@@ -14,13 +14,11 @@ namespace GeometryLib.Geometry
             MaxAngle = maxAngle;
         }
 
-        public Point Center { get; }
-        public Vector XAxis { get; }
-        public Vector YAxis { get; }
-        public double Radius { get; }
-        public double MinAngle { get; }
-        public double MaxAngle { get; }
-
-        public Point GetCenter() => Center;
+        public Point Center { get; set; }
+        public Vector XAxis { get; set; }
+        public Vector YAxis { get; set; }
+        public double Radius { get; set; }
+        public double MinAngle { get; set; }
+        public double MaxAngle { get; set; }
     }
 }

@@ -1,23 +1,51 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace GeometryLib.Core
 {
-
-    public class Point
+    public class Point : Serializable<Point>
     {
-        double? X { get; set; }
-        double? Y { get; set; }
-        double? Z { get; set; }
-    }
+        [JsonConstructor]
+        public Point(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
 
+        [JsonProperty]
+        double X { get; set; }
+        [JsonProperty]
+        double Y { get; set; }
+        [JsonProperty]
+        double Z { get; set; }
+
+        //public static Point FromJson(string s) => JsonConvert.DeserializeObject<Point>(s);
+        //public string ToJson() => JsonConvert.SerializeObject(new {X, Y, Z});
+        
+    }
     public class Vector
     {
-        double? X { get; set; }
-        double? Y { get; set; }
-        double? Z { get; set; }
-    }
+        public Vector(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
 
+        public Vector(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+
+        double X { get; set; }
+        double Y { get; set; }
+        double Z { get; set; }
+        public string ToJson() => JsonConvert.SerializeObject(this);
+    }
     public class Plane
     {
         public Point Origin { get; set; }
@@ -29,7 +57,6 @@ namespace GeometryLib.Core
             Normal = normal;
         }
     }
-
     public class Ray
     {
         public Point Origin { get; set; }
@@ -41,20 +68,17 @@ namespace GeometryLib.Core
             Direction = direction;
         }
     }
-
     public class Face
     {
         public int A { get; set; }
         public int B { get; set; }
         public int C { get; set; }
     }
-
     public class UV
     {
         public double U { get; set; }
         public double V { get; set; }
     }
-
     public class NurbsCurveData
     {
         public int Degree { get; set; }
@@ -68,7 +92,6 @@ namespace GeometryLib.Core
         }
 
     }
-
     public class NurbsSurfaceData
     {
         public int DegreeU { get; set; }
@@ -86,7 +109,6 @@ namespace GeometryLib.Core
         }
 
     }
-
     public class MeshData
     {
 
@@ -105,7 +127,6 @@ namespace GeometryLib.Core
 
         public static MeshData Empty() => new MeshData(new List<Face>(), new List<Point>(), new List<Vector>(), new List<UV>());
     }
-
     public class PolylineData
     {
         public PolylineData(List<Point> points, List<double> parameters)
@@ -117,7 +138,6 @@ namespace GeometryLib.Core
         public List<Point> Points { get; }
         public List<double> Parameters { get; }
     }
-
     public class VolumeData
     {
         public VolumeData(int degreeU, int degreeV, int degreeW, List<double> knotsU, List<double> knotsV, List<double> knotsW, List<List<List<Point>>> controlPoints)
@@ -139,7 +159,6 @@ namespace GeometryLib.Core
         public List<double> KnotsW { get; }
         public List<List<List<Point>>> ControlPoints { get; }
     }
-
     public class Pair<T1, T2>
     {
         public Pair(T1 item1, T2 item2)
@@ -151,7 +170,6 @@ namespace GeometryLib.Core
         public T1 Item1 { get; }
         public T2 Item2 { get; }
     }
-
     public class Interval<T>
     {
         public Interval(T min, T max)
@@ -163,5 +181,4 @@ namespace GeometryLib.Core
         public T Min { get; }
         public T Max { get; }
     }
-
 }
