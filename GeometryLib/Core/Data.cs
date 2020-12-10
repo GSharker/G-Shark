@@ -4,6 +4,16 @@ using System.Collections.Generic;
 
 namespace GeometryLib.Core
 {
+    public class Coordinates
+    {
+        [JsonProperty]
+        public double X { get; set; }
+        [JsonProperty]
+        public double Y { get; set; }
+        [JsonProperty]
+        public double Z { get; set; }
+    }
+
     public class Point : Serializable<Point>
     {
         [JsonConstructor]
@@ -13,44 +23,24 @@ namespace GeometryLib.Core
             Y = y;
             Z = z;
         }
-
-        [JsonProperty]
-        double X { get; set; }
-        [JsonProperty]
-        double Y { get; set; }
-        [JsonProperty]
-        double Z { get; set; }
-
-        //public static Point FromJson(string s) => JsonConvert.DeserializeObject<Point>(s);
-        //public string ToJson() => JsonConvert.SerializeObject(new {X, Y, Z});
-        
     }
-    public class Vector
+    public class Vector : Serializable<Vector>
     {
+        [JsonConstructor]
         public Vector(double x, double y, double z)
         {
             X = x;
             Y = y;
             Z = z;
         }
-
-        public Vector(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-
-
-        double X { get; set; }
-        double Y { get; set; }
-        double Z { get; set; }
-        public string ToJson() => JsonConvert.SerializeObject(this);
     }
-    public class Plane
+    public class Plane : Serializable<Plane>
     {
-        public Point Origin { get; set; }
-        public Vector Normal { get; set; }
 
+        [JsonProperty]  public Point Origin { get; set; }
+        [JsonProperty]  public Vector Normal { get; set; }
+
+        [JsonConstructor]
         public Plane(Point origin, Vector normal)
         {
             Origin = origin;

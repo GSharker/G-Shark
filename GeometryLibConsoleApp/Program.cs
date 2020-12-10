@@ -8,9 +8,11 @@ namespace GeometryLibConsoleApp
     {
         static void Main(string[] args)
         {
-            Point p = new Point(0, 1, 0);
-            var j = Point.ToJson(p);
-            var p1 = Point.FromJson(j);
+            Point pt = new Point(0, 0, 0);
+            var ptj = Point.ToJson(pt);
+
+            Plane p = new Plane(new Point(0, 0, 0), new Vector(0, 0, 1));
+            var s = Plane.ToJson(p);
 
 
             Console.WriteLine("Press any key to close...");

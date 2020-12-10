@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace GeometryLib.Core
 {
-    public class Serializable<T>
+
+    public class Serializable<T>: Coordinates
     {
         public static T FromJson(string s) => JsonConvert.DeserializeObject<T>(s);
         public static string ToJson(T t) => JsonConvert.SerializeObject(t,
