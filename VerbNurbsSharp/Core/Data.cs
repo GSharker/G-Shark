@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GeometryLib.Core
+namespace VerbNurbsSharp.Core
 {
     public class Point : List<double> { }
 

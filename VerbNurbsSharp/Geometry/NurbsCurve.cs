@@ -1,6 +1,6 @@
-﻿using GeometryLib.Evaluation;
+﻿using VerbNurbsSharp.Evaluation;
 using System.Collections.Generic;
-using GeometryLib.Core;
+using VerbNurbsSharp.Core;
 
 namespace GeometryLib.Geometry
 {

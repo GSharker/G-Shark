@@ -1,8 +1,8 @@
-﻿using GeometryLib.Core;
+﻿using VerbNurbsSharp.Core;
 using System;
 using System.Linq;
 
-namespace GeometryLib.Evaluation
+namespace VerbNurbsSharp.Evaluation
 {
     public class Check
     {

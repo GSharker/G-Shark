@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <PackageId>VerbNurbsSharp</PackageId>
+    <Authors>Cesare Caoduro</Authors>
+    <Company>AECOM</Company>
+    <Product />
+    <RepositoryUrl>https://github.com/cesarecaoduro/VerbNurbsSharp</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyName>VerbNurbsSharp</AssemblyName>
+    <RootNamespace>VerbNurbsSharp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>

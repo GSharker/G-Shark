@@ -1,5 +1,5 @@
-﻿using GeometryLib.Core;
-using GeometryLib.Geometry;
+﻿using VerbNurbsSharp.Core;
+using VerbNurbsSharp.Geometry;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

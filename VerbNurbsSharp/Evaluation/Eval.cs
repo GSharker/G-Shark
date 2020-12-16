@@ -1,7 +1,7 @@
-﻿using GeometryLib.Core;
+﻿using VerbNurbsSharp.Core;
 using System.Collections.Generic;
 
-namespace GeometryLib.Evaluation
+namespace VerbNurbsSharp.Evaluation
 {
     class Eval
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeometryLib.Core
+namespace VerbNurbsSharp.Core
 {
 
     public class Serializable<T>

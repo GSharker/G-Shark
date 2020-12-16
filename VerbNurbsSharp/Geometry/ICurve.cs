@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeometryLib.Geometry
+namespace VerbNurbsSharp.Geometry
 {
     public interface ICurve
     {

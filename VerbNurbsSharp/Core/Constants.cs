@@ -1,4 +1,4 @@
-﻿namespace GeometryLib.Core
+﻿namespace VerbNurbsSharp.Core
 {
     /// <summary>
     /// `Constants` contains a collection of default constants used throughout the library

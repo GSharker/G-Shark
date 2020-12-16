@@ -1,6 +1,6 @@
-﻿using GeometryLib.Core;
+﻿using VerbNurbsSharp.Core;
 
-namespace GeometryLib.Geometry
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A curve representing a straight line
