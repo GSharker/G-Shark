@@ -1,6 +1,8 @@
 ﻿using GeometryLib.Core;
+using GeometryLib.Geometry;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace GeometryLibConsoleApp
 {
@@ -8,12 +10,8 @@ namespace GeometryLibConsoleApp
     {
         static void Main(string[] args)
         {
-            Point pt = new Point(0, 0, 0);
-            var ptj = Point.ToJson(pt);
-
-            Plane p = new Plane(new Point(0, 0, 0), new Vector(0, 0, 1));
-            var s = Plane.ToJson(p);
-
+            var line = new Line(new Point() { 0, 0, 0 }, new Point() { 1, 1, 1 });
+            var json = Line.ToJson(line);
 
             Console.WriteLine("Press any key to close...");
             Console.ReadLine();
