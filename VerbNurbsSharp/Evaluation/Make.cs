@@ -63,6 +63,11 @@ namespace VerbNurbsSharp.Evaluation
             {
                 var span = Eval.KnotSpanGivenN(n, degree, u, knots);
                 var basisFuncs = Eval.BasisFunctionsGivenKnotSpanIndex(span, u, degree, knots);
+                var ls = span - degree;
+                var rowstart = Vec.Zeros1d(ls);
+                var rowend = Vec.Zeros1d(ld - ls);
+
+                A.Add(rowstart.Concat(basisFuncs).Concat(rowend).ToList());
             }
 
             return null;
