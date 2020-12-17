@@ -12,7 +12,18 @@ namespace VerbNurbsSharp.Evaluation
                 return n;
             if (u < knots[degree] + Constants.EPSILON)
                 return degree;
-            return 0;
+            var low = degree;
+            var high = n + 1;
+            var mid = (int)Math.Floor((decimal)((low + high) / 2));
+            while (u < knots[mid] || u >= knots[mid + 1])
+            {
+                if (u < knots[mid])
+                    high = mid;
+                else
+                    low = mid;
+                mid = (int)Math.Floor((decimal)((low + high) / 2));
+            }
+            return mid;
         }
     }
 }
