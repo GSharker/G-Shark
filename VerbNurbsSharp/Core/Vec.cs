@@ -26,6 +26,14 @@ namespace VerbNurbsSharp.Core
 
         public static Vector Add(Vector a, Vector b) => new Vector() { a[0] + b[0], a[1] + b[1], a[2] + b[2] };
 
+        public  static List<double> Zeros1d(int rows)
+        {
+            var list = new List<double>();
+            for (int i = 0; i < rows; i++)
+                list.Add(0.0);
+            return list;
+        }
+
         public static Vector Mul(double a, Vector b) => new Vector() { a * b[0], a * b[1], a * b[2] };
 
         public static Vector Div(Vector a, double b) => new Vector() { a[0] / b, a[1] / b, a[2] / b };

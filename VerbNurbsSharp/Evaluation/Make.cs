@@ -62,6 +62,7 @@ namespace VerbNurbsSharp.Evaluation
             foreach(var u in us)
             {
                 var span = Eval.KnotSpanGivenN(n, degree, u, knots);
+                var basisFuncs = Eval.BasisFunctionsGivenKnotSpanIndex(span, u, degree, knots);
             }
 
             return null;
