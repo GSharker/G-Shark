@@ -16,15 +16,16 @@ namespace GeometryLib.Geometry
             this.data = Check.isValidNurbsCurveData(data);
         }
 
-        public NurbsCurve()
-        {
-        }
+        public NurbsCurve() { }
 
+        public int Degree => data.Degree;
+        public KnotArray Knots => data.Knots;
+        public List<Point> ControlPoints => data.ControlPoints;
+        public List<double> Weights => Eval.Weight1d(data.ControlPoints);
+
+        public static NurbsCurve byKnotsControlPointsWeights(int degree, KnotArray knots, List<Point> controlPoints, List<double> weights = null) => null;
         public static NurbsCurve ByPoints(List<Point> points, int degree = 3) => new NurbsCurve(Make.RationalInterpCurve(points, degree));
 
-        public int Degree => this.data.Degree;
-        public List<double> Knots => this.data.Knots;
-        public List<Point> ControlPoints => this.data.ControlPoints;
 
         public NurbsCurve Clone() => new NurbsCurve(this.data);
         public Interval<double> Domain() => new Interval<double>(this.data.Knots[0], this.data.Knots[this.data.Knots.Count - 1]);

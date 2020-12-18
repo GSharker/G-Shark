@@ -8,6 +8,8 @@ namespace VerbNurbsSharp.Core
 {
     public class Vec
     {
+        public static Vector Cross(Vector u, Vector v) => new Vector() { u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0] };
+
         public static double AngleBetween(Vector a, Vector b) => Math.Acos(Dot(a, b) / (Norm(a) * Norm(b)));
 
         internal static double AngleBetweenNormalized3D(Vector a, Vector b) => double.NaN;
@@ -15,6 +17,8 @@ namespace VerbNurbsSharp.Core
         public static double Domain(Vector a) => a.Last() - a.First();
 
         public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => double.NaN;
+
+        public static double Dist(Point a, Point b) => Norm(Sub(FromPoint(a), FromPoint(b)));
 
         public static double SignedAngleBetween(Vector a, Vector b, Vector n) => double.NaN;
 
@@ -35,6 +39,12 @@ namespace VerbNurbsSharp.Core
         }
 
         public static Vector Mul(double a, Vector b) => new Vector() { a * b[0], a * b[1], a * b[2] };
+        public static List<double> ScalarMult(double a, List<double> b)
+        {
+            for (int i = 0; i < b.Count; i++)
+                b[i] *= a;
+            return b;
+        }
 
         public static Vector Div(Vector a, double b) => new Vector() { a[0] / b, a[1] / b, a[2] / b };
 

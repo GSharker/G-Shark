@@ -26,6 +26,46 @@ namespace VerbNurbsSharp.Evaluation
             return mid;
         }
 
+        public static List<Point> Homogenize1d(List<Point> controlPoints, List<double> weights)
+        {
+            var rows = controlPoints.Count;
+            var dim = controlPoints[0].Count;
+            var homo_controlPoints = new List<Point>();
+            double wt = 0;
+            var ref_pt = new Point();
+            weights = weights != null ? weights : Vec.Rep(controlPoints.Count, 1.0);
+
+            for(int i = 0; i< rows; i++)
+            {
+                var pt = new Point();
+                ref_pt = controlPoints[i];
+                wt = weights[i];
+                for (int k = 0; k < dim; k++)
+                    pt.Add(ref_pt[k] * wt);
+                homo_controlPoints.Add(pt);
+            }
+
+            return homo_controlPoints;
+        }
+
+        public static List<double> Weight1d(List<Point> homoPoints)
+        {
+            var dim = homoPoints[0].Count - 1;
+            var weight1d = new List<double>();
+            homoPoints.ForEach(x => weight1d.Add(x[dim]));
+            return weight1d;
+        }
+
+        public static Point Dehomogenize(Point homoPoint)
+        {
+            var dim = homoPoint.Count;
+            var point = new Point();
+            var wt = homoPoint[dim - 1];
+            var l = homoPoint.Count - 1;
+            homoPoint.ForEach(x => point.Add(x / wt);
+            return point;
+        }
+
         public static List<double> BasisFunctionsGivenKnotSpanIndex(int knotSpan_index, double u, int degree, List<double> knots)
         {
             var basisFunctions = Vec.Zeros1d(degree + 1);

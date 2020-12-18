@@ -5,12 +5,10 @@ using System.Collections.Generic;
 namespace VerbNurbsSharp.Core
 {
     public class Point : List<double> { }
-
     public class Vector : List<double> { }
-
     public class Matrix : List<List<double>> { }
 
-    public class KnotArray : List<int> { }
+    public class KnotArray : List<double> { }
     public class Tri : List<int> { }
     public class UV : List<double> { }
 
@@ -38,7 +36,7 @@ namespace VerbNurbsSharp.Core
 
     public class NurbsCurveData : Serializable<NurbsCurveData>
     {
-        public NurbsCurveData(int degree, List<Point> controlPoints, List<double> knots)
+        public NurbsCurveData(int degree, KnotArray knots, List<Point> controlPoints)
         {
             Degree = degree;
             ControlPoints = controlPoints;
@@ -47,7 +45,7 @@ namespace VerbNurbsSharp.Core
 
         public int Degree { get; set; }
         public List<Point> ControlPoints { get; set; }
-        public List<double> Knots { get; }
+        public KnotArray Knots { get; }
     }
 
     public class NurbsSurfaceData : Serializable<NurbsSurfaceData>
