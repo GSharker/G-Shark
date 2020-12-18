@@ -49,6 +49,7 @@ namespace VerbNurbsSharp.Core
         public static Vector Div(Vector a, double b) => new Vector() { a[0] / b, a[1] / b, a[2] / b };
 
         public static Vector Sub(Vector a, Vector b) => new Vector() { a[0] - b[0], a[1] - b[1], a[2] - b[2] };
+        public static Vector Sub(Point a, Point b) => new Vector() { a[0] - b[0], a[1] - b[1], a[2] - b[2] };
 
         public static Vector FromPoint(Point a) => new Vector() { a[0], a[1], a[2] };
         public static Point ToPoint(Vector a) => new Point() { a[0], a[1], a[2] };
