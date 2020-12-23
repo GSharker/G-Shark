@@ -125,12 +125,172 @@ namespace VerbNurbsSharp.Core
             return r;
         }
 
+        /// <summary>
+        /// Build an identity matrix of a given size
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static Matrix Identity(int n)
+        {
+            Matrix m = new Matrix();
+            var zeros = Vec.Zero2d(n, n);
+            for (int i = 0; i < n; i++)
+            {
+                zeros[i][i] = 1.0;
+                m.Add(zeros[i].ToList());
+            }
+            return m;
+        }
 
-        public static Vector Identity(int i) => throw new NotImplementedException();
-        public static Matrix Transpose(Matrix a) => throw new NotImplementedException();
-        public static Vector Solve(Matrix a, Vector b) => throw new NotImplementedException();
-        public static Vector LUSolve(LUDecomp LUP, Vector b) => throw new NotImplementedException();
-        public static LUDecomp LU(Matrix a) => throw new NotImplementedException();
+        /// <summary>
+        /// Transpose a matrix
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static Matrix Transpose(Matrix a)
+        {
+            if (a.Count == 0) return null;
+            Matrix t = new Matrix();
+            for (int i = 0; i < a[0].Count; i++)
+                for (int j = 0; j < a.Count; j++)
+                    t[i][j] = a[j][i];
+            return t;
+
+        }
+
+        /// <summary>
+        /// Solve a system of equations
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Vector Solve(Matrix a, Vector b) => LUSolve(LU(a), b);
+
+        /// <summary>
+        /// Based on methods from numeric.js
+        /// </summary>
+        /// <param name="LUP"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Vector LUSolve(LUDecomp LUP, Vector b)
+        {
+            var LU = LUP.LU;
+            var n = LU.Count;
+            var x = b;
+            var P = LUP.P;
+
+            var i = n - 1;
+            while (i != -1)
+            {
+                x[i] = b[i];
+                --i;
+            }
+
+            i = 0;
+            while (i < n)
+            {
+                var Pi = P[i];
+                if (P[i] != i)
+                {
+                    var tmp = x[i];
+                    x[i] = x[Pi];
+                    x[Pi] = tmp;
+                }
+
+                var LUi = LU[i];
+                var j = 0;
+                while (j < i)
+                {
+                    x[i] -= x[j] * LUi[j];
+                    ++j;
+                }
+                ++i;
+            }
+
+            i = n - 1;
+            while (i >= 0)
+            {
+                var LUi = LU[i];
+                var j = i + 1;
+                while (j < n)
+                {
+                    x[i] -= x[j] * LUi[j];
+                    ++j;
+                }
+
+                x[i] /= LUi[i];
+                --i;
+            }
+
+            return x;
+        }
+
+        /// <summary>
+        /// Based on methods from numeric.js
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static LUDecomp LU(Matrix a) {
+            var n = a.Count;
+            var n1 = n - 1;
+            var p = new List<int>();
+
+            var k = 0;
+            while (k < n)
+            {
+                var Pk = k;
+                var Ak = a[k];
+                var max = Math.Abs(Ak[k]);
+
+                var j = k + 1;
+                while (j < n)
+                {
+                    var absAjk = Math.Abs(a[j][k]);
+                    if (max < absAjk)
+                    {
+                        max = absAjk;
+                        Pk = j;
+                    }
+                    ++j;
+                }
+                p[k] = Pk;
+
+                if (Pk != k)
+                {
+                    a[k] = a[Pk];
+                    a[Pk] = Ak;
+                    Ak = a[k];
+                }
+
+                var Akk = Ak[k];
+
+                var i = k + 1;
+                while (i < n)
+                {
+                    a[i][k] /= Akk;
+                    ++i;
+                }
+
+                i = k + 1;
+                while (i < n)
+                {
+                    var Ai = a[i];
+                    j = k + 1;
+                    while (j < n1)
+                    {
+                        Ai[j] -= Ai[k] * Ak[j];
+                        ++j;
+                        Ai[j] -= Ai[k] * Ak[j];
+                        ++j;
+                    }
+                    if (j == n1) Ai[j] -= Ai[k] * Ak[j];
+                    ++i;
+                }
+
+                ++k;
+            }
+            return new LUDecomp(a, p);
+        }
     }
 
     public class LUDecomp
