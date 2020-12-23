@@ -2,8 +2,6 @@
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Geometry;
 
-using verb;
-using verb.eval;
 
 namespace VerbNurbsSharpConsoleApp
 {

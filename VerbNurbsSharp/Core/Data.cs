@@ -28,13 +28,6 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class KnotArray : List<double> { }
 
-    public class Vector : List<double> { }
-    public class Matrix : List<List<double>> { }
-
-    public class KnotArray : List<double> { }
-    public class Tri : List<int> { }
-    public class UV : List<double> { }
-
 
     /// <summary>
     /// A Plane is simply an origin point and normal.
@@ -87,7 +80,6 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
-        public List<double> Knots { get; }
         public KnotArray Knots { get; }
     }
     /// <summary>

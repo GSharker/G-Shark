@@ -19,7 +19,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="degree">The degree</param>
 
         /// <returns>Whether the list is a valid knot vector or knot</returns>
-        public static bool isValidKnotVector(IList<double> vector, int degree)
+        public static bool isValidKnotVector(IList<double> vector, int degree) => false; //WIP
 
         /// <returns>Whether the array is a valid knot vector or knot</returns>
         public static bool isValidKnotVector(KnotArray vector, int degree)
@@ -65,7 +65,7 @@ namespace VerbNurbsSharp.Evaluation
             if (data.Knots == null) throw new ArgumentNullException("Knots cannot be null!");
             if (data.Knots.Count != data.ControlPoints.Count + data.Degree + 1)
                 throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length!");
-            if (!Check.isValidKnotVector((Vector)data.Knots, data.Degree))
+            if (!Check.isValidKnotVector(data.Knots, data.Degree))
                 throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             return data;
         }

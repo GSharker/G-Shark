@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,13 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VerbNurbsSharp\VerbNurbsSharp.csproj" />
+    <PackageReference Include="geometry3Sharp" Version="1.0.324" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Verb">
-      <HintPath>..\..\..\verb\build\cs\bin\x64\Debug\Verb.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\VerbNurbsSharp\VerbNurbsSharp.csproj" />
   </ItemGroup>
 
 </Project>
