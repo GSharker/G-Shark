@@ -7,7 +7,7 @@
     <Company>AECOM</Company>
     <Product />
     <RepositoryUrl>https://github.com/cesarecaoduro/VerbNurbsSharp</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyName>VerbNurbsSharp</AssemblyName>
     <RootNamespace>VerbNurbsSharp</RootNamespace>
   </PropertyGroup>
