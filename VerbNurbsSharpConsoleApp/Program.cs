@@ -3,6 +3,7 @@ using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Geometry;
 
 
+
 namespace VerbNurbsSharpConsoleApp
 {
     class Program
