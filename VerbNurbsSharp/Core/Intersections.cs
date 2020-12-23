@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VerbNurbsSharp.Core.intersections
+namespace VerbNurbsSharp.Core
 {
 
     public class CurveCurveIntersection

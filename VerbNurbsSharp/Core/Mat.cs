@@ -151,11 +151,18 @@ namespace VerbNurbsSharp.Core
         {
             if (a.Count == 0) return null;
             Matrix t = new Matrix();
-            for (int i = 0; i < a[0].Count; i++)
-                for (int j = 0; j < a.Count; j++)
-                    t[i][j] = a[j][i];
+            var rows = a.Count;
+            var columns = a[0].Count;
+            for (var c = 0; c < columns; c++)
+            {
+                var rr = new List<double>();
+                for (var r = 0; r < rows; r++)
+                {
+                    rr.Add(a[r][c]);
+                }
+                t.Add(rr);
+            }
             return t;
-
         }
 
         /// <summary>
@@ -303,4 +310,5 @@ namespace VerbNurbsSharp.Core
             P = p;
         }
     }
+
 }

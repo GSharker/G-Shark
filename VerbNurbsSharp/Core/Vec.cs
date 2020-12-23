@@ -139,9 +139,51 @@ namespace VerbNurbsSharp.Core
         public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
         public static double Norm(Vector a) => throw new NotImplementedException();
         public static double NormSquared(Vector a) => throw new NotImplementedException();
-        public static Vector Zero1d(int rows) => throw new NotImplementedException();
-        public static List<Vector> Zero2d(int rows, int cols) => throw new NotImplementedException();
-        public static List<List<Vector>> Zero3d(int rows, int cols, int depth) => throw new NotImplementedException();
+
+        /// <summary>
+        /// Create a list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
+        public static Vector Zero1d(int rows)
+        {
+            Vector v = new Vector();
+            for (int i = 0; i < rows; i++)
+                v.Add(0.0);
+            return v;
+
+        }
+
+        /// <summary>
+        /// Create a 2 dimensional list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        /// <returns></returns>
+        public static List<Vector> Zero2d(int rows, int cols)
+        {
+            List<Vector> lv = new List<Vector>();
+            for (int i = 0; i < rows; i++)
+                lv.Add(Zero1d(cols));
+            return lv;
+        }
+
+        /// <summary>
+        /// Create a 3 dimensional list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        public static List<List<Vector>> Zero3d(int rows, int cols, int depth)
+        {
+            List<List<Vector>> llv = new List<List<Vector>>();
+            for (int i = 0; i < rows; i++)
+                llv.Add(Zero2d(cols, depth));
+            return llv;
+        }
+
+
         public static double Dot(Vector a, Vector b) => throw new NotImplementedException();
         public static Vector Add(Vector a, Vector b) => throw new NotImplementedException();
         public static Vector Div(Vector a, double b) => throw new NotImplementedException();
