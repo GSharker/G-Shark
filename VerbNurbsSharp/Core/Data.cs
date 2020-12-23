@@ -8,8 +8,16 @@ namespace VerbNurbsSharp.Core
     /// A Point in verb is represented simply by an list of double point numbers.
     /// So, you would write simply [0,0,0] to create a Point at the origin.
     /// </summary>
-    public class Point : List<double> { }
-
+    public class Point : List<double>
+    {
+        public static Point Unset
+        {
+            get
+            {
+                return new Point(){ -1.23432101234321E+308, -1.23432101234321E+308, -1.23432101234321E+308 };
+            }
+        }
+    }
 
     /// <summary>
     /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
