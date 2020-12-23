@@ -54,7 +54,6 @@ namespace VerbNurbsSharp.Core
             }
             
         }
-
         /// <summary>
         /// Adds a point to the bounding box, expanding the bounding box if the point is outside of it.
         /// If the bounding box is not _initialized, this method has that side effect.
@@ -91,6 +90,27 @@ namespace VerbNurbsSharp.Core
             foreach (var t in pts)
                 this.Add(t);
             return this;
+        }
+        /// <summary>
+        /// Tests a point for BoundingBox inclusion.
+        /// </summary>
+        /// <param name="pt">Point to test</param>
+        /// <param name="strict">If true, the point needs to be fully on the inside of the BoundingBox. I.e. coincident points will be considered 'outside'.</param>
+        /// <returns></returns>
+        public bool Contains(Point pt, bool strict)
+        {
+            if (pt == null) return false;
+            if (!this._initialized) return false;
+
+            if (strict)
+            {
+                if (pt[0] <= this.Min[0] || pt[0] >= this.Max[0] || (pt[1] <= this.Min[1] || pt[1] >= this.Max[1]) || (pt[2] <= this.Min[2] || 2 >= this.Max[2]))
+                    return false;
+            }
+            else
+            if (pt[0] < this.Min[0] || pt[0] > this.Max[0] || (pt[1] < this.Min[1] || pt[1] > this.Max[1]) || (pt[2] < this.Min[2] || 2 > this.Max[2]))
+                return false;
+            return true;
         }
 
         public static BoundingBox Intersect(BoundingBox bBox1, BoundingBox bBox2)
