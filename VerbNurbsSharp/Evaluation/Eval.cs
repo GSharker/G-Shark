@@ -62,7 +62,7 @@ namespace VerbNurbsSharp.Evaluation
             var point = new Point();
             var wt = homoPoint[dim - 1];
             var l = homoPoint.Count - 1;
-            homoPoint.ForEach(x => point.Add(x / wt);
+            homoPoint.ForEach(x => point.Add(x / wt));
             return point;
         }
 

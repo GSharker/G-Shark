@@ -24,7 +24,7 @@ namespace GeometryLib.Geometry
         public List<double> Weights => Eval.Weight1d(data.ControlPoints);
 
         public static NurbsCurve byKnotsControlPointsWeights(int degree, KnotArray knots, List<Point> controlPoints, List<double> weights = null) => null;
-        public static NurbsCurve ByPoints(List<Point> points, int degree = 3) => new NurbsCurve(Make.RationalInterpCurve(points, degree));
+        //public static NurbsCurve ByPoints(List<Point> points, int degree = 3) => new NurbsCurve(Make.RationalInterpCurve(points, degree));
 
 
         public NurbsCurve Clone() => new NurbsCurve(this.data);
