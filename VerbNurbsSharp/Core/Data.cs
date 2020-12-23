@@ -10,6 +10,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Point : List<double> { }
 
+
     /// <summary>
     /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector in the X direction.
@@ -26,6 +27,14 @@ namespace VerbNurbsSharp.Core
     /// A KnotArray is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate KnotArray's.
     /// </summary>
     public class KnotArray : List<double> { }
+
+    public class Vector : List<double> { }
+    public class Matrix : List<List<double>> { }
+
+    public class KnotArray : List<double> { }
+    public class Tri : List<int> { }
+    public class UV : List<double> { }
+
 
     /// <summary>
     /// A Plane is simply an origin point and normal.
@@ -60,7 +69,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class NurbsCurveData : Serializable<NurbsCurveData>
     {
-        public NurbsCurveData(int degree, List<Point> controlPoints, List<double> knots)
+        public NurbsCurveData(int degree, KnotArray knots, List<Point> controlPoints)
         {
             Degree = degree;
             ControlPoints = controlPoints;
@@ -74,10 +83,12 @@ namespace VerbNurbsSharp.Core
         /// 2d list of control points, where each control point is an list of length (dim).
         /// </summary>
         public List<Point> ControlPoints { get; set; }
+
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
         public List<double> Knots { get; }
+        public KnotArray Knots { get; }
     }
     /// <summary>
     /// A simple data structure representing a NURBS surface.

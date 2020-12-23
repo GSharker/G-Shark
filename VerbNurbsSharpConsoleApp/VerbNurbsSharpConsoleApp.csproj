@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +7,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VerbNurbsSharp\VerbNurbsSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Verb">
+      <HintPath>..\..\..\verb\build\cs\bin\x64\Debug\Verb.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
