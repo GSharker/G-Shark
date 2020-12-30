@@ -94,7 +94,7 @@ namespace VerbNurbsSharpTest
             BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(pts2);
 
-            BoundingBox bBoxResult = BoundingBox.Intersect(bBox1, bBox2);
+            BoundingBox bBoxResult = bBox1.Intersect(bBox2);
             Assert.True(bBoxResult.IsValid);
             Assert.Equal(bBoxResult.Min, bBox2.Min);
             Assert.Equal(bBoxResult.Max, bBox1.Max);
