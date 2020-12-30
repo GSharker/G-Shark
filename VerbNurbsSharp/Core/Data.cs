@@ -10,12 +10,23 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Point : List<double>
     {
+        /// <summary>
+        /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
+        /// </summary>
         public static Point Unset
         {
             get
             {
-                return new Point(){ -1.23432101234321E+308, -1.23432101234321E+308, -1.23432101234321E+308 };
+                return new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
             }
+        }
+        /// <summary>
+        /// Constructs the string representation of the point.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{this[0]},{this[1]},{this[2]}";
         }
     }
 

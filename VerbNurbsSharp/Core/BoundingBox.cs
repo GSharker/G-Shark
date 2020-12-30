@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace VerbNurbsSharp.Core
 {
@@ -50,9 +47,22 @@ namespace VerbNurbsSharp.Core
         {
             get
             {
-                return BoundingBox.Unset;
+                BoundingBox bBox = _unset;
+                bBox._initialized = false;
+                return bBox;
             }
             
+        }
+        /// <summary>
+        /// If the Bounding box is initialized is a bounding box valid.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                return this._initialized;
+            }
+
         }
         /// <summary>
         /// Adds a point to the bounding box, expanding the bounding box if the point is outside of it.
@@ -62,7 +72,7 @@ namespace VerbNurbsSharp.Core
         /// <returns></returns>
         public BoundingBox Add(Point pt)
         {
-            if (this._initialized == false)
+            if (!this.IsValid)
             {
                 this._dim = pt.Count;
                 this.Min = new Point(){pt[0],pt[1],pt[2]};
@@ -92,6 +102,84 @@ namespace VerbNurbsSharp.Core
             return this;
         }
         /// <summary>
+        /// Clear the bounding box, leaving it in an uninitialized state.  Call add, addRange in order to initialize.
+        /// </summary>
+        /// <returns></returns>
+        public BoundingBox Clear()
+        {
+            this._initialized = false;
+            return this;
+        }
+        /// <summary>
+        /// Get length of given axis.
+        /// </summary>
+        /// <param name="i">Index of axis to inspect (between 0 and 2)</param>
+        /// <returns></returns>
+        public double GetAxisLength(int i)
+        {
+            if (i < 0 || i > this._dim - 1) return 0.0;
+            return Math.Abs(this.Min[i] - this.Max[i]);
+        }
+        /// <summary>
+        /// Get longest axis of bounding box.
+        /// Value 0 = X, 1 = Y, 2 = Z.
+        /// </summary>
+        /// <returns></returns>
+        public int GetLongestAxis()
+        {
+            double max = double.MinValue;
+            int axisIndex = 0;
+
+            for (int i = 0; i < _dim; i++)
+            {
+                double axisLength = this.GetAxisLength(i);
+                if (axisLength > max)
+                {
+                    max = axisLength;
+                    axisIndex = i;
+                }
+            }
+
+            return axisIndex;
+        }
+        /// <summary>
+        /// Constructs the string representation of this aligned bounding box.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{this.Min.ToString()} - {this.Max.ToString()}";
+        }
+        /// <summary>
+        /// Determines if two BoundingBoxes intersect.
+        /// </summary>
+        /// <param name="bBox1">First BoundingBox</param>
+        /// <param name="bBox2">Second BoundingBox</param>
+        /// <param name="tol">Tolerance</param>
+        /// <returns></returns>
+        // ToDo this method can be simplified
+        // first way: https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
+        // Second way: replacing IsValid, as a method that check the validity of a BoundingBox, as in Rhino.
+        public static bool AreOverlapping(BoundingBox bBox1, BoundingBox bBox2, double tol)
+        {
+            if (!bBox1.IsValid || !bBox2.IsValid) return false;
+            tol = tol < -0.5 ? Constants.TOLERANCE : tol;
+            int count = 0; 
+            for (int i = 0; i < bBox1._dim; i++)
+            {
+                double x1 = Math.Min(bBox1.Min[i], bBox1.Max[i]) - tol;
+                double x2 = Math.Max(bBox1.Min[i], bBox1.Max[i]) + tol;
+                double y1 = Math.Min(bBox2.Min[i], bBox2.Max[i]) - tol;
+                double y2 = Math.Max(bBox2.Min[i], bBox2.Max[i]) + tol;
+
+                if ((x1 >= y1 && x1 <= y2) || (x2 >= y1 && x2 <= y2) || (y1 >= x1 && y1 <= x2) ||
+                    (y2 >= x1 && y2 <= x2) == true)
+                    count++;
+            }
+            return count == 3;
+        }
+
+        /// <summary>
         /// Tests a point for BoundingBox inclusion.
         /// </summary>
         /// <param name="pt">Point to test</param>
@@ -100,7 +188,7 @@ namespace VerbNurbsSharp.Core
         public bool Contains(Point pt, bool strict)
         {
             if (pt == null) return false;
-            if (!this._initialized) return false;
+            if (!this.IsValid) return false;
 
             if (strict)
             {
@@ -112,10 +200,81 @@ namespace VerbNurbsSharp.Core
                 return false;
             return true;
         }
-
+        /// <summary>
+        /// Computes the intersection of two bounding boxes.
+        /// If one of the two boundary is not valid, or the two BoundingBoxes do not intersect return an unset bounding box.
+        /// </summary>
+        /// <param name="other">BoundingBox to intersect with</param>
+        /// <returns></returns>
+        public BoundingBox Intersect(BoundingBox other)
+        {
+            return Intersect(this, other);
+        }
+        /// <summary>
+        /// Computes the intersection of two bounding boxes.
+        /// If one of the two boundary is not valid, or the two BoundingBoxes do not intersect return an unset bounding box.
+        /// </summary>
+        /// <param name="bBox1">First BoundingBox</param>
+        /// <param name="bBox2">Second BoundingBox</param>
+        /// <returns></returns>
         public static BoundingBox Intersect(BoundingBox bBox1, BoundingBox bBox2)
         {
-            return BoundingBox.Unset;
+            BoundingBox bBox = BoundingBox.Unset;
+            if (!bBox1.IsValid || !bBox2.IsValid) return bBox;
+            if (!AreOverlapping(bBox1, bBox2, 0.0)) return bBox;
+
+            Point minPt = new Point();
+            Point maxPt = new Point();
+            minPt.Add(bBox1.Min[0] >= bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
+            minPt.Add(bBox1.Min[1] >= bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
+            minPt.Add(bBox1.Min[2] >= bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);
+
+            maxPt.Add(bBox1.Max[0] <= bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0]);
+            maxPt.Add(bBox1.Max[1] <= bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
+            maxPt.Add(bBox1.Max[2] <= bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
+
+            bBox._initialized = true;
+            bBox.Min = minPt;
+            bBox.Max = maxPt;
+
+            return bBox;
+        }
+        /// <summary>
+        /// Compute the boolean union of this with another BoundingBox
+        /// </summary>
+        /// <param name="other">BoundingBox to union with</param>
+        /// <returns></returns>
+        public BoundingBox Union(BoundingBox other)
+        {
+            return Union(this, other);
+        }
+        /// <summary>
+        /// Compute the boolean union between two BoundingBoxes.
+        /// </summary>
+        /// <param name="bBox1">First BoundingBox</param>
+        /// <param name="bBox2">Second BoundingBox</param>
+        /// <returns></returns>
+        public static BoundingBox Union(BoundingBox bBox1, BoundingBox bBox2)
+        {
+            if (!bBox1.IsValid) return bBox2;
+            if (!bBox2.IsValid) return bBox1;
+
+            BoundingBox bBox = BoundingBox.Unset;
+            Point minPt = new Point();
+            Point maxPt = new Point();
+            minPt.Add(bBox1.Min[0] < bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
+            minPt.Add(bBox1.Min[1] < bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
+            minPt.Add(bBox1.Min[2] < bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);
+
+            maxPt.Add(bBox1.Max[0] > bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0]);
+            maxPt.Add(bBox1.Max[1] > bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
+            maxPt.Add(bBox1.Max[2] > bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
+
+            bBox._initialized = true;
+            bBox.Min = minPt;
+            bBox.Max = maxPt;
+
+            return bBox;
         }
     }
 }
