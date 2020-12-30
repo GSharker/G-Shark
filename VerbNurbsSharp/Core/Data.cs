@@ -34,7 +34,7 @@ namespace VerbNurbsSharp.Core
     /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector in the X direction.
     /// </summary>
-    public class Vector : List<double> { }
+    //public class Vector : List<double> { }
 
     /// <summary>
     /// A Matrix is represented by a nested list of double point numbers.

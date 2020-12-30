@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace VerbNurbsSharp.Core
 {
-    public class Vec
+    /// <summary>
+    /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
+    /// So, you would write simply [1,0,0] to create a Vector in the X direction.
+    /// </summary>
+    public class Vector : List<double>
     {
         /// <summary>
         /// Multiply a n dimension vector by a constant
@@ -183,11 +187,58 @@ namespace VerbNurbsSharp.Core
             return llv;
         }
 
-
-        public static double Dot(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector Add(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector Div(Vector a, double b) => throw new NotImplementedException();
-        public static Vector Sub(Vector a, Vector b) => throw new NotImplementedException();
+        /// <summary>
+        /// Compute the dot product between two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <returns>The dot product.</returns>
+        public static double Dot(Vector a, Vector b)
+        {
+            double sum = 0d;
+            for (int i = 0; i < a.Count; i++)
+                sum += a[i] * b[i];
+            return sum;
+        }
+        /// <summary>
+        /// Add two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the sum of a and b.</returns>
+        public static Vector operator +(Vector a, Vector b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] + b[i]);
+            return vec;
+        }
+        /// <summary>
+        /// Divide a vector by a scalar.
+        /// </summary>
+        /// <param name="a">The vector to divide.</param>
+        /// <param name="b">The scalar divisor.</param>
+        /// <returns>A vector whose magnitude is multiplied by b.</returns>
+        public static Vector operator /(Vector a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] / b);
+            return vec;
+        }
+        /// <summary>
+        /// Subtract two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the difference between a and b.</returns>
+        public static Vector operator -(Vector a, Vector b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i]-b[i]);
+            return vec;
+        }
         public static bool IsZero(Vector a) => throw new NotImplementedException();
         public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
         public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
