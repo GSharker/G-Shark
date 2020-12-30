@@ -8,52 +8,197 @@ namespace VerbNurbsSharp.Core
 {
     public class Vec
     {
-        public static Vector Cross(Vector u, Vector v) => new Vector() { u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0] };
+        /// <summary>
+        /// Multiply a n dimension vector by a constant
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Vector Mul(double a, Vector b)
+        {
+            var nV = new Vector();
+            foreach (var c in b)
+                nV.Add(c * a);
+            return nV;
+        }
 
-        public static double AngleBetween(Vector a, Vector b) => Math.Acos(Dot(a, b) / (Norm(a) * Norm(b)));
+        public static double AngleBetween(Vector a, Vector b) => throw new NotImplementedException();
 
-        internal static double AngleBetweenNormalized3D(Vector a, Vector b) => double.NaN;
+        public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
 
+        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+
+        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static double Domain(Vector a) => a.Last() - a.First();
 
-        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => double.NaN;
-
-        public static double Dist(Point a, Point b) => Norm(Sub(FromPoint(a), FromPoint(b)));
-
-        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => double.NaN;
-
-        public static double Norm(Vector a) => NormSquared(a) != 0 ? Math.Sqrt(NormSquared(a)) : NormSquared(a);
-
-        public static double NormSquared(Vector a) => Math.Pow(a[0], 2) + Math.Pow(a[1], 2) + Math.Pow(a[2], 2);
-
-        public static double Dot(Vector a, Vector b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-
-        public static Vector Add(Vector a, Vector b) => new Vector() { a[0] + b[0], a[1] + b[1], a[2] + b[2] };
-
-        public  static List<double> Zeros1d(int rows)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static Vector Range(int max)
         {
-            var list = new List<double>();
+            var l = new Vector();
+            double f = 0.0;
+            for (int i = 0; i < max; i++)
+            {
+                l.Add(f);
+                f += 1.0;
+            }
+            return l;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="step"></param>
+        /// <returns></returns>
+        public static Vector Span(double min, double max, double step)
+        {
+            if (step < Constants.EPSILON) return new Vector();
+            if (min > max && step > 0.0) return new Vector();
+            if (max > min && step < 0.0) return new Vector();
+
+            var l = new Vector();
+            var cur = min;
+            while (cur <= max)
+            {
+                l.Add(cur);
+                cur += step;
+            }
+            return l;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static Vector Neg(Vector a)
+        {
+            var negA = new Vector();
+            a.ForEach(x => negA.Add(-x));
+            return negA;
+        }
+
+
+        public static double Min(Vector a) => throw new NotImplementedException();
+        public static double Max(Vector a) => throw new NotImplementedException();
+        public static bool All(List<bool> a) => throw new NotImplementedException();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static List<bool> Finite(Vector a)
+        {
+            var fin = new List<bool>();
+            a.ForEach(x => fin.Add(double.IsFinite(x)));
+            return fin;
+        }
+
+
+        public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
+        public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
+        public static Vector Normalized(Vector a) => throw new NotImplementedException();
+
+        /// <summary>
+        /// Cross product
+        /// </summary>
+        /// <param name="a">Vector</param>
+        /// <param name="b">Vector</param>
+        /// <returns></returns>
+        public static Vector Cross(Vector u, Vector v) =>
+            new Vector() {
+                u[1] * v[2] - u[2] * v[1],
+                u[2] * v[0] - u[0] * v[2],
+                u[0] * v[1] - u[1] * v[0]
+            };
+
+
+        public static double Dist(Vector a, Vector b) => throw new NotImplementedException();
+        public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
+
+        public static double Sum(Vector a) => throw new NotImplementedException(); //not really clear
+        public static double AddAll(List<Vector> a) => throw new NotImplementedException(); //not really clear
+        public static double AddAllMutate(List<Vector> a) => throw new NotImplementedException(); //not really clear
+        public static double AddMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        public static double SubMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
+        public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
+        public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
+        public static double Norm(Vector a) => throw new NotImplementedException();
+        public static double NormSquared(Vector a) => throw new NotImplementedException();
+
+        /// <summary>
+        /// Create a list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
+        public static Vector Zero1d(int rows)
+        {
+            Vector v = new Vector();
             for (int i = 0; i < rows; i++)
-                list.Add(0.0);
-            return list;
+                v.Add(0.0);
+            return v;
+
         }
 
-        public static Vector Mul(double a, Vector b) => new Vector() { a * b[0], a * b[1], a * b[2] };
-        public static List<double> ScalarMult(double a, List<double> b)
+        /// <summary>
+        /// Create a 2 dimensional list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        /// <returns></returns>
+        public static List<Vector> Zero2d(int rows, int cols)
         {
-            for (int i = 0; i < b.Count; i++)
-                b[i] *= a;
-            return b;
+            List<Vector> lv = new List<Vector>();
+            for (int i = 0; i < rows; i++)
+                lv.Add(Zero1d(cols));
+            return lv;
         }
 
-        public static Vector Div(Vector a, double b) => new Vector() { a[0] / b, a[1] / b, a[2] / b };
+        /// <summary>
+        /// Create a 3 dimensional list of zero values
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        public static List<List<Vector>> Zero3d(int rows, int cols, int depth)
+        {
+            List<List<Vector>> llv = new List<List<Vector>>();
+            for (int i = 0; i < rows; i++)
+                llv.Add(Zero2d(cols, depth));
+            return llv;
+        }
 
-        public static Vector Sub(Vector a, Vector b) => new Vector() { a[0] - b[0], a[1] - b[1], a[2] - b[2] };
-        public static Vector Sub(Point a, Point b) => new Vector() { a[0] - b[0], a[1] - b[1], a[2] - b[2] };
 
-        public static Vector FromPoint(Point a) => new Vector() { a[0], a[1], a[2] };
-        public static Point ToPoint(Vector a) => new Point() { a[0], a[1], a[2] };
+        public static double Dot(Vector a, Vector b) => throw new NotImplementedException();
+        public static Vector Add(Vector a, Vector b) => throw new NotImplementedException();
+        public static Vector Div(Vector a, double b) => throw new NotImplementedException();
+        public static Vector Sub(Vector a, Vector b) => throw new NotImplementedException();
+        public static bool IsZero(Vector a) => throw new NotImplementedException();
+        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
+        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="num"></param>
+        /// <param name="ele"></param>
+        /// <returns></returns>
         public static List<T> Rep<T>(int num, T ele)
         {
             List<T> list = new List<T>();
