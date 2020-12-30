@@ -47,9 +47,8 @@ namespace VerbNurbsSharp.Core
         {
             get
             {
-                BoundingBox bBox = _unset;
-                bBox._initialized = false;
-                return bBox;
+                _unset._initialized = false;
+                return _unset;
             }
             
         }
