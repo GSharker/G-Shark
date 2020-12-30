@@ -191,11 +191,10 @@ namespace VerbNurbsSharp.Core
 
             if (strict)
             {
-                if (pt[0] <= this.Min[0] || pt[0] >= this.Max[0] || (pt[1] <= this.Min[1] || pt[1] >= this.Max[1]) || (pt[2] <= this.Min[2] || 2 >= this.Max[2]))
+                if (pt[0] <= this.Min[0] || pt[0] >= this.Max[0] || pt[1] <= this.Min[1] || pt[1] >= this.Max[1] || pt[2] <= this.Min[2] || pt[2] >= this.Max[2])
                     return false;
             }
-            else
-            if (pt[0] < this.Min[0] || pt[0] > this.Max[0] || (pt[1] < this.Min[1] || pt[1] > this.Max[1]) || (pt[2] < this.Min[2] || 2 > this.Max[2]))
+            else if (pt[0] < this.Min[0] || pt[0] > this.Max[0] || pt[1] < this.Min[1] || pt[1] > this.Max[1] || pt[2] < this.Min[2] || pt[2] > this.Max[2])
                 return false;
             return true;
         }

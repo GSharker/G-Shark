@@ -29,23 +29,23 @@ namespace VerbNurbsSharpTest
         }
 
         [Fact]
-        public void It_Test_If_A_Point_Is_Contained_Into_The_BoundingBox()
+        public void ReturnTrue_IfAPoint_Is_Contained_Into_TheBoundingBox()
         {
             Point conteinedPt = new Point() {2.5, 4.5, 0.0};
 
             BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
 
-            Assert.False(bBox.Contains(conteinedPt, false));
+            Assert.True(bBox.Contains(conteinedPt, false));
         }
 
         [Fact]
-        public void It_Test_If_A_Point_Is_Outside_The_BoundingBox()
+        public void ReturnFalse_IfAPoint_Is_Outside_TheBoundingBox()
         {
-            Point conteinedPt = new Point() { 12.4, 5.0, 0.0 };
+            Point externalPt = new Point() { 12.4, 5.0, 0.0 };
 
             BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
 
-            Assert.False(bBox.Contains(conteinedPt, false));
+            Assert.False(bBox.Contains(externalPt, false));
         }
 
         [Theory]
@@ -59,7 +59,7 @@ namespace VerbNurbsSharpTest
         }
 
         [Fact]
-        public void IntersectReturn_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized()
+        public void IntersectReturns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized()
         {
             BoundingBox bBox1 = BoundingBox.Unset;
             BoundingBox bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
@@ -72,7 +72,7 @@ namespace VerbNurbsSharpTest
         }
 
         [Fact]
-        public void IntersectReturn_UnsetBBox_If_ThereIsNotIntersection()
+        public void IntersectReturns_UnsetBBox_If_ThereIsNotIntersection()
         {
             BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(BoundingBoxCollection.NegativeBoundingBox());
@@ -85,7 +85,7 @@ namespace VerbNurbsSharpTest
         }
 
         [Fact]
-        public void IntersectReturn_BBox_As_Intersection_Of_Two_BBoxes()
+        public void IntersectReturns_BBox_As_Intersection_Of_Two_BBoxes()
         {
             Point pt1 = new Point() { 5d, 5d, 0d };
             Point pt2 = new Point() { 15d, 15d, 0d };
@@ -146,7 +146,7 @@ namespace VerbNurbsSharpTest
         }
 
         [Fact]
-        public void BoundingBoxUnion_Return_ValidBoundingBox_IfOther_IsNotValid()
+        public void Union_Returns_TheValidBoundingBox_IfOther_IsNotValid()
         {
             BoundingBox bBox1 = BoundingBox.Unset;
             BoundingBox bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
