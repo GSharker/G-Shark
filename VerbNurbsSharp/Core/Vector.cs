@@ -117,11 +117,11 @@ namespace VerbNurbsSharp.Core
         public static Vector Normalized(Vector a) => throw new NotImplementedException();
 
         /// <summary>
-        /// Cross product
+        /// Cross product.
         /// </summary>
-        /// <param name="a">Vector</param>
-        /// <param name="b">Vector</param>
-        /// <returns></returns>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>Compute the cross product.</returns>
         public static Vector Cross(Vector u, Vector v) =>
             new Vector() {
                 u[1] * v[2] - u[2] * v[1],
@@ -141,8 +141,26 @@ namespace VerbNurbsSharp.Core
         public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
-        public static double Norm(Vector a) => throw new NotImplementedException();
-        public static double NormSquared(Vector a) => throw new NotImplementedException();
+        /// <summary>
+        /// The norm of a vector, or also say the magnitude of a vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The magnitude of the vector.</returns>
+        public static double Norm(Vector a)
+        {
+            double norm = NormSquared(a);
+            return norm != 0.0 ? Math.Sqrt(norm) : norm;
+        }
+
+        /// <summary>
+        /// The square length of a vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The sum of each value squared.</returns>
+        public static double NormSquared(Vector a)
+        {
+            return a.Aggregate(0.0, (x, a) => a * a + x);
+        }
 
         /// <summary>
         /// Create a list of zero values
@@ -206,11 +224,24 @@ namespace VerbNurbsSharp.Core
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>A vector which is the sum of a and b.</returns>
-        public static Vector operator +(Vector a, Vector b)
+        public static Vector Addition(IList<double> a, IList<double> b)
         {
             Vector vec = new Vector();
             for (int i = 0; i < a.Count; i++)
                 vec.Add(a[i] + b[i]);
+            return vec;
+        }
+        /// <summary>
+        /// Multiply a scalar and a vector.
+        /// </summary>
+        /// <param name="a">The vector to divide.</param>
+        /// <param name="b">The scalar value to multiply.</param>
+        /// <returns>A vector whose magnitude is multiplied by b.</returns>
+        public static Vector Multiply(IList<double> a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] * b);
             return vec;
         }
         /// <summary>
@@ -219,7 +250,7 @@ namespace VerbNurbsSharp.Core
         /// <param name="a">The vector to divide.</param>
         /// <param name="b">The scalar divisor.</param>
         /// <returns>A vector whose magnitude is multiplied by b.</returns>
-        public static Vector operator /(Vector a, double b)
+        public static Vector Division(IList<double> a, double b)
         {
             Vector vec = new Vector();
             for (int i = 0; i < a.Count; i++)
@@ -232,7 +263,7 @@ namespace VerbNurbsSharp.Core
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>A vector which is the difference between a and b.</returns>
-        public static Vector operator -(Vector a, Vector b)
+        public static Vector Subtraction(IList<double> a, IList<double> b)
         {
             Vector vec = new Vector();
             for (int i = 0; i < a.Count; i++)
