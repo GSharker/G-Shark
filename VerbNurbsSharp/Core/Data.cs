@@ -49,17 +49,16 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class KnotArray : List<double> { }
 
-
     /// <summary>
     /// A Plane is simply an origin point and normal.
     /// </summary>
     public class Plane : Serializable<Plane>
     {
-        public Vector Direction { get; set; }
+        public Vector Normal { get; set; }
         public Point Origin { get; set; }
         public Plane(Point origin, Vector direction)
         {
-            this.Direction = direction;
+            this.Normal = direction;
             this.Origin = origin;
         }
     }

@@ -49,5 +49,14 @@ namespace VerbNurbsSharp.XUnit.Core
             _testOutput.WriteLine(distance.ToString());
             Assert.Equal(distanceExpected, distance);
         }
+
+        [Fact]
+        public void isPointOnPlane_ReturnTrue_IfThePointLiesOnPlane()
+        {
+            Plane plane = new Plane(new Point() { 30, 45, 0 }, new Vector() { 30, 45, 0 });
+            Point pt = new Point() { 26.565905, 47.289396, 0.0 };
+
+            Assert.True(Trig.isPointOnPlane(pt, plane, 0.1));
+        }
     }
 }
