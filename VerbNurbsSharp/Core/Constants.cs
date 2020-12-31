@@ -1,4 +1,6 @@
-﻿namespace VerbNurbsSharp.Core
+﻿using System.Net;
+
+namespace VerbNurbsSharp.Core
 {
     /// <summary>
     /// `Constants` contains a collection of default constants used throughout the library
@@ -17,5 +19,9 @@
         /// The minimum value to determine whether two floating point numbers are the same
         /// </summary>
         public static double EPSILON => 1e-10;
+        /// <summary>
+        /// The value of an unset object.
+        /// </summary>
+        public static double UNSETVALUE => 1.23432101234321E+308;
     }
 }
