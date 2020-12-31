@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace VerbNurbsSharp.Core
 {
@@ -12,6 +13,15 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Vector : List<double>
     {
+        public Vector()
+        {
+        }
+
+        public Vector(IEnumerable<double> values)
+        {
+            this.AddRange(values);
+        }
+
         /// <summary>
         /// Multiply a n dimension vector by a constant
         /// </summary>
@@ -114,7 +124,16 @@ namespace VerbNurbsSharp.Core
 
         public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
         public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
-        public static Vector Normalized(Vector a) => throw new NotImplementedException();
+
+        /// <summary>
+        /// Vector normalized.
+        /// </summary>
+        /// <param name="a">The vector has to be normalized.</param>
+        /// <returns>The vector normalized.</returns>
+        public static Vector Normalized(Vector a)
+        {
+            return Division(a, Norm(a));
+        }
 
         /// <summary>
         /// Cross product.
@@ -237,7 +256,7 @@ namespace VerbNurbsSharp.Core
         /// <param name="a">The vector to divide.</param>
         /// <param name="b">The scalar value to multiply.</param>
         /// <returns>A vector whose magnitude is multiplied by b.</returns>
-        public static Vector Multiply(IList<double> a, double b)
+        public static Vector Multiplication(IList<double> a, double b)
         {
             Vector vec = new Vector();
             for (int i = 0; i < a.Count; i++)

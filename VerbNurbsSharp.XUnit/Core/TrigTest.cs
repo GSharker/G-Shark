@@ -26,5 +26,28 @@ namespace VerbNurbsSharp.XUnit.Core
 
             Assert.True(Trig.ArePointsCoplanar(points));
         }
+
+        [Fact]
+        public void RayClosestPoint_ReturnTheProjectPoint()
+        {
+            Ray ray = new Ray(new Point(){0,0,0},new Vector(){30,45,0});
+            Point pt = new Point(){10,20,0};
+            Point expectedPt = new Point(){ 12.30769230769231, 18.461538461538463, 0 };
+
+            Point closestPt = Trig.RayClosestPoint(pt, ray);
+            Assert.Equal(expectedPt, closestPt);
+        }
+
+        [Fact]
+        public void DistanceToRay_ReturnTheDistance_Between_APointAndTheRay()
+        {
+            Ray ray = new Ray(new Point() { 0, 0, 0 }, new Vector() { 30, 45, 0 });
+            Point pt = new Point() { 10, 20, 0 };
+            double distanceExpected = 2.7735009811261464;
+
+            double distance = Trig.DistanceToRay(pt, ray);
+            _testOutput.WriteLine(distance.ToString());
+            Assert.Equal(distanceExpected, distance);
+        }
     }
 }

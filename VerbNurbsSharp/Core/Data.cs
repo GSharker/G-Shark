@@ -10,6 +10,14 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Point : List<double>
     {
+        public Point()
+        {
+        }
+
+        public Point(IEnumerable<double> values)
+        {
+            this.AddRange(values);
+        }
         /// <summary>
         /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
         /// </summary>
