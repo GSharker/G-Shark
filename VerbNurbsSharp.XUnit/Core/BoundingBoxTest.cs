@@ -16,6 +16,7 @@ namespace VerbNurbsSharpTest
             _testOutput = testOutput;
         }
 
+        [Trait("Category", "BoundingBox")]
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxCollections), MemberType = typeof(BoundingBoxCollection))]
         public void It_Create_A_BoundingBox_From_Points(List<Point> pts, Point min, Point max)
