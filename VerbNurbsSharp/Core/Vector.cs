@@ -23,20 +23,15 @@ namespace VerbNurbsSharp.Core
         }
 
         /// <summary>
-        /// Multiply a n dimension vector by a constant
+        /// The angle in radians between two vectors.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Vector Mul(double a, Vector b)
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>The angle in radians</returns>
+        public static double AngleBetween(Vector a, Vector b)
         {
-            var nV = new Vector();
-            foreach (var c in b)
-                nV.Add(c * a);
-            return nV;
+            return Math.Round(Math.Acos(Dot(a, b) / (Norm(a) * Norm(b))),6);
         }
-
-        public static double AngleBetween(Vector a, Vector b) => throw new NotImplementedException();
 
         public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
 
@@ -45,82 +40,19 @@ namespace VerbNurbsSharp.Core
         public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
 
         /// <summary>
-        /// 
+        /// Reverses this vector in place (reverses the direction).
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static double Domain(Vector a) => a.Last() - a.First();
+        /// <param name="a">The vector to reverse.</param>
+        /// <returns>The reversed vector.</returns>
+        public static Vector Reverse(Vector a) => new Vector(a.Select(x => -x));
 
         /// <summary>
-        /// 
+        /// Gets a value indicating whether this vector is valid.
+        /// A valid vector must be formed of finite numbers.
         /// </summary>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        public static Vector Range(int max)
-        {
-            var l = new Vector();
-            double f = 0.0;
-            for (int i = 0; i < max; i++)
-            {
-                l.Add(f);
-                f += 1.0;
-            }
-            return l;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="step"></param>
-        /// <returns></returns>
-        public static Vector Span(double min, double max, double step)
-        {
-            if (step < Constants.EPSILON) return new Vector();
-            if (min > max && step > 0.0) return new Vector();
-            if (max > min && step < 0.0) return new Vector();
-
-            var l = new Vector();
-            var cur = min;
-            while (cur <= max)
-            {
-                l.Add(cur);
-                cur += step;
-            }
-            return l;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static Vector Neg(Vector a)
-        {
-            var negA = new Vector();
-            a.ForEach(x => negA.Add(-x));
-            return negA;
-        }
-
-
-        public static double Min(Vector a) => throw new NotImplementedException();
-        public static double Max(Vector a) => throw new NotImplementedException();
-        public static bool All(List<bool> a) => throw new NotImplementedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static List<bool> Finite(Vector a)
-        {
-            var fin = new List<bool>();
-            a.ForEach(x => fin.Add(double.IsFinite(x)));
-            return fin;
-        }
-
+        /// <param name="a">The vector to be valued.</param>
+        /// <returns>True if the vector is valid.</returns>
+        public bool IsValid() => this.Any(double.IsFinite);
 
         public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
         public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();

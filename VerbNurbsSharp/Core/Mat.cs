@@ -18,7 +18,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             foreach (var l in b)
-                r.Add(Vector.Mul(a, (Vector)l));
+                r.Add(Vector.Multiplication((Vector)l, a));
             return r;
         }
 
