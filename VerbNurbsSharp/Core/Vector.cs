@@ -21,12 +21,10 @@ namespace VerbNurbsSharp.Core
         {
             this.AddRange(values);
         }
-
         /// <summary>
         /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
         /// </summary>
         public static Vector Unset => new Vector(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
-
         /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
@@ -37,13 +35,6 @@ namespace VerbNurbsSharp.Core
         {
             return Math.Acos(Dot(a, b) / (Length(a) * Length(b)));
         }
-
-        public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
-
-        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
-
-        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
-
         /// <summary>
         /// Reverses this vector in place (reverses the direction).
         /// </summary>
@@ -133,16 +124,6 @@ namespace VerbNurbsSharp.Core
                 sum += a[i] * b[i];
             return sum;
         }
-
-        public static double Sum(Vector a) => throw new NotImplementedException(); //not really clear
-        public static double AddAll(List<Vector> a) => throw new NotImplementedException(); //not really clear
-        public static double AddAllMutate(List<Vector> a) => throw new NotImplementedException(); //not really clear
-        public static double AddMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
-        public static double SubMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
-        public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
-        public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
-        public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
-
         /// <summary>
         /// Create a list of zero values.
         /// </summary>
@@ -190,5 +171,30 @@ namespace VerbNurbsSharp.Core
         {
             return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
+
+        // ToDo implement them if necessary.
+        // Get the angle between two vectors in 2d, for a 2 dimension.
+        // use the perp dot product other words the two dimensional cross-product.
+        // http://johnblackburne.blogspot.com/2012/02/perp-dot-product.html
+        // http://www.sunshine2k.de/articles/Notes_PerpDotProduct_R2.pdf
+        public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
+        // Return a angle in between a and b, not clear what n vector is used for.
+        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+        // Return a angle in between a and b, not clear what n vector is used for. Angle is degrees.
+        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+        public static double Sum(Vector a) => throw new NotImplementedException(); // This sum the value of a vector.
+        public static double AddAll(List<Vector> a) => throw new NotImplementedException(); // This sum all the vectors.
+        // This sum all the vectors to the first.
+        public static double AddAllMutate(List<Vector> a) => throw new NotImplementedException();
+        // This multiple all the vectors for a value and add them to the first one
+        public static double AddMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        // This subtract all the vectors for a value and add them to the first one
+        public static double SubMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        // Like addition but modifying the first vector.
+        public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
+        // Like subtraction but modifying the first vector.
+        public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
+        // Like multiplication but modifying the first vector.
+        public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
     }
 }
