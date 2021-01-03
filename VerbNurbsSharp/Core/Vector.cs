@@ -3,11 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace VerbNurbsSharp.Core
 {
-    public class Vec
+    /// <summary>
+    /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
+    /// So, you would write simply [1,0,0] to create a Vector in the X direction.
+    /// </summary>
+    public class Vector : List<double>
     {
+        public Vector()
+        {
+        }
+
+        public Vector(IEnumerable<double> values)
+        {
+            this.AddRange(values);
+        }
+
         /// <summary>
         /// Multiply a n dimension vector by a constant
         /// </summary>
@@ -110,14 +124,23 @@ namespace VerbNurbsSharp.Core
 
         public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
         public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
-        public static Vector Normalized(Vector a) => throw new NotImplementedException();
 
         /// <summary>
-        /// Cross product
+        /// Vector normalized.
         /// </summary>
-        /// <param name="a">Vector</param>
-        /// <param name="b">Vector</param>
-        /// <returns></returns>
+        /// <param name="a">The vector has to be normalized.</param>
+        /// <returns>The vector normalized.</returns>
+        public static Vector Normalized(Vector a)
+        {
+            return Division(a, Norm(a));
+        }
+
+        /// <summary>
+        /// Cross product.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>Compute the cross product.</returns>
         public static Vector Cross(Vector u, Vector v) =>
             new Vector() {
                 u[1] * v[2] - u[2] * v[1],
@@ -137,8 +160,26 @@ namespace VerbNurbsSharp.Core
         public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
-        public static double Norm(Vector a) => throw new NotImplementedException();
-        public static double NormSquared(Vector a) => throw new NotImplementedException();
+        /// <summary>
+        /// The norm of a vector, or also say the magnitude of a vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The magnitude of the vector.</returns>
+        public static double Norm(Vector a)
+        {
+            double norm = NormSquared(a);
+            return norm != 0.0 ? Math.Sqrt(norm) : norm;
+        }
+
+        /// <summary>
+        /// The square length of a vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The sum of each value squared.</returns>
+        public static double NormSquared(Vector a)
+        {
+            return a.Aggregate(0.0, (x, a) => a * a + x);
+        }
 
         /// <summary>
         /// Create a list of zero values
@@ -183,11 +224,71 @@ namespace VerbNurbsSharp.Core
             return llv;
         }
 
-
-        public static double Dot(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector Add(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector Div(Vector a, double b) => throw new NotImplementedException();
-        public static Vector Sub(Vector a, Vector b) => throw new NotImplementedException();
+        /// <summary>
+        /// Compute the dot product between two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <returns>The dot product.</returns>
+        public static double Dot(Vector a, Vector b)
+        {
+            double sum = 0d;
+            for (int i = 0; i < a.Count; i++)
+                sum += a[i] * b[i];
+            return sum;
+        }
+        /// <summary>
+        /// Add two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the sum of a and b.</returns>
+        public static Vector Addition(IList<double> a, IList<double> b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] + b[i]);
+            return vec;
+        }
+        /// <summary>
+        /// Multiply a scalar and a vector.
+        /// </summary>
+        /// <param name="a">The vector to divide.</param>
+        /// <param name="b">The scalar value to multiply.</param>
+        /// <returns>A vector whose magnitude is multiplied by b.</returns>
+        public static Vector Multiplication(IList<double> a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] * b);
+            return vec;
+        }
+        /// <summary>
+        /// Divide a vector by a scalar.
+        /// </summary>
+        /// <param name="a">The vector to divide.</param>
+        /// <param name="b">The scalar divisor.</param>
+        /// <returns>A vector whose magnitude is multiplied by b.</returns>
+        public static Vector Division(IList<double> a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] / b);
+            return vec;
+        }
+        /// <summary>
+        /// Subtract two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the difference between a and b.</returns>
+        public static Vector Subtraction(IList<double> a, IList<double> b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i]-b[i]);
+            return vec;
+        }
         public static bool IsZero(Vector a) => throw new NotImplementedException();
         public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
         public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
