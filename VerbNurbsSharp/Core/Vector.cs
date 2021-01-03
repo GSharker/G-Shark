@@ -66,10 +66,19 @@ namespace VerbNurbsSharp.Core
         /// <returns>True if all the component are less than Epsilon.</returns>
         public bool IsZero() => this.All(value => Math.Abs(value) < Constants.EPSILON);
 
-        // Amplitude
-        public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
-        // Amplitude but negative direction.
-        public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
+        // ToDo probably this method should be in another class.
+        /// <summary>
+        /// Gets the vector amplified by a scalar value along a direction.
+        /// </summary>
+        /// <param name="origin">The start point or vector.</param>
+        /// <param name="dir">The direction.</param>
+        /// <param name="amplitude">The scalar value to amplify the vector.</param>
+        /// <returns>The vector amplified.</returns>
+        public static Vector OnRay(IList<double> origin, Vector dir, double amplitude)
+        {
+            var vectorAmplified = new Vector(Constants.Multiplication(Vector.Normalized(dir), amplitude));
+            return new Vector(Constants.Addition(origin, vectorAmplified));
+        }
 
         /// <summary>
         /// Vector normalized.

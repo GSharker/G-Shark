@@ -34,6 +34,13 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { new Vector() { -0d, 0d, 0d }, 0.0}
             };
 
+        public static IEnumerable<object[]> AmplifiedVectors =>
+            new List<object[]>
+            {
+                new object[] { new Vector() { 3.0930734141595426, 11.54653670707977, 6.726731646460115 }, 15},
+                new object[] { new Vector() { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
+            };
+
         [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheRadianAngle_BetweenTwoVectors()
@@ -154,6 +161,19 @@ namespace VerbNurbsSharp.XUnit.Core
             vec3D.Should().HaveCount(3);
             vec3D.Select(val => val.Should().HaveCount(4));
             vec3D.Select(val => val.Select(x => x.Should().Contain(0.0)));
+        }
+
+        [Trait("Category", "Vector")]
+        [Theory]
+        [MemberData(nameof(AmplifiedVectors))]
+        public void Return_VectorAmplified_LongADirection(Vector expected, double amplitude)
+        {
+            var pt = new Point(){ -10, 5, 10 };
+            var dir = new Vector(){ 20,10,-5};
+
+            var amplifiedVector = Vector.OnRay(pt, dir, amplitude);
+
+            amplifiedVector.Should().BeEquivalentTo(expected);
         }
 
     }
