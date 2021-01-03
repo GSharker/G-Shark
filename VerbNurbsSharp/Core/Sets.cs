@@ -61,6 +61,24 @@ namespace VerbNurbsSharp.Core
             return l;
         }
 
+        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
+        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="num"></param>
+        /// <param name="ele"></param>
+        /// <returns></returns>
+        public static List<T> Rep<T>(int num, T ele)
+        {
+            List<T> list = new List<T>();
+            for (int i = 0; i < num; i++)
+                list.Add(ele);
+            return list;
+        }
+
         // ToDo will be integrated if necessary.
         public static double Min(Vector a) => throw new NotImplementedException();
         public static double Max(Vector a) => throw new NotImplementedException();

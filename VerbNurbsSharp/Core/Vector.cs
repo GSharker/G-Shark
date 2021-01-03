@@ -66,7 +66,9 @@ namespace VerbNurbsSharp.Core
         /// <returns>True if all the component are less than Epsilon.</returns>
         public bool IsZero() => this.All(value => Math.Abs(value) < Constants.EPSILON);
 
+        // Amplitude
         public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
+        // Amplitude but negative direction.
         public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
 
         /// <summary>
@@ -78,7 +80,6 @@ namespace VerbNurbsSharp.Core
         {
             return new Vector(Constants.Division(a, Length(a)));
         }
-
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
         /// </summary>
@@ -89,7 +90,6 @@ namespace VerbNurbsSharp.Core
             if (!a.IsValid() || a.IsZero()) return 0.0;
             return Math.Sqrt(SquaredLength(a));
         }
-
         /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
@@ -99,7 +99,6 @@ namespace VerbNurbsSharp.Core
         {
             return a.Aggregate(0.0, (x, a) => a * a + x);
         }
-
         /// <summary>
         /// Cross product.
         /// </summary>
@@ -112,7 +111,6 @@ namespace VerbNurbsSharp.Core
                 u[2] * v[0] - u[0] * v[2],
                 u[0] * v[1] - u[1] * v[0]
             };
-
         /// <summary>
         /// Compute the dot product between two vectors.
         /// </summary>
@@ -126,9 +124,6 @@ namespace VerbNurbsSharp.Core
                 sum += a[i] * b[i];
             return sum;
         }
-
-        public static double Dist(Vector a, Vector b) => throw new NotImplementedException();
-        public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
 
         public static double Sum(Vector a) => throw new NotImplementedException(); //not really clear
         public static double AddAll(List<Vector> a) => throw new NotImplementedException(); //not really clear
@@ -151,7 +146,6 @@ namespace VerbNurbsSharp.Core
                 v.Add(0.0);
             return v;
         }
-
         /// <summary>
         /// Create a 2 dimensional list of zero values.
         /// </summary>
@@ -165,7 +159,6 @@ namespace VerbNurbsSharp.Core
                 lv.Add(Zero1d(cols));
             return lv;
         }
-
         /// <summary>
         /// Create a 3 dimensional list of zero values.
         /// </summary>
@@ -180,27 +173,6 @@ namespace VerbNurbsSharp.Core
                 llv.Add(Zero2d(cols, depth));
             return llv;
         }
-
-        
-
-        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="num"></param>
-        /// <param name="ele"></param>
-        /// <returns></returns>
-        public static List<T> Rep<T>(int num, T ele)
-        {
-            List<T> list = new List<T>();
-            for (int i = 0; i < num; i++)
-                list.Add(ele);
-            return list;
-        }
-
         /// <summary>
         /// Constructs the string representation of the vector.
         /// </summary>

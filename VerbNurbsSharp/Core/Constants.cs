@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using System.Linq;
 using System.Net;
+using System.Runtime.ExceptionServices;
 
 namespace VerbNurbsSharp.Core
 {
@@ -9,7 +12,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Constants
     {
-
+        //ToDo make tests for this class.
         /// <summary>
         /// The current version of GeometryLib
         /// </summary>
@@ -54,8 +57,9 @@ namespace VerbNurbsSharp.Core
             return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
+        //ToDo maybe these operators can be split for Point and Vector or in a specific class called MathVerb, for example.
         /// <summary>
-        /// Add two list of numbers.
+        /// Add two list of numbers, so you can sum points or vectors.
         /// </summary>
         /// <param name="a">The first list.</param>
         /// <param name="b">The second list.</param>
@@ -68,7 +72,7 @@ namespace VerbNurbsSharp.Core
             return vec;
         }
         /// <summary>
-        /// Multiply a scalar and a list numbers.
+        /// Multiply a scalar and a list numbers, so you can multiple vectors.
         /// </summary>
         /// <param name="a">The list to divide.</param>
         /// <param name="b">The scalar value to multiply.</param>
@@ -81,7 +85,7 @@ namespace VerbNurbsSharp.Core
             return vec;
         }
         /// <summary>
-        /// Divide a list of numbers by a scalar.
+        /// Divide a list of numbers by a scalar, so you can divide vectors.
         /// </summary>
         /// <param name="a">The list to divide.</param>
         /// <param name="b">The scalar divisor.</param>
@@ -94,7 +98,7 @@ namespace VerbNurbsSharp.Core
             return vec;
         }
         /// <summary>
-        /// Subtract two lists of numbers.
+        /// Subtract two lists of numbers, so you can subtract points and vectors.
         /// </summary>
         /// <param name="a">The first list.</param>
         /// <param name="b">The second list.</param>
@@ -106,5 +110,19 @@ namespace VerbNurbsSharp.Core
                 vec.Add(a[i] - b[i]);
             return vec;
         }
+        /// <summary>
+        /// The distance from two vectors or two points.
+        /// </summary>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>The distance between the provided list.</returns>
+        public static double DistanceTo(IList<double> a, IList<double> b)
+        {
+            if(a.Count != b.Count) throw new Exception("The two list doesn't match in length.");
+            return Math.Sqrt(a.Zip(b, (first, second) => Math.Pow(first - second, 2)).Sum());
+        }
+
+        // ToDo value if this method is necessary.
+        public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
     }
 }

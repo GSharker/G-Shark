@@ -126,14 +126,35 @@ namespace VerbNurbsSharp.XUnit.Core
 
         [Trait("Category", "Vector")]
         [Fact]
-        public void Return_TheSubtraction_BetweenTwoVectors()
+        public void Return_AZero1dVector()
         {
-            Vector vec1 = new Vector() { 8.0, 5.0, 0.0 };
-            Vector vec2 = new Vector() { 1.0, 10.0, -6.0 };
-            Vector vecExpected = new Vector() { -7.0, 5.0, -6.0 };
+            Vector vec1D = Vector.Zero1d(4);
 
-            Vector result = new Vector(Constants.Subtraction(vec2, vec1));
-            Assert.Equal(vecExpected, result);
+            vec1D.Should().HaveCount(4);
+            vec1D.Select(val => val.Should().Be(0.0));
         }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_AZero2dVector()
+        {
+            var vec2D = Vector.Zero2d(3,3);
+
+            vec2D.Should().HaveCount(3);
+            vec2D.Select(val => val.Should().HaveCount(3));
+            vec2D.Select(val => val.Should().Contain(0.0));
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_AZero3dVector()
+        {
+            var vec3D = Vector.Zero3d(3, 3, 4);
+
+            vec3D.Should().HaveCount(3);
+            vec3D.Select(val => val.Should().HaveCount(4));
+            vec3D.Select(val => val.Select(x => x.Should().Contain(0.0)));
+        }
+
     }
 }
