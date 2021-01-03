@@ -18,7 +18,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             foreach (var l in b)
-                r.Add(Vector.Mul(a, (Vector)l));
+                r.Add(Constants.Multiplication((Vector)l, a));
             return r;
         }
 
@@ -78,7 +78,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vector.Addition((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Addition((Vector)a[i], (Vector)b[i]));
             return r;
         }
 
@@ -92,7 +92,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vector.Division((Vector)a[i], b));
+                r.Add(Constants.Division((Vector)a[i], b));
             return r;
         }
 
@@ -106,7 +106,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vector.Subtraction((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Subtraction((Vector)a[i], (Vector)b[i]));
             return r;
         }
 

@@ -21,20 +21,15 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
         /// </summary>
-        public static Point Unset
-        {
-            get
-            {
-                return new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
-            }
-        }
+        public static Point Unset => new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
+
         /// <summary>
         /// Constructs the string representation of the point.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{this[0]},{this[1]},{this[2]}";
+            return $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }
 
@@ -42,7 +37,7 @@ namespace VerbNurbsSharp.Core
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
-    public class Matrix : List<List<double>> { }
+    public class Matrix : List<IList<double>> { }
 
     /// <summary>
     /// A KnotArray is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate KnotArray's.

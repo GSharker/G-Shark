@@ -21,109 +21,55 @@ namespace VerbNurbsSharp.Core
         {
             this.AddRange(values);
         }
-
         /// <summary>
-        /// Multiply a n dimension vector by a constant
+        /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Vector Mul(double a, Vector b)
+        public static Vector Unset => new Vector(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
+        /// <summary>
+        /// The angle in radians between two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>The angle in radians</returns>
+        public static double AngleBetween(Vector a, Vector b)
         {
-            var nV = new Vector();
-            foreach (var c in b)
-                nV.Add(c * a);
-            return nV;
+            return Math.Acos(Dot(a, b) / (Length(a) * Length(b)));
         }
-
-        public static double AngleBetween(Vector a, Vector b) => throw new NotImplementedException();
-
-        public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
-
-        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
-
-        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+        /// <summary>
+        /// Reverses this vector in place (reverses the direction).
+        /// </summary>
+        /// <param name="a">The vector to reverse.</param>
+        /// <returns>The reversed vector.</returns>
+        public static Vector Reverse(Vector a) => new Vector(a.Select(x => -x));
 
         /// <summary>
-        /// 
+        /// Gets a value indicating whether this vector is valid.
+        /// A valid vector must be formed of finite numbers.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static double Domain(Vector a) => a.Last() - a.First();
+        /// <param name="a">The vector to be valued.</param>
+        /// <returns>True if the vector is valid.</returns>
+        public bool IsValid() => this.Any(Constants.IsValidDouble);
 
         /// <summary>
-        /// 
+        /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
         /// </summary>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        public static Vector Range(int max)
+        /// <param name="a">The vector to check.</param>
+        /// <returns>True if all the component are less than Epsilon.</returns>
+        public bool IsZero() => this.All(value => Math.Abs(value) < Constants.EPSILON);
+
+        // ToDo probably this method should be in another class.
+        /// <summary>
+        /// Gets the vector amplified by a scalar value along a direction.
+        /// </summary>
+        /// <param name="origin">The start point or vector.</param>
+        /// <param name="dir">The direction.</param>
+        /// <param name="amplitude">The scalar value to amplify the vector.</param>
+        /// <returns>The vector amplified.</returns>
+        public static Vector OnRay(IList<double> origin, Vector dir, double amplitude)
         {
-            var l = new Vector();
-            double f = 0.0;
-            for (int i = 0; i < max; i++)
-            {
-                l.Add(f);
-                f += 1.0;
-            }
-            return l;
+            var vectorAmplified = new Vector(Constants.Multiplication(Vector.Normalized(dir), amplitude));
+            return new Vector(Constants.Addition(origin, vectorAmplified));
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="step"></param>
-        /// <returns></returns>
-        public static Vector Span(double min, double max, double step)
-        {
-            if (step < Constants.EPSILON) return new Vector();
-            if (min > max && step > 0.0) return new Vector();
-            if (max > min && step < 0.0) return new Vector();
-
-            var l = new Vector();
-            var cur = min;
-            while (cur <= max)
-            {
-                l.Add(cur);
-                cur += step;
-            }
-            return l;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static Vector Neg(Vector a)
-        {
-            var negA = new Vector();
-            a.ForEach(x => negA.Add(-x));
-            return negA;
-        }
-
-
-        public static double Min(Vector a) => throw new NotImplementedException();
-        public static double Max(Vector a) => throw new NotImplementedException();
-        public static bool All(List<bool> a) => throw new NotImplementedException();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static List<bool> Finite(Vector a)
-        {
-            var fin = new List<bool>();
-            a.ForEach(x => fin.Add(double.IsFinite(x)));
-            return fin;
-        }
-
-
-        public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
-        public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
 
         /// <summary>
         /// Vector normalized.
@@ -132,9 +78,27 @@ namespace VerbNurbsSharp.Core
         /// <returns>The vector normalized.</returns>
         public static Vector Normalized(Vector a)
         {
-            return Division(a, Norm(a));
+            return new Vector(Constants.Division(a, Length(a)));
         }
-
+        /// <summary>
+        /// Computes the length (or magnitude, or size) of this vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The magnitude of the vector.</returns>
+        public static double Length(Vector a)
+        {
+            if (!a.IsValid() || a.IsZero()) return 0.0;
+            return Math.Sqrt(SquaredLength(a));
+        }
+        /// <summary>
+        /// Computes the squared length (or magnitude, or size) of this vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The sum of each value squared.</returns>
+        public static double SquaredLength(Vector a)
+        {
+            return a.Aggregate(0.0, (x, a) => a * a + x);
+        }
         /// <summary>
         /// Cross product.
         /// </summary>
@@ -147,83 +111,6 @@ namespace VerbNurbsSharp.Core
                 u[2] * v[0] - u[0] * v[2],
                 u[0] * v[1] - u[1] * v[0]
             };
-
-
-        public static double Dist(Vector a, Vector b) => throw new NotImplementedException();
-        public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
-
-        public static double Sum(Vector a) => throw new NotImplementedException(); //not really clear
-        public static double AddAll(List<Vector> a) => throw new NotImplementedException(); //not really clear
-        public static double AddAllMutate(List<Vector> a) => throw new NotImplementedException(); //not really clear
-        public static double AddMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
-        public static double SubMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
-        public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
-        public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
-        public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
-        /// <summary>
-        /// The norm of a vector, or also say the magnitude of a vector.
-        /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <returns>The magnitude of the vector.</returns>
-        public static double Norm(Vector a)
-        {
-            double norm = NormSquared(a);
-            return norm != 0.0 ? Math.Sqrt(norm) : norm;
-        }
-
-        /// <summary>
-        /// The square length of a vector.
-        /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <returns>The sum of each value squared.</returns>
-        public static double NormSquared(Vector a)
-        {
-            return a.Aggregate(0.0, (x, a) => a * a + x);
-        }
-
-        /// <summary>
-        /// Create a list of zero values
-        /// </summary>
-        /// <param name="rows"></param>
-        /// <returns></returns>
-        public static Vector Zero1d(int rows)
-        {
-            Vector v = new Vector();
-            for (int i = 0; i < rows; i++)
-                v.Add(0.0);
-            return v;
-
-        }
-
-        /// <summary>
-        /// Create a 2 dimensional list of zero values
-        /// </summary>
-        /// <param name="rows"></param>
-        /// <param name="cols"></param>
-        /// <returns></returns>
-        public static List<Vector> Zero2d(int rows, int cols)
-        {
-            List<Vector> lv = new List<Vector>();
-            for (int i = 0; i < rows; i++)
-                lv.Add(Zero1d(cols));
-            return lv;
-        }
-
-        /// <summary>
-        /// Create a 3 dimensional list of zero values
-        /// </summary>
-        /// <param name="rows"></param>
-        /// <param name="cols"></param>
-        /// <param name="depth"></param>
-        /// <returns></returns>
-        public static List<List<Vector>> Zero3d(int rows, int cols, int depth)
-        {
-            List<List<Vector>> llv = new List<List<Vector>>();
-            for (int i = 0; i < rows; i++)
-                llv.Add(Zero2d(cols, depth));
-            return llv;
-        }
-
         /// <summary>
         /// Compute the dot product between two vectors.
         /// </summary>
@@ -238,74 +125,76 @@ namespace VerbNurbsSharp.Core
             return sum;
         }
         /// <summary>
-        /// Add two vectors.
+        /// Create a list of zero values.
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>A vector which is the sum of a and b.</returns>
-        public static Vector Addition(IList<double> a, IList<double> b)
+        /// <param name="rows">Rows dimension.</param>
+        /// <returns>Get a vector of r dimension.</returns>
+        public static Vector Zero1d(int rows)
         {
-            Vector vec = new Vector();
-            for (int i = 0; i < a.Count; i++)
-                vec.Add(a[i] + b[i]);
-            return vec;
+            Vector v = new Vector();
+            for (int i = 0; i < rows; i++)
+                v.Add(0.0);
+            return v;
         }
         /// <summary>
-        /// Multiply a scalar and a vector.
+        /// Create a 2 dimensional list of zero values.
         /// </summary>
-        /// <param name="a">The vector to divide.</param>
-        /// <param name="b">The scalar value to multiply.</param>
-        /// <returns>A vector whose magnitude is multiplied by b.</returns>
-        public static Vector Multiplication(IList<double> a, double b)
+        /// <param name="rows">Rows dimension.</param>
+        /// <param name="cols">Columns dimension.</param>
+        /// <returns>Get a vector of r*c dimension.</returns>
+        public static List<Vector> Zero2d(int rows, int cols)
         {
-            Vector vec = new Vector();
-            for (int i = 0; i < a.Count; i++)
-                vec.Add(a[i] * b);
-            return vec;
+            List<Vector> lv = new List<Vector>();
+            for (int i = 0; i < rows; i++)
+                lv.Add(Zero1d(cols));
+            return lv;
         }
         /// <summary>
-        /// Divide a vector by a scalar.
+        /// Create a 3 dimensional list of zero values.
         /// </summary>
-        /// <param name="a">The vector to divide.</param>
-        /// <param name="b">The scalar divisor.</param>
-        /// <returns>A vector whose magnitude is multiplied by b.</returns>
-        public static Vector Division(IList<double> a, double b)
+        /// <param name="rows">Rows dimension.</param>
+        /// <param name="cols">Columns dimension.</param>
+        /// <param name="depth">Depth dimension.</param>
+        /// <returns>Get a vector of r*c*d dimension.</returns>
+        public static List<List<Vector>> Zero3d(int rows, int cols, int depth)
         {
-            Vector vec = new Vector();
-            for (int i = 0; i < a.Count; i++)
-                vec.Add(a[i] / b);
-            return vec;
+            List<List<Vector>> llv = new List<List<Vector>>();
+            for (int i = 0; i < rows; i++)
+                llv.Add(Zero2d(cols, depth));
+            return llv;
         }
         /// <summary>
-        /// Subtract two vectors.
+        /// Constructs the string representation of the vector.
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>A vector which is the difference between a and b.</returns>
-        public static Vector Subtraction(IList<double> a, IList<double> b)
+        /// <returns>The vector in string format</returns>
+        public override string ToString()
         {
-            Vector vec = new Vector();
-            for (int i = 0; i < a.Count; i++)
-                vec.Add(a[i]-b[i]);
-            return vec;
+            return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
-        public static bool IsZero(Vector a) => throw new NotImplementedException();
-        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="num"></param>
-        /// <param name="ele"></param>
-        /// <returns></returns>
-        public static List<T> Rep<T>(int num, T ele)
-        {
-            List<T> list = new List<T>();
-            for (int i = 0; i < num; i++)
-                list.Add(ele);
-            return list;
-        }
+        // ToDo implement them if necessary.
+        // Get the angle between two vectors in 2d, for a 2 dimension.
+        // use the perp dot product other words the two dimensional cross-product.
+        // http://johnblackburne.blogspot.com/2012/02/perp-dot-product.html
+        // http://www.sunshine2k.de/articles/Notes_PerpDotProduct_R2.pdf
+        public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
+        // Return a angle in between a and b, not clear what n vector is used for.
+        public static double PositiveAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+        // Return a angle in between a and b, not clear what n vector is used for. Angle is degrees.
+        public static double SignedAngleBetween(Vector a, Vector b, Vector n) => throw new NotImplementedException();
+        public static double Sum(Vector a) => throw new NotImplementedException(); // This sum the value of a vector.
+        public static double AddAll(List<Vector> a) => throw new NotImplementedException(); // This sum all the vectors.
+        // This sum all the vectors to the first.
+        public static double AddAllMutate(List<Vector> a) => throw new NotImplementedException();
+        // This multiple all the vectors for a value and add them to the first one
+        public static double AddMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        // This subtract all the vectors for a value and add them to the first one
+        public static double SubMulMutate(Vector a, Vector b, double s) => throw new NotImplementedException();
+        // Like addition but modifying the first vector.
+        public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
+        // Like subtraction but modifying the first vector.
+        public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
+        // Like multiplication but modifying the first vector.
+        public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
     }
 }
