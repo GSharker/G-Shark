@@ -4,8 +4,8 @@ The initial library uses Haxe to build for different languages including C# with
 Still in the very early stages but I am planning to include few examples, including a ConsoleApp and a SPA based on Blazor WebAssembly.
 # VerbNurbsSharp.XUnit
 This projects implements unit tests using XUnit and Fluent Assertion
-# VerbNurbsSharp.XUnit
-This projects implements a console app test
+# VerbNurbsSharpConsoleApp
+This projects implements a console app to test some functionalities
 # WIP Classes
 ### Core
  - [x] BoundingBox
@@ -26,5 +26,5 @@ This projects implements a console app test
 ### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzODQ1MjQwMDNdfQ==
+eyJoaXN0b3J5IjpbLTM2Mzg2MDMxNV19
 -->
