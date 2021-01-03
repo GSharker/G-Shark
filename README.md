@@ -5,9 +5,7 @@ Still in the very early stages but I am planning to include few examples, includ
 # VerbNurbsSharp.XUnit
 This projects implements unit tests using XUnit and Fluent Assertion
 # WIP Classes
-
-## Core
-
+### Core
  - [x] BoundingBox
  - [x] Constants
  - [x] Data
@@ -19,14 +17,12 @@ This projects implements unit tests using XUnit and Fluent Assertion
  - [x] Trig
  - [x] Vector
  - [ ] KDTree 
-
-## Evaluation
+### Evaluation
 - [ ] Check
 - [ ] Eval
 - [ ] Make
-
-## Geometry
+### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MTE3MjE0MzFdfQ==
+eyJoaXN0b3J5IjpbMTM3NzEyODI2NF19
 -->
