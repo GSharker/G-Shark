@@ -80,7 +80,7 @@ namespace VerbNurbsSharp.Core
         public static double Length(Vector a)
         {
             if (!a.IsValid()) return 0.0;
-            return Math.Round(Math.Sqrt(SquaredLength(a)), 6);
+            return Math.Sqrt(SquaredLength(a));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>The sum of each value squared.</returns>
         public static double SquaredLength(Vector a)
         {
-            return Math.Round(a.Aggregate(0.0, (x, a) => a * a + x), 6);
+            return a.Aggregate(0.0, (x, a) => a * a + x);
         }
 
         /// <summary>
@@ -244,6 +244,15 @@ namespace VerbNurbsSharp.Core
             for (int i = 0; i < num; i++)
                 list.Add(ele);
             return list;
+        }
+
+        /// <summary>
+        /// Constructs the string representation of the vector.
+        /// </summary>
+        /// <returns>The vector in string format</returns>
+        public override string ToString()
+        {
+            return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }
 }

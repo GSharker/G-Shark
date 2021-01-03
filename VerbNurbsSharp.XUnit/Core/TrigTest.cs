@@ -48,7 +48,7 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             Ray ray = new Ray(new Point() { 0, 0, 0 }, new Vector() { 30, 45, 0 });
             Point pt = new Point() { 10, 20, 0 };
-            double distanceExpected = 2.7735009811261464;
+            double distanceExpected = 2.773501;
 
             double distance = Trig.DistanceToRay(pt, ray);
 

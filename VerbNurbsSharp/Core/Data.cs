@@ -29,7 +29,7 @@ namespace VerbNurbsSharp.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{this[0]},{this[1]},{this[2]}";
+            return $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }
 

@@ -26,8 +26,6 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { Vector.Unset, false},
             };
 
-        // ToDo collect a list of vectors in a class.
-
         [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheRadianAngle_BetweenTwoVectors()
@@ -52,7 +50,6 @@ namespace VerbNurbsSharp.XUnit.Core
             reversedVector.Should().BeEquivalentTo(vectorExpected);
         }
 
-        // ToDo take more than one vector to test.
         [Trait("Category", "Vector")]
         [Theory]
         [MemberData(nameof(ValidateVectors))]
@@ -93,7 +90,7 @@ namespace VerbNurbsSharp.XUnit.Core
 
             double length = Vector.Length(v1);
 
-            length.Should().Be(32.465366);
+            length.Should().Be(32.46536616149585);
         }
 
         [Trait("Category", "Vector")]
@@ -104,6 +101,17 @@ namespace VerbNurbsSharp.XUnit.Core
             length.Should().Be(0.0);
         }
 
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_Normalized_Vector()
+        {
+            Vector v1 = new Vector() { -18d, -21d, -17d };
+            Vector normalizedExpected = new Vector() { -0.5544369932703277, -0.6468431588153823, -0.5236349380886428 };
+
+            Vector normalizedVector = Vector.Normalized(v1);
+
+            normalizedVector.Should().Equal(normalizedExpected);
+        }
 
         [Trait("Category", "Vector")]
         [Fact]
