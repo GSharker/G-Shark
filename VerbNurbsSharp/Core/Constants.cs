@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace VerbNurbsSharp.Core
 {
@@ -7,6 +8,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Constants
     {
+
         /// <summary>
         /// The current version of GeometryLib
         /// </summary>
@@ -22,6 +24,33 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// The value of an unset object.
         /// </summary>
-        public static double UNSETVALUE => 1.23432101234321E+308;
+        public static double UNSETVALUE => -1.23432101234321E+308;
+        /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        /// <param name="degrees">Value degrees.</param>
+        /// <returns>Get the radians value.</returns>
+        public static double ToRadians(double degrees)
+        {
+            return degrees * (Math.PI / 180.0);
+        }
+        /// <summary>
+        /// Convert radians to degrees.
+        /// </summary>
+        /// <param name="radians">Value radians.</param>
+        /// <returns>Get the degree value.</returns>
+        public static double ToDegrees(double radians)
+        {
+            return radians * (180.0 / Math.PI);
+        }
+        /// <summary>
+        /// Check if it is a value double.
+        /// </summary>
+        /// <param name="x">Double value.</param>
+        /// <returns>Return if it is valid.</returns>
+        public static bool IsValidDouble(double x)
+        {
+            return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
+        }
     }
 }

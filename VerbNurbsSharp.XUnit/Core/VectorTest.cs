@@ -19,6 +19,13 @@ namespace VerbNurbsSharp.XUnit.Core
             _testOutput = testOutput;
         }
 
+        public static IEnumerable<object[]> ValidateVectors =>
+            new List<object[]>
+            {
+                new object[] { new Vector() { 20d, -10d, 0d }, true},
+                new object[] { Vector.Unset, false},
+            };
+
         // ToDo collect a list of vectors in a class.
 
         [Trait("Category", "Vector")]
@@ -47,15 +54,58 @@ namespace VerbNurbsSharp.XUnit.Core
 
         // ToDo take more than one vector to test.
         [Trait("Category", "Vector")]
-        [Fact]
-        public void ReturnTrue_IfTheVectorIsValid()
+        [Theory]
+        [MemberData(nameof(ValidateVectors))]
+        public void CheckingIfVectors_AreValidOrNot(Vector v, bool expected)
         {
-            Vector v1 = new Vector() { 20d, -10d, 0d };
-            v1.IsValid().Should().BeTrue();
+            v.IsValid().Should().Be(expected);
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_TheCrossProduct_BetweenTwoVectors()
+        {
+            Vector v1 = new Vector() { -10d, 5d, 10d };
+            Vector v2 = new Vector() { 10d, 15d, 5d };
+            Vector crossProductExpected = new Vector() { -125d, 150d, -200d };
+
+            Vector crossProduct = Vector.Cross(v1, v2);
+
+            crossProduct.Should().BeEquivalentTo(crossProductExpected);
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_TheSquaredLengthOfAVector()
+        {
+            Vector v1 = new Vector() { 10d, 15d, 5d };
+
+            double squaredLength = Vector.SquaredLength(v1);
+
+            squaredLength.Should().Be(350);
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_TheLengthOfAVector()
+        {
+            Vector v1 = new Vector() { -18d, -21d, -17d };
+
+            double length = Vector.Length(v1);
+
+            length.Should().Be(32.465366);
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
+        public void Return_VectorLengthZero_ForAnInvalidVector()
+        {
+            double length = Vector.Length(Vector.Unset);
+            length.Should().Be(0.0);
         }
 
 
-
+        [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheSubtraction_BetweenTwoVectors()
         {

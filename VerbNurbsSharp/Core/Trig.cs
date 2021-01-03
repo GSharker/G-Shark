@@ -46,7 +46,7 @@ namespace VerbNurbsSharp.Core
         {
             Point projectedPt = RayClosestPoint(pt, ray);
             Vector ptToProjectedPt = Vector.Subtraction(projectedPt, pt);
-            return Vector.Norm(ptToProjectedPt);
+            return Vector.Length(ptToProjectedPt);
         }
 
         // ToDo the original method used 3 points, but 3 points are always coplanar.

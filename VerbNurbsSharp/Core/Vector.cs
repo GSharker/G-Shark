@@ -23,6 +23,11 @@ namespace VerbNurbsSharp.Core
         }
 
         /// <summary>
+        /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
+        /// </summary>
+        public static Vector Unset => new Vector(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
+
+        /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
@@ -30,7 +35,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>The angle in radians</returns>
         public static double AngleBetween(Vector a, Vector b)
         {
-            return Math.Round(Math.Acos(Dot(a, b) / (Norm(a) * Norm(b))),6);
+            return Math.Round(Math.Acos(Dot(a, b) / (Length(a) * Length(b))),6);
         }
 
         public static double AngleBetweenNormalized2d(Vector a, Vector b) => throw new NotImplementedException();
@@ -52,7 +57,7 @@ namespace VerbNurbsSharp.Core
         /// </summary>
         /// <param name="a">The vector to be valued.</param>
         /// <returns>True if the vector is valid.</returns>
-        public bool IsValid() => this.Any(double.IsFinite);
+        public bool IsValid() => this.Any(Constants.IsValidDouble);
 
         public static Vector OnRay(Point origin, Vector dir, double u) => throw new NotImplementedException();
         public static Vector Lerp(double i, Vector u, Vector v) => throw new NotImplementedException();
@@ -64,7 +69,28 @@ namespace VerbNurbsSharp.Core
         /// <returns>The vector normalized.</returns>
         public static Vector Normalized(Vector a)
         {
-            return Division(a, Norm(a));
+            return Division(a, Length(a));
+        }
+
+        /// <summary>
+        /// Computes the length (or magnitude, or size) of this vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The magnitude of the vector.</returns>
+        public static double Length(Vector a)
+        {
+            if (!a.IsValid()) return 0.0;
+            return Math.Round(Math.Sqrt(SquaredLength(a)), 6);
+        }
+
+        /// <summary>
+        /// Computes the squared length (or magnitude, or size) of this vector.
+        /// </summary>
+        /// <param name="a">The vector.</param>
+        /// <returns>The sum of each value squared.</returns>
+        public static double SquaredLength(Vector a)
+        {
+            return Math.Round(a.Aggregate(0.0, (x, a) => a * a + x), 6);
         }
 
         /// <summary>
@@ -80,6 +106,19 @@ namespace VerbNurbsSharp.Core
                 u[0] * v[1] - u[1] * v[0]
             };
 
+        /// <summary>
+        /// Compute the dot product between two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <returns>The dot product.</returns>
+        public static double Dot(Vector a, Vector b)
+        {
+            double sum = 0d;
+            for (int i = 0; i < a.Count; i++)
+                sum += a[i] * b[i];
+            return sum;
+        }
 
         public static double Dist(Vector a, Vector b) => throw new NotImplementedException();
         public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
@@ -92,26 +131,6 @@ namespace VerbNurbsSharp.Core
         public static double AddMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double SubMutate(Vector a, Vector b) => throw new NotImplementedException();
         public static double MulMutate(double a, Vector b) => throw new NotImplementedException();
-        /// <summary>
-        /// The norm of a vector, or also say the magnitude of a vector.
-        /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <returns>The magnitude of the vector.</returns>
-        public static double Norm(Vector a)
-        {
-            double norm = NormSquared(a);
-            return norm != 0.0 ? Math.Sqrt(norm) : norm;
-        }
-
-        /// <summary>
-        /// The square length of a vector.
-        /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <returns>The sum of each value squared.</returns>
-        public static double NormSquared(Vector a)
-        {
-            return a.Aggregate(0.0, (x, a) => a * a + x);
-        }
 
         /// <summary>
         /// Create a list of zero values
@@ -156,19 +175,6 @@ namespace VerbNurbsSharp.Core
             return llv;
         }
 
-        /// <summary>
-        /// Compute the dot product between two vectors.
-        /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector with which compute the dot product.</param>
-        /// <returns>The dot product.</returns>
-        public static double Dot(Vector a, Vector b)
-        {
-            double sum = 0d;
-            for (int i = 0; i < a.Count; i++)
-                sum += a[i] * b[i];
-            return sum;
-        }
         /// <summary>
         /// Add two vectors.
         /// </summary>

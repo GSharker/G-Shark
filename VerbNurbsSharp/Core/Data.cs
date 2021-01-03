@@ -21,13 +21,8 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
         /// </summary>
-        public static Point Unset
-        {
-            get
-            {
-                return new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
-            }
-        }
+        public static Point Unset => new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
+
         /// <summary>
         /// Constructs the string representation of the point.
         /// </summary>

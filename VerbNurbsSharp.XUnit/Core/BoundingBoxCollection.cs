@@ -68,7 +68,7 @@ namespace VerbNurbsSharpTest
         {
             get
             {
-                //yield return new object[] { BoundingBoxFrom5Points(), NegativeMinValuePositiveMaxValue(), true};
+                yield return new object[] { BoundingBoxFrom5Points(), NegativeMinValuePositiveMaxValue(), true};
                 yield return new object[] { BoundingBoxFrom5Points(), NegativeBoundingBox(), false};
             }
         }
