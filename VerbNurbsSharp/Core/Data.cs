@@ -37,7 +37,7 @@ namespace VerbNurbsSharp.Core
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
-    public class Matrix : List<List<double>> { }
+    public class Matrix : List<IList<double>> { }
 
     /// <summary>
     /// A KnotArray is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate KnotArray's.

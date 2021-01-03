@@ -26,6 +26,14 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { Vector.Unset, false},
             };
 
+        public static IEnumerable<object[]> VectorLengths =>
+            new List<object[]>
+            {
+                new object[] { new Vector() { -18d, -21d, -17d }, 32.46536616149585},
+                new object[] { Vector.Unset, 0.0},
+                new object[] { new Vector() { -0d, 0d, 0d }, 0.0}
+            };
+
         [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheRadianAngle_BetweenTwoVectors()
@@ -35,7 +43,7 @@ namespace VerbNurbsSharp.XUnit.Core
 
             double angle = Vector.AngleBetween(v1, v2);
 
-            angle.Should().Be(2.158799);
+            angle.Should().Be(2.1587989303424644);
         }
 
         [Trait("Category", "Vector")]
@@ -73,6 +81,18 @@ namespace VerbNurbsSharp.XUnit.Core
 
         [Trait("Category", "Vector")]
         [Fact]
+        public void Return_TheDotProduct_BetweenTwoVectors()
+        {
+            Vector v1 = new Vector() { -10d, 5d, 10d };
+            Vector v2 = new Vector() { 10d, 15d, 5d };
+
+            double dotProduct = Vector.Dot(v1, v2);
+
+            dotProduct.Should().Be(25);
+        }
+
+        [Trait("Category", "Vector")]
+        [Fact]
         public void Return_TheSquaredLengthOfAVector()
         {
             Vector v1 = new Vector() { 10d, 15d, 5d };
@@ -83,22 +103,13 @@ namespace VerbNurbsSharp.XUnit.Core
         }
 
         [Trait("Category", "Vector")]
-        [Fact]
-        public void Return_TheLengthOfAVector()
+        [Theory]
+        [MemberData(nameof(VectorLengths))]
+        public void Return_TheLengthOfAVector(Vector v, double expectedLength)
         {
-            Vector v1 = new Vector() { -18d, -21d, -17d };
+            double length = Vector.Length(v);
 
-            double length = Vector.Length(v1);
-
-            length.Should().Be(32.46536616149585);
-        }
-
-        [Trait("Category", "Vector")]
-        [Fact]
-        public void Return_VectorLengthZero_ForAnInvalidVector()
-        {
-            double length = Vector.Length(Vector.Unset);
-            length.Should().Be(0.0);
+            length.Should().Be(expectedLength);
         }
 
         [Trait("Category", "Vector")]
@@ -121,7 +132,7 @@ namespace VerbNurbsSharp.XUnit.Core
             Vector vec2 = new Vector() { 1.0, 10.0, -6.0 };
             Vector vecExpected = new Vector() { -7.0, 5.0, -6.0 };
 
-            Vector result = Vector.Subtraction(vec2, vec1);
+            Vector result = new Vector(Constants.Subtraction(vec2, vec1));
             Assert.Equal(vecExpected, result);
         }
     }

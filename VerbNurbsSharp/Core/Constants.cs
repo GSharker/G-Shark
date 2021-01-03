@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace VerbNurbsSharp.Core
@@ -51,6 +52,59 @@ namespace VerbNurbsSharp.Core
         public static bool IsValidDouble(double x)
         {
             return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
+        }
+
+        /// <summary>
+        /// Add two list of numbers.
+        /// </summary>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>A vector which is the sum of a and b.</returns>
+        public static IList<double> Addition(IList<double> a, IList<double> b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] + b[i]);
+            return vec;
+        }
+        /// <summary>
+        /// Multiply a scalar and a list numbers.
+        /// </summary>
+        /// <param name="a">The list to divide.</param>
+        /// <param name="b">The scalar value to multiply.</param>
+        /// <returns>A list whose magnitude is multiplied by b.</returns>
+        public static IList<double > Multiplication(IList<double> a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] * b);
+            return vec;
+        }
+        /// <summary>
+        /// Divide a list of numbers by a scalar.
+        /// </summary>
+        /// <param name="a">The list to divide.</param>
+        /// <param name="b">The scalar divisor.</param>
+        /// <returns>A list whose magnitude is multiplied by b.</returns>
+        public static IList<double> Division(IList<double> a, double b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] / b);
+            return vec;
+        }
+        /// <summary>
+        /// Subtract two lists of numbers.
+        /// </summary>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>A list which is the difference between a and b.</returns>
+        public static IList<double> Subtraction(IList<double> a, IList<double> b)
+        {
+            Vector vec = new Vector();
+            for (int i = 0; i < a.Count; i++)
+                vec.Add(a[i] - b[i]);
+            return vec;
         }
     }
 }
