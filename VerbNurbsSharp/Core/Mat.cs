@@ -18,7 +18,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             foreach (var l in b)
-                r.Add(Vec.Mul(a, (Vector)l));
+                r.Add(Constants.Multiplication((Vector)l, a));
             return r;
         }
 
@@ -78,7 +78,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vec.Add((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Addition((Vector)a[i], (Vector)b[i]));
             return r;
         }
 
@@ -92,7 +92,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vec.Div((Vector)a[i], b));
+                r.Add(Constants.Division((Vector)a[i], b));
             return r;
         }
 
@@ -106,7 +106,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vec.Sub((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Subtraction((Vector)a[i], (Vector)b[i]));
             return r;
         }
 
@@ -121,7 +121,7 @@ namespace VerbNurbsSharp.Core
         {
             Vector r = new Vector();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vec.Dot((Vector)a[i], b));
+                r.Add(Vector.Dot((Vector)a[i], b));
             return r;
         }
 
@@ -133,7 +133,7 @@ namespace VerbNurbsSharp.Core
         public static Matrix Identity(int n)
         {
             Matrix m = new Matrix();
-            var zeros = Vec.Zero2d(n, n);
+            var zeros = Vector.Zero2d(n, n);
             for (int i = 0; i < n; i++)
             {
                 zeros[i][i] = 1.0;

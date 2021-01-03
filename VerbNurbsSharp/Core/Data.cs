@@ -8,37 +8,52 @@ namespace VerbNurbsSharp.Core
     /// A Point in verb is represented simply by an list of double point numbers.
     /// So, you would write simply [0,0,0] to create a Point at the origin.
     /// </summary>
-    public class Point : List<double> { }
+    public class Point : List<double>
+    {
+        public Point()
+        {
+        }
 
+        public Point(IEnumerable<double> values)
+        {
+            this.AddRange(values);
+        }
+        /// <summary>
+        /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
+        /// </summary>
+        public static Point Unset => new Point(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
 
-    /// <summary>
-    /// Like a Point, a Vector in verb is represented simply by an list of double point numbers.
-    /// So, you would write simply [1,0,0] to create a Vector in the X direction.
-    /// </summary>
-    public class Vector : List<double> { }
+        /// <summary>
+        /// Constructs the string representation of the point.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
+        }
+    }
 
     /// <summary>
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
-    public class Matrix : List<List<double>> { }
+    public class Matrix : List<IList<double>> { }
 
     /// <summary>
     /// A KnotArray is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate KnotArray's.
     /// </summary>
     public class KnotArray : List<double> { }
 
-
     /// <summary>
     /// A Plane is simply an origin point and normal.
     /// </summary>
     public class Plane : Serializable<Plane>
     {
-        public Vector Direction { get; set; }
+        public Vector Normal { get; set; }
         public Point Origin { get; set; }
         public Plane(Point origin, Vector direction)
         {
-            this.Direction = direction;
+            this.Normal = direction;
             this.Origin = origin;
         }
     }
