@@ -5,16 +5,17 @@ The initial library uses Haxe to build for different languages including C# with
 Still in the very early stages but I am planning to include few examples, including a ConsoleApp and a SPA based on Blazor WebAssembly.
 ## Core
 
- - [ ] BoundingBox
- - [ ] Constants
- - [ ] Data
+ - [x] BoundingBox
+ - [x] Constants
+ - [x] Data
  - [ ] Intersections
- - [ ] Mat
- - [ ] Mesh
- - [ ] Serializable
+ - [x] Mat
+ - [x] Mesh
+ - [x] Serializable
  - [ ] Sets
- - [ ] Trig
- - [ ] Vector
+ - [x] Trig
+ - [x] Vector
+ - [ ] KDTree 
 
 ## Evaluation
 - [ ] Check
@@ -22,7 +23,7 @@ Still in the very early stages but I am planning to include few examples, includ
 - [ ] Make
 
 ## Geometry
-- [ ] Line
+- [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwMjk1MjQ0ODJdfQ==
+eyJoaXN0b3J5IjpbLTE1Njc4MTk4ODJdfQ==
 -->
