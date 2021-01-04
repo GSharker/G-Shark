@@ -20,7 +20,7 @@ This projects implements a console app to test some functionalities
  - [x] Vector
  - [ ] KDTree 
 ### Evaluation
-- [ ] Check
+- [x] Check
 - [ ] Eval
 - [ ] Make
 ### Geometry

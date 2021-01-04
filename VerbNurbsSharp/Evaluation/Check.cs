@@ -10,20 +10,13 @@ namespace VerbNurbsSharp.Evaluation
         /// <summary>
         /// Check whether a given list is a valid NURBS knot vector. This also checks the validity of the end points.
         /// More specifically, this method checks if the knot vector is of the following structure:
-        ///
         /// The knot vector must be non-decreasing and of length (degree + 1) * 2 or greater
-        ///
         /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
         /// <param name="vector">The knot vector to test</param>
         /// <param name="degree">The degree</param>
-
-        /// <returns>Whether the list is a valid knot vector or knot</returns>
-        public static bool isValidKnotVector(IList<double> vector, int degree) => false; //WIP
-
         /// <returns>Whether the array is a valid knot vector or knot</returns>
-        public static bool isValidKnotVector(KnotArray vector, int degree)
-
+        public static bool IsValidKnotVector(KnotArray vector, int degree)
         {
             if (vector.Count == 0) return false;
             if (vector.Count < (degree + 1)*2) return false;
@@ -65,7 +58,7 @@ namespace VerbNurbsSharp.Evaluation
             if (data.Knots == null) throw new ArgumentNullException("Knots cannot be null!");
             if (data.Knots.Count != data.ControlPoints.Count + data.Degree + 1)
                 throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length!");
-            if (!Check.isValidKnotVector(data.Knots, data.Degree))
+            if (!Check.IsValidKnotVector(data.Knots, data.Degree))
                 throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             return data;
         }
@@ -87,7 +80,7 @@ namespace VerbNurbsSharp.Evaluation
                 throw new ArgumentException("controlPointsU.length + degreeU + 1 must equal knotsU.length!");
             if (data.KnotsV.Count != data.ControlPoints[0].Count + data.DegreeV + 1)
                 throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
-            if (!Check.isValidKnotVector(data.KnotsU, data.DegreeU) || !Check.isValidKnotVector(data.KnotsV, data.DegreeV))
+            if (!Check.IsValidKnotVector(data.KnotsU, data.DegreeU) || !Check.IsValidKnotVector(data.KnotsV, data.DegreeV))
                 throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             return data;
         }
