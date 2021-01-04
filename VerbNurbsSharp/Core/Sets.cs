@@ -47,7 +47,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>A range of numbers.</returns>
         public static IList<double> Range(int maxValue)
         {
-            if (maxValue <= 0) throw new Exception("Negative value is not accepted");
+            if (maxValue <= 0) throw new Exception("Zero or negative value is not accepted");
             var l = new List<double>();
             double f = 0.0;
 
@@ -61,24 +61,25 @@ namespace VerbNurbsSharp.Core
         }
 
         /// <summary>
-        /// Create a range of numbers. 
+        /// Create a series of numbers. 
         /// </summary>
-        /// <param name="domain">Domain of numeric range.</param>
-        /// <param name="step">Number of steps.</param>
-        /// <returns>List of steps in the range.</returns>
+        /// <param name="domain">First number in the series.</param>
+        /// <param name="step">Step size for each successive number.</param>
+        /// <param name="count">Number of values in the series.</param>
+        /// <returns>Series of numbers.</returns>
         public static IList<double> Span(double start, double step, int count)
         {
-            //if (step <= 0) return new List<double>() { domain.Min, domain.Max };
+            if (count <= 0) throw new Exception("Count as zero or negative is not accepted");
             var l = new List<double>();
-            double f = 0.0;
+            double counter = 0.0;
+            double number1 = start;
 
-            //while (f <= step)
-            //{
-            //    double normalizedParam = f / step;
-            //    double number = domain.ParameterAt(normalizedParam);
-            //    l.Add(number);
-            //    ++f;
-            //}
+            while (counter <= count)
+            {
+                l.Add(number1);
+                number1 += step;
+                ++counter;
+            }
 
             return l;
         }

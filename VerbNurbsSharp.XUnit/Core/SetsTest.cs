@@ -61,11 +61,13 @@ namespace VerbNurbsSharp.XUnit.Core
         public void RangeThrowAnException_IfTheValueIsNegativeOrZero(int maxValue)
         {
             Func<object> resultFunction = () => Sets.Range(maxValue);
-            resultFunction.Should().Throw<Exception>().WithMessage("Negative value is not accepted");
+            resultFunction.Should().Throw<Exception>().WithMessage("Zero or negative value is not accepted");
         }
 
         [Theory]
         [InlineData(2, 4, 8)]
+        [InlineData(-3, 10, 10)]
+        [InlineData(0, 1, 10)]
         public void GetASeriesOfNumber(double start, double step, int count)
         {
             var series = Sets.Span(start, step, count);
@@ -74,6 +76,16 @@ namespace VerbNurbsSharp.XUnit.Core
             _OutputHelper.WriteLine(st);
 
             series.Should().NotBeNull();
+            series.Should().BeEquivalentTo(new List<double>(series));
+        }
+
+        [Theory]
+        [InlineData(-3, 10, 0)]
+        [InlineData(0, 10, -1)]
+        public void SeriesThrowAnException_IfTheValueIsNegativeOrZero(double start, double step, int count)
+        {
+            Func<object> resultFunction = () => Sets.Span(start, step, count);
+            resultFunction.Should().Throw<Exception>().WithMessage("Count as zero or negative is not accepted");
         }
     }
 }
