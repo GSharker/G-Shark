@@ -18,7 +18,7 @@ This projects implements a console app to test some functionalities
  - [ ] Sets
  - [x] Trig
  - [x] Vector
- - [ ] KDTree 
+ - [ ] KDTree [CC]
 ### Evaluation
 - [ ] Check
 - [ ] Eval
@@ -26,5 +26,5 @@ This projects implements a console app to test some functionalities
 ### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM2Mzg2MDMxNV19
+eyJoaXN0b3J5IjpbNzM4ODkyNTE5LC0zNjM4NjAzMTVdfQ==
 -->
