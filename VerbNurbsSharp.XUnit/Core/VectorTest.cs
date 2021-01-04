@@ -10,6 +10,7 @@ using Xunit.Abstractions;
 
 namespace VerbNurbsSharp.XUnit.Core
 {
+    [Trait("Category", "Vector")]
     public class VectorTest
     {
         private readonly ITestOutputHelper _testOutput;
@@ -41,7 +42,6 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { new Vector() { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
             };
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheRadianAngle_BetweenTwoVectors()
         {
@@ -53,7 +53,6 @@ namespace VerbNurbsSharp.XUnit.Core
             angle.Should().Be(2.1587989303424644);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_AReversedVector()
         {
@@ -65,7 +64,6 @@ namespace VerbNurbsSharp.XUnit.Core
             reversedVector.Should().BeEquivalentTo(vectorExpected);
         }
 
-        [Trait("Category", "Vector")]
         [Theory]
         [MemberData(nameof(ValidateVectors))]
         public void CheckingIfVectors_AreValidOrNot(Vector v, bool expected)
@@ -73,7 +71,6 @@ namespace VerbNurbsSharp.XUnit.Core
             v.IsValid().Should().Be(expected);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheCrossProduct_BetweenTwoVectors()
         {
@@ -86,7 +83,6 @@ namespace VerbNurbsSharp.XUnit.Core
             crossProduct.Should().BeEquivalentTo(crossProductExpected);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheDotProduct_BetweenTwoVectors()
         {
@@ -98,7 +94,6 @@ namespace VerbNurbsSharp.XUnit.Core
             dotProduct.Should().Be(25);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_TheSquaredLengthOfAVector()
         {
@@ -109,7 +104,6 @@ namespace VerbNurbsSharp.XUnit.Core
             squaredLength.Should().Be(350);
         }
 
-        [Trait("Category", "Vector")]
         [Theory]
         [MemberData(nameof(VectorLengths))]
         public void Return_TheLengthOfAVector(Vector v, double expectedLength)
@@ -119,7 +113,6 @@ namespace VerbNurbsSharp.XUnit.Core
             length.Should().Be(expectedLength);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_Normalized_Vector()
         {
@@ -131,7 +124,6 @@ namespace VerbNurbsSharp.XUnit.Core
             normalizedVector.Should().Equal(normalizedExpected);
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_AZero1dVector()
         {
@@ -141,7 +133,6 @@ namespace VerbNurbsSharp.XUnit.Core
             vec1D.Select(val => val.Should().Be(0.0));
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_AZero2dVector()
         {
@@ -152,7 +143,6 @@ namespace VerbNurbsSharp.XUnit.Core
             vec2D.Select(val => val.Should().Contain(0.0));
         }
 
-        [Trait("Category", "Vector")]
         [Fact]
         public void Return_AZero3dVector()
         {
@@ -163,7 +153,6 @@ namespace VerbNurbsSharp.XUnit.Core
             vec3D.Select(val => val.Select(x => x.Should().Contain(0.0)));
         }
 
-        [Trait("Category", "Vector")]
         [Theory]
         [MemberData(nameof(AmplifiedVectors))]
         public void Return_VectorAmplified_LongADirection(Vector expected, double amplitude)

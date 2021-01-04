@@ -17,47 +17,69 @@ namespace VerbNurbsSharp.Core
         /// <returns></returns>
         public static double Domain(Vector a) => a.Last() - a.First();
 
-        // ToDo use interval
-        // ToDo make test for this class.
         /// <summary>
         /// Create a range of numbers. 
         /// </summary>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        public static List<double> Range(int max)
+        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="step">Number of steps</param>
+        /// <returns>A range of numbers.</returns>
+        public static IList<double> Range(Interval domain, int step)
         {
-            var l = new Vector();
+            if (step <= 0) return new List<double>() { domain.Min, domain.Max };
+            var l = new List<double>();
             double f = 0.0;
-            for (int i = 0; i < max; i++)
+
+            while (f <= step)
             {
-                l.Add(f);
-                f += 1.0;
+                double normalizedParam = f / step;
+                double number = domain.ParameterAt(normalizedParam);
+                l.Add(number);
+                ++f;
             }
+
             return l;
         }
 
-        // ToDo use interval
-        // ToDo make test for this class.
         /// <summary>
-        /// Create a series of numbers.
+        /// Create a range of positive numbers, incrementing of one step and starting from 0.
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="step"></param>
-        /// <returns></returns>
-        public static Vector Span(double min, double max, double step)
+        /// <param name="maxValue">The dimension of the range.</param>
+        /// <returns>A range of numbers.</returns>
+        public static IList<double> Range(int maxValue)
         {
-            if (step < Constants.EPSILON) return new Vector();
-            if (min > max && step > 0.0) return new Vector();
-            if (max > min && step < 0.0) return new Vector();
+            if (maxValue <= 0) throw new Exception("Negative value is not accepted");
+            var l = new List<double>();
+            double f = 0.0;
 
-            var l = new Vector();
-            var cur = min;
-            while (cur <= max)
+            while (f <= maxValue)
             {
-                l.Add(cur);
-                cur += step;
+                l.Add(f);
+                ++f;
             }
+
+            return l;
+        }
+
+        /// <summary>
+        /// Create a range of numbers. 
+        /// </summary>
+        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="step">Number of steps.</param>
+        /// <returns>List of steps in the range.</returns>
+        public static IList<double> Span(double start, double step, int count)
+        {
+            //if (step <= 0) return new List<double>() { domain.Min, domain.Max };
+            var l = new List<double>();
+            double f = 0.0;
+
+            //while (f <= step)
+            //{
+            //    double normalizedParam = f / step;
+            //    double number = domain.ParameterAt(normalizedParam);
+            //    l.Add(number);
+            //    ++f;
+            //}
+
             return l;
         }
 

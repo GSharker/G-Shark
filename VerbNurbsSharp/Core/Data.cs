@@ -250,18 +250,26 @@ namespace VerbNurbsSharp.Core
             Item1 = item1;
         }
     }
+    // ToDo originally interval took T as type. If necessary re-introduce as a T.
     /// <summary>
     /// A simple parametric data type representing an "interval" between two numbers. This data structure does no legality checks.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Interval<T>
+    /// <typeparam name=""></typeparam>
+    public class Interval
     {
-        public T Min { get; set; }
-        public T Max { get; set; }
-        public Interval(T min, T max)
+        public double Min { get; set; }
+        public double Max { get; set; }
+        public Interval(double min, double max)
         {
             Min = min;
             Max = max;
+        }
+
+        public double ParameterAt(double normalizedParameter)
+        {
+            return !Constants.IsValidDouble(normalizedParameter)
+                ? -1.23432101234321E+308
+                : (1.0 - normalizedParameter) * this.Min + normalizedParameter * this.Max;
         }
     }
 }
