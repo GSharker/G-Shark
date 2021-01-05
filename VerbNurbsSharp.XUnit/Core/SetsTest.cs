@@ -21,7 +21,7 @@ namespace VerbNurbsSharp.XUnit.Core
             _OutputHelper = outputHelper;
         }
 
-        public static IEnumerable<object[]> DefineRanges =>
+        public static IEnumerable<object[]> RangesToBeDefined =>
             new List<object[]>
             {
                 new object[] { new Interval(2, 30), 3},
@@ -29,8 +29,16 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { new Interval(1, 10), 0}
             };
 
+        public static IEnumerable<object[]> SetOfNumbersAndTheSetDimension =>
+            new List<object[]>
+            {
+                new object[] { new List<double>(){ 10, 99, 87, 45, 67, 43, 45, 33, 21, 7, 65, 98 }, 92},
+                new object[] { new Vector(){ 14, -12, 7, 0, -5, -8, 17, -11, 19 }, 31},
+                new object[] { new List<double>(){ 2.7, 3.5, 4.9, 5.1, 8.3 }, 5.6000000000000005 }
+            };
+
         [Theory]
-        [MemberData(nameof(DefineRanges))]
+        [MemberData(nameof(RangesToBeDefined))]
         public void GetARangeOfNumbers(Interval interval, int step)
         {
             var range = Sets.Range(interval, step);
@@ -87,5 +95,13 @@ namespace VerbNurbsSharp.XUnit.Core
             Func<object> resultFunction = () => Sets.Span(start, step, count);
             resultFunction.Should().Throw<Exception>().WithMessage("Count as zero or negative is not accepted");
         }
+
+        [Theory]
+        [MemberData(nameof(SetOfNumbersAndTheSetDimension))]
+        public static void GetTheDimension_OfASetOfNumbers(IList<double> set, double expectedRange)
+        {
+            Sets.Dimension(set).Should().Be(expectedRange);
+        }
+
     }
 }

@@ -8,14 +8,17 @@ namespace VerbNurbsSharp.Core
 {
     public static class Sets
     {
-        // ToDo This is a Range of a list of numbers.
-        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// <summary>
-        /// 
+        /// The range of a set of number, or the distance between the smallest value to the biggest in the collection.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static double Domain(Vector a) => a.Last() - a.First();
+        /// <param name="a">Set of numbers.</param>
+        /// <returns>The range.</returns>
+        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
+        public static double Dimension(IList<double> a)
+        {
+            var sortedSet = a.OrderBy(x => x);
+            return sortedSet.Last() - sortedSet.First();
+        }
 
         /// <summary>
         /// Create a range of numbers. 
