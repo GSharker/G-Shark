@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Evaluation
 {
 	public class Divide
 	{
-		public static List<NurbsSurfaceData> surfaceSplit(NurbsSurfaceData surface, float u, bool useV = false)
+		public static List<NurbsSurfaceData> SurfaceSplit(NurbsSurfaceData surface, float u, bool useV = false)
 		{
 			KnotArray knots;
 			int degree;
@@ -38,7 +38,7 @@ namespace VerbNurbsSharp.Evaluation
 			List<List<Point>> newpts0 = new List<List<Point>>();
 			List<List<Point>> newpts1 = new List<List<Point>>();
 
-			var s = Eval.knotSpan(degree, u, knots);
+			var s = Eval.KnotSpan(degree, u, knots);
 			NurbsCurveData res = null;
 
 			foreach (List<Point> cps in controlPoints)

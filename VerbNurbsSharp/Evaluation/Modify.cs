@@ -19,8 +19,8 @@ namespace VerbNurbsSharp.Evaluation
 		/// <returns></returns>
 		public static NurbsCurveData curveKnotRefine(NurbsCurveData curve, List<double> knotsToInsert)
 		{
-			//if (knotsToInsert.Count == 0)
-			//	return Make.clonedCurve(curve);
+			if (knotsToInsert.Count == 0)
+				return Make.ClonedCurve(curve);
 
 			int degree = curve.Degree;
 			List<Point> controlPoints = curve.ControlPoints;

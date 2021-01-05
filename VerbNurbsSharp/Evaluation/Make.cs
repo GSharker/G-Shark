@@ -9,5 +9,9 @@ namespace VerbNurbsSharp.Evaluation
 {
     public class Make
     {
+        public static NurbsCurveData ClonedCurve(NurbsCurveData curve)
+        {
+            return new NurbsCurveData(curve.Degree, curve.Knots, curve.ControlPoints);
+        }
     }
 }
