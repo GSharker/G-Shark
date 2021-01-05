@@ -54,8 +54,8 @@ namespace VerbNurbsSharp.Evaluation
 
 			if (!useV)
 			{
-				newpts0 = Mat.transpose(newpts0);
-				newpts1 = Mat.transpose(newpts1);
+				newpts0 = Mat.Transpose(newpts0);
+				newpts1 = Mat.Transpose(newpts1);
 
 				return new List<NurbsSurfaceData>(){ new NurbsSurfaceData(degree, surface.DegreeV, knots0, surface.KnotsV, newpts0),
 				new NurbsSurfaceData(degree, surface.DegreeV, knots1, surface.KnotsV, newpts1)};

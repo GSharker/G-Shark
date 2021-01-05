@@ -20,7 +20,6 @@ namespace VerbNurbsSharp.Evaluation
 
         /// <summary>
         /// find the span on the knot list of the given parameter, (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition)
-        /// 
         /// </summary>
         /// <param name="n">integer number of basis functions - 1 = knots.length - degree - 2</param>
         /// <param name="degree">integer degree of function</param>
