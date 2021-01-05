@@ -131,6 +131,13 @@ namespace VerbNurbsSharp.Core
         /// <returns>The linear interpolation between the provided lists</returns>
         public static IList<double> Lerp(double i, IList<double> a, IList<double> b) => Addition(Multiplication(a, i), Multiplication(b, 1.0d - i));
 
+        public static List<T> Rep<T>(int num, T element)
+        {
+            List<T> res = new List<T>();
+            for (int i = 0; i < num; i++)
+                res.Add(element);
+            return res;
+        }
         // ToDo value if this method is necessary.
         public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
     }
