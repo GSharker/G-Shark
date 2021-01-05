@@ -15,7 +15,7 @@ This projects implements a console app to test some functionalities
  - [x] Mat
  - [x] Mesh
  - [x] Serializable
- - [ ] Sets
+ - [x] Sets
  - [x] Trig
  - [x] Vector
  - [ ] KDTree [CC]
@@ -26,5 +26,6 @@ This projects implements a console app to test some functionalities
 ### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzM4ODkyNTE5LC0zNjM4NjAzMTVdfQ==
+eyJoaXN0b3J5IjpbLTIxMjI4MDAyMzMsNzM4ODkyNTE5LC0zNj
+M4NjAzMTVdfQ==
 -->
