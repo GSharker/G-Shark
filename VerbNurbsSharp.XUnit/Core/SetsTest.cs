@@ -133,5 +133,41 @@ namespace VerbNurbsSharp.XUnit.Core
             Func<object> resultFunction = () => Sets.RepeatData(data, length);
             resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative or zero.");
         }
+
+        [Theory]
+        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { 5, 6, 7 }, new double[] { 3, 8, 11 })]
+        [InlineData(new double[] { }, new double[] { 5, 6, 7 }, new double[] { 5, 6, 7 })]
+        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { }, new double[] { 3, 5, 7, 9, 11 })]
+        public void Return_ASetUnion_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
+        {
+            var setSub = Sets.SetUnion(set1, set2);
+            var resultConcat = string.Join("--", setSub);
+            _testOutput.WriteLine(resultConcat);
+
+            setExpected.Should().BeEquivalentTo(setExpected);
+        }
+
+        [Theory]
+        [InlineData(new double[]{ 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
+        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] {}, new double[] { 3, 5, 7, 9, 11 })]
+        public void Return_ASetDifference_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
+        {
+            var setSub = Sets.SetDifference(set1, set2);
+            var resultConcat = string.Join("--", setSub);
+            _testOutput.WriteLine(resultConcat);
+
+            setExpected.Should().BeEquivalentTo(setExpected);
+        }
+
+        [Fact]
+        public void SetDifference_ThrowAnException_IfTheFirstCollection_IsEmpty()
+        {
+            var set1 = new List<double>();
+            var set2 = new List<double>() { 3, 5, 7, 9, 11 };
+
+            Func<object> resultFunction = () => Sets.SetDifference(set1, set2);
+
+            resultFunction.Should().Throw<Exception>("Set difference can't be computed, the first set is empty.");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 
 namespace VerbNurbsSharp.Core
 {
@@ -84,9 +85,32 @@ namespace VerbNurbsSharp.Core
 
             return l;
         }
+        // ToDo the original doesn't provide a set union, we have to keep an eye on this method.
+        // A removed the Sorted from the name due to the method doesn't sort the final list.
+        /// <summary>
+        /// The set union of two sequences of numbers.
+        /// </summary>
+        /// <param name="a">First set.</param>
+        /// <param name="b">Second set.</param>
+        /// <returns>The set union.</returns>
+        public static List<double> SetUnion(IList<double> a, IList<double> b)
+        {
+            if (a.Count == 0) return b.ToList();
+            return b.Count == 0 ? a.ToList() : a.Union(b).ToList();
+        }
 
-        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
+        // A removed the Sorted from the name due to the method doesn't sort the final list.
+        /// <summary>
+        /// The set difference from two sequences of numbers, sorted.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static List<double> SetDifference(IList<double> a, IList<double> b)
+        {
+            if(a.Count == 0) throw new Exception("Set difference can't be computed, the first set is empty.");
+            return a.Except(b).ToList();
+        }
 
         /// <summary>
         /// Repeat data until it reaches the defined length.
