@@ -52,5 +52,9 @@ namespace VerbNurbsSharp.Evaluation
             return mid;
         }
 
+        public static List<Point> Homogenize1d(List<Point> controlPoints, List<double> weights)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
