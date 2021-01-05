@@ -1,81 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Intrinsics.X86;
 
 namespace VerbNurbsSharp.Core
 {
     public static class Sets
     {
-        // ToDo This is a Range of a list of numbers.
-        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// <summary>
-        /// 
+        /// The range of a set of number, or the distance between the smallest value to the biggest in the collection.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static double Domain(Vector a) => a.Last() - a.First();
+        /// <param name="a">Set of numbers.</param>
+        /// <returns>The range.</returns>
+        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
+        public static double Dimension(IList<double> a)
+        {
+            var sortedSet = a.OrderBy(x => x);
+            return sortedSet.Last() - sortedSet.First();
+        }
 
-        // ToDo use interval
-        // ToDo make test for this class.
         /// <summary>
         /// Create a range of numbers. 
         /// </summary>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        public static List<double> Range(int max)
+        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="step">Number of steps</param>
+        /// <returns>A range of numbers.</returns>
+        public static IList<double> Range(Interval domain, int step)
         {
-            var l = new Vector();
+            if (step <= 0) return new List<double>() { domain.Min, domain.Max };
+            var l = new List<double>();
             double f = 0.0;
-            for (int i = 0; i < max; i++)
+
+            while (f <= step)
+            {
+                double normalizedParam = f / step;
+                double number = domain.ParameterAt(normalizedParam);
+                l.Add(number);
+                ++f;
+            }
+
+            return l;
+        }
+
+        /// <summary>
+        /// Create a range of positive numbers, incrementing of one step and starting from 0.
+        /// </summary>
+        /// <param name="maxValue">The dimension of the range.</param>
+        /// <returns>A range of numbers.</returns>
+        public static IList<double> Range(int maxValue)
+        {
+            if (maxValue <= 0) throw new Exception("Max value range can not be negative or zero.");
+            var l = new List<double>();
+            double f = 0.0;
+
+            while (f <= maxValue)
             {
                 l.Add(f);
-                f += 1.0;
+                ++f;
             }
+
             return l;
         }
 
-        // ToDo use interval
-        // ToDo make test for this class.
         /// <summary>
-        /// Create a series of numbers.
+        /// Create a series of numbers. 
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="step"></param>
-        /// <returns></returns>
-        public static Vector Span(double min, double max, double step)
+        /// <param name="domain">First number in the series.</param>
+        /// <param name="step">Step size for each successive number.</param>
+        /// <param name="count">Number of values in the series.</param>
+        /// <returns>Series of numbers.</returns>
+        public static IList<double> Span(double start, double step, int count)
         {
-            if (step < Constants.EPSILON) return new Vector();
-            if (min > max && step > 0.0) return new Vector();
-            if (max > min && step < 0.0) return new Vector();
+            if (count <= 0) throw new Exception("Count can not be negative or zero.");
+            var l = new List<double>();
+            double counter = 0.0;
+            double number1 = start;
 
-            var l = new Vector();
-            var cur = min;
-            while (cur <= max)
+            while (counter <= count)
             {
-                l.Add(cur);
-                cur += step;
+                l.Add(number1);
+                number1 += step;
+                ++counter;
             }
+
             return l;
         }
+        // ToDo the original doesn't provide a set union, we have to keep an eye on this method.
+        // A removed the Sorted from the name due to the method doesn't sort the final list.
+        /// <summary>
+        /// The set union of two sequences of numbers.
+        /// </summary>
+        /// <param name="a">First set.</param>
+        /// <param name="b">Second set.</param>
+        /// <returns>The set union.</returns>
+        public static List<double> SetUnion(IList<double> a, IList<double> b)
+        {
+            if (a.Count == 0) return b.ToList();
+            return b.Count == 0 ? a.ToList() : a.Union(b).ToList();
+        }
 
-        public static Vector SortedSetUnion(Vector a, Vector b) => throw new NotImplementedException();
-        public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
+        // A removed the Sorted from the name due to the method doesn't sort the final list.
+        /// <summary>
+        /// The set difference from two sequences of numbers, sorted.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static List<double> SetDifference(IList<double> a, IList<double> b)
+        {
+            if(a.Count == 0) throw new Exception("Set difference can't be computed, the first set is empty.");
+            return a.Except(b).ToList();
+        }
 
         /// <summary>
-        /// 
+        /// Repeat data until it reaches the defined length.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="num"></param>
-        /// <param name="ele"></param>
-        /// <returns></returns>
-        public static List<T> Rep<T>(int num, T ele)
+        /// <param name="data">Data to repeat.</param>
+        /// <param name="length">Length of the final set.</param>
+        /// <returns>Set of repeated data.</returns>
+        public static List<T> RepeatData<T>(T data, int length)
         {
+            if (length <= 0) throw new Exception("Length can not be negative or zero.");
             List<T> list = new List<T>();
-            for (int i = 0; i < num; i++)
-                list.Add(ele);
+            for (int i = 0; i < length; i++)
+                list.Add(data);
             return list;
         }
 

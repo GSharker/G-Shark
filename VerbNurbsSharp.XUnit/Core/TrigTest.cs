@@ -7,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace VerbNurbsSharp.XUnit.Core
 {
+    [Trait("Category", "Trig")]
     public class TrigTest
     {
         private readonly ITestOutputHelper _testOutput;
@@ -17,7 +18,6 @@ namespace VerbNurbsSharp.XUnit.Core
         }
 
         [Fact]
-        [Trait("Category", "Trig")]
         public void ThreePointsAreFlat_ReturnTrue()
         {
             Point p1 = new Point() { 0.0, 0.0, 0.0 };
@@ -30,7 +30,6 @@ namespace VerbNurbsSharp.XUnit.Core
         }
 
         [Fact]
-        [Trait("Category", "Trig")]
         public void RayClosestPoint_ReturnTheProjectPoint()
         {
             Ray ray = new Ray(new Point(){0,0,0},new Vector(){30,45,0});
@@ -43,7 +42,6 @@ namespace VerbNurbsSharp.XUnit.Core
         }
 
         [Fact]
-        [Trait("Category", "Trig")]
         public void DistanceToRay_ReturnTheDistance_Between_APointAndTheRay()
         {
             Ray ray = new Ray(new Point() { 0, 0, 0 }, new Vector() { 30, 45, 0 });
@@ -57,7 +55,6 @@ namespace VerbNurbsSharp.XUnit.Core
         }
 
         [Fact]
-        [Trait("Category", "Trig")]
         public void isPointOnPlane_ReturnTrue_IfThePointLiesOnPlane()
         {
             Plane plane = new Plane(new Point() { 30, 45, 0 }, new Vector() { 30, 45, 0 });
