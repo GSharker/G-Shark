@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace VerbNurbsSharp.Evaluation
 {
+    //ToDO initialized the class Make
     public class Make
     {
     }
