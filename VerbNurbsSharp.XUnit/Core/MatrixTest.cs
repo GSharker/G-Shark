@@ -29,7 +29,7 @@ namespace VerbNurbsSharp.XUnit.Core
                new List<double>{0, 0, 1 }
            };
 
-           Matrix.Identity(i).Should().BeEquivalentTo<Matrix>(identity);
+           Matrix.Identity(i).Should().BeEquivalentTo(identity);
         }
 
     }
