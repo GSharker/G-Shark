@@ -12,6 +12,9 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Matrix : List<IList<double>>
     {
+        /// <summary>
+        /// Main constructor
+        /// </summary>
         public Matrix()
         {
 
