@@ -77,7 +77,7 @@ namespace VerbNurbsSharp.Core
         /// <param name="a">The list to divide.</param>
         /// <param name="b">The scalar value to multiply.</param>
         /// <returns>A list whose magnitude is multiplied by b.</returns>
-        public static IList<double > Multiplication(IList<double> a, double b)
+        public static IList<double> Multiplication(IList<double> a, double b)
         {
             Vector vec = new Vector();
             for (int i = 0; i < a.Count; i++)
@@ -118,9 +118,18 @@ namespace VerbNurbsSharp.Core
         /// <returns>The distance between the provided list.</returns>
         public static double DistanceTo(IList<double> a, IList<double> b)
         {
-            if(a.Count != b.Count) throw new Exception("The two list doesn't match in length.");
+            if (a.Count != b.Count) throw new Exception("The two list doesn't match in length.");
             return Math.Sqrt(a.Zip(b, (first, second) => Math.Pow(first - second, 2)).Sum());
         }
+
+        /// <summary>
+        /// Linear Interpolation
+        /// </summary>
+        /// <param name="i">The scalar</param>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>The linear interpolation between the provided lists</returns>
+        public static IList<double> Lerp(double i, IList<double> a, IList<double> b) => Addition(Multiplication(a, i), Multiplication(b, 1.0d - i));
 
         // ToDo value if this method is necessary.
         public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
