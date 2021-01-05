@@ -8,9 +8,9 @@ namespace VerbNurbsSharp.Core
 {
     /// <summary>
     /// A simple data structure representing a NURBS volume. This data structure is largely experimental in intent. Like CurveData
-    /// and SurfaceData, this data structure does no legality checks.
+    /// and Surface, this data structure does no legality checks.
     /// </summary>
-    public class VolumeData : Serializable<VolumeData>
+    public class Volume : Serializable<Volume>
     {
         /// <summary>
         /// Integer degree in u direction.
