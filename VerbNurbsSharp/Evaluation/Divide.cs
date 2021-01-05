@@ -49,8 +49,8 @@ namespace VerbNurbsSharp.Evaluation
 				newpts1.Add(res.ControlPoints.GetRange(0, s + 1)/*.slice(s + 1)*/);
 			}
 
-			KnotArray knots0 = res.Knots.GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
-			KnotArray knots1 = res.Knots.GetRange(0, s + 1);//.slice(s + 1);
+			KnotArray knots0 = (KnotArray)res.Knots.ToList().GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
+			KnotArray knots1 = (KnotArray)res.Knots.ToList().GetRange(0, s + 1);//.slice(s + 1);
 
 			if (!useV)
 			{

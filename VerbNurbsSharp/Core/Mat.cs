@@ -165,17 +165,17 @@ namespace VerbNurbsSharp.Core
             return t;
         }
 
-        public static List<List<dynamic>> Transpose(List<List<dynamic>> a)
+        public static List<List<Point>> Transpose(List<List<Point>> a)
         {
             if (a.Count == 0) return null;
 
-            List<List<dynamic>> t = new List<List<dynamic>>();
+            List<List<Point>> t = new List<List<Point>>();
             var rows = a.Count;
             var columns = a[0].Count;
 
             for (var c = 0; c < columns; c++)
             {
-                var rr = new List<dynamic>();
+                var rr = new List<Point>();
                 for (var r = 0; r < rows; r++)
                 {
                     rr.Add(a[r][c]);
