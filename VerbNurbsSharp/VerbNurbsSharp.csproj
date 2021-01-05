@@ -10,7 +10,6 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyName>VerbNurbsSharp</AssemblyName>
     <RootNamespace>VerbNurbsSharp</RootNamespace>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
