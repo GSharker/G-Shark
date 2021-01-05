@@ -43,7 +43,7 @@ namespace VerbNurbsSharp.Evaluation
 
 			foreach (List<Point> cps in controlPoints)
 			{
-				res = Modify.curveKnotRefine(new NurbsCurveData(degree, knots, cps), knots_to_insert);
+				res = Modify.CurveKnotRefine(new NurbsCurveData(degree, knots, cps), knots_to_insert);
 
 				newpts0.Add(res.ControlPoints.GetRange(0, s + 1)/*.slice(0, s + 1)*/);
 				newpts1.Add(res.ControlPoints.GetRange(0, s + 1)/*.slice(s + 1)*/);

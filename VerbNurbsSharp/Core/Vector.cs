@@ -172,6 +172,25 @@ namespace VerbNurbsSharp.Core
             return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
 
+
+        public static List<double> Add(List<double> a, List<double> b)
+        {
+            List<double> result = new List<double>();
+            for (int i = 0; i < a.Count; i++)
+                result.Add(a[i] + b[i]);
+
+            return result;
+        }
+
+        public static List<double> Mul(double a, List<double> b)
+        {
+            List<double> result = new List<double>();
+            for (int i = 0; i < b.Count; i++)
+                result.Add(a * b[i]);
+
+            return result;
+        }
+
         // ToDo implement them if necessary.
         // Get the angle between two vectors in 2d, for a 2 dimension.
         // use the perp dot product other words the two dimensional cross-product.
