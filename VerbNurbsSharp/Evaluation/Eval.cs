@@ -13,9 +13,9 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="u">float parameter</param>
         /// <param name="knots">array of nondecreasing knot values</param>
         /// <returns></returns>
-        public static int knotSpan(int degree, float u, KnotArray knots)
+        public static int KnotSpan(int degree, float u, KnotArray knots)
         {
-            return knotSpanGivenN(knots.Count - degree - 2, degree, u, knots);
+            return KnotSpanGivenN(knots.Count - degree - 2, degree, u, knots);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="u">parameter</param>
         /// <param name="knots">array of nondecreasing knot values</param>
         /// <returns>the index of the knot span</returns>
-        public static int knotSpanGivenN(int n, int degree, float u, KnotArray knots)
+        public static int KnotSpanGivenN(int n, int degree, float u, KnotArray knots)
         {
             if (u > knots[n + 1] - Constants.EPSILON)
                 return n;
