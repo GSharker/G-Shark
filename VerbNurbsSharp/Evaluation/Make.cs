@@ -25,7 +25,8 @@ namespace VerbNurbsSharp.Evaluation
                 knots.Add(1.0);
             if (weights == null)
                 weights = Constants.Rep(controlPoints.Count, 1.0);
-            return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
+            //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
+            return null;
         }
     }
 }
