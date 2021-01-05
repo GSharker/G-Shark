@@ -14,11 +14,11 @@ namespace VerbNurbsSharp.XUnit.Core
     [Trait("Category", "Sets")]
     public class SetsTest
     {
-        public readonly ITestOutputHelper _OutputHelper;
+        private readonly ITestOutputHelper _testOutput;
 
-        public SetsTest(ITestOutputHelper outputHelper)
+        public SetsTest(ITestOutputHelper testOutput)
         {
-            _OutputHelper = outputHelper;
+            _testOutput = testOutput;
         }
 
         public static IEnumerable<object[]> RangesToBeDefined =>
@@ -37,6 +37,14 @@ namespace VerbNurbsSharp.XUnit.Core
                 new object[] { new List<double>(){ 2.7, 3.5, 4.9, 5.1, 8.3 }, 5.6000000000000005 }
             };
 
+        public static IEnumerable<object[]> DataToRepeat =>
+            new List<object[]>
+            {
+                new object[] { 10, 7},
+                new object[] { new Vector(){ 14, -12, 7}, 5},
+                new object[] { 2.7, 8 }
+            };
+
         [Theory]
         [MemberData(nameof(RangesToBeDefined))]
         public void GetARangeOfNumbers(Interval interval, int step)
@@ -44,7 +52,7 @@ namespace VerbNurbsSharp.XUnit.Core
             var range = Sets.Range(interval, step);
 
             var st = string.Join('-', range);
-            _OutputHelper.WriteLine(st);
+            _testOutput.WriteLine(st);
 
             range.Should().NotBeNull();
             range.Should().BeEquivalentTo(new List<double>(range));
@@ -56,7 +64,7 @@ namespace VerbNurbsSharp.XUnit.Core
             var range = Sets.Range(12);
 
             var st = string.Join('-', range);
-            _OutputHelper.WriteLine(st);
+            _testOutput.WriteLine(st);
 
             range.Should().NotBeNull();
             range.Should().BeEquivalentTo(new List<double>(range));
@@ -69,7 +77,7 @@ namespace VerbNurbsSharp.XUnit.Core
         public void RangeThrowAnException_IfTheValueIsNegativeOrZero(int maxValue)
         {
             Func<object> resultFunction = () => Sets.Range(maxValue);
-            resultFunction.Should().Throw<Exception>().WithMessage("Zero or negative value is not accepted");
+            resultFunction.Should().Throw<Exception>().WithMessage("Max value range can not be negative or zero.");
         }
 
         [Theory]
@@ -81,7 +89,7 @@ namespace VerbNurbsSharp.XUnit.Core
             var series = Sets.Span(start, step, count);
 
             var st = string.Join('-', series);
-            _OutputHelper.WriteLine(st);
+            _testOutput.WriteLine(st);
 
             series.Should().NotBeNull();
             series.Should().BeEquivalentTo(new List<double>(series));
@@ -93,15 +101,37 @@ namespace VerbNurbsSharp.XUnit.Core
         public void SeriesThrowAnException_IfTheValueIsNegativeOrZero(double start, double step, int count)
         {
             Func<object> resultFunction = () => Sets.Span(start, step, count);
-            resultFunction.Should().Throw<Exception>().WithMessage("Count as zero or negative is not accepted");
+            resultFunction.Should().Throw<Exception>().WithMessage("Count can not be negative or zero.");
         }
 
         [Theory]
         [MemberData(nameof(SetOfNumbersAndTheSetDimension))]
-        public static void GetTheDimension_OfASetOfNumbers(IList<double> set, double expectedRange)
+        public void GetTheDimension_OfASetOfNumbers(IList<double> set, double expectedRange)
         {
             Sets.Dimension(set).Should().Be(expectedRange);
         }
 
+        [Theory]
+        [MemberData(nameof(DataToRepeat))]
+        public void GetASet_OfRepeatedData_OfASpecificLength(object data, int length)
+        {
+            var repeatedData = Sets.RepeatData(data, length);
+
+            var resultConcat = string.Join("--", repeatedData);
+            _testOutput.WriteLine(resultConcat);
+
+            repeatedData.Should().NotBeEmpty();
+            repeatedData.Should().HaveCount(length);
+            repeatedData.Should().BeEquivalentTo(new List<object>(repeatedData));
+        }
+
+        [Theory]
+        [InlineData(10, 0)]
+        [InlineData(5, -1)]
+        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero(object data, int length)
+        {
+            Func<object> resultFunction = () => Sets.RepeatData(data, length);
+            resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative or zero.");
+        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VerbNurbsSharp.Core
 {
@@ -50,7 +48,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>A range of numbers.</returns>
         public static IList<double> Range(int maxValue)
         {
-            if (maxValue <= 0) throw new Exception("Zero or negative value is not accepted");
+            if (maxValue <= 0) throw new Exception("Max value range can not be negative or zero.");
             var l = new List<double>();
             double f = 0.0;
 
@@ -72,7 +70,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>Series of numbers.</returns>
         public static IList<double> Span(double start, double step, int count)
         {
-            if (count <= 0) throw new Exception("Count as zero or negative is not accepted");
+            if (count <= 0) throw new Exception("Count can not be negative or zero.");
             var l = new List<double>();
             double counter = 0.0;
             double number1 = start;
@@ -91,17 +89,17 @@ namespace VerbNurbsSharp.Core
         public static Vector SortedSetSub(Vector a, Vector b) => throw new NotImplementedException();
 
         /// <summary>
-        /// 
+        /// Repeat data until it reaches the defined length.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="num"></param>
-        /// <param name="ele"></param>
-        /// <returns></returns>
-        public static List<T> Rep<T>(int num, T ele)
+        /// <param name="data">Data to repeat.</param>
+        /// <param name="length">Length of the final set.</param>
+        /// <returns>Set of repeated data.</returns>
+        public static List<T> RepeatData<T>(T data, int length)
         {
+            if (length <= 0) throw new Exception("Length can not be negative or zero.");
             List<T> list = new List<T>();
-            for (int i = 0; i < num; i++)
-                list.Add(ele);
+            for (int i = 0; i < length; i++)
+                list.Add(data);
             return list;
         }
 
