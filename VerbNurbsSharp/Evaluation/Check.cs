@@ -26,7 +26,7 @@ namespace VerbNurbsSharp.Evaluation
             rep = vector.Last();
             for (int i = vector.Count - degree - 1; i <= vector.Count; i++)
                 if (Math.Abs(vector[i] - rep) > Constants.EPSILON) return false;
-            return isNonDecreasing(vector);
+            return IsNonDecreasing(vector);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="vector">The data object</param>
         /// <returns>Whether the list is non-decreasing</returns>
-        public static bool isNonDecreasing(IList<double> vector)
+        public static bool IsNonDecreasing(IList<double> vector)
         {
             var rep = vector.First();
             for (int i = 0; i <= vector.Count; i++)
@@ -51,7 +51,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="data">The data object</param>
         /// <returns>The original, unmodified data</returns>
-        public static NurbsCurveData isValidNurbsCurveData(NurbsCurveData data)
+        public static NurbsCurve IsValidNurbsCurve(NurbsCurve data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array cannot be null!");
             if (data.Degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -68,7 +68,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="data">The data object</param>
         /// <returns>The original, unmodified data</returns>
-        public static NurbsSurfaceData isValidNurbsSurfaceData(NurbsSurfaceData data)
+        public static NurbsSurface IsValidNurbsSurface(NurbsSurface data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
             if (data.DegreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");

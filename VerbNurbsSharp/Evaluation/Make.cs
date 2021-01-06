@@ -15,6 +15,22 @@ namespace VerbNurbsSharp.Evaluation
 
         }
 
+
+        public static NurbsCurve Polyline (List<Point> points)
+        {
+            KnotArray knots = new KnotArray() { 0.0, 0.0 };
+            double lsum = 0.0;
+
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                lsum += Constants.DistanceTo(points[i], points[i + 1]);
+                knots.Add(lsum);
+            }
+            knots.Add(lsum);
+            var weights = points.Select(x => 1.0).ToList();
+            points.ForEach(x => weights.Add(1.0));
+            return new NurbsCurve(1, knots, Eval.Homogenize1d(points, weights));
+
         public static NurbsCurve RationalBezierCurve(List<Point> controlPoints, List<double> weights = null)
         {
             var degree = controlPoints.Count - 1;
@@ -113,16 +129,6 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
         /// <returns>a NurbsCurveData object representing a NURBS curve</returns>
         public static NurbsCurve Arc(Point center, Vector xaxis, Vector yaxis, double radius, double startAngle, double endAngle)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Generate the control points, weights, and knots of a polyline curve
-        /// </summary>
-        /// <param name="pts">array of points in curve</param>
-        /// <returns>a NurbsCurveData object representing a NURBS curve</returns>
-        public static NurbsCurve Polyline(List<Point> pts)
         {
             throw new NotImplementedException();
         }
