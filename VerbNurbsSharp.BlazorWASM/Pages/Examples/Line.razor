@@ -1,7 +1,18 @@
 ﻿@page "/line"
- 
+@inject IJSRuntime js
+
 <h3>Line</h3>
 
+
+
 @code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
 
 }
