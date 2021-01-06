@@ -17,7 +17,7 @@ namespace VerbNurbsSharp.Evaluation
 		/// <param name="curve"></param>
 		/// <param name="knotsToInsert"></param>
 		/// <returns></returns>
-		public static NurbsCurveData curveKnotRefine(NurbsCurveData curve, List<double> knotsToInsert)
+		public static NurbsCurve curveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
 		{
 			//if (knotsToInsert.Count == 0)
 			//	return Make.clonedCurve(curve);

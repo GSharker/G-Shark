@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class NurbsSurface : Serializable<NurbsSurface>
     {
-        public NurbsSurfaceData(int degreeU, int degreeV, KnotArray knotsU, KnotArray knotsV, List<List<Point>> controlPoints)
+        public NurbsSurface(int degreeU, int degreeV, KnotArray knotsU, KnotArray knotsV, List<List<Point>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;

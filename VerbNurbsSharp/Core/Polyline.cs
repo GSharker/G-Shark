@@ -20,7 +20,7 @@ namespace VerbNurbsSharp.Core
         /// The parameters of the individual points.
         /// </summary>
         public List<double> Parameters { get; set; }
-        public PolylineData(List<Point> points, List<double> parameters)
+        public Polyline(List<Point> points, List<double> parameters)
         {
             Points = points;
             Parameters = parameters;

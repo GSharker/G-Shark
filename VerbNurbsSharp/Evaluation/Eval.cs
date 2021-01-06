@@ -52,9 +52,35 @@ namespace VerbNurbsSharp.Evaluation
             return mid;
         }
 
-        public static List<Point> Homogenize1d(List<Point> controlPoints, List<double> weights)
+        /// <summary>
+        /// Transform a 1d array of points into their homogeneous equivalents
+        /// </summary>
+        /// <param name="controlPoints">1d array of control points, (actually a 2d array of size (m x dim) )</param>
+        /// <param name="weights">array of control point weights, the same size as the array of control points (m x 1)</param>
+        /// <returns>
+        /// 1d array of control points where each point is (wi*pi,  i) where wi
+        ///i the ith control point weight and pi is the ith control point,
+        ///hence the dimension of the point is dim + 1
+        ///</returns>
+        public static List<Point> Homogenize1d(List<Point> pts, List<double> weights = null)
         {
-            throw new NotImplementedException();
+            var rows = pts.Count;
+            var dim = pts[0].Count;
+            var homoPts = new List<Point>();
+            double wt = 0.0;
+            Point refPt = new Point();
+            weights = weights != null ? weights : Sets.RepeatData(1.0d, pts.Count);
+            for (int i = 0; i < rows; i++)
+            {
+                var pt = new Point();
+                refPt = pts[i];
+                wt = weights[i];
+                for (int k = 0; k < dim; k++)
+                    pt.Add(refPt[k] * wt);
+                pt.Add(wt);
+                homoPts.Add(pt);
+            }
+            return homoPts;
         }
     }
 }
