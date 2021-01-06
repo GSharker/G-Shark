@@ -11,12 +11,12 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Mesh : Serializable<Mesh>
     {
-        public List<Tri> Faces { get; set; }
+        public List<Triangle> Faces { get; set; }
         public List<Point> Points { get; set; }
         public List<Vector> Normals { get; set; }
         public List<UV> UVs { get; set; }
 
-        public MeshData(List<Tri> faces, List<Point> points, List<Vector> normals, List<UV> uVs)
+        public Mesh(List<Triangle> faces, List<Point> points, List<Vector> normals, List<UV> uVs)
         {
             Faces = faces;
             Points = points;
@@ -24,8 +24,8 @@ namespace VerbNurbsSharp.Core
             UVs = uVs;
         }
 
-        internal static MeshData Empty() => new MeshData(
-            new List<Tri>(),
+        internal static Mesh Empty() => new Mesh(
+            new List<Triangle>(),
             new List<Point>(),
             new List<Vector>(),
             new List<UV>()
