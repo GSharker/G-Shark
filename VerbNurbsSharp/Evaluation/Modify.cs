@@ -23,7 +23,7 @@ namespace VerbNurbsSharp.Evaluation
 				return Make.ClonedCurve(curve);
 
 			int degree = curve.Degree;
-			List<Point> controlPoints = curve.ControlPoints;
+			List<Vector> controlPoints = curve.ControlPoints;
 			KnotArray knots = curve.Knots;
 
 			int n = controlPoints.Count - 1;
@@ -31,7 +31,7 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			List<Point> controlPoints_post = new List<Point>();
+			List<Vector> controlPoints_post = new List<Vector>();
 			KnotArray knots_post = new KnotArray();
 
 			//new control points
@@ -73,7 +73,7 @@ namespace VerbNurbsSharp.Evaluation
 					else
 					{
 						alfa = alfa / (knots_post[k + 1] - knots[ii - degree + 1]);
-						//controlPoints_post[ind - 1] = Vector.Add(Vector.Mul(alfa, controlPoints_post[ind - 1]), Vector.Mul((1.0 - alfa), controlPoints_post[ind]));
+						controlPoints_post[ind - 1] =(Vector)Constants.Addition( Constants.Multiplication(controlPoints_post[ind - 1], alfa), Constants.Multiplication(controlPoints_post[ind], 1.0-alfa));
 					}
 				}
 
