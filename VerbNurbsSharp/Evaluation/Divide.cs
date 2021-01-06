@@ -12,6 +12,16 @@ namespace VerbNurbsSharp.Evaluation
 {
 	public class Divide
 	{
+		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
+		{
+			int degree = curve.Degree;
+			List<Vector> controlPoints = curve.ControlPoints;
+			throw new NotImplementedException();
+		}
+
+
+		//////////////////////////// =================================== not implemented yet ================================== ///////////////////
+
 		public static List<NurbsSurface> SurfaceSplit(NurbsSurface surface, float u, bool useV = false)
 		{
 			throw new NotImplementedException();

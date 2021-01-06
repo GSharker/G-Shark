@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class NurbsCurve : Serializable<NurbsCurve>
     {
-        public NurbsCurveData(int degree, KnotArray knots, List<Point> controlPoints)
+        public NurbsCurve(int degree, KnotArray knots, List<Vector> controlPoints)
         {
             Degree = degree;
             ControlPoints = controlPoints;
@@ -25,7 +25,7 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// 2d list of control points, where each control point is an list of length (dim).
         /// </summary>
-        public List<Point> ControlPoints { get; set; }
+        public List<Vector> ControlPoints { get; set; }
 
         /// <summary>
         /// List of non-decreasing knot values.

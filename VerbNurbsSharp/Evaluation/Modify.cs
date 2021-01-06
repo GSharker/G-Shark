@@ -73,7 +73,7 @@ namespace VerbNurbsSharp.Evaluation
 					else
 					{
 						alfa = alfa / (knots_post[k + 1] - knots[ii - degree + 1]);
-						controlPoints_post[ind - 1] = Vector.Add(Vector.Mul(alfa, controlPoints_post[ind - 1]), Vector.Mul((1.0 - alfa), controlPoints_post[ind]));
+						//controlPoints_post[ind - 1] = Vector.Add(Vector.Mul(alfa, controlPoints_post[ind - 1]), Vector.Mul((1.0 - alfa), controlPoints_post[ind]));
 					}
 				}
 
