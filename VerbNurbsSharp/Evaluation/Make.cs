@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
@@ -43,7 +44,7 @@ namespace VerbNurbsSharp.Evaluation
             if (weights == null)
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
             return new NurbsCurve(degree, knots, Eval.Homogenize1d(controlPoints, weights));
-                weights = Constants.Rep(controlPoints.Count, 1.0);
+                weights = Sets.RepeatData(1.0, controlPoints.Count);
             //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
             return null;
         }

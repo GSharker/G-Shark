@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
@@ -47,10 +48,10 @@ namespace VerbNurbsSharp.Evaluation
         }
 
         /// <summary>
-        /// Validate a NurbsCurveData object
+        /// Validate a NurbsCurveData object.
         /// </summary>
-        /// <param name="data">The data object</param>
-        /// <returns>The original, unmodified data</returns>
+        /// <param name="data">The data object.</param>
+        /// <returns>The original, unmodified data.</returns>
         public static NurbsCurve IsValidNurbsCurve(NurbsCurve data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array cannot be null!");

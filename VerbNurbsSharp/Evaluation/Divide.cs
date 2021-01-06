@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using VerbNurbsSharp.Geometry;
 using VerbNurbsSharp.Core;
 
 //Divide provides various tools for dividing and splitting NURBS geometry.
