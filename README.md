@@ -6,6 +6,8 @@ Still in the very early stages but I am planning to include few examples, includ
 This projects implements unit tests using XUnit and Fluent Assertion
 # VerbNurbsSharpConsoleApp
 This projects implements a console app to test some functionalities
+# [VerbNurbsSharp.BlazorWASM](https://github.com/cesarecaoduro/VerbNurbsSharp/tree/master/VerbNurbsSharp.BlazorWASM "VerbNurbsSharp.BlazorWASM")
+This projects implement a Balzor Webassembly application
 # WIP Classes
 ### Core
  - [x] BoundingBox
@@ -26,6 +28,6 @@ This projects implements a console app to test some functionalities
 ### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMjI4MDAyMzMsNzM4ODkyNTE5LC0zNj
-M4NjAzMTVdfQ==
+eyJoaXN0b3J5IjpbNjk4NDk2MzAxLC0yMTIyODAwMjMzLDczOD
+g5MjUxOSwtMzYzODYwMzE1XX0=
 -->
