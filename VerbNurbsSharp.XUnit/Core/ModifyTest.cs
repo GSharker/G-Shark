@@ -10,7 +10,6 @@ using Xunit.Abstractions;
 
 namespace VerbNurbsSharp.XUnit.Core
 {
-	[Trait("Category", "Modify")]
 	public class ModifyTest
 	{
 		private readonly ITestOutputHelper _testOutput;
@@ -18,6 +17,17 @@ namespace VerbNurbsSharp.XUnit.Core
 		public ModifyTest(ITestOutputHelper testOutput)
 		{
 			_testOutput = testOutput;
+		}
+
+		[Fact]
+		public void Check_CurveKnotRefine()
+		{
+			//arrange
+			NurbsCurve inputCurve = null;
+			NurbsCurve expectedCurve = null;
+			//act
+			//assert
+			Assert.Equal(expectedCurve, inputCurve);
 		}
 	}
 }

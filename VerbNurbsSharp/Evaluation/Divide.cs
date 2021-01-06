@@ -16,11 +16,28 @@ namespace VerbNurbsSharp.Evaluation
 		{
 			int degree = curve.Degree;
 			List<Vector> controlPoints = curve.ControlPoints;
-			throw new NotImplementedException();
+			KnotArray knots = curve.Knots;
+
+			List<double> knots_to_insert = new List<double>();
+			for (int i = 0; i <= degree; i++)
+				knots_to_insert.Add(u);
+
+			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knots_to_insert);
+
+		 	int s = Eval.KnotSpan(degree, u, knots);
+
+			KnotArray knots0 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + degree + 2);
+			KnotArray knots1 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + 1);
+
+			List<Vector> cpts0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+			List<Vector> cpts1 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+
+			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, cpts0), new NurbsCurve(degree, knots1, cpts1) };
 		}
 
 
 		//////////////////////////// =================================== not implemented yet ================================== ///////////////////
+
 
 		public static List<NurbsSurface> SurfaceSplit(NurbsSurface surface, float u, bool useV = false)
 		{
@@ -60,8 +77,8 @@ namespace VerbNurbsSharp.Evaluation
 			//				newpts1.Add(res.ControlPoints.GetRange(0, s + 1)/*.slice(s + 1)*/);
 			//			}
 
-			//			KnotArray knots0 = res.Knots.GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
-			//			KnotArray knots1 = res.Knots.GetRange(0, s + 1);//.slice(s + 1);
+			//			KnotArray knots0 = (KnotArray)res.Knots.ToList().GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
+			//			KnotArray knots1 = (KnotArray)res.Knots.ToList().GetRange(0, s + 1);//.slice(s + 1);
 
 			//			if (!useV)
 			//			{
@@ -76,5 +93,7 @@ namespace VerbNurbsSharp.Evaluation
 			//			return new List<NurbsSurfaceData>(){new NurbsSurfaceData(surface.DegreeU, degree, surface.KnotsU, knots0, newpts0),
 			//			new NurbsSurfaceData(surface.DegreeU, degree, surface.KnotsU, knots1, newpts1) };
 		}
+
+
 	}
 }

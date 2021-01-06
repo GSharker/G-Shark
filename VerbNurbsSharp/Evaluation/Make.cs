@@ -16,7 +16,7 @@ namespace VerbNurbsSharp.Evaluation
         }
 
 
-        public static NurbsCurve Polyline(List<Point> points)
+        public static NurbsCurve Polyline(List<Vector> points)
         {
             KnotArray knots = new KnotArray() { 0.0, 0.0 };
             double lsum = 0.0;
@@ -32,7 +32,7 @@ namespace VerbNurbsSharp.Evaluation
             return new NurbsCurve(1, knots, Eval.Homogenize1d(points, weights));
         }
 
-        public static NurbsCurve RationalBezierCurve(List<Point> controlPoints, List<double> weights = null)
+        public static NurbsCurve RationalBezierCurve(List<Vector> controlPoints, List<double> weights = null)
         {
             var degree = controlPoints.Count - 1;
             var knots = new KnotArray();
@@ -43,7 +43,7 @@ namespace VerbNurbsSharp.Evaluation
             if (weights == null)
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
             return new NurbsCurve(degree, knots, Eval.Homogenize1d(controlPoints, weights));
-                weights = Sets.RepeatData<double>(1.0, controlPoints.Count);
+                weights = Constants.Rep(controlPoints.Count, 1.0);
             //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
             return null;
         }

@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Evaluation
 	{
 		/// <summary>
 		/// Insert a collectioin of knots on a curve
-		/// corresponds to Algorithm A5.4 (Piegl & Tiller)
+		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
 		/// </summary>
 		/// <param name="curve"></param>
 		/// <param name="knotsToInsert"></param>
@@ -20,7 +20,7 @@ namespace VerbNurbsSharp.Evaluation
 		public static NurbsCurve CurveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
 		{
 			if (knotsToInsert.Count == 0)
-				return Make.ClonedCurve(curve);
+				return curve;
 
 			int degree = curve.Degree;
 			List<Vector> controlPoints = curve.ControlPoints;
@@ -48,17 +48,17 @@ namespace VerbNurbsSharp.Evaluation
 			for (int i = b + degree; i <= m; i++)
 				knots_post[i + r + 1] = knots[i];
 
-			int ii = b + degree + 1;
+			int g = b + degree + 1;
 			int k = b + degree + r;
 			int j = r;
 			while (j >= 0)
 			{
-				while (knotsToInsert[j] <= knots[ii] && ii > a)
+				while (knotsToInsert[j] <= knots[g] && g > a)
 				{
-					controlPoints_post[k - degree - 1] = controlPoints[ii - degree - 1];
-					knots_post[k] = knots[ii];
-					k = k - 1;
-					ii = ii - 1;
+					controlPoints_post[k - degree - 1] = controlPoints[g - degree - 1];
+					knots_post[k] = knots[g];
+					k--;
+					g--;
 				}
 
 				controlPoints_post[k - degree - 1] = controlPoints_post[k - degree];
@@ -72,8 +72,8 @@ namespace VerbNurbsSharp.Evaluation
 						controlPoints_post[ind - 1] = controlPoints_post[ind];
 					else
 					{
-						alfa = alfa / (knots_post[k + 1] - knots[ii - degree + 1]);
-						controlPoints_post[ind - 1] =(Vector)Constants.Addition( Constants.Multiplication(controlPoints_post[ind - 1], alfa), Constants.Multiplication(controlPoints_post[ind], 1.0-alfa));
+						alfa = alfa / (knots_post[k + 1] - knots[g - degree + 1]);
+						controlPoints_post[ind - 1] =(Vector)Constants.Addition(Constants.Multiplication(controlPoints_post[ind - 1], alfa), Constants.Multiplication(controlPoints_post[ind], 1.0-alfa));
 					}
 				}
 
