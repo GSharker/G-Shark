@@ -51,7 +51,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="data">The data object</param>
         /// <returns>The original, unmodified data</returns>
-        public static NurbsCurveData isValidNurbsCurveData(NurbsCurveData data)
+        public static NurbsCurve isValidNurbsCurveData(NurbsCurve data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array cannot be null!");
             if (data.Degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -68,7 +68,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="data">The data object</param>
         /// <returns>The original, unmodified data</returns>
-        public static NurbsSurfaceData isValidNurbsSurfaceData(NurbsSurfaceData data)
+        public static NurbsSurface isValidNurbsSurfaceData(NurbsSurface data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
             if (data.DegreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");

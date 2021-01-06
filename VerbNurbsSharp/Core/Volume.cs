@@ -41,7 +41,7 @@ namespace VerbNurbsSharp.Core
         /// and where each control point is an list of length (dim)
         /// </summary>
         public List<List<List<Point>>> ControlPoints { get; set; }
-        public VolumeData(int degreeU, int degreeV, int degreeW, KnotArray knotsU, KnotArray knotsV, KnotArray knotsW, List<List<List<Point>>> controlPoints)
+        public Volume(int degreeU, int degreeV, int degreeW, KnotArray knotsU, KnotArray knotsV, KnotArray knotsW, List<List<List<Point>>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;
