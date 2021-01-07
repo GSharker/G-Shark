@@ -157,14 +157,14 @@ namespace VerbNurbsSharp.Evaluation
 		}
 
 		/// <summary>
-		/// Transform a NURBS curve using a matrix
+		/// Transform a NURBS curve using a matrix.
 		/// </summary>
-		/// <param name="curve">The curve to transform</param>
-		/// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions</param>
-		/// <returns>A new NURBS surface after transformation</returns>
+		/// <param name="curve">The curve to transform.</param>
+		/// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
+		/// <returns>A new NURBS surface after transformation.</returns>
 		public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
 		{
-			throw new NotImplementedException();
+            throw new NotImplementedException();
 		}
 
 		/// <summary>

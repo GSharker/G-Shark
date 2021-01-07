@@ -94,12 +94,38 @@ namespace VerbNurbsSharp.Evaluation
 
             return controlPtsHomogenized;
         }
-
+        /// <summary>
+        /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
+        /// </summary>
+        /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>A set of numbers represented by an set pi with length (dim).</returns>
         public static IList<double> Weight1d(List<Vector> homogeneousPts)
         {
             if(homogeneousPts.Any(vec => vec.Count != homogeneousPts[0].Count))
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
             return homogeneousPts.Select(vec => vec[^1]).ToList();
         }
+        /// <summary>
+        /// Dehomogenize a point.
+        /// </summary>
+        /// <param name="homogeneousPt">A point represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>A point represented by an array pi with length (dim).</returns>
+        public static Vector Dehomogenize(Vector homogeneousPt)
+        {
+            var dim = homogeneousPt.Count;
+            var weight = homogeneousPt[dim - 1];
+            var point = new Vector();
+
+            for (int i = 0; i < dim-1; i++)
+                point.Add(homogeneousPt[i]/weight);
+
+            return point;
+        }
+        /// <summary>
+        /// Dehomogenize an set of points.
+        /// </summary>
+        /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>Set of points, each of length dim.</returns>
+        public static List<Vector> Dehomogenize1d(List<Vector> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
     }
 }

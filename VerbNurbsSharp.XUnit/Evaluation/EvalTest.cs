@@ -105,5 +105,38 @@ namespace VerbNurbsSharp.XUnit.Evaluation
 
             weight1d.Should().BeEquivalentTo(new List<double>() {0.5, 0.5, 0.5});
         }
+
+        [Fact]
+        public void Dehomogenizer()
+        {
+            var homegeneousPts = new Vector() {1.25, -1.25, 0.0, 0.5};
+            var dehomogenizeExpected = new Vector() {2.5, -2.5, 0};
+
+            var dehomogenizePts = Eval.Dehomogenize(homegeneousPts);
+
+            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+        }
+
+        [Fact]
+        public void Dehomogenizer1d()
+        {
+            var homegeneousPts = new List<Vector>()
+            {
+                new Vector() {0.0, 0.0, 0.0, 0.5},
+                new Vector() {1.25, -1.25, 0.0, 0.5},
+                new Vector() {2.5, 0.0, 0.0, 0.5}
+            };
+
+            var dehomogenizeExpected = new List<Vector>()
+            {
+                new Vector() {0.0, 0.0, 0},
+                new Vector() {2.5, -2.5, 0},
+                new Vector() {5.0, 0.0, 0}
+            };
+
+            var dehomogenizePts = Eval.Dehomogenize1d(homegeneousPts);
+
+            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+        }
     }
 }
