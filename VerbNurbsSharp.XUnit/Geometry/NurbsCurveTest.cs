@@ -13,6 +13,19 @@ namespace VerbNurbsSharp.XUnit.Geometry
     [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTest
     {
+        private static NurbsCurve NurbsCurveExample()
+        {
+            int degree = 2;
+            List<Vector> pts = new List<Vector>()
+            {
+                new Vector(){-10,15,5},
+                new Vector(){10,5,5},
+                new Vector(){20,0,0}
+            };
+            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
+
+            return new NurbsCurve(degree, knots, pts);
+        }
 
         [Fact]
         public void Get_A_NurbsCurve()
@@ -32,7 +45,26 @@ namespace VerbNurbsSharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Get_A_NurbsCurve_FromANurbs()
+        public void Get_A_NurbsCurve_EvaluatedWithAListOfWeights()
+        {
+            int degree = 2;
+            List<Vector> pts = new List<Vector>()
+            {
+                new Vector(){-10,15,5},
+                new Vector(){10,5,5},
+                new Vector(){20,0,0}
+            };
+            KnotArray knots = new KnotArray() { 1, 1, 1 };
+            var weights = new List<double>() {0.5, 0.5, 0.5};
+
+            var nurbsCurve = new NurbsCurve(degree, knots, pts, weights);
+
+            nurbsCurve.Should().NotBeNull();
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector() {10, 0, 0, 0.5});
+        }
+
+        [Fact]
+        public void Get_ACopied_NurbsCurve()
         {
             int degree = 2;
             List<Vector> pts = new List<Vector>()
@@ -44,10 +76,19 @@ namespace VerbNurbsSharp.XUnit.Geometry
             KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1};
 
             var nurbsCurve = new NurbsCurve(degree, knots, pts);
-            var copiedNurbs = new NurbsCurve(nurbsCurve);
+            var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
             copiedNurbs.Should().BeEquivalentTo(nurbsCurve);
+        }
+
+        [Fact]
+        public void GetTheDomainOfTheCurve()
+        {
+            var curveDomain = NurbsCurveExample().Domain();
+
+            curveDomain.Min.Should().Be(NurbsCurveExample().Knots.First());
+            curveDomain.Max.Should().Be(NurbsCurveExample().Knots.Last());
         }
     }
 }

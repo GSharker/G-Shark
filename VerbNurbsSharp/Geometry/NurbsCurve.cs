@@ -1,6 +1,7 @@
 ﻿using System;
 using VerbNurbsSharp.Evaluation;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using VerbNurbsSharp.Core;
 
@@ -12,10 +13,10 @@ namespace VerbNurbsSharp.Geometry
         /// A simple data structure representing a NURBS curve.
         /// NurbsCurve does no checks for legality. You can use <see cref="VerbNurbsSharp.Evaluation.Check"/> for that.
         /// </summary>
-        public NurbsCurve(int degree, KnotArray knots, List<Vector> controlPoints)
+        public NurbsCurve(int degree, KnotArray knots, List<Vector> controlPoints, List<double> weights = null)
         {
             Degree = degree;
-            ControlPoints = controlPoints;
+            ControlPoints = weights == null ? controlPoints : Eval.Homogenize1d(controlPoints, weights); 
             Knots = knots;
         }
         /// <summary>
@@ -36,14 +37,22 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         public int Degree { get; set; }
         /// <summary>
-        /// 2d list of control points, where each control point is an list of length (dim).
+        /// 2d list of control points, where each control point is a list of length (dim).
         /// </summary>
         public List<Vector> ControlPoints { get; set; }
-
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
         public KnotArray Knots { get; set; }
+        /// <summary>
+        /// Obtain a copy of the NurbsCurve.
+        /// </summary>
+        /// <returns>The copied curve.</returns>
+        public NurbsCurve Clone()
+        {
+            return new NurbsCurve(this);
+        }
+
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -54,10 +63,13 @@ namespace VerbNurbsSharp.Geometry
         {
             throw new System.NotImplementedException();
         }
-
+        /// <summary>
+        /// Determine the valid domain of the curve.
+        /// </summary>
+        /// <returns>representing the high and end point of the domain of the curve.</returns>
         public Interval Domain()
         {
-            throw new System.NotImplementedException();
+            return new Interval(this.Knots.First(), this.Knots.Last());
         }
 
         public Vector PointAt(double t)
