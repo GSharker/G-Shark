@@ -1,18 +1,19 @@
 ﻿@page "/line"
-@inject IJSRuntime js
+@inject IJSRuntime JsRuntime
 
 <h3>Line</h3>
 
-
+<Row>
+    <Column ColumnSize="ColumnSize.IsHalf">
+        <canvas id="babylonRender" touch-action="none" style="width:100%; height:100%"></canvas>
+    </Column>
+</Row>
 
 @code {
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-        }
+        await JsRuntime.InvokeVoidAsync("InitializeBabylonScene", "babylonRender");
+        await JsRuntime.InvokeVoidAsync("Line");
     }
-
-
 }
