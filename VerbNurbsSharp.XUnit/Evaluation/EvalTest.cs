@@ -75,5 +75,35 @@ namespace VerbNurbsSharp.XUnit.Evaluation
 
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
         }
+
+        [Fact]
+        public void Weight1d_ThrowsAnException_IfThePassedSet_HasNotTheSameDimension()
+        {
+            var homegeneousPts = new List<Vector>()
+            {
+                new Vector() {0.0, 0.0, 0.0},
+                new Vector() {1.25, -1.25, 0.0, 0.5},
+                new Vector() {2.5, 0.0, 0.0, 0.5}
+            };
+
+            Func<object> resultFunc = () => Eval.Weight1d(homegeneousPts);
+
+            resultFunc.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void Weight1d()
+        {
+            var homegeneousPts = new List<Vector>()
+            {
+                new Vector() {0.0, 0.0, 0.0, 0.5},
+                new Vector() {1.25, -1.25, 0.0, 0.5},
+                new Vector() {2.5, 0.0, 0.0, 0.5}
+            };
+
+            var weight1d = Eval.Weight1d(homegeneousPts);
+
+            weight1d.Should().BeEquivalentTo(new List<double>() {0.5, 0.5, 0.5});
+        }
     }
 }

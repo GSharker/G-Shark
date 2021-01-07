@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
 namespace VerbNurbsSharp.Evaluation
@@ -92,6 +93,13 @@ namespace VerbNurbsSharp.Evaluation
             }
 
             return controlPtsHomogenized;
+        }
+
+        public static IList<double> Weight1d(List<Vector> homogeneousPts)
+        {
+            if(homogeneousPts.Any(vec => vec.Count != homogeneousPts[0].Count))
+                throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
+            return homogeneousPts.Select(vec => vec[^1]).ToList();
         }
     }
 }
