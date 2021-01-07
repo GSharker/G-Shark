@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using VerbNurbsSharp.Core;
-using NurbsCurve = GeometryLib.Geometry.NurbsCurve;
 
 namespace VerbNurbsSharp.Geometry
 {

@@ -41,7 +41,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector(){10,5,5},
                 new Vector(){20,0,0}
             };
-            KnotArray knots = new KnotArray() { 1, 1, 1 };
+            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1};
 
             var nurbsCurve = new NurbsCurve(degree, knots, pts);
             var copiedNurbs = new NurbsCurve(nurbsCurve);
