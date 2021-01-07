@@ -156,25 +156,42 @@ namespace VerbNurbsSharp.Evaluation
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Transform a NURBS curve using a matrix.
-		/// </summary>
-		/// <param name="curve">The curve to transform.</param>
-		/// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
-		/// <returns>A new NURBS surface after transformation.</returns>
-		public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
-		{
-            throw new NotImplementedException();
-		}
+		//ToDo this method has to be tested.
+        /// <summary>
+        /// Transform a NURBS curve using a matrix.
+        /// </summary>
+        /// <param name="curve">The curve to transform.</param>
+        /// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
+        /// <returns>A new NURBS surface after transformation.</returns>
+        public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
+        {
+            var pts = curve.AreControlPointsHomogenized()
+                 ? Eval.Dehomogenize1d(curve.ControlPoints)
+				 : curve.ControlPoints;
+            /*
+            Why he added a 4th value to the pt and after he remove it?
+            Also it wouldn't be multiple in the dot product if the first vector count is lower.
+            Lets keep recorded these steps if we will notice something strange in the future.
+            
+            var homoPt = pts[i];
+            homoPt.push(1.0);  
 
-		/// <summary>
-		/// Perform knot refinement on a NURBS surface by inserting knots at various parameters
-		/// </summary>
-		/// <param name="surface">The surface to insert the knots into</param>
-		/// <param name="knotsToInsert">The knots to insert - an array of parameter positions within the surface domain</param>
-		/// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
-		/// <returns>A new NURBS surface with the knots inserted</returns>
-		public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
+            pts[i] = Mat.dot(mat, homoPt).slice(0, homoPt.length - 1);
+            */
+
+            var multiplePts = pts.Select(pt => Matrix.Dot(mat, pt)).ToList();
+            var homogenizePts = Eval.Homogenize1d(multiplePts, Eval.Weight1d(curve.ControlPoints));
+            return new NurbsCurve(curve.Degree, curve.Knots, homogenizePts);
+        }
+
+        /// <summary>
+        /// Perform knot refinement on a NURBS surface by inserting knots at various parameters
+        /// </summary>
+        /// <param name="surface">The surface to insert the knots into</param>
+        /// <param name="knotsToInsert">The knots to insert - an array of parameter positions within the surface domain</param>
+        /// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
+        /// <returns>A new NURBS surface with the knots inserted</returns>
+        public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
 		{
 			throw new NotImplementedException();
 		}

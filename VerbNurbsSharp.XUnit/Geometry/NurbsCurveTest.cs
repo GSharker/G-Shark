@@ -27,6 +27,21 @@ namespace VerbNurbsSharp.XUnit.Geometry
             return new NurbsCurve(degree, knots, pts);
         }
 
+        private static NurbsCurve NurbsCurveHomogenizedPtsExample()
+        {
+            int degree = 2;
+            List<Vector> pts = new List<Vector>()
+            {
+                new Vector(){-10,15,5},
+                new Vector(){10,5,5},
+                new Vector(){20,0,0}
+            };
+            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
+            var weights = new List<double>() { 0.5, 0.5, 0.5 };
+
+            return new NurbsCurve(degree, knots, pts, weights);
+        }
+
         [Fact]
         public void Get_A_NurbsCurve()
         {
@@ -89,6 +104,20 @@ namespace VerbNurbsSharp.XUnit.Geometry
 
             curveDomain.Min.Should().Be(NurbsCurveExample().Knots.First());
             curveDomain.Max.Should().Be(NurbsCurveExample().Knots.Last());
+        }
+
+        [Fact]
+        public void AreTheControlPoints_Homogenized()
+        {
+            NurbsCurveExample().AreControlPointsHomogenized().Should().BeFalse();
+            NurbsCurveHomogenizedPtsExample().AreControlPointsHomogenized().Should().BeTrue();
+        }
+
+        // ToDo be implemented.
+        [Fact]
+        public void TransformNurbsCurve_ByAGivenMatrix()
+        {
+
         }
     }
 }

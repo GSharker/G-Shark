@@ -52,6 +52,22 @@ namespace VerbNurbsSharp.Geometry
         {
             return new NurbsCurve(this);
         }
+        /// <summary>
+        /// Check if the points represented a set (wi*pi, wi) with length (dim+1).
+        /// </summary>
+        /// <returns>Get the result.</returns>
+        public bool AreControlPointsHomogenized() => this.ControlPoints.All(pt => pt.Count == 4);
+
+        // ToDo implement the test.
+        /// <summary>
+        /// Transform a curve with the given matrix.
+        /// </summary>
+        /// <param name="mat">4d set representing the transform.</param>
+        /// <returns>A new NurbsCurve transformed.</returns>
+        public NurbsCurve Transform(Matrix mat)
+        {
+            return new NurbsCurve(Modify.RationalCurveTransform(this, mat));
+        }
 
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)

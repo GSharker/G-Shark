@@ -99,7 +99,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>A set of numbers represented by an set pi with length (dim).</returns>
-        public static IList<double> Weight1d(List<Vector> homogeneousPts)
+        public static List<double> Weight1d(List<Vector> homogeneousPts)
         {
             if(homogeneousPts.Any(vec => vec.Count != homogeneousPts[0].Count))
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
