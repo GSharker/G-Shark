@@ -99,6 +99,7 @@ namespace VerbNurbsSharp.Core
         {
             return a.Aggregate(0.0, (x, a) => a * a + x);
         }
+
         /// <summary>
         /// Cross product.
         /// </summary>

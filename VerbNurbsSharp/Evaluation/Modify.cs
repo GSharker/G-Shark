@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Evaluation
 	{
 		/// <summary>
 		/// Insert a collectioin of knots on a curve
-		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
+		/// corresponds to Algorithm A5.4 (Piegl & Tiller)
 		/// </summary>
 		/// <param name="curve"></param>
 		/// <param name="knotsToInsert"></param>
@@ -26,9 +26,9 @@ namespace VerbNurbsSharp.Evaluation
 			List<Vector> controlPoints = curve.ControlPoints;
 			KnotArray knots = curve.Knots;
 
-			int n = controlPoints.Count - 1;
-			int m = n + degree + 1;
-			int r = knotsToInsert.Count - 1;
+			int n = controlPoints.Count - 1; //n of curve
+			int m = n + degree + 1; //the number of curve segment
+			int r = knotsToInsert.Count - 1; //number of knots
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
 			List<Vector> controlPoints_post = new List<Vector>();
@@ -81,7 +81,6 @@ namespace VerbNurbsSharp.Evaluation
 				k = k - 1;
 				j--;
 			}
-
 
 			return new NurbsCurve(degree, knots_post, controlPoints_post);
 		}

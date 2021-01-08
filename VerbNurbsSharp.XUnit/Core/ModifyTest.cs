@@ -19,15 +19,23 @@ namespace VerbNurbsSharp.XUnit.Core
 			_testOutput = testOutput;
 		}
 
-		[Fact]
-		public void Check_CurveKnotRefine()
-		{
-			//arrange
-			NurbsCurve inputCurve = null;
-			NurbsCurve expectedCurve = null;
-			//act
-			//assert
-			Assert.Equal(expectedCurve, inputCurve);
-		}
+		//[Fact]
+		//public void Check_CurveKnotRefine(
+		//	int inputDegree, 
+		//	List<double> inputKnots, 
+		//	List<Vector> inputControlPts, 
+		//	List<double>knotsToInsert,
+		//	int outputDegree,
+		//	List<double> outputKnots,
+		//	List<Vector> outputControlPts)
+		//{
+		//	//arrange
+		//	NurbsCurve inputCurve = new NurbsCurve(inputDegree, (KnotArray)inputKnots, inputControlPts);
+			
+		//	//act
+		//	NurbsCurve expectedCurve = Evaluation.Modify.CurveKnotRefine(inputCurve, knotsToInsert);
+		//	//assert
+		//	Assert.Equal(expectedCurve.Degree, inputCurve.Degree);
+		//}
 	}
 }

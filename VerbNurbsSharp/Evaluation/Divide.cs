@@ -38,7 +38,6 @@ namespace VerbNurbsSharp.Evaluation
 
 		//////////////////////////// =================================== not implemented yet ================================== ///////////////////
 
-
 		public static List<NurbsSurface> SurfaceSplit(NurbsSurface surface, float u, bool useV = false)
 		{
 			throw new NotImplementedException();
