@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.ExtendedMethods;
 using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
@@ -165,22 +166,17 @@ namespace VerbNurbsSharp.Evaluation
         /// <returns>A new NURBS surface after transformation.</returns>
         public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
         {
-            var pts = curve.AreControlPointsHomogenized()
-                 ? Eval.Dehomogenize1d(curve.ControlPoints)
-				 : curve.ControlPoints;
-            /*
-            Why he added a 4th value to the pt and after he remove it?
-            Also it wouldn't be multiple in the dot product if the first vector count is lower.
-            Lets keep recorded these steps if we will notice something strange in the future.
-            
-            var homoPt = pts[i];
-            homoPt.push(1.0);  
+            var pts = curve.ControlPoints;
+			var weights = Eval.Weight1d(curve.ControlPoints);
 
-            pts[i] = Mat.dot(mat, homoPt).slice(0, homoPt.length - 1);
-            */
+            if (!curve.AreControlPointsHomogenized())
+            {
+                pts = Eval.Homogenize1d(curve.ControlPoints);
+                weights = Sets.RepeatData(1.0, curve.ControlPoints.Count);
+            }
 
-            var multiplePts = pts.Select(pt => Matrix.Dot(mat, pt)).ToList();
-            var homogenizePts = Eval.Homogenize1d(multiplePts, Eval.Weight1d(curve.ControlPoints));
+            var controlPtsTransformed = pts.Select(pt => Matrix.Dot(mat, pt).Take(pt.Count - 1).ToVector()).ToList();
+            var homogenizePts = Eval.Homogenize1d(controlPtsTransformed, weights);
             return new NurbsCurve(curve.Degree, curve.Knots, homogenizePts);
         }
 

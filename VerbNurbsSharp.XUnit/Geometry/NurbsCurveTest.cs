@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.Evaluation;
+using VerbNurbsSharp.ExtendedMethods;
 using VerbNurbsSharp.Geometry;
+using VerbNurbsSharp.XUnit.Core;
 using Xunit;
 
 namespace VerbNurbsSharp.XUnit.Geometry
@@ -13,7 +16,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
     [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTest
     {
-        private static NurbsCurve NurbsCurveExample()
+        public static NurbsCurve NurbsCurveExample()
         {
             int degree = 2;
             List<Vector> pts = new List<Vector>()
@@ -27,7 +30,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
             return new NurbsCurve(degree, knots, pts);
         }
 
-        private static NurbsCurve NurbsCurveHomogenizedPtsExample()
+        public static NurbsCurve NurbsCurveHomogenizedPtsExample()
         {
             int degree = 2;
             List<Vector> pts = new List<Vector>()
@@ -113,11 +116,20 @@ namespace VerbNurbsSharp.XUnit.Geometry
             NurbsCurveHomogenizedPtsExample().AreControlPointsHomogenized().Should().BeTrue();
         }
 
-        // ToDo be implemented.
         [Fact]
         public void TransformNurbsCurve_ByAGivenMatrix()
         {
+            var curve = NurbsCurveTest.NurbsCurveExample();
+            var matrix = MatrixTest.TransformationMatrixExample;
 
+            var transformedCurve = curve.Transform(matrix);
+            var demoPts = Eval.Dehomogenize1d(transformedCurve.ControlPoints);
+
+            var distanceBetweenPts =
+                Math.Round(Vector.Length(Constants.Subtraction(demoPts[0], curve.ControlPoints[0])
+                    .ToVector()),6);
+
+            distanceBetweenPts.Should().Be(22.383029);
         }
     }
 }
