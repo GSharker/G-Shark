@@ -23,21 +23,21 @@ namespace VerbNurbsSharp.Evaluation
 			int degree = curve.Degree;
             KnotArray knots = curve.Knots;
 
-			List<double> knots_to_insert = new List<double>();
+			List<double> knotsToInsert = new List<double>();
 			for (int i = 0; i <= degree; i++)
-				knots_to_insert.Add(u);
+				knotsToInsert.Add(u);
 
-			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knots_to_insert);
+			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
 		 	int s = Eval.KnotSpan(degree, u, knots);
 
 			KnotArray knots0 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + degree + 2);
 			KnotArray knots1 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + 1);
 
-			List<Vector> cpts0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
-			List<Vector> cpts1 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+			List<Vector> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+			List<Vector> controlPoints1 = refinedCurve.ControlPoints.GetRange(0, s + 1);
 
-			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, cpts0), new NurbsCurve(degree, knots1, cpts1) };
+			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
 		}
 
 

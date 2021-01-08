@@ -11,6 +11,7 @@ namespace VerbNurbsSharp.Evaluation
 {
 	public class Modify
 	{
+		// ToDo make the test.
 		/// <summary>
 		/// Insert a collection of knots on a curve.
 		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
@@ -32,15 +33,15 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			List<Vector> controlPointsPost = new List<Vector>();
-			KnotArray knotsPost = new KnotArray();
+			Vector[] controlPointsPost = new Vector[] { };
+            double[] knotsPost = new double[] { };
 
 			//new control points
 			for (int i = 0; i <= a - degree; i++)
 				controlPointsPost[i] = controlPoints[i];
 
-			for (int i = b - 1; i <= n; i++)
-				controlPointsPost[i + r + 1] = controlPoints[i];
+            for (int i = b - 1; i <= n; i++)
+                controlPointsPost[i + r + 1] = controlPoints[i]; 
 
 			//new knot vector
 			for (int i = 0; i <= a; i++)
@@ -81,7 +82,7 @@ namespace VerbNurbsSharp.Evaluation
 				--k;
 				--j;
 			}
-            return new NurbsCurve(degree, knotsPost, controlPointsPost);
+            return new NurbsCurve(degree, (KnotArray) knotsPost.ToList(), controlPointsPost.ToList());
 		}
 
 		private static int Imin(int a, int b)

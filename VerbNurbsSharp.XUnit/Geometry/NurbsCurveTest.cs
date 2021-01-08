@@ -139,5 +139,25 @@ namespace VerbNurbsSharp.XUnit.Geometry
 
             distanceBetweenPts.Should().Be(22.383029);
         }
+
+        [Fact]
+        public void Split_ReturnTwoNurbsCurve()
+        {
+            int degree = 2;
+            List<Vector> pts = new List<Vector>()
+            {
+                new Vector(){2.0,2.0,0.0},
+                new Vector(){10.0,12.0,5.0},
+                new Vector(){15.0,2.0,0.0}
+            };
+            KnotArray knots = new KnotArray() { 0, 0, 1, 1};
+            var weights = new List<double>() { 1, 1, 1 };
+
+            var curve = new NurbsCurve(degree, knots, pts, weights);
+
+            var splitCurves = curve.Split(0.5);
+
+            splitCurves.Should().HaveCount(2);
+        }
     }
 }

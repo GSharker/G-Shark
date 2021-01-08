@@ -147,15 +147,23 @@ namespace VerbNurbsSharp.XUnit.Evaluation
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
         }
 
-        [Fact]
-        public void KnotSpanGivenParameter()
+        [Theory]
+        [InlineData(4, 2.5)]
+        [InlineData(3, 1)]
+        [InlineData(3, 1.5)]
+        [InlineData(7, 4.9)]
+        [InlineData(7, 10)]
+        [InlineData(7, 5)]
+        [InlineData(2, 0)]
+        [InlineData(2, -1)]
+        public void KnotSpanGivenParameter(int expectedValue, double parameter)
         {
             var knotVector = new KnotArray() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
             var degree = 2;
 
-            var result = Eval.KnotSpan(knotVector.Count - degree - 2, 2, 2.5, knotVector);
+            var result = Eval.KnotSpan(knotVector.Count - degree - 2, 2, parameter, knotVector);
 
-            result.Should().Be(4);
+            result.Should().Be(expectedValue);
         }
     }
 }

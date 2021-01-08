@@ -56,5 +56,24 @@ namespace VerbNurbsSharp.XUnit.Core
 
             resultedCurve.ControlPoints.Should().BeEquivalentTo(expectedControlPts);
         }
+
+        [Fact]
+        public void CurveKnotRefine()
+        {
+            var degree = 3;
+            var knots = new KnotArray(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
+            var newKnots = Sets.RepeatData(2.5, 1);
+
+            var controlPts = new List<Vector>();
+            for (int i = 0; i <= knots.Count - 3 - 2; i++)
+            {
+                controlPts.Add(new Vector(){i,0.0,0.0});
+            }
+
+            var curve = new NurbsCurve(degree, knots, controlPts);
+            var curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
+
+            _testOutput.WriteLine(curveAfterRefine.ToString());
+        }
     }
 }
