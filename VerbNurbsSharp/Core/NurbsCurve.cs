@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,5 +32,16 @@ namespace VerbNurbsSharp.Core
         /// List of non-decreasing knot values.
         /// </summary>
         public KnotArray Knots { get; }
+
+        public override NurbsCurve FromJson(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a nurbs curve to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }

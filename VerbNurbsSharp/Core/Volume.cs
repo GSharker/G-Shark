@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,5 +52,17 @@ namespace VerbNurbsSharp.Core
             KnotsW = knotsW;
             ControlPoints = controlPoints;
         }
+
+        public override Volume FromJson(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a volume to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
+
     }
 }

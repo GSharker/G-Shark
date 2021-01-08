@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,5 +42,16 @@ namespace VerbNurbsSharp.Core
         /// and where each control point is an list of length (dim).
         /// </summary>
         public List<List<Point>> ControlPoints { get; set; }
+
+        public override NurbsSurface FromJson(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a nurbs surface to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }

@@ -1,4 +1,5 @@
-﻿using VerbNurbsSharp.Core;
+﻿using Newtonsoft.Json;
+using VerbNurbsSharp.Core;
 
 namespace VerbNurbsSharp.Geometry
 {
@@ -31,5 +32,16 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         /// <returns></returns>
         public double Length => Constants.DistanceTo(this.Start, this.End);
+
+        public override Line FromJson(string s)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a line to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,5 +31,16 @@ namespace VerbNurbsSharp.Core
             new List<Vector>(),
             new List<UV>()
             );
+
+        public override Mesh FromJson(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a mesh to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }

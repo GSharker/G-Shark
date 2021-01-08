@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,5 +20,16 @@ namespace VerbNurbsSharp.Core
             this.Direction = direction;
             this.Origin = origin;
         }
+
+        public override Ray FromJson(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Serialize a ray to JSON
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }
