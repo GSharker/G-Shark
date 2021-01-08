@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using VerbNurbsSharp.Core;
 
-namespace VerbNurbsSharp.XUnit
+namespace VerbNurbsSharp.XUnit.Core
 {
 	public class EvalTestCollection
 	{
