@@ -57,18 +57,20 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         /// <returns>Get the result.</returns>
         public bool AreControlPointsHomogenized() => this.ControlPoints.All(pt => pt.Count == 4);
-
-        // ToDo implement the test.
         /// <summary>
         /// Transform a curve with the given matrix.
         /// </summary>
         /// <param name="mat">4d set representing the transform.</param>
         /// <returns>A new NurbsCurve transformed.</returns>
-        public NurbsCurve Transform(Matrix mat)
-        {
-            return new NurbsCurve(Modify.RationalCurveTransform(this, mat));
-        }
-
+        public NurbsCurve Transform(Matrix mat) => new NurbsCurve(Modify.RationalCurveTransform(this, mat));
+        // ToDo Implement the async method.
+        /// <summary>
+        /// Split the curve at the give parameter.
+        /// </summary>
+        /// <param name="t">The parameter at which to split the curve</param>
+        /// <returns>Two curves - one at the lower end of the parameter range and one at the higher end.</returns>
+        public List<NurbsCurve> Split(double t) => Divide.CurveSplit(this, t);
+        // ToDo Implement the async method.
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -83,10 +85,7 @@ namespace VerbNurbsSharp.Geometry
         /// Determine the valid domain of the curve.
         /// </summary>
         /// <returns>representing the high and end point of the domain of the curve.</returns>
-        public Interval Domain()
-        {
-            return new Interval(this.Knots.First(), this.Knots.Last());
-        }
+        public Interval Domain() => new Interval(this.Knots.First(), this.Knots.Last());
 
         public Vector PointAt(double t)
         {

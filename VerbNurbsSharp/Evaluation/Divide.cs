@@ -12,11 +12,16 @@ namespace VerbNurbsSharp.Evaluation
 {
 	public class Divide
 	{
+		/// <summary>
+		/// Split a NURBS curve into two parts at a given parameter.
+		/// </summary>
+		/// <param name="curve">NurbsCurveData object representing the curve.</param>
+		/// <param name="u">The parameter where to split the curve.</param>
+		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
 		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
 		{
 			int degree = curve.Degree;
-			List<Vector> controlPoints = curve.ControlPoints;
-			KnotArray knots = curve.Knots;
+            KnotArray knots = curve.Knots;
 
 			List<double> knots_to_insert = new List<double>();
 			for (int i = 0; i <= degree; i++)

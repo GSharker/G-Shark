@@ -22,25 +22,24 @@ namespace VerbNurbsSharp.Evaluation
         }
 
         /// <summary>
-        /// find the span on the knot list of the given parameter, (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition)
-        /// 
+        /// Find the span on the knot list of the given parameter,
+        /// (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition).
         /// </summary>
-        /// <param name="n">integer number of basis functions - 1 = knots.length - degree - 2</param>
-        /// <param name="degree">integer degree of function</param>
-        /// <param name="u">parameter</param>
-        /// <param name="knots">array of nondecreasing knot values</param>
-        /// <returns>the index of the knot span</returns>
+        /// <param name="n">Number of control points - 1.</param>
+        /// <param name="degree">Integer degree of function.</param>
+        /// <param name="u">Parameter.</param>
+        /// <param name="knots">Array of non decreasing knot values.</param>
+        /// <returns>The index of the knot span.</returns>
         public static int KnotSpanGivenN(int n, int degree, double u, KnotArray knots)
         {
-            if (u > knots[n + 1] - Constants.EPSILON)
-                return n;
+            // special case if u == knots[n+1]
+            if (u > knots[n + 1] - Constants.EPSILON) return n;
 
-            if (u < knots[degree] + Constants.EPSILON)
-                return degree;
+            if (u < knots[degree] + Constants.EPSILON) return degree;
 
             var low = degree;
             var high = n + 1;
-            int mid = (int)Math.Floor((decimal)(low + high) / 2);
+            int mid = (int) Math.Floor((double)(low + high) / 2);
 
             while (u < knots[mid] || u >= knots[mid + 1])
             {

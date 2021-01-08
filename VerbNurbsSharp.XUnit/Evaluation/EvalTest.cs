@@ -7,12 +7,20 @@ using FluentAssertions;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Evaluation;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace VerbNurbsSharp.XUnit.Evaluation
 {
     [Trait("Category", "Eval")]
     public class EvalTest
     {
+        private readonly ITestOutputHelper _testOutput;
+
+        public EvalTest(ITestOutputHelper testOutput)
+        {
+            _testOutput = testOutput;
+        }
+
         public static IEnumerable<object[]> Homogenized1dData => new List<object[]>
         {
             new object[]
@@ -137,6 +145,16 @@ namespace VerbNurbsSharp.XUnit.Evaluation
             var dehomogenizePts = Eval.Dehomogenize1d(homegeneousPts);
 
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+        }
+
+        [Fact]
+        public void KnotSpanGivenParameter()
+        {
+            var knotVector = new KnotArray() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+
+            var result = Eval.KnotSpanGivenN(5, 2, 2.5, knotVector);
+
+            result.Should().Be(4);
         }
     }
 }

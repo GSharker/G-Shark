@@ -12,7 +12,7 @@ namespace VerbNurbsSharp.Evaluation
 	public class Modify
 	{
 		/// <summary>
-		/// Insert a collectioin of knots on a curve
+		/// Insert a collection of knots on a curve.
 		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
 		/// </summary>
 		/// <param name="curve"></param>
