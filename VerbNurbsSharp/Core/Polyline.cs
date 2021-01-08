@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VerbNurbsSharp.Core
 {
@@ -12,6 +9,10 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Polyline : Serializable<Polyline>
     {
+        public Polyline()
+        {
+
+        }
         /// <summary>
         /// The points in the polyline.
         /// </summary>
@@ -24,6 +25,22 @@ namespace VerbNurbsSharp.Core
         {
             Points = points;
             Parameters = parameters;
+        }
+
+        /// <summary>
+        /// Serialize a polyline to json
+        /// </summary>
+        /// <returns></returns>
+        public override string ToJson() => JsonConvert.SerializeObject(this);
+
+        /// <summary>
+        /// Create a polyline from a json
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public override Polyline FromJson(string s)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -9,15 +9,9 @@ using System.Threading.Tasks;
 namespace VerbNurbsSharp.Core
 {
 
-    public class Serializable<T>
+    public abstract class Serializable<T>
     {
-        public static T FromJson(string s) => JsonConvert.DeserializeObject<T>(s);
-        public static string ToJson(T t) => JsonConvert.SerializeObject(t,
-            new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
-            );
+        public abstract T FromJson(string s);
+        public abstract string ToJson();
     }
 }
