@@ -121,19 +121,19 @@ namespace VerbNurbsSharp.Core
                 r.Add(Constants.Subtraction((Vector)a[i], (Vector)b[i]));
             return r;
         }
-
-
         /// <summary>
         /// Multiply a `Matrix` by a `Vector`
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The transformation matrix.</param>
+        /// <param name="b">The vector to transform.</param>
+        /// <returns>The transformed vector.</returns>
         public static Vector Dot(Matrix a, Vector b)
         {
+            if(b.Count != a[0].Count)
+                throw new ArgumentOutOfRangeException(nameof(b), "Vector and Matrix must have the same dimension.");
             Vector r = new Vector();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vector.Dot((Vector)a[i], b));
+                r.Add(Vector.Dot(new Vector(a[i]), b));
             return r;
         }
 
@@ -175,6 +175,11 @@ namespace VerbNurbsSharp.Core
                 t.Add(rr);
             }
             return t;
+        }
+
+        public override string ToString()
+        {
+            return string.Join("\n", this.Select(first => $"({string.Join(",", first)})"));
         }
     }
 }

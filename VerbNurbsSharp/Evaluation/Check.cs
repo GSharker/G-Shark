@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
@@ -24,7 +25,7 @@ namespace VerbNurbsSharp.Evaluation
             for (int i = 0; i <= degree + 1; i++)
                 if (Math.Abs(vector[i] - rep) > Constants.EPSILON) return false;
             rep = vector.Last();
-            for (int i = vector.Count - degree - 1; i <= vector.Count; i++)
+            for (int i = vector.Count - degree - 1; i < vector.Count; i++)
                 if (Math.Abs(vector[i] - rep) > Constants.EPSILON) return false;
             return IsNonDecreasing(vector);
         }
@@ -38,7 +39,7 @@ namespace VerbNurbsSharp.Evaluation
         public static bool IsNonDecreasing(IList<double> vector)
         {
             var rep = vector.First();
-            for (int i = 0; i <= vector.Count; i++)
+            for (int i = 0; i < vector.Count; i++)
             {
                 if (vector[i] < rep - Constants.EPSILON) return false;
                 rep = vector[i];
@@ -47,11 +48,11 @@ namespace VerbNurbsSharp.Evaluation
         }
 
         /// <summary>
-        /// Validate a NurbsCurveData object
+        /// Validate a NurbsCurveData object.
         /// </summary>
-        /// <param name="data">The data object</param>
-        /// <returns>The original, unmodified data</returns>
-        public static NurbsCurve IsValidNurbsCurve(NurbsCurve data)
+        /// <param name="data">The NurbsCurve object.</param>
+        /// <returns>True if it is valid.</returns>
+        public static bool IsValidNurbsCurve(NurbsCurve data)
         {
             if (data.ControlPoints == null) throw new ArgumentNullException("Control points array cannot be null!");
             if (data.Degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -60,7 +61,7 @@ namespace VerbNurbsSharp.Evaluation
                 throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length!");
             if (!Check.IsValidKnotVector(data.Knots, data.Degree))
                 throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
-            return data;
+            return true;
         }
 
         /// <summary>

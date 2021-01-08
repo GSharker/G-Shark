@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.ExtendedMethods;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
 	public class Modify
 	{
+		// ToDo make the test.
 		/// <summary>
-		/// Insert a collectioin of knots on a curve
+		/// Insert a collection of knots on a curve.
 		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
 		/// </summary>
-		/// <param name="curve"></param>
-		/// <param name="knotsToInsert"></param>
-		/// <returns></returns>
+		/// <param name="curve">The NurbsCurve.</param>
+		/// <param name="knotsToInsert">The set of Knots.</param>
+		/// <returns>NurbsCurve.</returns>
 		public static NurbsCurve CurveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
 		{
 			if (knotsToInsert.Count == 0)
-				return curve;
+				return new NurbsCurve(curve);
 
 			int degree = curve.Degree;
 			List<Vector> controlPoints = curve.ControlPoints;
@@ -31,59 +33,56 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			List<Vector> controlPoints_post = new List<Vector>();
-			KnotArray knots_post = new KnotArray();
+			Vector[] controlPointsPost = new Vector[] { };
+            double[] knotsPost = new double[] { };
 
 			//new control points
 			for (int i = 0; i <= a - degree; i++)
-				controlPoints_post[i] = controlPoints[i];
+				controlPointsPost[i] = controlPoints[i];
 
-			for (int i = b - 1; i <= n; i++)
-				controlPoints_post[i + r + 1] = controlPoints[i];
+            for (int i = b - 1; i <= n; i++)
+                controlPointsPost[i + r + 1] = controlPoints[i]; 
 
 			//new knot vector
 			for (int i = 0; i <= a; i++)
-				knots_post[i] = knots[i];
+				knotsPost[i] = knots[i];
 
 			for (int i = b + degree; i <= m; i++)
-				knots_post[i + r + 1] = knots[i];
+				knotsPost[i + r + 1] = knots[i];
 
-			int g = b + degree + 1;
+			int g = b + degree - 1;
 			int k = b + degree + r;
 			int j = r;
 			while (j >= 0)
 			{
 				while (knotsToInsert[j] <= knots[g] && g > a)
 				{
-					controlPoints_post[k - degree - 1] = controlPoints[g - degree - 1];
-					knots_post[k] = knots[g];
-					k--;
-					g--;
+					controlPointsPost[k - degree - 1] = controlPoints[g - degree - 1];
+					knotsPost[k] = knots[g];
+					--k;
+					--g;
 				}
 
-				controlPoints_post[k - degree - 1] = controlPoints_post[k - degree];
+				controlPointsPost[k - degree - 1] = controlPointsPost[k - degree];
 
-				for (int i = 1; i <= degree; i++)
+				for (int l = 1; l <= degree; l++)
 				{
-					int ind = k - degree + 1;
-					double alfa = knots_post[k + 1] - knotsToInsert[j];
+					int ind = k - degree + l;
+					double alfa = knotsPost[k + l] - knotsToInsert[j];
 
 					if (Math.Abs(alfa) < Constants.EPSILON)
-						controlPoints_post[ind - 1] = controlPoints_post[ind];
+						controlPointsPost[ind - 1] = controlPointsPost[ind];
 					else
 					{
-						alfa = alfa / (knots_post[k + 1] - knots[g - degree + 1]);
-						controlPoints_post[ind - 1] =(Vector)Constants.Addition(Constants.Multiplication(controlPoints_post[ind - 1], alfa), Constants.Multiplication(controlPoints_post[ind], 1.0-alfa));
+						alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
+						controlPointsPost[ind - 1] =(Vector)Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0-alfa));
 					}
 				}
-
-				knots_post[k] = knotsToInsert[j];
-				k = k - 1;
-				j--;
+                knotsPost[k] = knotsToInsert[j];
+				--k;
+				--j;
 			}
-
-
-			return new NurbsCurve(degree, knots_post, controlPoints_post);
+            return new NurbsCurve(degree, (KnotArray) knotsPost.ToList(), controlPointsPost.ToList());
 		}
 
 		private static int Imin(int a, int b)
@@ -156,25 +155,37 @@ namespace VerbNurbsSharp.Evaluation
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Transform a NURBS curve using a matrix
-		/// </summary>
-		/// <param name="curve">The curve to transform</param>
-		/// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions</param>
-		/// <returns>A new NURBS surface after transformation</returns>
-		public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
-		{
-			throw new NotImplementedException();
-		}
+		//ToDo this method has to be tested.
+        /// <summary>
+        /// Transform a NURBS curve using a matrix.
+        /// </summary>
+        /// <param name="curve">The curve to transform.</param>
+        /// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
+        /// <returns>A new NURBS surface after transformation.</returns>
+        public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
+        {
+            var pts = curve.ControlPoints;
+			var weights = Eval.Weight1d(curve.ControlPoints);
 
-		/// <summary>
-		/// Perform knot refinement on a NURBS surface by inserting knots at various parameters
-		/// </summary>
-		/// <param name="surface">The surface to insert the knots into</param>
-		/// <param name="knotsToInsert">The knots to insert - an array of parameter positions within the surface domain</param>
-		/// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
-		/// <returns>A new NURBS surface with the knots inserted</returns>
-		public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
+            if (!curve.AreControlPointsHomogenized())
+            {
+                pts = Eval.Homogenize1d(curve.ControlPoints);
+                weights = Sets.RepeatData(1.0, curve.ControlPoints.Count);
+            }
+
+            var controlPtsTransformed = pts.Select(pt => Matrix.Dot(mat, pt).Take(pt.Count - 1).ToVector()).ToList();
+            var homogenizePts = Eval.Homogenize1d(controlPtsTransformed, weights);
+            return new NurbsCurve(curve.Degree, curve.Knots, homogenizePts);
+        }
+
+        /// <summary>
+        /// Perform knot refinement on a NURBS surface by inserting knots at various parameters
+        /// </summary>
+        /// <param name="surface">The surface to insert the knots into</param>
+        /// <param name="knotsToInsert">The knots to insert - an array of parameter positions within the surface domain</param>
+        /// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
+        /// <returns>A new NURBS surface with the knots inserted</returns>
+        public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
 		{
 			throw new NotImplementedException();
 		}

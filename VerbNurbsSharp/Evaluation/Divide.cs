@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using VerbNurbsSharp.Geometry;
 using VerbNurbsSharp.Core;
 
 //Divide provides various tools for dividing and splitting NURBS geometry.
@@ -12,27 +12,32 @@ namespace VerbNurbsSharp.Evaluation
 {
 	public class Divide
 	{
+		/// <summary>
+		/// Split a NURBS curve into two parts at a given parameter.
+		/// </summary>
+		/// <param name="curve">NurbsCurveData object representing the curve.</param>
+		/// <param name="u">The parameter where to split the curve.</param>
+		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
 		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
 		{
 			int degree = curve.Degree;
-			List<Vector> controlPoints = curve.ControlPoints;
-			KnotArray knots = curve.Knots;
+            KnotArray knots = curve.Knots;
 
-			List<double> knots_to_insert = new List<double>();
+			List<double> knotsToInsert = new List<double>();
 			for (int i = 0; i <= degree; i++)
-				knots_to_insert.Add(u);
+				knotsToInsert.Add(u);
 
-			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knots_to_insert);
+			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
 		 	int s = Eval.KnotSpan(degree, u, knots);
 
 			KnotArray knots0 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + degree + 2);
 			KnotArray knots1 = (KnotArray)refinedCurve.Knots.ToList().GetRange(0, s + 1);
 
-			List<Vector> cpts0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
-			List<Vector> cpts1 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+			List<Vector> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+			List<Vector> controlPoints1 = refinedCurve.ControlPoints.GetRange(0, s + 1);
 
-			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, cpts0), new NurbsCurve(degree, knots1, cpts1) };
+			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
 		}
 
 
