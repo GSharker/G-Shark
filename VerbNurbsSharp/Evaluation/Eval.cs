@@ -10,16 +10,13 @@ namespace VerbNurbsSharp.Evaluation
     public class Eval
     {
         /// <summary>
-        /// Find the span on the knot Array without supplying n
+        /// Find the span on the knot Array without supplying a number of control points.
         /// </summary>
-        /// <param name="degree">integer degree of function</param>
-        /// <param name="u">float parameter</param>
-        /// <param name="knots">array of nondecreasing knot values</param>
+        /// <param name="degree">Integer degree of function.</param>
+        /// <param name="u">Parameter.</param>
+        /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns></returns>
-        public static int KnotSpan(int degree, double u, KnotArray knots)
-        {
-            return KnotSpanGivenN(knots.Count - degree - 2, degree, u, knots);
-        }
+        public static int KnotSpan(int degree, double u, KnotArray knots) => KnotSpan(knots.Count - degree - 2, degree, u, knots);
 
         /// <summary>
         /// Find the span on the knot list of the given parameter,
@@ -30,7 +27,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="u">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns>The index of the knot span.</returns>
-        public static int KnotSpanGivenN(int n, int degree, double u, KnotArray knots)
+        public static int KnotSpan(int n, int degree, double u, KnotArray knots)
         {
             // special case if u == knots[n+1]
             if (u > knots[n + 1] - Constants.EPSILON) return n;

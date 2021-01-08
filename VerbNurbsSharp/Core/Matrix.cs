@@ -176,6 +176,11 @@ namespace VerbNurbsSharp.Core
             }
             return t;
         }
+
+        public override string ToString()
+        {
+            return string.Join("\n", this.Select(first => $"({string.Join(",", first)})"));
+        }
     }
 }
 

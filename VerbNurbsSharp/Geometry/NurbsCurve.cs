@@ -3,6 +3,7 @@ using VerbNurbsSharp.Evaluation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using VerbNurbsSharp.Core;
 
 namespace VerbNurbsSharp.Geometry
@@ -101,6 +102,21 @@ namespace VerbNurbsSharp.Geometry
         {
             if (other == null) return false;
             return Degree == other.Degree && Equals(ControlPoints, other.ControlPoints) && Equals(Knots, other.Knots);
+        }
+
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            var controlPts = string.Join("\n", this.ControlPoints.Select(first => $"({string.Join(",", first)})"));
+            var knots = $"Knots = ({string.Join(",", this.Knots)})";
+            var degree = $"CurveDegree = {Degree}";
+
+            stringBuilder.AppendLine(controlPts);
+            stringBuilder.AppendLine(knots);
+            stringBuilder.AppendLine(degree);
+
+            return stringBuilder.ToString();
         }
     }
 }

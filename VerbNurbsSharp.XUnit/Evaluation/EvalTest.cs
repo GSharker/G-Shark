@@ -151,8 +151,9 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         public void KnotSpanGivenParameter()
         {
             var knotVector = new KnotArray() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var degree = 2;
 
-            var result = Eval.KnotSpanGivenN(5, 2, 2.5, knotVector);
+            var result = Eval.KnotSpan(knotVector.Count - degree - 2, 2, 2.5, knotVector);
 
             result.Should().Be(4);
         }

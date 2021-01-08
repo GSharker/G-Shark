@@ -10,12 +10,20 @@ using VerbNurbsSharp.ExtendedMethods;
 using VerbNurbsSharp.Geometry;
 using VerbNurbsSharp.XUnit.Core;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace VerbNurbsSharp.XUnit.Geometry
 {
     [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTest
     {
+        private readonly ITestOutputHelper _testOutput;
+
+        public NurbsCurveTest(ITestOutputHelper testOutput)
+        {
+            _testOutput = testOutput;
+        }
+
         public static NurbsCurve NurbsCurveExample()
         {
             int degree = 2;
