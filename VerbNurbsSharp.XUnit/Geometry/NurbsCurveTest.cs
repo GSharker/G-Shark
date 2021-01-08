@@ -143,17 +143,26 @@ namespace VerbNurbsSharp.XUnit.Geometry
         [Fact]
         public void Split_ReturnTwoNurbsCurve()
         {
-            int degree = 2;
-            List<Vector> pts = new List<Vector>()
-            {
-                new Vector(){2.0,2.0,0.0},
-                new Vector(){10.0,12.0,5.0},
-                new Vector(){15.0,2.0,0.0}
-            };
-            KnotArray knots = new KnotArray() { 0, 0, 1, 1};
-            var weights = new List<double>() { 1, 1, 1 };
+            //int degree = 2;
+            //List<Vector> pts = new List<Vector>()
+            //{
+            //    new Vector(){2.0,2.0,0.0},
+            //    new Vector(){10.0,12.0,5.0},
+            //    new Vector(){15.0,2.0,0.0}
+            //};
+            //KnotArray knots = new KnotArray() { 0, 0, 1, 1};
+            //var weights = new List<double>() { 1, 1, 1 };
 
-            var curve = new NurbsCurve(degree, knots, pts, weights);
+            var degree = 3;
+            var knots = new KnotArray() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+            var controlPts = new List<Vector>();
+            for (int i = 0; i <= knots.Count - 3 - 2; i++)
+            {
+                controlPts.Add(new Vector() { i, 0.0, 0.0 });
+            }
+            var weights = Sets.RepeatData(1.0, controlPts.Count);
+
+            var curve = new NurbsCurve(degree, knots, controlPts, weights);
 
             var splitCurves = curve.Split(0.5);
 

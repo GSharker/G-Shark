@@ -33,22 +33,21 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			Vector[] controlPointsPost = new Vector[] { };
-            double[] knotsPost = new double[] { };
-
+			List<Vector> controlPointsPost = new List<Vector>();
+			KnotArray knotsPost = new KnotArray();
 			//new control points
 			for (int i = 0; i <= a - degree; i++)
-				controlPointsPost[i] = controlPoints[i];
+				controlPointsPost.Add(controlPoints[i]);
 
             for (int i = b - 1; i <= n; i++)
-                controlPointsPost[i + r + 1] = controlPoints[i]; 
+                controlPointsPost.Add(controlPoints[i]); 
 
 			//new knot vector
 			for (int i = 0; i <= a; i++)
-				knotsPost[i] = knots[i];
+				knotsPost.Add(knots[i]);
 
 			for (int i = b + degree; i <= m; i++)
-				knotsPost[i + r + 1] = knots[i];
+				knotsPost.Add(knots[i]);
 
 			int g = b + degree - 1;
 			int k = b + degree + r;
@@ -75,14 +74,14 @@ namespace VerbNurbsSharp.Evaluation
 					else
 					{
 						alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
-						controlPointsPost[ind - 1] =(Vector)Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0-alfa));
+						controlPointsPost[ind - 1] = Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0-alfa)).ToVector();
 					}
 				}
                 knotsPost[k] = knotsToInsert[j];
 				--k;
 				--j;
 			}
-            return new NurbsCurve(degree, (KnotArray) knotsPost.ToList(), controlPointsPost.ToList());
+            return new NurbsCurve(degree, knotsPost, controlPointsPost);
 		}
 
 		private static int Imin(int a, int b)

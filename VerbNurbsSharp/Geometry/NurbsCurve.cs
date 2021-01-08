@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using VerbNurbsSharp.Core;
+using Newtonsoft.Json;
 
 namespace VerbNurbsSharp.Geometry
 {
@@ -118,5 +119,9 @@ namespace VerbNurbsSharp.Geometry
 
             return stringBuilder.ToString();
         }
+
+        public override NurbsCurve FromJson(string s) => throw new NotImplementedException();
+
+        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }

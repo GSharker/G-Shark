@@ -45,7 +45,7 @@ namespace VerbNurbsSharp.Evaluation
                 else
                     low = mid;
 
-                mid = (int)Math.Floor((decimal)(low + high) / 2);
+                mid = (int)Math.Floor((double)(low + high) / 2);
             }
 
             return mid;
