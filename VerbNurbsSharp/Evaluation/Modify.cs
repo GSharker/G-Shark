@@ -14,7 +14,7 @@ namespace VerbNurbsSharp.Evaluation
 		// ToDo make the test.
 		/// <summary>
 		/// Insert a collection of knots on a curve.
-		/// corresponds to Algorithm A5.2 (Piegl & Tiller)
+		/// corresponds to Algorithm A5.4 (Piegl & Tiller)
 		/// </summary>
 		/// <param name="curve">The NurbsCurve.</param>
 		/// <param name="knotsToInsert">The set of Knots.</param>
@@ -33,56 +33,55 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			List<Vector> controlPointsPost = new List<Vector>();
-			KnotArray knotsPost = new KnotArray();
+			Vector[] controlPointsPost = new Vector[n+r+2];
+			double[] knotsPost = new double[m+r+2];
 			//new control points
-			for (int i = 0; i <= a - degree; i++)
-				controlPointsPost.Add(controlPoints[i]);
-
-            for (int i = b - 1; i <= n; i++)
-                controlPointsPost.Add(controlPoints[i]); 
+            for (int i = 0; i < a - degree + 1; i++)
+                controlPointsPost[i] = controlPoints[i];
+            for (int i = b - 1; i < n + 1; i++)
+				controlPointsPost[i + r + 1] = controlPoints[i];
 
 			//new knot vector
-			for (int i = 0; i <= a; i++)
-				knotsPost.Add(knots[i]);
+			for (int i = 0; i < a + 1; i++)
+                knotsPost[i] = knots[i];
 
-			for (int i = b + degree; i <= m; i++)
-				knotsPost.Add(knots[i]);
+			for (int i = b + degree; i < m + 1; i++)
+                knotsPost[i + r + 1] = knots[i];
 
-			int g = b + degree - 1;
-			int k = b + degree + r;
-			int j = r;
-			while (j >= 0)
-			{
-				while (knotsToInsert[j] <= knots[g] && g > a)
-				{
-					controlPointsPost[k - degree - 1] = controlPoints[g - degree - 1];
-					knotsPost[k] = knots[g];
-					--k;
-					--g;
-				}
+            int g = b + degree - 1;
+            int k = b + degree + r;
+            int j = r;
+            while (j >= 0)
+            {
+                while (knotsToInsert[j] <= knots[g] && g > a)
+                {
+                    controlPointsPost[k - degree - 1] = controlPoints[g - degree - 1];
+                    knotsPost[k] = knots[g];
+                    --k;
+                    --g;
+                }
 
-				controlPointsPost[k - degree - 1] = controlPointsPost[k - degree];
+                controlPointsPost[k - degree - 1] = controlPointsPost[k - degree];
 
-				for (int l = 1; l <= degree; l++)
-				{
-					int ind = k - degree + l;
-					double alfa = knotsPost[k + l] - knotsToInsert[j];
+                for (int l = 1; l < degree+1; l++)
+                {
+                    int ind = k - degree + l;
+                    double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-					if (Math.Abs(alfa) < Constants.EPSILON)
-						controlPointsPost[ind - 1] = controlPointsPost[ind];
-					else
-					{
-						alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
-						controlPointsPost[ind - 1] = Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0-alfa)).ToVector();
-					}
-				}
+                    if (Math.Abs(alfa) < Constants.EPSILON)
+                        controlPointsPost[ind - 1] = controlPointsPost[ind];
+                    else
+                    {
+                        alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
+                        controlPointsPost[ind - 1] = Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0 - alfa)).ToVector();
+                    }
+                }
                 knotsPost[k] = knotsToInsert[j];
-				--k;
-				--j;
-			}
-            return new NurbsCurve(degree, knotsPost, controlPointsPost);
-		}
+                --k;
+                --j;
+            }
+            return new NurbsCurve(degree, knotsPost.ToKnot(), controlPointsPost.ToList());
+        }
 
 		private static int Imin(int a, int b)
 		{
