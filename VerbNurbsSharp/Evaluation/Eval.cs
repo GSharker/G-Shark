@@ -52,6 +52,7 @@ namespace VerbNurbsSharp.Evaluation
 
             return mid;
         }
+
         /// <summary>
         /// Transform a 1d array of points into their homogeneous equivalents.
         /// </summary>
