@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VerbNurbsSharp.ExtendedMethods;
 
 namespace VerbNurbsSharp.Core
 {
@@ -22,7 +23,6 @@ namespace VerbNurbsSharp.Core
         {
             this.AddRange(values);
         }
-
         /// <summary>
         /// Check the validity of the input knots.
         /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
@@ -46,7 +46,19 @@ namespace VerbNurbsSharp.Core
 
             return true;
         }
-
+        /// <summary>
+        /// Normalizes the input knot vector to [0, 1] domain.
+        /// Overwrite the knots.
+        /// </summary>
+        public void Normalize()
+        {
+            var denominator = this[^1] - this[0];
+            var normalizedKnots = new List<double>();
+            foreach (var knot in this)
+                normalizedKnots.Add((knot - this[0]) / denominator);
+            this.Clear();
+            this.AddRange(normalizedKnots);
+        }
         /// <summary>
         /// Generates an equally spaced knot vector.
         /// Clamp curve is tangent to the first and the last legs at the first and last control points.

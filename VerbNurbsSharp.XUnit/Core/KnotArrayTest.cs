@@ -66,5 +66,16 @@ namespace VerbNurbsSharp.XUnit.Core
 
             knotsArray.AreValid(degree, ctrlPts).Should().Be(expectedResult);
         }
+
+        [Fact]
+        public void NormalizedKnotArray()
+        {
+            var knots = new KnotArray(){ -5, -5, -3, -2, 2, 3, 5, 5 };
+            var knotsExpected = new KnotArray(){ 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
+
+            knots.Normalize();
+
+            knots.Should().BeEquivalentTo(knotsExpected);
+        }
     }
 }
