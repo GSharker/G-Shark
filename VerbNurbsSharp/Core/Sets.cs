@@ -143,7 +143,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>Set of repeated data.</returns>
         public static List<T> RepeatData<T>(T data, int length)
         {
-            if (length <= 0) throw new Exception("Length can not be negative or zero.");
+            if (length < 0) throw new Exception("Length can not be negative.");
             List<T> list = new List<T>();
             for (int i = 0; i < length; i++)
                 list.Add(data);

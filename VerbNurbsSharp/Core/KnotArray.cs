@@ -24,12 +24,28 @@ namespace VerbNurbsSharp.Core
         }
 
         /// <summary>
+        /// Check the validity of the input knots.
         /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
+        /// Refer to The NURBS Book (2nd Edition), p.50 for details.
         /// </summary>
         /// <param name="degree">Curve degree.</param>
         /// <param name="numControlPts">Number of control points.</param>
         /// <returns>Whether the relation is confirmed.</returns>
-        public bool AsValidRelations(int degree, int numControlPts) => numControlPts + degree + 1 - this.Count == 0;
+        public bool AreValid(int degree, int numControlPts)
+        {
+            // Check the formula; m = p + n + 1
+            if (numControlPts + degree + 1 - this.Count != 0) return false;
+
+            // Check ascending order.
+            var previousKnot = this[0];
+            foreach (var knot in this)
+            {
+                if (previousKnot > knot) return false;
+                previousKnot = knot;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Generates an equally spaced knot vector.
@@ -40,8 +56,8 @@ namespace VerbNurbsSharp.Core
         /// <param name="clamped">Flag to choose from clamped or unclamped knot vector options, default true.</param>
         public void Generate(int degree, int numberOfControlPts, bool clamped)
         {
-            if (degree == 0 || numberOfControlPts == 0)
-                throw new Exception("Input values should be different than zero.");
+            if (degree <= 0 || numberOfControlPts <= 0)
+                throw new Exception("Input values must be positive and different than zero.");
 
             // Number of repetitions at the start and end of the array.
             var numOfRepeat = degree;

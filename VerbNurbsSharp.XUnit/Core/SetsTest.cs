@@ -43,7 +43,8 @@ namespace VerbNurbsSharp.XUnit.Core
             {
                 new object[] { 10, 7},
                 new object[] { new Vector(){ 14, -12, 7}, 5},
-                new object[] { 2.7, 8 }
+                new object[] { 2.7, 8 },
+                new object[] { 1.0, 0 }
             };
 
         [Theory]
@@ -139,13 +140,11 @@ namespace VerbNurbsSharp.XUnit.Core
             repeatedData.Should().BeEquivalentTo(new List<object>(repeatedData));
         }
 
-        [Theory]
-        [InlineData(10, 0)]
-        [InlineData(5, -1)]
-        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero(object data, int length)
+        [Fact]
+        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero()
         {
-            Func<object> resultFunction = () => Sets.RepeatData(data, length);
-            resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative or zero.");
+            Func<object> resultFunction = () => Sets.RepeatData(5, -1);
+            resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative.");
         }
 
         [Theory]

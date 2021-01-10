@@ -20,12 +20,51 @@ namespace VerbNurbsSharp.XUnit.Core
             _testOutput = testOutput;
         }
 
+        [Theory]
+        [InlineData(0,12)]
+        [InlineData(4,0)]
+        [InlineData(-1, 0)]
+        public void KnotArray_ThrowsAnException_IfDegreeOrNumberOfControlPts_AreLessThanOrZero(int degree, int numberOfControlPts)
+        {
+            Func<KnotArray> funcResult = () => new KnotArray(degree, numberOfControlPts);
+
+            funcResult.Should().Throw<Exception>().WithMessage("Input values must be positive and different than zero.");
+        }
+
         [Fact]
         public void GenerateAnEqualSpaceKnotArray()
         {
-            var result = new KnotArray(3, 8);
-            result.AsValidRelations(3, 8).Should().BeTrue();
-            _testOutput.WriteLine(result.ToString());
+            var degree = 4;
+            var ctrlPts = 12;
+            var resultExpected = new KnotArray(){ 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0};
+
+            var generateKnots = new KnotArray(degree, ctrlPts);
+
+            generateKnots.Should().BeEquivalentTo(resultExpected);
+        }
+
+        [Fact]
+        public void GenerateAnEqualSpaceKnotArray_Unclamped()
+        {
+            var degree = 3;
+            var ctrlPts = 5;
+            var resultExpected = new KnotArray() { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
+
+            var generateKnots = new KnotArray(degree, ctrlPts, false);
+
+            generateKnots.Should().BeEquivalentTo(resultExpected);
+        }
+
+        [Theory]
+        [InlineData(new double[] {0, 0, 1, 2, 3, 4, 4}, 4, 12, false)]
+        [InlineData(new double[] {5, 3, 6, 5, 4, 5, 6}, 3, 3, false)]
+        [InlineData(new double[] {0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0}, 3, 12,
+            true)]
+        public void AreValidKnots(double[] knots, int degree, int ctrlPts, bool expectedResult)
+        {
+            var knotsArray = new KnotArray(knots);
+
+            knotsArray.AreValid(degree, ctrlPts).Should().Be(expectedResult);
         }
     }
 }
