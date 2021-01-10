@@ -23,17 +23,6 @@ namespace VerbNurbsSharp.XUnit.Core
 			_testOutput = testOutput;
 		}
 
-		[Fact]
-		public void Check_CurveKnotRefine()
-		{
-			//arrange
-			NurbsCurve inputCurve = null;
-			NurbsCurve expectedCurve = null;
-			//act
-			//assert
-			Assert.Equal(expectedCurve, inputCurve);
-		}
-
         [Fact]
         public void TransformNurbsCurve_UsingAMatrix()
         {
@@ -57,23 +46,49 @@ namespace VerbNurbsSharp.XUnit.Core
             resultedCurve.ControlPoints.Should().BeEquivalentTo(expectedControlPts);
         }
 
-        [Fact]
-        public void CurveKnotRefine()
+        [Theory]
+        [InlineData(2.5 ,1)]
+        [InlineData(2.5, 2)]
+        [InlineData(2.5, 3)]
+        [InlineData(2.5, 4)]
+        [InlineData(0.5, 1)]
+        [InlineData(0.5, 2)]
+        [InlineData(0.5, 3)]
+        [InlineData(0.5, 4)]
+        [InlineData(3.0, 1)]
+        [InlineData(3.0, 2)]
+        public void CurveKnotRefine(double val, int insertion)
         {
             var degree = 3;
             var knots = new KnotArray(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
-            var newKnots = Sets.RepeatData(2.5, 1);
+
+            var newKnots = new List<double>();
+            for (int i = 0; i < insertion; i++)
+                newKnots.Add(val);
 
             var controlPts = new List<Vector>();
-            for (int i = 0; i <= knots.Count - 3 - 2; i++)
-            {
+            for (int i = 0; i <= knots.Count - degree - 2; i++)
                 controlPts.Add(new Vector(){i,0.0,0.0});
-            }
 
             var curve = new NurbsCurve(degree, knots, controlPts);
             var curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
 
             _testOutput.WriteLine(curveAfterRefine.ToString());
+            _testOutput.WriteLine(knots.Count.ToString());
+            _testOutput.WriteLine(curveAfterRefine.Knots.Count.ToString());
+
+            (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
+            (controlPts.Count + insertion).Should().Be(curveAfterRefine.ControlPoints.Count);
+
+            // ToDo add this part of the test
+            /*
+            var p0 = verb.eval.Eval.curvePoint( crv, 2.5);
+		    var p1 = verb.eval.Eval.curvePoint( after, 2.5);
+
+		    p0[0].should.be.approximately(p1[0], verb.core.Constants.TOLERANCE);
+		    p0[1].should.be.approximately(p1[1], verb.core.Constants.TOLERANCE);
+		    p0[2].should.be.approximately(p1[2], verb.core.Constants.TOLERANCE);
+            */
         }
     }
 }

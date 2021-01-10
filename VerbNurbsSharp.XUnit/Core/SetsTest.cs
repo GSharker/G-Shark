@@ -24,6 +24,7 @@ namespace VerbNurbsSharp.XUnit.Core
         public static IEnumerable<object[]> RangesToBeDefined =>
             new List<object[]>
             {
+                new object[] { new Interval(0, 1), 4},
                 new object[] { new Interval(2, 30), 3},
                 new object[] { new Interval(-10, 30), 6},
                 new object[] { new Interval(1, 10), 0}
@@ -42,7 +43,8 @@ namespace VerbNurbsSharp.XUnit.Core
             {
                 new object[] { 10, 7},
                 new object[] { new Vector(){ 14, -12, 7}, 5},
-                new object[] { 2.7, 8 }
+                new object[] { 2.7, 8 },
+                new object[] { 1.0, 0 }
             };
 
         [Theory]
@@ -51,11 +53,24 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var range = Sets.Range(interval, step);
 
-            var st = string.Join('-', range);
+            var st = string.Join(',', range);
             _testOutput.WriteLine(st);
 
             range.Should().NotBeNull();
             range.Should().BeEquivalentTo(new List<double>(range));
+        }
+
+        [Theory]
+        [MemberData(nameof(RangesToBeDefined))]
+        public void GetAListOfEquallySpaceNumbers(Interval interval, int step)
+        {
+            var linearSpace = Sets.LinearSpace(interval, step);
+
+            var st = string.Join(',', linearSpace);
+            _testOutput.WriteLine(st);
+
+            linearSpace.Should().NotBeNull();
+            linearSpace.Should().BeEquivalentTo(new List<double>(linearSpace));
         }
 
         [Fact]
@@ -63,7 +78,7 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var range = Sets.Range(12);
 
-            var st = string.Join('-', range);
+            var st = string.Join(',', range);
             _testOutput.WriteLine(st);
 
             range.Should().NotBeNull();
@@ -88,7 +103,7 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var series = Sets.Span(start, step, count);
 
-            var st = string.Join('-', series);
+            var st = string.Join(',', series);
             _testOutput.WriteLine(st);
 
             series.Should().NotBeNull();
@@ -117,7 +132,7 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var repeatedData = Sets.RepeatData(data, length);
 
-            var resultConcat = string.Join("--", repeatedData);
+            var resultConcat = string.Join(",", repeatedData);
             _testOutput.WriteLine(resultConcat);
 
             repeatedData.Should().NotBeEmpty();
@@ -125,13 +140,11 @@ namespace VerbNurbsSharp.XUnit.Core
             repeatedData.Should().BeEquivalentTo(new List<object>(repeatedData));
         }
 
-        [Theory]
-        [InlineData(10, 0)]
-        [InlineData(5, -1)]
-        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero(object data, int length)
+        [Fact]
+        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero()
         {
-            Func<object> resultFunction = () => Sets.RepeatData(data, length);
-            resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative or zero.");
+            Func<object> resultFunction = () => Sets.RepeatData(5, -1);
+            resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative.");
         }
 
         [Theory]
@@ -141,7 +154,7 @@ namespace VerbNurbsSharp.XUnit.Core
         public void Return_ASetUnion_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
         {
             var setSub = Sets.SetUnion(set1, set2);
-            var resultConcat = string.Join("--", setSub);
+            var resultConcat = string.Join(",", setSub);
             _testOutput.WriteLine(resultConcat);
 
             setExpected.Should().BeEquivalentTo(setExpected);
@@ -153,7 +166,7 @@ namespace VerbNurbsSharp.XUnit.Core
         public void Return_ASetDifference_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
         {
             var setSub = Sets.SetDifference(set1, set2);
-            var resultConcat = string.Join("--", setSub);
+            var resultConcat = string.Join(",", setSub);
             _testOutput.WriteLine(resultConcat);
 
             setExpected.Should().BeEquivalentTo(setExpected);

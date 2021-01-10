@@ -10,5 +10,10 @@ namespace VerbNurbsSharp.ExtendedMethods
         {
             return new Vector(enumerable.ToList());
         }
+
+        public static KnotArray ToKnot(this IEnumerable<double> enumerable)
+        {
+            return new KnotArray(enumerable.ToList());
+        }
     }
 }

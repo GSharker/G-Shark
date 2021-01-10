@@ -41,6 +41,29 @@ namespace VerbNurbsSharp.Core
 
             return l;
         }
+        /// <summary>
+        /// Returns a list of evenly spaced numbers over a specified interval.
+        /// </summary>
+        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="step">Number of steps.</param>
+        /// <returns>A list of equally spaced numbers.</returns>
+        public static IList<double> LinearSpace(Interval domain, int step)
+        {
+            if(Math.Abs(domain.Min - domain.Max) <= Constants.EPSILON) return new List<double>(){ domain.Min };
+            var linearSpace = new List<double>();
+
+            if (step <= 1)
+            {
+                linearSpace.Add(domain.Min);
+                return linearSpace;
+            }
+
+            var div = step - 1;
+            var delta = domain.Max - domain.Min;
+            for (int i = 0; i < step; i++)
+                linearSpace.Add(domain.Min + (i * delta / div));
+            return linearSpace;
+        }
 
         /// <summary>
         /// Create a range of positive numbers, incrementing of one step and starting from 0.
@@ -120,7 +143,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>Set of repeated data.</returns>
         public static List<T> RepeatData<T>(T data, int length)
         {
-            if (length <= 0) throw new Exception("Length can not be negative or zero.");
+            if (length < 0) throw new Exception("Length can not be negative.");
             List<T> list = new List<T>();
             for (int i = 0; i < length; i++)
                 list.Add(data);

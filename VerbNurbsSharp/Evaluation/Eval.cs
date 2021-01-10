@@ -4,11 +4,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
     public class Eval
     {
+        
         /// <summary>
         /// Find the span on the knot Array without supplying a number of control points.
         /// </summary>
@@ -22,25 +24,25 @@ namespace VerbNurbsSharp.Evaluation
         /// Find the span on the knot list of the given parameter,
         /// (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition).
         /// </summary>
-        /// <param name="n">Number of control points - 1.</param>
+        /// <param name="numberOfControlPts">Number of control points - 1.</param>
         /// <param name="degree">Integer degree of function.</param>
-        /// <param name="u">Parameter.</param>
+        /// <param name="parameter">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns>The index of the knot span.</returns>
-        public static int KnotSpan(int n, int degree, double u, KnotArray knots)
+        public static int KnotSpan(int numberOfControlPts, int degree, double parameter, KnotArray knots)
         {
-            // special case if u == knots[n+1]
-            if (u > knots[n + 1] - Constants.EPSILON) return n;
+            // special case if parameter == knots[numberOfControlPts+1]
+            if (parameter > knots[numberOfControlPts + 1] - Constants.EPSILON) return numberOfControlPts;
 
-            if (u < knots[degree] + Constants.EPSILON) return degree;
+            if (parameter < knots[degree] + Constants.EPSILON) return degree;
 
             var low = degree;
-            var high = n + 1;
+            var high = numberOfControlPts + 1;
             int mid = (int) Math.Floor((double)(low + high) / 2);
 
-            while (u < knots[mid] || u >= knots[mid + 1])
+            while (parameter < knots[mid] || parameter >= knots[mid + 1])
             {
-                if (u < knots[mid])
+                if (parameter < knots[mid])
                     high = mid;
                 else
                     low = mid;
@@ -50,6 +52,7 @@ namespace VerbNurbsSharp.Evaluation
 
             return mid;
         }
+
         /// <summary>
         /// Transform a 1d array of points into their homogeneous equivalents.
         /// </summary>
