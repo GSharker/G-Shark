@@ -37,9 +37,9 @@ namespace VerbNurbsSharp.XUnit.Core
 			NurbsCurve expectedCurve = Evaluation.Modify.CurveKnotRefine(inputCurve, knotsToInsert);
 
 			//assert
-			Assert.Equal(expectedCurve.Degree, outputDegree);
-			Assert.Equal(expectedCurve.Knots, outputKnots);
-			Assert.Equal(expectedCurve.ControlPoints, outputControlPts);
+			Assert.Equal(outputDegree, expectedCurve.Degree);
+			Assert.Equal(outputKnots, expectedCurve.Knots);
+			Assert.Equal(outputControlPts, expectedCurve.ControlPoints);
 		}
 	}
 

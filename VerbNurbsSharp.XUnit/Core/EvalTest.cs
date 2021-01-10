@@ -31,7 +31,7 @@ namespace VerbNurbsSharp.XUnit.Core
 			//act
 			int knotIndex = Eval.KnotSpan(degree, u, knots);
 			//assert
-			Assert.Equal(knotIndex, expectedKnotIndex);
+			Assert.Equal(expectedKnotIndex, knotIndex);
 		}
 	}
 
