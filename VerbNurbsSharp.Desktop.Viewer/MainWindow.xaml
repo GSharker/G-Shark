@@ -1,0 +1,15 @@
+﻿<Window x:Class="VerbNurbsSharp.Desktop.Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VerbNurbsSharp.Desktop.Viewer"
+        xmlns:ht="http://helix-toolkit.org/wpf"
+        mc:Ignorable="d"
+        Title="VerbuNurbsSharp 3D Viewer" Height="450" Width="800">
+    <ht:HelixViewport3D x:Name="MainViewport" ZoomExtentsWhenLoaded="True"> 
+        <ht:GridLinesVisual3D x:Name="Grids"></ht:GridLinesVisual3D>
+        <ht:PointsVisual3D x:Name="Points" Size="5"></ht:PointsVisual3D>
+        <ht:MeshGeometryVisual3D x:Name="Mesh"></ht:MeshGeometryVisual3D>
+    </ht:HelixViewport3D>
+</Window>
