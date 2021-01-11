@@ -58,8 +58,7 @@ namespace VerbNurbsSharp.XUnit.Core
         [Theory]
         [InlineData(new double[] {0, 0, 1, 2, 3, 4, 4}, 4, 12, false)]
         [InlineData(new double[] {5, 3, 6, 5, 4, 5, 6}, 3, 3, false)]
-        [InlineData(new double[] {0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0}, 3, 12,
-            true)]
+        [InlineData(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 }, 4, 12, true)]
         public void AreValidKnots(double[] knots, int degree, int ctrlPts, bool expectedResult)
         {
             var knotsArray = new KnotArray(knots);

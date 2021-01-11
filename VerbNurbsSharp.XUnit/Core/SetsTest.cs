@@ -135,7 +135,6 @@ namespace VerbNurbsSharp.XUnit.Core
             var resultConcat = string.Join(",", repeatedData);
             _testOutput.WriteLine(resultConcat);
 
-            repeatedData.Should().NotBeEmpty();
             repeatedData.Should().HaveCount(length);
             repeatedData.Should().BeEquivalentTo(new List<object>(repeatedData));
         }

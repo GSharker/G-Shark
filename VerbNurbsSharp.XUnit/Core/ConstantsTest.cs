@@ -88,7 +88,9 @@ namespace VerbNurbsSharp.XUnit.Core
             var set1 = new List<double>() { -10, 15, 5 };
             var expectedSet = new List<double>() { -1.428571, 2.142857, 0.714286 };
 
-            Constants.Division(set1, 7).Should().BeEquivalentTo(expectedSet);
+            var divisionResult = Constants.Division(set1, 7);
+
+            divisionResult.Select((val, i) => Math.Round(val, 6).Should().Be(expectedSet[i]));
         }
     }
 }
