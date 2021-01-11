@@ -6,7 +6,8 @@ Still in the very early stages but I am planning to include few examples, includ
 This projects implements unit tests using XUnit and Fluent Assertion
 # [VerbNurbsSharp.BlazorWASM](https://github.com/cesarecaoduro/VerbNurbsSharp/tree/master/VerbNurbsSharp.BlazorWASM "VerbNurbsSharp.BlazorWASM")
 This projects implement a Balzor Webassembly application
-[VerbNurbsSharp.Desktop.Viewer](https://github.com/cesarecaoduro/VerbNurbsSharp/tree/master/VerbNurbsSharp.Desktop.Viewer "VerbNurbsSharp.Desktop.Viewer")
+# [VerbNurbsSharp.Desktop.Viewer](https://github.com/cesarecaoduro/VerbNurbsSharp/tree/master/VerbNurbsSharp.Desktop.Viewer "VerbNurbsSharp.Desktop.Viewer")
+This project implements a Desktop WPF application using NET5-windows and the Helix Toolkit
 # WIP Classes
 ### Core
  - [x] BoundingBox
@@ -27,6 +28,6 @@ This projects implement a Balzor Webassembly application
 ### Geometry
 - [x] Line
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODM2ODUwMDE2LDQ3ODY5MzIwOSwtMjEyMj
-gwMDIzMyw3Mzg4OTI1MTksLTM2Mzg2MDMxNV19
+eyJoaXN0b3J5IjpbLTEyNjYwODQ0MDYsNDc4NjkzMjA5LC0yMT
+IyODAwMjMzLDczODg5MjUxOSwtMzYzODYwMzE1XX0=
 -->
