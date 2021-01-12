@@ -22,7 +22,7 @@ namespace VerbNurbsSharp.Evaluation
 
             for (int i = 0; i < points.Count - 1; i++)
             {
-                lsum += Constants.DistanceTo(points[i], points[i + 1]);
+                lsum += points[i].DistanceTo(points[i + 1]);
                 knots.Add(lsum);
             }
             knots.Add(lsum);
@@ -42,9 +42,9 @@ namespace VerbNurbsSharp.Evaluation
             if (weights == null)
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
             return new NurbsCurve(degree, knots, Eval.Homogenize1d(controlPoints, weights));
-                weights = Sets.RepeatData(1.0, controlPoints.Count);
+            //weights = Sets.RepeatData(1.0, controlPoints.Count);
             //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
-            return null;
+            //return null;
         }
 
         public static NurbsCurve ClonedCurve(NurbsCurve curve)

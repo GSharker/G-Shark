@@ -50,7 +50,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>A list of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.Min - domain.Max) <= Constants.EPSILON) return new List<double>(){ domain.Min };
+            if(System.Math.Abs(domain.Min - domain.Max) <= Math.EPSILON) return new List<double>(){ domain.Min };
             var linearSpace = new List<double>();
 
             if (step <= 1)

@@ -28,10 +28,10 @@ namespace VerbNurbsSharp.Geometry
         }
 
         /// <summary>
-        /// Length of the line
+        /// Length of the line.
         /// </summary>
         /// <returns></returns>
-        public double Length => Constants.DistanceTo(this.Start, this.End);
+        public double Length => this.Start.DistanceTo(this.End);
 
         public override Line FromJson(string s)
         {

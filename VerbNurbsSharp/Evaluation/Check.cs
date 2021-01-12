@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using VerbNurbsSharp.Geometry;
+using Math = VerbNurbsSharp.Core.Math;
 
 namespace VerbNurbsSharp.Evaluation
 {
@@ -23,10 +24,10 @@ namespace VerbNurbsSharp.Evaluation
             if (vector.Count < (degree + 1)*2) return false;
             var rep = vector.First();
             for (int i = 0; i <= degree + 1; i++)
-                if (Math.Abs(vector[i] - rep) > Constants.EPSILON) return false;
+                if (System.Math.Abs(vector[i] - rep) > Math.EPSILON) return false;
             rep = vector.Last();
             for (int i = vector.Count - degree - 1; i < vector.Count; i++)
-                if (Math.Abs(vector[i] - rep) > Constants.EPSILON) return false;
+                if (System.Math.Abs(vector[i] - rep) > Math.EPSILON) return false;
             return IsNonDecreasing(vector);
         }
 
@@ -41,7 +42,7 @@ namespace VerbNurbsSharp.Evaluation
             var rep = vector.First();
             for (int i = 0; i < vector.Count; i++)
             {
-                if (vector[i] < rep - Constants.EPSILON) return false;
+                if (vector[i] < rep - Math.EPSILON) return false;
                 rep = vector[i];
             }
             return true;

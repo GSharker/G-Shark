@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.ExtendedMethods;
+using Math = VerbNurbsSharp.Core.Math;
 
 namespace VerbNurbsSharp.Geometry
 {
@@ -20,9 +23,9 @@ namespace VerbNurbsSharp.Geometry
             this.AddRange(values);
         }
         /// <summary>
-        /// Gets the value of a point at location Constants.UNSETVALUE,Constants.UNSETVALUE,Constants.UNSETVALUE.
+        /// Gets the value of a point at location Math.UNSETVALUE,Math.UNSETVALUE,Math.UNSETVALUE.
         /// </summary>
-        public static Vector3 Unset => new Vector3(){ Constants.UNSETVALUE, Constants.UNSETVALUE, Constants.UNSETVALUE };
+        public static Vector3 Unset => new Vector3(){ Math.UNSETVALUE, Math.UNSETVALUE, Math.UNSETVALUE };
         /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
@@ -31,7 +34,7 @@ namespace VerbNurbsSharp.Geometry
         /// <returns>The angle in radians</returns>
         public static double AngleBetween(Vector3 a, Vector3 b)
         {
-            return Math.Acos(Dot(a, b) / (Length(a) * Length(b)));
+            return System.Math.Acos(Dot(a, b) / (Length(a) * Length(b)));
         }
         /// <summary>
         /// Reverses this vector in place (reverses the direction).
@@ -46,14 +49,14 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         /// <param name="a">The vector to be valued.</param>
         /// <returns>True if the vector is valid.</returns>
-        public bool IsValid() => this.Any(Constants.IsValidDouble);
+        public bool IsValid() => this.Any(Math.IsValidDouble);
 
         /// <summary>
         /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
         /// </summary>
         /// <param name="a">The vector to check.</param>
         /// <returns>True if all the component are less than Epsilon.</returns>
-        public bool IsZero() => this.All(value => Math.Abs(value) < Constants.EPSILON);
+        public bool IsZero() => this.All(value => System.Math.Abs(value) < Math.EPSILON);
 
         // ToDo probably this method should be in another class.
         /// <summary>
@@ -63,10 +66,10 @@ namespace VerbNurbsSharp.Geometry
         /// <param name="dir">The direction.</param>
         /// <param name="amplitude">The scalar value to amplify the vector.</param>
         /// <returns>The vector amplified.</returns>
-        public static Vector3 OnRay(IList<double> origin, Vector3 dir, double amplitude)
+        public static Vector3 OnRay(Vector3 origin, Vector3 dir, double amplitude)
         {
-            var vectorAmplified = new Vector3(Constants.Multiplication(Vector3.Normalized(dir), amplitude));
-            return new Vector3(Constants.Addition(origin, vectorAmplified));
+            var vectorAmplified = Vector3.Normalized(dir) * amplitude;
+            return origin + vectorAmplified;
         }
 
         /// <summary>
@@ -74,9 +77,9 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         /// <param name="a">The vector has to be normalized.</param>
         /// <returns>The vector normalized.</returns>
-        public static Vector3 Normalized(Vector3 a)
+        public static Vector3 Normalized(Vector3 v)
         {
-            return new Vector3(Constants.Division(a, Length(a)));
+            return v / Length(v);
         }
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
@@ -86,7 +89,7 @@ namespace VerbNurbsSharp.Geometry
         public static double Length(Vector3 a)
         {
             if (!a.IsValid() || a.IsZero()) return 0.0;
-            return Math.Sqrt(SquaredLength(a));
+            return System.Math.Sqrt(SquaredLength(a));
         }
         /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
@@ -162,13 +165,76 @@ namespace VerbNurbsSharp.Geometry
             return llv;
         }
         /// <summary>
+        /// The distance from this point to b.
+        /// </summary>
+        /// <param name="v">The target vector.</param>
+        /// <returns>The distance between this vector and the provided vector.</returns>
+        public double DistanceTo(Vector3 v)
+        {
+            if (this.Count != v.Count) throw new Exception("The two list doesn't match in length.");
+            return System.Math.Sqrt(this.Select((val, i) => System.Math.Pow(val - v[i], 2)).Sum());
+            //return Math.Sqrt(a.Zip(b, (first, second) => Math.Pow(first - second, 2)).Sum());
+        }
+        /// <summary>
+        /// Multiply a vector and a scalar.
+        /// </summary>
+        /// <param name="v">The vector to multiply.</param>
+        /// <param name="a">The scalar value to multiply.</param>
+        /// <returns>A vector whose magnitude is multiplied by a.</returns>
+        public static Vector3 operator *(Vector3 v, double a)
+        {
+            return v.Select(val => val * a).ToVector();
+        }
+        /// <summary>
+        /// Divide a vector by a scalar.
+        /// </summary>
+        /// <param name="a">The scalar divisor.</param>
+        /// <param name="v">The vector to divide.</param>
+        /// <returns>A vector whose magnitude is multiplied by a.</returns>
+        public static Vector3 operator /(Vector3 v, double a)
+        {
+            return v.Select(val => val / a).ToVector();
+        }
+        /// <summary>
+        /// Subtract two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the difference between a and b.</returns>
+        public static Vector3 operator -(Vector3 a, Vector3 b)
+        {
+            return a.Select((val, i) => val - b[i]).ToVector();
+        }
+        /// <summary>
+        /// Add two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>A vector which is the sum of a and b.</returns>
+        public static Vector3 operator +(Vector3 a, Vector3 b)
+        {
+            return a.Select((val, i) => val + b[i]).ToVector();
+        }
+        /// <summary>
+        /// Determine whether this vector's components are equal to those of v, within tolerance.
+        /// </summary>
+        /// <param name="v">The vector to compare.</param>
+        /// <returns>True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise false.</returns>
+        public bool IsAlmostEqualTo(Vector3 v)
+        {
+            return this.Select((val, i) => System.Math.Round(val - v[i]))
+                .All(val => val < Math.EPSILON);
+        }
+        /// <summary>
         /// Constructs the string representation of the vector.
         /// </summary>
         /// <returns>The vector in string format</returns>
         public override string ToString()
         {
-            return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
+            return $"{System.Math.Round(this[0],6)},{System.Math.Round(this[1], 6)},{System.Math.Round(this[2], 6)}";
         }
+
+
 
         // ToDo implement them if necessary.
         // Get the angle between two vectors in 2d, for a 2 dimension.

@@ -15,7 +15,7 @@ namespace VerbNurbsSharp.Core
         /// <returns>Whether the point is on the plane.</returns>
         public static bool isPointOnPlane(Vector3 pt, Plane plane, double tol)
         {
-            return Math.Abs(Vector3.Dot(new Vector3(Constants.Subtraction(pt, plane.Origin)), plane.Normal)) < tol;
+            return System.Math.Abs(Vector3.Dot(pt - plane.Origin , plane.Normal)) < tol;
         }
         /// <summary>
         /// Get the closest point on a ray from a point.
@@ -26,10 +26,9 @@ namespace VerbNurbsSharp.Core
         public static Vector3 RayClosestPoint(Vector3 pt, Ray ray)
         {
             Vector3 rayDirNormalized = Vector3.Normalized(ray.Direction);
-            Vector3 rayOriginToPt = new Vector3(Constants.Subtraction(pt, ray.Origin));
+            Vector3 rayOriginToPt = pt - ray.Origin;
             double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
-            Vector3 projectedPt =
-                new Vector3(Constants.Addition(ray.Origin, Constants.Multiplication(rayDirNormalized, dotResult)));
+            Vector3 projectedPt = ray.Origin + (rayDirNormalized * dotResult);
             return projectedPt;
         }
 
@@ -42,7 +41,7 @@ namespace VerbNurbsSharp.Core
         public static double DistanceToRay(Vector3 pt, Ray ray)
         {
             Vector3 projectedPt = RayClosestPoint(pt, ray);
-            Vector3 ptToProjectedPt = new Vector3(Constants.Subtraction(projectedPt, pt));
+            Vector3 ptToProjectedPt = projectedPt -  pt;
             return Vector3.Length(ptToProjectedPt);
         }
 
@@ -55,15 +54,15 @@ namespace VerbNurbsSharp.Core
         {
             if (points.Count < 3) return true;
 
-            Vector3 vec1 = new Vector3(Constants.Subtraction(points[1], points[0]));
-            Vector3 vec2 = new Vector3(Constants.Subtraction(points[2], points[0]));
+            Vector3 vec1 = points[1] - points[0];
+            Vector3 vec2 = points[2] - points[0];
 
             for (int i = 3; i < points.Count; i++)
             {
-                Vector3 vec3 = new Vector3(Constants.Subtraction(points[i], points[0]));
+                Vector3 vec3 = points[i] - points[0];
                 double tripleProduct = Vector3.Dot(Vector3.Cross(vec1, vec2), vec3);
                 // https://en.wikipedia.org/wiki/Triple_product
-                if (Math.Abs(tripleProduct) > Constants.EPSILON)
+                if (System.Math.Abs(tripleProduct) > Math.EPSILON)
                     return false;
             }
 

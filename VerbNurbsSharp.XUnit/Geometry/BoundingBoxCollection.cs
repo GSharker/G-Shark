@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.XUnit.Geometry
@@ -72,8 +73,8 @@ namespace VerbNurbsSharp.XUnit.Geometry
         {
             get
             {
-                yield return new object[] { new BoundingBox(BoundingBoxFrom5Points()), BoundingBox.Unset };
-                yield return new object[] { new BoundingBox(BoundingBoxFrom5Points()), new BoundingBox(NegativeBoundingBox()) };
+                yield return new BoundingBox[] { new BoundingBox(BoundingBoxFrom5Points()), BoundingBox.Unset };
+                yield return new BoundingBox[] { new BoundingBox(BoundingBoxFrom5Points()), new BoundingBox(NegativeBoundingBox()) };
             }
         }
     }

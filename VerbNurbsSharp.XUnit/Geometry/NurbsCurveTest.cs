@@ -11,6 +11,7 @@ using VerbNurbsSharp.Geometry;
 using VerbNurbsSharp.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
+using Math = System.Math;
 
 namespace VerbNurbsSharp.XUnit.Geometry
 {
@@ -134,8 +135,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
             var demoPts = Eval.Dehomogenize1d(transformedCurve.ControlPoints);
 
             var distanceBetweenPts =
-                Math.Round(Vector3.Length(Constants.Subtraction(demoPts[0], curve.ControlPoints[0])
-                    .ToVector()),6);
+                Math.Round(Vector3.Length(demoPts[0] - curve.ControlPoints[0]),6);
 
             distanceBetweenPts.Should().Be(22.383029);
         }

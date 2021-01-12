@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using VerbNurbsSharp.Geometry;
@@ -162,5 +163,75 @@ namespace VerbNurbsSharp.XUnit.Geometry
             amplifiedVector.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void Vector_Addiction()
+        {
+            var vec1 = new Vector3(){ 20, 0, 0 };
+            var vec2 = new Vector3(){ -10, 15, 5 };
+            var expectedVec = new Vector3() { 10, 15, 5 };
+
+            (vec1 + vec2).Should().BeEquivalentTo(expectedVec);
+        }
+
+        [Fact]
+        public void Vector_Subtraction()
+        {
+            var vec1 = new Vector3() { 20, 0, 0 };
+            var vec2 = new Vector3() { -10, 15, 5 };
+            var expectedVec = new Vector3() { 30, -15, -5 };
+
+            (vec1 - vec2).Should().BeEquivalentTo(expectedVec);
+        }
+
+        [Fact]
+        public void Vector_Multiplication()
+        {
+            var vec = new Vector3() { -10, 15, 5 };
+            var expectedVec = new Vector3() { -70, 105, 35 };
+
+            (vec * 7).Should().BeEquivalentTo(expectedVec);
+        }
+
+        [Fact]
+        public void Vector_Division()
+        {
+            var vec = new Vector3() { -10, 15, 5 };
+            var expectedVec = new Vector3() { -1.428571, 2.142857, 0.714286 };
+
+            var divisionResult = vec / 7;
+
+            divisionResult.Select((val, i) => Math.Round(val, 6).Should().Be(expectedVec[i]));
+        }
+
+        [Fact]
+        public void ReturnTrue_If_VectorsAreEqual()
+        {
+            var vec1 = new Vector3() { -10, 15, 5 };
+            var vec2 = new Vector3() { -10, 15, 5 };
+
+            vec1.IsAlmostEqualTo(vec2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void DistanceTo_ThrowsAnException_IfTheTwoVector_HaveDifferentLength()
+        {
+            var vec1 = new Vector3() { -10, 15, 5 };
+            var vec2 = new Vector3() { 10, 15 };
+
+            Func<object> funcResult = () => vec1.DistanceTo(vec2);
+
+            funcResult.Should().Throw<Exception>().WithMessage("The two list doesn't match in length.");
+        }
+
+        [Fact]
+        public void DistanceTo_FromTwoVectors()
+        {
+            var vec1 = new Vector3() { -20, 15, 5 };
+            var vec2 = new Vector3() { 10, 0, 15 };
+
+            var distance = vec1.DistanceTo(vec2);
+
+            distance.Should().Be(35);
+        }
     }
 }

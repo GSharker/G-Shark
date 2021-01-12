@@ -40,13 +40,13 @@ namespace VerbNurbsSharp.XUnit.Evaluation
             for (int i = 0; i < degree + 1; i++)
             {
                 var d = curves[0].Knots.Count - (degree + 1);
-                curves[0].Knots[d + i].Should().BeApproximately(cubicSplit, Constants.TOLERANCE);
+                curves[0].Knots[d + i].Should().BeApproximately(cubicSplit, Math.TOLERANCE);
             }
 
             for (int i = 0; i < degree + 1; i++)
             {
                 var d = 0;
-                curves[1].Knots[d + i].Should().BeApproximately(cubicSplit, Constants.TOLERANCE);
+                curves[1].Knots[d + i].Should().BeApproximately(cubicSplit, Math.TOLERANCE);
             }
 
             curves.Should().HaveCount(2);

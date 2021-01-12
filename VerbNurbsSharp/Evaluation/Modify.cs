@@ -4,6 +4,7 @@ using System.Linq;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.ExtendedMethods;
 using VerbNurbsSharp.Geometry;
+using Math = VerbNurbsSharp.Core.Math;
 
 namespace VerbNurbsSharp.Evaluation
 {
@@ -66,12 +67,12 @@ namespace VerbNurbsSharp.Evaluation
                     int ind = k - degree + l;
                     double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-                    if (Math.Abs(alfa) < Constants.EPSILON)
+                    if (System.Math.Abs(alfa) < Math.EPSILON)
                         controlPointsPost[ind - 1] = controlPointsPost[ind];
                     else
                     {
                         alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
-                        controlPointsPost[ind - 1] = Constants.Addition(Constants.Multiplication(controlPointsPost[ind - 1], alfa), Constants.Multiplication(controlPointsPost[ind], 1.0 - alfa)).ToVector();
+                        controlPointsPost[ind - 1] = (controlPointsPost[ind - 1] * alfa) + (controlPointsPost[ind] * (1.0 - alfa));
                     }
                 }
                 knotsPost[k] = knotsToInsert[j];

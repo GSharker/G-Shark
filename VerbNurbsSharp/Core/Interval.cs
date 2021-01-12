@@ -23,7 +23,7 @@ namespace VerbNurbsSharp.Core
 
         public double ParameterAt(double normalizedParameter)
         {
-            return !Constants.IsValidDouble(normalizedParameter)
+            return !Math.IsValidDouble(normalizedParameter)
                 ? -1.23432101234321E+308
                 : (1.0 - normalizedParameter) * this.Min + normalizedParameter * this.Max;
         }
