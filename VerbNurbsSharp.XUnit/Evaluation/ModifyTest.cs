@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Evaluation;
@@ -11,9 +7,9 @@ using VerbNurbsSharp.XUnit.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace VerbNurbsSharp.XUnit.Core
+namespace VerbNurbsSharp.XUnit.Evaluation
 {
-	[Trait("Category", "Modify")]
+    [Trait("Category", "Modify")]
 	public class ModifyTest
 	{
 		private readonly ITestOutputHelper _testOutput;
@@ -60,7 +56,7 @@ namespace VerbNurbsSharp.XUnit.Core
         public void CurveKnotRefine(double val, int insertion)
         {
             var degree = 3;
-            var knots = new KnotArray(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
+            var knots = new Knot(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
 
             var newKnots = new List<double>();
             for (int i = 0; i < insertion; i++)

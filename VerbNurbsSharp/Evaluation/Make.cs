@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
@@ -19,7 +17,7 @@ namespace VerbNurbsSharp.Evaluation
 
         public static NurbsCurve Polyline(List<Vector3> points)
         {
-            KnotArray knots = new KnotArray() { 0.0, 0.0 };
+            Knot knots = new Knot() { 0.0, 0.0 };
             double lsum = 0.0;
 
             for (int i = 0; i < points.Count - 1; i++)
@@ -36,7 +34,7 @@ namespace VerbNurbsSharp.Evaluation
         public static NurbsCurve RationalBezierCurve(List<Vector3> controlPoints, List<double> weights = null)
         {
             var degree = controlPoints.Count - 1;
-            var knots = new KnotArray();
+            var knots = new Knot();
             for (int i = 0; i < degree + 1; i++)
                 knots.Add(0.0);
             for (int i = 0; i < degree + 1; i++)

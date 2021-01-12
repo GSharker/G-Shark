@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.ExtendedMethods
 {
@@ -11,9 +12,9 @@ namespace VerbNurbsSharp.ExtendedMethods
             return new Vector3(enumerable.ToList());
         }
 
-        public static KnotArray ToKnot(this IEnumerable<double> enumerable)
+        public static Knot ToKnot(this IEnumerable<double> enumerable)
         {
-            return new KnotArray(enumerable.ToList());
+            return new Knot(enumerable.ToList());
         }
     }
 }

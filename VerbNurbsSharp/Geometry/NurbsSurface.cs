@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VerbNurbsSharp.Core;
 
-namespace VerbNurbsSharp.Core
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A simple data structure representing a NURBS surface.
@@ -13,7 +11,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class NurbsSurface : Serializable<NurbsSurface>
     {
-        public NurbsSurface(int degreeU, int degreeV, KnotArray knotsU, KnotArray knotsV, List<List<Vector3>> controlPoints)
+        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;
@@ -32,11 +30,11 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// List of non-decreasing knot values in u direction.
         /// </summary>
-        public KnotArray KnotsU { get; set; }
+        public Knot KnotsU { get; set; }
         /// <summary>
         /// List of non-decreasing knot values in v direction.
         /// </summary>
-        public KnotArray KnotsV { get; set; }
+        public Knot KnotsV { get; set; }
         /// <summary>
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).

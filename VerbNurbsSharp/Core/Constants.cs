@@ -4,6 +4,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Net;
 using System.Runtime.ExceptionServices;
+using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Core
 {

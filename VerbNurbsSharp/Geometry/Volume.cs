@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VerbNurbsSharp.Core;
 
-namespace VerbNurbsSharp.Core
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A simple data structure representing a NURBS volume. This data structure is largely experimental in intent. Like CurveData
@@ -28,21 +26,21 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// List of non-decreasing knot values in u direction.
         /// </summary>
-        public KnotArray KnotsU { get; set; }
+        public Knot KnotsU { get; set; }
         /// <summary>
         /// List of non-decreasing knot values in v direction.
         /// </summary>
-        public KnotArray KnotsV { get; set; }
+        public Knot KnotsV { get; set; }
         /// <summary>
         /// List of non-decreasing knot values in w direction.
         /// </summary>
-        public KnotArray KnotsW { get; set; }
+        public Knot KnotsW { get; set; }
         /// <summary>
         /// 3d list of control points, where rows are the u dir, and columns run along the positive v direction,
         /// and where each control point is an list of length (dim)
         /// </summary>
         public List<List<List<Vector3>>> ControlPoints { get; set; }
-        public Volume(int degreeU, int degreeV, int degreeW, KnotArray knotsU, KnotArray knotsV, KnotArray knotsW, List<List<List<Vector3>>> controlPoints)
+        public Volume(int degreeU, int degreeV, int degreeW, Knot knotsU, Knot knotsV, Knot knotsW, List<List<List<Vector3>>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;

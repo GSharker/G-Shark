@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VerbNurbsSharp.Core;
 
-namespace VerbNurbsSharp.Core
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A simple data structure representing a mesh. MeshData does not check for legality.

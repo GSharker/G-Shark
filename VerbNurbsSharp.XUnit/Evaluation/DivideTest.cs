@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Evaluation;
@@ -11,7 +6,7 @@ using VerbNurbsSharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace VerbNurbsSharp.XUnit.Core
+namespace VerbNurbsSharp.XUnit.Evaluation
 {
     [Trait("Category", "Divide")]
     public class DivideTest
@@ -37,7 +32,7 @@ namespace VerbNurbsSharp.XUnit.Core
                 new Vector3(){7,12,0},
                 new Vector3(){15,2,0}
             };
-            var knots = new KnotArray(degree, controlPts.Count);
+            var knots = new Knot(degree, controlPts.Count);
 
             var curve = new NurbsCurve(degree, knots, controlPts);
             var curves = Divide.CurveSplit(curve, cubicSplit);

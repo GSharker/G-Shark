@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Evaluation;
+using VerbNurbsSharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -158,7 +156,7 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [InlineData(2, -1)]
         public void KnotSpanGivenParameter(int expectedValue, double parameter)
         {
-            var knotVector = new KnotArray() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var knotVector = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
             var degree = 2;
 
             var result = Eval.KnotSpan(knotVector.Count - degree - 2, 2, parameter, knotVector);

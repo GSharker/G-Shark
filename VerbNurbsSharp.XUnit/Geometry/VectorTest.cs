@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using VerbNurbsSharp.Core;
+using VerbNurbsSharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace VerbNurbsSharp.XUnit.Core
+namespace VerbNurbsSharp.XUnit.Geometry
 {
     [Trait("Category", "Vector3")]
     public class VectorTest

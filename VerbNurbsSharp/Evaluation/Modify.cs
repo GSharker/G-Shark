@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VerbNurbsSharp.Core;
 using VerbNurbsSharp.ExtendedMethods;
 using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
 {
-	public class Modify
+    public class Modify
 	{
 		// ToDo make the test.
 		/// <summary>
@@ -26,7 +24,7 @@ namespace VerbNurbsSharp.Evaluation
 
 			int degree = curve.Degree;
 			List<Vector3> controlPoints = curve.ControlPoints;
-			KnotArray knots = curve.Knots;
+			Knot knots = curve.Knots;
 
 			int n = controlPoints.Count - 1;
 			int m = n + degree + 1;
@@ -116,7 +114,7 @@ namespace VerbNurbsSharp.Evaluation
 		/// </summary>
 		/// <param name="knots">An array of knots</param>
 		/// <returns>The reversed array of knots</returns>
-		public static KnotArray KnotsReverse(KnotArray knots)
+		public static Knot KnotsReverse(Knot knots)
 		{
 			throw new NotImplementedException();
 		}

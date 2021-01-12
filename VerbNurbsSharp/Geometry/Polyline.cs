@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using VerbNurbsSharp.Core;
 
-namespace VerbNurbsSharp.Core
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A simple data structure representing a polyline.

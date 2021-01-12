@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
+using VerbNurbsSharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 

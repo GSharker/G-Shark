@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VerbNurbsSharp.Core
+namespace VerbNurbsSharp.Geometry
 {
     /// <summary>
     /// A triangular face of a mesh.

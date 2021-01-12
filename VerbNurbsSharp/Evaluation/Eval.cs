@@ -1,9 +1,7 @@
 ﻿using VerbNurbsSharp.Core;
 using System.Collections.Generic;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using VerbNurbsSharp.Geometry;
 
 namespace VerbNurbsSharp.Evaluation
@@ -18,7 +16,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="u">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns></returns>
-        public static int KnotSpan(int degree, double u, KnotArray knots) => KnotSpan(knots.Count - degree - 2, degree, u, knots);
+        public static int KnotSpan(int degree, double u, Knot knots) => KnotSpan(knots.Count - degree - 2, degree, u, knots);
 
         /// <summary>
         /// Find the span on the knot list of the given parameter,
@@ -29,7 +27,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="parameter">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns>The index of the knot span.</returns>
-        public static int KnotSpan(int numberOfControlPts, int degree, double parameter, KnotArray knots)
+        public static int KnotSpan(int numberOfControlPts, int degree, double parameter, Knot knots)
         {
             // special case if parameter == knots[numberOfControlPts+1]
             if (parameter > knots[numberOfControlPts + 1] - Constants.EPSILON) return numberOfControlPts;

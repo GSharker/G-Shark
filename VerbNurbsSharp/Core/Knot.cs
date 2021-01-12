@@ -8,18 +8,18 @@ using VerbNurbsSharp.ExtendedMethods;
 namespace VerbNurbsSharp.Core
 {
     /// <summary>
-    /// A KnotArray is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate KnotArray's.
+    /// A Knot is a non-decreasing sequence of doubles. Use the methods in <see cref="VerbNurbsSharp.Evaluation.Check"/>/> to validate Knot's.
     /// </summary>
-    public class KnotArray : List<double>
+    public class Knot : List<double>
     {
-        public KnotArray(){}
+        public Knot(){}
 
-        public KnotArray(int degree, int numberOfControlPts, bool clamped = true)
+        public Knot(int degree, int numberOfControlPts, bool clamped = true)
         {
             Generate(degree, numberOfControlPts, clamped);
         }
 
-        public KnotArray(IEnumerable<double> values)
+        public Knot(IEnumerable<double> values)
         {
             this.AddRange(values);
         }

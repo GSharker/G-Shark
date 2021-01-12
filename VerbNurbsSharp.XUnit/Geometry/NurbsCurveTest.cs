@@ -33,7 +33,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
+            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1 };
 
             return new NurbsCurve(degree, knots, pts);
         }
@@ -47,7 +47,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
+            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1 };
             var weights = new List<double>() { 0.5, 0.5, 0.5 };
 
             return new NurbsCurve(degree, knots, pts, weights);
@@ -63,7 +63,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            KnotArray knots = new KnotArray() {1, 1, 1};
+            Knot knots = new Knot() {1, 1, 1};
 
             var nurbsCurve = new NurbsCurve(degree, knots, pts);
 
@@ -80,7 +80,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            KnotArray knots = new KnotArray() { 1, 1, 1 };
+            Knot knots = new Knot() { 1, 1, 1 };
             var weights = new List<double>() {0.5, 0.5, 0.5};
 
             var nurbsCurve = new NurbsCurve(degree, knots, pts, weights);
@@ -99,7 +99,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1};
+            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1};
 
             var nurbsCurve = new NurbsCurve(degree, knots, pts);
             var copiedNurbs = nurbsCurve.Clone();
@@ -150,11 +150,11 @@ namespace VerbNurbsSharp.XUnit.Geometry
             //    new Vector3(){10.0,12.0,5.0},
             //    new Vector3(){15.0,2.0,0.0}
             //};
-            //KnotArray knots = new KnotArray() { 0, 0, 1, 1};
+            //Knot knots = new Knot() { 0, 0, 1, 1};
             //var weights = new List<double>() { 1, 1, 1 };
 
             var degree = 3;
-            var knots = new KnotArray() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+            var knots = new Knot() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
             var controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - 3 - 2; i++)
             {

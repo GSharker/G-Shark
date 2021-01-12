@@ -22,7 +22,7 @@ namespace VerbNurbsSharp.Evaluation
 		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
 		{
 			int degree = curve.Degree;
-            KnotArray knots = curve.Knots;
+            Knot knots = curve.Knots;
 
             var knotsToInsert = Sets.RepeatData(u, degree + 1);
 
@@ -46,7 +46,7 @@ namespace VerbNurbsSharp.Evaluation
 		public static List<NurbsSurface> SurfaceSplit(NurbsSurface surface, float u, bool useV = false)
 		{
 			throw new NotImplementedException();
-			//			KnotArray knots;
+			//			Knot knots;
 			//			int degree;
 			//			List<List<Vector3>> controlPoints;
 
@@ -81,8 +81,8 @@ namespace VerbNurbsSharp.Evaluation
 			//				newpts1.Add(res.ControlPoints.GetRange(0, s + 1)/*.slice(s + 1)*/);
 			//			}
 
-			//			KnotArray knots0 = (KnotArray)res.Knots.ToList().GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
-			//			KnotArray knots1 = (KnotArray)res.Knots.ToList().GetRange(0, s + 1);//.slice(s + 1);
+			//			Knot knots0 = (Knot)res.Knots.ToList().GetRange(0, s + degree + 2);//.slice(0, s + degree + 2);
+			//			Knot knots1 = (Knot)res.Knots.ToList().GetRange(0, s + 1);//.slice(s + 1);
 
 			//			if (!useV)
 			//			{

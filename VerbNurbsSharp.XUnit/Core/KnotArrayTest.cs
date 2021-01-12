@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using VerbNurbsSharp.Core;
 using Xunit;
@@ -26,7 +22,7 @@ namespace VerbNurbsSharp.XUnit.Core
         [InlineData(-1, 0)]
         public void KnotArray_ThrowsAnException_IfDegreeOrNumberOfControlPts_AreLessThanOrZero(int degree, int numberOfControlPts)
         {
-            Func<KnotArray> funcResult = () => new KnotArray(degree, numberOfControlPts);
+            Func<Knot> funcResult = () => new Knot(degree, numberOfControlPts);
 
             funcResult.Should().Throw<Exception>().WithMessage("Input values must be positive and different than zero.");
         }
@@ -36,9 +32,9 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var degree = 4;
             var ctrlPts = 12;
-            var resultExpected = new KnotArray(){ 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0};
+            var resultExpected = new Knot(){ 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-            var generateKnots = new KnotArray(degree, ctrlPts);
+            var generateKnots = new Knot(degree, ctrlPts);
 
             generateKnots.Should().BeEquivalentTo(resultExpected);
         }
@@ -48,9 +44,9 @@ namespace VerbNurbsSharp.XUnit.Core
         {
             var degree = 3;
             var ctrlPts = 5;
-            var resultExpected = new KnotArray() { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
+            var resultExpected = new Knot() { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
 
-            var generateKnots = new KnotArray(degree, ctrlPts, false);
+            var generateKnots = new Knot(degree, ctrlPts, false);
 
             generateKnots.Should().BeEquivalentTo(resultExpected);
         }
@@ -61,7 +57,7 @@ namespace VerbNurbsSharp.XUnit.Core
         [InlineData(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 }, 4, 12, true)]
         public void AreValidKnots(double[] knots, int degree, int ctrlPts, bool expectedResult)
         {
-            var knotsArray = new KnotArray(knots);
+            var knotsArray = new Knot(knots);
 
             knotsArray.AreValid(degree, ctrlPts).Should().Be(expectedResult);
         }
@@ -69,8 +65,8 @@ namespace VerbNurbsSharp.XUnit.Core
         [Fact]
         public void NormalizedKnotArray()
         {
-            var knots = new KnotArray(){ -5, -5, -3, -2, 2, 3, 5, 5 };
-            var knotsExpected = new KnotArray(){ 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
+            var knots = new Knot(){ -5, -5, -3, -2, 2, 3, 5, 5 };
+            var knotsExpected = new Knot(){ 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
 
             knots.Normalize();
 

@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using VerbNurbsSharp.Core;
 using VerbNurbsSharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace VerbNurbsSharpTest
+namespace VerbNurbsSharp.XUnit.Geometry
 {
     public class BoundingBoxTest
     {

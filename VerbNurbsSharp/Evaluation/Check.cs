@@ -17,7 +17,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="vector">The knot vector to test</param>
         /// <param name="degree">The degree</param>
         /// <returns>Whether the array is a valid knot vector or knot</returns>
-        public static bool IsValidKnotVector(KnotArray vector, int degree)
+        public static bool IsValidKnotVector(Knot vector, int degree)
         {
             if (vector.Count == 0) return false;
             if (vector.Count < (degree + 1)*2) return false;
