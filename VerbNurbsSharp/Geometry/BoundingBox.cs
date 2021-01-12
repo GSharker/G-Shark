@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using VerbNurbsSharp.Core;
 
 namespace VerbNurbsSharp.Geometry
@@ -148,7 +147,7 @@ namespace VerbNurbsSharp.Geometry
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{this.Min.ToString()} - {this.Max.ToString()}";
+            return $"{this.Min} - {this.Max}";
         }
         /// <summary>
         /// Determines if two BoundingBoxes intersect.

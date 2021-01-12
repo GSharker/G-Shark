@@ -67,5 +67,14 @@ namespace VerbNurbsSharp.XUnit.Geometry
                 yield return new object[] { BoundingBoxFrom5Points(), NegativeBoundingBox(), false};
             }
         }
+
+        public static IEnumerable<object[]> BoundingBoxIntersectionsUnset
+        {
+            get
+            {
+                yield return new object[] { new BoundingBox(BoundingBoxFrom5Points()), BoundingBox.Unset };
+                yield return new object[] { new BoundingBox(BoundingBoxFrom5Points()), new BoundingBox(NegativeBoundingBox()) };
+            }
+        }
     }
 }
