@@ -26,33 +26,33 @@ namespace VerbNurbsSharp.XUnit.Evaluation
             new object[]
             {
                 new List<double>() {0.5, 0.5, 0.5},
-                new List<Vector>()
+                new List<Vector3>()
                 {
-                    new Vector() {0.0, 0.0, 0.0, 0.5},
-                    new Vector() {1.25, -1.25, 0.0, 0.5},
-                    new Vector() {2.5, 0.0, 0.0, 0.5}
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {1.25, -1.25, 0.0, 0.5},
+                    new Vector3() {2.5, 0.0, 0.0, 0.5}
                 }
             },
 
             new object[]
             {
                 new List<double>() {0.5},
-                new List<Vector>()
+                new List<Vector3>()
                 {
-                    new Vector() {0.0, 0.0, 0.0, 0.5},
-                    new Vector() {2.5, -2.5, 0.0, 1.0},
-                    new Vector() {5.0, 0.0, 0.0, 1.0}
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {2.5, -2.5, 0.0, 1.0},
+                    new Vector3() {5.0, 0.0, 0.0, 1.0}
                 }
             },
 
             new object[]
             {
                 null,
-                new List<Vector>()
+                new List<Vector3>()
                 {
-                    new Vector() {0.0, 0.0, 0.0, 1.0},
-                    new Vector() {2.5, -2.5, 0.0, 1.0},
-                    new Vector() {5.0, 0.0, 0.0, 1.0}
+                    new Vector3() {0.0, 0.0, 0.0, 1.0},
+                    new Vector3() {2.5, -2.5, 0.0, 1.0},
+                    new Vector3() {5.0, 0.0, 0.0, 1.0}
                 }
             }
         };
@@ -60,7 +60,7 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [Fact]
         public void EvalHomogenized1d_ThrowsAnException_IfTheSetOfWeights_IsBiggerThanControlPts()
         {
-            var controlPts = new List<Vector>();
+            var controlPts = new List<Vector3>();
             var weights = new List<double>(){1.0,1.5,1.0};
 
             Func<object> resultFunction = () => Eval.Homogenize1d(controlPts, weights);
@@ -70,13 +70,13 @@ namespace VerbNurbsSharp.XUnit.Evaluation
 
         [Theory]
         [MemberData(nameof(Homogenized1dData))]
-        public void NewSetOfControlPoints_Homogenized1d(List<double> weights, List<Vector> controlPtsExpected)
+        public void NewSetOfControlPoints_Homogenized1d(List<double> weights, List<Vector3> controlPtsExpected)
         {
-            var controlPts = new List<Vector>()
+            var controlPts = new List<Vector3>()
             {
-                new Vector() {0.0, 0.0, 0},
-                new Vector() {2.5, -2.5, 0},
-                new Vector() {5.0, 0.0, 0}
+                new Vector3() {0.0, 0.0, 0},
+                new Vector3() {2.5, -2.5, 0},
+                new Vector3() {5.0, 0.0, 0}
             };
 
             var newControlPts = Eval.Homogenize1d(controlPts, weights);
@@ -87,11 +87,11 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [Fact]
         public void Weight1d_ThrowsAnException_IfThePassedSet_HasNotTheSameDimension()
         {
-            var homegeneousPts = new List<Vector>()
+            var homegeneousPts = new List<Vector3>()
             {
-                new Vector() {0.0, 0.0, 0.0},
-                new Vector() {1.25, -1.25, 0.0, 0.5},
-                new Vector() {2.5, 0.0, 0.0, 0.5}
+                new Vector3() {0.0, 0.0, 0.0},
+                new Vector3() {1.25, -1.25, 0.0, 0.5},
+                new Vector3() {2.5, 0.0, 0.0, 0.5}
             };
 
             Func<object> resultFunc = () => Eval.Weight1d(homegeneousPts);
@@ -102,11 +102,11 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [Fact]
         public void Weight1d()
         {
-            var homegeneousPts = new List<Vector>()
+            var homegeneousPts = new List<Vector3>()
             {
-                new Vector() {0.0, 0.0, 0.0, 0.5},
-                new Vector() {1.25, -1.25, 0.0, 0.5},
-                new Vector() {2.5, 0.0, 0.0, 0.5}
+                new Vector3() {0.0, 0.0, 0.0, 0.5},
+                new Vector3() {1.25, -1.25, 0.0, 0.5},
+                new Vector3() {2.5, 0.0, 0.0, 0.5}
             };
 
             var weight1d = Eval.Weight1d(homegeneousPts);
@@ -117,8 +117,8 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [Fact]
         public void Dehomogenizer()
         {
-            var homegeneousPts = new Vector() {1.25, -1.25, 0.0, 0.5};
-            var dehomogenizeExpected = new Vector() {2.5, -2.5, 0};
+            var homegeneousPts = new Vector3() {1.25, -1.25, 0.0, 0.5};
+            var dehomogenizeExpected = new Vector3() {2.5, -2.5, 0};
 
             var dehomogenizePts = Eval.Dehomogenize(homegeneousPts);
 
@@ -128,18 +128,18 @@ namespace VerbNurbsSharp.XUnit.Evaluation
         [Fact]
         public void Dehomogenizer1d()
         {
-            var homegeneousPts = new List<Vector>()
+            var homegeneousPts = new List<Vector3>()
             {
-                new Vector() {0.0, 0.0, 0.0, 0.5},
-                new Vector() {1.25, -1.25, 0.0, 0.5},
-                new Vector() {2.5, 0.0, 0.0, 0.5}
+                new Vector3() {0.0, 0.0, 0.0, 0.5},
+                new Vector3() {1.25, -1.25, 0.0, 0.5},
+                new Vector3() {2.5, 0.0, 0.0, 0.5}
             };
 
-            var dehomogenizeExpected = new List<Vector>()
+            var dehomogenizeExpected = new List<Vector3>()
             {
-                new Vector() {0.0, 0.0, 0},
-                new Vector() {2.5, -2.5, 0},
-                new Vector() {5.0, 0.0, 0}
+                new Vector3() {0.0, 0.0, 0},
+                new Vector3() {2.5, -2.5, 0},
+                new Vector3() {5.0, 0.0, 0}
             };
 
             var dehomogenizePts = Eval.Dehomogenize1d(homegeneousPts);

@@ -13,9 +13,9 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Ray : Serializable<Ray>
     {
-        public Vector Direction { get; set; }
-        public Point Origin { get; set; }
-        public Ray(Point origin, Vector direction)
+        public Vector3 Direction { get; set; }
+        public Vector3 Origin { get; set; }
+        public Ray(Vector3 origin, Vector3 direction)
         {
             this.Direction = direction;
             this.Origin = origin;

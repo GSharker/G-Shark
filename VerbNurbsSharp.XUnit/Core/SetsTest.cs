@@ -34,7 +34,7 @@ namespace VerbNurbsSharp.XUnit.Core
             new List<object[]>
             {
                 new object[] { new List<double>(){ 10, 99, 87, 45, 67, 43, 45, 33, 21, 7, 65, 98 }, 92},
-                new object[] { new Vector(){ 14, -12, 7, 0, -5, -8, 17, -11, 19 }, 31},
+                new object[] { new Vector3(){ 14, -12, 7, 0, -5, -8, 17, -11, 19 }, 31},
                 new object[] { new List<double>(){ 2.7, 3.5, 4.9, 5.1, 8.3 }, 5.6000000000000005 }
             };
 
@@ -42,7 +42,7 @@ namespace VerbNurbsSharp.XUnit.Core
             new List<object[]>
             {
                 new object[] { 10, 7},
-                new object[] { new Vector(){ 14, -12, 7}, 5},
+                new object[] { new Vector3(){ 14, -12, 7}, 5},
                 new object[] { 2.7, 8 },
                 new object[] { 1.0, 0 }
             };

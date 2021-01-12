@@ -30,7 +30,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             foreach (var l in b)
-                r.Add(Constants.Multiplication((Vector)l, a));
+                r.Add(Constants.Multiplication((Vector3)l, a));
             return r;
         }
 
@@ -54,7 +54,7 @@ namespace VerbNurbsSharp.Core
 
             while (i >= 0)
             {
-                var foo = new Vector();
+                var foo = new Vector3();
                 var bar = x[i];
 
                 k = r - 1;
@@ -90,7 +90,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Constants.Addition((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Addition((Vector3)a[i], (Vector3)b[i]));
             return r;
         }
 
@@ -104,7 +104,7 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Constants.Division((Vector)a[i], b));
+                r.Add(Constants.Division((Vector3)a[i], b));
             return r;
         }
 
@@ -118,22 +118,22 @@ namespace VerbNurbsSharp.Core
         {
             Matrix r = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Constants.Subtraction((Vector)a[i], (Vector)b[i]));
+                r.Add(Constants.Subtraction((Vector3)a[i], (Vector3)b[i]));
             return r;
         }
         /// <summary>
-        /// Multiply a `Matrix` by a `Vector`
+        /// Multiply a `Matrix` by a `Vector3`
         /// </summary>
         /// <param name="a">The transformation matrix.</param>
         /// <param name="b">The vector to transform.</param>
         /// <returns>The transformed vector.</returns>
-        public static Vector Dot(Matrix a, Vector b)
+        public static Vector3 Dot(Matrix a, Vector3 b)
         {
             if(b.Count != a[0].Count)
-                throw new ArgumentOutOfRangeException(nameof(b), "Vector and Matrix must have the same dimension.");
-            Vector r = new Vector();
+                throw new ArgumentOutOfRangeException(nameof(b), "Vector3 and Matrix must have the same dimension.");
+            Vector3 r = new Vector3();
             for (int i = 0; i < a.Count; i++)
-                r.Add(Vector.Dot(new Vector(a[i]), b));
+                r.Add(Vector3.Dot(new Vector3(a[i]), b));
             return r;
         }
 
@@ -145,7 +145,7 @@ namespace VerbNurbsSharp.Core
         public static Matrix Identity(int n)
         {
             Matrix m = new Matrix();
-            var zeros = Vector.Zero2d(n, n);
+            var zeros = Vector3.Zero2d(n, n);
             for (int i = 0; i < n; i++)
             {
                 zeros[i][i] = 1.0;
@@ -190,7 +190,7 @@ namespace VerbNurbsSharp.Core
 //        /// <param name="a"></param>
 //        /// <param name="b"></param>
 //        /// <returns></returns>
-//        public static Vector Solve(Matrix a, Vector b) => LUSolve(LU(a), b);
+//        public static Vector3 Solve(Matrix a, Vector3 b) => LUSolve(LU(a), b);
 
 //        /// <summary>
 //        /// Based on methods from numeric.js
@@ -198,7 +198,7 @@ namespace VerbNurbsSharp.Core
 //        /// <param name="LUP"></param>
 //        /// <param name="b"></param>
 //        /// <returns></returns>
-//        public static Vector LUSolve(LUDecomp LUP, Vector b)
+//        public static Vector3 LUSolve(LUDecomp LUP, Vector3 b)
 //        {
 //            var LU = LUP.LU;
 //            var n = LU.Count;

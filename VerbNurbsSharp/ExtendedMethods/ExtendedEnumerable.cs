@@ -6,9 +6,9 @@ namespace VerbNurbsSharp.ExtendedMethods
 {
     public static class ExtendedEnumerable
     {
-        public static Vector ToVector(this IEnumerable<double> enumerable)
+        public static Vector3 ToVector(this IEnumerable<double> enumerable)
         {
-            return new Vector(enumerable.ToList());
+            return new Vector3(enumerable.ToList());
         }
 
         public static KnotArray ToKnot(this IEnumerable<double> enumerable)

@@ -48,7 +48,7 @@ namespace VerbNurbsSharp.Evaluation
 			throw new NotImplementedException();
 			//			KnotArray knots;
 			//			int degree;
-			//			List<List<Point>> controlPoints;
+			//			List<List<Vector3>> controlPoints;
 
 			//			if (!useV)
 			//			{
@@ -67,13 +67,13 @@ namespace VerbNurbsSharp.Evaluation
 			//			for (int i = 0; i < degree + 1; i++)
 			//				knots_to_insert.Add(i);
 
-			//			List<List<Point>> newpts0 = new List<List<Point>>();
-			//			List<List<Point>> newpts1 = new List<List<Point>>();
+			//			List<List<Vector3>> newpts0 = new List<List<Vector3>>();
+			//			List<List<Vector3>> newpts1 = new List<List<Vector3>>();
 
 			//			var s = Eval.knotSpan(degree, u, knots);
 			//			NurbsCurveData res = null;
 
-			//			foreach (List<Point> cps in controlPoints)
+			//			foreach (List<Vector3> cps in controlPoints)
 			//			{
 			//				res = Modify.curveKnotRefine(new NurbsCurveData(degree, knots, cps), knots_to_insert);
 

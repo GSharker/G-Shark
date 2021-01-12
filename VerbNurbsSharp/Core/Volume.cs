@@ -41,8 +41,8 @@ namespace VerbNurbsSharp.Core
         /// 3d list of control points, where rows are the u dir, and columns run along the positive v direction,
         /// and where each control point is an list of length (dim)
         /// </summary>
-        public List<List<List<Point>>> ControlPoints { get; set; }
-        public Volume(int degreeU, int degreeV, int degreeW, KnotArray knotsU, KnotArray knotsV, KnotArray knotsW, List<List<List<Point>>> controlPoints)
+        public List<List<List<Vector3>>> ControlPoints { get; set; }
+        public Volume(int degreeU, int degreeV, int degreeW, KnotArray knotsU, KnotArray knotsV, KnotArray knotsW, List<List<List<Vector3>>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;

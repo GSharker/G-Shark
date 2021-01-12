@@ -25,14 +25,14 @@ namespace VerbNurbsSharp.Geometry
         /// </summary>
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The evaluated point.</returns>
-        public Vector PointAt(double t);
+        public Vector3 PointAt(double t);
         /// <summary>
         /// Evaluate the derivatives at a point on a curve.
         /// </summary>
         /// <param name="u">The parameter on the curve.</param>
         /// <param name="numberDerivs">The number of derivatives to evaluate on the curve.</param>
         /// <returns>An set of derivative vectors.</returns>
-        public List<Vector> Derivatives(double u, int numberDerivs = 1);
+        public List<Vector3> Derivatives(double u, int numberDerivs = 1);
 
     }
 }

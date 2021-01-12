@@ -13,7 +13,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class NurbsSurface : Serializable<NurbsSurface>
     {
-        public NurbsSurface(int degreeU, int degreeV, KnotArray knotsU, KnotArray knotsV, List<List<Point>> controlPoints)
+        public NurbsSurface(int degreeU, int degreeV, KnotArray knotsU, KnotArray knotsV, List<List<Vector3>> controlPoints)
         {
             DegreeU = degreeU;
             DegreeV = degreeV;
@@ -41,7 +41,7 @@ namespace VerbNurbsSharp.Core
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).
         /// </summary>
-        public List<List<Point>> ControlPoints { get; set; }
+        public List<List<Vector3>> ControlPoints { get; set; }
 
         public override NurbsSurface FromJson(string s)
         {

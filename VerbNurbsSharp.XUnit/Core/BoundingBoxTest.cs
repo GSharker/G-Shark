@@ -20,7 +20,7 @@ namespace VerbNurbsSharpTest
         [Trait("Category", "BoundingBox")]
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxCollections), MemberType = typeof(BoundingBoxCollection))]
-        public void It_Create_A_BoundingBox_From_Points(List<Point> pts, Point min, Point max)
+        public void It_Create_A_BoundingBox_From_Points(List<Vector3> pts, Vector3 min, Vector3 max)
         {
             BoundingBox bBox = new BoundingBox(pts);
 
@@ -34,7 +34,7 @@ namespace VerbNurbsSharpTest
         [Fact]
         public void ReturnTrue_IfAPoint_Is_Contained_Into_TheBoundingBox()
         {
-            Point conteinedPt = new Point() {2.5, 4.5, 0.0};
+            Vector3 conteinedPt = new Vector3() {2.5, 4.5, 0.0};
 
             BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             bool containsResult = bBox.Contains(conteinedPt, false);
@@ -46,7 +46,7 @@ namespace VerbNurbsSharpTest
         [Fact]
         public void ReturnFalse_IfAPoint_Is_Outside_TheBoundingBox()
         {
-            Point externalPt = new Point() { 12.4, 5.0, 0.0 };
+            Vector3 externalPt = new Vector3() { 12.4, 5.0, 0.0 };
 
             BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             bool containsResult = bBox.Contains(externalPt, false);
@@ -57,7 +57,7 @@ namespace VerbNurbsSharpTest
         [Trait("Category", "BoundingBox")]
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersections), MemberType = typeof(BoundingBoxCollection))]
-        public void ReturnTrue_If_TwoBoundingBoxes_Intersect(List<Point> ptsBBox1, List<Point> ptsBBox2, bool result)
+        public void ReturnTrue_If_TwoBoundingBoxes_Intersect(List<Vector3> ptsBBox1, List<Vector3> ptsBBox2, bool result)
         {
             BoundingBox bBox1 = new BoundingBox(ptsBBox1);
             BoundingBox bBox2 = new BoundingBox(ptsBBox2);
@@ -77,8 +77,8 @@ namespace VerbNurbsSharpTest
             BoundingBox bBoxResult = BoundingBox.Intersect(bBox1, bBox2);
 
             bBoxResult.IsValid.Should().BeFalse();
-            bBoxResult.Max.Should().BeEquivalentTo(Point.Unset);
-            bBoxResult.Min.Should().BeEquivalentTo(Point.Unset);
+            bBoxResult.Max.Should().BeEquivalentTo(Vector3.Unset);
+            bBoxResult.Min.Should().BeEquivalentTo(Vector3.Unset);
         }
 
         [Trait("Category", "BoundingBox")]
@@ -91,17 +91,17 @@ namespace VerbNurbsSharpTest
             BoundingBox bBoxResult = BoundingBox.Intersect(bBox1, bBox2);
 
             bBoxResult.IsValid.Should().BeFalse();
-            bBoxResult.Max.Should().BeEquivalentTo(Point.Unset);
-            bBoxResult.Min.Should().BeEquivalentTo(Point.Unset);
+            bBoxResult.Max.Should().BeEquivalentTo(Vector3.Unset);
+            bBoxResult.Min.Should().BeEquivalentTo(Vector3.Unset);
         }
 
         [Trait("Category", "BoundingBox")]
         [Fact]
         public void IntersectReturns_BBox_As_Intersection_Of_Two_BBoxes()
         {
-            Point pt1 = new Point() { 5d, 5d, 0d };
-            Point pt2 = new Point() { 15d, 15d, 0d };
-            List<Point> pts2 = new List<Point>() { pt1, pt2};
+            Vector3 pt1 = new Vector3() { 5d, 5d, 0d };
+            Vector3 pt2 = new Vector3() { 15d, 15d, 0d };
+            List<Vector3> pts2 = new List<Vector3>() { pt1, pt2};
 
             BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(pts2);
@@ -126,7 +126,7 @@ namespace VerbNurbsSharpTest
         [Trait("Category", "BoundingBox")]
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxAxisLength), MemberType = typeof(BoundingBoxCollection))]
-        public void Return_ACollection_Of_GetAxisLength(List<Point> pts, int index, double length)
+        public void Return_ACollection_Of_GetAxisLength(List<Vector3> pts, int index, double length)
         {
             BoundingBox bBox = new BoundingBox(pts);
 
@@ -150,10 +150,10 @@ namespace VerbNurbsSharpTest
         [Fact]
         public void Return_ABooleanUnion_BetweenTwo_BoundingBoxes()
         {
-            Point pt1 = new Point() { 5d, 5d, 0d };
-            Point pt2 = new Point() { -15d, -13d, -5d };
-            List<Point> pts = new List<Point>() { pt1, pt2 };
-            Point pMax = new Point() {10, 10, 0};
+            Vector3 pt1 = new Vector3() { 5d, 5d, 0d };
+            Vector3 pt2 = new Vector3() { -15d, -13d, -5d };
+            List<Vector3> pts = new List<Vector3>() { pt1, pt2 };
+            Vector3 pMax = new Vector3() {10, 10, 0};
 
             BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(pts);

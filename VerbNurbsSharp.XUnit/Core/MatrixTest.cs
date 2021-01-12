@@ -44,9 +44,9 @@ namespace VerbNurbsSharp.XUnit.Core
         [Fact]
         public void GetTheTransformedVector()
         {
-            var homogenizedVec = new Vector(){-10.0, 20.0, 5.0, 1.0};
+            var homogenizedVec = new Vector3(){-10.0, 20.0, 5.0, 1.0};
 
-            var vecExpected = new Vector() { -20.0, 40.0, 6.0, 1.0 };
+            var vecExpected = new Vector3() { -20.0, 40.0, 6.0, 1.0 };
 
             var transformedVec = Matrix.Dot(TransformationMatrixExample, homogenizedVec);
 
@@ -56,7 +56,7 @@ namespace VerbNurbsSharp.XUnit.Core
         [Fact]
         public void MatrixDot_ThrowsAnException_IfTheVectorAndTheMatrix_HaveNotTheSameDimension()
         {
-            var vec = new Vector() { -10.0, 20.0, 5.0 };
+            var vec = new Vector3() { -10.0, 20.0, 5.0 };
 
             Func<object> funcResult = () => Matrix.Dot(TransformationMatrixExample, vec);
 

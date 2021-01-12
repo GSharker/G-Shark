@@ -12,12 +12,12 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// where the intersection took place
         /// </summary>
-        public Point Point0 { get; set; }
+        public Vector3 Point0 { get; set; }
 
         /// <summary>
         /// where the intersection took place on the second curve
         /// </summary>
-        public Point Point1 { get; set; }
+        public Vector3 Point1 { get; set; }
 
         /// <summary>
         /// the parameter on the first curve
@@ -29,7 +29,7 @@ namespace VerbNurbsSharp.Core
         /// </summary>
         public double U1 { get; set; }
 
-        public CurveCurveIntersection(Point point0, Point point1, double u0, double u1)
+        public CurveCurveIntersection(Vector3 point0, Vector3 point1, double u0, double u1)
         {
             Point0 = point0;
             Point1 = point1;
@@ -42,10 +42,10 @@ namespace VerbNurbsSharp.Core
     {
         public double U { get; set; }
         public UV UV { get; set; }
-        public Point CurvePoint { get; set; }
-        public Point SurfacePoint { get; set; }
+        public Vector3 CurvePoint { get; set; }
+        public Vector3 SurfacePoint { get; set; }
 
-        public CurveSurfaceIntersection(double u, UV uV, Point curvePoint, Point surfacePoint)
+        public CurveSurfaceIntersection(double u, UV uV, Vector3 curvePoint, Vector3 surfacePoint)
         {
             U = u;
             UV = uV;
@@ -58,18 +58,18 @@ namespace VerbNurbsSharp.Core
     {
         public UV UV0 { get; set; }
         public UV UV1 { get; set; }
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
         public int FaceIndex0 { get; set; }
         public int FaceIndex1 { get; set; }
         public MeshIntersectionPoint Opp { get; set; } = null;
         public MeshIntersectionPoint Adj { get; set; } = null;
         public bool Visited { get; set; } = false;
 
-        public MeshIntersectionPoint(UV uV0, UV uV1, Point point, int faceIndex0, int faceIndex1)
+        public MeshIntersectionPoint(UV uV0, UV uV1, Vector3 point, int faceIndex0, int faceIndex1)
         {
             UV0 = uV0;
             UV1 = uV1;
-            Point = point;
+            Vector3 = point;
             FaceIndex0 = faceIndex0;
             FaceIndex1 = faceIndex1;
         }
@@ -77,15 +77,15 @@ namespace VerbNurbsSharp.Core
 
     public class PolylineMeshIntersection
     {
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
         public double U { get; set; }
         public UV UV { get; set; }
         public int PolylineIndex { get; set; }
         public int FaceIndex { get; set; }
 
-        public PolylineMeshIntersection(Point point, double u, UV uV, int polylineIndex, int faceIndex)
+        public PolylineMeshIntersection(Vector3 point, double u, UV uV, int polylineIndex, int faceIndex)
         {
-            Point = point;
+            Vector3 = point;
             U = u;
             UV = uV;
             PolylineIndex = polylineIndex;
@@ -97,27 +97,27 @@ namespace VerbNurbsSharp.Core
     {
         public UV UV0 { get; set; }
         public UV UV1 { get; set; }
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
         public double Dist { get; set; }
 
-        public SurfaceSurfaceIntersectionPoint(UV uV0, UV uV1, Point point, double dist)
+        public SurfaceSurfaceIntersectionPoint(UV uV0, UV uV1, Vector3 point, double dist)
         {
             UV0 = uV0;
             UV1 = uV1;
-            Point = point;
+            Vector3 = point;
             Dist = dist;
         }
     }
 
     public class TriSegmentIntersection
     {
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
         public double S { get; set; }
         public double T { get; set; }
         public double P { get; set; }
-        public TriSegmentIntersection(Point point, double s, double t, double p)
+        public TriSegmentIntersection(Vector3 point, double s, double t, double p)
         {
-            Point = point;
+            Vector3 = point;
             S = s;
             T = t;
             P = p;
@@ -128,28 +128,28 @@ namespace VerbNurbsSharp.Core
     {
         public double U { get; set; }
         public UV UV { get; set; }
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
 
-        public CurveTriPoint(double u, UV uV, Point point)
+        public CurveTriPoint(double u, UV uV, Vector3 point)
         {
             U = u;
             UV = uV;
-            Point = point;
+            Vector3 = point;
         }
     }
 
     public class SurfacePoint
     {
         public UV UV { get; set; }
-        public Point Point { get; set; }
-        public Vector Normal { get; set; }
+        public Vector3 Vector3 { get; set; }
+        public Vector3 Normal { get; set; }
         public int Id { get; set; }
         public bool Degen { get; set; }
 
-        public SurfacePoint(UV uV, Point point, Vector normal, int id = -1, bool degen = false)
+        public SurfacePoint(UV uV, Vector3 point, Vector3 normal, int id = -1, bool degen = false)
         {
             UV = uV;
-            Point = point;
+            Vector3 = point;
             Normal = normal;
             Id = id;
             Degen = degen;
@@ -161,11 +161,11 @@ namespace VerbNurbsSharp.Core
     public class CurvePoint
     {
         public double U { get; set; }
-        public Point Point { get; set; }
-        public CurvePoint(double u, Point point)
+        public Vector3 Vector3 { get; set; }
+        public CurvePoint(double u, Vector3 point)
         {
             U = u;
-            Point = point;
+            Vector3 = point;
         }
     }
 }

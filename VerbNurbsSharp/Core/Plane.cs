@@ -12,9 +12,9 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class Plane : Serializable<Plane>
     {
-        public Vector Normal { get; set; }
-        public Point Origin { get; set; }
-        public Plane(Point origin, Vector direction)
+        public Vector3 Normal { get; set; }
+        public Vector3 Origin { get; set; }
+        public Plane(Vector3 origin, Vector3 direction)
         {
             this.Normal = direction;
             this.Origin = origin;

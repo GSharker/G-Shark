@@ -9,7 +9,7 @@ namespace VerbNurbsSharp.Core.KDTree
     public class KDTree<T>
     {
         public List<KDPoints<T>> Points { get; set; }
-        //private var distanceFunction : Point -> Point -> Float;
+        //private var distanceFunction : Vector3 -> Vector3 -> Float;
 
         public int Dim { get; set; } = 3;
         public KDNode<T> Root { get; set; }
@@ -17,7 +17,7 @@ namespace VerbNurbsSharp.Core.KDTree
         public KDTree(List<KDPoints<T>> points)
         {
             Points = points;
-            Dim = points[0].Point.Count;
+            Dim = points[0].Vector3.Count;
             //this.distanceFunction = distanceFunction;
             Root = BuildTree(points, 0, null);
         }
@@ -76,16 +76,16 @@ namespace VerbNurbsSharp.Core.KDTree
         /// <summary>
         /// The point
         /// </summary>
-        public Point Point { get; set; }
+        public Vector3 Vector3 { get; set; }
 
         /// <summary>
         /// An arbitrary object to attach
         /// </summary>
         public T Obj { get; set; }
 
-        public KDPoints(Point point, T obj)
+        public KDPoints(Vector3 point, T obj)
         {
-            Point = point;
+            Vector3 = point;
             Obj = obj;
         }
     }

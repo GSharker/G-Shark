@@ -30,12 +30,12 @@ namespace VerbNurbsSharp.XUnit.Core
         public void CurveSplit(double cubicSplit)
         {
             var degree = 3;
-            var controlPts = new List<Vector>()
+            var controlPts = new List<Vector3>()
             {
-                new Vector(){2,2,0},
-                new Vector(){4,12,0},
-                new Vector(){7,12,0},
-                new Vector(){15,2,0}
+                new Vector3(){2,2,0},
+                new Vector3(){4,12,0},
+                new Vector3(){7,12,0},
+                new Vector3(){15,2,0}
             };
             var knots = new KnotArray(degree, controlPts.Count);
 
