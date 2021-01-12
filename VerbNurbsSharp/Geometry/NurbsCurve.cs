@@ -15,7 +15,7 @@ namespace VerbNurbsSharp.Geometry
         /// A simple data structure representing a NURBS curve.
         /// NurbsCurve does no checks for legality. You can use <see cref="VerbNurbsSharp.Evaluation.Check"/> for that.
         /// </summary>
-        public NurbsCurve(int degree, KnotArray knots, List<Vector> controlPoints, List<double> weights = null)
+        public NurbsCurve(int degree, KnotArray knots, List<Vector3> controlPoints, List<double> weights = null)
         {
             Degree = degree;
             ControlPoints = weights == null ? controlPoints : Eval.Homogenize1d(controlPoints, weights); 
@@ -41,7 +41,7 @@ namespace VerbNurbsSharp.Geometry
         /// <summary>
         /// 2d list of control points, where each control point is a list of length (dim).
         /// </summary>
-        public List<Vector> ControlPoints { get; set; }
+        public List<Vector3> ControlPoints { get; set; }
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
@@ -89,12 +89,12 @@ namespace VerbNurbsSharp.Geometry
         /// <returns>representing the high and end point of the domain of the curve.</returns>
         public Interval Domain() => new Interval(this.Knots.First(), this.Knots.Last());
 
-        public Vector PointAt(double t)
+        public Vector3 PointAt(double t)
         {
             throw new System.NotImplementedException();
         }
 
-        public List<Vector> Derivatives(double u, int numberDerivs = 1)
+        public List<Vector3> Derivatives(double u, int numberDerivs = 1)
         {
             throw new System.NotImplementedException();
         }

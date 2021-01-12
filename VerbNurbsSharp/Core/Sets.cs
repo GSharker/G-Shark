@@ -151,8 +151,8 @@ namespace VerbNurbsSharp.Core
         }
 
         // ToDo will be integrated if necessary.
-        public static double Min(Vector a) => throw new NotImplementedException();
-        public static double Max(Vector a) => throw new NotImplementedException();
+        public static double Min(Vector3 a) => throw new NotImplementedException();
+        public static double Max(Vector3 a) => throw new NotImplementedException();
         public static bool All(List<bool> a) => throw new NotImplementedException();
     }
 }

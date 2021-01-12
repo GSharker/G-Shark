@@ -16,9 +16,9 @@ namespace VerbNurbsSharp.Core
         /// <param name="plane">The plane on which to find if the point lies on.</param>
         /// <param name="tol">Tolerance value.</param>
         /// <returns>Whether the point is on the plane.</returns>
-        public static bool isPointOnPlane(Point pt, Plane plane, double tol)
+        public static bool isPointOnPlane(Vector3 pt, Plane plane, double tol)
         {
-            return Math.Abs(Vector.Dot(new Vector(Constants.Subtraction(pt, plane.Origin)), plane.Normal)) < tol;
+            return Math.Abs(Vector3.Dot(new Vector3(Constants.Subtraction(pt, plane.Origin)), plane.Normal)) < tol;
         }
         /// <summary>
         /// Get the closest point on a ray from a point.
@@ -26,13 +26,13 @@ namespace VerbNurbsSharp.Core
         /// <param name="pt">The point.</param>
         /// <param name="ray">The ray on which to find the point.</param>
         /// <returns>Get the closest point on a ray from a point.</returns>
-        public static Point RayClosestPoint(Point pt, Ray ray)
+        public static Vector3 RayClosestPoint(Vector3 pt, Ray ray)
         {
-            Vector rayDirNormalized = Vector.Normalized(ray.Direction);
-            Vector rayOriginToPt = new Vector(Constants.Subtraction(pt, ray.Origin));
-            double dotResult = Vector.Dot(rayOriginToPt, rayDirNormalized);
-            Point projectedPt =
-                new Point(Constants.Addition(ray.Origin, Constants.Multiplication(rayDirNormalized, dotResult)));
+            Vector3 rayDirNormalized = Vector3.Normalized(ray.Direction);
+            Vector3 rayOriginToPt = new Vector3(Constants.Subtraction(pt, ray.Origin));
+            double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
+            Vector3 projectedPt =
+                new Vector3(Constants.Addition(ray.Origin, Constants.Multiplication(rayDirNormalized, dotResult)));
             return projectedPt;
         }
 
@@ -42,11 +42,11 @@ namespace VerbNurbsSharp.Core
         /// <param name="pt">The point to project.</param>
         /// <param name="ray">The ray from which to calculate the distance.</param>
         /// <returns>The distance.</returns>
-        public static double DistanceToRay(Point pt, Ray ray)
+        public static double DistanceToRay(Vector3 pt, Ray ray)
         {
-            Point projectedPt = RayClosestPoint(pt, ray);
-            Vector ptToProjectedPt = new Vector(Constants.Subtraction(projectedPt, pt));
-            return Vector.Length(ptToProjectedPt);
+            Vector3 projectedPt = RayClosestPoint(pt, ray);
+            Vector3 ptToProjectedPt = new Vector3(Constants.Subtraction(projectedPt, pt));
+            return Vector3.Length(ptToProjectedPt);
         }
 
         /// <summary>
@@ -54,17 +54,17 @@ namespace VerbNurbsSharp.Core
         /// </summary>
         /// <param name="points">Provided points.</param>
         /// <returns>Whether the point are coplanar.</returns>
-        public static bool ArePointsCoplanar(IList<Point> points)
+        public static bool ArePointsCoplanar(IList<Vector3> points)
         {
             if (points.Count < 3) return true;
 
-            Vector vec1 = new Vector(Constants.Subtraction(points[1], points[0]));
-            Vector vec2 = new Vector(Constants.Subtraction(points[2], points[0]));
+            Vector3 vec1 = new Vector3(Constants.Subtraction(points[1], points[0]));
+            Vector3 vec2 = new Vector3(Constants.Subtraction(points[2], points[0]));
 
             for (int i = 3; i < points.Count; i++)
             {
-                Vector vec3 = new Vector(Constants.Subtraction(points[i], points[0]));
-                double tripleProduct = Vector.Dot(Vector.Cross(vec1, vec2), vec3);
+                Vector3 vec3 = new Vector3(Constants.Subtraction(points[i], points[0]));
+                double tripleProduct = Vector3.Dot(Vector3.Cross(vec1, vec2), vec3);
                 // https://en.wikipedia.org/wiki/Triple_product
                 if (Math.Abs(tripleProduct) > Constants.EPSILON)
                     return false;
@@ -75,7 +75,7 @@ namespace VerbNurbsSharp.Core
 
         // ToDo these methods are similar to the one that use the ray, in this case using a segment, I don't think is necessary.
         // It required a segment that is not defined as a data.
-        public static Point segmentClosestPoint() => throw new NotImplementedException();
+        public static Vector3 segmentClosestPoint() => throw new NotImplementedException();
         public static double distToSegment() => throw new NotImplementedException();
     }
 }

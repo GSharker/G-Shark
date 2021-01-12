@@ -11,7 +11,7 @@ namespace VerbNurbsSharp.Core
     /// </summary>
     public class BoundingBox
     {
-        private static readonly BoundingBox _unset = new BoundingBox(Point.Unset);
+        private static readonly BoundingBox _unset = new BoundingBox(Vector3.Unset);
         private bool _initialized = false;
         private int _dim = 3;
 
@@ -19,7 +19,7 @@ namespace VerbNurbsSharp.Core
         /// Points to add, if desired.  Otherwise, will not be _initialized until add is called.
         /// </summary>
         /// <param name="pts"></param>
-        public BoundingBox(IList<Point> pts)
+        public BoundingBox(IList<Vector3> pts)
         {
             if (pts != null)
                 this.AddRange(pts);
@@ -28,18 +28,18 @@ namespace VerbNurbsSharp.Core
         /// Create a bounding box _initialized with a single element.
         /// </summary>
         /// <param name="pt"></param>
-        public BoundingBox(Point pt)
+        public BoundingBox(Vector3 pt)
         {
             this.Add(pt);
         }
         /// <summary>
         /// The minimum point of the BoundingBox - the coordinates of this point are always <= max.
         /// </summary>
-        public Point Min { get; set; }
+        public Vector3 Min { get; set; }
         /// <summary>
         /// The maximum point of the BoundingBox. The coordinates of this point are always >= min.
         /// </summary>
-        public Point Max { get; set; }
+        public Vector3 Max { get; set; }
         /// <summary>
         /// Gets a bounding box that has Unset coordinates for Min and Max.
         /// </summary>
@@ -69,13 +69,13 @@ namespace VerbNurbsSharp.Core
         /// </summary>
         /// <param name="pt"></param>
         /// <returns></returns>
-        public BoundingBox Add(Point pt)
+        public BoundingBox Add(Vector3 pt)
         {
             if (!this.IsValid)
             {
                 this._dim = pt.Count;
-                this.Min = new Point(){pt[0],pt[1],pt[2]};
-                this.Max = new Point(){pt[0],pt[1],pt[2]};
+                this.Min = new Vector3(){pt[0],pt[1],pt[2]};
+                this.Max = new Vector3(){pt[0],pt[1],pt[2]};
                 this._initialized = true;
                 return this;
             }
@@ -94,7 +94,7 @@ namespace VerbNurbsSharp.Core
         /// </summary>
         /// <param name="pts"></param>
         /// <returns></returns>
-        public BoundingBox AddRange(IList<Point> pts)
+        public BoundingBox AddRange(IList<Vector3> pts)
         {
             foreach (var t in pts)
                 this.Add(t);
@@ -181,10 +181,10 @@ namespace VerbNurbsSharp.Core
         /// <summary>
         /// Tests a point for BoundingBox inclusion.
         /// </summary>
-        /// <param name="pt">Point to test</param>
+        /// <param name="pt">Vector3 to test</param>
         /// <param name="strict">If true, the point needs to be fully on the inside of the BoundingBox. I.e. coincident points will be considered 'outside'.</param>
         /// <returns></returns>
-        public bool Contains(Point pt, bool strict)
+        public bool Contains(Vector3 pt, bool strict)
         {
             if (pt == null) return false;
             if (!this.IsValid) return false;
@@ -221,8 +221,8 @@ namespace VerbNurbsSharp.Core
             if (!bBox1.IsValid || !bBox2.IsValid) return bBox;
             if (!AreOverlapping(bBox1, bBox2, 0.0)) return bBox;
 
-            Point minPt = new Point();
-            Point maxPt = new Point();
+            Vector3 minPt = new Vector3();
+            Vector3 maxPt = new Vector3();
             minPt.Add(bBox1.Min[0] >= bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
             minPt.Add(bBox1.Min[1] >= bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
             minPt.Add(bBox1.Min[2] >= bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);
@@ -258,8 +258,8 @@ namespace VerbNurbsSharp.Core
             if (!bBox2.IsValid) return bBox1;
 
             BoundingBox bBox = BoundingBox.Unset;
-            Point minPt = new Point();
-            Point maxPt = new Point();
+            Vector3 minPt = new Vector3();
+            Vector3 maxPt = new Vector3();
             minPt.Add(bBox1.Min[0] < bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
             minPt.Add(bBox1.Min[1] < bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
             minPt.Add(bBox1.Min[2] < bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);

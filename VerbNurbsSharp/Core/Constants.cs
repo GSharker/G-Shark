@@ -57,7 +57,7 @@ namespace VerbNurbsSharp.Core
             return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
-        //ToDo maybe these operators can be split for Point and Vector or in a specific class called MathVerb, for example.
+        //ToDo maybe these operators can be split for Vector3 and Vector3 or in a specific class called MathVerb, for example.
         /// <summary>
         /// Add two list of numbers, so you can sum points or vectors.
         /// </summary>
@@ -107,6 +107,6 @@ namespace VerbNurbsSharp.Core
         }
 
         // ToDo value if this method is necessary.
-        public static double DistSquared(Vector a, Vector b) => throw new NotImplementedException();
+        public static double DistSquared(Vector3 a, Vector3 b) => throw new NotImplementedException();
     }
 }

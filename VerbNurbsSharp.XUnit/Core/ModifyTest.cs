@@ -34,11 +34,11 @@ namespace VerbNurbsSharp.XUnit.Core
                 new List<double>{0.0, 0.0, 0.0, 1.0 }
             };
 
-			var expectedControlPts = new List<Vector>()
+			var expectedControlPts = new List<Vector3>()
             {
-                new Vector(){-20.0, 35.0, 6.0, 1.0 },
-                new Vector(){0.0, 25.0, 6.0, 1.0 },
-                new Vector(){10.0, 20.0, 1.0, 1.0 },
+                new Vector3(){-20.0, 35.0, 6.0, 1.0 },
+                new Vector3(){0.0, 25.0, 6.0, 1.0 },
+                new Vector3(){10.0, 20.0, 1.0, 1.0 },
 			};
 
             var resultedCurve = Modify.RationalCurveTransform(curve, mat);
@@ -66,9 +66,9 @@ namespace VerbNurbsSharp.XUnit.Core
             for (int i = 0; i < insertion; i++)
                 newKnots.Add(val);
 
-            var controlPts = new List<Vector>();
+            var controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Vector(){i,0.0,0.0});
+                controlPts.Add(new Vector3(){i,0.0,0.0});
 
             var curve = new NurbsCurve(degree, knots, controlPts);
             var curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);

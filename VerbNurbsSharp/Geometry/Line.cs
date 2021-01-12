@@ -8,8 +8,8 @@ namespace VerbNurbsSharp.Geometry
     /// </summary>
     public class Line : Serializable<Line>
     {
-        public Point Start { get; set; }
-        public Point End { get; set; }
+        public Vector3 Start { get; set; }
+        public Vector3 End { get; set; }
 
         /// <summary>
         /// Main constructor
@@ -19,9 +19,9 @@ namespace VerbNurbsSharp.Geometry
         /// <summary>
         /// Line by start point and  end point
         /// </summary>
-        /// <param name="start">Start Point</param>
-        /// <param name="end">End Point</param>
-        public Line(Point start, Point end)
+        /// <param name="start">Start Vector3</param>
+        /// <param name="end">End Vector3</param>
+        public Line(Vector3 start, Vector3 end)
         {
             this.Start = start;
             this.End = end;

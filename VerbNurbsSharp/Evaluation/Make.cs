@@ -17,7 +17,7 @@ namespace VerbNurbsSharp.Evaluation
         }
 
 
-        public static NurbsCurve Polyline(List<Vector> points)
+        public static NurbsCurve Polyline(List<Vector3> points)
         {
             KnotArray knots = new KnotArray() { 0.0, 0.0 };
             double lsum = 0.0;
@@ -33,7 +33,7 @@ namespace VerbNurbsSharp.Evaluation
             return new NurbsCurve(1, knots, Eval.Homogenize1d(points, weights));
         }
 
-        public static NurbsCurve RationalBezierCurve(List<Vector> controlPoints, List<double> weights = null)
+        public static NurbsCurve RationalBezierCurve(List<Vector3> controlPoints, List<double> weights = null)
         {
             var degree = controlPoints.Count - 1;
             var knots = new KnotArray();
@@ -100,7 +100,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="p4">forth point in counter-clockwise form</param>
         /// <param name="degree"></param>
         /// <returns></returns>
-        public static NurbsSurface FourPointSurface(Point p1, Point p2, Point p3, Point p4, int degree = 3)
+        public static NurbsSurface FourPointSurface(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
         {
             throw new NotImplementedException();
         }
@@ -114,7 +114,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
         /// <returns>a NurbsCurveData object representing a NURBS curve</returns>
-        public static NurbsCurve EllipseArc(Point center, Vector xaxis, Point yaxis, double startAngle, double endAngle)
+        public static NurbsCurve EllipseArc(Vector3 center, Vector3 xaxis, Vector3 yaxis, double startAngle, double endAngle)
         {
             throw new NotImplementedException();
         }
@@ -130,7 +130,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="startAngle">start angle of the arc, between 0 and 2pi</param>
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
         /// <returns>a NurbsCurveData object representing a NURBS curve</returns>
-        public static NurbsCurve Arc(Point center, Vector xaxis, Vector yaxis, double radius, double startAngle, double endAngle)
+        public static NurbsCurve Arc(Vector3 center, Vector3 xaxis, Vector3 yaxis, double radius, double startAngle, double endAngle)
         {
             throw new NotImplementedException();
         }
@@ -142,7 +142,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="length">length of the extrusion</param>
         /// <param name="profile">a NurbsCurveData object representing a NURBS surface</param>
         /// <returns>an object with the following properties: controlPoints, weights, knots, degree</returns>
-        public static NurbsSurface ExtrudedSurface(Vector axis, double length, NurbsCurve profile)
+        public static NurbsSurface ExtrudedSurface(Vector3 axis, double length, NurbsCurve profile)
         {
             throw new NotImplementedException();
         }
@@ -156,7 +156,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="height">height from base to top</param>
         /// <param name="radius">radius of the cylinder</param>
         /// <returns>an object with the following properties: controlPoints, weights, knotsU, knotsV, degreeU, degreeV</returns>
-        public static NurbsSurface CylindricalSurface(Vector axis, Vector xaxis, Point basePt, double height, double radius)
+        public static NurbsSurface CylindricalSurface(Vector3 axis, Vector3 xaxis, Vector3 basePt, double height, double radius)
         {
             throw new NotImplementedException();
         }
@@ -168,7 +168,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="axis"></param>
         /// <param name="theta"></param>
         /// <returns></returns>
-        public static NurbsSurface RevolvedSurface(NurbsCurve profile, Point center, Vector axis, double theta)
+        public static NurbsSurface RevolvedSurface(NurbsCurve profile, Vector3 center, Vector3 axis, double theta)
         {
             throw new NotImplementedException();
         }
@@ -181,7 +181,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="xaxis">vector perpendicular to axis of sphere, starting the rotation of the sphere</param>
         /// <param name="radius">radius of the sphere</param>
         /// <returns>an object with the following properties: controlPoints, weights, knotsU, knotsV, degreeU, degreeV</returns>
-        public static NurbsSurface SphericalSurface(Point center, Vector axis, Vector xaxis, double radius)
+        public static NurbsSurface SphericalSurface(Vector3 center, Vector3 axis, Vector3 xaxis, double radius)
         {
             throw new NotImplementedException();
         }
@@ -195,12 +195,12 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="height">height from base to tip</param>
         /// <param name="radius">radius at the base of the cone</param>
         /// <returns></returns>
-        public static NurbsSurface ConicalSurface(Vector axis, Vector xaxis, Point basePt, double height, double radius)
+        public static NurbsSurface ConicalSurface(Vector3 axis, Vector3 xaxis, Vector3 basePt, double height, double radius)
         {
             throw new NotImplementedException();
         }
 
-        public static NurbsCurve RationalInterpCurve(List<List<double>> points, int degree, bool homogeneousPoints = false, Point start_tangent = null, Point end_tangent = null)
+        public static NurbsCurve RationalInterpCurve(List<List<double>> points, int degree, bool homogeneousPoints = false, Vector3 start_tangent = null, Vector3 end_tangent = null)
         {
             throw new NotImplementedException();
         }

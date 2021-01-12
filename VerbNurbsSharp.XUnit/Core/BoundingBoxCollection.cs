@@ -10,34 +10,34 @@ namespace VerbNurbsSharpTest
 {
     public static class BoundingBoxCollection
     {
-        public static List<Point> BoundingBoxFrom5Points()
+        public static List<Vector3> BoundingBoxFrom5Points()
         {
-            Point pt1 = new Point() { 0d, 0d, 0d };
-            Point pt2 = new Point() { 10d, 0d, 0d };
-            Point pt3 = new Point() { 10d, 10d, 0d };
-            Point pt4 = new Point() { 5d, 5d, 0d };
-            return new List<Point>() { pt1, pt2, pt3, pt4 };
+            Vector3 pt1 = new Vector3() { 0d, 0d, 0d };
+            Vector3 pt2 = new Vector3() { 10d, 0d, 0d };
+            Vector3 pt3 = new Vector3() { 10d, 10d, 0d };
+            Vector3 pt4 = new Vector3() { 5d, 5d, 0d };
+            return new List<Vector3>() { pt1, pt2, pt3, pt4 };
         }
 
-        public static List<Point> NegativeBoundingBox()
+        public static List<Vector3> NegativeBoundingBox()
         {
-            Point pt1 = new Point() { -15d, -15d, 0d };
-            Point pt2 = new Point() { -5d, -5d, 0d };
-            return new List<Point>() { pt1, pt2};
+            Vector3 pt1 = new Vector3() { -15d, -15d, 0d };
+            Vector3 pt2 = new Vector3() { -5d, -5d, 0d };
+            return new List<Vector3>() { pt1, pt2};
         }
 
-        public static List<Point> NegativeMinValuePositiveMaxValue()
+        public static List<Vector3> NegativeMinValuePositiveMaxValue()
         {
-            Point pt1 = new Point() { -12d, -17d, 0d };
-            Point pt2 = new Point() { 10d, 13d, 0d };
-            return new List<Point>() { pt1, pt2 };
+            Vector3 pt1 = new Vector3() { -12d, -17d, 0d };
+            Vector3 pt2 = new Vector3() { 10d, 13d, 0d };
+            return new List<Vector3>() { pt1, pt2 };
         }
 
-        public static List<Point> BoundingBoxWithZValue()
+        public static List<Vector3> BoundingBoxWithZValue()
         {
-            Point pt1 = new Point() { -12d, -17d, -10d };
-            Point pt2 = new Point() { 10d, 13d, 5d };
-            return new List<Point>() { pt1, pt2 };
+            Vector3 pt1 = new Vector3() { -12d, -17d, -10d };
+            Vector3 pt2 = new Vector3() { 10d, 13d, 5d };
+            return new List<Vector3>() { pt1, pt2 };
         }
 
         public static IEnumerable<object[]> BoundingBoxCollections

@@ -25,7 +25,7 @@ namespace VerbNurbsSharp.Evaluation
 				return new NurbsCurve(curve);
 
 			int degree = curve.Degree;
-			List<Vector> controlPoints = curve.ControlPoints;
+			List<Vector3> controlPoints = curve.ControlPoints;
 			KnotArray knots = curve.Knots;
 
 			int n = controlPoints.Count - 1;
@@ -33,7 +33,7 @@ namespace VerbNurbsSharp.Evaluation
 			int r = knotsToInsert.Count - 1;
 			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
 			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
-			Vector[] controlPointsPost = new Vector[n+r+2];
+			Vector3[] controlPointsPost = new Vector3[n+r+2];
 			double[] knotsPost = new double[m+r+2];
 			//new control points
             for (int i = 0; i < a - degree + 1; i++)

@@ -59,7 +59,7 @@ namespace VerbNurbsSharp.Evaluation
         /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
         /// <returns> 1d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
-        public static List<Vector> Homogenize1d(List<Vector> controlPoints, List<double> weights = null)
+        public static List<Vector3> Homogenize1d(List<Vector3> controlPoints, List<double> weights = null)
         {
             var neWeights = weights;
             if (weights == null || weights.Count == 0)
@@ -77,11 +77,11 @@ namespace VerbNurbsSharp.Evaluation
 
             var rows = controlPoints.Count;
             var dim = controlPoints[0].Count;
-            var controlPtsHomogenized = new List<Vector>();
+            var controlPtsHomogenized = new List<Vector3>();
 
             for (int i = 0; i < rows; i++)
             {
-                var tempPt = new Vector();
+                var tempPt = new Vector3();
                 for (int j = 0; j < dim; j++)
                 {
                     tempPt.Add(controlPoints[i][j] * neWeights[i]);
@@ -98,7 +98,7 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>A set of numbers represented by an set pi with length (dim).</returns>
-        public static List<double> Weight1d(List<Vector> homogeneousPts)
+        public static List<double> Weight1d(List<Vector3> homogeneousPts)
         {
             if(homogeneousPts.Any(vec => vec.Count != homogeneousPts[0].Count))
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
@@ -109,11 +109,11 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="homogeneousPt">A point represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>A point represented by an array pi with length (dim).</returns>
-        public static Vector Dehomogenize(Vector homogeneousPt)
+        public static Vector3 Dehomogenize(Vector3 homogeneousPt)
         {
             var dim = homogeneousPt.Count;
             var weight = homogeneousPt[dim - 1];
-            var point = new Vector();
+            var point = new Vector3();
 
             for (int i = 0; i < dim-1; i++)
                 point.Add(homogeneousPt[i]/weight);
@@ -125,6 +125,6 @@ namespace VerbNurbsSharp.Evaluation
         /// </summary>
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
-        public static List<Vector> Dehomogenize1d(List<Vector> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
+        public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
     }
 }

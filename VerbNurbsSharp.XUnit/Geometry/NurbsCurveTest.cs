@@ -27,11 +27,11 @@ namespace VerbNurbsSharp.XUnit.Geometry
         public static NurbsCurve NurbsCurveExample()
         {
             int degree = 2;
-            List<Vector> pts = new List<Vector>()
+            List<Vector3> pts = new List<Vector3>()
             {
-                new Vector(){-10,15,5},
-                new Vector(){10,5,5},
-                new Vector(){20,0,0}
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
             };
             KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
 
@@ -41,11 +41,11 @@ namespace VerbNurbsSharp.XUnit.Geometry
         public static NurbsCurve NurbsCurveHomogenizedPtsExample()
         {
             int degree = 2;
-            List<Vector> pts = new List<Vector>()
+            List<Vector3> pts = new List<Vector3>()
             {
-                new Vector(){-10,15,5},
-                new Vector(){10,5,5},
-                new Vector(){20,0,0}
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
             };
             KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1 };
             var weights = new List<double>() { 0.5, 0.5, 0.5 };
@@ -57,11 +57,11 @@ namespace VerbNurbsSharp.XUnit.Geometry
         public void Get_A_NurbsCurve()
         {
             int degree = 2;
-            List<Vector> pts = new List<Vector>()
+            List<Vector3> pts = new List<Vector3>()
             {
-                new Vector(){-10,15,5},
-                new Vector(){10,5,5},
-                new Vector(){20,0,0}
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
             };
             KnotArray knots = new KnotArray() {1, 1, 1};
 
@@ -74,11 +74,11 @@ namespace VerbNurbsSharp.XUnit.Geometry
         public void Get_A_NurbsCurve_EvaluatedWithAListOfWeights()
         {
             int degree = 2;
-            List<Vector> pts = new List<Vector>()
+            List<Vector3> pts = new List<Vector3>()
             {
-                new Vector(){-10,15,5},
-                new Vector(){10,5,5},
-                new Vector(){20,0,0}
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
             };
             KnotArray knots = new KnotArray() { 1, 1, 1 };
             var weights = new List<double>() {0.5, 0.5, 0.5};
@@ -86,18 +86,18 @@ namespace VerbNurbsSharp.XUnit.Geometry
             var nurbsCurve = new NurbsCurve(degree, knots, pts, weights);
 
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector() {10, 0, 0, 0.5});
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
         }
 
         [Fact]
         public void Get_ACopied_NurbsCurve()
         {
             int degree = 2;
-            List<Vector> pts = new List<Vector>()
+            List<Vector3> pts = new List<Vector3>()
             {
-                new Vector(){-10,15,5},
-                new Vector(){10,5,5},
-                new Vector(){20,0,0}
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
             };
             KnotArray knots = new KnotArray() { 1, 1, 1, 1, 1, 1};
 
@@ -134,7 +134,7 @@ namespace VerbNurbsSharp.XUnit.Geometry
             var demoPts = Eval.Dehomogenize1d(transformedCurve.ControlPoints);
 
             var distanceBetweenPts =
-                Math.Round(Vector.Length(Constants.Subtraction(demoPts[0], curve.ControlPoints[0])
+                Math.Round(Vector3.Length(Constants.Subtraction(demoPts[0], curve.ControlPoints[0])
                     .ToVector()),6);
 
             distanceBetweenPts.Should().Be(22.383029);
@@ -144,21 +144,21 @@ namespace VerbNurbsSharp.XUnit.Geometry
         public void Split_ReturnTwoNurbsCurve()
         {
             //int degree = 2;
-            //List<Vector> pts = new List<Vector>()
+            //List<Vector3> pts = new List<Vector3>()
             //{
-            //    new Vector(){2.0,2.0,0.0},
-            //    new Vector(){10.0,12.0,5.0},
-            //    new Vector(){15.0,2.0,0.0}
+            //    new Vector3(){2.0,2.0,0.0},
+            //    new Vector3(){10.0,12.0,5.0},
+            //    new Vector3(){15.0,2.0,0.0}
             //};
             //KnotArray knots = new KnotArray() { 0, 0, 1, 1};
             //var weights = new List<double>() { 1, 1, 1 };
 
             var degree = 3;
             var knots = new KnotArray() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
-            var controlPts = new List<Vector>();
+            var controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - 3 - 2; i++)
             {
-                controlPts.Add(new Vector() { i, 0.0, 0.0 });
+                controlPts.Add(new Vector3() { i, 0.0, 0.0 });
             }
             var weights = Sets.RepeatData(1.0, controlPts.Count);
 
