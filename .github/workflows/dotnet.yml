@@ -33,3 +33,4 @@ jobs:
         # NuGet package id, used for version detection & defaults to project name
         PACKAGE_NAME: GeometrySharp
         # API key to authenticate with NuGet server
+        NUGET_KEY: NUGET_API_KEY
