@@ -46,6 +46,49 @@ namespace GeometrySharp.Core
 
             return true;
         }
+
+        /// <summary>
+        /// Find the span on the knot Array without supplying a number of control points.
+        /// </summary>
+        /// <param name="degree">Integer degree of function.</param>
+        /// <param name="u">Parameter.</param>
+        /// <param name="knots">Array of non decreasing knot values.</param>
+        /// <returns></returns>
+        public static int Span(int degree, double u, Knot knots) => Span(knots.Count - degree - 2, degree, u, knots);
+
+        /// <summary>
+        /// Find the span on the knot list of the given parameter,
+        /// (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition).
+        /// </summary>
+        /// <param name="numberOfControlPts">Number of control points - 1.</param>
+        /// <param name="degree">Integer degree of function.</param>
+        /// <param name="parameter">Parameter.</param>
+        /// <param name="knots">Array of non decreasing knot values.</param>
+        /// <returns>The index of the knot span.</returns>
+        public static int Span(int numberOfControlPts, int degree, double parameter, Knot knots)
+        {
+            // special case if parameter == knots[numberOfControlPts+1]
+            if (parameter > knots[numberOfControlPts + 1] - Math.EPSILON) return numberOfControlPts;
+
+            if (parameter < knots[degree] + Math.EPSILON) return degree;
+
+            var low = degree;
+            var high = numberOfControlPts + 1;
+            int mid = (int)System.Math.Floor((double)(low + high) / 2);
+
+            while (parameter < knots[mid] || parameter >= knots[mid + 1])
+            {
+                if (parameter < knots[mid])
+                    high = mid;
+                else
+                    low = mid;
+
+                mid = (int)System.Math.Floor((double)(low + high) / 2);
+            }
+
+            return mid;
+        }
+
         /// <summary>
         /// Normalizes the input knot vector to [0, 1] domain.
         /// Overwrite the knots.

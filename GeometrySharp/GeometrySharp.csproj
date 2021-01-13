@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <PackageId>VerbNurbsSharp</PackageId>
+    <PackageId>GeometrySharp</PackageId>
     <Authors>Cesare Caoduro</Authors>
-    <Company>AECOM</Company>
+    <Company></Company>
     <Product />
-    <RepositoryUrl>https://github.com/cesarecaoduro/VerbNurbsSharp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/cesarecaoduro/GeometrySharp</RepositoryUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyName>GeometrySharp</AssemblyName>
     <RootNamespace>GeometrySharp</RootNamespace>

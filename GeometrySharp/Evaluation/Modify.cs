@@ -29,8 +29,8 @@ namespace GeometrySharp.Evaluation
 			int n = controlPoints.Count - 1;
 			int m = n + degree + 1;
 			int r = knotsToInsert.Count - 1;
-			int a = Eval.KnotSpan(degree, knotsToInsert[0], knots);
-			int b = Eval.KnotSpan(degree, knotsToInsert[r], knots);
+			int a = Knot.Span(degree, knotsToInsert[0], knots);
+			int b = Knot.Span(degree, knotsToInsert[r], knots);
 			Vector3[] controlPointsPost = new Vector3[n+r+2];
 			double[] knotsPost = new double[m+r+2];
 			//new control points
@@ -161,16 +161,16 @@ namespace GeometrySharp.Evaluation
         public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
         {
             var pts = curve.ControlPoints;
-			var weights = Eval.Weight1d(curve.ControlPoints);
+			var weights = LinearAlgebra.Weight1d(curve.ControlPoints);
 
             if (!curve.AreControlPointsHomogenized())
             {
-                pts = Eval.Homogenize1d(curve.ControlPoints);
+                pts = LinearAlgebra.Homogenize1d(curve.ControlPoints);
                 weights = Sets.RepeatData(1.0, curve.ControlPoints.Count);
             }
 
             var controlPtsTransformed = pts.Select(pt => Matrix.Dot(mat, pt).Take(pt.Count - 1).ToVector()).ToList();
-            var homogenizePts = Eval.Homogenize1d(controlPtsTransformed, weights);
+            var homogenizePts = LinearAlgebra.Homogenize1d(controlPtsTransformed, weights);
             return new NurbsCurve(curve.Degree, curve.Knots, homogenizePts);
         }
 

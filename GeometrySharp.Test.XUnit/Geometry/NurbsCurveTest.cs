@@ -132,7 +132,7 @@ namespace GeometrySharp.XUnit.Geometry
             var matrix = MatrixTest.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
-            var demoPts = Eval.Dehomogenize1d(transformedCurve.ControlPoints);
+            var demoPts = LinearAlgebra.Dehomogenize1d(transformedCurve.ControlPoints);
 
             var distanceBetweenPts =
                 Math.Round((demoPts[0] - curve.ControlPoints[0]).Length(), 6);
