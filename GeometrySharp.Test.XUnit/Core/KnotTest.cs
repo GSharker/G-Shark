@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 namespace GeometrySharp.XUnit.Core
 {
     [Trait("Category", "Knot")]
-    public class KnotArrayTest
+    public class KnotTest
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public KnotArrayTest(ITestOutputHelper testOutput)
+        public KnotTest(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -71,6 +71,25 @@ namespace GeometrySharp.XUnit.Core
             knots.Normalize();
 
             knots.Should().BeEquivalentTo(knotsExpected);
+        }
+
+        [Theory]
+        [InlineData(4, 2.5)]
+        [InlineData(3, 1)]
+        [InlineData(3, 1.5)]
+        [InlineData(7, 4.9)]
+        [InlineData(7, 10)]
+        [InlineData(7, 5)]
+        [InlineData(2, 0)]
+        [InlineData(2, -1)]
+        public void KnotSpanGivenParameter(int expectedValue, double parameter)
+        {
+            var knotVector = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var degree = 2;
+
+            var result = Knot.Span(knotVector.Count - degree - 2, 2, parameter, knotVector);
+
+            result.Should().Be(expectedValue);
         }
     }
 }

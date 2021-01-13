@@ -28,7 +28,7 @@ namespace GeometrySharp.Evaluation
 
 			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
-		 	int s = Eval.KnotSpan(degree, u, knots);
+		 	int s = Knot.Span(degree, u, knots);
 
 			var knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
             var knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();

@@ -18,7 +18,7 @@ namespace GeometrySharp.Geometry
         public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double> weights = null)
         {
             Degree = degree;
-            ControlPoints = weights == null ? controlPoints : Eval.Homogenize1d(controlPoints, weights); 
+            ControlPoints = weights == null ? controlPoints : LinearAlgebra.Homogenize1d(controlPoints, weights); 
             Knots = knots;
         }
         /// <summary>
