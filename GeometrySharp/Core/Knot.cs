@@ -68,13 +68,13 @@ namespace GeometrySharp.Core
         public static int Span(int numberOfControlPts, int degree, double parameter, Knot knots)
         {
             // special case if parameter == knots[numberOfControlPts+1]
-            if (parameter > knots[numberOfControlPts + 1] - Math.EPSILON) return numberOfControlPts;
+            if (parameter > knots[numberOfControlPts + 1] - GeoSharpMath.EPSILON) return numberOfControlPts;
 
-            if (parameter < knots[degree] + Math.EPSILON) return degree;
+            if (parameter < knots[degree] + GeoSharpMath.EPSILON) return degree;
 
             var low = degree;
             var high = numberOfControlPts + 1;
-            int mid = (int)System.Math.Floor((double)(low + high) / 2);
+            int mid = (int) Math.Floor((double)(low + high) / 2);
 
             while (parameter < knots[mid] || parameter >= knots[mid + 1])
             {
@@ -83,7 +83,7 @@ namespace GeometrySharp.Core
                 else
                     low = mid;
 
-                mid = (int)System.Math.Floor((double)(low + high) / 2);
+                mid = (int) Math.Floor((double)(low + high) / 2);
             }
 
             return mid;
