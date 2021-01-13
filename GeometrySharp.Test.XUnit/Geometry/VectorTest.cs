@@ -41,7 +41,7 @@ namespace GeometrySharp.XUnit.Geometry
             };
 
         [Fact]
-        public void Return_TheRadianAngle_BetweenTwoVectors()
+        public void It_Returns_The_Radian_Angle_Between_Two_Vectors()
         {
             Vector3 v1 = new Vector3(){20d,0d,0d};
             Vector3 v2 = new Vector3(){-10d,15d,0d};
@@ -52,7 +52,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Return_AReversedVector()
+        public void It_Returns_A_Reversed_Vector()
         {
             Vector3 v1 = new Vector3() { 20d, 0d, 0d };
             Vector3 vectorExpected = new Vector3() { -20d, 0d, 0d };
@@ -64,13 +64,13 @@ namespace GeometrySharp.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(ValidateVectors))]
-        public void CheckingIfVectors_AreValidOrNot(Vector3 v, bool expected)
+        public void It_Checks_If_Vectors_Are_Valid_Or_Not(Vector3 v, bool expected)
         {
             v.IsValid().Should().Be(expected);
         }
 
         [Fact]
-        public void Return_TheCrossProduct_BetweenTwoVectors()
+        public void It_Returns_The_Cross_Product_Between_Two_Vectors()
         {
             Vector3 v1 = new Vector3() { -10d, 5d, 10d };
             Vector3 v2 = new Vector3() { 10d, 15d, 5d };
@@ -82,7 +82,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Return_TheDotProduct_BetweenTwoVectors()
+        public void It_Returns_The_Dot_Product_Between_Two_Vectors()
         {
             Vector3 v1 = new Vector3() { -10d, 5d, 10d };
             Vector3 v2 = new Vector3() { 10d, 15d, 5d };
@@ -93,37 +93,37 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Return_TheSquaredLengthOfAVector()
+        public void It_Returns_The_Squared_Length_Of_A_Vector()
         {
             Vector3 v1 = new Vector3() { 10d, 15d, 5d };
 
-            double squaredLength = Vector3.SquaredLength(v1);
+            double squaredLength = v1.SquaredLength();
 
             squaredLength.Should().Be(350);
         }
 
         [Theory]
         [MemberData(nameof(VectorLengths))]
-        public void Return_TheLengthOfAVector(Vector3 v, double expectedLength)
+        public void It_Returns_The_Length_Of_A_Vector(Vector3 v, double expectedLength)
         {
-            double length = Vector3.Length(v);
+            double length = v.Length();
 
             length.Should().Be(expectedLength);
         }
 
         [Fact]
-        public void Return_Normalized_Vector()
+        public void It_Returns_Normalized_Vector()
         {
             Vector3 v1 = new Vector3() { -18d, -21d, -17d };
             Vector3 normalizedExpected = new Vector3() { -0.5544369932703277, -0.6468431588153823, -0.5236349380886428 };
 
-            Vector3 normalizedVector = Vector3.Normalized(v1);
+            Vector3 normalizedVector = v1.Normalized();
 
             normalizedVector.Should().Equal(normalizedExpected);
         }
 
         [Fact]
-        public void Return_AZero1dVector()
+        public void It_Returns_A_Zero1d_Vector()
         {
             Vector3 vec1D = Vector3.Zero1d(4);
 
@@ -132,7 +132,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Return_AZero2dVector()
+        public void It_Returns_A_Zero2d_Vector()
         {
             var vec2D = Vector3.Zero2d(3,3);
 
@@ -142,7 +142,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Return_AZero3dVector()
+        public void It_Returns_A_Zero3d_Vector()
         {
             var vec3D = Vector3.Zero3d(3, 3, 4);
 
@@ -153,7 +153,7 @@ namespace GeometrySharp.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(AmplifiedVectors))]
-        public void Return_VectorAmplified_LongADirection(Vector3 expected, double amplitude)
+        public void It_Returns_An_Amplified_Vector_Long_A_Direction(Vector3 expected, double amplitude)
         {
             var pt = new Vector3(){ -10, 5, 10 };
             var dir = new Vector3(){ 20,10,-5};
@@ -164,7 +164,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Vector_Addiction()
+        public void It_Returns_The_Addiction_Between_Two_Vectors()
         {
             var vec1 = new Vector3(){ 20, 0, 0 };
             var vec2 = new Vector3(){ -10, 15, 5 };
@@ -174,7 +174,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Vector_Subtraction()
+        public void It_Returns_The_Subtraction_Between_Two_Vectors()
         {
             var vec1 = new Vector3() { 20, 0, 0 };
             var vec2 = new Vector3() { -10, 15, 5 };
@@ -184,7 +184,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Vector_Multiplication()
+        public void It_Returns_The_Multiplication_Between_Two_Vectors()
         {
             var vec = new Vector3() { -10, 15, 5 };
             var expectedVec = new Vector3() { -70, 105, 35 };
@@ -193,7 +193,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Vector_Division()
+        public void It_Returns_The_Division_Between_Two_Vectors()
         {
             var vec = new Vector3() { -10, 15, 5 };
             var expectedVec = new Vector3() { -1.428571, 2.142857, 0.714286 };
@@ -204,7 +204,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void ReturnTrue_If_VectorsAreEqual()
+        public void It_Returns_True_If_Vectors_Are_Equal()
         {
             var vec1 = new Vector3() { -10, 15, 5 };
             var vec2 = new Vector3() { -10, 15, 5 };
@@ -213,7 +213,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void DistanceTo_ThrowsAnException_IfTheTwoVector_HaveDifferentLength()
+        public void DistanceTo_Throws_An_Exception_If_The_Two_Vector_Have_Different_Length()
         {
             var vec1 = new Vector3() { -10, 15, 5 };
             var vec2 = new Vector3() { 10, 15 };
@@ -224,7 +224,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void DistanceTo_FromTwoVectors()
+        public void It_Returns_The_DistanceTo_TwoVectors()
         {
             var vec1 = new Vector3() { -20, 15, 5 };
             var vec2 = new Vector3() { 10, 0, 15 };
@@ -232,6 +232,65 @@ namespace GeometrySharp.XUnit.Geometry
             var distance = vec1.DistanceTo(vec2);
 
             distance.Should().Be(35);
+        }
+
+        [Fact]
+        public void It_Returns_The_Distance_Between_A_Point_And_A_Ray()
+        {
+            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 10, 20, 0 };
+            double distanceExpected = 2.7735009811261464;
+
+            double distance = pt.DistanceTo(ray);
+
+            _testOutput.WriteLine(distance.ToString());
+            distance.Should().Be(distanceExpected);
+        }
+
+        [Fact]
+        public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
+        {
+            var line = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 10, 20, 0 };
+            double distanceExpected = 2.7735009811261464;
+
+            double distance = pt.DistanceTo(line);
+
+            _testOutput.WriteLine(distance.ToString());
+            distance.Should().Be(distanceExpected);
+        }
+
+        [Fact]
+        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Ray()
+        {
+            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 10, 20, 0 };
+            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
+
+            Vector3 closestPt = pt.ClosestPointOn(ray);
+
+            closestPt.Should().BeEquivalentTo(expectedPt);
+        }
+
+        [Fact]
+        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Line()
+        {
+            Line ray = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 10, 20, 0 };
+            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
+
+            Vector3 closestPt = pt.ClosestPointOn(ray);
+
+            closestPt.Should().BeEquivalentTo(expectedPt);
+        }
+
+        [Fact]
+        public void It_Checks_If_A_Point_Lies_On_A_Plane()
+        {
+            Plane plane = new Plane(new Vector3() { 30, 45, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 26.565905, 47.289396, 0.0 };
+
+            pt.IsPointOnPlane(plane, 0.001).Should().BeTrue();
         }
     }
 }

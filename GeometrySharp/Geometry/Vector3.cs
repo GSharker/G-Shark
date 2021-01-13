@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
-using Math = GeometrySharp.Core.Math;
 
 namespace GeometrySharp.Geometry
 {
@@ -22,10 +21,12 @@ namespace GeometrySharp.Geometry
         {
             this.AddRange(values);
         }
+
         /// <summary>
-        /// Gets the value of a point at location Math.UNSETVALUE,Math.UNSETVALUE,Math.UNSETVALUE.
+        /// Gets the value of a point at location GeoSharpMath.UNSETVALUE,GeoSharpMath.UNSETVALUE,GeoSharpMath.UNSETVALUE.
         /// </summary>
-        public static Vector3 Unset => new Vector3(){ Math.UNSETVALUE, Math.UNSETVALUE, Math.UNSETVALUE };
+        public static Vector3 Unset => new Vector3(){ GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE };
+
         /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
@@ -34,8 +35,9 @@ namespace GeometrySharp.Geometry
         /// <returns>The angle in radians</returns>
         public static double AngleBetween(Vector3 a, Vector3 b)
         {
-            return System.Math.Acos(Dot(a, b) / (Length(a) * Length(b)));
+            return Math.Acos(Dot(a, b) / (a.Length() * b.Length()));
         }
+
         /// <summary>
         /// Reverses this vector in place (reverses the direction).
         /// </summary>
@@ -49,16 +51,15 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="a">The vector to be valued.</param>
         /// <returns>True if the vector is valid.</returns>
-        public bool IsValid() => this.Any(Math.IsValidDouble);
+        public bool IsValid() => this.Any(GeoSharpMath.IsValidDouble);
 
         /// <summary>
         /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
         /// </summary>
         /// <param name="a">The vector to check.</param>
         /// <returns>True if all the component are less than Epsilon.</returns>
-        public bool IsZero() => this.All(value => System.Math.Abs(value) < Math.EPSILON);
+        public bool IsZero() => this.All(value => Math.Abs(value) < GeoSharpMath.EPSILON);
 
-        // ToDo probably this method should be in another class.
         /// <summary>
         /// Gets the vector amplified by a scalar value along a direction.
         /// </summary>
@@ -68,7 +69,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The vector amplified.</returns>
         public static Vector3 OnRay(Vector3 origin, Vector3 dir, double amplitude)
         {
-            var vectorAmplified = Vector3.Normalized(dir) * amplitude;
+            var vectorAmplified = dir.Normalized() * amplitude;
             return origin + vectorAmplified;
         }
 
@@ -77,29 +78,32 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="a">The vector has to be normalized.</param>
         /// <returns>The vector normalized.</returns>
-        public static Vector3 Normalized(Vector3 v)
+        public Vector3 Normalized()
         {
-            return v / Length(v);
+            return this / this.Length();
         }
+
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
         /// </summary>
         /// <param name="a">The vector.</param>
         /// <returns>The magnitude of the vector.</returns>
-        public static double Length(Vector3 a)
+        public double Length()
         {
-            if (!a.IsValid() || a.IsZero()) return 0.0;
-            return System.Math.Sqrt(SquaredLength(a));
+            if (!this.IsValid() || this.IsZero()) return 0.0;
+            return Math.Sqrt(this.SquaredLength());
         }
+
         /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
         /// <param name="a">The vector.</param>
         /// <returns>The sum of each value squared.</returns>
-        public static double SquaredLength(Vector3 a)
+        public double SquaredLength()
         {
-            return a.Aggregate(0.0, (x, a) => a * a + x);
+            return this.Aggregate(0.0, (x, a) => a * a + x);
         }
+
         /// <summary>
         /// Cross product.
         /// </summary>
@@ -112,6 +116,7 @@ namespace GeometrySharp.Geometry
                 u[2] * v[0] - u[0] * v[2],
                 u[0] * v[1] - u[1] * v[0]
             };
+
         /// <summary>
         /// Compute the dot product between two vectors.
         /// </summary>
@@ -125,6 +130,7 @@ namespace GeometrySharp.Geometry
                 sum += a[i] * b[i];
             return sum;
         }
+
         /// <summary>
         /// Create a list of zero values.
         /// </summary>
@@ -137,6 +143,7 @@ namespace GeometrySharp.Geometry
                 v.Add(0.0);
             return v;
         }
+
         /// <summary>
         /// Create a 2 dimensional list of zero values.
         /// </summary>
@@ -150,6 +157,7 @@ namespace GeometrySharp.Geometry
                 lv.Add(Zero1d(cols));
             return lv;
         }
+
         /// <summary>
         /// Create a 3 dimensional list of zero values.
         /// </summary>
@@ -164,6 +172,7 @@ namespace GeometrySharp.Geometry
                 llv.Add(Zero2d(cols, depth));
             return llv;
         }
+
         /// <summary>
         /// The distance from this point to b.
         /// </summary>
@@ -172,49 +181,107 @@ namespace GeometrySharp.Geometry
         public double DistanceTo(Vector3 v)
         {
             if (this.Count != v.Count) throw new Exception("The two list doesn't match in length.");
-            return System.Math.Sqrt(this.Select((val, i) => System.Math.Pow(val - v[i], 2)).Sum());
-            //return Math.Sqrt(a.Zip(b, (first, second) => Math.Pow(first - second, 2)).Sum());
+            return Math.Sqrt(this.Select((val, i) => Math.Pow(val - v[i], 2)).Sum());
         }
+
+        /// <summary>
+        /// Get the distance of a point to a ray.
+        /// </summary>
+        /// <param name="pt">The point to project.</param>
+        /// <param name="ray">The ray from which to calculate the distance.</param>
+        /// <returns>The distance.</returns>
+        public double DistanceTo(Ray ray)
+        {
+            Vector3 projectedPt = this.ClosestPointOn(ray);
+            Vector3 ptToProjectedPt = projectedPt - this;
+            return ptToProjectedPt.Length();
+        }
+
+        /// <summary>
+        /// Get the distance of a point to a line.
+        /// </summary>
+        /// <param name="pt">The point to project.</param>
+        /// <param name="line">The line from which to calculate the distance.</param>
+        /// <returns>The distance.</returns>
+        public double DistanceTo(Line line)
+        {
+            var ray = new Ray(line.Start, line.Direction);
+            return DistanceTo(ray);
+        }
+
+        /// <summary>
+        /// Get the closest point on a ray from a point.
+        /// </summary>
+        /// <param name="pt">The point.</param>
+        /// <param name="ray">The ray on which to find the point.</param>
+        /// <returns>Get the closest point on a ray from a point.</returns>
+        public Vector3 ClosestPointOn(Ray ray)
+        {
+            Vector3 rayDirNormalized = ray.Direction.Normalized();
+            Vector3 rayOriginToPt = this - ray.Origin;
+            double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
+            Vector3 projectedPt = ray.Origin + (rayDirNormalized * dotResult);
+            return projectedPt;
+        }
+
+        /// <summary>
+        /// Get the closest point on the line from this point.
+        /// </summary>
+        /// <param name="line">The line on which to find the closest point.</param>
+        /// <returns>The closest point on the line from this point.</returns>
+        public Vector3 ClosestPointOn(Line line)
+        {
+            var dir = line.Direction;
+            var v = this - line.Start;
+            var d = Vector3.Dot(v, dir);
+            d = Math.Min(line.Length, d);
+            d = Math.Max(d, 0);
+            return line.Start + dir * d;
+        }
+
+        /// <summary>
+        /// Determinate if the provided point lies on the plane.
+        /// </summary>
+        /// <param name="pt">The point to check if it lies on the plane.</param>
+        /// <param name="plane">The plane on which to find if the point lies on.</param>
+        /// <returns>Whether the point is on the plane.</returns>
+        public bool IsPointOnPlane(Plane plane, double tol)
+        {
+            return Math.Abs(Vector3.Dot(this - plane.Origin, plane.Normal)) < tol;
+        }
+
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         /// <param name="v">The vector to multiply.</param>
         /// <param name="a">The scalar value to multiply.</param>
         /// <returns>A vector whose magnitude is multiplied by a.</returns>
-        public static Vector3 operator *(Vector3 v, double a)
-        {
-            return v.Select(val => val * a).ToVector();
-        }
+        public static Vector3 operator *(Vector3 v, double a) => v.Select(val => val * a).ToVector();
+
         /// <summary>
         /// Divide a vector by a scalar.
         /// </summary>
         /// <param name="a">The scalar divisor.</param>
         /// <param name="v">The vector to divide.</param>
         /// <returns>A vector whose magnitude is multiplied by a.</returns>
-        public static Vector3 operator /(Vector3 v, double a)
-        {
-            return v.Select(val => val / a).ToVector();
-        }
+        public static Vector3 operator /(Vector3 v, double a) => v.Select(val => val / a).ToVector();
+
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>A vector which is the difference between a and b.</returns>
-        public static Vector3 operator -(Vector3 a, Vector3 b)
-        {
-            return a.Select((val, i) => val - b[i]).ToVector();
-        }
+        public static Vector3 operator -(Vector3 a, Vector3 b) => a.Select((val, i) => val - b[i]).ToVector();
+
         /// <summary>
         /// Add two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>A vector which is the sum of a and b.</returns>
-        public static Vector3 operator +(Vector3 a, Vector3 b)
-        {
-            return a.Select((val, i) => val + b[i]).ToVector();
-        }
+        public static Vector3 operator +(Vector3 a, Vector3 b) => a.Select((val, i) => val + b[i]).ToVector();
+
         /// <summary>
         /// Determine whether this vector's components are equal to those of v, within tolerance.
         /// </summary>
@@ -222,16 +289,17 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise false.</returns>
         public bool IsAlmostEqualTo(Vector3 v)
         {
-            return this.Select((val, i) => System.Math.Round(val - v[i]))
-                .All(val => val < Math.EPSILON);
+            return this.Select((val, i) => Math.Round(val - v[i]))
+                .All(val => val < GeoSharpMath.EPSILON);
         }
+
         /// <summary>
         /// Constructs the string representation of the vector.
         /// </summary>
         /// <returns>The vector in string format</returns>
         public override string ToString()
         {
-            return $"{System.Math.Round(this[0],6)},{System.Math.Round(this[1], 6)},{System.Math.Round(this[2], 6)}";
+            return $"{Math.Round(this[0],6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
 
 

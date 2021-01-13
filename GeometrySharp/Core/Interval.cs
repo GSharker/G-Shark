@@ -23,7 +23,7 @@ namespace GeometrySharp.Core
 
         public double ParameterAt(double normalizedParameter)
         {
-            return !Math.IsValidDouble(normalizedParameter)
+            return !GeoSharpMath.IsValidDouble(normalizedParameter)
                 ? -1.23432101234321E+308
                 : (1.0 - normalizedParameter) * this.Min + normalizedParameter * this.Max;
         }

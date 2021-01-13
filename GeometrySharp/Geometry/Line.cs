@@ -8,19 +8,16 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Line : Serializable<Line>
     {
-        public Vector3 Start { get; set; }
-        public Vector3 End { get; set; }
-
         /// <summary>
-        /// Main constructor
+        /// Default constructor.
         /// </summary>
         public Line() { }
 
         /// <summary>
-        /// Line by start point and  end point
+        /// Line by start point and end point.
         /// </summary>
-        /// <param name="start">Start Vector3</param>
-        /// <param name="end">End Vector3</param>
+        /// <param name="start">Start point.</param>
+        /// <param name="end">End point.</param>
         public Line(Vector3 start, Vector3 end)
         {
             this.Start = start;
@@ -28,10 +25,24 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Start point of the line.
+        /// </summary>
+        public Vector3 Start { get; set; }
+
+        /// <summary>
+        /// End point of the line.
+        /// </summary>
+        public Vector3 End { get; set; }
+
+        /// <summary>
         /// Length of the line.
         /// </summary>
-        /// <returns></returns>
         public double Length => this.Start.DistanceTo(this.End);
+
+        /// <summary>
+        /// Direction of the line.
+        /// </summary>
+        public Vector3 Direction => (this.End - this.Start).Normalized();
 
         public override Line FromJson(string s)
         {

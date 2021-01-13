@@ -6,9 +6,9 @@ using GeometrySharp.Geometry;
 namespace GeometrySharp.Core
 {
     /// <summary>
-    /// `Math` contains a collection of default constants used throughout the library
+    /// `GeoSharpMath` contains a collection of default constants used throughout the library
     /// </summary>
-    public class Math
+    public class GeoSharpMath
     {
         /// <summary>
         /// The current version of GeometryLib
@@ -33,7 +33,7 @@ namespace GeometrySharp.Core
         /// <returns>Get the radians value.</returns>
         public static double ToRadians(double degrees)
         {
-            return degrees * (System.Math.PI / 180.0);
+            return degrees * (Math.PI / 180.0);
         }
         /// <summary>
         /// Convert radians to degrees.
@@ -42,7 +42,7 @@ namespace GeometrySharp.Core
         /// <returns>Get the degree value.</returns>
         public static double ToDegrees(double radians)
         {
-            return radians * (180.0 / System.Math.PI);
+            return radians * (180.0 / Math.PI);
         }
         /// <summary>
         /// Check if it is a value double.
