@@ -135,7 +135,7 @@ namespace GeometrySharp.XUnit.Geometry
             var demoPts = Eval.Dehomogenize1d(transformedCurve.ControlPoints);
 
             var distanceBetweenPts =
-                Math.Round(Vector3.Length(demoPts[0] - curve.ControlPoints[0]),6);
+                Math.Round((demoPts[0] - curve.ControlPoints[0]).Length(), 6);
 
             distanceBetweenPts.Should().Be(22.383029);
         }

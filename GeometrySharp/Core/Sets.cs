@@ -50,7 +50,7 @@ namespace GeometrySharp.Core
         /// <returns>A list of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(System.Math.Abs(domain.Min - domain.Max) <= Math.EPSILON) return new List<double>(){ domain.Min };
+            if(Math.Abs(domain.Min - domain.Max) <= GeoSharpMath.EPSILON) return new List<double>(){ domain.Min };
             var linearSpace = new List<double>();
 
             if (step <= 1)

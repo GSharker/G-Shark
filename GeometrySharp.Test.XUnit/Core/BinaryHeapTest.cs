@@ -10,6 +10,7 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.XUnit.Core
 {
+    [Trait("Category", "BinaryHeap")]
     public class BinaryHeapTest
     {
         private readonly ITestOutputHelper _testOutput;
@@ -19,7 +20,6 @@ namespace GeometrySharp.XUnit.Core
             _testOutput = testOutput;
         }
 
-        [Trait("Category", "BinaryHeap")]
         [Fact]
         public void Binary_Heap_Pop()
         {

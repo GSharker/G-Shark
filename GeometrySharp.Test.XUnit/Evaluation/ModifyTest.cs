@@ -81,9 +81,9 @@ namespace GeometrySharp.XUnit.Evaluation
             var p0 = verb.eval.Eval.curvePoint( crv, 2.5);
 		    var p1 = verb.eval.Eval.curvePoint( after, 2.5);
 
-		    p0[0].should.be.approximately(p1[0], verb.core.Math.TOLERANCE);
-		    p0[1].should.be.approximately(p1[1], verb.core.Math.TOLERANCE);
-		    p0[2].should.be.approximately(p1[2], verb.core.Math.TOLERANCE);
+		    p0[0].should.be.approximately(p1[0], verb.core.GeoSharpMath.TOLERANCE);
+		    p0[1].should.be.approximately(p1[1], verb.core.GeoSharpMath.TOLERANCE);
+		    p0[2].should.be.approximately(p1[2], verb.core.GeoSharpMath.TOLERANCE);
             */
         }
     }

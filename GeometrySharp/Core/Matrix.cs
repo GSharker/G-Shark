@@ -265,12 +265,12 @@ namespace GeometrySharp.Core
 //            {
 //                var Pk = k;
 //                var Ak = a[k];
-//                var max = Math.Abs(Ak[k]);
+//                var max = GeoSharpMath.Abs(Ak[k]);
 
 //                var j = k + 1;
 //                while (j < n)
 //                {
-//                    var absAjk = Math.Abs(a[j][k]);
+//                    var absAjk = GeoSharpMath.Abs(a[j][k]);
 //                    if (max < absAjk)
 //                    {
 //                        max = absAjk;

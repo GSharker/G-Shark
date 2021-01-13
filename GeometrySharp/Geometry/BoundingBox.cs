@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
-using Math = GeometrySharp.Core.Math;
 
 namespace GeometrySharp.Geometry
 {
@@ -118,7 +117,7 @@ namespace GeometrySharp.Geometry
         public double GetAxisLength(int i)
         {
             if (i < 0 || i > this._dim - 1) return 0.0;
-            return System.Math.Abs(this.Min[i] - this.Max[i]);
+            return Math.Abs(this.Min[i] - this.Max[i]);
         }
         /// <summary>
         /// Get longest axis of bounding box.
@@ -163,14 +162,14 @@ namespace GeometrySharp.Geometry
         public static bool AreOverlapping(BoundingBox bBox1, BoundingBox bBox2, double tol)
         {
             if (!bBox1.IsValid || !bBox2.IsValid) return false;
-            tol = tol < -0.5 ? Math.TOLERANCE : tol;
+            tol = tol < -0.5 ? GeoSharpMath.TOLERANCE : tol;
             int count = 0; 
             for (int i = 0; i < bBox1._dim; i++)
             {
-                double x1 = System.Math.Min(bBox1.Min[i], bBox1.Max[i]) - tol;
-                double x2 = System.Math.Max(bBox1.Min[i], bBox1.Max[i]) + tol;
-                double y1 = System.Math.Min(bBox2.Min[i], bBox2.Max[i]) - tol;
-                double y2 = System.Math.Max(bBox2.Min[i], bBox2.Max[i]) + tol;
+                double x1 = Math.Min(bBox1.Min[i], bBox1.Max[i]) - tol;
+                double x2 = Math.Max(bBox1.Min[i], bBox1.Max[i]) + tol;
+                double y1 = Math.Min(bBox2.Min[i], bBox2.Max[i]) - tol;
+                double y2 = Math.Max(bBox2.Min[i], bBox2.Max[i]) + tol;
 
                 if ((x1 >= y1 && x1 <= y2) || (x2 >= y1 && x2 <= y2) || (y1 >= x1 && y1 <= x2) ||
                     (y2 >= x1 && y2 <= x2) == true)

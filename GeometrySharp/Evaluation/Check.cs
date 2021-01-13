@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Geometry;
-using Math = GeometrySharp.Core.Math;
 
 namespace GeometrySharp.Evaluation
 {
@@ -24,10 +23,10 @@ namespace GeometrySharp.Evaluation
             if (vector.Count < (degree + 1)*2) return false;
             var rep = vector.First();
             for (int i = 0; i <= degree + 1; i++)
-                if (System.Math.Abs(vector[i] - rep) > Math.EPSILON) return false;
+                if (System.Math.Abs(vector[i] - rep) > GeoSharpMath.EPSILON) return false;
             rep = vector.Last();
             for (int i = vector.Count - degree - 1; i < vector.Count; i++)
-                if (System.Math.Abs(vector[i] - rep) > Math.EPSILON) return false;
+                if (System.Math.Abs(vector[i] - rep) > GeoSharpMath.EPSILON) return false;
             return IsNonDecreasing(vector);
         }
 
@@ -42,7 +41,7 @@ namespace GeometrySharp.Evaluation
             var rep = vector.First();
             for (int i = 0; i < vector.Count; i++)
             {
-                if (vector[i] < rep - Math.EPSILON) return false;
+                if (vector[i] < rep - GeoSharpMath.EPSILON) return false;
                 rep = vector[i];
             }
             return true;

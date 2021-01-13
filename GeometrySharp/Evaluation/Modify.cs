@@ -4,7 +4,6 @@ using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
-using Math = GeometrySharp.Core.Math;
 
 namespace GeometrySharp.Evaluation
 {
@@ -67,7 +66,7 @@ namespace GeometrySharp.Evaluation
                     int ind = k - degree + l;
                     double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-                    if (System.Math.Abs(alfa) < Math.EPSILON)
+                    if (System.Math.Abs(alfa) < GeoSharpMath.EPSILON)
                         controlPointsPost[ind - 1] = controlPointsPost[ind];
                     else
                     {

@@ -7,11 +7,10 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
-using Math = GeometrySharp.Core.Math;
 
 namespace GeometrySharp.XUnit.Core
 {
-    [Trait("Category", "Math")]
+    [Trait("Category", "GeoSharpMath")]
     public class MathTest
     {
         private readonly ITestOutputHelper _testOutput;
@@ -28,7 +27,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(180, 3.141593)]
         public void GetRadiansFromDegree(double degree, double radiansExpected)
         {
-            System.Math.Round(Math.ToRadians(degree), 6).Should().Be(radiansExpected);
+            Math.Round(GeoSharpMath.ToRadians(degree), 6).Should().Be(radiansExpected);
         }
 
         [Theory]
@@ -38,7 +37,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(3.141592, 180)]
         public void GetDegreeFromRadians(double radians, double degreeExpected)
         {
-            System.Math.Round(Math.ToDegrees(radians), 0).Should().Be(degreeExpected);
+            Math.Round(GeoSharpMath.ToDegrees(radians), 0).Should().Be(degreeExpected);
         }
 
         [Theory]
@@ -51,7 +50,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(0.0, true)]
         public void CheckIfADoubleIsValid(double val, bool expectedResult)
         {
-            Math.IsValidDouble(val).Should().Be(expectedResult);
+            GeoSharpMath.IsValidDouble(val).Should().Be(expectedResult);
         }
     }
 }
