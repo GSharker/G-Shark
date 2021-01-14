@@ -17,7 +17,6 @@ namespace GeometrySharp.XUnit.Evaluation
         public EvalTest(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-        } 
-
+        }
     }
 }

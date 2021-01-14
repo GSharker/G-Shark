@@ -20,7 +20,7 @@ namespace GeometrySharp.XUnit.Evaluation
 		}
 
         [Fact]
-        public void TransformNurbsCurve_UsingAMatrix()
+        public void It_Returns_A_Transformed_NurbsCurve_Using_A_Matrix()
         {
             var curve = NurbsCurveTest.NurbsCurveExample();
             var mat = new Matrix() {
@@ -53,7 +53,7 @@ namespace GeometrySharp.XUnit.Evaluation
         [InlineData(0.5, 4)]
         [InlineData(3.0, 1)]
         [InlineData(3.0, 2)]
-        public void CurveKnotRefine(double val, int insertion)
+        public void It_Refines_The_Curve_Knot(double val, int insertion)
         {
             var degree = 3;
             var knots = new Knot(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};

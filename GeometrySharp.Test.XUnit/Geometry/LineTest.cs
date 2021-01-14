@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
@@ -6,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.XUnit.Geometry
 {
+    [Trait("Category", "Line")]
     public class LineTest
     {
         private readonly ITestOutputHelper _testOutput;
@@ -14,13 +16,37 @@ namespace GeometrySharp.XUnit.Geometry
             _testOutput = testOutput;
         }
 
-        [Trait("Category", "Line")]
         [Fact]
-        public void Create_Line_By_Two_Points()
+        public void It_Returns_A_Line()
         {
-            var l = new Line(new Vector3 { -0.913, 1.0, 4.68 }, new Vector3 { 6.363, 10.0, 7.971 });
-            double dynL = 12.03207;
-            l.Length.Should().BeApproximately(dynL, 5);
+            var p1 = new Vector3 {-0.913, 1.0, 4.68};
+            var p2 = new Vector3 {6.363, 10.0, 7.971};
+            var l = new Line(p1, p2);
+            
+            l.Should().NotBeNull();
+            l.Start.All(p1.Contains).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Length_Of_The_Line()
+        {
+            var p1 = new Vector3 { -0.913, 1.0, 4.68 };
+            var p2 = new Vector3 { 6.363, 10.0, 7.971 };
+            var l = new Line(p1, p2);
+            double expectedLength = 12.03207;
+
+            l.Length.Should().BeApproximately(expectedLength, 5);
+        }
+
+        [Fact]
+        public void It_Returns_The_Line_Direction()
+        {
+            var p1 = new Vector3 { 0, 0, 0 };
+            var p2 = new Vector3 { 5, 0, 0 };
+            var l = new Line(p1, p2);
+            var expectedDirection = new Vector3 { 1, 0, 0 };
+
+            l.Direction.Should().BeEquivalentTo(expectedDirection);
         }
     }
 }

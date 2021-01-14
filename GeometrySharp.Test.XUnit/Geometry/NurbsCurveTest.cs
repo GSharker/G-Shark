@@ -55,7 +55,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Get_A_NurbsCurve()
+        public void It_Returns_A_NurbsCurve()
         {
             int degree = 2;
             List<Vector3> pts = new List<Vector3>()
@@ -72,7 +72,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Get_A_NurbsCurve_EvaluatedWithAListOfWeights()
+        public void It_Returns_A_NurbsCurve_Evaluated_With_A_List_Of_Weights()
         {
             int degree = 2;
             List<Vector3> pts = new List<Vector3>()
@@ -91,7 +91,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Get_ACopied_NurbsCurve()
+        public void It_Returns_A_Copied_NurbsCurve()
         {
             int degree = 2;
             List<Vector3> pts = new List<Vector3>()
@@ -110,7 +110,7 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void GetTheDomainOfTheCurve()
+        public void It_Returns_The_Domain_Of_The_Curve()
         {
             var curveDomain = NurbsCurveExample().Domain();
 
@@ -119,16 +119,16 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void AreTheControlPoints_Homogenized()
+        public void It_Checks_If_The_Control_Points_Are_Homogenized()
         {
             NurbsCurveExample().AreControlPointsHomogenized().Should().BeFalse();
             NurbsCurveHomogenizedPtsExample().AreControlPointsHomogenized().Should().BeTrue();
         }
 
         [Fact]
-        public void TransformNurbsCurve_ByAGivenMatrix()
+        public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
-            var curve = NurbsCurveTest.NurbsCurveExample();
+            var curve = NurbsCurveExample();
             var matrix = MatrixTest.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
@@ -141,18 +141,8 @@ namespace GeometrySharp.XUnit.Geometry
         }
 
         [Fact]
-        public void Split_ReturnTwoNurbsCurve()
+        public void It_Splits_A_Curve_Returning_Two_Curves()
         {
-            //int degree = 2;
-            //List<Vector3> pts = new List<Vector3>()
-            //{
-            //    new Vector3(){2.0,2.0,0.0},
-            //    new Vector3(){10.0,12.0,5.0},
-            //    new Vector3(){15.0,2.0,0.0}
-            //};
-            //Knot knots = new Knot() { 0, 0, 1, 1};
-            //var weights = new List<double>() { 1, 1, 1 };
-
             var degree = 3;
             var knots = new Knot() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
             var controlPts = new List<Vector3>();
@@ -167,6 +157,7 @@ namespace GeometrySharp.XUnit.Geometry
             var splitCurves = curve.Split(0.5);
 
             splitCurves.Should().HaveCount(2);
+            // ToDo Check a point on both curve.
         }
     }
 }

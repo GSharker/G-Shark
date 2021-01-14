@@ -11,7 +11,7 @@ namespace GeometrySharp.XUnit.Core
     public class TrigTest
     {
         [Fact]
-        public void ThreePointsAreFlat_ReturnTrue()
+        public void It_Returns_True_If_Three_Points_Are_Flat()
         {
             Vector3 p1 = new Vector3() { 0.0, 0.0, 0.0 };
             Vector3 p2 = new Vector3() { 10.0, 0.0, 0.0 };
