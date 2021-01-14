@@ -56,7 +56,7 @@ namespace GeometrySharp.XUnit.Core
         };
 
         [Fact]
-        public void EvalHomogenized1d_ThrowsAnException_IfTheSetOfWeights_IsBiggerThanControlPts()
+        public void Eval_Homogenized1d_Throws_An_Exception_If_The_Weight_Collection_Is_Bigger_Than_ControlPts()
         {
             var controlPts = new List<Vector3>();
             var weights = new List<double>(){1.0,1.5,1.0};
@@ -68,7 +68,7 @@ namespace GeometrySharp.XUnit.Core
 
         [Theory]
         [MemberData(nameof(Homogenized1dData))]
-        public void NewSetOfControlPoints_Homogenized1d(List<double> weights, List<Vector3> controlPtsExpected)
+        public void It_Returns_A_New_Set_Of_ControlPoints_Homogenized1d(List<double> weights, List<Vector3> controlPtsExpected)
         {
             var controlPts = new List<Vector3>()
             {
@@ -83,7 +83,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void Weight1d_ThrowsAnException_IfThePassedSet_HasNotTheSameDimension()
+        public void Weight1d_Throws_An_Exception_If_The_Set_Of_Points_Has_Not_The_Same_Dimension()
         {
             var homegeneousPts = new List<Vector3>()
             {
@@ -98,7 +98,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void Weight1d()
+        public void It_Returns_A_Weighted1d_Set()
         {
             var homegeneousPts = new List<Vector3>()
             {
@@ -113,7 +113,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void Dehomogenizer()
+        public void It_Returns_A_Set_Of_Points_Dehomogenized()
         {
             var homegeneousPts = new Vector3() {1.25, -1.25, 0.0, 0.5};
             var dehomogenizeExpected = new Vector3() {2.5, -2.5, 0};
@@ -124,7 +124,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void Dehomogenizer1d()
+        public void It_Returns_A_Set_Of_Points_Dehomogenizer1d()
         {
             var homegeneousPts = new List<Vector3>()
             {

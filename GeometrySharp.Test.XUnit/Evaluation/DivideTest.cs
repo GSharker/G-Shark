@@ -22,7 +22,7 @@ namespace GeometrySharp.XUnit.Evaluation
         [InlineData(0.25)]
         [InlineData(0.5)]
         [InlineData(0.75)]
-        public void CurveSplit(double cubicSplit)
+        public void It_Returns_Two_Curves_Splitting_One_Curve(double cubicSplit)
         {
             var degree = 3;
             var controlPts = new List<Vector3>()

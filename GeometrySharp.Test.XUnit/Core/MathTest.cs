@@ -25,7 +25,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(32, 0.558505)]
         [InlineData(45, 0.785398)]
         [InlineData(180, 3.141593)]
-        public void GetRadiansFromDegree(double degree, double radiansExpected)
+        public void It_Returns_The_Radians_From_Degree(double degree, double radiansExpected)
         {
             Math.Round(GeoSharpMath.ToRadians(degree), 6).Should().Be(radiansExpected);
         }
@@ -35,7 +35,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(0.558505, 32)]
         [InlineData(0.785398, 45)]
         [InlineData(3.141592, 180)]
-        public void GetDegreeFromRadians(double radians, double degreeExpected)
+        public void It_Returns_The_Degree_From_Radians(double radians, double degreeExpected)
         {
             Math.Round(GeoSharpMath.ToDegrees(radians), 0).Should().Be(degreeExpected);
         }
@@ -48,7 +48,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(-1.23432101234321E+308, false)]
         [InlineData(-1.2, true)]
         [InlineData(0.0, true)]
-        public void CheckIfADoubleIsValid(double val, bool expectedResult)
+        public void It_Checks_If_A_Double_Is_Valid(double val, bool expectedResult)
         {
             GeoSharpMath.IsValidDouble(val).Should().Be(expectedResult);
         }

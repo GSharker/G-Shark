@@ -46,7 +46,7 @@ namespace GeometrySharp.XUnit.Core
 
         [Theory]
         [MemberData(nameof(RangesToBeDefined))]
-        public void GetARangeOfNumbers(Interval interval, int step)
+        public void It_Returns_A_Range_Of_Numbers(Interval interval, int step)
         {
             var range = Sets.Range(interval, step);
 
@@ -59,7 +59,7 @@ namespace GeometrySharp.XUnit.Core
 
         [Theory]
         [MemberData(nameof(RangesToBeDefined))]
-        public void GetAListOfEquallySpaceNumbers(Interval interval, int step)
+        public void It_Returns_A_List_Of_Equally_Space_Numbers(Interval interval, int step)
         {
             var linearSpace = Sets.LinearSpace(interval, step);
 
@@ -71,7 +71,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void GetARangeOfPositiveNumber_SteppingOfOne()
+        public void It_Returns_A_Range_Of_Positive_Number_Stepping_Of_One()
         {
             var range = Sets.Range(12);
 
@@ -86,7 +86,7 @@ namespace GeometrySharp.XUnit.Core
         [Theory]
         [InlineData(0)]
         [InlineData(-5)]
-        public void RangeThrowAnException_IfTheValueIsNegativeOrZero(int maxValue)
+        public void Range_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero(int maxValue)
         {
             Func<object> resultFunction = () => Sets.Range(maxValue);
             resultFunction.Should().Throw<Exception>().WithMessage("Max value range can not be negative or zero.");
@@ -96,7 +96,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(2, 4, 8)]
         [InlineData(-3, 10, 10)]
         [InlineData(0, 1, 10)]
-        public void GetASeriesOfNumber(double start, double step, int count)
+        public void It_Returns_A_Series_Of_Numbers_With_A_Define_Count_And_Step(double start, double step, int count)
         {
             var series = Sets.Span(start, step, count);
 
@@ -110,7 +110,7 @@ namespace GeometrySharp.XUnit.Core
         [Theory]
         [InlineData(-3, 10, 0)]
         [InlineData(0, 10, -1)]
-        public void SeriesThrowAnException_IfTheValueIsNegativeOrZero(double start, double step, int count)
+        public void Series_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero(double start, double step, int count)
         {
             Func<object> resultFunction = () => Sets.Span(start, step, count);
             resultFunction.Should().Throw<Exception>().WithMessage("Count can not be negative or zero.");
@@ -118,14 +118,14 @@ namespace GeometrySharp.XUnit.Core
 
         [Theory]
         [MemberData(nameof(SetOfNumbersAndTheSetDimension))]
-        public void GetTheDimension_OfASetOfNumbers(IList<double> set, double expectedRange)
+        public void It_Returns_The_Dimensions_Of_A_Set_Of_Numbers(IList<double> set, double expectedRange)
         {
             Sets.Dimension(set).Should().Be(expectedRange);
         }
 
         [Theory]
         [MemberData(nameof(DataToRepeat))]
-        public void GetASet_OfRepeatedData_OfASpecificLength(object data, int length)
+        public void It_Returns_A_Set_Of_Repeated_Data_Of_A_Specific_Length(object data, int length)
         {
             var repeatedData = Sets.RepeatData(data, length);
 
@@ -137,7 +137,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void RepeatThrowAnException_IfTheValueIsNegativeOrZero()
+        public void RepeatData_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero()
         {
             Func<object> resultFunction = () => Sets.RepeatData(5, -1);
             resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative.");
@@ -147,7 +147,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { 5, 6, 7 }, new double[] { 3, 8, 11 })]
         [InlineData(new double[] { }, new double[] { 5, 6, 7 }, new double[] { 5, 6, 7 })]
         [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { }, new double[] { 3, 5, 7, 9, 11 })]
-        public void Return_ASetUnion_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
+        public void It_Returns_A_SetUnion_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
             var setSub = Sets.SetUnion(set1, set2);
             var resultConcat = string.Join(",", setSub);
@@ -159,7 +159,7 @@ namespace GeometrySharp.XUnit.Core
         [Theory]
         [InlineData(new double[]{ 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
         [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] {}, new double[] { 3, 5, 7, 9, 11 })]
-        public void Return_ASetDifference_FromTwoCollectionsOfNumbers(double[] set1, double[] set2, double[] setExpected)
+        public void It_Returns_A_SetDifference_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
             var setSub = Sets.SetDifference(set1, set2);
             var resultConcat = string.Join(",", setSub);
@@ -169,7 +169,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void SetDifference_ThrowAnException_IfTheFirstCollection_IsEmpty()
+        public void SetDifference_Throws_An_Exception_If_The_First_Collection_Is_Empty()
         {
             var set1 = new List<double>();
             var set2 = new List<double>() { 3, 5, 7, 9, 11 };

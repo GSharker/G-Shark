@@ -36,14 +36,14 @@ namespace GeometrySharp.XUnit.Core
         }
         
         [Fact]
-        public void Create_Identity_Matrix()
+        public void It_Creates_An_Identity_Matrix()
         {
            int i = 3;
            Matrix.Identity(i).Should().BeEquivalentTo(IdentityMatrix);
         }
 
         [Fact]
-        public void GetTheTransformedVector()
+        public void It_Returns_A_Transformed_Vector()
         {
             var homogenizedVec = new Vector3(){-10.0, 20.0, 5.0, 1.0};
 
@@ -55,7 +55,7 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Fact]
-        public void MatrixDot_ThrowsAnException_IfTheVectorAndTheMatrix_HaveNotTheSameDimension()
+        public void Dot_Throws_An_Exception_If_The_Vector_And_The_Matrix_Have_Not_The_Same_Dimension()
         {
             var vec = new Vector3() { -10.0, 20.0, 5.0 };
 
@@ -63,6 +63,5 @@ namespace GeometrySharp.XUnit.Core
 
             funcResult.Should().Throw<ArgumentOutOfRangeException>();
         }
-
     }
 }
