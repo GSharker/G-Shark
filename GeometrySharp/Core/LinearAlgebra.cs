@@ -49,6 +49,7 @@ namespace GeometrySharp.Core
 
             return controlPtsHomogenized;
         }
+
         /// <summary>
         /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
@@ -60,6 +61,7 @@ namespace GeometrySharp.Core
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
             return homogeneousPts.Select(vec => vec[^1]).ToList();
         }
+
         /// <summary>
         /// Dehomogenize a point.
         /// </summary>
@@ -76,11 +78,29 @@ namespace GeometrySharp.Core
 
             return point;
         }
+
         /// <summary>
         /// Dehomogenize an set of points.
         /// </summary>
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
         public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
+
+
+        public static Vector3 CurvePointAt(NurbsCurve curve, double u)
+        {
+            var degree = curve.Degree;
+            var controlPts = curve.ControlPoints;
+            var knots = curve.Knots;
+
+            if (curve.Knots.AreValidRelations(degree, controlPts.Count))
+                throw new ArgumentException("Invalid relations between control points, knot");
+
+            var n = knots.Count - degree - 2;
+
+            var knotSpanIndex = knots.Span(n, degree, u);
+
+            return new Vector3();
+        }
     }
 }

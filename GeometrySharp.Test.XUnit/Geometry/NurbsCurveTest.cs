@@ -106,7 +106,7 @@ namespace GeometrySharp.XUnit.Geometry
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Should().BeEquivalentTo(nurbsCurve);
+            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
         }
 
         [Fact]
