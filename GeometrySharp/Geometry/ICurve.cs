@@ -11,11 +11,6 @@ namespace GeometrySharp.Geometry
     public interface ICurve : ISerializable
     {
         /// <summary>
-        /// Provide the NURBS representation of the curve.
-        /// </summary>
-        /// <returns>A NurbsCurveData object representing the curve.</returns>
-        public NurbsCurve AsNurbs();
-        /// <summary>
         /// Obtain the parametric domain of the curve.
         /// </summary>
         /// <returns>An Interval object containing the min and max of the domain.</returns>

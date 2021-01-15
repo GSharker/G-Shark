@@ -94,15 +94,7 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public NurbsCurve AsNurbs()
-        {
-            throw new System.NotImplementedException();
-        }
+        public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
 
         public List<Vector3> Derivatives(double u, int numberDerivs = 1)
         {
@@ -114,7 +106,7 @@ namespace GeometrySharp.Geometry
             if (other == null) return false;
             if (this.ControlPoints.Count != other.ControlPoints.Count) return false;
             if (this.Knots.Count != other.Knots.Count) return false;
-            return Degree == other.Degree && ControlPoints.All(other.ControlPoints.Contains) && Knots.All(other.Knots.Contains);
+            return Degree == other.Degree && ControlPoints.SequenceEqual(other.ControlPoints) && Knots.All(other.Knots.Contains);
         }
 
         public override string ToString()
@@ -132,6 +124,11 @@ namespace GeometrySharp.Geometry
             return stringBuilder.ToString();
         }
 
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new System.NotImplementedException();
+        }
         public override NurbsCurve FromJson(string s) => throw new NotImplementedException();
 
         public override string ToJson() => JsonConvert.SerializeObject(this);
