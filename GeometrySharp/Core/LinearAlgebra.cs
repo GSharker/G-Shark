@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeometrySharp.Evaluation;
+using Newtonsoft.Json.Linq;
 
 namespace GeometrySharp.Core
 {
@@ -85,22 +87,5 @@ namespace GeometrySharp.Core
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
         public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
-
-
-        public static Vector3 CurvePointAt(NurbsCurve curve, double u)
-        {
-            var degree = curve.Degree;
-            var controlPts = curve.ControlPoints;
-            var knots = curve.Knots;
-
-            if (curve.Knots.AreValidRelations(degree, controlPts.Count))
-                throw new ArgumentException("Invalid relations between control points, knot");
-
-            var n = knots.Count - degree - 2;
-
-            var knotSpanIndex = knots.Span(n, degree, u);
-
-            return new Vector3();
-        }
     }
 }

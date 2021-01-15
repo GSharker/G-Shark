@@ -92,11 +92,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 PointAt(double t)
-        {
-            //Eval.RationalCurvePoint.
-            throw new System.NotImplementedException();
-        }
+        public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

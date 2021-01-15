@@ -61,5 +61,38 @@ namespace GeometrySharp.Evaluation
 
             return N;
         }
+
+        /// <summary>
+        /// Compute a point on a non-uniform, non-rational b-spline curve.
+        /// Corresponds to algorithm 3.1 from The NURBS book, Piegl & Tiller 2nd edition.
+        /// </summary>
+        /// <param name="curve">Object representing the curve.</param>
+        /// <param name="u">Parameter on the curve at which the point is to be evaluated</param>
+        /// <returns>The evaluated point.</returns>
+        public static Vector3 CurvePointAt(NurbsCurve curve, double u)
+        {
+            var degree = curve.Degree;
+            var controlPts = curve.ControlPoints;
+            var knots = curve.Knots;
+
+            if (!curve.Knots.AreValidRelations(degree, controlPts.Count))
+                throw new ArgumentException("Invalid relations between control points, knot");
+
+            var n = knots.Count - degree - 2;
+
+            var knotSpan = knots.Span(n, degree, u);
+            var basisValue = BasicFunction(degree, knots, knotSpan, u);
+            var position = Vector3.Zero1d(controlPts[0].Count);
+
+            for (int i = 0; i < degree + 1; i++)
+            {
+                var valToMultiply = basisValue[i];
+                var pt = controlPts[knotSpan - degree + i];
+                for (int j = 0; j < position.Count; j++)
+                    position[j] = position[j] + valToMultiply * pt[j];
+            }
+
+            return position;
+        }
     }
 }
