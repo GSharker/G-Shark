@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
@@ -61,6 +62,38 @@ namespace GeometrySharp.XUnit.Evaluation
 
             pt[0].Should().BeApproximately(result[0], 0.001);
             pt[1].Should().BeApproximately(result[1], 0.001);
+        }
+
+        [Fact]
+        public void It_Returns_A_Derive_Basic_Function_Given_Two_Parameters()
+        {
+            // Arrange
+            // Values and formulas from The Nurbs Book p.69 & p.72
+            var degree = 2;
+            var span = 4;
+            var order = 2;
+            var parameter = 2.5;
+            var knots = new Knot(){ 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var expectedResult = new double[,] {{0.125, 0.75, 0.125}, {-0.5, 0.0, 0.5}, {1.0, -2.0, 1.0}};
+
+            // Act
+            var resultToCheck = Eval.DerivativeBasisFunctionsGivenTwoN(span, parameter, degree, order, knots);
+
+            // Assert
+            resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.TOLERANCE);
+            resultToCheck[0][1].Should().BeApproximately(expectedResult[0, 1], GeoSharpMath.TOLERANCE);
+            resultToCheck[0][2].Should().BeApproximately(expectedResult[0, 2], GeoSharpMath.TOLERANCE);
+
+            resultToCheck[1][0].Should().BeApproximately(expectedResult[1, 0], GeoSharpMath.TOLERANCE);
+            resultToCheck[1][1].Should().BeApproximately(expectedResult[1, 1], GeoSharpMath.TOLERANCE);
+            resultToCheck[1][2].Should().BeApproximately(expectedResult[1, 2], GeoSharpMath.TOLERANCE);
+
+            resultToCheck[2][0].Should().BeApproximately(expectedResult[2, 0], GeoSharpMath.TOLERANCE);
+            resultToCheck[2][1].Should().BeApproximately(expectedResult[2, 1], GeoSharpMath.TOLERANCE);
+            resultToCheck[2][2].Should().BeApproximately(expectedResult[2, 2], GeoSharpMath.TOLERANCE);
+
+            resultToCheck.Count.Should().Be(order + 1);
+            resultToCheck[0].Count.Should().Be(degree + 1);
         }
     }
 }
