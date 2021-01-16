@@ -41,18 +41,16 @@ namespace GeometrySharp.Evaluation
             var right = Sets.RepeatData(0.0, degree + 1);
             // N[0] = 1.0 by definition;
             var N = Sets.RepeatData(1.0, degree + 1);
-            var saved = 0.0;
-            var temp = 0.0;
 
             for (int j = 1; j < degree + 1; j++)
             {
                 left[j] = parameter - knots[span + 1 - j];
                 right[j] = knots[span + j] - parameter;
-                saved = 0.0;
+                var saved = 0.0;
 
                 for (int r = 0; r < j; r++)
                 {
-                    temp = N[r] / (right[r + 1] + left[j - r]);
+                    var temp = N[r] / (right[r + 1] + left[j - r]);
                     N[r] = saved + right[r + 1] * temp;
                     saved = left[j - r] * temp;
                 }
@@ -154,7 +152,7 @@ namespace GeometrySharp.Evaluation
                     var valToMultiply = derived2d[k][j];
                     var pt = controlPts[knotSpan - degree + j];
                     for (int i = 0; i < CK[k].Count; i++)
-                        CK[k][i] = CK[k][i] + valToMultiply * pt[j];
+                        CK[k][i] = CK[k][i] + valToMultiply * pt[i];
                 }
             }
 

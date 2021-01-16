@@ -38,7 +38,7 @@ namespace GeometrySharp.XUnit.Evaluation
         }
 
         [Theory]
-        [InlineData(0.0, new double[]{5.0,5.0,0.0})]
+        [InlineData(0.0, new double[] {5.0,5.0,0.0})]
         [InlineData(0.3, new double[] { 18.617, 13.377, 0.0 })]
         [InlineData(0.5, new double[] { 27.645, 14.691, 0.0 })]
         [InlineData(0.6, new double[] { 32.143, 14.328, 0.0 })]
@@ -94,6 +94,30 @@ namespace GeometrySharp.XUnit.Evaluation
 
             resultToCheck.Count.Should().Be(order + 1);
             resultToCheck[0].Count.Should().Be(degree + 1);
+        }
+
+        [Fact]
+        public void It_Returns_The_Result_Of_A_Curve_Derivatives()
+        {
+            var degree = 3;
+            var parameter = 0;
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            var numberDerivs = 2;
+            var controlPts = new List<Vector3>()
+            {
+                new Vector3() {10, 0, 0},
+                new Vector3() {20, 10, 0},
+                new Vector3() {30, 20, 0},
+                new Vector3() {50, 50, 0}
+            };
+
+            var curve = new NurbsCurve(degree, knots, controlPts);
+
+            var p = Eval.CurveDerivatives(curve, parameter, numberDerivs);
+
+            p[0][0].Should().Be(10);
+            p[0][1].Should().Be(0);
+            (p[1][0] / p[1][1]).Should().Be(1);
         }
     }
 }
