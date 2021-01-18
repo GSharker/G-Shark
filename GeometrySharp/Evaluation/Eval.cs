@@ -37,10 +37,11 @@ namespace GeometrySharp.Evaluation
         /// <returns>List of non-vanishing basis functions.</returns>
         public static List<double> BasicFunction(int degree, Knot knots, int span, double parameter)
         {
-            var left = Sets.RepeatData(0.0, degree + 1);
-            var right = Sets.RepeatData(0.0, degree + 1);
+            var left = Vector3.Zero1d(degree + 1);
+            var right = Vector3.Zero1d(degree + 1);
             // N[0] = 1.0 by definition;
-            var N = Sets.RepeatData(1.0, degree + 1);
+            var N = Vector3.Zero1d(degree + 1);
+            N[0] = 1.0;
 
             for (int j = 1; j < degree + 1; j++)
             {
@@ -94,12 +95,25 @@ namespace GeometrySharp.Evaluation
             return position;
         }
 
-        //public static Vector3 RationalCurveTanget(NurbsCurve curve, double t)
-        //{
-        //    var derivs = RationalCurveDerivatives(curve, t, 1);
-        //    return derivs[1];
-        //}
+        /// <summary>
+        /// Compute the tangent at a point on a NURBS curve.
+        /// </summary>
+        /// <param name="curve">NurbsCurve object representing the curve.</param>
+        /// <param name="t">Parameter.</param>
+        /// <returns>A Vector represented by an array of length (dim).</returns>
+        public static Vector3 RationalCurveTanget(NurbsCurve curve, double t)
+        {
+            var derivs = RationalCurveDerivatives(curve, t, 1);
+            return derivs[1];
+        }
 
+        /// <summary>
+        /// Determine the derivatives of a NURBS curve at a given parameter.
+        /// </summary>
+        /// <param name="curve">Curve object representing the curve - the control points are in homogeneous coordinates.</param>
+        /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
+        /// <param name="numberDerivs">Number of derivatives to evaluate</param>
+        /// <returns>A point represented by an array of length (dim).</returns>
         public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
         {
             var derivatives = CurveDerivatives(curve, parameter, numberDerivs);
@@ -128,6 +142,14 @@ namespace GeometrySharp.Evaluation
             return CK;
         }
 
+        /// <summary>
+        /// Determine the derivatives of a non-uniform, non-rational B-spline curve at a given parameter.
+        /// Corresponds to algorithm 3.2 from The NURBS book, Piegl & Tiller 2nd edition.
+        /// </summary>
+        /// <param name="curve">NurbsCurve object representing the curve.</param>
+        /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
+        /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
+        /// <returns></returns>
         public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
         {
             var degree = curve.Degree;
@@ -139,11 +161,12 @@ namespace GeometrySharp.Evaluation
 
             var n = knots.Count - degree - 2;
 
-            var ptDimension = controlPts[0].Count-1;
-            var derivateOrder = numberDerivs < degree ? numberDerivs : degree;
-            var CK = Vector3.Zero2d(numberDerivs + 1, ptDimension);
+            var ptDimension = controlPts[0].Count;
+            //var derivateOrder = numberDerivs < degree ? numberDerivs : degree;
+            var derivateOrder = Math.Min(numberDerivs, degree);
+            var CK = Vector3.Zero2d(numberDerivs + 1, degree + 1);
             var knotSpan = knots.Span(n, degree, parameter);
-            var derived2d = DerivativeBasisFunctionsGivenTwoN(knotSpan, parameter, degree, derivateOrder, knots);
+            var derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, degree, derivateOrder, knots);
 
             for (int k = 0; k < derivateOrder + 1; k++)
             {
@@ -152,18 +175,27 @@ namespace GeometrySharp.Evaluation
                     var valToMultiply = derived2d[k][j];
                     var pt = controlPts[knotSpan - degree + j];
                     for (int i = 0; i < CK[k].Count; i++)
-                        CK[k][i] = CK[k][i] + valToMultiply * pt[i];
+                        CK[k][i] = CK[k][i] + (valToMultiply * pt[i]);
                 }
             }
-
             return CK;
         }
 
-        public static List<Vector3> DerivativeBasisFunctionsGivenTwoN(int span, double parameter, int degree,
+        /// <summary>
+        /// Compute the non-vanishing basis functions and their derivatives.
+        /// (corresponds to algorithm 2.3 from The NURBS book, Piegl & Tiller 2nd edition).
+        /// </summary>
+        /// <param name="span">Span index.</param>
+        /// <param name="parameter">Parameter.</param>
+        /// <param name="degree">Curve degree.</param>
+        /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
+        /// <param name="knots">Sets of non-decreasing knot values.</param>
+        /// <returns></returns>
+        public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
             int order, Knot knots)
         {
-            var left = Sets.RepeatData(1.0, degree + 1);
-            var right = Sets.RepeatData(1.0, degree + 1);
+            var left = Vector3.Zero1d(degree + 1);
+            var right = Vector3.Zero1d(degree + 1);
             // N[0][0] = 1.0 by definition
             var ndu = Vector3.Zero2d(degree + 1, degree + 1);
             ndu[0][0] = 1.0;

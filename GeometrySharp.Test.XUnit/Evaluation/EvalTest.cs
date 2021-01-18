@@ -44,7 +44,7 @@ namespace GeometrySharp.XUnit.Evaluation
         [InlineData(0.5, new double[] { 27.645, 14.691, 0.0 })]
         [InlineData(0.6, new double[] { 32.143, 14.328, 0.0 })]
         [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
-        public void It_Returns_A_Point_On_A_Curve_At_A_Given_Parameter(double parameter, double[] result)
+        public void It_Returns_A_Point_At_A_Given_Parameter(double parameter, double[] result)
         {
             var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
             var degree = 3;
@@ -66,7 +66,7 @@ namespace GeometrySharp.XUnit.Evaluation
         }
 
         [Fact]
-        public void It_Returns_A_Derive_Basic_Function_Given_Two_Parameters()
+        public void It_Returns_A_Derive_Basic_Function_Given_NI()
         {
             // Arrange
             // Values and formulas from The Nurbs Book p.69 & p.72
@@ -78,7 +78,7 @@ namespace GeometrySharp.XUnit.Evaluation
             var expectedResult = new double[,] {{0.125, 0.75, 0.125}, {-0.5, 0.0, 0.5}, {1.0, -2.0, 1.0}};
 
             // Act
-            var resultToCheck = Eval.DerivativeBasisFunctionsGivenTwoN(span, parameter, degree, order, knots);
+            var resultToCheck = Eval.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
             resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.TOLERANCE);
@@ -125,13 +125,14 @@ namespace GeometrySharp.XUnit.Evaluation
         public void It_Returns_The_Result_Of_A_Rational_Curve_Derivatives()
         {
             var degree = 2;
-            var knots = new Knot() {0, 0, 0, 1, 1, 1};
+            var knots = new Knot() { 0, 0, 0, 1, 1, 1 };
             var controlPts = new List<Vector3>()
             {
                 new Vector3() {1, 0, 1},
                 new Vector3() {1, 1, 1},
                 new Vector3() {0, 2, 2}
             };
+            //var weights = new List<double>{1,1,2};
             var curve = new NurbsCurve(degree, knots, controlPts);
 
             var derivativesOrder = 2;
@@ -145,6 +146,27 @@ namespace GeometrySharp.XUnit.Evaluation
 
             resultToCheck[2][0].Should().Be(-4);
             resultToCheck[2][1].Should().Be(0);
+
+            //var resultToCheck2 = Eval.RationalCurveDerivatives(curve, 1, derivativesOrder);
+
+            //resultToCheck2[0][0].Should().Be(0);
+            //resultToCheck2[0][1].Should().Be(1);
+
+            //resultToCheck2[1][0].Should().Be(-1);
+            //resultToCheck2[1][1].Should().Be(0);
+
+            //resultToCheck2[2][0].Should().Be(1);
+            //resultToCheck2[2][1].Should().Be(-1);
+
+            var resultToCheck3 = Eval.RationalCurveDerivatives(curve, 0, 3);
+
+            resultToCheck3[3][0].Should().Be(0);
+            resultToCheck3[3][1].Should().Be(-12);
+
+            var resultToCheck4 = Eval.RationalCurveDerivatives(curve, 1, 3);
+
+            //resultToCheck4[3][0].Should().Be(0);
+            //resultToCheck4[3][1].Should().Be(3);
         }
     }
 }

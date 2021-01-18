@@ -61,20 +61,20 @@ namespace GeometrySharp.Core
         /// Find the span on the knot list of the given parameter,
         /// (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition).
         /// </summary>
-        /// <param name="numberOfControlPts">Number of control points - 1.</param>
+        /// <param name="n">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="degree">Integer degree of function.</param>
         /// <param name="parameter">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns>The index of the knot span.</returns>
-        public int Span(int numberOfControlPts, int degree, double parameter)
+        public int Span(int n, int degree, double parameter)
         {
-            // special case if parameter == knots[numberOfControlPts+1]
-            if (parameter > this[numberOfControlPts + 1] - GeoSharpMath.EPSILON) return numberOfControlPts;
+            // special case if parameter == knots[n+1]
+            if (parameter > this[n + 1] - GeoSharpMath.EPSILON) return n;
 
             if (parameter < this[degree] + GeoSharpMath.EPSILON) return degree;
 
             var low = degree;
-            var high = numberOfControlPts + 1;
+            var high = n + 1;
             int mid = (int) Math.Floor((double)(low + high) / 2);
 
             while (parameter < this[mid] || parameter >= this[mid + 1])

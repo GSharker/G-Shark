@@ -49,5 +49,27 @@ namespace GeometrySharp.Core
 
             return r;
         }
+
+        // This class can be removed and moved inside a linear algebra, simplifying the binomial like this.
+
+        //public double BinomialCoefficient(int n, int i)
+        //{
+        //    return Factorial(n) / (Factorial(i) * Factorial(n - i));
+        //}
+
+        //private int Factorial(int n)
+        //{
+        //    if (n == 0)
+        //    {
+        //        return 1;
+        //    }
+
+        //    var fact = n;
+        //    for (var i = n - 1; i >= 1; i--)
+        //    {
+        //        fact *= i;
+        //    }
+        //    return fact;
+        //}
     }
 }
