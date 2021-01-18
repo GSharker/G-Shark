@@ -100,33 +100,33 @@ namespace GeometrySharp.Evaluation
         //    return derivs[1];
         //}
 
-        //public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
-        //{
-        //    var derivatives = CurveDerivatives(curve, parameter, numberDerivs);
-        //    var Aders = Rational1d(derivatives);
-        //    var weightDerivatives = Weight1d(derivatives);
-        //    var CK = new List<Vector3>();
+        public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
+        {
+            var derivatives = CurveDerivatives(curve, parameter, numberDerivs);
+            var ptsDerivatives = LinearAlgebra.Rational1d(derivatives);
+            var weightDerivatives = LinearAlgebra.Weight1d(derivatives);
+            var CK = new List<Vector3>();
 
-        //    for (int k = 0; k < numberDerivs + 1; k++)
-        //    {
-        //        var v = Aders[k];
+            for (int k = 0; k < numberDerivs + 1; k++)
+            {
+                var v = ptsDerivatives[k];
 
-        //        for (int i = 1; i < k + 1; i++)
-        //        {
-        //            var valToMultiply = Binomial.Get(k, i) * weightDerivatives[i];
-        //            var pt = CK[k - i];
-        //            for (int j = 0; j < v.Count; j++)
-        //            {
-        //                v[j] = v[j] + valToMultiply * pt[j];
-        //                v[j] = v[j] * 1 / weightDerivatives[i];
-        //            }
+                for (int i = 1; i < k + 1; i++)
+                {
+                    var valToMultiply = Binomial.Get(k, i) * weightDerivatives[i];
+                    var pt = CK[k - i];
+                    for (int j = 0; j < v.Count; j++)
+                    {
+                        v[j] = v[j] - valToMultiply * pt[j];
+                        v[j] = v[j] * (1 / weightDerivatives[0]);
+                    }
+                }
 
-        //            CK.Add(v);
-        //        }
-        //    }
+                CK.Add(v);
+            }
 
-        //    return CK;
-        //}
+            return CK;
+        }
 
         public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
         {
@@ -139,7 +139,7 @@ namespace GeometrySharp.Evaluation
 
             var n = knots.Count - degree - 2;
 
-            var ptDimension = controlPts[0].Count;
+            var ptDimension = controlPts[0].Count-1;
             var derivateOrder = numberDerivs < degree ? numberDerivs : degree;
             var CK = Vector3.Zero2d(numberDerivs + 1, ptDimension);
             var knotSpan = knots.Span(n, degree, parameter);

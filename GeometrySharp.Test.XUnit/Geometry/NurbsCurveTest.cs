@@ -39,7 +39,7 @@ namespace GeometrySharp.XUnit.Geometry
             return new NurbsCurve(degree, knots, pts);
         }
 
-        public static NurbsCurve NurbsCurveHomogenizedPtsExample()
+        public static NurbsCurve NurbsCurvePtsAndWeightsExample()
         {
             int degree = 2;
             List<Vector3> pts = new List<Vector3>()
@@ -121,8 +121,7 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Checks_If_The_Control_Points_Are_Homogenized()
         {
-            NurbsCurveExample().AreControlPointsHomogenized().Should().BeFalse();
-            NurbsCurveHomogenizedPtsExample().AreControlPointsHomogenized().Should().BeTrue();
+            NurbsCurveExample().AreControlPointsHomogenized().Should().BeTrue();
         }
 
         [Fact]
@@ -132,7 +131,7 @@ namespace GeometrySharp.XUnit.Geometry
             var matrix = MatrixTest.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
-            var demoPts = LinearAlgebra.Dehomogenize1d(transformedCurve.ControlPoints);
+            var demoPts = LinearAlgebra.Dehomogenize2d(transformedCurve.ControlPoints);
 
             var distanceBetweenPts =
                 Math.Round((demoPts[0] - curve.ControlPoints[0]).Length(), 6);

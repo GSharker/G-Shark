@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime.CompilerServices;
 using FluentAssertions;
 using GeometrySharp.Core;
@@ -118,6 +119,32 @@ namespace GeometrySharp.XUnit.Evaluation
             p[0][0].Should().Be(10);
             p[0][1].Should().Be(0);
             (p[1][0] / p[1][1]).Should().Be(1);
+        }
+
+        [Fact]
+        public void It_Returns_The_Result_Of_A_Rational_Curve_Derivatives()
+        {
+            var degree = 2;
+            var knots = new Knot() {0, 0, 0, 1, 1, 1};
+            var controlPts = new List<Vector3>()
+            {
+                new Vector3() {1, 0, 1},
+                new Vector3() {1, 1, 1},
+                new Vector3() {0, 2, 2}
+            };
+            var curve = new NurbsCurve(degree, knots, controlPts);
+
+            var derivativesOrder = 2;
+            var resultToCheck = Eval.RationalCurveDerivatives(curve, 0, derivativesOrder);
+
+            resultToCheck[0][0].Should().Be(1);
+            resultToCheck[0][1].Should().Be(0);
+
+            resultToCheck[1][0].Should().Be(0);
+            resultToCheck[1][1].Should().Be(2);
+
+            resultToCheck[2][0].Should().Be(-4);
+            resultToCheck[2][1].Should().Be(0);
         }
     }
 }
