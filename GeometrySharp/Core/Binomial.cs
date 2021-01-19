@@ -50,6 +50,8 @@ namespace GeometrySharp.Core
             return r;
         }
 
+        // This class is more efficient using one loop only and storing the data.
+        // If we are not interest in efficiency we can replace it with the solution below.
         // This class can be removed and moved inside a linear algebra, simplifying the binomial like this.
 
         //public double BinomialCoefficient(int n, int i)

@@ -96,7 +96,12 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
 
-        //public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
 
         public List<Vector3> Derivatives(double u, int numberDerivs = 1)
         {

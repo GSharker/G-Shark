@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Common;
+using FluentAssertions.Equivalency;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
 using GeometrySharp.ExtendedMethods;
@@ -52,6 +55,22 @@ namespace GeometrySharp.XUnit.Geometry
             var weights = new List<double>() { 0.5, 0.5, 0.5 };
 
             return new NurbsCurve(degree, knots, pts, weights);
+        }
+
+        public static NurbsCurve NurbsCurveExample2()
+        {
+            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
+            var degree = 3;
+            var controlPts = new List<Vector3>()
+            {
+                new Vector3() {5,5,0},
+                new Vector3() {10, 10, 0},
+                new Vector3() {20, 15, 0},
+                new Vector3() {35, 15, 0},
+                new Vector3() {45, 10, 0},
+                new Vector3() {50, 5, 0}
+            };
+            return new NurbsCurve(degree, knots, controlPts);
         }
 
         [Fact]
@@ -174,5 +193,44 @@ namespace GeometrySharp.XUnit.Geometry
             splitCurves.Should().HaveCount(2);
             splitCurves[0].ControlPoints.Last().Should().BeEquivalentTo(splitCurves[1].ControlPoints.First());
         }
+
+        [Theory]
+        [InlineData(0.0, new double[] { 0.707107, 0.707107, 0 })]
+        [InlineData(0.25, new double[] { 0.931457, 0.363851, 0 })]
+        [InlineData(0.5, new double[] { 1, 0, 0 })]
+        [InlineData(0.75, new double[] { 0.931457, -0.363851, 0 })]
+        [InlineData(1.0, new double[] { 0.707107, -0.707107, 0 })]
+        public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
+        {
+            // Verb test
+            var degree = 3;
+            var knots = new Knot() {0, 0, 0, 0, 0.5, 1, 1, 1, 1};
+            List<Vector3> pts = new List<Vector3>()
+            {
+                new Vector3(){0, 0, 0},
+                new Vector3(){1, 0, 0},
+                new Vector3(){2, 0, 0},
+                new Vector3(){3, 0, 0},
+                new Vector3(){4, 0, 0}
+            };
+            var weights = new List<double>() {1, 1, 1, 1, 1};
+            var crv = new NurbsCurve(degree, knots, pts, weights);
+            var tangent = crv.Tangent(0.5);
+
+            tangent.Should().BeEquivalentTo(new Vector3() {3, 0, 0});
+
+            // Custom test
+            var tangentToCheck = NurbsCurveExample2().Tangent(t);
+            var tangentNormalized = tangentToCheck.Normalized();
+            var tangentExpected = new Vector3(tangentData);
+
+            var tr = tangentNormalized.Select(v => Math.Round(v, 6)).ToList();
+            _testOutput.WriteLine($"{tr[0]},{tr[1]},{tr[2]}");
+
+            tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-2))
+                .WhenTypeIs<double>());
+        }
+
     }
 }
