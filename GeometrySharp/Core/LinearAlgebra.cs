@@ -88,7 +88,7 @@ namespace GeometrySharp.Core
         /// </summary>
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
-        public static List<Vector3> Dehomogenize2d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
+        public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
 
         /// <summary>
         /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.

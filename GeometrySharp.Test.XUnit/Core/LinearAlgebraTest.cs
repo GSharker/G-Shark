@@ -141,7 +141,7 @@ namespace GeometrySharp.XUnit.Core
                 new Vector3() {5.0, 0.0, 0}
             };
 
-            var dehomogenizePts = LinearAlgebra.Dehomogenize2d(homegeneousPts);
+            var dehomogenizePts = LinearAlgebra.Dehomogenize1d(homegeneousPts);
 
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
         }
