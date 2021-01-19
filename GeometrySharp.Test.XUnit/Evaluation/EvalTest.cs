@@ -124,15 +124,17 @@ namespace GeometrySharp.XUnit.Evaluation
         [Fact]
         public void It_Returns_The_Result_Of_A_Rational_Curve_Derivatives()
         {
+            // Consider the quadratic rational Bezier circular arc.
+            // Example at page 126.
             var degree = 2;
             var knots = new Knot() { 0, 0, 0, 1, 1, 1 };
+            // Homogeneous points, weights {1,1,2}
             var controlPts = new List<Vector3>()
             {
-                new Vector3() {1, 0, 1},
-                new Vector3() {1, 1, 1},
-                new Vector3() {0, 2, 2}
+                new Vector3() {1, 0, 0, 1},
+                new Vector3() {1, 1, 0, 1},
+                new Vector3() {0, 2, 0, 2}
             };
-            //var weights = new List<double>{1,1,2};
             var curve = new NurbsCurve(degree, knots, controlPts);
 
             var derivativesOrder = 2;
@@ -147,16 +149,16 @@ namespace GeometrySharp.XUnit.Evaluation
             resultToCheck[2][0].Should().Be(-4);
             resultToCheck[2][1].Should().Be(0);
 
-            //var resultToCheck2 = Eval.RationalCurveDerivatives(curve, 1, derivativesOrder);
+            var resultToCheck2 = Eval.RationalCurveDerivatives(curve, 1, derivativesOrder);
 
-            //resultToCheck2[0][0].Should().Be(0);
-            //resultToCheck2[0][1].Should().Be(1);
+            resultToCheck2[0][0].Should().Be(0);
+            resultToCheck2[0][1].Should().Be(1);
 
-            //resultToCheck2[1][0].Should().Be(-1);
-            //resultToCheck2[1][1].Should().Be(0);
+            resultToCheck2[1][0].Should().Be(-1);
+            resultToCheck2[1][1].Should().Be(0);
 
-            //resultToCheck2[2][0].Should().Be(1);
-            //resultToCheck2[2][1].Should().Be(-1);
+            resultToCheck2[2][0].Should().Be(1);
+            resultToCheck2[2][1].Should().Be(-1);
 
             var resultToCheck3 = Eval.RationalCurveDerivatives(curve, 0, 3);
 
@@ -165,8 +167,8 @@ namespace GeometrySharp.XUnit.Evaluation
 
             var resultToCheck4 = Eval.RationalCurveDerivatives(curve, 1, 3);
 
-            //resultToCheck4[3][0].Should().Be(0);
-            //resultToCheck4[3][1].Should().Be(3);
+            resultToCheck4[3][0].Should().Be(0);
+            resultToCheck4[3][1].Should().Be(3);
         }
     }
 }
