@@ -159,12 +159,13 @@ namespace GeometrySharp.XUnit.Geometry
             splitCurves[0].ControlPoints.Last().Should().BeEquivalentTo(splitCurves[1].ControlPoints.First());
         }
 
+        // This values have been compered with NurbsPython lib.
         [Theory]
-        [InlineData(0.0, new double[] { 0.707107, 0.707107, 0 })]
-        [InlineData(0.25, new double[] { 0.931457, 0.363851, 0 })]
-        [InlineData(0.5, new double[] { 1, 0, 0 })]
-        [InlineData(0.75, new double[] { 0.931457, -0.363851, 0 })]
-        [InlineData(1.0, new double[] { 0.707107, -0.707107, 0 })]
+        [InlineData(0.0, new double[] { 0.7071067811865476, 0.7071067811865476, 0 })]
+        [InlineData(0.25, new double[] { 0.9325937445592631, 0.3609278426623971, 0 })]
+        [InlineData(0.5, new double[] { 0.9999839615943609, -0.005663616693228194, 0 })]
+        [InlineData(0.75, new double[] { 0.9295348056537327, -0.36873438282627974, 0 })]
+        [InlineData(1.0, new double[] { 0.7071067811865475, -0.7071067811865475, 0 })]
         public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
         {
             // Verb test
@@ -189,43 +190,26 @@ namespace GeometrySharp.XUnit.Geometry
             var tangentNormalized = tangentToCheck.Normalized();
             var tangentExpected = new Vector3(tangentData);
 
-            var tr = tangentNormalized.Select(v => Math.Round(v, 6)).ToList();
-            _testOutput.WriteLine($"{tr[0]},{tr[1]},{tr[2]}");
-
             tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-2))
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
                 .WhenTypeIs<double>());
         }
 
-        [Fact]
-        public void It_Returns_A_Point_At_The_Value()
+        // This values have been compered with NurbsPython lib.
+        [Theory]
+        [InlineData(0.0, new double[] { 5.0, 5.0, 0 })]
+        [InlineData(0.25, new double[] { 16.352766647188133, 12.60271447254918, 0 })]
+        [InlineData(0.5, new double[] { 27.64549230676716, 14.691702224146088, 0 })]
+        [InlineData(0.75, new double[] { 38.87409413435116, 12.502152087670986, 0 })]
+        [InlineData(1.0, new double[] { 50.0, 5.0, 0 })]
+        public void It_Returns_A_Point_At_The_Value(double t, double[] pointData)
         {
-            var degree = 3;
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){10, 5, 10},
-                new Vector3(){10, 20, -30},
-                new Vector3(){40, 10, 25},
-                new Vector3(){-10, 5, 0}
-            };
+            var pointToCheck = LinearAlgebra.Dehomogenize(NurbsCurveExample2().PointAt(t));
+            var pointExpected = new Vector3(pointData);
 
-            var crv = new NurbsCurve(degree, knots, pts);
-            var pt = crv.PointAt(0.3);
-
-            var derv = Eval.CurveDerivatives(crv, 0.35, 2);
-
-            var tangent = crv.Tangent(0.3).Normalized();
-
-            _testOutput.WriteLine(pt.ToString());
-            _testOutput.WriteLine(tangent[0].ToString());
-            _testOutput.WriteLine(tangent[1].ToString());
-            _testOutput.WriteLine(tangent[2].ToString());
-
-            //foreach (var vec in derv)
-            //{
-            //    _testOutput.WriteLine(vec.ToString());
-            //}
+            pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
         }
 
     }
