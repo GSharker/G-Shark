@@ -1,6 +1,8 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using GeometrySharp.Evaluation;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -19,8 +21,12 @@ namespace GeometrySharp.Geometry
         {
             Degree = degree;
             ControlPoints = controlPoints;
-            if (!AreControlPointsHomogenized())
+            Weights = weights;
+            if (!AreControlPointsHomogenized() || weights == null)
+            {
                 ControlPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
+                Weights = LinearAlgebra.Weight1d(ControlPoints);
+            }
             Knots = knots;
         }
 
@@ -47,6 +53,11 @@ namespace GeometrySharp.Geometry
         /// 2d list of control points, where each control point is a list of length (dim).
         /// </summary>
         public List<Vector3> ControlPoints { get; }
+
+        /// <summary>
+        /// List of weight values.
+        /// </summary>
+        public List<double> Weights { get; }
 
         /// <summary>
         /// List of non-decreasing knot values.
