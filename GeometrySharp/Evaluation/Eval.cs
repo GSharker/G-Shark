@@ -144,7 +144,7 @@ namespace GeometrySharp.Evaluation
 
                 CK.Add(v);
             }
-
+            // Return C(u) derivatives.
             return CK;
         }
 
@@ -155,7 +155,7 @@ namespace GeometrySharp.Evaluation
         /// <param name="curve">NurbsCurve object representing the curve.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
-        /// <returns></returns>
+        /// <returns>A point represented by an array of length (dim).</returns>
         public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
         {
             var degree = curve.Degree;

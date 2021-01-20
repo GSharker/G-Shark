@@ -1,29 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using FluentAssertions.Common;
-using FluentAssertions.Equivalency;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
-using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
-using Math = System.Math;
 
 namespace GeometrySharp.XUnit.Geometry
 {
     [Trait("Category", "NurbsCurve")]
-    public class NurbsCurveTest
+    public class NurbsCurveTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public NurbsCurveTest(ITestOutputHelper testOutput)
+        public NurbsCurveTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -76,34 +69,14 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Returns_A_NurbsCurve()
         {
-            int degree = 2;
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
-            };
-            Knot knots = new Knot() {1, 1, 1};
-
-            var nurbsCurve = new NurbsCurve(degree, knots, pts);
-
+            var nurbsCurve = NurbsCurveExample2();
             nurbsCurve.Should().NotBeNull();
         }
 
         [Fact]
         public void It_Returns_A_NurbsCurve_Evaluated_With_A_List_Of_Weights()
         {
-            int degree = 2;
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
-            };
-            Knot knots = new Knot() { 1, 1, 1 };
-            var weights = new List<double>() {0.5, 0.5, 0.5};
-
-            var nurbsCurve = new NurbsCurve(degree, knots, pts, weights);
+            var nurbsCurve = NurbsCurvePtsAndWeightsExample();
 
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
@@ -112,16 +85,7 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Copied_NurbsCurve()
         {
-            int degree = 2;
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
-            };
-            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1};
-
-            var nurbsCurve = new NurbsCurve(degree, knots, pts);
+            var nurbsCurve = NurbsCurveExample2();
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
@@ -146,14 +110,15 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
-            var curve = NurbsCurveExample();
+            var curve = NurbsCurveExample2();
             var matrix = MatrixTest.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
-            var demoPts = LinearAlgebra.Dehomogenize1d(transformedCurve.ControlPoints);
 
-            var distanceBetweenPts =
-                Math.Round((demoPts[0] - curve.ControlPoints[0]).Length(), 6);
+            var pt1 = curve.PointAt(0.5);
+            var pt2 = transformedCurve.PointAt(0.5);
+
+            var distanceBetweenPts = Math.Round((pt2 - pt1).Length(), 6);
 
             distanceBetweenPts.Should().Be(22.383029);
         }
@@ -230,6 +195,37 @@ namespace GeometrySharp.XUnit.Geometry
             tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-2))
                 .WhenTypeIs<double>());
+        }
+
+        [Fact]
+        public void It_Returns_A_Point_At_The_Value()
+        {
+            var degree = 3;
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            List<Vector3> pts = new List<Vector3>()
+            {
+                new Vector3(){10, 5, 10},
+                new Vector3(){10, 20, -30},
+                new Vector3(){40, 10, 25},
+                new Vector3(){-10, 5, 0}
+            };
+
+            var crv = new NurbsCurve(degree, knots, pts);
+            var pt = crv.PointAt(0.3);
+
+            var derv = Eval.CurveDerivatives(crv, 0.35, 2);
+
+            var tangent = crv.Tangent(0.3).Normalized();
+
+            _testOutput.WriteLine(pt.ToString());
+            _testOutput.WriteLine(tangent[0].ToString());
+            _testOutput.WriteLine(tangent[1].ToString());
+            _testOutput.WriteLine(tangent[2].ToString());
+
+            //foreach (var vec in derv)
+            //{
+            //    _testOutput.WriteLine(vec.ToString());
+            //}
         }
 
     }

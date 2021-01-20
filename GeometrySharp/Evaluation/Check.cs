@@ -9,25 +9,25 @@ namespace GeometrySharp.Evaluation
     public class Check
     {
         /// <summary>
-        /// Check whether a given list is a valid NURBS knot vector. This also checks the validity of the end points.
-        /// More specifically, this method checks if the knot vector is of the following structure:
-        /// The knot vector must be non-decreasing and of length (degree + 1) * 2 or greater
+        /// Check whether a given list is a valid NURBS knot knots. This also checks the validity of the end points.
+        /// More specifically, this method checks if the knot knots is of the following structure:
+        /// The knot knots must be non-decreasing and of length (degree + 1) * 2 or greater
         /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
-        /// <param name="vector">The knot vector to test</param>
+        /// <param name="knots">The knot knots to test</param>
         /// <param name="degree">The degree</param>
-        /// <returns>Whether the array is a valid knot vector or knot</returns>
-        public static bool IsValidKnotVector(Knot vector, int degree)
+        /// <returns>Whether the array is a valid knot knots or knot</returns>
+        public static bool IsValidKnotVector(Knot knots, int degree)
         {
-            if (vector.Count == 0) return false;
-            if (vector.Count < (degree + 1)*2) return false;
-            var rep = vector.First();
-            for (int i = 0; i <= degree + 1; i++)
-                if (System.Math.Abs(vector[i] - rep) > GeoSharpMath.EPSILON) return false;
-            rep = vector.Last();
-            for (int i = vector.Count - degree - 1; i < vector.Count; i++)
-                if (System.Math.Abs(vector[i] - rep) > GeoSharpMath.EPSILON) return false;
-            return IsNonDecreasing(vector);
+            if (knots.Count == 0) return false;
+            if (knots.Count < (degree + 1)*2) return false;
+            var rep = knots.First();
+            for (int i = 0; i < degree + 1; i++)
+                if (Math.Abs(knots[i] - rep) > GeoSharpMath.EPSILON) return false;
+            rep = knots.Last();
+            for (int i = knots.Count - degree - 1; i < knots.Count; i++)
+                if (Math.Abs(knots[i] - rep) > GeoSharpMath.EPSILON) return false;
+             return IsNonDecreasing(knots);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace GeometrySharp.Evaluation
             if (data.Knots.Count != data.ControlPoints.Count + data.Degree + 1)
                 throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length!");
             if (!Check.IsValidKnotVector(data.Knots, data.Degree))
-                throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
+                throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             return true;
         }
 
@@ -82,7 +82,7 @@ namespace GeometrySharp.Evaluation
             if (data.KnotsV.Count != data.ControlPoints[0].Count + data.DegreeV + 1)
                 throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
             if (!Check.IsValidKnotVector(data.KnotsU, data.DegreeU) || !Check.IsValidKnotVector(data.KnotsV, data.DegreeV))
-                throw new ArgumentException("Invalid knot vector format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
+                throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             return data;
         }
     }
