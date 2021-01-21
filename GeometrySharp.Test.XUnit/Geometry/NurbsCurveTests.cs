@@ -8,6 +8,8 @@ using GeometrySharp.Geometry;
 using GeometrySharp.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
+using verb;
+using verb.core;
 
 namespace GeometrySharp.XUnit.Geometry
 {
@@ -52,7 +54,7 @@ namespace GeometrySharp.XUnit.Geometry
 
         public static NurbsCurve NurbsCurveExample2()
         {
-            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
+            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 };
             var degree = 3;
             var controlPts = new List<Vector3>()
             {
@@ -118,7 +120,7 @@ namespace GeometrySharp.XUnit.Geometry
             var pt1 = curve.PointAt(0.5);
             var pt2 = transformedCurve.PointAt(0.5);
 
-            var distanceBetweenPts = Math.Round((pt2 - pt1).Length(), 6);
+            var distanceBetweenPts = System.Math.Round((pt2 - pt1).Length(), 6);
 
             distanceBetweenPts.Should().Be(22.383029);
         }
@@ -159,13 +161,13 @@ namespace GeometrySharp.XUnit.Geometry
             splitCurves[0].ControlPoints.Last().Should().BeEquivalentTo(splitCurves[1].ControlPoints.First());
         }
 
-        // This values have been compered with NurbsPython lib.
+        // This values have been compered with Rhino.
         [Theory]
-        [InlineData(0.0, new double[] { 0.7071067811865476, 0.7071067811865476, 0 })]
-        [InlineData(0.25, new double[] { 0.9325937445592631, 0.3609278426623971, 0 })]
-        [InlineData(0.5, new double[] { 0.9999839615943609, -0.005663616693228194, 0 })]
-        [InlineData(0.75, new double[] { 0.9295348056537327, -0.36873438282627974, 0 })]
-        [InlineData(1.0, new double[] { 0.7071067811865475, -0.7071067811865475, 0 })]
+        [InlineData(0.0, new double[] { 0.707107, 0.707107, 0.0 })]
+        [InlineData(0.25, new double[] { 0.931457, 0.363851, 0.0 })]
+        [InlineData(0.5, new double[] { 1.0, 0.0, 0.0 })]
+        [InlineData(0.75, new double[] { 0.931457, -0.363851, 0 })]
+        [InlineData(1.0, new double[] { 0.707107, -0.707107, 0.0 })]
         public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
         {
             // Verb test
@@ -195,13 +197,13 @@ namespace GeometrySharp.XUnit.Geometry
                 .WhenTypeIs<double>());
         }
 
-        // This values have been compered with NurbsPython lib.
+        // This values have been compered with Rhino.
         [Theory]
-        [InlineData(0.0, new double[] { 5.0, 5.0, 0 })]
-        [InlineData(0.25, new double[] { 16.352766647188133, 12.60271447254918, 0 })]
-        [InlineData(0.5, new double[] { 27.64549230676716, 14.691702224146088, 0 })]
-        [InlineData(0.75, new double[] { 38.87409413435116, 12.502152087670986, 0 })]
-        [InlineData(1.0, new double[] { 50.0, 5.0, 0 })]
+        [InlineData(0.0, new double[] { 5.0, 5.0, 0.0 })]
+        [InlineData(0.25, new double[] { 16.25, 12.558594, 0.0 })]
+        [InlineData(0.5, new double[] { 27.5, 14.6875, 0.0 })]
+        [InlineData(0.75, new double[] { 38.75, 12.558594, 0.0 })]
+        [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_The_Value(double t, double[] pointData)
         {
             var pointToCheck = LinearAlgebra.Dehomogenize(NurbsCurveExample2().PointAt(t));
@@ -210,6 +212,37 @@ namespace GeometrySharp.XUnit.Geometry
             pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
                 .WhenTypeIs<double>());
+        }
+
+        [Fact]
+        public  void t()
+        {
+            var pts = new Array<object>();
+
+            pts.push(new Array<double>(new double[] { 5, 5, 0 }));
+            pts.push(new Array<double>(new double[] { 10, 10, 0 }));
+            pts.push(new Array<double>(new double[] { 20, 15, 0 }));
+            pts.push(new Array<double>(new double[] { 35, 15, 0 }));
+            pts.push(new Array<double>(new double[] { 45, 10, 0 }));
+            pts.push(new Array<double>(new double[] { 50, 5, 0 }));
+
+            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 });
+            var weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+
+            var curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
+            var curve2 = verb.geom.NurbsCurve.byPoints(pts, 3);
+
+            var ptAt = curve2.point(0.5);
+            var vec = verb.core.Vec.normalized(curve2.tangent(0.5));
+            var k = curve2.knots();
+
+            for (int i = 0; i < k.length; i++)
+            {
+                k[i] = System.Math.Round(k[i], 6);
+            }
+
+            _testOutput.WriteLine($"{k}");
+            _testOutput.WriteLine($"{ptAt[0]},{ptAt[1]},{ptAt[2]}");
         }
 
     }

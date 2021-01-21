@@ -33,7 +33,7 @@ namespace GeometrySharp.Test.XUnit.Core
         {
             var valToCheck = Binomial.Get(n, k);
             _testOutput.WriteLine(valToCheck.ToString());
-            (Math.Abs(valToCheck - valResult) < GeoSharpMath.EPSILON).Should().BeTrue();
+            (System.Math.Abs(valToCheck - valResult) < GeoSharpMath.EPSILON).Should().BeTrue();
         }
     }
 }
