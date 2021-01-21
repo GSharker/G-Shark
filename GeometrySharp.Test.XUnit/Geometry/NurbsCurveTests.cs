@@ -73,6 +73,8 @@ namespace GeometrySharp.XUnit.Geometry
         {
             var nurbsCurve = NurbsCurveExample2();
             nurbsCurve.Should().NotBeNull();
+            nurbsCurve.Degree.Should().Be(3);
+            nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, 6));
         }
 
         [Fact]
@@ -81,7 +83,8 @@ namespace GeometrySharp.XUnit.Geometry
             var nurbsCurve = NurbsCurvePtsAndWeightsExample();
 
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
+            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() { 20, 0, 0 });
         }
 
         [Fact]
@@ -91,7 +94,9 @@ namespace GeometrySharp.XUnit.Geometry
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
+            copiedNurbs.Equals(nurbsCurve).Should().BeFalse();
+            copiedNurbs.Degree.Should().Be(nurbsCurve.Degree);
+            copiedNurbs.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
         }
 
         [Fact]
@@ -101,12 +106,6 @@ namespace GeometrySharp.XUnit.Geometry
 
             curveDomain.Min.Should().Be(NurbsCurveExample().Knots.First());
             curveDomain.Max.Should().Be(NurbsCurveExample().Knots.Last());
-        }
-
-        [Fact]
-        public void It_Checks_If_The_Control_Points_Are_Homogenized()
-        {
-            NurbsCurveExample().AreControlPointsHomogenized().Should().BeTrue();
         }
 
         [Fact]
@@ -138,9 +137,8 @@ namespace GeometrySharp.XUnit.Geometry
             {
                 controlPts.Add(new Vector3() { i, 0.0, 0.0 });
             }
-            var weights = Sets.RepeatData(1.0, controlPts.Count);
-            var curve = new NurbsCurve(degree, knots, controlPts, weights);
-
+            var curve = new NurbsCurve(degree, knots, controlPts);
+            var weights = curve.Weights;
             // Act
             var splitCurves = curve.Split(parameter);
 
@@ -210,7 +208,7 @@ namespace GeometrySharp.XUnit.Geometry
             var pointExpected = new Vector3(pointData);
 
             pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-5))
                 .WhenTypeIs<double>());
         }
 

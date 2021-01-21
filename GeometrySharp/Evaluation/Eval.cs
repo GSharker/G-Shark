@@ -72,22 +72,22 @@ namespace GeometrySharp.Evaluation
         public static Vector3 CurvePointAt(NurbsCurve curve, double u)
         {
             var degree = curve.Degree;
-            var controlPts = curve.ControlPoints;
+            var curveHomogenizedPoints = curve.HomogenizedPoints;
             var knots = curve.Knots;
 
-            if (!curve.Knots.AreValidRelations(degree, controlPts.Count))
+            if (!curve.Knots.AreValidRelations(degree, curveHomogenizedPoints.Count))
                 throw new ArgumentException("Invalid relations between control points, knot");
 
             var n = knots.Count - degree - 2;
 
             var knotSpan = knots.Span(n, degree, u);
             var basisValue = BasicFunction(degree, knots, knotSpan, u);
-            var position = Vector3.Zero1d(controlPts[0].Count);
+            var position = Vector3.Zero1d(curveHomogenizedPoints[0].Count);
 
             for (int i = 0; i < degree + 1; i++)
             {
                 var valToMultiply = basisValue[i];
-                var pt = controlPts[knotSpan - degree + i];
+                var pt = curveHomogenizedPoints[knotSpan - degree + i];
                 for (int j = 0; j < position.Count; j++)
                     position[j] = position[j] + valToMultiply * pt[j];
             }
@@ -159,15 +159,15 @@ namespace GeometrySharp.Evaluation
         public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
         {
             var degree = curve.Degree;
-            var controlPts = curve.ControlPoints;
+            var curveHomogenizedPoints = curve.HomogenizedPoints;
             var knots = curve.Knots;
 
-            if (!curve.Knots.AreValidRelations(degree, controlPts.Count))
+            if (!curve.Knots.AreValidRelations(degree, curveHomogenizedPoints.Count))
                 throw new ArgumentException("Invalid relations between control points, knot");
 
             var n = knots.Count - degree - 2;
 
-            var ptDimension = controlPts[0].Count;
+            var ptDimension = curveHomogenizedPoints[0].Count;
             var derivateOrder = numberDerivs < degree ? numberDerivs : degree;
             var CK = Vector3.Zero2d(numberDerivs + 1, ptDimension);
             var knotSpan = knots.Span(n, degree, parameter);
@@ -178,7 +178,7 @@ namespace GeometrySharp.Evaluation
                 for (int j = 0; j < degree + 1; j++)
                 {
                     var valToMultiply = derived2d[k][j];
-                    var pt = controlPts[knotSpan - degree + j];
+                    var pt = curveHomogenizedPoints[knotSpan - degree + j];
                     for (int i = 0; i < CK[k].Count; i++)
                         CK[k][i] = CK[k][i] + (valToMultiply * pt[i]);
                 }

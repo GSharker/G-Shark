@@ -19,14 +19,9 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double> weights = null)
         {
+            HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
+            Weights = weights == null ? Sets.RepeatData(1.0, controlPoints.Count) : weights;
             Degree = degree;
-            ControlPoints = controlPoints;
-            Weights = weights;
-            if (!AreControlPointsHomogenized() || weights == null)
-            {
-                ControlPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
-                Weights = LinearAlgebra.Weight1d(ControlPoints);
-            }
             Knots = knots;
         }
 
@@ -39,8 +34,9 @@ namespace GeometrySharp.Geometry
             if (Check.IsValidNurbsCurve(curve))
             {
                 Degree = curve.Degree;
-                ControlPoints = new List<Vector3>(curve.ControlPoints);
+                HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
                 Knots = new Knot(curve.Knots);
+                Weights = new List<double>(curve.Weights!);
             };
         }
 
@@ -50,14 +46,19 @@ namespace GeometrySharp.Geometry
         public int Degree { get; }
 
         /// <summary>
-        /// 2d list of control points, where each control point is a list of length (dim).
+        /// 2d list of control points, where each control point is a list like (x,y,z) of length (dim).
         /// </summary>
-        public List<Vector3> ControlPoints { get; }
+        public List<Vector3> ControlPoints => LinearAlgebra.Dehomogenize1d(HomogenizedPoints);
+
+        /// <summary>
+        /// 2d list of points, where represented a set (wi*pi, wi) with length (dim+1).
+        /// </summary>
+        public List<Vector3> HomogenizedPoints { get; }
 
         /// <summary>
         /// List of weight values.
         /// </summary>
-        public List<double> Weights { get; }
+        public List<double>? Weights { get; }
 
         /// <summary>
         /// List of non-decreasing knot values.
@@ -69,12 +70,6 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <returns>The copied curve.</returns>
         public NurbsCurve Clone() => new NurbsCurve(this);
-
-        /// <summary>
-        /// Check if the points represented a set (wi*pi, wi) with length (dim+1).
-        /// </summary>
-        /// <returns>Get the result.</returns>
-        public bool AreControlPointsHomogenized() => this.ControlPoints.All(pt => pt.Count == 4);
 
         /// <summary>
         /// Determine the valid domain of the curve.
