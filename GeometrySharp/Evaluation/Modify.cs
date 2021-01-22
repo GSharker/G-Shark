@@ -29,8 +29,8 @@ namespace GeometrySharp.Evaluation
 			int n = controlPoints.Count - 1;
 			int m = n + degree + 1;
 			int r = knotsToInsert.Count - 1;
-			int a = Knot.Span(degree, knotsToInsert[0], knots);
-			int b = Knot.Span(degree, knotsToInsert[r], knots);
+			int a = knots.Span(degree, knotsToInsert[0]);
+			int b = knots.Span(degree, knotsToInsert[r]);
 			Vector3[] controlPointsPost = new Vector3[n+r+2];
 			double[] knotsPost = new double[m+r+2];
 			//new control points

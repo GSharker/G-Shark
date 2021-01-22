@@ -144,6 +144,5 @@ namespace GeometrySharp.XUnit.Core
 
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
         }
-     
     }
 }

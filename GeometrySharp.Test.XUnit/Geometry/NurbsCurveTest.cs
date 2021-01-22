@@ -106,7 +106,7 @@ namespace GeometrySharp.XUnit.Geometry
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Should().BeEquivalentTo(nurbsCurve);
+            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
         }
 
         [Fact]
@@ -140,9 +140,12 @@ namespace GeometrySharp.XUnit.Geometry
             distanceBetweenPts.Should().Be(22.383029);
         }
 
-        [Fact]
-        public void It_Splits_A_Curve_Returning_Two_Curves()
+        [Theory]
+        [InlineData(0.5)]
+        [InlineData(3.5)]
+        public void It_Splits_A_Curve_Returning_Two_Curves(double parameter)
         {
+            // Arrange
             var degree = 3;
             var knots = new Knot() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
             var controlPts = new List<Vector3>();
@@ -151,13 +154,26 @@ namespace GeometrySharp.XUnit.Geometry
                 controlPts.Add(new Vector3() { i, 0.0, 0.0 });
             }
             var weights = Sets.RepeatData(1.0, controlPts.Count);
-
             var curve = new NurbsCurve(degree, knots, controlPts, weights);
 
-            var splitCurves = curve.Split(0.5);
+            // Act
+            var splitCurves = curve.Split(parameter);
+
+            // Assert
+            for (var i = 0; i < degree + 1; i++)
+            {
+                var d = splitCurves[0].Knots.Count- (degree + 1);
+                splitCurves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.TOLERANCE);
+            }
+
+            for (var i = 0; i < degree + 1; i++)
+            {
+                var d = 0;
+                splitCurves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.TOLERANCE);
+            }
 
             splitCurves.Should().HaveCount(2);
-            // ToDo Check a point on both curve.
+            splitCurves[0].ControlPoints.Last().Should().BeEquivalentTo(splitCurves[1].ControlPoints.First());
         }
     }
 }

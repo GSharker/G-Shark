@@ -21,6 +21,7 @@ namespace GeometrySharp.Geometry
             ControlPoints = weights == null ? controlPoints : LinearAlgebra.Homogenize1d(controlPoints, weights); 
             Knots = knots;
         }
+
         /// <summary>
         /// Construct a NurbsCurve by a NurbsCurve object.
         /// </summary>
@@ -30,49 +31,68 @@ namespace GeometrySharp.Geometry
             if (Check.IsValidNurbsCurve(curve))
             {
                 Degree = curve.Degree;
-                ControlPoints = curve.ControlPoints;
-                Knots = curve.Knots;
+                ControlPoints = new List<Vector3>(curve.ControlPoints);
+                Knots = new Knot(curve.Knots);
             };
         }
+
         /// <summary>
         /// Integer degree of curve.
         /// </summary>
-        public int Degree { get; set; }
+        public int Degree { get; }
+
         /// <summary>
         /// 2d list of control points, where each control point is a list of length (dim).
         /// </summary>
-        public List<Vector3> ControlPoints { get; set; }
+        public List<Vector3> ControlPoints { get; }
+
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
-        public Knot Knots { get; set; }
+        public Knot Knots { get; }
+
         /// <summary>
         /// Obtain a copy of the NurbsCurve.
         /// </summary>
         /// <returns>The copied curve.</returns>
-        public NurbsCurve Clone()
-        {
-            return new NurbsCurve(this);
-        }
+        public NurbsCurve Clone() => new NurbsCurve(this);
+
         /// <summary>
         /// Check if the points represented a set (wi*pi, wi) with length (dim+1).
         /// </summary>
         /// <returns>Get the result.</returns>
         public bool AreControlPointsHomogenized() => this.ControlPoints.All(pt => pt.Count == 4);
+
+        /// <summary>
+        /// Determine the valid domain of the curve.
+        /// </summary>
+        /// <returns>representing the high and end point of the domain of the curve.</returns>
+        public Interval Domain() => new Interval(this.Knots.First(), this.Knots.Last());
+
         /// <summary>
         /// Transform a curve with the given matrix.
         /// </summary>
         /// <param name="mat">4d set representing the transform.</param>
         /// <returns>A new NurbsCurve transformed.</returns>
+        /// ToDo consider the hypar transformation.
+        /// ToDo implement the async method.
         public NurbsCurve Transform(Matrix mat) => new NurbsCurve(Modify.RationalCurveTransform(this, mat));
-        // ToDo Implement the async method.
+
         /// <summary>
         /// Split the curve at the give parameter.
         /// </summary>
         /// <param name="t">The parameter at which to split the curve</param>
         /// <returns>Two curves - one at the lower end of the parameter range and one at the higher end.</returns>
+        /// ToDo implement the async method.
         public List<NurbsCurve> Split(double t) => Divide.CurveSplit(this, t);
-        // ToDo Implement the async method.
+
+        /// <summary>
+        /// Sample a point at the given parameter.
+        /// </summary>
+        /// <param name="t">The parameter to sample the curve.</param>
+        /// <returns>A point at the given parameter.</returns>
+        /// ToDo implement the async method.
+        public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -80,16 +100,6 @@ namespace GeometrySharp.Geometry
         }
 
         public NurbsCurve AsNurbs()
-        {
-            throw new System.NotImplementedException();
-        }
-        /// <summary>
-        /// Determine the valid domain of the curve.
-        /// </summary>
-        /// <returns>representing the high and end point of the domain of the curve.</returns>
-        public Interval Domain() => new Interval(this.Knots.First(), this.Knots.Last());
-
-        public Vector3 PointAt(double t)
         {
             throw new System.NotImplementedException();
         }
@@ -102,7 +112,9 @@ namespace GeometrySharp.Geometry
         public bool Equals(NurbsCurve other)
         {
             if (other == null) return false;
-            return Degree == other.Degree && Equals(ControlPoints, other.ControlPoints) && Equals(Knots, other.Knots);
+            if (this.ControlPoints.Count != other.ControlPoints.Count) return false;
+            if (this.Knots.Count != other.Knots.Count) return false;
+            return Degree == other.Degree && ControlPoints.All(other.ControlPoints.Contains) && Knots.All(other.Knots.Contains);
         }
 
         public override string ToString()

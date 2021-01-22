@@ -52,7 +52,7 @@ namespace GeometrySharp.XUnit.Core
         {
             var knotsArray = new Knot(knots);
 
-            knotsArray.AreValid(degree, ctrlPts).Should().Be(expectedResult);
+            knotsArray.AreValidRelations(degree, ctrlPts).Should().Be(expectedResult);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace GeometrySharp.XUnit.Core
             var knotVector = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
             var degree = 2;
 
-            var result = Knot.Span(knotVector.Count - degree - 2, 2, parameter, knotVector);
+            var result = knotVector.Span(knotVector.Count - degree - 2, 2, parameter);
 
             result.Should().Be(expectedValue);
         }

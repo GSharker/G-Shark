@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeometrySharp.Evaluation;
+using Newtonsoft.Json.Linq;
 
 namespace GeometrySharp.Core
 {
@@ -49,6 +51,7 @@ namespace GeometrySharp.Core
 
             return controlPtsHomogenized;
         }
+
         /// <summary>
         /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
@@ -60,6 +63,7 @@ namespace GeometrySharp.Core
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
             return homogeneousPts.Select(vec => vec[^1]).ToList();
         }
+
         /// <summary>
         /// Dehomogenize a point.
         /// </summary>
@@ -76,6 +80,7 @@ namespace GeometrySharp.Core
 
             return point;
         }
+
         /// <summary>
         /// Dehomogenize an set of points.
         /// </summary>

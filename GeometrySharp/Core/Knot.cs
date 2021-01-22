@@ -23,6 +23,7 @@ namespace GeometrySharp.Core
         {
             this.AddRange(values);
         }
+
         /// <summary>
         /// Check the validity of the input knots.
         /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
@@ -31,7 +32,7 @@ namespace GeometrySharp.Core
         /// <param name="degree">Curve degree.</param>
         /// <param name="numControlPts">Number of control points.</param>
         /// <returns>Whether the relation is confirmed.</returns>
-        public bool AreValid(int degree, int numControlPts)
+        public bool AreValidRelations(int degree, int numControlPts)
         {
             // Check the formula; m = p + n + 1
             if (numControlPts + degree + 1 - this.Count != 0) return false;
@@ -54,7 +55,7 @@ namespace GeometrySharp.Core
         /// <param name="u">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns></returns>
-        public static int Span(int degree, double u, Knot knots) => Span(knots.Count - degree - 2, degree, u, knots);
+        public int Span(int degree, double u) => Span(this.Count - degree - 2, degree, u);
 
         /// <summary>
         /// Find the span on the knot list of the given parameter,
@@ -65,20 +66,20 @@ namespace GeometrySharp.Core
         /// <param name="parameter">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns>The index of the knot span.</returns>
-        public static int Span(int numberOfControlPts, int degree, double parameter, Knot knots)
+        public int Span(int numberOfControlPts, int degree, double parameter)
         {
             // special case if parameter == knots[numberOfControlPts+1]
-            if (parameter > knots[numberOfControlPts + 1] - GeoSharpMath.EPSILON) return numberOfControlPts;
+            if (parameter > this[numberOfControlPts + 1] - GeoSharpMath.EPSILON) return numberOfControlPts;
 
-            if (parameter < knots[degree] + GeoSharpMath.EPSILON) return degree;
+            if (parameter < this[degree] + GeoSharpMath.EPSILON) return degree;
 
             var low = degree;
             var high = numberOfControlPts + 1;
             int mid = (int) Math.Floor((double)(low + high) / 2);
 
-            while (parameter < knots[mid] || parameter >= knots[mid + 1])
+            while (parameter < this[mid] || parameter >= this[mid + 1])
             {
-                if (parameter < knots[mid])
+                if (parameter < this[mid])
                     high = mid;
                 else
                     low = mid;
@@ -102,6 +103,7 @@ namespace GeometrySharp.Core
             this.Clear();
             this.AddRange(normalizedKnots);
         }
+
         /// <summary>
         /// Generates an equally spaced knot vector.
         /// Clamp curve is tangent to the first and the last legs at the first and last control points.

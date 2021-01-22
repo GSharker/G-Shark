@@ -18,5 +18,49 @@ namespace GeometrySharp.XUnit.Evaluation
         {
             _testOutput = testOutput;
         }
+
+        [Fact]
+        public void It_Tests_A_Basic_Function()
+        {
+            var degree = 2;
+            var span = 4;
+            var knots = new Knot() {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
+
+            var result1 = Eval.BasicFunction(degree, knots, span, 2.5);
+            var result2 = Eval.BasicFunction(degree, knots,2.5);
+
+            result1.Should().BeEquivalentTo(result2);
+            result1.Count.Should().Be(3);
+            result1[0].Should().Be(0.125);
+            result1[1].Should().Be(0.75);
+            result1[2].Should().Be(0.125);
+        }
+
+        [Theory]
+        [InlineData(0.0, new double[]{5.0,5.0,0.0})]
+        [InlineData(0.3, new double[] { 18.617, 13.377, 0.0 })]
+        [InlineData(0.5, new double[] { 27.645, 14.691, 0.0 })]
+        [InlineData(0.6, new double[] { 32.143, 14.328, 0.0 })]
+        [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
+        public void It_Returns_A_Point_On_A_Curve_At_A_Given_Parameter(double parameter, double[] result)
+        {
+            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
+            var degree = 3;
+            var controlPts = new List<Vector3>()
+            {
+                new Vector3() {5,5,0},
+                new Vector3() {10, 10, 0},
+                new Vector3() {20, 15, 0},
+                new Vector3() {35, 15, 0},
+                new Vector3() {45, 10, 0},
+                new Vector3() {50, 5, 0}
+            };
+            var curve = new NurbsCurve(degree, knots, controlPts);
+
+            var pt = Eval.CurvePointAt(curve, parameter);
+
+            pt[0].Should().BeApproximately(result[0], 0.001);
+            pt[1].Should().BeApproximately(result[1], 0.001);
+        }
     }
 }
