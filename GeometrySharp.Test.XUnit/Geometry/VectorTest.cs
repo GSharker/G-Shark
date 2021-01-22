@@ -200,7 +200,7 @@ namespace GeometrySharp.XUnit.Geometry
 
             var divisionResult = vec / 7;
 
-            divisionResult.Select((val, i) => Math.Round(val, 6).Should().Be(expectedVec[i]));
+            divisionResult.Select((val, i) => System.Math.Round(val, 6).Should().Be(expectedVec[i]));
         }
 
         [Fact]

@@ -23,7 +23,7 @@ namespace GeometrySharp.Evaluation
 				return new NurbsCurve(curve);
 
 			int degree = curve.Degree;
-			List<Vector3> controlPoints = curve.ControlPoints;
+			List<Vector3> controlPoints = curve.HomogenizedPoints;
 			Knot knots = curve.Knots;
 
 			int n = controlPoints.Count - 1;
@@ -66,11 +66,11 @@ namespace GeometrySharp.Evaluation
                     int ind = k - degree + l;
                     double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-                    if (System.Math.Abs(alfa) < GeoSharpMath.EPSILON)
+                    if (Math.Abs(alfa) < GeoSharpMath.EPSILON)
                         controlPointsPost[ind - 1] = controlPointsPost[ind];
                     else
                     {
-                        alfa = alfa / (knotsPost[k + l] - knots[g - degree + l]);
+                        alfa /= (knotsPost[k + l] - knots[g - degree + l]);
                         controlPointsPost[ind - 1] = (controlPointsPost[ind - 1] * alfa) + (controlPointsPost[ind] * (1.0 - alfa));
                     }
                 }
@@ -161,17 +161,14 @@ namespace GeometrySharp.Evaluation
         public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
         {
             var pts = curve.ControlPoints;
-			var weights = LinearAlgebra.Weight1d(curve.ControlPoints);
-
-            if (!curve.AreControlPointsHomogenized())
+            for (int i = 0; i < pts.Count; i++)
             {
-                pts = LinearAlgebra.Homogenize1d(curve.ControlPoints);
-                weights = Sets.RepeatData(1.0, curve.ControlPoints.Count);
+                var pt = pts[i];
+				pt.Add(1.0);
+                pts[i] = Matrix.Dot(mat, pt).Take(pt.Count - 1).ToVector();
             }
 
-            var controlPtsTransformed = pts.Select(pt => Matrix.Dot(mat, pt).Take(pt.Count - 1).ToVector()).ToList();
-            var homogenizePts = LinearAlgebra.Homogenize1d(controlPtsTransformed, weights);
-            return new NurbsCurve(curve.Degree, curve.Knots, homogenizePts);
+            return new NurbsCurve(curve.Degree, curve.Knots, pts, curve.Weights!);
         }
 
         /// <summary>

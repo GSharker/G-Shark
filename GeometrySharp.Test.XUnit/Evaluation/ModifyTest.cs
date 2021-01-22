@@ -22,7 +22,7 @@ namespace GeometrySharp.XUnit.Evaluation
         [Fact]
         public void It_Returns_A_Transformed_NurbsCurve_Using_A_Matrix()
         {
-            var curve = NurbsCurveTest.NurbsCurveExample();
+            var curve = NurbsCurveTests.NurbsCurveExample();
             var mat = new Matrix() {
                 new List<double>{1.0, 0.0, 0.0, -10.0 },
                 new List<double>{0.0, 1.0, 0.0, 20.0 },

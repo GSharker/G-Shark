@@ -1,6 +1,8 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using GeometrySharp.Evaluation;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -17,8 +19,9 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double> weights = null)
         {
+            HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
+            Weights = weights == null ? Sets.RepeatData(1.0, controlPoints.Count) : weights;
             Degree = degree;
-            ControlPoints = weights == null ? controlPoints : LinearAlgebra.Homogenize1d(controlPoints, weights); 
             Knots = knots;
         }
 
@@ -31,8 +34,9 @@ namespace GeometrySharp.Geometry
             if (Check.IsValidNurbsCurve(curve))
             {
                 Degree = curve.Degree;
-                ControlPoints = new List<Vector3>(curve.ControlPoints);
+                HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
                 Knots = new Knot(curve.Knots);
+                Weights = new List<double>(curve.Weights!);
             };
         }
 
@@ -42,9 +46,19 @@ namespace GeometrySharp.Geometry
         public int Degree { get; }
 
         /// <summary>
-        /// 2d list of control points, where each control point is a list of length (dim).
+        /// 2d list of control points, where each control point is a list like (x,y,z) of length (dim).
         /// </summary>
-        public List<Vector3> ControlPoints { get; }
+        public List<Vector3> ControlPoints => LinearAlgebra.Dehomogenize1d(HomogenizedPoints);
+
+        /// <summary>
+        /// 2d list of points, where represented a set (wi*pi, wi) with length (dim+1).
+        /// </summary>
+        public List<Vector3> HomogenizedPoints { get; }
+
+        /// <summary>
+        /// List of weight values.
+        /// </summary>
+        public List<double>? Weights { get; }
 
         /// <summary>
         /// List of non-decreasing knot values.
@@ -56,12 +70,6 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <returns>The copied curve.</returns>
         public NurbsCurve Clone() => new NurbsCurve(this);
-
-        /// <summary>
-        /// Check if the points represented a set (wi*pi, wi) with length (dim+1).
-        /// </summary>
-        /// <returns>Get the result.</returns>
-        public bool AreControlPointsHomogenized() => this.ControlPoints.All(pt => pt.Count == 4);
 
         /// <summary>
         /// Determine the valid domain of the curve.
@@ -94,15 +102,12 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public NurbsCurve AsNurbs()
-        {
-            throw new System.NotImplementedException();
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
 
         public List<Vector3> Derivatives(double u, int numberDerivs = 1)
         {
@@ -114,7 +119,7 @@ namespace GeometrySharp.Geometry
             if (other == null) return false;
             if (this.ControlPoints.Count != other.ControlPoints.Count) return false;
             if (this.Knots.Count != other.Knots.Count) return false;
-            return Degree == other.Degree && ControlPoints.All(other.ControlPoints.Contains) && Knots.All(other.Knots.Contains);
+            return Degree == other.Degree && ControlPoints.SequenceEqual(other.ControlPoints) && Knots.All(other.Knots.Contains);
         }
 
         public override string ToString()
@@ -132,6 +137,11 @@ namespace GeometrySharp.Geometry
             return stringBuilder.ToString();
         }
 
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new System.NotImplementedException();
+        }
         public override NurbsCurve FromJson(string s) => throw new NotImplementedException();
 
         public override string ToJson() => JsonConvert.SerializeObject(this);

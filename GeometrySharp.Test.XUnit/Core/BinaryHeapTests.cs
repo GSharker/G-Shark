@@ -11,11 +11,11 @@ using Xunit.Abstractions;
 namespace GeometrySharp.XUnit.Core
 {
     [Trait("Category", "BinaryHeap")]
-    public class BinaryHeapTest
+    public class BinaryHeapTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public BinaryHeapTest(ITestOutputHelper testOutput)
+        public BinaryHeapTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

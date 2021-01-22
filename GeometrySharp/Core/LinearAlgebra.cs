@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GeometrySharp.Evaluation;
+using GeometrySharp.ExtendedMethods;
 using Newtonsoft.Json.Linq;
 
 namespace GeometrySharp.Core
@@ -13,6 +14,7 @@ namespace GeometrySharp.Core
     {
         /// <summary>
         /// Transform a 1d array of points into their homogeneous equivalents.
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
         /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
@@ -87,5 +89,17 @@ namespace GeometrySharp.Core
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
         public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
+
+        /// <summary>
+        /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.
+        /// ToDo remove all these process adding a list of weight in the nurbs.
+        /// </summary>
+        /// <param name="homoPoints">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns> Set of points represented by an array (wi*pi) with length (dim).</returns>
+        public static List<Vector3> Rational1d(List<Vector3> homoPoints)
+        {
+            var dim = homoPoints[0].Count - 1;
+            return homoPoints.Select(pt => new Vector3(pt.GetRange(0, dim))).ToList();
+        }
     }
 }
