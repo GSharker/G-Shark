@@ -183,7 +183,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
             var curve = NurbsCurveExample2();
-            var matrix = MatrixTest.TransformationMatrixExample;
+            var matrix = MatrixTests.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
 

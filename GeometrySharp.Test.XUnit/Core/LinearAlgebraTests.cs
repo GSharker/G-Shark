@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
     [Trait("Category", "LinearAlgebra")]
-    public class LinearAlgebraTest
+    public class LinearAlgebraTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public LinearAlgebraTest(ITestOutputHelper testOutput)
+        public LinearAlgebraTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

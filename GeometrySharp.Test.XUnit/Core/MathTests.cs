@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
     [Trait("Category", "GeoSharpMath")]
-    public class MathTest
+    public class MathTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public MathTest(ITestOutputHelper testOutput)
+        public MathTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

@@ -6,14 +6,14 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
     [Trait("Category", "Vector3")]
-    public class VectorTest
+    public class VectorTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public VectorTest(ITestOutputHelper testOutput)
+        public VectorTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
