@@ -16,7 +16,7 @@ namespace GeometrySharp.Core
 
         public Knot(int degree, int numberOfControlPts, bool clamped = true)
         {
-            Generate(degree, numberOfControlPts, clamped);
+            Create(degree, numberOfControlPts, clamped);
         }
 
         public Knot(IEnumerable<double> values)
@@ -122,7 +122,7 @@ namespace GeometrySharp.Core
         /// <param name="degree">Degree.</param>
         /// <param name="numberOfControlPts">Number of control points.</param>
         /// <param name="clamped">Flag to choose from clamped or unclamped knot vector options, default true.</param>
-        public void Generate(int degree, int numberOfControlPts, bool clamped)
+        public void Create(int degree, int numberOfControlPts, bool clamped = true)
         {
             if (degree <= 0 || numberOfControlPts <= 0)
                 throw new Exception("Input values must be positive and different than zero.");

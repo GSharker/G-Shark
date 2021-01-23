@@ -45,7 +45,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 new Vector3(){10,5,5},
                 new Vector3(){20,0,0}
             };
-            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1 };
+            Knot knots = new Knot() { 0, 0, 0, 1, 1, 1 };
 
             return new NurbsCurve(degree, knots, pts);
         }
@@ -85,6 +85,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_NurbsCurve()
         {
             var nurbsCurve = NurbsCurveExample2();
+
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(3);
             nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, 6));
@@ -98,6 +99,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() { 20, 0, 0 });
+        }
+
+        [Fact]
+        public void It_Returns_A_NurbsCurve_From_ControlPoints_And_Degree()
+        {
+            var nurbsCurve = new NurbsCurve(CurveData.pts, CurveData.degree);
+
+            nurbsCurve.Should().NotBeNull();
+            nurbsCurve.Degree.Should().Be(2);
+            nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, CurveData.pts.Count));
+            nurbsCurve.Knots.Should().BeEquivalentTo(new Knot(CurveData.degree, CurveData.pts.Count));
         }
 
         [Fact]
