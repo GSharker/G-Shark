@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 using verb;
 using verb.core;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
     [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTests
@@ -22,6 +22,19 @@ namespace GeometrySharp.XUnit.Geometry
         {
             _testOutput = testOutput;
         }
+
+        public static (int degree, List<Vector3> pts, Knot knots, List<double> weights) CurveData =>
+        (
+            2,
+            new List<Vector3>()
+            {
+                new Vector3(){-10,15,5},
+                new Vector3(){10,5,5},
+                new Vector3(){20,0,0}
+            },
+            new Knot() { 1, 1, 1, 1, 1, 1 },
+            new List<double>() { 0.5, 0.5, 0.5 }
+        );
 
         public static NurbsCurve NurbsCurveExample()
         {
@@ -85,6 +98,52 @@ namespace GeometrySharp.XUnit.Geometry
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() { 20, 0, 0 });
+        }
+
+        [Fact]
+        public void NurbsCurve_Throws_An_Exception_If_ControlPoints_Are_Null()
+        {
+            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, CurveData.knots, null, CurveData.weights);
+
+            curve.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Null()
+        {
+            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, null, CurveData.pts, CurveData.weights);
+
+            curve.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void NurbsCurve_Throws_An_Exception_If_Degree_is_Less_Than_1()
+        {
+            Func<NurbsCurve> curve = () => new NurbsCurve(0, CurveData.knots, CurveData.pts, CurveData.weights);
+
+            curve.Should().Throw<ArgumentException>()
+                .WithMessage("Degree must be greater than 1!");
+        }
+
+        // Confirm the relations between degree(p), number of control points(n+1), and the number of knots(m+1).
+        // m = p + n + 1
+        [Fact]
+        public void NurbsCurve_Throws_An_Exception_If_Is_Not_Valid_The_Relation_Between_Pts_Degree_Knots()
+        {
+            Func<NurbsCurve> curve = () => new NurbsCurve(1, CurveData.knots, CurveData.pts, CurveData.weights);
+
+            curve.Should().Throw<ArgumentException>()
+                .WithMessage("Number of points + degree + 1 must equal knots length!");
+        }
+
+        [Fact]
+        public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
+        {
+            var knots = new Knot(){0,0,1,1,2,2};
+            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);
+
+            curve.Should().Throw<ArgumentException>()
+                .WithMessage("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
         }
 
         [Fact]
