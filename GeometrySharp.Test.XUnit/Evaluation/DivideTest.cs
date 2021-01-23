@@ -6,7 +6,7 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Evaluation
 {
     [Trait("Category", "Divide")]
     public class DivideTest
