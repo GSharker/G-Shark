@@ -75,7 +75,7 @@ namespace GeometrySharp.Evaluation
             var curveHomogenizedPoints = curve.HomogenizedPoints;
             var knots = curve.Knots;
 
-            if (!curve.Knots.AreValidRelations(degree, curveHomogenizedPoints.Count))
+            if (!curve.Knots.AreValidKnots(degree, curveHomogenizedPoints.Count))
                 throw new ArgumentException("Invalid relations between control points, knot");
 
             var n = knots.Count - degree - 2;
@@ -162,7 +162,7 @@ namespace GeometrySharp.Evaluation
             var curveHomogenizedPoints = curve.HomogenizedPoints;
             var knots = curve.Knots;
 
-            if (!curve.Knots.AreValidRelations(degree, curveHomogenizedPoints.Count))
+            if (!curve.Knots.AreValidKnots(degree, curveHomogenizedPoints.Count))
                 throw new ArgumentException("Invalid relations between control points, knot");
 
             var n = knots.Count - degree - 2;

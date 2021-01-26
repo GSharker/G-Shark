@@ -4,10 +4,10 @@ using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
     [Trait("Category", "Knot")]
-    public class KnotTest
+    public class KnotTests
     {
         [Theory]
         [InlineData(0,12)]
@@ -45,14 +45,21 @@ namespace GeometrySharp.XUnit.Core
         }
 
         [Theory]
-        [InlineData(new double[] {0, 0, 1, 2, 3, 4, 4}, 4, 12, false)]
-        [InlineData(new double[] {5, 3, 6, 5, 4, 5, 6}, 3, 3, false)]
-        [InlineData(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 }, 4, 12, true)]
-        public void It_Checks_Are_Valid_Knots(double[] knots, int degree, int ctrlPts, bool expectedResult)
+        [InlineData(new double[] { 0, 0, 0, 1, 1, 1 }, 2, 3, true)]
+        [InlineData(new double[] { 0, 0, 0, 0.5, 1, 1, 1 }, 2, 4, true)]
+        [InlineData(new double[] { 0, 0, 1, 1, 1 }, 2, 2, false)]
+        [InlineData(new double[] { 0, 0, 0.5, 1, 1, 1 }, 2, 4, false)]
+        [InlineData(new double[] { 0, 0, 0, 1, 1, 2 }, 2, 3, false)]
+        [InlineData(new double[] { 0, 0, 0, 0.5, 1, 1, 2 }, 2, 4, false)]
+        [InlineData(new double[] { 0, 0, 0, 0.5, 0.25, 1, 1, 1 }, 2, 5, false)]
+        [InlineData(new double[] { 2, 2, 2, 3, 4, 4, 4 }, 2, 4, true)]
+        [InlineData(new double[] { 0, 0, 1, 2, 3, 4, 4 }, 4, 12, false)]
+        [InlineData(new double[] { 5, 3, 6, 5, 4, 5, 6 }, 3, 3, false)]
+        // [InlineData(new double[] { 0, 0, 0, 0.5, 0.25, 1, 1, 1 }, 2, true)]  Check for periodic knots
+        public void It_Checks_If_The_Knots_Are_Valid(double[] knots, int degree, int ctrlPts, bool expectedResult)
         {
-            var knotsArray = new Knot(knots);
-
-            knotsArray.AreValidRelations(degree, ctrlPts).Should().Be(expectedResult);
+            var knot = new Knot(knots);
+            knot.AreValidKnots(degree, ctrlPts).Should().Be(expectedResult);
         }
 
         [Fact]

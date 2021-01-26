@@ -6,14 +6,14 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
     [Trait("Category", "Sets")]
-    public class SetsTest
+    public class SetsTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public SetsTest(ITestOutputHelper testOutput)
+        public SetsTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

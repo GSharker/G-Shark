@@ -16,7 +16,7 @@ namespace GeometrySharp.Core
 
         public Knot(int degree, int numberOfControlPts, bool clamped = true)
         {
-            Generate(degree, numberOfControlPts, clamped);
+            Create(degree, numberOfControlPts, clamped);
         }
 
         public Knot(IEnumerable<double> values)
@@ -28,23 +28,34 @@ namespace GeometrySharp.Core
         /// Check the validity of the input knots.
         /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
         /// Refer to The NURBS Book (2nd Edition), p.50 for details.
+        /// 
+        /// More specifically, this method checks if the knot knots is of the following structure:
+        /// The knot knots must be non-decreasing and of length (degree + 1) * 2 or greater
+        /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
-        /// <param name="degree">Curve degree.</param>
-        /// <param name="numControlPts">Number of control points.</param>
-        /// <returns>Whether the relation is confirmed.</returns>
-        public bool AreValidRelations(int degree, int numControlPts)
+        /// <param name="degree">The degree of the curve.</param>
+        /// <param name="numControlPts">The number of control points.</param>
+        /// <returns>Whether the array is a valid knot knots or knot</returns>
+        public bool AreValidKnots(int degree, int numControlPts)
         {
-            // Check the formula; m = p + n + 1
+            if (this.Count == 0) return false;
+            if (this.Count < (degree + 1) * 2) return false;
+            // Check the formula: m = p + n + 1
             if (numControlPts + degree + 1 - this.Count != 0) return false;
 
-            // Check ascending order.
-            var previousKnot = this[0];
-            foreach (var knot in this)
+            var rep = this.First();
+            for (int i = 0; i < this.Count; i++)
             {
-                if (previousKnot > knot) return false;
-                previousKnot = knot;
-            }
+                // Verb doesn't allow for periodic knots, these two ifs should be removed.
+                if (i < degree + 1)
+                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON) return false;
 
+                if (i > this.Count - degree - 1 && i < this.Count)
+                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON) return false;
+
+                if (this[i] < rep - GeoSharpMath.EPSILON) return false;
+                rep = this[i];
+            }
             return true;
         }
 
@@ -111,7 +122,7 @@ namespace GeometrySharp.Core
         /// <param name="degree">Degree.</param>
         /// <param name="numberOfControlPts">Number of control points.</param>
         /// <param name="clamped">Flag to choose from clamped or unclamped knot vector options, default true.</param>
-        public void Generate(int degree, int numberOfControlPts, bool clamped)
+        public void Create(int degree, int numberOfControlPts, bool clamped = true)
         {
             if (degree <= 0 || numberOfControlPts <= 0)
                 throw new Exception("Input values must be positive and different than zero.");

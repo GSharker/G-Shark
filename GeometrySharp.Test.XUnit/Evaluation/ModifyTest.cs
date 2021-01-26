@@ -3,11 +3,11 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
-using GeometrySharp.XUnit.Geometry;
+using GeometrySharp.Test.XUnit.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Evaluation
 {
     [Trait("Category", "Modify")]
 	public class ModifyTest

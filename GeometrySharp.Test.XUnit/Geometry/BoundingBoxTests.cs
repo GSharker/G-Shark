@@ -4,14 +4,14 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
     [Trait("Category", "BoundingBox")]
-    public class BoundingBoxTest
+    public class BoundingBoxTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public BoundingBoxTest(ITestOutputHelper testOutput)
+        public BoundingBoxTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

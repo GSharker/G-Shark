@@ -14,15 +14,43 @@ namespace GeometrySharp.Geometry
     public class NurbsCurve : Serializable<NurbsCurve>, ICurve, IEquatable<NurbsCurve>
     {
         /// <summary>
-        /// A simple data structure representing a NURBS curve.
-        /// NurbsCurve does no checks for legality. You can use <see cref="GeometrySharp.Evaluation.Check"/> for that.
+        /// Basic constructor.
         /// </summary>
+        public NurbsCurve()
+        {
+        }
+
+        /// <summary>
+        /// Creates a Nurbs curve object.
+        /// </summary>
+        /// <param name="degree">Curve degree.</param>
+        /// <param name="knots">Knot defining the curve.</param>
+        /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
+        /// <param name="weights">Weight values, as a collection of doubles.</param>
         public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double> weights = null)
         {
+            if (controlPoints == null) throw new ArgumentNullException(nameof(ControlPoints));
+            if (knots == null) throw new ArgumentNullException(nameof(Knots));
+            if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
+            if (knots.Count != controlPoints.Count + degree + 1)
+                throw new ArgumentException("Number of points + degree + 1 must equal knots length!");
+            if (!knots.AreValidKnots(degree, controlPoints.Count))
+                throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
+
             HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
             Weights = weights == null ? Sets.RepeatData(1.0, controlPoints.Count) : weights;
             Degree = degree;
             Knots = knots;
+        }
+
+        /// <summary>
+        /// Creates a Nurbs curve object.
+        /// </summary>
+        /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
+        /// <param name="degree">Curve degree.</param>
+        public NurbsCurve(List<Vector3> controlPoints, int degree)
+            : this(degree, new Knot(degree, controlPoints.Count), controlPoints)
+        {
         }
 
         /// <summary>
@@ -31,13 +59,10 @@ namespace GeometrySharp.Geometry
         /// <param name="curve">The curve object</param>
         public NurbsCurve(NurbsCurve curve)
         {
-            if (Check.IsValidNurbsCurve(curve))
-            {
-                Degree = curve.Degree;
-                HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
-                Knots = new Knot(curve.Knots);
-                Weights = new List<double>(curve.Weights!);
-            };
+            Degree = curve.Degree;
+            HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
+            Knots = new Knot(curve.Knots);
+            Weights = new List<double>(curve.Weights!);
         }
 
         /// <summary>

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GeometrySharp.Geometry;
 using Xunit;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
     public class BoundingBoxCollection
     {

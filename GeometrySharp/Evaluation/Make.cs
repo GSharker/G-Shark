@@ -56,7 +56,7 @@ namespace GeometrySharp.Evaluation
         //////////////////////////// =================================== not implemented yet ================================== ///////////////////
 
         /// <summary>
-        /// Generate a surface by translating a profile curve along a rail curve
+        /// Create a surface by translating a profile curve along a rail curve
         /// </summary>
         /// <param name="profile">NurbCurveData Profile</param>
         /// <param name="rail">NurbCurveData Rail</param>
@@ -104,7 +104,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an elliptical arc
+        /// Create the control points, weights, and knots of an elliptical arc
         /// </summary>
         /// <param name="center">the center</param>
         /// <param name="xaxis">the scaled x axis</param>
@@ -118,7 +118,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an arbitrary arc
+        /// Create the control points, weights, and knots of an arbitrary arc
         /// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
         /// </summary>
         /// <param name="center">the center of the arc</param>
@@ -134,7 +134,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an extruded surface
+        /// Create the control points, weights, and knots of an extruded surface
         /// </summary>
         /// <param name="axis">axis of the extrusion</param>
         /// <param name="length">length of the extrusion</param>
@@ -146,7 +146,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a cylinder
+        /// Create the control points, weights, and knots of a cylinder
         /// </summary>
         /// <param name="axis">normalized axis of cylinder</param>
         /// <param name="xaxis">xaxis in plane of cylinder</param>
@@ -172,7 +172,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a sphere
+        /// Create the control points, weights, and knots of a sphere
         /// </summary>
         /// <param name="center">the center of the sphere</param>
         /// <param name="axis">normalized axis of sphere</param>
@@ -185,7 +185,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a cone
+        /// Create the control points, weights, and knots of a cone
         /// </summary>
         /// <param name="axis">normalized axis of cone</param>
         /// <param name="xaxis"></param>

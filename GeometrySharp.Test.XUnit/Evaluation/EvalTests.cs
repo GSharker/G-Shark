@@ -9,14 +9,14 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Evaluation
 {
     [Trait("Category", "Eval")]
-    public class EvalTest
+    public class EvalTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public EvalTest(ITestOutputHelper testOutput)
+        public EvalTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

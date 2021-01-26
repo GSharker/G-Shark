@@ -5,10 +5,10 @@ using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
     [Trait("Category", "Trig")]
-    public class TrigTest
+    public class TrigTests
     {
         [Fact]
         public void It_Returns_True_If_Three_Points_Are_Flat()
