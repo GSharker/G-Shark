@@ -128,7 +128,7 @@ namespace GeometrySharp.Core
             var index = knotIndex;
             var knot = this[knotIndex];
             var multiplicity = 1;
-            while (knotIndex < this.Count)
+            while (index < this.Count-1)
             {
                 if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
                     break;
@@ -145,20 +145,18 @@ namespace GeometrySharp.Core
         /// <returns>Dictionary where the key is the knot and the value the multiplicity</returns>
         public Dictionary<double, int> Multiplicities()
         {
-            var multiplicities = new Dictionary<double, int>();
-            var counter = 0;
+            var multiplicities = new Dictionary<double, int> {{this[0], 0}};
             var tempKnot = this[0];
 
             foreach (var knot in this)
             {
                 if (Math.Abs(knot - tempKnot) > GeoSharpMath.EPSILON)
                 {
-                    multiplicities.Add(tempKnot, counter);
-                    counter = 0;
+                    multiplicities.Add(knot, 0);
                     tempKnot = knot;
                 }
 
-                counter += 1;
+                multiplicities[tempKnot] += 1;
             }
 
             return multiplicities;

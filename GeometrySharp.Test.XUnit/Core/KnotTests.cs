@@ -110,9 +110,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(6, 3)]
         [InlineData(9, 1)]
         [InlineData(10, 1)]
+        [InlineData(11, 3)]
         public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(int index, int result)
         {
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             var knotMult = knots.MultiplicityByIndex(index);
 
@@ -122,13 +123,15 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void Multiplicities_Returns_A_Dictionary_Of_Knot_Values_And_Multiplicity()
         {
-            var knotsValue = new double[] {0, 1, 2, 3, 3.3};
-            var multiplicityResult = new int[] {4, 2, 3, 1, 1};
+            var knotsValue = new double[] {0, 1, 2, 3, 3.3, 4};
+            var multiplicityResult = new int[] {4, 2, 3, 1, 1, 3};
             var count = 0;
 
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             var multiplicities = knots.Multiplicities();
+
+            multiplicities.Keys.Count.Should().Be(knotsValue.Length);
 
             foreach (var (key, value) in multiplicities)
             {
