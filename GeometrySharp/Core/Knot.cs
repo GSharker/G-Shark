@@ -115,6 +115,25 @@ namespace GeometrySharp.Core
             this.AddRange(normalizedKnots);
         }
 
+        public int MultiplicityByIndex(int knotIndex)
+        {
+            if (knotIndex < 0 || knotIndex > this.Count)
+                throw new Exception("Input values must be in the dimension of the knot set.");
+
+            var index = knotIndex;
+            var knot = this[knotIndex];
+            var multiplicity = 1;
+            while (knotIndex < this.Count)
+            {
+                if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
+                    break;
+                index += 1;
+                multiplicity += 1;
+            }
+
+            return multiplicity;
+        }
+
         /// <summary>
         /// Generates an equally spaced knot vector.
         /// Clamp curve is tangent to the first and the last legs at the first and last control points.

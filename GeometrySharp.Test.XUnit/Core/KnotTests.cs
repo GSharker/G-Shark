@@ -91,5 +91,31 @@ namespace GeometrySharp.Test.XUnit.Core
 
             result.Should().Be(expectedValue);
         }
+
+        [Fact]
+        public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Scope()
+        {
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+
+            Func<object> funcResult = () => knots.MultiplicityByIndex(12);
+
+            funcResult.Should().Throw<Exception>()
+                .WithMessage("Input values must be in the dimension of the knot set.");
+        }
+
+        [Theory]
+        [InlineData(0, 4)]
+        [InlineData(4, 2)]
+        [InlineData(6, 3)]
+        [InlineData(9, 1)]
+        [InlineData(10, 1)]
+        public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(int index, int result)
+        {
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+
+            var knotMult = knots.MultiplicityByIndex(index);
+
+            knotMult.Should().Be(result);
+        }
     }
 }
