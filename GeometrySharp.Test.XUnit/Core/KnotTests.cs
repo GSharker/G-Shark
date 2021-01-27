@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
@@ -116,6 +117,25 @@ namespace GeometrySharp.Test.XUnit.Core
             var knotMult = knots.MultiplicityByIndex(index);
 
             knotMult.Should().Be(result);
+        }
+
+        [Fact]
+        public void Multiplicities_Returns_A_Dictionary_Of_Knot_Values_And_Multiplicity()
+        {
+            var knotsValue = new double[] {0, 1, 2, 3, 3.3};
+            var multiplicityResult = new int[] {4, 2, 3, 1, 1};
+            var count = 0;
+
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+
+            var multiplicities = knots.Multiplicities();
+
+            foreach (var (key, value) in multiplicities)
+            {
+                key.Should().Be(knotsValue[count]);
+                value.Should().Be(multiplicityResult[count]);
+                count += 1;
+            }
         }
     }
 }

@@ -115,6 +115,11 @@ namespace GeometrySharp.Core
             this.AddRange(normalizedKnots);
         }
 
+        /// <summary>
+        /// Calculate the multiplicity of a knot.
+        /// </summary>
+        /// <param name="knotIndex">The index of the knot to determine multiplicity.</param>
+        /// <returns>The multiplicity of the knot.</returns>
         public int MultiplicityByIndex(int knotIndex)
         {
             if (knotIndex < 0 || knotIndex > this.Count)
@@ -132,6 +137,31 @@ namespace GeometrySharp.Core
             }
 
             return multiplicity;
+        }
+
+        /// <summary>
+        /// Determine the multiplicity values of the knot.
+        /// </summary>
+        /// <returns>Dictionary where the key is the knot and the value the multiplicity</returns>
+        public Dictionary<double, int> Multiplicities()
+        {
+            var multiplicities = new Dictionary<double, int>();
+            var counter = 0;
+            var tempKnot = this[0];
+
+            foreach (var knot in this)
+            {
+                if (Math.Abs(knot - tempKnot) > GeoSharpMath.EPSILON)
+                {
+                    multiplicities.Add(tempKnot, counter);
+                    counter = 0;
+                    tempKnot = knot;
+                }
+
+                counter += 1;
+            }
+
+            return multiplicities;
         }
 
         /// <summary>
