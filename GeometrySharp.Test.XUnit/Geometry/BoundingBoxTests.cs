@@ -80,6 +80,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             bBoxResult.Min.Should().BeEquivalentTo(pt2);
         }
 
+        // This test still failing when all the tests are run together.
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersectionsUnset), MemberType = typeof(BoundingBoxCollection))]
         public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(BoundingBox bBox1, BoundingBox bBox2)

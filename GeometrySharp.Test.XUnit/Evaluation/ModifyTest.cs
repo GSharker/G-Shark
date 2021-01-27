@@ -39,7 +39,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
             var resultedCurve = Modify.RationalCurveTransform(curve, mat);
 
-            resultedCurve.ControlPoints.Should().BeEquivalentTo(expectedControlPts);
+            resultedCurve.HomogenizedPoints.Should().BeEquivalentTo(expectedControlPts);
         }
 
         [Theory]
