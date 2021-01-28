@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
@@ -90,6 +91,54 @@ namespace GeometrySharp.Test.XUnit.Core
             var result = knotVector.Span(knotVector.Count - degree - 2, 2, parameter);
 
             result.Should().Be(expectedValue);
+        }
+
+        [Fact]
+        public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Scope()
+        {
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+
+            Func<object> funcResult = () => knots.MultiplicityByIndex(12);
+
+            funcResult.Should().Throw<Exception>()
+                .WithMessage("Input values must be in the dimension of the knot set.");
+        }
+
+        [Theory]
+        [InlineData(0, 4)]
+        [InlineData(4, 2)]
+        [InlineData(6, 3)]
+        [InlineData(9, 1)]
+        [InlineData(10, 1)]
+        [InlineData(11, 3)]
+        public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(int index, int result)
+        {
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+
+            var knotMult = knots.MultiplicityByIndex(index);
+
+            knotMult.Should().Be(result);
+        }
+
+        [Fact]
+        public void Multiplicities_Returns_A_Dictionary_Of_Knot_Values_And_Multiplicity()
+        {
+            var knotsValue = new double[] {0, 1, 2, 3, 3.3, 4};
+            var multiplicityResult = new int[] {4, 2, 3, 1, 1, 3};
+            var count = 0;
+
+            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+
+            var multiplicities = knots.Multiplicities();
+
+            multiplicities.Keys.Count.Should().Be(knotsValue.Length);
+
+            foreach (var (key, value) in multiplicities)
+            {
+                key.Should().Be(knotsValue[count]);
+                value.Should().Be(multiplicityResult[count]);
+                count += 1;
+            }
         }
     }
 }

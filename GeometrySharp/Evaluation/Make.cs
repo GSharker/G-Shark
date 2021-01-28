@@ -46,12 +46,7 @@ namespace GeometrySharp.Evaluation
             //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
             //return null;
         }
-
-        public static NurbsCurve ClonedCurve(NurbsCurve curve)
-        {
-            return new NurbsCurve(curve.Degree, curve.Knots, curve.ControlPoints);
-        }
-
+        
 
         //////////////////////////// =================================== not implemented yet ================================== ///////////////////
 

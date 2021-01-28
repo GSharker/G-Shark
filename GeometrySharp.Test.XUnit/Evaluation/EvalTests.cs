@@ -128,14 +128,14 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             // Example at page 126.
             var degree = 2;
             var knots = new Knot() { 0, 0, 0, 1, 1, 1 };
-            // Homogeneous points, weights {1,1,2}
+            var weight = new List<double>() {1, 1, 2};
             var controlPts = new List<Vector3>()
             {
-                new Vector3() {1, 0, 0, 1},
-                new Vector3() {1, 1, 0, 1},
-                new Vector3() {0, 2, 0, 2}
+                new Vector3() {1, 0},
+                new Vector3() {1, 1},
+                new Vector3() {0, 1}
             };
-            var curve = new NurbsCurve(degree, knots, controlPts);
+            var curve = new NurbsCurve(degree, knots, controlPts, weight);
 
             var derivativesOrder = 2;
             var resultToCheck = Eval.RationalCurveDerivatives(curve, 0, derivativesOrder);

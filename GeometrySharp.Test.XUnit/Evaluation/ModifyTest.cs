@@ -39,7 +39,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
             var resultedCurve = Modify.RationalCurveTransform(curve, mat);
 
-            resultedCurve.ControlPoints.Should().BeEquivalentTo(expectedControlPts);
+            resultedCurve.HomogenizedPoints.Should().BeEquivalentTo(expectedControlPts);
         }
 
         [Theory]
@@ -69,22 +69,42 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var curve = new NurbsCurve(degree, knots, controlPts);
             var curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
 
-            _testOutput.WriteLine(curveAfterRefine.ToString());
-            _testOutput.WriteLine(knots.Count.ToString());
-            _testOutput.WriteLine(curveAfterRefine.Knots.Count.ToString());
-
             (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
             (controlPts.Count + insertion).Should().Be(curveAfterRefine.ControlPoints.Count);
 
-            // ToDo add this part of the test
-            /*
-            var p0 = verb.eval.Eval.curvePoint( crv, 2.5);
-		    var p1 = verb.eval.Eval.curvePoint( after, 2.5);
+            var p0 = curve.PointAt(2.5);
+            var p1 = curveAfterRefine.PointAt(2.5);
 
-		    p0[0].should.be.approximately(p1[0], verb.core.GeoSharpMath.TOLERANCE);
-		    p0[1].should.be.approximately(p1[1], verb.core.GeoSharpMath.TOLERANCE);
-		    p0[2].should.be.approximately(p1[2], verb.core.GeoSharpMath.TOLERANCE);
-            */
+            p0[0].Should().BeApproximately(p1[0], GeoSharpMath.TOLERANCE);
+            p0[1].Should().BeApproximately(p1[1], GeoSharpMath.TOLERANCE);
+            p0[2].Should().BeApproximately(p1[2], GeoSharpMath.TOLERANCE);
+        }
+
+        [Fact]
+        public void It_Decomposes_The_Curve_Into_Bezier_Curve_Segments()
+        {
+            var degree = 3;
+            var knots = new Knot() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+
+            var controlPts = new List<Vector3>();
+            for (int i = 0; i <= knots.Count - degree - 2; i++)
+                controlPts.Add(new Vector3() { i, 0.0, 0.0 });
+
+            var curve = new NurbsCurve(degree, knots, controlPts);
+            var curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+
+            curvesAfterDecompose.Count.Should().Be(5);
+
+            foreach (var bezierCurve in curvesAfterDecompose)
+            {
+                var t = bezierCurve.Knots[0];
+                var pt0 = bezierCurve.PointAt(t);
+                var pt1 = curve.PointAt(t);
+
+                var pt0_pt1 = (pt0 - pt1).Length();
+
+                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.TOLERANCE);
+            }
         }
     }
 }

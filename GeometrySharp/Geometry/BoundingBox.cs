@@ -41,7 +41,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Max { get; set; }
         /// <summary>
-        /// Gets a bounding box that has Unset coordinates for Min and Max.
+        /// Gets a BoundingBox that has Unset coordinates for Min and Max.
         /// </summary>
         public static BoundingBox Unset
         {
@@ -52,23 +52,18 @@ namespace GeometrySharp.Geometry
             }
             
         }
-        /// <summary>
-        /// If the Bounding box is initialized is a bounding box valid.
-        /// </summary>
-        public bool IsValid
-        {
-            get
-            {
-                return this._initialized;
-            }
 
-        }
         /// <summary>
-        /// Adds a point to the bounding box, expanding the bounding box if the point is outside of it.
-        /// If the bounding box is not _initialized, this method has that side effect.
+        /// If the BoundingBox is initialized is a bounding box valid.
+        /// </summary>
+        public bool IsValid => this._initialized;
+
+        /// <summary>
+        /// Adds a point to the BoundingBox, expanding the BoundingBox if the point is outside of it.
+        /// If the BoundingBox is not _initialized, this method has that side effect.
         /// </summary>
         /// <param name="pt"></param>
-        /// <returns></returns>
+        /// <returns>Return the BoundingBox changed.</returns>
         public BoundingBox Add(Vector3 pt)
         {
             if (!this.IsValid)
@@ -90,10 +85,10 @@ namespace GeometrySharp.Geometry
             return this;
         }
         /// <summary>
-        /// Add an array of points to the bounding box.
+        /// Add an array of points to the BoundingBox.
         /// </summary>
         /// <param name="pts"></param>
-        /// <returns></returns>
+        /// <returns>Return a BoundingBox from a list of points.</returns>
         public BoundingBox AddRange(IList<Vector3> pts)
         {
             foreach (var t in pts)
@@ -101,9 +96,9 @@ namespace GeometrySharp.Geometry
             return this;
         }
         /// <summary>
-        /// Clear the bounding box, leaving it in an uninitialized state.  Call add, addRange in order to initialize.
+        /// Clear the BoundingBox, leaving it in an uninitialized state.  Call add, addRange in order to initialize.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A BoundingBox cleared.</returns>
         public BoundingBox Clear()
         {
             this._initialized = false;
@@ -113,7 +108,7 @@ namespace GeometrySharp.Geometry
         /// Get length of given axis.
         /// </summary>
         /// <param name="i">Index of axis to inspect (between 0 and 2)</param>
-        /// <returns></returns>
+        /// <returns>Return the value length of the axis.</returns>
         public double GetAxisLength(int i)
         {
             if (i < 0 || i > this._dim - 1) return 0.0;
@@ -123,7 +118,7 @@ namespace GeometrySharp.Geometry
         /// Get longest axis of bounding box.
         /// Value 0 = X, 1 = Y, 2 = Z.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Return the value of the longest axis of BoundingBox.</returns>
         public int GetLongestAxis()
         {
             double max = double.MinValue;
@@ -149,16 +144,15 @@ namespace GeometrySharp.Geometry
         {
             return $"{this.Min} - {this.Max}";
         }
+
+        // https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
         /// <summary>
-        /// Determines if two BoundingBoxes intersect.
+        /// Determines if two BoundingBoxes overlapping.
         /// </summary>
         /// <param name="bBox1">First BoundingBox</param>
         /// <param name="bBox2">Second BoundingBox</param>
         /// <param name="tol">Tolerance</param>
-        /// <returns></returns>
-        // ToDo this method can be simplified
-        // first way: https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
-        // Second way: replacing IsValid, as a method that check the validity of a BoundingBox, as in Rhino.
+        /// <returns>Return true if the BoundingBoxes are overlapping.</returns>
         public static bool AreOverlapping(BoundingBox bBox1, BoundingBox bBox2, double tol)
         {
             if (!bBox1.IsValid || !bBox2.IsValid) return false;
@@ -183,7 +177,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">Vector3 to test</param>
         /// <param name="strict">If true, the point needs to be fully on the inside of the BoundingBox. I.e. coincident points will be considered 'outside'.</param>
-        /// <returns></returns>
+        /// <returns>Return true if the point is contained in the BoundingBox.</returns>
         public bool Contains(Vector3 pt, bool strict)
         {
             if (pt == null) return false;
@@ -203,7 +197,7 @@ namespace GeometrySharp.Geometry
         /// If one of the two boundary is not valid, or the two BoundingBoxes do not intersect return an unset bounding box.
         /// </summary>
         /// <param name="other">BoundingBox to intersect with</param>
-        /// <returns></returns>
+        /// <returns>Return the BoundingBox intersection between the two BoundingBox.</returns>
         public BoundingBox Intersect(BoundingBox other)
         {
             return Intersect(this, other);
@@ -214,7 +208,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="bBox1">First BoundingBox</param>
         /// <param name="bBox2">Second BoundingBox</param>
-        /// <returns></returns>
+        /// <returns>Return the BoundingBox intersection between the two BoundingBox.</returns>
         public static BoundingBox Intersect(BoundingBox bBox1, BoundingBox bBox2)
         {
             BoundingBox bBox = BoundingBox.Unset;
@@ -241,7 +235,7 @@ namespace GeometrySharp.Geometry
         /// Compute the boolean union of this with another BoundingBox
         /// </summary>
         /// <param name="other">BoundingBox to union with</param>
-        /// <returns></returns>
+        /// <returns>Return the BoundingBox union between the two BoundingBox</returns>
         public BoundingBox Union(BoundingBox other)
         {
             return Union(this, other);
@@ -251,7 +245,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="bBox1">First BoundingBox</param>
         /// <param name="bBox2">Second BoundingBox</param>
-        /// <returns></returns>
+        /// <returns>Return the BoundingBox union between the two BoundingBox</returns>
         public static BoundingBox Union(BoundingBox bBox1, BoundingBox bBox2)
         {
             if (!bBox1.IsValid) return bBox2;

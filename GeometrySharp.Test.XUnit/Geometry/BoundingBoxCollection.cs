@@ -68,10 +68,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
             }
         }
 
-        public static TheoryData<BoundingBox, BoundingBox> BoundingBoxIntersectionsUnset = new TheoryData<BoundingBox, BoundingBox>()
+        public static TheoryData<Vector3[], BoundingBox> BoundingBoxIntersectionsUnset = new TheoryData<Vector3[], BoundingBox>()
         {
-            {new BoundingBox(BoundingBoxFrom5Points), BoundingBox.Unset},
-            {new BoundingBox(BoundingBoxFrom5Points), new BoundingBox(NegativeBoundingBox)},
+            {BoundingBoxFrom5Points, BoundingBox.Unset},
+            {BoundingBoxFrom5Points, new BoundingBox(NegativeBoundingBox)},
         };
     }
 }

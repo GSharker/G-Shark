@@ -5,11 +5,9 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
-using GeometrySharp.XUnit.Core;
+using GeometrySharp.Test.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
-using verb;
-using verb.core;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -275,7 +273,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_The_Value(double t, double[] pointData)
         {
-            var pointToCheck = LinearAlgebra.Dehomogenize(NurbsCurveExample2().PointAt(t));
+            var pointToCheck = NurbsCurveExample2().PointAt(t);
             var pointExpected = new Vector3(pointData);
 
             pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
@@ -283,36 +281,23 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 .WhenTypeIs<double>());
         }
 
+        // This value has been compared with Rhino.
         [Fact]
-        public  void t()
+        public void It_Returns_The_Length_Of_The_Curve()
         {
-            var pts = new Array<object>();
+            var crv = NurbsCurveExample2();
 
-            pts.push(new Array<double>(new double[] { 5, 5, 0 }));
-            pts.push(new Array<double>(new double[] { 10, 10, 0 }));
-            pts.push(new Array<double>(new double[] { 20, 15, 0 }));
-            pts.push(new Array<double>(new double[] { 35, 15, 0 }));
-            pts.push(new Array<double>(new double[] { 45, 10, 0 }));
-            pts.push(new Array<double>(new double[] { 50, 5, 0 }));
+            var crvLength = crv.Length();
+            var samples = Tessellation.RationalCurveRegularSample(crv, 10000);
 
-            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 });
-            var weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+            var length = 0.0;
+            for (int j = 0; j < samples.pts.Count-1; j++)
+                length += (samples.pts[j + 1] - samples.pts[j]).Length();
 
-            var curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
-            var curve2 = verb.geom.NurbsCurve.byPoints(pts, 3);
+            _testOutput.WriteLine(crvLength.ToString());
+            _testOutput.WriteLine(length.ToString());
 
-            var ptAt = curve2.point(0.5);
-            var vec = verb.core.Vec.normalized(curve2.tangent(0.5));
-            var k = curve2.knots();
-
-            for (int i = 0; i < k.length; i++)
-            {
-                k[i] = System.Math.Round(k[i], 6);
-            }
-
-            _testOutput.WriteLine($"{k}");
-            _testOutput.WriteLine($"{ptAt[0]},{ptAt[1]},{ptAt[2]}");
+            crvLength.Should().BeApproximately(length, 1e-3);
         }
-
     }
 }

@@ -107,7 +107,6 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="mat">4d set representing the transform.</param>
         /// <returns>A new NurbsCurve transformed.</returns>
-        /// ToDo consider the hypar transformation.
         /// ToDo implement the async method.
         public NurbsCurve Transform(Matrix mat) => new NurbsCurve(Modify.RationalCurveTransform(this, mat));
 
@@ -125,19 +124,29 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 PointAt(double t) => Eval.CurvePointAt(this, t);
+        public Vector3 PointAt(double t) => LinearAlgebra.Dehomogenize(Eval.CurvePointAt(this, t));
 
         /// <summary>
-        /// 
+        /// Obtain the curve tangent at the given parameter.
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="t">The parameter to sample the curve.</param>
+        /// <returns>The vector at the given parameter.</returns>
+        /// ToDo implement the async method.
         public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
+
+        /// <summary>
+        /// Determine the arc length of the curve.
+        /// </summary>
+        /// <returns>The length of the curve.</returns>
+        /// ToDo implement the async method.
+        public double Length() => Analyze.RationalCurveArcLength(this);
+
 
         public List<Vector3> Derivatives(double u, int numberDerivs = 1)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
+
 
         public bool Equals(NurbsCurve other)
         {

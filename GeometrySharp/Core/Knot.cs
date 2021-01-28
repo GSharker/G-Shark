@@ -116,6 +116,53 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Calculate the multiplicity of a knot.
+        /// </summary>
+        /// <param name="knotIndex">The index of the knot to determine multiplicity.</param>
+        /// <returns>The multiplicity of the knot.</returns>
+        public int MultiplicityByIndex(int knotIndex)
+        {
+            if (knotIndex < 0 || knotIndex > this.Count)
+                throw new Exception("Input values must be in the dimension of the knot set.");
+
+            var index = knotIndex;
+            var knot = this[knotIndex];
+            var multiplicity = 1;
+            while (index < this.Count-1)
+            {
+                if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
+                    break;
+                index += 1;
+                multiplicity += 1;
+            }
+
+            return multiplicity;
+        }
+
+        /// <summary>
+        /// Determine the multiplicity values of the knot.
+        /// </summary>
+        /// <returns>Dictionary where the key is the knot and the value the multiplicity</returns>
+        public Dictionary<double, int> Multiplicities()
+        {
+            var multiplicities = new Dictionary<double, int> {{this[0], 0}};
+            var tempKnot = this[0];
+
+            foreach (var knot in this)
+            {
+                if (Math.Abs(knot - tempKnot) > GeoSharpMath.EPSILON)
+                {
+                    multiplicities.Add(knot, 0);
+                    tempKnot = knot;
+                }
+
+                multiplicities[tempKnot] += 1;
+            }
+
+            return multiplicities;
+        }
+
+        /// <summary>
         /// Generates an equally spaced knot vector.
         /// Clamp curve is tangent to the first and the last legs at the first and last control points.
         /// </summary>

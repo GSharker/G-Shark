@@ -9,10 +9,9 @@ namespace GeometrySharp.Evaluation
 {
     public class Modify
 	{
-		// ToDo make the test.
-		/// <summary>
+        /// <summary>
 		/// Insert a collection of knots on a curve.
-		/// corresponds to Algorithm A5.4 (Piegl & Tiller)
+		/// Implementation of Algorithm A5.4 of The NURBS Book by Piegl & Tiller, 2nd Edition.
 		/// </summary>
 		/// <param name="curve">The NurbsCurve.</param>
 		/// <param name="knotsToInsert">The set of Knots.</param>
@@ -23,9 +22,10 @@ namespace GeometrySharp.Evaluation
 				return new NurbsCurve(curve);
 
 			int degree = curve.Degree;
-			List<Vector3> controlPoints = curve.HomogenizedPoints;
+			List<Vector3> controlPoints = curve.ControlPoints;
 			Knot knots = curve.Knots;
 
+			// Initialize common variables.
 			int n = controlPoints.Count - 1;
 			int m = n + degree + 1;
 			int r = knotsToInsert.Count - 1;
@@ -33,23 +33,26 @@ namespace GeometrySharp.Evaluation
 			int b = knots.Span(degree, knotsToInsert[r]);
 			Vector3[] controlPointsPost = new Vector3[n+r+2];
 			double[] knotsPost = new double[m+r+2];
-			//new control points
+
+			// New control points.
             for (int i = 0; i < a - degree + 1; i++)
                 controlPointsPost[i] = controlPoints[i];
             for (int i = b - 1; i < n + 1; i++)
 				controlPointsPost[i + r + 1] = controlPoints[i];
 
-			//new knot vector
+			// New knot vector.
 			for (int i = 0; i < a + 1; i++)
                 knotsPost[i] = knots[i];
-
-			for (int i = b + degree; i < m + 1; i++)
+            for (int i = b + degree; i < m + 1; i++)
                 knotsPost[i + r + 1] = knots[i];
 
-            int g = b + degree - 1;
+			// Initialize variables for knot refinement.
+			int g = b + degree - 1;
             int k = b + degree + r;
             int j = r;
-            while (j >= 0)
+
+			// Apply knot refinement.
+			while (j >= 0)
             {
                 while (knotsToInsert[j] <= knots[g] && g > a)
                 {
@@ -81,6 +84,65 @@ namespace GeometrySharp.Evaluation
             return new NurbsCurve(degree, knotsPost.ToKnot(), controlPointsPost.ToList());
         }
 
+		/// <summary>
+		/// Decompose a NURBS curve into a collection of bezier's.  Useful
+		/// as each bezier fits into it's convex hull.  This is a useful starting
+		/// point for intersection, closest point, divide & conquer algorithms
+		/// </summary>
+		/// <param name="curve">NurbsCurveData object representing the curve</param>
+		/// <returns>List of NurbsCurveData objects, defined by degree, knots, and control points</returns>
+		public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve)
+		{
+			var degree = curve.Degree;
+			var controlPoints = curve.ControlPoints;
+			var knots = curve.Knots;
+
+			// Find all of the unique knot values and their multiplicity.
+			// For each, increase their multiplicity to degree + 1.
+			var knotMultiplicities = knots.Multiplicities();
+			var reqMultiplicity = degree + 1;
+
+			// Insert the knots.
+			foreach (var (key, value) in knotMultiplicities)
+			{
+                if (value < reqMultiplicity)
+                {
+                    var knotsToInsert = Sets.RepeatData(key, reqMultiplicity - value);
+                    var curveTemp = new NurbsCurve(degree, knots, controlPoints);
+                    var curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                    knots = curveResult.Knots;
+                    controlPoints = curveResult.ControlPoints;
+				}
+            }
+
+			var crvKnotLength = reqMultiplicity * 2;
+			var curves = new List<NurbsCurve>();
+			var i = 0;
+
+			while (i < controlPoints.Count)
+			{
+				var knotsRange = knots.GetRange(i, crvKnotLength).ToKnot();
+				var ptsRange = controlPoints.GetRange(i, reqMultiplicity);
+
+				var tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
+				curves.Add(tempCrv);
+				i += reqMultiplicity;
+			}
+
+			return curves;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
 		private static int Imin(int a, int b)
 		{
 			return a < b ? a : b;
@@ -91,8 +153,6 @@ namespace GeometrySharp.Evaluation
 			return a > b ? a : b;
 		}
 
-
-		//////////////////////////// =================================== not implemented yet ================================== ///////////////////
 
 		/// <summary>
 		/// Reverses the parameterization of a NURBS curve. The domain is unaffected.
@@ -179,18 +239,6 @@ namespace GeometrySharp.Evaluation
         /// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
         /// <returns>A new NURBS surface with the knots inserted</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Decompose a NURBS curve into a collection of bezier's.  Useful
-		/// as each bezier fits into it's convex hull.  This is a useful starting
-		/// point for intersection, closest point, divide & conquer algorithms
-		/// </summary>
-		/// <param name="curve">NurbsCurveData object representing the curve</param>
-		/// <returns>List of NurbsCurveData objects, defined by degree, knots, and control points</returns>
-		public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve)
 		{
 			throw new NotImplementedException();
 		}
