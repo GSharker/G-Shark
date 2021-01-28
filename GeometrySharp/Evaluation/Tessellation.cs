@@ -43,7 +43,7 @@ namespace GeometrySharp.Evaluation
             {
                 var t = start + span * i;
 
-                var ptEval = LinearAlgebra.Dehomogenize(curve.PointAt(t));
+                var ptEval = curve.PointAt(t);
                 pts.Add(ptEval);
                 tValues.Add(t);
             }

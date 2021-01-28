@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
 using GeometrySharp.Test.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
-using verb;
-using verb.core;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -274,12 +273,31 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_The_Value(double t, double[] pointData)
         {
-            var pointToCheck = LinearAlgebra.Dehomogenize(NurbsCurveExample2().PointAt(t));
+            var pointToCheck = NurbsCurveExample2().PointAt(t);
             var pointExpected = new Vector3(pointData);
 
             pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-5))
                 .WhenTypeIs<double>());
+        }
+
+        // This value has been compared with Rhino.
+        [Fact]
+        public void It_Returns_The_Length_Of_The_Curve()
+        {
+            var crv = NurbsCurveExample2();
+
+            var crvLength = crv.Length();
+            var samples = Tessellation.RationalCurveRegularSample(crv, 10000);
+
+            var length = 0.0;
+            for (int j = 0; j < samples.pts.Count-1; j++)
+                length += (samples.pts[j + 1] - samples.pts[j]).Length();
+
+            _testOutput.WriteLine(crvLength.ToString());
+            _testOutput.WriteLine(length.ToString());
+
+            crvLength.Should().BeApproximately(length, 1e-3);
         }
     }
 }
