@@ -281,37 +281,5 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-5))
                 .WhenTypeIs<double>());
         }
-
-        [Fact]
-        public  void t()
-        {
-            var pts = new Array<object>();
-
-            pts.push(new Array<double>(new double[] { 5, 5, 0 }));
-            pts.push(new Array<double>(new double[] { 10, 10, 0 }));
-            pts.push(new Array<double>(new double[] { 20, 15, 0 }));
-            pts.push(new Array<double>(new double[] { 35, 15, 0 }));
-            pts.push(new Array<double>(new double[] { 45, 10, 0 }));
-            pts.push(new Array<double>(new double[] { 50, 5, 0 }));
-
-            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 });
-            var weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-
-            var curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
-            var curve2 = verb.geom.NurbsCurve.byPoints(pts, 3);
-
-            var ptAt = curve2.point(0.5);
-            var vec = verb.core.Vec.normalized(curve2.tangent(0.5));
-            var k = curve2.knots();
-
-            for (int i = 0; i < k.length; i++)
-            {
-                k[i] = System.Math.Round(k[i], 6);
-            }
-
-            _testOutput.WriteLine($"{k}");
-            _testOutput.WriteLine($"{ptAt[0]},{ptAt[1]},{ptAt[2]}");
-        }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Evaluation
@@ -453,6 +455,26 @@ namespace GeometrySharp.Evaluation
                 0.0123412297999871995468056670700372915759, 0.0123412297999871995468056670700372915759
             }
         };
+
+        public static double RationalCurveArcLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        {
+            var uSet = u < 0.0 ? curve.Knots.Last() : u;
+
+            var crvs = Modify.DecomposeCurveIntoBeziers(curve);
+            var tempCrv = crvs[0];
+            var i = 0;
+            var sum = 0.0;
+
+            while (i < crvs.Count && tempCrv.Knots[0] + GeoSharpMath.EPSILON < uSet)
+            {
+                var param = Math.Min(tempCrv.Knots.Last(), uSet);
+                sum += RationalBezierCurveArcLength(tempCrv, param, gaussDegIncrease);
+                i += 1;
+                tempCrv = crvs[i];
+            }
+
+            return sum;
+        }
 
         /// <summary>
         /// Approximate the length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.

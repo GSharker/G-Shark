@@ -9,6 +9,7 @@ using verb;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
+    [Trait("Category", "Analyze")]
     public class AnalyzeTests
     {
         private readonly ITestOutputHelper _testOutput;
@@ -40,26 +41,6 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
             curveLength1.Should().BeApproximately(3.0, GeoSharpMath.TOLERANCE);
             curveLength2.Should().BeApproximately(3.0, GeoSharpMath.TOLERANCE);
-        }
-
-        [Fact]
-        public void t()
-        {
-            var pts = new Array<object>();
-
-            pts.push(new Array<double>(new double[] { 0, 0, 0, 1 }));
-            pts.push(new Array<double>(new double[] { 0.5, 0, 0, 1 }));
-            pts.push(new Array<double>(new double[] { 2.5, 0, 0, 1 }));
-            pts.push(new Array<double>(new double[] { 3, 0, 0, 1 }));
-
-            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 });
-            var weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-
-            var curve = verb.geom.NurbsCurve.byPoints(pts, 3);
-
-            var res = verb.eval.Analyze.rationalBezierCurveArcLength(curve._data,1, 16);
-
-            _testOutput.WriteLine($"{res}");
         }
     }
 }
