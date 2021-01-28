@@ -74,7 +74,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
             BoundingBox bBox2 = new BoundingBox(pts);
             BoundingBox bBoxResult = bBox1.Union(bBox2);
 
-            _testOutput.WriteLine(bBoxResult.ToString());
             bBoxResult.IsValid.Should().BeTrue();
             bBoxResult.Max.Should().BeEquivalentTo(pMax);
             bBoxResult.Min.Should().BeEquivalentTo(pt2);
@@ -83,9 +82,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         // This test still failing when all the tests are run together.
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersectionsUnset), MemberType = typeof(BoundingBoxCollection))]
-        public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(BoundingBox bBox1, BoundingBox bBox2)
+        public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(Vector3[] bBoxPts, BoundingBox bBox2)
         {
-            BoundingBox bBoxIntersect = bBox2.Intersect(bBox1);
+            var bBox1 = new BoundingBox(bBoxPts);
+            var bBoxIntersect = bBox1.Intersect(bBox2);
 
             bBoxIntersect.IsValid.Should().BeFalse();
             bBoxIntersect.Max.Should().BeEquivalentTo(Vector3.Unset);
