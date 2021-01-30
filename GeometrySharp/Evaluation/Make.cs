@@ -14,7 +14,6 @@ namespace GeometrySharp.Evaluation
 
         }
 
-
         public static NurbsCurve Polyline(List<Vector3> points)
         {
             Knot knots = new Knot() { 0.0, 0.0 };

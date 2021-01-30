@@ -156,7 +156,7 @@ namespace GeometrySharp.Geometry
         public static bool AreOverlapping(BoundingBox bBox1, BoundingBox bBox2, double tol)
         {
             if (!bBox1.IsValid || !bBox2.IsValid) return false;
-            tol = tol < -0.5 ? GeoSharpMath.TOLERANCE : tol;
+            tol = tol < -0.5 ? GeoSharpMath.MAXTOLERANCE : tol;
             int count = 0; 
             for (int i = 0; i < bBox1._dim; i++)
             {

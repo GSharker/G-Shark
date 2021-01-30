@@ -39,8 +39,8 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var curveLength1 = Analyze.RationalBezierCurveArcLength(curve1, 1);
             var curveLength2 = Analyze.RationalBezierCurveArcLength(curve2, 4);
 
-            curveLength1.Should().BeApproximately(3.0, GeoSharpMath.TOLERANCE);
-            curveLength2.Should().BeApproximately(3.0, GeoSharpMath.TOLERANCE);
+            curveLength1.Should().BeApproximately(3.0, GeoSharpMath.MAXTOLERANCE);
+            curveLength2.Should().BeApproximately(3.0, GeoSharpMath.MAXTOLERANCE);
         }
     }
 }
