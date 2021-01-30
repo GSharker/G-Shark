@@ -11,6 +11,11 @@ using Newtonsoft.Json;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo normalize the knots when passed in between 0-1.
+    /// <summary>
+    /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
+    /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
+    /// /// </summary>
     public class NurbsCurve : Serializable<NurbsCurve>, ICurve, IEquatable<NurbsCurve>
     {
         /// <summary>
@@ -141,13 +146,23 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public double Length() => Analyze.RationalCurveArcLength(this);
 
+        /// <summary>
+        /// Get the derivatives at a given parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter to sample the curve.</param>
+        /// <param name="numberDerivs">The number of derivatives to obtain.</param>
+        /// <returns>A point represented by an array of length (dim).</returns>
+        /// ToDo implement the async method.
+        /// Note this method doesn't see necessary here in this class.
+        public List<Vector3> Derivatives(double parameter, int numberDerivs = 1) =>
+            Eval.RationalCurveDerivatives(this, parameter, numberDerivs);
 
-        public List<Vector3> Derivatives(double u, int numberDerivs = 1)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        /// <summary>
+        /// Compare if two NurbsCurves are the same.
+        /// Two NurbsCurve are equal when the have same degree, same control points order and dimension, and same knots.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>Return true if the NurbsCurves are equal.</returns>
         public bool Equals(NurbsCurve other)
         {
             if (other == null) return false;
@@ -156,6 +171,10 @@ namespace GeometrySharp.Geometry
             return Degree == other.Degree && ControlPoints.SequenceEqual(other.ControlPoints) && Knots.All(other.Knots.Contains);
         }
 
+        /// <summary>
+        /// Implement the override method to string.
+        /// </summary>
+        /// <returns>The representation of a NurbsCurve in string.</returns>
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();

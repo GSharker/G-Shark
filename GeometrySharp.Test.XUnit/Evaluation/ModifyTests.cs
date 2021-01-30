@@ -10,11 +10,11 @@ using Xunit.Abstractions;
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
     [Trait("Category", "Modify")]
-	public class ModifyTest
+	public class ModifyTests
 	{
 		private readonly ITestOutputHelper _testOutput;
 
-		public ModifyTest(ITestOutputHelper testOutput)
+		public ModifyTests(ITestOutputHelper testOutput)
 		{
 			_testOutput = testOutput;
 		}
@@ -75,9 +75,9 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var p0 = curve.PointAt(2.5);
             var p1 = curveAfterRefine.PointAt(2.5);
 
-            p0[0].Should().BeApproximately(p1[0], GeoSharpMath.TOLERANCE);
-            p0[1].Should().BeApproximately(p1[1], GeoSharpMath.TOLERANCE);
-            p0[2].Should().BeApproximately(p1[2], GeoSharpMath.TOLERANCE);
+            p0[0].Should().BeApproximately(p1[0], GeoSharpMath.MAXTOLERANCE);
+            p0[1].Should().BeApproximately(p1[1], GeoSharpMath.MAXTOLERANCE);
+            p0[2].Should().BeApproximately(p1[2], GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
                 var pt0_pt1 = (pt0 - pt1).Length();
 
-                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.TOLERANCE);
+                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
             }
         }
     }

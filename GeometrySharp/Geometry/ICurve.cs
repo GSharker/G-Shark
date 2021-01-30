@@ -24,10 +24,9 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Evaluate the derivatives at a point on a curve.
         /// </summary>
-        /// <param name="u">The parameter on the curve.</param>
+        /// <param name="parameter">The parameter on the curve.</param>
         /// <param name="numberDerivs">The number of derivatives to evaluate on the curve.</param>
         /// <returns>An set of derivative vectors.</returns>
-        public List<Vector3> Derivatives(double u, int numberDerivs = 1);
-
+        public List<Vector3> Derivatives(double parameter, int numberDerivs = 1);
     }
 }

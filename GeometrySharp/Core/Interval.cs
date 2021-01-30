@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GeometrySharp.Core
+﻿namespace GeometrySharp.Core
 {
-    // ToDo originally interval took T as type. If necessary re-introduce as a T.
+    // Note originally interval took T as type. If necessary re-introduce as a T.
+    // ToDo add checks for this class.
+    // ToDo add comments to the properties.
+    // ToDo make the test for this class.
     /// <summary>
-    /// A simple parametric data type representing an "interval" between two numbers. This data structure does no legality checks.
+    /// A simple parametric data representing an "interval" between two numbers.
     /// </summary>
-    /// <typeparam name=""></typeparam>
     public class Interval
     {
         public double Min { get; set; }

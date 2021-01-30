@@ -11,6 +11,7 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
+    // ToDo make a class collection Curve example and data to use in other tests.
     [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTests
     {
@@ -215,13 +216,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
             for (var i = 0; i < degree + 1; i++)
             {
                 var d = splitCurves[0].Knots.Count- (degree + 1);
-                splitCurves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.TOLERANCE);
+                splitCurves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAXTOLERANCE);
             }
 
             for (var i = 0; i < degree + 1; i++)
             {
                 var d = 0;
-                splitCurves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.TOLERANCE);
+                splitCurves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAXTOLERANCE);
             }
 
             splitCurves.Should().HaveCount(2);
@@ -288,7 +289,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var crv = NurbsCurveExample2();
 
             var crvLength = crv.Length();
-            var samples = Tessellation.RationalCurveRegularSample(crv, 10000);
+            var samples = Tessellation.RegularSample(crv, 10000);
 
             var length = 0.0;
             for (int j = 0; j < samples.pts.Count-1; j++)

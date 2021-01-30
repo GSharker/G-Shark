@@ -3,8 +3,9 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo this class has to be tested.
     /// <summary>
-    /// A curve representing a straight line
+    /// A curve representing a straight line.
     /// </summary>
     public class Line : Serializable<Line>
     {

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GeometrySharp.Core
 {
+    // ToDo comment what is this class.
     public class LinearAlgebra
     {
         /// <summary>
@@ -92,7 +93,6 @@ namespace GeometrySharp.Core
 
         /// <summary>
         /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.
-        /// ToDo remove all these process adding a list of weight in the nurbs.
         /// </summary>
         /// <param name="homoPoints">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns> Set of points represented by an array (wi*pi) with length (dim).</returns>

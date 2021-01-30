@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
     public static class Sets
     {
+        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// <summary>
         /// The range of a set of number, or the distance between the smallest value to the biggest in the collection.
         /// </summary>
         /// <param name="a">Set of numbers.</param>
         /// <returns>The range.</returns>
-        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         public static double Dimension(IList<double> a)
         {
             var sortedSet = a.OrderBy(x => x);
@@ -42,6 +41,7 @@ namespace GeometrySharp.Core
 
             return l;
         }
+
         /// <summary>
         /// Returns a list of evenly spaced numbers over a specified interval.
         /// </summary>
@@ -109,7 +109,8 @@ namespace GeometrySharp.Core
 
             return l;
         }
-        // ToDo the original doesn't provide a set union, we have to keep an eye on this method.
+
+        // Note the original doesn't provide a set union, we have to keep an eye on this method.
         // A removed the Sorted from the name due to the method doesn't sort the final list.
         /// <summary>
         /// The set union of two sequences of numbers.
@@ -123,7 +124,6 @@ namespace GeometrySharp.Core
             return b.Count == 0 ? a.ToList() : a.Union(b).ToList();
         }
 
-        // A removed the Sorted from the name due to the method doesn't sort the final list.
         /// <summary>
         /// The set difference from two sequences of numbers, sorted.
         /// </summary>

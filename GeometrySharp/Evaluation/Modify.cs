@@ -244,7 +244,7 @@ namespace GeometrySharp.Evaluation
 		}
 
 		/// <summary>
-		/// Insert a knot along a rational curve.  Note that this algorithm only works
+		/// Insert a knot along a rational curve.
 		/// for r + s <= degree, where s is the initial multiplicity (number of duplicates) of the knot.
 		/// </summary>
 		/// <param name="curve"></param>
