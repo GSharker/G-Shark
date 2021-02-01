@@ -6,7 +6,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
-    [Trait("Category", "Line")]
     public class LineTests
     {
         private readonly ITestOutputHelper _testOutput;

@@ -5,7 +5,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "GeoSharpMath")]
     public class MathTests
     {
         private readonly ITestOutputHelper _testOutput;

@@ -7,7 +7,6 @@ using Xunit;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Trigonometry")]
     public class TrigonometryTests
     {
         [Fact]

@@ -12,7 +12,6 @@ using Xunit.Abstractions;
 namespace GeometrySharp.Test.XUnit.Geometry
 {
     // ToDo make a class collection Curve example and data to use in other tests.
-    [Trait("Category", "NurbsCurve")]
     public class NurbsCurveTests
     {
         private readonly ITestOutputHelper _testOutput;

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Binomial")]
     public class BinomialTests
     {
         private readonly ITestOutputHelper _testOutput;

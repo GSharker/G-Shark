@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
@@ -11,7 +8,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
-    [Trait("Category", "Eval")]
     public class EvalTests
     {
         private readonly ITestOutputHelper _testOutput;

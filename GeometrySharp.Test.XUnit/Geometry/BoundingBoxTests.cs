@@ -6,7 +6,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
-    [Trait("Category", "BoundingBox")]
     public class BoundingBoxTests
     {
         private readonly ITestOutputHelper _testOutput;

@@ -9,8 +9,7 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
-    [Trait("Category", "Modify")]
-	public class ModifyTests
+    public class ModifyTests
 	{
 		private readonly ITestOutputHelper _testOutput;
 
