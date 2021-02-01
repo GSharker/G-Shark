@@ -11,8 +11,19 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class BoundingBox
     {
-        private static readonly BoundingBox _unset = new BoundingBox(Vector3.Unset);
         private int _dim = 3;
+
+        /// <summary>
+        /// Constructs a new bounding box from two corner points.
+        /// </summary>
+        /// <param name="min">Point containing all the minimum coordinates.</param>
+        /// <param name="max">Point containing all the maximum coordinates.</param>
+        public BoundingBox(Vector3 min, Vector3 max)
+        {
+            this.Min = min;
+            this.Max = max;
+            this.IsValid = true;
+        }
 
         /// <summary>
         /// Create a BoundingBox from a list of points.
@@ -36,24 +47,17 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// The minimum point of the BoundingBox - the coordinates of this point are always <= max.
         /// </summary>
-        public Vector3 Min { get; set; }
+        public Vector3 Min { get; private set; }
 
         /// <summary>
         /// The maximum point of the BoundingBox. The coordinates of this point are always >= min.
         /// </summary>
-        public Vector3 Max { get; set; }
+        public Vector3 Max { get; private set; }
 
         /// <summary>
         /// Gets a BoundingBox that has Unset coordinates for Min and Max.
         /// </summary>
-        public static BoundingBox Unset
-        {
-            get
-            {
-                _unset.IsValid = false;
-                return _unset;
-            }
-        }
+        public static BoundingBox Unset { get; } = new BoundingBox(Vector3.Unset){IsValid = false};
 
         /// <summary>
         /// If the BoundingBox is initialized is a bounding box valid.
@@ -221,9 +225,8 @@ namespace GeometrySharp.Geometry
         /// <returns>Return the BoundingBox intersection between the two BoundingBox.</returns>
         public static BoundingBox Intersect(BoundingBox bBox1, BoundingBox bBox2)
         {
-            var bBox = Unset;
-            if (!bBox1.IsValid || !bBox2.IsValid) return bBox;
-            if (!AreOverlapping(bBox1, bBox2, 0.0)) return bBox;
+            if (!bBox1.IsValid || !bBox2.IsValid) return Unset;
+            if (!AreOverlapping(bBox1, bBox2, 0.0)) return Unset;
 
             var minPt = new Vector3();
             var maxPt = new Vector3();
@@ -235,11 +238,7 @@ namespace GeometrySharp.Geometry
             maxPt.Add(bBox1.Max[1] <= bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
             maxPt.Add(bBox1.Max[2] <= bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
 
-            bBox.IsValid = true;
-            bBox.Min = minPt;
-            bBox.Max = maxPt;
-
-            return bBox;
+            return new BoundingBox(minPt, maxPt);
         }
 
         /// <summary>
@@ -263,7 +262,6 @@ namespace GeometrySharp.Geometry
             if (!bBox1.IsValid) return bBox2;
             if (!bBox2.IsValid) return bBox1;
 
-            var bBox = Unset;
             var minPt = new Vector3();
             var maxPt = new Vector3();
             minPt.Add(bBox1.Min[0] < bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
@@ -274,11 +272,7 @@ namespace GeometrySharp.Geometry
             maxPt.Add(bBox1.Max[1] > bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
             maxPt.Add(bBox1.Max[2] > bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
 
-            bBox.IsValid = true;
-            bBox.Min = minPt;
-            bBox.Max = maxPt;
-
-            return bBox;
+            return new BoundingBox(minPt, maxPt);
         }
 
         /// <summary>
