@@ -8,12 +8,11 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
-    [Trait("Category", "Divide")]
-    public class DivideTest
+    public class DivideTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public DivideTest(ITestOutputHelper testOutput)
+        public DivideTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

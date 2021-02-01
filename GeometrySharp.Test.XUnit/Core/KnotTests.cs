@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Knot")]
     public class KnotTests
     {
         [Theory]

@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using GeometrySharp.Geometry;
 
+// ToDo this class has to be commented.
+// ToDo this class ha to be tested.
+// ToDo this class has to be review in the naming.
 namespace GeometrySharp.Core.KDTree
 {
     public class KDTree<T>
@@ -65,7 +68,6 @@ namespace GeometrySharp.Core.KDTree
             Left = null;
             Right = null;
         }
-
     }
 
     /// <summary>

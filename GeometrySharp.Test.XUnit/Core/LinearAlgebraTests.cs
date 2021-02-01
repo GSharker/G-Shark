@@ -9,7 +9,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "LinearAlgebra")]
     public class LinearAlgebraTests
     {
         private readonly ITestOutputHelper _testOutput;

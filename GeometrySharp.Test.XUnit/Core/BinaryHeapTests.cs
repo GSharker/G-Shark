@@ -5,7 +5,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "BinaryHeap")]
     public class BinaryHeapTests
     {
         private readonly ITestOutputHelper _testOutput;

@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Sets")]
     public class SetsTests
     {
         private readonly ITestOutputHelper _testOutput;

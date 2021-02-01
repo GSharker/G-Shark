@@ -11,7 +11,6 @@ using Xunit;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
-    [Trait("Category", "Check")]
     public class CheckTests
     {
     }

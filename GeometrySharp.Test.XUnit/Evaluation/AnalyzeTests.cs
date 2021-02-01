@@ -5,11 +5,9 @@ using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
-using verb;
 
 namespace GeometrySharp.Test.XUnit.Evaluation
 {
-    [Trait("Category", "Analyze")]
     public class AnalyzeTests
     {
         private readonly ITestOutputHelper _testOutput;

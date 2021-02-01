@@ -3,11 +3,12 @@ using System;
 using System.Linq;
 using GeometrySharp.Geometry;
 
+// ToDo remove this class once the surface has to be developed.
+// ToDo This checks should be moved into the NurbsSurface construct, to avoid the creation of non valid surfaces.
 namespace GeometrySharp.Evaluation
 {
     public class Check
     {
-        // ToDo This checks should be moved into the NurbsSurface construct, to avoid the creation of non valid surfaces.
         /// <summary>
         /// Validate a NurbsSurfaceData object
         /// </summary>

@@ -2,15 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeometrySharp.Evaluation;
-using GeometrySharp.ExtendedMethods;
-using Newtonsoft.Json.Linq;
 
 namespace GeometrySharp.Core
 {
-    // ToDo comment what is this class.
+    /// <summary>
+    /// Provides linear algebra utility functions.
+    /// </summary>
     public class LinearAlgebra
     {
         /// <summary>

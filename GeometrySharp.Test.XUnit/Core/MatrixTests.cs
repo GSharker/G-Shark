@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Matrix")]
     public class MatrixTests
     {
         public static readonly Matrix IdentityMatrix = new Matrix()

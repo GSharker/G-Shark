@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Note this class can be removed, as mentioned in the note below the code.
+
 namespace GeometrySharp.Core
 {
     public class Binomial

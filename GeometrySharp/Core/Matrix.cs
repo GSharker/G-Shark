@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Geometry;
 
+// ToDo this class has to be tested.
+// ToDo this class has to be commented on all of the parts.
+// ToDo remove code that is not necessary.
 namespace GeometrySharp.Core
 {
     /// <summary>
@@ -12,7 +15,7 @@ namespace GeometrySharp.Core
     public class Matrix : List<IList<double>>
     {
         /// <summary>
-        /// Main constructor
+        /// Main constructor.
         /// </summary>
         public Matrix()
         {
@@ -20,7 +23,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Multiply a `Matrix` by a constant
+        /// Multiply a `Matrix` by a constant.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -35,7 +38,6 @@ namespace GeometrySharp.Core
 
         /// <summary>
         /// Multiply two matrices assuming they are of compatible dimensions.
-        /// Based on the numeric.js routine - `numeric.dotMMsmall`
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
