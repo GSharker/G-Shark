@@ -6,7 +6,10 @@ using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Evaluation
 {
-    //ToDO initialized the class Make
+    // ToDo this class has to be commented.
+    // ToDo this class has to be tested.
+    // Todo this class has to be understand the need, and eventually removed or modified.
+
     public class Make
     {
         public Make()

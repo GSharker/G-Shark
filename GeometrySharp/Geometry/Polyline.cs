@@ -4,6 +4,10 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo this class need to be tested.
+    // ToDo this class need to be commented.
+    // Note this class can be developed bit more looking Hypar or RhinoCommon.
+
     /// <summary>
     /// A simple data structure representing a polyline.
     /// PolylineData is useful, for example, as the result of a curve tessellation.

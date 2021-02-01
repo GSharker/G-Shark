@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// ToDo this class need to be tested.
+// ToDo this class need to be developed.
+
 namespace GeometrySharp.Geometry
 {
     /// <summary>

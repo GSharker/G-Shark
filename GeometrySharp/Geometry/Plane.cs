@@ -2,6 +2,9 @@
 using System;
 using GeometrySharp.Core;
 
+// ToDo this class need to be tested.
+// ToDo this class need to be commented.
+// Note this class can be developed bit more looking Hypar or RhinoCommon.
 namespace GeometrySharp.Geometry
 {
     /// <summary>

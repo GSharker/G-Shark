@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
 
+// ToDo this class has to be commented.
+// ToDo this class has to be tested.
+
 namespace GeometrySharp.Geometry
 {
     /// <summary>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
 
+// ToDo this class need to be tested.
 namespace GeometrySharp.Geometry
 {
     /// <summary>

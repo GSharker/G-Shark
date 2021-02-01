@@ -1,13 +1,15 @@
 ﻿using GeometrySharp.Core;
 using System.Collections.Generic;
 using System;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Evaluation
 {
+    /// <summary>
+    /// Eval provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.
+    /// Eval also provides experimental tools for evaluating points in NURBS volumes.
+    /// Many of these algorithms owe their implementation to Piegl & Tiller's "The NURBS Book".
+    /// </summary>
     public class Eval
     {
         /// <summary>

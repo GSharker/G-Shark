@@ -4,7 +4,11 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
-    //ToDo why Ray an Plan are the same?
+    // ToDo this class need to be tested.
+    // ToDo this class need to be commented.
+    // Note this class can be developed bit more looking Hypar or RhinoCommon.
+    // Note Ray and Plane are the same.
+
     /// <summary>
     /// A Ray is simply an origin point and normal.
     /// </summary>

@@ -7,7 +7,12 @@ using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Evaluation
 {
-    public class Modify
+	/// <summary>
+	/// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
+	/// knot insertion, knot refinement, degree elevation, reparameterization.
+    /// Many of these algorithms owe their implementation to Piegl & Tiller's, "The NURBS Book".
+	/// </summary>
+	public class Modify
 	{
         /// <summary>
 		/// Insert a collection of knots on a curve.
@@ -132,86 +137,6 @@ namespace GeometrySharp.Evaluation
 			return curves;
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-		private static int Imin(int a, int b)
-		{
-			return a < b ? a : b;
-		}
-
-		private static int Imax(int a, int b)
-		{
-			return a > b ? a : b;
-		}
-
-
-		/// <summary>
-		/// Reverses the parameterization of a NURBS curve. The domain is unaffected.
-		/// </summary>
-		/// <param name="curve">A NURBS curve to be reversed</param>
-		/// <returns>A new NURBS curve with a reversed parameterization</returns>
-		public static NurbsCurve CurveReverse(NurbsCurve curve)
-		{
-			throw new NotImplementedException();
-		}
-
-		public static NurbsSurface SurfaceReverse(NurbsSurface surface, bool useV = false)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Reverse a knot vector
-		/// </summary>
-		/// <param name="knots">An array of knots</param>
-		/// <returns>The reversed array of knots</returns>
-		public static Knot KnotsReverse(Knot knots)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Unify the knot vectors of a collection of NURBS curves. This can be used, for example, is used for lofting between curves.
-		/// </summary>
-		/// <param name="curves">An array of NURBS curves</param>
-		/// <returns>A collection of NURBS curves, all with the same knot vector</returns>
-		public static List<NurbsCurve> UnifyCurveKnotVectors(List<NurbsCurve> curves)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Elevate the degree of a NURBS curve
-		/// </summary>
-		/// <param name="curve">The curve to elevate</param>
-		/// <param name="finalDegree">The expected final degree</param>
-		/// <returns>The NURBS curve after degree elevation - if the supplied degree is <= the curve is returned unmodified</returns>
-		public static NurbsCurve CurveElevateDegree(NurbsCurve curve, int finalDegree)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Transform a NURBS surface using a matrix
-		/// </summary>
-		/// <param name="surfaceData">The surface to transform</param>
-		/// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the surface + 1 in both directions</param>
-		/// <returns>A new NURBS surface after transformation</returns>
-		public static NurbsSurface RationalSurfaceTransform(NurbsSurface surfaceData, Matrix mat)
-		{
-			throw new NotImplementedException();
-		}
-
-		//ToDo this method has to be tested.
         /// <summary>
         /// Transform a NURBS curve using a matrix.
         /// </summary>
@@ -230,30 +155,5 @@ namespace GeometrySharp.Evaluation
 
             return new NurbsCurve(curve.Degree, curve.Knots, pts, curve.Weights!);
         }
-
-        /// <summary>
-        /// Perform knot refinement on a NURBS surface by inserting knots at various parameters
-        /// </summary>
-        /// <param name="surface">The surface to insert the knots into</param>
-        /// <param name="knotsToInsert">The knots to insert - an array of parameter positions within the surface domain</param>
-        /// <param name="useV">Whether to insert in the U direction or V direction of the surface</param>
-        /// <returns>A new NURBS surface with the knots inserted</returns>
-        public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, bool useV)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Insert a knot along a rational curve.
-		/// for r + s <= degree, where s is the initial multiplicity (number of duplicates) of the knot.
-		/// </summary>
-		/// <param name="curve"></param>
-		/// <param name="u"></param>
-		/// <param name="r"></param>
-		/// <returns></returns>
-		public static NurbsCurve CurveKnotInsert(NurbsCurve curve, double u, int r)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }
