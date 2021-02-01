@@ -8,10 +8,10 @@ using GeometrySharp.Geometry;
 using GeometrySharp.Test.XUnit.Core;
 using Xunit;
 using Xunit.Abstractions;
+using GeometrySharp.Test.XUnit.Data;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
-    // ToDo make a class collection Curve example and data to use in other tests.
     public class NurbsCurveTests
     {
         private readonly ITestOutputHelper _testOutput;
@@ -34,55 +34,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
             new List<double>() { 0.5, 0.5, 0.5 }
         );
 
-        public static NurbsCurve NurbsCurveExample()
-        {
-            int degree = 2;
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
-            };
-            Knot knots = new Knot() { 0, 0, 0, 1, 1, 1 };
-
-            return new NurbsCurve(degree, knots, pts);
-        }
-
-        public static NurbsCurve NurbsCurvePtsAndWeightsExample()
-        {
-            int degree = 2;
-            List<Vector3> pts = new List<Vector3>()
-            {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
-            };
-            Knot knots = new Knot() { 1, 1, 1, 1, 1, 1 };
-            var weights = new List<double>() { 0.5, 0.5, 0.5 };
-
-            return new NurbsCurve(degree, knots, pts, weights);
-        }
-
-        public static NurbsCurve NurbsCurveExample2()
-        {
-            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 };
-            var degree = 3;
-            var controlPts = new List<Vector3>()
-            {
-                new Vector3() {5,5,0},
-                new Vector3() {10, 10, 0},
-                new Vector3() {20, 15, 0},
-                new Vector3() {35, 15, 0},
-                new Vector3() {45, 10, 0},
-                new Vector3() {50, 5, 0}
-            };
-            return new NurbsCurve(degree, knots, controlPts);
-        }
-
         [Fact]
         public void It_Returns_A_NurbsCurve()
         {
-            var nurbsCurve = NurbsCurveExample2();
+            var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
 
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(3);
@@ -92,7 +47,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_NurbsCurve_Evaluated_With_A_List_Of_Weights()
         {
-            var nurbsCurve = NurbsCurvePtsAndWeightsExample();
+            var nurbsCurve = NurbsCurveCollection.NurbsCurvePtsAndWeightsExample();
 
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
@@ -159,7 +114,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Copied_NurbsCurve()
         {
-            var nurbsCurve = NurbsCurveExample2();
+            var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
@@ -171,16 +126,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Domain_Of_The_Curve()
         {
-            var curveDomain = NurbsCurveExample().Domain();
+            var curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain();
 
-            curveDomain.Min.Should().Be(NurbsCurveExample().Knots.First());
-            curveDomain.Max.Should().Be(NurbsCurveExample().Knots.Last());
+            curveDomain.Min.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.First());
+            curveDomain.Max.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.Last());
         }
 
         [Fact]
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
-            var curve = NurbsCurveExample2();
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
             var matrix = MatrixTests.TransformationMatrixExample;
 
             var transformedCurve = curve.Transform(matrix);
@@ -255,7 +210,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             tangent.Should().BeEquivalentTo(new Vector3() {3, 0, 0});
 
             // Custom test
-            var tangentToCheck = NurbsCurveExample2().Tangent(t);
+            var tangentToCheck = NurbsCurveCollection.NurbsCurveExample2().Tangent(t);
             var tangentNormalized = tangentToCheck.Normalized();
             var tangentExpected = new Vector3(tangentData);
 
@@ -273,7 +228,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_The_Value(double t, double[] pointData)
         {
-            var pointToCheck = NurbsCurveExample2().PointAt(t);
+            var pointToCheck = NurbsCurveCollection.NurbsCurveExample2().PointAt(t);
             var pointExpected = new Vector3(pointData);
 
             pointToCheck.Should().BeEquivalentTo(pointExpected, option => option
@@ -285,7 +240,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Length_Of_The_Curve()
         {
-            var crv = NurbsCurveExample2();
+            var crv = NurbsCurveCollection.NurbsCurveExample2();
 
             var crvLength = crv.Length();
             var samples = Tessellation.RegularSample(crv, 10000);

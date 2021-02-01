@@ -3,7 +3,7 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
-using GeometrySharp.Test.XUnit.Geometry;
+using GeometrySharp.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,7 +21,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
         [Fact]
         public void It_Returns_A_Transformed_NurbsCurve_Using_A_Matrix()
         {
-            var curve = NurbsCurveTests.NurbsCurveExample();
+            var curve = NurbsCurveCollection.NurbsCurveExample();
             var mat = new Matrix() {
                 new List<double>{1.0, 0.0, 0.0, -10.0 },
                 new List<double>{0.0, 1.0, 0.0, 20.0 },

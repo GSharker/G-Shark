@@ -4,6 +4,7 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
+using GeometrySharp.Test.XUnit.Data;
 using GeometrySharp.Test.XUnit.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -53,7 +54,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
         [Fact]
         public void AdaptiveSample_Returns_Points_Sampling_The_Domain_With_Respect_Local_Curvature()
         {
-            var curve = NurbsCurveTests.NurbsCurveExample2();
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
 
             var adaptiveSample = Tessellation.AdaptiveSample(curve, 0.1);
 
@@ -71,7 +72,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
         [Fact]
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
-            var controlPts = NurbsCurveTests.NurbsCurveExample2().ControlPoints;
+            var controlPts = NurbsCurveCollection.NurbsCurveExample2().ControlPoints;
             var curve = new NurbsCurve(controlPts, 1);
 
             var (tValues, pts) = Tessellation.AdaptiveSample(curve, 0.1);
