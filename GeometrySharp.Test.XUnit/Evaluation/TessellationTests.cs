@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
@@ -79,6 +80,15 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
             tValues.Count.Should().Be(pts.Count).And.Be(6);
             pts.Select((pt, i) => pt.Should().BeEquivalentTo(controlPts[i]));
+        }
+
+        [Fact]
+        public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
+        {
+            var (tValues, pts) = Tessellation.AdaptiveSample(NurbsCurveCollection.NurbsCurveExample2(), 0.0);
+
+            tValues.Should().NotBeEmpty();
+            pts.Should().NotBeEmpty();
         }
     }
 }

@@ -12,7 +12,10 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Knot(){}
+        public Knot()
+        {
+
+        }
 
         /// <summary>
         /// Create an instance of the class knot.
@@ -204,6 +207,8 @@ namespace GeometrySharp.Core
 
             this.AddRange(knotVector);
         }
+
+        // ToDo Normalized vector.
 
         /// <summary>
         /// Override ToString method.
