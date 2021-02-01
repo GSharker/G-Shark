@@ -60,17 +60,6 @@ namespace GeometrySharp.Test.XUnit.Core
             knot.AreValidKnots(degree, ctrlPts).Should().Be(expectedResult);
         }
 
-        [Fact]
-        public void It_Normalizes_Knot()
-        {
-            var knots = new Knot(){ -5, -5, -3, -2, 2, 3, 5, 5 };
-            var knotsExpected = new Knot(){ 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
-
-            knots.Normalize();
-
-            knots.Should().BeEquivalentTo(knotsExpected);
-        }
-
         [Theory]
         [InlineData(4, 2.5)]
         [InlineData(3, 1)]
@@ -136,6 +125,17 @@ namespace GeometrySharp.Test.XUnit.Core
                 value.Should().Be(multiplicityResult[count]);
                 count += 1;
             }
+        }
+
+        [Fact]
+        public void It_Returns_A_Normalized_Knot_vectors()
+        {
+            var knots = new Knot() { -5, -5, -3, -2, 2, 3, 5, 5 };
+            var knotsExpected = new Knot() { 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
+
+            var normalizedKnots = Knot.Normalize(knots);
+
+            normalizedKnots.Should().BeEquivalentTo(knotsExpected);
         }
     }
 }

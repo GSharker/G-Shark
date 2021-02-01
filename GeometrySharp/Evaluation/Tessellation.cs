@@ -29,8 +29,9 @@ namespace GeometrySharp.Evaluation
                 throw new Exception("Number of sample must be at least 1 and not negative.");
 
             var start = curve.Knots[0];
-            var end = curve.Knots.Last();
-            var span = (end - start) / (numSamples - 1);
+            var end = curve.Knots[^1];
+
+        var span = (end - start) / (numSamples - 1);
             var pts = new List<Vector3>();
             var tValues = new List<double>();
 
@@ -58,7 +59,7 @@ namespace GeometrySharp.Evaluation
             var tValues = new List<double>();
             var pts = new List<Vector3>();
             var start = curve.Knots[0];
-            var end = curve.Knots.Last();
+            var end = curve.Knots[^1];
 
             if (curve.Degree != 1) return AdaptiveSampleRange(curve, start, end, tolerance);
 

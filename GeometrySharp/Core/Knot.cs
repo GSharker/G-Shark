@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Core
 {
@@ -79,7 +80,10 @@ namespace GeometrySharp.Core
         /// <param name="u">Parameter.</param>
         /// <param name="knots">Array of non decreasing knot values.</param>
         /// <returns></returns>
-        public int Span(int degree, double u) => Span(this.Count - degree - 2, degree, u);
+        public int Span(int degree, double u)
+        {
+            return Span(this.Count - degree - 2, degree, u);
+        }
 
         /// <summary>
         /// Find the span on the knot list of the given parameter,
@@ -112,20 +116,6 @@ namespace GeometrySharp.Core
             }
 
             return mid;
-        }
-
-        /// <summary>
-        /// Normalizes the input knot vector to [0, 1] domain.
-        /// Overwrite the knots.
-        /// </summary>
-        public void Normalize()
-        {
-            var denominator = this[^1] - this[0];
-            var normalizedKnots = new List<double>();
-            foreach (var knot in this)
-                normalizedKnots.Add((knot - this[0]) / denominator);
-            this.Clear();
-            this.AddRange(normalizedKnots);
         }
 
         /// <summary>
@@ -208,7 +198,22 @@ namespace GeometrySharp.Core
             this.AddRange(knotVector);
         }
 
-        // ToDo Normalized vector.
+        /// <summary>
+        /// Normalizes the input knot vector to [0, 1] domain.
+        /// </summary>
+        /// <param name="knots">Knot vector to be normalized,</param>
+        /// <returns>Normalized knot vector.</returns>
+        public static Knot Normalize(Knot knots)
+        {
+            if (knots.Count == 0)
+                throw new Exception("Input knot vector cannot be empty");
+
+            var firstKnot = knots[0];
+            var lastKnot = knots[^1];
+            var denominator = lastKnot - firstKnot;
+
+            return knots.Select(kv => (kv - firstKnot) / denominator).ToKnot();
+        }
 
         /// <summary>
         /// Override ToString method.
