@@ -1,5 +1,8 @@
 ﻿using GeometrySharp.Geometry;
 
+// ToDo this class has to be commented.
+// ToDo this class has to be implemented.
+// ToDo this class has to be tested.
 namespace GeometrySharp.Core
 {
 

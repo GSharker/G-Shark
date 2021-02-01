@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
+    /// <summary>
+    /// Provide utility function for sets creation.
+    /// Example range, linear subdivisions and boolean operations.
+    /// </summary>
     public static class Sets
     {
         // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
@@ -111,7 +114,6 @@ namespace GeometrySharp.Core
         }
 
         // Note the original doesn't provide a set union, we have to keep an eye on this method.
-        // A removed the Sorted from the name due to the method doesn't sort the final list.
         /// <summary>
         /// The set union of two sequences of numbers.
         /// </summary>
@@ -125,7 +127,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// The set difference from two sequences of numbers, sorted.
+        /// The set difference from two sequences of numbers.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -150,10 +152,5 @@ namespace GeometrySharp.Core
                 list.Add(data);
             return list;
         }
-
-        // ToDo will be integrated if necessary.
-        public static double Min(Vector3 a) => throw new NotImplementedException();
-        public static double Max(Vector3 a) => throw new NotImplementedException();
-        public static bool All(List<bool> a) => throw new NotImplementedException();
     }
 }

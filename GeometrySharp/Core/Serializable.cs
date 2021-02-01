@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// ToDo this class has to be commented.
 namespace GeometrySharp.Core
 {
 

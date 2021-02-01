@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Core
 {
@@ -12,13 +9,26 @@ namespace GeometrySharp.Core
     /// </summary>
     public class Knot : List<double>
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public Knot(){}
 
+        /// <summary>
+        /// Create an instance of the class knot.
+        /// </summary>
+        /// <param name="degree">Degree of the curve.</param>
+        /// <param name="numberOfControlPts">Number of control points of the curve.</param>
+        /// <param name="clamped">If the curve is clamped or not.</param>
         public Knot(int degree, int numberOfControlPts, bool clamped = true)
         {
             Create(degree, numberOfControlPts, clamped);
         }
 
+        /// <summary>
+        /// Create an instance of the class from a list of values.
+        /// </summary>
+        /// <param name="values">Set of knots.</param>
         public Knot(IEnumerable<double> values)
         {
             this.AddRange(values);
@@ -195,6 +205,10 @@ namespace GeometrySharp.Core
             this.AddRange(knotVector);
         }
 
+        /// <summary>
+        /// Override ToString method.
+        /// </summary>
+        /// <returns>A knot in a string version.</returns>
         public override string ToString()
         {
             return $"{{{string.Join(",", this)}}}";
