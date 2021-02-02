@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 
@@ -31,7 +33,7 @@ namespace GeometrySharp.Evaluation
             {
                 tempCrv = crvs[i];
                 var param = Math.Min(tempCrv.Knots.Last(), uSet);
-                sum += RationalBezierCurveArcLength(tempCrv, param, gaussDegIncrease);
+                sum += RationalBezierCurveLength(tempCrv, param, gaussDegIncrease);
                 i += 1;
             }
 
@@ -46,7 +48,7 @@ namespace GeometrySharp.Evaluation
         /// <param name="gaussDegIncrease">the degree of gaussian quadrature to perform.
         /// A higher number yields a more exact result, default set to 16.</param>
         /// <returns>Return the approximate length.</returns>
-        public static double RationalBezierCurveArcLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        public static double RationalBezierCurveLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
             var uSet = u < 0.0 ? curve.Knots.Last() : u;
             var z = (uSet - curve.Knots[0]) / 2;
@@ -62,6 +64,52 @@ namespace GeometrySharp.Evaluation
             }
 
             return z * sum;
+        }
+
+        /// <summary>
+        /// Get the curve parameter t at a given length.
+        /// </summary>
+        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="segmentLength">The length to find the parameter.</param>
+        /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
+        /// <param name="curveLength">The length of curve if computer, if not will be computed.</param>
+        /// <returns>The parameter t at the given length.</returns>
+        public static double RationalBezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance, double curveLength = -1)
+        {
+            if (segmentLength < 0) return curve.Knots[0];
+
+            // We compute the whole length, if the curve lengths is not provided.
+            var setCurveLength = (curveLength < 0) ? RationalBezierCurveLength(curve) : curveLength;
+
+            if (segmentLength > setCurveLength) return curve.Knots[^1];
+
+            // Divide and conquer.
+            var setTolerance = (tolerance <= 0.0) ? GeoSharpMath.EPSILON : tolerance;
+
+            var startT = curve.Knots[0];
+            var startLength = 0.0;
+
+            var endT = curve.Knots[^1];
+            var endLength = setCurveLength;
+
+            while ((endLength - startLength) > setTolerance)
+            {
+                var midT = (startT + endT) / 2;
+                var midLength = RationalBezierCurveLength(curve, midT);
+
+                if (midLength > segmentLength)
+                {
+                    endT = midT;
+                    endLength = midLength;
+                }
+                else
+                {
+                    startT = midT;
+                    startLength = midLength;
+                }
+            }
+
+            return (startT + endT) / 2;
         }
     }
 }

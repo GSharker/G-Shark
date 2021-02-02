@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using GeometrySharp.Geometry;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
@@ -38,5 +39,54 @@ namespace GeometrySharp.Evaluation
 			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
 		}
 
-	}
+		/// <summary>
+		/// Divide a NURBS curve given a given number of times, including the end points.
+		/// The result is not split curves but a collection of t values and lengths that can be used for splitting.
+		/// As with all arc length methods, the result is an approximation.
+		/// </summary>
+		/// <param name="curve">NurbsCurve object to divide.</param>
+		/// <param name="divisions">The number of parts to split the curve into.</param>
+		/// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+		public static (List<double> tValues, List<double> lengths) RationalCurveByEqualLength(NurbsCurve curve, int divisions)
+        {
+            var curves = Modify.DecomposeCurveIntoBeziers(curve);
+            var curveLengths = curves.Select(nurbsCurve => Analyze.RationalBezierCurveLength(nurbsCurve)).ToList();
+            var totalLength = curveLengths.Sum();
+
+			var tValues = new List<double> {curve.Knots[0]};
+			var divisionLengths = new List<double> {0.0};
+
+            var approximatedLength = Analyze.RationalCurveArcLength(curve);
+            var arcLengthSeparation = approximatedLength / divisions;
+
+            if (arcLengthSeparation > totalLength) return (tValues, divisionLengths);
+
+            var i = 0;
+            var sum = 0.0;
+            var sum2 = 0.0;
+            var segmentLength = arcLengthSeparation;
+
+
+			while (i < curves.Count)
+            {
+                sum += curveLengths[i];
+
+                while (segmentLength < sum + GeoSharpMath.EPSILON)
+                {
+                    var t = Analyze.RationalBezierCurveParamAtLength(curves[i], segmentLength - sum2,
+                        GeoSharpMath.MAXTOLERANCE, curveLengths[i]);
+
+					tValues.Add(t);
+					divisionLengths.Add(segmentLength);
+
+                    segmentLength += arcLengthSeparation;
+                }
+
+                sum2 += curveLengths[i];
+                i++;
+            }
+
+			return (tValues, divisionLengths);
+		}
+    }
 }

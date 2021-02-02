@@ -237,6 +237,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 .WhenTypeIs<double>());
         }
 
+        // Note thinking to move this test in tessellation.
         // This value has been compared with Rhino.
         [Fact]
         public void It_Returns_The_Length_Of_The_Curve()
@@ -256,6 +257,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             crvLength.Should().BeApproximately(length, 1e-3);
         }
 
+        // Note thinking to move this test in modify.
         [Fact]
         public void It_Returns_The_Reverse_Curve()
         {
@@ -271,6 +273,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
             crv.Equals(reversed2).Should().BeTrue();
             // Checks at reference level are different.
             crv.Should().NotBeSameAs(reversed2);
+        }
+
+        // Note thinking to move this test in divide tests.
+        [Fact]
+        public void It_Returns_The_Curve_Divided_By_A_Count()
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+            // Values from Rhino.
+            var tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
+            var steps = 7;
+
+            var divisions = curve.DividedByCount(steps);
+
+            divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
+            for (int i = 0; i < steps; i++)
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MINTOLERANCE);
         }
     }
 }

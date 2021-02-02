@@ -1,12 +1,9 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using GeometrySharp.Evaluation;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using GeometrySharp.Core;
-using Newtonsoft.Json;
 
 namespace GeometrySharp.Geometry
 {
@@ -162,6 +159,15 @@ namespace GeometrySharp.Geometry
         /// <returns>A reversed curve.</returns>
         /// ToDo implement the async method.
         public NurbsCurve Reverse() => Modify.ReverseCurve(this);
+
+        /// <summary>
+        /// Divide a curve into equal length segments.
+        /// </summary>
+        /// <param name="divisions">Number of divisions of the curve.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        /// ToDo implement the async method.
+        public (List<double> tValues, List<double> lengths) DividedByCount(int divisions) =>
+            Divide.RationalCurveByEqualLength(this, divisions);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.
