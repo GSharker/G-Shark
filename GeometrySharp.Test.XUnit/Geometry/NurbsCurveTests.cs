@@ -118,7 +118,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Equals(nurbsCurve).Should().BeFalse();
+            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
+            copiedNurbs.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
             copiedNurbs.Degree.Should().Be(nurbsCurve.Degree);
             copiedNurbs.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
         }
@@ -268,7 +269,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             pt0.Should().BeEquivalentTo(pt1);
             crv.Equals(reversed2).Should().BeTrue();
-            // Check that at reference level are different.
+            // Checks at reference level are different.
             crv.Should().NotBeSameAs(reversed2);
         }
     }
