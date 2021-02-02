@@ -29,8 +29,9 @@ namespace GeometrySharp.Evaluation
                 throw new Exception("Number of sample must be at least 1 and not negative.");
 
             var start = curve.Knots[0];
-            var end = curve.Knots.Last();
-            var span = (end - start) / (numSamples - 1);
+            var end = curve.Knots[^1];
+
+        var span = (end - start) / (numSamples - 1);
             var pts = new List<Vector3>();
             var tValues = new List<double>();
 
@@ -53,12 +54,12 @@ namespace GeometrySharp.Evaluation
         /// <param name="curve">NurbsCurve object.</param>
         /// <param name="tolerance">Tolerance for the adaptive scheme.</param>
         /// <returns>Return a tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSample(NurbsCurve curve, double tolerance = 1e-6)
+        public static (List<double> tValues, List<Vector3> pts) AdaptiveSample(NurbsCurve curve, double tolerance)
         {
             var tValues = new List<double>();
             var pts = new List<Vector3>();
             var start = curve.Knots[0];
-            var end = curve.Knots.Last();
+            var end = curve.Knots[^1];
 
             if (curve.Degree != 1) return AdaptiveSampleRange(curve, start, end, tolerance);
 
@@ -72,8 +73,6 @@ namespace GeometrySharp.Evaluation
             return (tValues, pts);
         }
 
-        // ToDo tolerance can't be 0.0, in this case rhino looks like usa a regular sample, what do we want to do?
-        // Note investigate it this method can be simplify using this solution.
         // https://www.modelical.com/en/grasshopper-scripting-107/
         /// <summary>
         /// Sample a curve in an adaptive way.
@@ -82,10 +81,13 @@ namespace GeometrySharp.Evaluation
         /// <param name="curve">NurbsCurve object.</param>
         /// <param name="start">Parameter for sampling.</param>
         /// <param name="end">Parameter for sampling.</param>
-        /// <param name="tolerance">Tolerance for the adaptive scheme.</param>
+        /// <param name="tolerance">Tolerance for the adaptive scheme.
+        /// If tolerance is <=0.0, the tolerance used is set as MAXTOLERANCE (1e-6).</param>
         /// <returns>Return a tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance = 1e-6)
+        public static (List<double> tValues, List<Vector3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance)
         {
+            var setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAXTOLERANCE : tolerance;
+
             var tValues = new List<double>();
             var pts = new List<Vector3>();
 
@@ -101,15 +103,15 @@ namespace GeometrySharp.Evaluation
             var diff = pt1 - pt3;
             var diff2 = pt1 - pt2;
 
-            if ((Vector3.Dot(diff, diff) < tolerance && Vector3.Dot(diff2, diff2) > tolerance) 
-                || !Trigonometry.AreThreePointsCollinear(pt1, pt2,pt3, tolerance))
+            if ((Vector3.Dot(diff, diff) < setTolerance && Vector3.Dot(diff2, diff2) > setTolerance) 
+                || !Trigonometry.AreThreePointsCollinear(pt1, pt2,pt3, setTolerance))
             {
                 // Get the exact middle value.
                 var midValue = start + (end - start) * 0.5;
 
                 // Recurse the two halves.
-                var (leftValuesT,leftPts) = AdaptiveSampleRange(curve, start, midValue, tolerance);
-                var (rightValuesT, rightPts) = AdaptiveSampleRange(curve, midValue, end, tolerance);
+                var (leftValuesT,leftPts) = AdaptiveSampleRange(curve, start, midValue, setTolerance);
+                var (rightValuesT, rightPts) = AdaptiveSampleRange(curve, midValue, end, setTolerance);
 
                 tValues.AddRange(leftValuesT.SkipLast(1).ToList());
                 tValues.AddRange(rightValuesT);

@@ -208,7 +208,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var vec1 = new Vector3() { -10, 15, 5 };
             var vec2 = new Vector3() { -10, 15, 5 };
 
-            vec1.IsAlmostEqualTo(vec2).Should().BeTrue();
+            (vec1 == vec2).Should().BeTrue();
         }
 
         [Fact]

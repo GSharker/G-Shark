@@ -88,7 +88,7 @@ namespace GeometrySharp.Test.XUnit
             var curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
             var curve2 = verb.geom.NurbsCurve.byPoints(pts, 1);
 
-            var p = verb.eval.Tess.rationalCurveAdaptiveSample(curve2._data, 0.1, null);
+            var p = verb.eval.Tess.rationalCurveAdaptiveSample(curve._data, 1e-6, null);
 
             _testOutput.WriteLine($"{p.length}");
             for (int i = 0; i < p.length; i++)

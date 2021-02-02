@@ -118,7 +118,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var copiedNurbs = nurbsCurve.Clone();
 
             copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Equals(nurbsCurve).Should().BeFalse();
+            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
+            copiedNurbs.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
             copiedNurbs.Degree.Should().Be(nurbsCurve.Degree);
             copiedNurbs.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
         }
@@ -236,6 +237,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 .WhenTypeIs<double>());
         }
 
+        // Note thinking to move this test in tessellation.
         // This value has been compared with Rhino.
         [Fact]
         public void It_Returns_The_Length_Of_The_Curve()
@@ -253,6 +255,40 @@ namespace GeometrySharp.Test.XUnit.Geometry
             _testOutput.WriteLine(length.ToString());
 
             crvLength.Should().BeApproximately(length, 1e-3);
+        }
+
+        // Note thinking to move this test in modify.
+        [Fact]
+        public void It_Returns_The_Reverse_Curve()
+        {
+            var crv = NurbsCurveCollection.NurbsCurveExample3();
+
+            var reversed1 = crv.Reverse();
+            var reversed2 = reversed1.Reverse();
+
+            var pt0 = crv.PointAt(0.0);
+            var pt1 = reversed1.PointAt(1.0);
+
+            pt0.Should().BeEquivalentTo(pt1);
+            crv.Equals(reversed2).Should().BeTrue();
+            // Checks at reference level are different.
+            crv.Should().NotBeSameAs(reversed2);
+        }
+
+        // Note thinking to move this test in divide tests.
+        [Fact]
+        public void It_Returns_The_Curve_Divided_By_A_Count()
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+            // Values from Rhino.
+            var tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
+            var steps = 7;
+
+            var divisions = curve.DividedByCount(steps);
+
+            divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
+            for (int i = 0; i < steps; i++)
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MINTOLERANCE);
         }
     }
 }
