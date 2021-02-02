@@ -10,7 +10,7 @@ namespace GeometrySharp.Geometry
     /// ICurve is implemented by all curve types.
     /// ICurve is a series of methods that all the curves have.
     /// </summary>
-    public interface ICurve : ISerializable
+    public interface ICurve
     {
         /// <summary>
         /// Calculate the length of the curve.

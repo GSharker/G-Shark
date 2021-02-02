@@ -2,11 +2,9 @@
 using System;
 using GeometrySharp.Evaluation;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading;
 using GeometrySharp.Core;
 using Newtonsoft.Json;
 
@@ -17,7 +15,7 @@ namespace GeometrySharp.Geometry
     /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
     /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
     /// /// </summary>
-    public class NurbsCurve : Serializable<NurbsCurve>, ICurve, IEquatable<NurbsCurve>
+    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>
     {
         /// <summary>
         /// Basic constructor.
@@ -162,10 +160,8 @@ namespace GeometrySharp.Geometry
         /// Reverse the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
-        public NurbsCurve Reverse()
-        {
-            return Modify.ReverseCurve(this);
-        }
+        /// ToDo implement the async method.
+        public NurbsCurve Reverse() => Modify.ReverseCurve(this);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.
@@ -173,19 +169,17 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="other"></param>
         /// <returns>Return true if the NurbsCurves are equal.</returns>
-        public bool Equals(NurbsCurve other)
+        public bool Equals(NurbsCurve? other)
         {
             var pts = this.ControlPoints;
-            var otherPts = other.ControlPoints;
+            var otherPts = other?.ControlPoints;
+
             if (other == null) return false;
             if (pts.Count != otherPts.Count) return false;
             if (this.Knots.Count != other.Knots.Count) return false;
-            for (int i = 0; i < pts.Count; i++)
+            if (pts.Where((t, i) => !t.Equals(otherPts[i])).Any())
             {
-                if (!pts[i].Equals(otherPts[i]))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return Degree == other.Degree && Knots.All(other.Knots.Contains) && Weights.All(other.Weights.Contains);
@@ -209,14 +203,5 @@ namespace GeometrySharp.Geometry
 
             return stringBuilder.ToString();
         }
-
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new System.NotImplementedException();
-        }
-        public override NurbsCurve FromJson(string s) => throw new NotImplementedException();
-
-        public override string ToJson() => JsonConvert.SerializeObject(this);
     }
 }
