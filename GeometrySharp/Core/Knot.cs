@@ -216,6 +216,22 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Reverses the input knot vectors.
+        /// </summary>
+        /// <param name="knots">Knot vectors to be reversed.</param>
+        /// <returns>Reversed knot vector.</returns>
+        public static Knot Reverse(Knot knots)
+        {
+            var firstKnot = knots[0];
+
+            var reversedKnots = new Knot {firstKnot};
+            for (int i = 1; i < knots.Count; i++)
+                reversedKnots.Add(reversedKnots[i-1] + (knots[^i] - knots[knots.Count - i - 1]));
+
+            return reversedKnots;
+        }
+
+        /// <summary>
         /// Override ToString method.
         /// </summary>
         /// <returns>A knot in a string version.</returns>

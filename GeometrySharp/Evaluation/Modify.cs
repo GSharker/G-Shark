@@ -18,9 +18,9 @@ namespace GeometrySharp.Evaluation
 		/// Insert a collection of knots on a curve.
 		/// Implementation of Algorithm A5.4 of The NURBS Book by Piegl & Tiller, 2nd Edition.
 		/// </summary>
-		/// <param name="curve">The NurbsCurve.</param>
+		/// <param name="curve">The NurbsCurve object.</param>
 		/// <param name="knotsToInsert">The set of Knots.</param>
-		/// <returns>NurbsCurve.</returns>
+		/// <returns>A NurbsCurve with refined knots.</returns>
 		public static NurbsCurve CurveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
 		{
 			if (knotsToInsert.Count == 0)
@@ -89,14 +89,14 @@ namespace GeometrySharp.Evaluation
             return new NurbsCurve(degree, knotsPost.ToKnot(), controlPointsPost.ToList());
         }
 
-		/// <summary>
-		/// Decompose a NURBS curve into a collection of bezier's.  Useful
-		/// as each bezier fits into it's convex hull.  This is a useful starting
-		/// point for intersection, closest point, divide & conquer algorithms
-		/// </summary>
-		/// <param name="curve">NurbsCurveData object representing the curve</param>
-		/// <returns>List of NurbsCurveData objects, defined by degree, knots, and control points</returns>
-		public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve)
+        /// <summary>
+        /// Decompose a NurbsCurve into a collection of bezier's.  Useful
+        /// as each bezier fits into it's convex hull.  This is a useful starting
+        /// point for intersection, closest point, divide & conquer algorithms
+        /// </summary>
+        /// <param name="curve">NurbsCurve object representing the curve</param>
+        /// <returns>List of NurbsCurve objects, defined by degree, knots, and control points</returns>
+        public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve)
 		{
 			var degree = curve.Degree;
 			var controlPoints = curve.ControlPoints;
@@ -138,11 +138,11 @@ namespace GeometrySharp.Evaluation
 		}
 
         /// <summary>
-        /// Transform a NURBS curve using a matrix.
+        /// Transform a NurbsCurve using a matrix.
         /// </summary>
         /// <param name="curve">The curve to transform.</param>
         /// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
-        /// <returns>A new NURBS surface after transformation.</returns>
+        /// <returns>A new NurbsCurve after transformation.</returns>
         public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
         {
             var pts = curve.ControlPoints;
@@ -154,6 +154,24 @@ namespace GeometrySharp.Evaluation
             }
 
             return new NurbsCurve(curve.Degree, curve.Knots, pts, curve.Weights!);
+        }
+
+        /// <summary>
+        /// Reverses the parametrization of a NurbsCurve. The domain is unaffected.
+        /// </summary>
+        /// <param name="curve">The NurbsCurve has to be reversed.</param>
+        /// <returns>A NurbsCurve with a reversed parametrization.</returns>
+        public static NurbsCurve ReverseCurve(NurbsCurve curve)
+        {
+            var pts = curve.ControlPoints;
+            pts.Reverse();
+
+            var weights = curve.Weights;
+            weights.Reverse();
+
+            var knots = Knot.Reverse(curve.Knots);
+
+            return new NurbsCurve(curve.Degree, knots, pts, weights);
         }
     }
 }

@@ -254,5 +254,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             crvLength.Should().BeApproximately(length, 1e-3);
         }
+
+        [Fact]
+        public void It_Returns_The_Reverse_Curve()
+        {
+            var crv = NurbsCurveCollection.NurbsCurveExample3();
+
+            var reversed1 = crv.Reverse();
+            var reversed2 = reversed1.Reverse();
+
+            var pt0 = crv.PointAt(0.0);
+            var pt1 = reversed1.PointAt(1.0);
+
+            pt0.Should().BeEquivalentTo(pt1);
+            crv.Equals(reversed2).Should().BeTrue();
+            // Check that at reference level are different.
+            crv.Should().NotBeSameAs(reversed2);
+        }
     }
 }

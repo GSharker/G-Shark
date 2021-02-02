@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using GeometrySharp.Core;
 using Newtonsoft.Json;
 
@@ -158,6 +159,15 @@ namespace GeometrySharp.Geometry
             Eval.RationalCurveDerivatives(this, parameter, numberDerivs);
 
         /// <summary>
+        /// Reverse the parametrization of the curve.
+        /// </summary>
+        /// <returns>A reversed curve.</returns>
+        public NurbsCurve Reverse()
+        {
+            return Modify.ReverseCurve(this);
+        }
+
+        /// <summary>
         /// Compare if two NurbsCurves are the same.
         /// Two NurbsCurve are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
@@ -165,10 +175,20 @@ namespace GeometrySharp.Geometry
         /// <returns>Return true if the NurbsCurves are equal.</returns>
         public bool Equals(NurbsCurve other)
         {
+            var pts = this.ControlPoints;
+            var otherPts = other.ControlPoints;
             if (other == null) return false;
-            if (this.ControlPoints.Count != other.ControlPoints.Count) return false;
+            if (pts.Count != otherPts.Count) return false;
             if (this.Knots.Count != other.Knots.Count) return false;
-            return Degree == other.Degree && ControlPoints.SequenceEqual(other.ControlPoints) && Knots.All(other.Knots.Contains);
+            for (int i = 0; i < pts.Count; i++)
+            {
+                if (!pts[i].Equals(otherPts[i]))
+                {
+                    return false;
+                }
+            }
+
+            return Degree == other.Degree && Knots.All(other.Knots.Contains) && Weights.All(other.Weights.Contains);
         }
 
         /// <summary>

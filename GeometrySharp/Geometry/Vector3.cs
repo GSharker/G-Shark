@@ -10,7 +10,7 @@ namespace GeometrySharp.Geometry
     /// Vector3 is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
     /// </summary>
-    public class Vector3 : List<double>
+    public class Vector3 : List<double>, IEquatable<Vector3>
     {
         /// <summary>
         /// Default constructor.
@@ -315,6 +315,53 @@ namespace GeometrySharp.Geometry
         public static Vector3 operator +(Vector3 a, Vector3 b)
         {
             return a.Select((val, i) => val + b[i]).ToVector();
+        }
+
+        // ToDo make test for this.
+        /// <summary>
+        /// Are the two vectors the same within Epsilon?
+        /// </summary>
+        /// <param name="a">First vector.</param>
+        /// <param name="b">Second vector.</param>
+        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        public static bool operator ==(Vector3 a, Vector3 b)
+        {
+            return Equals(a, b);
+        }
+
+        /// <summary>
+        /// Are the two vectors the same within Epsilon?
+        /// </summary>
+        /// <param name="a">First vector.</param>
+        /// <param name="b">Second vector.</param>
+        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        public static bool operator !=(Vector3 a, Vector3 b)
+        {
+            return !Equals(a, b);
+        }
+
+        /// <summary>
+        /// Is the vector equal to the provided vector?
+        /// </summary>
+        /// <param name="obj">The vector to test.</param>
+        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (!(obj is Vector3)) return false;
+
+            var vec = (Vector3)obj;
+            return IsAlmostEqualTo(vec);
+        }
+
+        /// <summary>
+        /// Is the vector equal to the provided vector?
+        /// </summary>
+        /// <param name="obj">The vector to test.</param>
+        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        public bool Equals(Vector3 other)
+        {
+            return IsAlmostEqualTo(other);
         }
 
         /// <summary>

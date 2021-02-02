@@ -128,7 +128,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Normalized_Knot_vectors()
+        public void It_Returns_A_Normalized_Knot_Vectors()
         {
             var knots = new Knot() { -5, -5, -3, -2, 2, 3, 5, 5 };
             var knotsExpected = new Knot() { 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
@@ -136,6 +136,28 @@ namespace GeometrySharp.Test.XUnit.Core
             var normalizedKnots = Knot.Normalize(knots);
 
             normalizedKnots.Should().BeEquivalentTo(knotsExpected);
+        }
+
+        [Fact]
+        public void It_Throws_An_Exception_If_Input_Knot()
+        {
+            var knots = new Knot();
+
+            Func<Knot> func = () => Knot.Normalize(knots);
+
+            func.Should().Throw<Exception>().WithMessage("Input knot vector cannot be empty");
+        }
+
+        [Fact]
+        public void It_Returns_The_Reversed_Knot_Vectors()
+        {
+            var knots = new Knot { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+            var knotsExpected = new Knot {0, 0, 0, 0.7000000000000002, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4};
+
+            var reversedKnots = Knot.Reverse(knots);
+
+            reversedKnots.Should().BeInAscendingOrder();
+            reversedKnots.Should().BeEquivalentTo(knotsExpected);
         }
     }
 }
