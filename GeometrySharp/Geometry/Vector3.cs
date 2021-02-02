@@ -317,7 +317,6 @@ namespace GeometrySharp.Geometry
             return a.Select((val, i) => val + b[i]).ToVector();
         }
 
-        // ToDo make test for this.
         /// <summary>
         /// Are the two vectors the same within Epsilon?
         /// </summary>
