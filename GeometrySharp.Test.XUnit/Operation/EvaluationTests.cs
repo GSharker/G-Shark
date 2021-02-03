@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
+using GeometrySharp.Operation;
+using GeometrySharp.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.Test.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Operation
 {
-    public class EvalTests
+    public class EvaluationTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public EvalTests(ITestOutputHelper testOutput)
+        public EvaluationTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -24,8 +25,8 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var span = 4;
             var knots = new Knot() {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
 
-            var result1 = Eval.BasicFunction(degree, knots, span, 2.5);
-            var result2 = Eval.BasicFunction(degree, knots,2.5);
+            var result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
+            var result2 = Evaluation.BasicFunction(degree, knots,2.5);
 
             result1.Should().BeEquivalentTo(result2);
             result1.Count.Should().Be(3);
@@ -55,7 +56,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             };
             var curve = new NurbsCurve(degree, knots, controlPts);
 
-            var pt = Eval.CurvePointAt(curve, parameter);
+            var pt = Evaluation.CurvePointAt(curve, parameter);
 
             pt[0].Should().BeApproximately(result[0], 0.001);
             pt[1].Should().BeApproximately(result[1], 0.001);
@@ -74,7 +75,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var expectedResult = new double[,] {{0.125, 0.75, 0.125}, {-0.5, 0.0, 0.5}, {1.0, -2.0, 1.0}};
 
             // Act
-            var resultToCheck = Eval.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
+            var resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
             resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.MAXTOLERANCE);
@@ -110,7 +111,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
             var curve = new NurbsCurve(degree, knots, controlPts);
 
-            var p = Eval.CurveDerivatives(curve, parameter, numberDerivs);
+            var p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
 
             p[0][0].Should().Be(10);
             p[0][1].Should().Be(0);
@@ -134,7 +135,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             var curve = new NurbsCurve(degree, knots, controlPts, weight);
 
             var derivativesOrder = 2;
-            var resultToCheck = Eval.RationalCurveDerivatives(curve, 0, derivativesOrder);
+            var resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
 
             resultToCheck[0][0].Should().Be(1);
             resultToCheck[0][1].Should().Be(0);
@@ -145,7 +146,7 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             resultToCheck[2][0].Should().Be(-4);
             resultToCheck[2][1].Should().Be(0);
 
-            var resultToCheck2 = Eval.RationalCurveDerivatives(curve, 1, derivativesOrder);
+            var resultToCheck2 = Evaluation.RationalCurveDerivatives(curve, 1, derivativesOrder);
 
             resultToCheck2[0][0].Should().Be(0);
             resultToCheck2[0][1].Should().Be(1);
@@ -156,15 +157,51 @@ namespace GeometrySharp.Test.XUnit.Evaluation
             resultToCheck2[2][0].Should().Be(1);
             resultToCheck2[2][1].Should().Be(-1);
 
-            var resultToCheck3 = Eval.RationalCurveDerivatives(curve, 0, 3);
+            var resultToCheck3 = Evaluation.RationalCurveDerivatives(curve, 0, 3);
 
             resultToCheck3[3][0].Should().Be(0);
             resultToCheck3[3][1].Should().Be(-12);
 
-            var resultToCheck4 = Eval.RationalCurveDerivatives(curve, 1, 3);
+            var resultToCheck4 = Evaluation.RationalCurveDerivatives(curve, 1, 3);
 
             resultToCheck4[3][0].Should().Be(0);
             resultToCheck4[3][1].Should().Be(3);
+        }
+
+        // This values have been compered with Rhino.
+        [Theory]
+        [InlineData(0.0, new double[] { 0.707107, 0.707107, 0.0 })]
+        [InlineData(0.25, new double[] { 0.931457, 0.363851, 0.0 })]
+        [InlineData(0.5, new double[] { 1.0, 0.0, 0.0 })]
+        [InlineData(0.75, new double[] { 0.931457, -0.363851, 0 })]
+        [InlineData(1.0, new double[] { 0.707107, -0.707107, 0.0 })]
+        public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
+        {
+            // Verb test
+            var degree = 3;
+            var knots = new Knot() { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
+            List<Vector3> pts = new List<Vector3>()
+            {
+                new Vector3(){0, 0, 0},
+                new Vector3(){1, 0, 0},
+                new Vector3(){2, 0, 0},
+                new Vector3(){3, 0, 0},
+                new Vector3(){4, 0, 0}
+            };
+            var weights = new List<double>() { 1, 1, 1, 1, 1 };
+            var curve = new NurbsCurve(degree, knots, pts, weights);
+            var tangent = Evaluation.RationalCurveTanget(curve, 0.5);
+
+            tangent.Should().BeEquivalentTo(new Vector3() { 3, 0, 0 });
+
+            // Custom test
+            var tangentToCheck = Evaluation.RationalCurveTanget(NurbsCurveCollection.NurbsCurveExample2(), t);
+            var tangentNormalized = tangentToCheck.Normalized();
+            var tangentExpected = new Vector3(tangentData);
+
+            tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
         }
     }
 }

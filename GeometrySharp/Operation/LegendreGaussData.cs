@@ -1,4 +1,4 @@
-﻿namespace GeometrySharp.Evaluation
+﻿namespace GeometrySharp.Operation
 {
     /// <summary>
     /// This class contains the value of Gaussian Quadrature Weights and Abscissae.

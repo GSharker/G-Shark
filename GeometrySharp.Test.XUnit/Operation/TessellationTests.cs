@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
+using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
-using GeometrySharp.Test.XUnit.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.Test.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Operation
 {
     public class TessellationTests
     {

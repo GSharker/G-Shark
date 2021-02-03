@@ -4,7 +4,7 @@ using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
     /// <summary>
     /// Tessellation contains static, immutable algorithms for tessellation of NURBS curves and sufaces. Tessellation is the decomposition
