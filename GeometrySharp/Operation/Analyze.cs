@@ -227,5 +227,34 @@ namespace GeometrySharp.Operation
 
             return u - f / df;
         }
+
+        /// <summary>
+        /// Approximate the parameter at a given arc length on a NurbsCurve.
+        /// </summary>
+        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="segmentLength">The arc length for which to do the procedure.</param>
+        /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
+        /// <returns>The t parameter.</returns>
+        public static double RationalCurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
+        {
+            if (segmentLength < GeoSharpMath.EPSILON) return curve.Knots[0];
+            if (Math.Abs(curve.Length() - segmentLength) < GeoSharpMath.EPSILON) return curve.Knots[^1];
+
+            var curves = Modify.DecomposeCurveIntoBeziers(curve);
+            var i = 0;
+            var curveLength = - GeoSharpMath.EPSILON;
+
+            while (curveLength < segmentLength && i < curves.Count)
+            {
+                var bezierLength = RationalBezierCurveLength(curve);
+                curveLength += bezierLength;
+
+                if (segmentLength < curveLength + GeoSharpMath.EPSILON)
+                    return RationalBezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
+                i++;
+            }
+
+            return -1;
+        }
     }
 }

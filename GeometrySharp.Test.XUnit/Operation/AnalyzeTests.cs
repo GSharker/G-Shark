@@ -110,5 +110,21 @@ namespace GeometrySharp.Test.XUnit.Operation
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MAXTOLERANCE))
                 .WhenTypeIs<double>());
         }
+
+        // These values have been compared with Rhino.
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(15, 0.278127)]
+        [InlineData(33, 0.672164)]
+        [InlineData(46, 0.928308)]
+        [InlineData(50.334675, 1)]
+        public void RationalCurveParameterAtLength_Returns_Parameter_t_At_The_Given_Length(double segmentLength, double tValueExpected)
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+
+            var t = Analyze.RationalCurveParameterAtLength(curve, segmentLength);
+
+            t.Should().BeApproximately(tValueExpected, 1e-5);
+        }
     }
 }
