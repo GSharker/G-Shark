@@ -383,7 +383,7 @@ namespace GeometrySharp.Geometry
         /// </returns>
         public bool IsAlmostEqualTo(Vector3 v)
         {
-            return this.Select((val, i) => Math.Round(val - v[i]))
+            return this.Select((val, i) => Math.Abs(val - v[i]))
                 .All(val => val < GeoSharpMath.EPSILON);
         }
 

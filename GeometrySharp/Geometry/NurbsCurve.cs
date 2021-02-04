@@ -183,8 +183,10 @@ namespace GeometrySharp.Geometry
         /// Return the closest point on the curve to the given point.
         /// </summary>
         /// <param name="point">Point to analyze.</param>
+        /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public Vector3 ClosestPoint(Vector3 point) => Analyze.RationalCurveClosestPoint(this, point);
+        public Vector3 ClosestPoint(Vector3 point, out double t) =>
+            Analyze.RationalCurveClosestPoint(this, point, out t);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.

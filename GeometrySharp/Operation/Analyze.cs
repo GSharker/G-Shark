@@ -112,17 +112,24 @@ namespace GeometrySharp.Operation
             return (startT + endT) / 2;
         }
 
-        public static Vector3 RationalCurveClosestPoint(NurbsCurve curve, Vector3 point)
+        /// <summary>
+        /// Compute the closest point on a NurbsCurve to a given point.
+        /// </summary>
+        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="point">Point to search from.</param>
+        /// <param name="t">Parameter of local closest point.</param>
+        /// <returns>The closest point on the curve.</returns>
+        public static Vector3 RationalCurveClosestPoint(NurbsCurve curve, Vector3 point, out double t)
         {
-            var tValue = RationalCurveClosestParameter(curve, point);
-            return Evaluation.CurvePointAt(curve, tValue);
+            t = RationalCurveClosestParameter(curve, point);
+            return Evaluation.CurvePointAt(curve, t);
         }
 
         /// <summary>
         /// Compute the closest parameters on a NurbsCurve to a given point.
         /// (Piegl & Tiller suggest) page 244 chapter six.
         /// <param name="curve">The NurbsCurve object.</param>
-        /// <param name="point">The point to which we're trying to locate the closest parameter on the curve.</param>
+        /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
         public static double RationalCurveClosestParameter(NurbsCurve curve, Vector3 point)
         {
