@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -177,6 +178,13 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public (List<double> tValues, List<double> lengths) DividedByLength(double length) =>
             Divide.RationalCurveByEqualLength(this, length);
+
+        /// <summary>
+        /// Return the closest point on the curve to the given point.
+        /// </summary>
+        /// <param name="point">Point to analyze.</param>
+        /// <returns>The closest point on the curve.</returns>
+        public Vector3 ClosestPoint(Vector3 point) => Analyze.RationalCurveClosestPoint(this, point);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.

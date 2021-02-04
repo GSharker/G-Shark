@@ -146,6 +146,16 @@ namespace GeometrySharp.Geometry
         /// <returns>The dot product.</returns>
         public static double Dot(Vector3 a, Vector3 b) => a.Select((t, i) => t * b[i]).Sum();
 
+        // ToDo has to tested.
+        /// <summary>
+        /// Unitize vector.
+        /// </summary>
+        /// <returns>The vector unitized.</returns>
+        public Vector3 Unitize()
+        {
+            return this * (1 / this.Length());
+        }
+
         /// <summary>
         /// Create a list of zero values.
         /// </summary>

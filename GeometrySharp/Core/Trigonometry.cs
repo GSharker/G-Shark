@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
@@ -11,6 +12,7 @@ namespace GeometrySharp.Core
     public class Trigonometry
     {
         // ToDo isPointOnPlane.
+        // ToDo closedPointToPlane.
 
         /// <summary>
         /// Determine if the provide points are on the same plane.
@@ -54,6 +56,41 @@ namespace GeometrySharp.Core
             var area = Vector3.Dot(norm, norm);
 
             return area < tol;
+        }
+
+        /// <summary>
+        /// Find the closest point on a segment.
+        /// The segment is deconstruct in two points and two t values.
+        /// </summary>
+        /// <param name="point">Point to project.</param>
+        /// <param name="segmentPt0">First point of the segment.</param>
+        /// <param name="segmentPt1">Second point of the segment.</param>
+        /// <param name="valueT0">First t value of the segment.</param>
+        /// <param name="valueT1">Second t value of the segment.</param>
+        /// <returns>Tuple with the point projected and its t value.</returns>
+        public static (double tValue, Vector3 pt) ClosestPointToSegment(Vector3 point, Vector3 segmentPt0,
+            Vector3 segmentPt1, double valueT0, double valueT1)
+        {
+            var direction = segmentPt1 - segmentPt0;
+            var length = direction.Length();
+
+            if (length < GeoSharpMath.EPSILON)
+                return (tValue: valueT0, pt: segmentPt0);
+
+            var vecUnitized = direction.Unitize();
+            var ptToSegPt0 = point - segmentPt0;
+            var dotResult = Vector3.Dot(ptToSegPt0, vecUnitized);
+
+            if(dotResult < 0.0)
+                return (tValue: valueT0, pt: segmentPt0);
+            else if (dotResult > length)
+                return (tValue: valueT1, pt: segmentPt1);
+            else
+            {
+                var pointResult = segmentPt0 + (vecUnitized * dotResult);
+                var tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
+                return (tValue: tValueResult, pt: pointResult);
+            }
         }
     }
 }
