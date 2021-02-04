@@ -158,13 +158,14 @@ namespace GeometrySharp.Operation
             var maxInteraction = 5;
             var j = 0;
             // Two zero tolerances can be used to indicate convergence:
-            var tol1 = 0.0001; // a measure of Euclidean distance;
+            var tol1 = GeoSharpMath.MAXTOLERANCE; // a measure of Euclidean distance;
             var tol2 = 0.0005; // a zero cosine measure.
             var tVal0 = curve.Knots[0];
             var tVal1 = curve.Knots[^1];
             var isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquaredLength() < GeoSharpMath.EPSILON;
             var Cu = tParameter;
 
+            // To avoid infinite loop we limited the interaction.
             while (j < maxInteraction)
             {
                 var e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);

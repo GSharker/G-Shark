@@ -205,8 +205,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_True_If_Vectors_Are_Equal()
         {
-            var vec1 = new Vector3() { -10, 15, 5 };
-            var vec2 = new Vector3() { -10, 15, 5 };
+            var vec1 = new Vector3() { 5.982099, 5.950299, 0 };
+            var vec2 = new Vector3() { 5.982099, 5.950299, 0 };
 
             (vec1 == vec2).Should().BeTrue();
         }
