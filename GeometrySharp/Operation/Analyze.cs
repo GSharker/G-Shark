@@ -118,10 +118,14 @@ namespace GeometrySharp.Operation
             return Evaluation.CurvePointAt(curve, tValue);
         }
 
+        /// <summary>
+        /// Compute the closest parameters on a NurbsCurve to a given point.
+        /// (Piegl & Tiller suggest) page 244 chapter six.
+        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="point">The point to which we're trying to locate the closest parameter on the curve.</param>
+        /// <returns>The closest parameter on the curve.</returns>
         public static double RationalCurveClosestParameter(NurbsCurve curve, Vector3 point)
         {
-            // (Piegl & Tiller suggest) page 244 chapter six
-
             var minimumDistance = double.PositiveInfinity;
             var tParameter = default(double);
             var ctrlPts = curve.ControlPoints;

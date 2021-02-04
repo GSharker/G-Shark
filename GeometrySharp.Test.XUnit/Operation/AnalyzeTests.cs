@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
@@ -83,6 +84,22 @@ namespace GeometrySharp.Test.XUnit.Operation
             _testOutput.WriteLine(length.ToString());
 
             crvLength.Should().BeApproximately(length, 1e-3);
+        }
+
+        // These values have been compared with Rhino.
+        [Theory]
+        [InlineData(new double[] { 5, 7, 0 }, 0.021824)]
+        [InlineData(new double[] { 12, 10, 0 }, 0.150707)]
+        [InlineData(new double[] { 22, 17, 0 }, 0.387993)]
+        [InlineData(new double[] { 32, 15, 0 }, 0.597924)]
+        [InlineData(new double[] { 41, 8, 0 }, 0.834548)]
+        [InlineData(new double[] { 50, 5, 0 }, 1.0)]
+        public void It_Returns_The_T_Parameter_Of_The_Closest_Point(double[] ptToCheck, double tValExpected)
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+            var tVal = Analyze.RationalCurveClosestParameter(curve, ptToCheck.ToVector());
+
+            tVal.Should().BeApproximately(tValExpected, GeoSharpMath.MAXTOLERANCE);
         }
     }
 }
