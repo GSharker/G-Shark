@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using GeometrySharp.Core;
+﻿
 
 // ToDo this class need to be tested.
 // ToDo this class need to be commented.
@@ -12,13 +10,39 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Plane
     {
+        /// <summary>
+        /// Construct a plane from a origin and a direction.
+        /// </summary>
+        /// <param name="origin">The point describing the origin of the plane.</param>
+        /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Vector3 origin, Vector3 direction)
         {
             this.Normal = direction;
             this.Origin = origin;
         }
 
+        /// <summary>
+        /// Construct a plane from three points.
+        /// </summary>
+        /// <param name="pt1">Firs point representing the origin.</param>
+        /// <param name="pt2">Second point representing the x direction.</param>
+        /// <param name="pt3">Third point representing the y direction.</param>
+        public Plane(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        {
+            this.Origin = pt1;
+            var xDir = (pt2 - pt1).Unitize();
+            var yDir = (pt3 - pt1).Unitize();
+            this.Normal = Vector3.Cross(xDir, yDir);
+        }
+
+        /// <summary>
+        /// The normal of the plan.
+        /// </summary>
         public Vector3 Normal { get; set; }
+
+        /// <summary>
+        /// The origin of the plane.
+        /// </summary>
         public Vector3 Origin { get; set; }
     }
 }

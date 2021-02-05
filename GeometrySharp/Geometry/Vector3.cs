@@ -392,6 +392,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="other">Vector to use as guide.</param>
         /// <returns>Return the perpendicular vector.</returns>
+        /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector
         public Vector3 PerpendicularTo(Vector3 other)
         {
             var tempVector = new double[3]; 
