@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
@@ -108,6 +110,122 @@ namespace GeometrySharp.Operation
             }
 
             return (startT + endT) / 2;
+        }
+
+        /// <summary>
+        /// Compute the closest point on a NurbsCurve to a given point.
+        /// </summary>
+        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="point">Point to search from.</param>
+        /// <param name="t">Parameter of local closest point.</param>
+        /// <returns>The closest point on the curve.</returns>
+        public static Vector3 RationalCurveClosestPoint(NurbsCurve curve, Vector3 point, out double t)
+        {
+            t = RationalCurveClosestParameter(curve, point);
+            return Evaluation.CurvePointAt(curve, t);
+        }
+
+        /// <summary>
+        /// Compute the closest parameters on a NurbsCurve to a given point.
+        /// (Piegl & Tiller suggest) page 244 chapter six.
+        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="point">Point to search from.</param>
+        /// <returns>The closest parameter on the curve.</returns>
+        public static double RationalCurveClosestParameter(NurbsCurve curve, Vector3 point)
+        {
+            var minimumDistance = double.PositiveInfinity;
+            var tParameter = default(double);
+            var ctrlPts = curve.ControlPoints;
+
+            var (tValues, pts) = Tessellation.RegularSample(curve, ctrlPts.Count * curve.Degree);
+
+            for (int i = 0; i < pts.Count - 1 ; i++)
+            {
+                var t0 = tValues[i];
+                var t1 = tValues[i + 1];
+
+                var pt0 = pts[i];
+                var pt1 = pts[i + 1];
+
+                var projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                var distance = (point - projection.pt).Length();
+
+                if (!(distance < minimumDistance)) continue;
+                minimumDistance = distance;
+                tParameter = projection.tValue;
+            }
+
+            var maxInteraction = 5;
+            var j = 0;
+            // Two zero tolerances can be used to indicate convergence:
+            var tol1 = GeoSharpMath.MAXTOLERANCE; // a measure of Euclidean distance;
+            var tol2 = 0.0005; // a zero cosine measure.
+            var tVal0 = curve.Knots[0];
+            var tVal1 = curve.Knots[^1];
+            var isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquaredLength() < GeoSharpMath.EPSILON;
+            var Cu = tParameter;
+
+            // To avoid infinite loop we limited the interaction.
+            while (j < maxInteraction)
+            {
+                var e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
+                var diff = e[0] - point; // C(u) - P
+
+                // First condition, point coincidence:
+                // |C(u) - p| < e1
+                var c1v = diff.Length();
+                var c1 = c1v <= tol1;
+
+                // Second condition, zero cosine:
+                // C'(u) * (C(u) - P)
+                // ------------------ < e2
+                // |C'(u)| |C(u) - P|
+                var c2n = Vector3.Dot(e[1], diff);
+                var c2d = (e[1] * c1v).Length();
+                var c2v = c2n / c2d;
+                var c2 = Math.Abs(c2v) <= tol2;
+
+                // If at least one of these conditions is not satisfied,
+                // a new value, ui+l> is computed using the NewtonIteration.
+                // Then two more conditions are checked.
+                if (c1 && c2) return Cu;
+                var ct = NewtonIteration(Cu, e, diff);
+
+                // Ensure that the parameter stays within the boundary of the curve.
+                if (ct < tVal0) ct = isCurveClosed ? tVal1 - (ct - tVal0) : tVal0;
+                if (ct > tVal1) ct = isCurveClosed ? tVal0 + (ct - tVal1) : tVal1;
+
+                // the parameter does not change significantly, the point is off the end of the curve.
+                var c3v = (e[1] * (ct - Cu)).Length();
+                if (c3v < tol1) return Cu;
+
+                Cu = ct;
+                j++;
+            }
+
+            return Cu;
+        }
+
+        /// <summary>
+        /// Newton iteration to minimize the distance between a point and a curve.
+        /// </summary>
+        /// <param name="u">The parameter obtained at the ith Newton iteration.</param>
+        /// <param name="derivativePts">Point on curve identify as C'(u)</param>
+        /// <param name="difference">Representing the difference from C(u) - P.</param>
+        /// <returns></returns>
+        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
+        {
+            // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
+            // C'(u) * ( C(u) - P ) = 0 = f(u)
+            // C(u) is the curve, p is the point, * is a dot product
+            var f = Vector3.Dot(derivativePts[1], difference);
+
+            //	f' = C"(u) * ( C(u) - p ) + C'(u) * C'(u)
+            var s0 = Vector3.Dot(derivativePts[2], difference);
+            var s1 = Vector3.Dot(derivativePts[1], derivativePts[1]);
+            var df = s0 + s1;
+
+            return u - f / df;
         }
     }
 }

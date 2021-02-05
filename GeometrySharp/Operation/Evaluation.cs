@@ -69,9 +69,9 @@ namespace GeometrySharp.Operation
         /// Corresponds to algorithm 3.1 from The NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
         /// <param name="curve">Object representing the curve.</param>
-        /// <param name="u">Parameter on the curve at which the point is to be evaluated</param>
+        /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        public static Vector3 CurvePointAt(NurbsCurve curve, double u)
+        public static Vector3 CurvePointAt(NurbsCurve curve, double t)
         {
             var degree = curve.Degree;
             var curveHomogenizedPoints = curve.HomogenizedPoints;
@@ -82,8 +82,8 @@ namespace GeometrySharp.Operation
 
             var n = knots.Count - degree - 2;
 
-            var knotSpan = knots.Span(n, degree, u);
-            var basisValue = BasicFunction(degree, knots, knotSpan, u);
+            var knotSpan = knots.Span(n, degree, t);
+            var basisValue = BasicFunction(degree, knots, knotSpan, t);
             var position = Vector3.Zero1d(curveHomogenizedPoints[0].Count);
 
             for (int i = 0; i < degree + 1; i++)
@@ -120,8 +120,8 @@ namespace GeometrySharp.Operation
         public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
         {
             var derivatives = CurveDerivatives(curve, parameter, numberDerivs);
-            // Array of derivate of A(u).
-            // Where A(u) is the vector - valued function whose coordinates are the first three coordinates
+            // Array of derivate of A(t).
+            // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
             var vecDers = LinearAlgebra.Rational1d(derivatives);
@@ -146,7 +146,7 @@ namespace GeometrySharp.Operation
 
                 CK.Add(v);
             }
-            // Return C(u) derivatives.
+            // Return C(t) derivatives.
             return CK;
         }
 

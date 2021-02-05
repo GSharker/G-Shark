@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
@@ -83,6 +85,30 @@ namespace GeometrySharp.Test.XUnit.Operation
             _testOutput.WriteLine(length.ToString());
 
             crvLength.Should().BeApproximately(length, 1e-3);
+        }
+
+        // These values have been compared with Rhino.
+        [Theory]
+        [InlineData(new double[] { 5, 7, 0 }, new double[] { 5.982099, 5.950299, 0 }, 0.021824)]
+        [InlineData(new double[] { 12, 10, 0 }, new double[] { 11.781824, 10.364244, 0 }, 0.150707)]
+        [InlineData(new double[] { 21, 17, 0 }, new double[] { 21.5726, 14.101932, 0 }, 0.36828)]
+        [InlineData(new double[] { 32, 15, 0 }, new double[] { 31.906562, 14.36387, 0 }, 0.597924)]
+        [InlineData(new double[] { 41, 8, 0 }, new double[] { 42.554645, 10.750437, 0 }, 0.834548)]
+        [InlineData(new double[] { 50, 5, 0 }, new double[] { 50, 5, 0 }, 1.0)]
+        public void It_Returns_The_Closest_Point_And_The_Parameter_t(double[] ptToCheck, double[] ptExpected, double tValExpected)
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+            var ptHomogenized = Analyze.RationalCurveClosestPoint(curve, ptToCheck.ToVector(), out var t);
+            var pt = LinearAlgebra.Dehomogenize(ptHomogenized);
+
+            _testOutput.WriteLine(pt.ToString());
+            _testOutput.WriteLine(t.ToString());
+
+            t.Should().BeApproximately(tValExpected, GeoSharpMath.MAXTOLERANCE);
+            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
+            pt.Should().BeEquivalentTo(ptExpected.ToVector(), options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MAXTOLERANCE))
+                .WhenTypeIs<double>());
         }
     }
 }
