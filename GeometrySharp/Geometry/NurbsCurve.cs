@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using GeometrySharp.Core;
 using GeometrySharp.Operation;
@@ -180,13 +181,30 @@ namespace GeometrySharp.Geometry
             Divide.RationalCurveByEqualLength(this, length);
 
         /// <summary>
-        /// Return the closest point on the curve to the given point.
+        /// Compute the closest point on the curve to the given point.
         /// </summary>
         /// <param name="point">Point to analyze.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
+        /// ToDo implement the async method.
         public Vector3 ClosestPoint(Vector3 point, out double t) =>
             Analyze.RationalCurveClosestPoint(this, point, out t);
+
+        /// <summary>
+        /// Gets the parameter along the curve which coincides with a given length along the curve.
+        /// </summary>
+        /// <param name="segmentLength">Length of segment to measure. Must be less than or equal to the length of the curve.</param>
+        /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
+        /// <returns></returns>
+        public double ParameterAtLength(double segmentLength, double tolerance = -1.0) =>
+            Analyze.RationalCurveParameterAtLength(this, segmentLength, tolerance);
+
+        /// <summary>
+        /// Get the length curve which coincides with a given parameter t.
+        /// </summary>
+        /// <param name="t">The parameter at which to evaluate.</param>
+        /// <returns>The length of the curve at the give parameter t.</returns>
+        public double LengthParameter(double t) => Analyze.RationalCurveArcLength(this, t);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.

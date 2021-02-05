@@ -286,10 +286,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Checks_If_A_Point_Lies_On_A_Plane()
         {
-            Plane plane = new Plane(new Vector3() { 30, 45, 0 }, new Vector3() { 30, 45, 0 });
+            Plane plane = new Plane(new Vector3 { 30, 45, 0 }, new Vector3 { 30, 45, 0 });
             Vector3 pt = new Vector3() { 26.565905, 47.289396, 0.0 };
 
             pt.IsPointOnPlane(plane, 0.001).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Perpendicular_Vector()
+        {
+            var vector = new Vector3 {-7, 10, -5};
+            var tempVec = new Vector3 {0, 1, 0};
+            var vectorExpected = new Vector3 {10, 7, 0};
+
+            var perVector = tempVec.PerpendicularTo(vector);
+
+            perVector.Equals(vectorExpected).Should().BeTrue();
         }
     }
 }
