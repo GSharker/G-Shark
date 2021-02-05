@@ -388,6 +388,82 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Compute the perpendicular to another vector. Result is not unitized.
+        /// </summary>
+        /// <param name="other">Vector to use as guide.</param>
+        /// <returns>Return the perpendicular vector.</returns>
+        public Vector3 PerpendicularTo(Vector3 other)
+        {
+            var tempVector = new double[3]; 
+            int i, j, k;
+            double a, b;
+            k = 2;
+            if (Math.Abs(other[1]) > Math.Abs(other[0]))
+            {
+                if (Math.Abs(other[2]) > Math.Abs(other[1]))
+                {
+                    // |v.z| > |v.y| > |v.x|
+                    i = 2;
+                    j = 1;
+                    k = 0;
+                    a = other[2];
+                    b = -other[1];
+                }
+                else if (Math.Abs(other[2]) > Math.Abs(other[0]))
+                {
+                    // |v.y| >= |v.z| >= |v.x|
+                    i = 1;
+                    j = 2;
+                    k = 0;
+                    a = other[1];
+                    b = -other[2];
+                }
+                else
+                {
+                    // |v.y| > |v.x| > |v.z|
+                    i = 1;
+                    j = 0;
+                    k = 2;
+                    a = other[1];
+                    b = -other[0];
+                }
+            }
+            else if (Math.Abs(other[2]) > Math.Abs(other[0]))
+            {
+                // |v.z| > |v.x| >= |v.y|
+                i = 2;
+                j = 0;
+                k = 1;
+                a = other[2];
+                b = -other[0];
+            }
+            else if (Math.Abs(other[2]) > Math.Abs(other[1]))
+            {
+                // |v.x| >= |v.z| > |v.y|
+                i = 0;
+                j = 2;
+                k = 1;
+                a = other[0];
+                b = -other[2];
+            }
+            else
+            {
+                // |v.x| >= |v.y| >= |v.z|
+                i = 0;
+                j = 1;
+                k = 2;
+                a = other[0];
+                b = -other[1];
+            }
+
+            tempVector[i] = b;
+            tempVector[j] = a;
+            tempVector[k] = 0.0;
+
+            return tempVector.ToVector();
+        }
+
+        /// <summary>
         /// Constructs the string representation of the vector.
         /// </summary>
         /// <returns>The vector in string format</returns>

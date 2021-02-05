@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
