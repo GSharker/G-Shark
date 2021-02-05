@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
     // ToDo this class has to be commented.
     // ToDo this class has to be tested.
@@ -45,7 +45,7 @@ namespace GeometrySharp.Evaluation
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
             return new NurbsCurve(degree, knots, LinearAlgebra.Homogenize1d(controlPoints, weights));
             //weights = Sets.RepeatData(1.0, controlPoints.Count);
-            //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
+            //return new NurbsCurveData(degree, knots, Evaluation.Homogenize1d(controlPoints, weights));
             //return null;
         }
         

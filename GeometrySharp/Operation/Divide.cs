@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using GeometrySharp.Geometry;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
 	/// <summary>
 	/// Divide provides various tools for dividing and splitting NURBS geometry.
@@ -14,9 +12,9 @@ namespace GeometrySharp.Evaluation
 	public class Divide
 	{
 		/// <summary>
-		/// Split a NURBS curve into two parts at a given parameter.
+		/// Split a NurbsCurve into two parts at a given parameter.
 		/// </summary>
-		/// <param name="curve">NurbsCurveData object representing the curve.</param>
+		/// <param name="curve">NurbsCurve object representing the curve.</param>
 		/// <param name="u">The parameter where to split the curve.</param>
 		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
 		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
@@ -36,18 +34,34 @@ namespace GeometrySharp.Evaluation
 			var controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
 			var controlPoints1 = refinedCurve.ControlPoints.GetRange(s + 1, refinedCurve.ControlPoints.Count - (s + 1));
 
-			return new List<NurbsCurve>() { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
+			return new List<NurbsCurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
 		}
 
 		/// <summary>
-		/// Divide a NURBS curve given a given number of times, including the end points.
+		/// Divide a NurbsCurve for a given number of time, including the end points.
 		/// The result is not split curves but a collection of t values and lengths that can be used for splitting.
 		/// As with all arc length methods, the result is an approximation.
 		/// </summary>
 		/// <param name="curve">NurbsCurve object to divide.</param>
 		/// <param name="divisions">The number of parts to split the curve into.</param>
 		/// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-		public static (List<double> tValues, List<double> lengths) RationalCurveByEqualLength(NurbsCurve curve, int divisions)
+		public static (List<double> tValues, List<double> lengths) RationalCurveByDivisions(NurbsCurve curve, int divisions)
+        {
+            var approximatedLength = Analyze.RationalCurveArcLength(curve);
+            var arcLengthSeparation = approximatedLength / divisions;
+
+            return RationalCurveByEqualLength(curve, arcLengthSeparation);
+        }
+
+		/// <summary>
+		/// Divide a NurbsCurve for a given length, including the end points.
+		/// The result is not split curves but a collection of t values and lengths that can be used for splitting.
+		/// As with all arc length methods, the result is an approximation.
+		/// </summary>
+		/// <param name="curve">NurbsCurve object to divide.</param>
+		/// <param name="length">The length separating the resultant samples.</param>
+		/// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+		public static (List<double> tValues, List<double> lengths) RationalCurveByEqualLength(NurbsCurve curve, double length)
         {
             var curves = Modify.DecomposeCurveIntoBeziers(curve);
             var curveLengths = curves.Select(nurbsCurve => Analyze.RationalBezierCurveLength(nurbsCurve)).ToList();
@@ -56,15 +70,12 @@ namespace GeometrySharp.Evaluation
 			var tValues = new List<double> {curve.Knots[0]};
 			var divisionLengths = new List<double> {0.0};
 
-            var approximatedLength = Analyze.RationalCurveArcLength(curve);
-            var arcLengthSeparation = approximatedLength / divisions;
-
-            if (arcLengthSeparation > totalLength) return (tValues, divisionLengths);
+            if (length > totalLength) return (tValues, divisionLengths);
 
             var i = 0;
             var sum = 0.0;
             var sum2 = 0.0;
-            var segmentLength = arcLengthSeparation;
+            var segmentLength = length;
 
 
 			while (i < curves.Count)
@@ -79,7 +90,7 @@ namespace GeometrySharp.Evaluation
 					tValues.Add(t);
 					divisionLengths.Add(segmentLength);
 
-                    segmentLength += arcLengthSeparation;
+                    segmentLength += length;
                 }
 
                 sum2 += curveLengths[i];

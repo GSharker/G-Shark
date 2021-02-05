@@ -1,9 +1,9 @@
 ﻿using System;
-using GeometrySharp.Evaluation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GeometrySharp.Core;
+using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
@@ -125,7 +125,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 PointAt(double t) => LinearAlgebra.Dehomogenize(Eval.CurvePointAt(this, t));
+        public Vector3 PointAt(double t) => LinearAlgebra.Dehomogenize(Evaluation.CurvePointAt(this, t));
 
         /// <summary>
         /// Obtain the curve tangent at the given parameter.
@@ -133,7 +133,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 Tangent(double t) => Eval.RationalCurveTanget(this, t);
+        public Vector3 Tangent(double t) => Evaluation.RationalCurveTanget(this, t);
 
         /// <summary>
         /// Determine the arc length of the curve.
@@ -151,7 +151,7 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         /// Note this method doesn't see necessary here in this class.
         public List<Vector3> Derivatives(double parameter, int numberDerivs = 1) =>
-            Eval.RationalCurveDerivatives(this, parameter, numberDerivs);
+            Evaluation.RationalCurveDerivatives(this, parameter, numberDerivs);
 
         /// <summary>
         /// Reverse the parametrization of the curve.
@@ -167,7 +167,16 @@ namespace GeometrySharp.Geometry
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         /// ToDo implement the async method.
         public (List<double> tValues, List<double> lengths) DividedByCount(int divisions) =>
-            Divide.RationalCurveByEqualLength(this, divisions);
+            Divide.RationalCurveByDivisions(this, divisions);
+
+        /// <summary>
+        /// Divide a curve into segments with a preset length.
+        /// </summary>
+        /// <param name="divisions">Length of each segment.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        /// ToDo implement the async method.
+        public (List<double> tValues, List<double> lengths) DividedByLength(double length) =>
+            Divide.RationalCurveByEqualLength(this, length);
 
         /// <summary>
         /// Compare if two NurbsCurves are the same.

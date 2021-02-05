@@ -2,13 +2,12 @@
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
-using verb.eval;
 using Xunit;
 using Xunit.Abstractions;
-using Analyze = GeometrySharp.Evaluation.Analyze;
 
-namespace GeometrySharp.Test.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Operation
 {
     public class AnalyzeTests
     {
@@ -65,6 +64,25 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
                 sumLengths += length;
             }
+        }
+
+        // This value has been compared with Rhino.
+        [Fact]
+        public void It_Returns_The_Length_Of_The_Curve()
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample2();
+
+            var crvLength = Analyze.RationalCurveArcLength(curve);
+            var samples = Tessellation.RegularSample(curve, 10000);
+
+            var length = 0.0;
+            for (int j = 0; j < samples.pts.Count - 1; j++)
+                length += (samples.pts[j + 1] - samples.pts[j]).Length();
+
+            _testOutput.WriteLine(crvLength.ToString());
+            _testOutput.WriteLine(length.ToString());
+
+            crvLength.Should().BeApproximately(length, 1e-3);
         }
     }
 }

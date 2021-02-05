@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
+using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.Test.XUnit.Evaluation
+namespace GeometrySharp.Test.XUnit.Operation
 {
     public class ModifyTests
 	{
@@ -104,6 +104,23 @@ namespace GeometrySharp.Test.XUnit.Evaluation
 
                 pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
             }
+        }
+
+        [Fact]
+        public void It_Reverses_The_Curve()
+        {
+            var curve = NurbsCurveCollection.NurbsCurveExample3();
+
+            var crvRev1 = Modify.ReverseCurve(curve);
+            var crvRev2 = Modify.ReverseCurve(crvRev1);
+
+            var pt0 = curve.PointAt(0.0);
+            var pt1 = crvRev1.PointAt(1.0);
+
+            pt0.Should().BeEquivalentTo(pt1);
+            curve.Equals(crvRev2).Should().BeTrue();
+            // Checks at reference level are different.
+            curve.Should().NotBeSameAs(crvRev2);
         }
     }
 }

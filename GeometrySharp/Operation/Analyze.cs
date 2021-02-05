@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
     /// <summary>
     /// Analyze contains methods for analyzing NURBS geometry.
@@ -58,7 +56,7 @@ namespace GeometrySharp.Evaluation
             for (int i = 0; i < gaussDegree; i++)
             {
                 var cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
-                var tan = Eval.RationalCurveDerivatives(curve, cu, 1);
+                var tan = Evaluation.RationalCurveDerivatives(curve, cu, 1);
 
                 sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length();
             }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
     /// <summary>
-    /// Eval provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.
-    /// Eval also provides experimental tools for evaluating points in NURBS volumes.
+    /// Evaluation provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.
+    /// Evaluation also provides experimental tools for evaluating points in NURBS volumes.
     /// Many of these algorithms owe their implementation to Piegl & Tiller's "The NURBS Book".
     /// </summary>
-    public class Eval
+    public class Evaluation
     {
         /// <summary>
         /// Compute the non-vanishing basis functions.

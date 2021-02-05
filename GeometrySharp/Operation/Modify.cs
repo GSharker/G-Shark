@@ -5,7 +5,7 @@ using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
 	/// <summary>
 	/// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
