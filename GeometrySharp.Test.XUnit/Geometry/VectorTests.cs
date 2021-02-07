@@ -6,14 +6,13 @@ using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
-    [Trait("Category", "Vector3")]
-    public class VectorTest
+    public class VectorTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public VectorTest(ITestOutputHelper testOutput)
+        public VectorTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -200,16 +199,16 @@ namespace GeometrySharp.XUnit.Geometry
 
             var divisionResult = vec / 7;
 
-            divisionResult.Select((val, i) => Math.Round(val, 6).Should().Be(expectedVec[i]));
+            divisionResult.Select((val, i) => System.Math.Round(val, 6).Should().Be(expectedVec[i]));
         }
 
         [Fact]
         public void It_Returns_True_If_Vectors_Are_Equal()
         {
-            var vec1 = new Vector3() { -10, 15, 5 };
-            var vec2 = new Vector3() { -10, 15, 5 };
+            var vec1 = new Vector3() { 5.982099, 5.950299, 0 };
+            var vec2 = new Vector3() { 5.982099, 5.950299, 0 };
 
-            vec1.IsAlmostEqualTo(vec2).Should().BeTrue();
+            (vec1 == vec2).Should().BeTrue();
         }
 
         [Fact]
@@ -287,10 +286,22 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Checks_If_A_Point_Lies_On_A_Plane()
         {
-            Plane plane = new Plane(new Vector3() { 30, 45, 0 }, new Vector3() { 30, 45, 0 });
+            Plane plane = new Plane(new Vector3 { 30, 45, 0 }, new Vector3 { 30, 45, 0 });
             Vector3 pt = new Vector3() { 26.565905, 47.289396, 0.0 };
 
             pt.IsPointOnPlane(plane, 0.001).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Perpendicular_Vector()
+        {
+            var vector = new Vector3 {-7, 10, -5};
+            var tempVec = new Vector3 {0, 1, 0};
+            var vectorExpected = new Vector3 {10, 7, 0};
+
+            var perVector = tempVec.PerpendicularTo(vector);
+
+            perVector.Equals(vectorExpected).Should().BeTrue();
         }
     }
 }

@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "GeoSharpMath")]
-    public class MathTest
+    public class MathTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public MathTest(ITestOutputHelper testOutput)
+        public MathTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -27,7 +21,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(180, 3.141593)]
         public void It_Returns_The_Radians_From_Degree(double degree, double radiansExpected)
         {
-            Math.Round(GeoSharpMath.ToRadians(degree), 6).Should().Be(radiansExpected);
+            System.Math.Round(GeoSharpMath.ToRadians(degree), 6).Should().Be(radiansExpected);
         }
 
         [Theory]
@@ -37,7 +31,7 @@ namespace GeometrySharp.XUnit.Core
         [InlineData(3.141592, 180)]
         public void It_Returns_The_Degree_From_Radians(double radians, double degreeExpected)
         {
-            Math.Round(GeoSharpMath.ToDegrees(radians), 0).Should().Be(degreeExpected);
+            System.Math.Round(GeoSharpMath.ToDegrees(radians), 0).Should().Be(degreeExpected);
         }
 
         [Theory]

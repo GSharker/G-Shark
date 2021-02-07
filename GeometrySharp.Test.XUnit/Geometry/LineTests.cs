@@ -1,17 +1,15 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
-    [Trait("Category", "Line")]
-    public class LineTest
+    public class LineTests
     {
         private readonly ITestOutputHelper _testOutput;
-        public LineTest(ITestOutputHelper testOutput)
+        public LineTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

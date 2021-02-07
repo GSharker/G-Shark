@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Evaluation;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "LinearAlgebra")]
-    public class LinearAlgebraTest
+    public class LinearAlgebraTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public LinearAlgebraTest(ITestOutputHelper testOutput)
+        public LinearAlgebraTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -144,6 +143,23 @@ namespace GeometrySharp.XUnit.Core
 
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
         }
-     
+
+        [Fact]
+        public void It_Returns_A_Rationalized_Set_Of_Points()
+        {
+            List<Vector3> homoPts = new List<Vector3>()
+            {
+                new Vector3() {0.0, 0.0, 0.0, 0.5},
+                new Vector3() {2.5, -2.5, 0.0, 1.0},
+                new Vector3() {5.0, 0.0, 0.0, 1.0}
+            };
+
+            var ratioPts = LinearAlgebra.Rational1d(homoPts);
+
+            ratioPts.All(pt => pt.Count == 3).Should().BeTrue();
+            ratioPts[0].Should().BeEquivalentTo(new Vector3() {0.0, 0.0, 0.0});
+            ratioPts[1].Should().BeEquivalentTo(new Vector3() {2.5, -2.5, 0.0});
+            ratioPts[2].Should().BeEquivalentTo(new Vector3() {5.0, 0.0, 0.0});
+        }
     }
 }

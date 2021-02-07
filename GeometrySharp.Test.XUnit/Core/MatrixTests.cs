@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "Matrix")]
-    public class MatrixTest
+    public class MatrixTests
     {
         public static readonly Matrix IdentityMatrix = new Matrix()
         {
@@ -30,7 +26,7 @@ namespace GeometrySharp.XUnit.Core
         };
 
         private readonly ITestOutputHelper _testOutput;
-        public MatrixTest(ITestOutputHelper testOutput)
+        public MatrixTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }

@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Geometry;
 
-namespace GeometrySharp.Evaluation
+namespace GeometrySharp.Operation
 {
-    //ToDO initialized the class Make
+    // ToDo this class has to be commented.
+    // ToDo this class has to be tested.
+    // Todo this class has to be understand the need, and eventually removed or modified.
+
     public class Make
     {
         public Make()
         {
 
         }
-
 
         public static NurbsCurve Polyline(List<Vector3> points)
         {
@@ -43,20 +45,15 @@ namespace GeometrySharp.Evaluation
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
             return new NurbsCurve(degree, knots, LinearAlgebra.Homogenize1d(controlPoints, weights));
             //weights = Sets.RepeatData(1.0, controlPoints.Count);
-            //return new NurbsCurveData(degree, knots, Eval.Homogenize1d(controlPoints, weights));
+            //return new NurbsCurveData(degree, knots, Evaluation.Homogenize1d(controlPoints, weights));
             //return null;
         }
-
-        public static NurbsCurve ClonedCurve(NurbsCurve curve)
-        {
-            return new NurbsCurve(curve.Degree, curve.Knots, curve.ControlPoints);
-        }
-
+        
 
         //////////////////////////// =================================== not implemented yet ================================== ///////////////////
 
         /// <summary>
-        /// Generate a surface by translating a profile curve along a rail curve
+        /// Create a surface by translating a profile curve along a rail curve
         /// </summary>
         /// <param name="profile">NurbCurveData Profile</param>
         /// <param name="rail">NurbCurveData Rail</param>
@@ -104,7 +101,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an elliptical arc
+        /// Create the control points, weights, and knots of an elliptical arc
         /// </summary>
         /// <param name="center">the center</param>
         /// <param name="xaxis">the scaled x axis</param>
@@ -118,7 +115,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an arbitrary arc
+        /// Create the control points, weights, and knots of an arbitrary arc
         /// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
         /// </summary>
         /// <param name="center">the center of the arc</param>
@@ -134,7 +131,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of an extruded surface
+        /// Create the control points, weights, and knots of an extruded surface
         /// </summary>
         /// <param name="axis">axis of the extrusion</param>
         /// <param name="length">length of the extrusion</param>
@@ -146,7 +143,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a cylinder
+        /// Create the control points, weights, and knots of a cylinder
         /// </summary>
         /// <param name="axis">normalized axis of cylinder</param>
         /// <param name="xaxis">xaxis in plane of cylinder</param>
@@ -172,7 +169,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a sphere
+        /// Create the control points, weights, and knots of a sphere
         /// </summary>
         /// <param name="center">the center of the sphere</param>
         /// <param name="axis">normalized axis of sphere</param>
@@ -185,7 +182,7 @@ namespace GeometrySharp.Evaluation
         }
 
         /// <summary>
-        /// Generate the control points, weights, and knots of a cone
+        /// Create the control points, weights, and knots of a cone
         /// </summary>
         /// <param name="axis">normalized axis of cone</param>
         /// <param name="xaxis"></param>

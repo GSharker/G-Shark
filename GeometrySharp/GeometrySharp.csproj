@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>GeometrySharp</PackageId>
-    <Authors>Cesare Caoduro</Authors>
+    <Authors>Cesare Caoduro and Mirco Bianchini</Authors>
     <Company></Company>
     <Product />
     <RepositoryUrl>https://github.com/cesarecaoduro/GeometrySharp</RepositoryUrl>

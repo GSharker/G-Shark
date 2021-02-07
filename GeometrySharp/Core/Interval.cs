@@ -1,26 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GeometrySharp.Core
+﻿namespace GeometrySharp.Core
 {
-    // ToDo originally interval took T as type. If necessary re-introduce as a T.
+    // Note originally interval took T as type. If necessary re-introduce as a T.
+    // Note this class can be implemented using some method from RhinoCommon.
+    // ToDo possible methods to add -> IsValid, Mid, Length, Equality.
     /// <summary>
-    /// A simple parametric data type representing an "interval" between two numbers. This data structure does no legality checks.
+    /// A simple parametric data representing an "interval" between two numbers.
     /// </summary>
-    /// <typeparam name=""></typeparam>
     public class Interval
     {
-        public double Min { get; set; }
-        public double Max { get; set; }
+        /// <summary>
+        /// Create an instance of an interval by the values.
+        /// </summary>
+        /// <param name="min">The minimum value of the interval.</param>
+        /// <param name="max">The maximum value of the interval.</param>
         public Interval(double min, double max)
         {
             Min = min;
             Max = max;
         }
 
+        /// <summary>
+        /// The minimum value of the interval.
+        /// </summary>
+        public double Min { get; set; }
+
+        /// <summary>
+        /// The maximum value of the interval.
+        /// </summary>
+        public double Max { get; set; }
+
+        /// <summary>
+        /// Converts normalized parameter to interval value, or pair of values.
+        /// </summary>
+        /// <param name="normalizedParameter">The normalized parameter between 0-1.</param>
+        /// <returns>Interval parameter min*(1.0-normalizedParameter) + max*normalizedParameter.</returns>
         public double ParameterAt(double normalizedParameter)
         {
             return !GeoSharpMath.IsValidDouble(normalizedParameter)

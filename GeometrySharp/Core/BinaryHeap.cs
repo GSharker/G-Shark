@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+// ToDo this class has to be tested.
+// ToDo this class has to be commented.
+// ToDo this class has to be reviewed
 namespace GeometrySharp.Core
 {
     /// <summary>
-    /// A min-type priority queue of Nodes
+    /// A min-type priority queue of Nodes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class BinaryHeap<T> where T : IComparable<T>

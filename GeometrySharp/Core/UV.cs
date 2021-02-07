@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Note is this class necessary? We need a class for this?
 namespace GeometrySharp.Core
 {
     /// <summary>

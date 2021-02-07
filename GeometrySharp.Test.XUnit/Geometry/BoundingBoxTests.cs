@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Geometry;
+using GeometrySharp.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Geometry
+namespace GeometrySharp.Test.XUnit.Geometry
 {
-    [Trait("Category", "BoundingBox")]
-    public class BoundingBoxTest
+    public class BoundingBoxTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public BoundingBoxTest(ITestOutputHelper testOutput)
+        public BoundingBoxTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -33,7 +33,7 @@ namespace GeometrySharp.XUnit.Geometry
         {
             Vector3 conteinedPt = new Vector3() { 2.5, 4.5, 0.0 };
 
-            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             bool containsResult = bBox.Contains(conteinedPt, false);
 
             containsResult.Should().BeTrue();
@@ -44,7 +44,7 @@ namespace GeometrySharp.XUnit.Geometry
         {
             Vector3 externalPt = new Vector3() { 12.4, 5.0, 0.0 };
 
-            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             bool containsResult = bBox.Contains(externalPt, false);
 
             containsResult.Should().BeFalse();
@@ -70,21 +70,22 @@ namespace GeometrySharp.XUnit.Geometry
             List<Vector3> pts = new List<Vector3>() { pt1, pt2 };
             Vector3 pMax = new Vector3() { 10, 10, 0 };
 
-            BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(pts);
             BoundingBox bBoxResult = bBox1.Union(bBox2);
 
-            _testOutput.WriteLine(bBoxResult.ToString());
             bBoxResult.IsValid.Should().BeTrue();
             bBoxResult.Max.Should().BeEquivalentTo(pMax);
             bBoxResult.Min.Should().BeEquivalentTo(pt2);
         }
 
         [Theory]
-        [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersectionsUnset), MemberType = typeof(BoundingBoxCollection))]
-        public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(BoundingBox bBox1, BoundingBox bBox2)
+       [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersectionsUnset), MemberType = typeof(BoundingBoxCollection))]
+        public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(Vector3[] bBoxPts, BoundingBox bBox2)
         {
-            BoundingBox bBoxIntersect = bBox2.Intersect(bBox1);
+            var bBox1 = new BoundingBox(bBoxPts);
+
+            var bBoxIntersect = bBox1.Intersect(bBox2);
 
             bBoxIntersect.IsValid.Should().BeFalse();
             bBoxIntersect.Max.Should().BeEquivalentTo(Vector3.Unset);
@@ -98,7 +99,7 @@ namespace GeometrySharp.XUnit.Geometry
             Vector3 pt2 = new Vector3() { 15d, 15d, 0d };
             List<Vector3> pts2 = new List<Vector3>() { pt1, pt2 };
 
-            BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
             BoundingBox bBox2 = new BoundingBox(pts2);
             BoundingBox bBoxResult = bBox1.Intersect(bBox2);
 
@@ -110,7 +111,7 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Returns_A_BBox_NotInitialized()
         {
-            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
 
             bBox.Clear();
 
@@ -131,7 +132,7 @@ namespace GeometrySharp.XUnit.Geometry
         [Fact]
         public void It_Returns_TheLongestAxis()
         {
-            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxWithZValue);
+            BoundingBox bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxWithZValue());
 
             int longestAxis = bBox.GetLongestAxis();
 
@@ -142,7 +143,7 @@ namespace GeometrySharp.XUnit.Geometry
         public void Union_Returns_ValidBoundingBox_IfOther_IsNotValid()
         {
             BoundingBox bBox1 = BoundingBox.Unset;
-            BoundingBox bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points);
+            BoundingBox bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
 
             BoundingBox bBoxResult = BoundingBox.Union(bBox1, bBox2);
 

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
-using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
+    /// <summary>
+    /// Provide utility function for sets creation.
+    /// Example range, linear subdivisions and boolean operations.
+    /// </summary>
     public static class Sets
     {
+        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// <summary>
         /// The range of a set of number, or the distance between the smallest value to the biggest in the collection.
         /// </summary>
         /// <param name="a">Set of numbers.</param>
         /// <returns>The range.</returns>
-        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         public static double Dimension(IList<double> a)
         {
             var sortedSet = a.OrderBy(x => x);
@@ -42,6 +44,7 @@ namespace GeometrySharp.Core
 
             return l;
         }
+
         /// <summary>
         /// Returns a list of evenly spaced numbers over a specified interval.
         /// </summary>
@@ -109,8 +112,8 @@ namespace GeometrySharp.Core
 
             return l;
         }
-        // ToDo the original doesn't provide a set union, we have to keep an eye on this method.
-        // A removed the Sorted from the name due to the method doesn't sort the final list.
+
+        // Note the original doesn't provide a set union, we have to keep an eye on this method.
         /// <summary>
         /// The set union of two sequences of numbers.
         /// </summary>
@@ -123,9 +126,8 @@ namespace GeometrySharp.Core
             return b.Count == 0 ? a.ToList() : a.Union(b).ToList();
         }
 
-        // A removed the Sorted from the name due to the method doesn't sort the final list.
         /// <summary>
-        /// The set difference from two sequences of numbers, sorted.
+        /// The set difference from two sequences of numbers.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -150,10 +152,5 @@ namespace GeometrySharp.Core
                 list.Add(data);
             return list;
         }
-
-        // ToDo will be integrated if necessary.
-        public static double Min(Vector3 a) => throw new NotImplementedException();
-        public static double Max(Vector3 a) => throw new NotImplementedException();
-        public static bool All(List<bool> a) => throw new NotImplementedException();
     }
 }

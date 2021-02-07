@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
 
+// ToDo this class need to be tested.
 namespace GeometrySharp.Geometry
 {
     /// <summary>
@@ -13,6 +14,21 @@ namespace GeometrySharp.Geometry
     {
         public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints)
         {
+
+            //if (data.ControlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
+            //if (data.DegreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
+            //if (data.DegreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
+            //if (data.KnotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
+            //if (data.KnotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
+
+            //if (data.KnotsU.Count != data.ControlPoints.Count + data.DegreeU + 1)
+            //    throw new ArgumentException("controlPointsU.length + degreeU + 1 must equal knotsU.length!");
+            //if (data.KnotsV.Count != data.ControlPoints[0].Count + data.DegreeV + 1)
+            //    throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
+            ////if (!Check.AreValidKnots(data.KnotsU, data.DegreeU) || !Check.AreValidKnots(data.KnotsV, data.DegreeV))
+            ////throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
+            //return data;
+
             DegreeU = degreeU;
             DegreeV = degreeV;
             KnotsU = knotsU;

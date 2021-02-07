@@ -1,21 +1,15 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GeometrySharp.Core;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.XUnit.Core
+namespace GeometrySharp.Test.XUnit.Core
 {
-    [Trait("Category", "BinaryHeap")]
-    public class BinaryHeapTest
+    public class BinaryHeapTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public BinaryHeapTest(ITestOutputHelper testOutput)
+        public BinaryHeapTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
