@@ -6,6 +6,8 @@ using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo add isPerpendicular, isOrthogonal, Rotate, AreRighthanded
+    // ToDo move the method Point on Line or point on Ray to trigonometry or eval, keep distanceTo here.
     /// <summary>
     /// Vector3 is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
@@ -36,6 +38,21 @@ namespace GeometrySharp.Geometry
             {GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE};
 
         /// <summary>
+        /// Gets the value of the vector with components 1,0,0.
+        /// </summary>
+        public static Vector3 XAxis => new Vector3 { 1.0, 0.0, 0.0 };
+
+        /// <summary>
+        /// Gets the value of the vector with components 0,1,0.
+        /// </summary>
+        public static Vector3 YAxis => new Vector3 { 0.0, 1.0, 0.0 };
+
+        /// <summary>
+        /// Gets the value of the vector with components 0,0,1.
+        /// </summary>
+        public static Vector3 ZAxis => new Vector3 { 0.0, 0.0, 1.0 };
+
+        /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
@@ -53,7 +70,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The reversed vector.</returns>
         public static Vector3 Reverse(Vector3 a)
         {
-            return new Vector3(a.Select(x => -x));
+            return new Vector3(a.Select(value => -value));
         }
 
         /// <summary>
