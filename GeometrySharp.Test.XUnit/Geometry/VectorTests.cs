@@ -32,11 +32,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 new object[] { new Vector3() { -0d, 0d, 0d }, 0.0}
             };
 
-        public static IEnumerable<object[]> AmplifiedVectors =>
-            new List<object[]>
+        public static TheoryData<Vector3, double, Vector3> AmplifiedVectors =>
+            new TheoryData<Vector3, double, Vector3>
             {
-                new object[] { new Vector3() { 3.0930734141595426, 11.54653670707977, 6.726731646460115 }, 15},
-                new object[] { new Vector3() { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
+                { new Vector3{ 5, 5, 0 }, 0, new Vector3{ 0, 0, 0 }},
+                { new Vector3{ 10, 10, 0 }, 15, new Vector3{ 10.606602,10.606602,0 }},
+                { new Vector3{ 20, 15, 0 }, 33, new Vector3{ 26.4,19.8,0 }},
+                { new Vector3{ 35, 15, 0 }, 46, new Vector3{ 42.280671,18.120288,0 }}
             };
 
         [Fact]
@@ -152,14 +154,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(AmplifiedVectors))]
-        public void It_Returns_An_Amplified_Vector_Long_A_Direction(Vector3 expected, double amplitude)
+        public void It_Returns_An_Amplified_Vector(Vector3 vector, double amplitude, Vector3 expected)
         {
-            var pt = new Vector3(){ -10, 5, 10 };
-            var dir = new Vector3(){ 20,10,-5};
+            var amplifiedVector = vector.Amplify(amplitude);
 
-            var amplifiedVector = Vector3.OnRay(pt, dir, amplitude);
-
-            amplifiedVector.Should().BeEquivalentTo(expected);
+            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
+            amplifiedVector.Should().BeEquivalentTo(expected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
         }
 
         [Fact]
@@ -234,19 +236,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Distance_Between_A_Point_And_A_Ray()
-        {
-            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            double distanceExpected = 2.7735009811261464;
-
-            double distance = pt.DistanceTo(ray);
-
-            _testOutput.WriteLine(distance.ToString());
-            distance.Should().Be(distanceExpected);
-        }
-
-        [Fact]
         public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
         {
             var line = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
@@ -257,30 +246,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             _testOutput.WriteLine(distance.ToString());
             distance.Should().Be(distanceExpected);
-        }
-
-        [Fact]
-        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Ray()
-        {
-            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
-
-            Vector3 closestPt = pt.ClosestPointOn(ray);
-
-            closestPt.Should().BeEquivalentTo(expectedPt);
-        }
-
-        [Fact]
-        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Line()
-        {
-            Line ray = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
-
-            Vector3 closestPt = pt.ClosestPointOn(ray);
-
-            closestPt.Should().BeEquivalentTo(expectedPt);
         }
 
         [Fact]

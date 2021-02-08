@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
     // ToDo add isPerpendicular, isOrthogonal, Rotate, AreRighthanded
-    // ToDo move the method Point on Line or point on Ray to trigonometry or eval, keep distanceTo here.
     /// <summary>
     /// Vector3 is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
@@ -95,16 +95,13 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Gets the vector amplified by a scalar value along a direction.
+        /// Gets the vector amplified by a scalar value.
         /// </summary>
-        /// <param name="origin">The start point or vector.</param>
-        /// <param name="dir">The direction.</param>
         /// <param name="amplitude">The scalar value to amplify the vector.</param>
         /// <returns>The vector amplified.</returns>
-        public static Vector3 OnRay(Vector3 origin, Vector3 dir, double amplitude)
+        public Vector3 Amplify(double amplitude)
         {
-            var vectorAmplified = dir.Normalized() * amplitude;
-            return origin + vectorAmplified;
+            return new Vector3(this.Unitize() * amplitude);
         }
 
         /// <summary>
@@ -226,21 +223,7 @@ namespace GeometrySharp.Geometry
         public double DistanceTo(Vector3 v)
         {
             if (Count != v.Count) throw new Exception("The two list doesn't match in length.");
-
             return Math.Sqrt(this.Select((val, i) => Math.Pow(val - v[i], 2)).Sum());
-        }
-
-        /// <summary>
-        /// Get the distance of a point to a ray.
-        /// </summary>
-        /// <param name="pt">The point to project.</param>
-        /// <param name="ray">The ray from which to calculate the distance.</param>
-        /// <returns>The distance.</returns>
-        public double DistanceTo(Ray ray)
-        {
-            var projectedPt = ClosestPointOn(ray);
-            var ptToProjectedPt = projectedPt - this;
-            return ptToProjectedPt.Length();
         }
 
         /// <summary>
@@ -251,51 +234,18 @@ namespace GeometrySharp.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            var ray = new Ray(line.Start, line.Direction);
-
-            return DistanceTo(ray);
-        }
-
-        /// <summary>
-        /// Get the closest point on a ray from a point.
-        /// </summary>
-        /// <param name="pt">The point.</param>
-        /// <param name="ray">The ray on which to find the point.</param>
-        /// <returns>Get the closest point on a ray from a point.</returns>
-        public Vector3 ClosestPointOn(Ray ray)
-        {
-            var rayDirNormalized = ray.Direction.Normalized();
-            var rayOriginToPt = this - ray.Origin;
-            var dotResult = Dot(rayOriginToPt, rayDirNormalized);
-            var projectedPt = ray.Origin + rayDirNormalized * dotResult;
-
-            return projectedPt;
-        }
-
-        /// <summary>
-        /// Get the closest point on the line from this point.
-        /// </summary>
-        /// <param name="line">The line on which to find the closest point.</param>
-        /// <returns>The closest point on the line from this point.</returns>
-        public Vector3 ClosestPointOn(Line line)
-        {
-            var dir = line.Direction;
-            var v = this - line.Start;
-            var d = Dot(v, dir);
-
-            d = Math.Min(line.Length, d);
-            d = Math.Max(d, 0);
-
-            return line.Start + dir * d;
+            var projectedPt = line.ClosestPoint(this);
+            var ptToProjectedPt = projectedPt - this;
+            return ptToProjectedPt.Length();
         }
 
         /// <summary>
         /// Determinate if the provided point lies on the plane.
         /// </summary>
-        /// <param name="pt">The point to check if it lies on the plane.</param>
         /// <param name="plane">The plane on which to find if the point lies on.</param>
+        /// <param name="tol">If the tolerance is not set, as per default is use 1e-6</param>
         /// <returns>Whether the point is on the plane.</returns>
-        public bool IsPointOnPlane(Plane plane, double tol)
+        public bool IsPointOnPlane(Plane plane, double tol = 1e-6)
         {
             return Math.Abs(Dot(this - plane.Origin, plane.Normal)) < tol;
         }

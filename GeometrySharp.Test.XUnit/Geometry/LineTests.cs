@@ -46,5 +46,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             l.Direction.Should().BeEquivalentTo(expectedDirection);
         }
+
+        [Fact]
+        public void It_Returns_The_ClosestPoint()
+        {
+            var line = new Line(new Vector3{ 0, 0, 0 }, new Vector3{ 30, 45, 0 });
+            var pt = new Vector3{ 10, 20, 0 };
+            var expectedPt = new Vector3{ 12.30769230769231, 18.461538461538463, 0 };
+
+            var closestPt = line.ClosestPoint(pt);
+
+            closestPt.Should().BeEquivalentTo(expectedPt);
+        }
     }
 }
