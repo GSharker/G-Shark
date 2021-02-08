@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using FluentAssertions;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
+using Plane = GeometrySharp.Geometry.Plane;
+using Vector3 = GeometrySharp.Geometry.Vector3;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -233,6 +236,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var distance = vec1.DistanceTo(vec2);
 
             distance.Should().Be(35);
+        }
+
+        [Fact]
+        public void It_Checks_If_Vectors_Are_Perpendicular()
+        {
+            var vec = new Vector3{ -7, 10, -5 };
+            var other1 = new Vector3{ 10, 7, 0 };
+            var other2 = Vector3.YAxis;
+
+            vec.IsPerpendicularTo(other1).Should().BeTrue();
+            vec.IsPerpendicularTo(other2).Should().BeFalse();
         }
 
         [Fact]

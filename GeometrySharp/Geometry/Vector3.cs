@@ -136,6 +136,17 @@ namespace GeometrySharp.Geometry
             return this.Aggregate(0.0, (x, a) => a * a + x);
         }
 
+        // Note Rhino is using a tolerance of 1 degree.
+        /// <summary>
+        /// Determines if this vector is perpendicular to another one.
+        /// </summary>
+        /// <param name="other">Vector to compare to.</param>
+        /// <returns>True if both vectors are perpendicular.</returns>
+        public bool IsPerpendicularTo(Vector3 other)
+        {
+            return Vector3.Dot(this, other) < GeoSharpMath.MAXTOLERANCE;
+        }
+
         /// <summary>
         /// Cross product.
         /// </summary>
