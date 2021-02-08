@@ -33,6 +33,12 @@ namespace GeometrySharp.Core
         public static double UNSETVALUE => -1.23432101234321E+308;
 
         /// <summary>
+        /// Represents the default angle tolerance, used when no other values are provided.
+        /// This is one degree, expressed in radians.
+        /// </summary>
+        public static double ANGLETOLERANCE => 0.0174532925199433;
+
+        /// <summary>
         /// Convert degrees to radians.
         /// </summary>
         /// <param name="degrees">Value degrees.</param>

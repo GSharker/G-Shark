@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo add isPerpendicular, isOrthogonal, Rotate, AreRighthanded
     /// <summary>
     /// Vector3 is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
@@ -136,15 +134,63 @@ namespace GeometrySharp.Geometry
             return this.Aggregate(0.0, (x, a) => a * a + x);
         }
 
-        // Note Rhino is using a tolerance of 1 degree.
         /// <summary>
-        /// Determines if this vector is perpendicular to another one.
+        /// Determines if this vector is perpendicular to within one degree of another one.
         /// </summary>
         /// <param name="other">Vector to compare to.</param>
+        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
         /// <returns>True if both vectors are perpendicular.</returns>
-        public bool IsPerpendicularTo(Vector3 other)
+        public bool IsPerpendicularTo(Vector3 other, double tolerance = -1)
         {
-            return Vector3.Dot(this, other) < GeoSharpMath.MAXTOLERANCE;
+            var result = false;
+            var toleranceSet = (tolerance < 0) ? GeoSharpMath.ANGLETOLERANCE : tolerance;
+            var length = this.Length() * other.Length();
+            var dotUnitize = Vector3.Dot(this, other) / length;
+            if (length > 0 && dotUnitize <= Math.Sin(toleranceSet)) result = true;
+            return result;
+        }
+
+        //ToDo make a test for this.
+        /// <summary>
+        /// Determines whether this vector is parallel to another vector, within a provided tolerance.
+        /// </summary>
+        /// <param name="other">Vector to compare to.</param>
+        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
+        /// <returns>A parallel indicator:
+        /// 1 vectors are parallel,
+        /// 0 vectors are not parallel,
+        /// -1 vectors are parallel but with opposite directions </returns>
+        public int IsParallelTo(Vector3 other, double tolerance = -1)
+        {
+            var result = 0;
+            var toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.ANGLETOLERANCE) : Math.Cos(tolerance);
+            var length = this.Length() * other.Length();
+            var dotUnitize = Vector3.Dot(this, other) / length;
+            if (!(length > 0)) return result;
+            if (toleranceSet >= dotUnitize) result = 1;
+            if (toleranceSet <= -dotUnitize) result = -1;
+            return result;
+        }
+
+        // ToDo remove the noise as Rhino
+        // ToDo make a test for this.
+        /// <summary>
+        /// Rotates this vector around a given axis.
+        /// The rotation is computed using Rodrigues Rotation formula.
+        /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
+        /// </summary>
+        /// <param name="axis">Axis of rotation.</param>
+        /// <param name="angle">Angle of rotation (in radians).</param>
+        /// <returns>Rotated vector.</returns>
+        public Vector3 Rotate(Vector3 axis, double angle)
+        {
+            var cosAngle = Math.Cos(angle);
+            var sinAngle = Math.Sin(angle);
+            var unitizedAxis = axis.Unitize();
+            var cross = Vector3.Cross(unitizedAxis, this);
+            var dot = Vector3.Dot(unitizedAxis, this);
+
+            return (this * cosAngle) + (cross * sinAngle) + (unitizedAxis * dot * (1 - cosAngle));
         }
 
         /// <summary>
@@ -153,13 +199,13 @@ namespace GeometrySharp.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>Compute the cross product.</returns>
-        public static Vector3 Cross(Vector3 u, Vector3 v)
+        public static Vector3 Cross(Vector3 a, Vector3 b)
         {
             return new Vector3
             {
-                u[1] * v[2] - u[2] * v[1],
-                u[2] * v[0] - u[0] * v[2],
-                u[0] * v[1] - u[1] * v[0]
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
             };
         }
 
