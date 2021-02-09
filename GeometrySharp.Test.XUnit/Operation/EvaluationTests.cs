@@ -196,7 +196,7 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             // Custom test
             var tangentToCheck = Evaluation.RationalCurveTanget(NurbsCurveCollection.NurbsCurveExample2(), t);
-            var tangentNormalized = tangentToCheck.Normalized();
+            var tangentNormalized = tangentToCheck.Unitize();
             var tangentExpected = new Vector3(tangentData);
 
             tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option

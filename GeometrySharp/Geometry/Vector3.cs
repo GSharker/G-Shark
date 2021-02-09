@@ -103,16 +103,6 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Vector3 normalized.
-        /// </summary>
-        /// <param name="a">The vector has to be normalized.</param>
-        /// <returns>The vector normalized.</returns>
-        public Vector3 Normalized()
-        {
-            return this / Length();
-        }
-
-        /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
         /// </summary>
         /// <param name="a">The vector.</param>
