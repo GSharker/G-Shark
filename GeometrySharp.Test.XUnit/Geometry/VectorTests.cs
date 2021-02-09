@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -42,6 +43,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 { new Vector3{ 10, 10, 0 }, 15, new Vector3{ 10.606602,10.606602,0 }},
                 { new Vector3{ 20, 15, 0 }, 33, new Vector3{ 26.4,19.8,0 }},
                 { new Vector3{ 35, 15, 0 }, 46, new Vector3{ 42.280671,18.120288,0 }}
+            };
+
+        public static TheoryData<Vector3> NotValidVectorUnitized =>
+            new TheoryData<Vector3>
+            {
+                Vector3.Unset,
+                new Vector3{ 0, 0, 0 },
             };
 
         [Fact]
@@ -281,6 +289,58 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var perVector = tempVec.PerpendicularTo(vector);
 
             perVector.Equals(vectorExpected).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(NotValidVectorUnitized))]
+        public void Unitize_Throws_An_Error_If_Invalid_Vector_Or_Zero_Length(Vector3 vector)
+        {
+            Func<Vector3> func = vector.Unitize;
+
+            func.Should().Throw<Exception>().WithMessage("An invalid or zero length vector cannot be unitized.");
+        }
+
+        [Fact]
+        public void It_Returns_A_Unitized_Vector()
+        {
+            var vector = new Vector3 { -7, 10, -5 };
+            var vectorExpected = new Vector3 { -0.530669, 0.758098, -0.379049 };
+
+            var unitizedVector = vector.Unitize();
+
+            unitizedVector.Should().BeEquivalentTo(vectorExpected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
+        }
+
+        [Theory]
+        [InlineData(-0.0000125, new [] {-7.0, 10.0, -5.0})]
+        [InlineData(0.0, new [] { -7.0, 10.0, -5.0 })]
+        [InlineData(12.5, new [] { -7.454672, 10.649531, -2.239498 })]
+        [InlineData(450, new [] { -2.867312, 4.09616, 12.206556 })]
+        public void It_Returns_A_Rotated_Vector_By_An_Angle(double angle, double[] vectorExpected)
+        {
+            var vector = new Vector3 { -7, 10, -5 };
+            var axis = new Vector3 { 10, 7, 0 };
+            var radiance = GeoSharpMath.ToRadians(angle);
+
+            var vectorRot = vector.Rotate(axis, radiance);
+
+            vectorRot.Should().BeEquivalentTo(vectorExpected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
+        }
+
+        [Theory]
+        [InlineData(new[] {11.5, 0.0, 0.0}, new[] {10.3, 0.0, 0.0}, 1)]
+        [InlineData(new[] {-7.0, 10.0, -5.0}, new[] {7.0, 15.0, 0.0}, 0)]
+        [InlineData(new[] {7.0, 0.0, 0.0}, new[] {-7.0, 0.0, 0.0}, -1)]
+        public void It_Checks_If_Two_Vectors_Are_Parallel(double[] v1, double[] v2, int result)
+        {
+            var vec1 = new Vector3(v1);
+            var vec2 = new Vector3(v2);
+
+            vec1.IsParallelTo(vec2).Should().Be(result);
         }
     }
 }

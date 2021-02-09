@@ -150,7 +150,6 @@ namespace GeometrySharp.Geometry
             return result;
         }
 
-        //ToDo make a test for this.
         /// <summary>
         /// Determines whether this vector is parallel to another vector, within a provided tolerance.
         /// </summary>
@@ -167,13 +166,11 @@ namespace GeometrySharp.Geometry
             var length = this.Length() * other.Length();
             var dotUnitize = Vector3.Dot(this, other) / length;
             if (!(length > 0)) return result;
-            if (toleranceSet >= dotUnitize) result = 1;
-            if (toleranceSet <= -dotUnitize) result = -1;
+            if (dotUnitize >= toleranceSet) result = 1;
+            if (dotUnitize <= -toleranceSet) result = -1;
             return result;
         }
 
-        // ToDo remove the noise as Rhino
-        // ToDo make a test for this.
         /// <summary>
         /// Rotates this vector around a given axis.
         /// The rotation is computed using Rodrigues Rotation formula.
@@ -186,6 +183,51 @@ namespace GeometrySharp.Geometry
         {
             var cosAngle = Math.Cos(angle);
             var sinAngle = Math.Sin(angle);
+
+            // Remove the noise in input.
+            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(cosAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(sinAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
+
+            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
+            {
+                var vec = new Vector3{cosAngle, sinAngle};
+                if (vec.Length() > 0.0)
+                {
+                    var vecUnitized = vec.Unitize();
+                    cosAngle = vecUnitized[0];
+                    sinAngle = vecUnitized[1];
+                }
+                else
+                {
+                    throw new Exception("SinAngle and CosAngle are both zero");
+                }
+            }
+
+            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
+
             var unitizedAxis = axis.Unitize();
             var cross = Vector3.Cross(unitizedAxis, this);
             var dot = Vector3.Dot(unitizedAxis, this);
@@ -215,16 +257,21 @@ namespace GeometrySharp.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
-        public static double Dot(Vector3 a, Vector3 b) => a.Select((t, i) => t * b[i]).Sum();
+        public static double Dot(Vector3 a, Vector3 b)
+        {
+            return a.Select((t, i) => t * b[i]).Sum();
+        }
 
-        // ToDo has to tested.
         /// <summary>
-        /// Unitize vector.
+        /// Unitizes the vector. A unit vector has length 1 unit.
         /// </summary>
-        /// <returns>The vector unitized.</returns>
+        /// <returns>A new vector unitized.</returns>
         public Vector3 Unitize()
         {
-            return this * (1 / this.Length());
+            var l = this.Length();
+            if (l <= 0.0)
+                throw new Exception("An invalid or zero length vector cannot be unitized.");
+            return this * (1 / l);
         }
 
         /// <summary>
