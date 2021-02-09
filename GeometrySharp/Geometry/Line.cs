@@ -1,10 +1,11 @@
 ﻿using System;
 
+using GeometrySharp.Core;
+
 namespace GeometrySharp.Geometry
 {
-    // ToDo this class has to be tested.
-    // ToDo this class has to be implemented.
-    // ToDo is the serializable be tested?
+    // ToDo add the serializable.
+    // ToDo ToNurbsCurve could be useful?
 
     /// <summary>
     /// A curve representing a straight line.
@@ -18,6 +19,8 @@ namespace GeometrySharp.Geometry
         /// <param name="end">End point.</param>
         public Line(Vector3 start, Vector3 end)
         {
+            if(start == end || !start.IsValid() || !end.IsValid())
+                throw new Exception("Inputs are not valid, or are equal");
             this.Start = start;
             this.End = end;
             this.Length = Start.DistanceTo(End);
@@ -32,10 +35,12 @@ namespace GeometrySharp.Geometry
         /// <param name="length">Length of the line.</param>
         public Line(Vector3 start, Vector3 direction, double length)
         {
+            if(length >= -GeoSharpMath.EPSILON && length <= GeoSharpMath.EPSILON)
+                throw new Exception("Length must not be 0.0");
             this.Start = start;
             this.End = start + direction.Amplify(length);
-            this.Length = length;
-            this.Direction = direction.Unitize();
+            this.Length = Math.Abs(length);
+            this.Direction = (End - Start).Unitize();
         }
 
         /// <summary>
@@ -110,10 +115,34 @@ namespace GeometrySharp.Geometry
             return new Line(this.End, this.Start);
         }
 
+        /// <summary>
+        /// Extends the line by lengths on both side.
+        /// </summary>
+        /// <param name="startLength">Length to extend the line at the start point.</param>
+        /// <param name="endLength">Length to extend the line at the end point.</param>
+        /// <returns>The extended line.</returns>
+        public Line Extend(double startLength, double endLength)
+        {
+            var start = this.Start;
+            var end = this.End;
 
-        // Extend
-        // ToString
-        // ToNurbsCurve
+            if (startLength >= -GeoSharpMath.EPSILON || startLength <= GeoSharpMath.EPSILON)
+                start = this.Start - (this.Direction * startLength);
+            if (endLength >= -GeoSharpMath.EPSILON || endLength <= GeoSharpMath.EPSILON)
+                end = this.End + (this.Direction * endLength);
+
+            return new Line(start, end);
+        }
+
+        /// <summary>
+        /// Constructs the string representation of the line.
+        /// </summary>
+        /// <returns>A text string.</returns>
+        public override string ToString()
+        {
+            return $"{Start} - {End} - L:{Length}";
+        }
+
         // Transform
         // Equality
     }

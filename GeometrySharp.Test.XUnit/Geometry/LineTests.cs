@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using Xunit;
@@ -29,6 +30,44 @@ namespace GeometrySharp.Test.XUnit.Geometry
             
             l.Should().NotBeNull();
             l.Start.All(p1.Contains).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Throws_An_Exception_If_Inputs_Are_Not_Valid_Or_Equals()
+        {
+            Func<Line> func = () =>  new Line(new Vector3{5,5,0}, new Vector3 { 5, 5, 0 });
+            Func<Line> func1 = () => new Line(new Vector3 { 5, 5, 0 }, Vector3.Unset);
+
+            func.Should().Throw<Exception>();
+            func1.Should().Throw<Exception>().WithMessage("Inputs are not valid, or are equal");
+        }
+
+        [Fact]
+        public void It_Returns_A_Line_By_A_Starting_Point_Direction_Length()
+        {
+            var startingPoint = new Vector3 {0, 0, 0};
+            
+            var line1 = new Line(startingPoint, Vector3.XAxis, 15);
+            var line2 = new Line(startingPoint, Vector3.XAxis, -15);
+
+            line1.Length.Should().Be(line2.Length).And.Be(15);
+            line1.Start.Should().BeEquivalentTo(line2.Start).And.BeEquivalentTo(startingPoint);
+
+            line1.Direction.Should().BeEquivalentTo(new Vector3 {1, 0, 0});
+            line1.End.Should().BeEquivalentTo(new Vector3 { 15, 0, 0 });
+
+            line2.Direction.Should().BeEquivalentTo(new Vector3 { -1, 0, 0 });
+            line2.End.Should().BeEquivalentTo(new Vector3 { -15, 0, 0 });
+        }
+
+        [Fact]
+        public void It_Throws_An_Exception_If_Length_Is_Zero()
+        {
+            var startingPoint = new Vector3 { 0, 0, 0 };
+
+            Func<Line> func = () => new Line(startingPoint, Vector3.XAxis, 0);
+
+            func.Should().Throw<Exception>().WithMessage("Length must not be 0.0");
         }
 
         [Fact]
@@ -96,6 +135,15 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             flippedLine.Start.Equals(ExampleLine.End).Should().BeTrue();
             flippedLine.End.Equals(ExampleLine.Start).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_An_Extend_Line()
+        {
+            var extendedLine = ExampleLine.Extend(0, -5);
+
+            extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MAXTOLERANCE);
+            extendedLine.Start.Should().BeEquivalentTo(ExampleLine.Start);
         }
     }
 }
