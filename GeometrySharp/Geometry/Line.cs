@@ -101,9 +101,16 @@ namespace GeometrySharp.Geometry
             return this.Start + this.Direction * (this.Length * t);
         }
 
+        /// <summary>
+        /// Flip the endpoint of the line.
+        /// </summary>
+        /// <returns>The line flipped.</returns>
+        public Line Flip()
+        {
+            return new Line(this.End, this.Start);
+        }
 
-        // PointAtLength
-        // Flip
+
         // Extend
         // ToString
         // ToNurbsCurve

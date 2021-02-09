@@ -88,5 +88,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             ptEvaluated.Equals(ptExpected.ToVector()).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Flipped_Line()
+        {
+            var flippedLine = ExampleLine.Flip();
+
+            flippedLine.Start.Equals(ExampleLine.End).Should().BeTrue();
+            flippedLine.End.Equals(ExampleLine.Start).Should().BeTrue();
+        }
     }
 }
