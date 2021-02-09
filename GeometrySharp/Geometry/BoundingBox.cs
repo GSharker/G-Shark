@@ -276,6 +276,30 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Ensures that the box is defined in an increasing fashion.
+        /// If the Min or Max points are unset, this function will return a BoundingBox unset.
+        /// </summary>
+        /// <returns>A BoundingBox made valid.</returns>
+        public BoundingBox MakeItValid()
+        {
+            if(!this.Min.IsValid() || !this.Max.IsValid())
+                return BoundingBox.Unset;
+
+            var x1 = Math.Min(Min[0], Max[0]);
+            var y1 = Math.Min(Min[1], Max[1]);
+            var z1 = Math.Min(Min[2], Max[2]);
+
+            var x2 = Math.Max(Min[0], Max[0]);
+            var y2 = Math.Max(Min[1], Max[1]);
+            var z2 = Math.Max(Min[2], Max[2]);
+
+            var min = new Vector3 {x1, y1, z1};
+            var max = new Vector3 { x2, y2, z2 };
+
+            return new BoundingBox(min, max);
+        }
+
+        /// <summary>
         /// Constructs the string representation of this aligned bounding box.
         /// </summary>
         /// <returns></returns>

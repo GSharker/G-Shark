@@ -58,6 +58,16 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Direction { get; }
 
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                var bBox = new BoundingBox(Start, End);
+                var validBBox = bBox.MakeItValid();
+                return validBBox;
+            }
+        }
+
         /// <summary>
         /// Get the closest point on the line from this point.
         /// </summary>
@@ -74,5 +84,15 @@ namespace GeometrySharp.Geometry
 
             return this.Start + dir * d;
         }
+
+        // BoundingBox
+        // PointAt
+        // PointAtLength
+        // Flip
+        // Extend
+        // ToString
+        // ToNurbsCurve
+        // Transform
+        // Equality
     }
 }
