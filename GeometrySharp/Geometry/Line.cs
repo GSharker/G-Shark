@@ -1,6 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
-using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
