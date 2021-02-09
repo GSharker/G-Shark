@@ -58,6 +58,9 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Direction { get; }
 
+        /// <summary>
+        /// Gets the BoundingBox in ascending fashion.
+        /// </summary>
         public BoundingBox BoundingBox
         {
             get
@@ -85,8 +88,20 @@ namespace GeometrySharp.Geometry
             return this.Start + dir * d;
         }
 
-        // BoundingBox
-        // PointAt
+        /// <summary>
+        /// Evaluate the line at the specified parameter.
+        /// </summary>
+        /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
+        /// <returns>The point at the specific parameter.</returns>
+        public Vector3 PointAt(double t)
+        {
+            if (t > 1.0 || t < 0.0)
+                throw new ArgumentOutOfRangeException(nameof(t), "Parameter is outside the domain 0.0 to 1.0");
+
+            return this.Start + this.Direction * (this.Length * t);
+        }
+
+
         // PointAtLength
         // Flip
         // Extend
