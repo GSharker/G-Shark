@@ -14,11 +14,6 @@ namespace GeometrySharp.Geometry
     public class Line
     {
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Line() { }
-
-        /// <summary>
         /// Line by start point and end point.
         /// </summary>
         /// <param name="start">Start point.</param>
@@ -27,6 +22,22 @@ namespace GeometrySharp.Geometry
         {
             this.Start = start;
             this.End = end;
+            this.Length = Start.DistanceTo(End);
+            this.Direction = (End - Start).Unitize();
+        }
+
+        /// <summary>
+        /// Line from a starting point, direction and length.
+        /// </summary>
+        /// <param name="start">Starting point of the line.</param>
+        /// <param name="direction">Direction of the line.</param>
+        /// <param name="length">Length of the line.</param>
+        public Line(Vector3 start, Vector3 direction, double length)
+        {
+            this.Start = start;
+            this.End = start + direction.Amplify(length);
+            this.Length = length;
+            this.Direction = direction.Unitize();
         }
 
         /// <summary>
@@ -42,12 +53,12 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Length of the line.
         /// </summary>
-        public double Length => this.Start.DistanceTo(this.End);
+        public double Length { get; }
 
         /// <summary>
         /// Direction of the line.
         /// </summary>
-        public Vector3 Direction => (this.End - this.Start).Normalized();
+        public Vector3 Direction { get; }
 
         /// <summary>
         /// Get the closest point on the line from this point.
