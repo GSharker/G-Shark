@@ -9,12 +9,11 @@ using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo normalize the knots when passed in between 0-1.
     /// <summary>
     /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
     /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
     /// /// </summary>
-    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>
+    public class NurbsCurve : IEquatable<NurbsCurve>
     {
         /// <summary>
         /// Basic constructor.
@@ -30,10 +29,10 @@ namespace GeometrySharp.Geometry
         /// <param name="knots">Knot defining the curve.</param>
         /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
         /// <param name="weights">Weight values, as a collection of doubles.</param>
-        public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double> weights = null)
+        public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double>? weights = null)
         {
-            if (controlPoints == null) throw new ArgumentNullException(nameof(ControlPoints));
-            if (knots == null) throw new ArgumentNullException(nameof(Knots));
+            if (controlPoints is null) throw new ArgumentNullException(nameof(ControlPoints));
+            if (knots is null) throw new ArgumentNullException(nameof(Knots));
             if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
             if (knots.Count != controlPoints.Count + degree + 1)
                 throw new ArgumentException("Number of points + degree + 1 must equal knots length!");
@@ -41,7 +40,7 @@ namespace GeometrySharp.Geometry
                 throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
 
             HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
-            Weights = weights == null ? Sets.RepeatData(1.0, controlPoints.Count) : weights;
+            Weights = weights ?? Sets.RepeatData(1.0, controlPoints.Count);
             Degree = degree;
             Knots = knots;
         }
@@ -86,7 +85,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// List of weight values.
         /// </summary>
-        public List<double>? Weights { get; }
+        public List<double> Weights { get; }
 
         /// <summary>
         /// List of non-decreasing knot values.

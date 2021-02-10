@@ -129,7 +129,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Vector3 v1 = new Vector3() { -18d, -21d, -17d };
             Vector3 normalizedExpected = new Vector3() { -0.5544369932703277, -0.6468431588153823, -0.5236349380886428 };
 
-            Vector3 normalizedVector = v1.Normalized();
+            Vector3 normalizedVector = v1.Unitize();
 
             normalizedVector.Should().Equal(normalizedExpected);
         }

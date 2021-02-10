@@ -29,7 +29,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The point along the ray.</returns>
         public Vector3 OnRay(double amplitude)
         {
-            var vectorAmplified = this.Direction.Normalized() * amplitude;
+            var vectorAmplified = this.Direction.Unitize() * amplitude;
             return this.Position + vectorAmplified;
         }
 
@@ -40,7 +40,7 @@ namespace GeometrySharp.Geometry
         /// <returns>Get the closest point on a ray from a point.</returns>
         public Vector3 ClosestPoint(Vector3 pt)
         {
-            var rayDirNormalized = this.Direction.Normalized();
+            var rayDirNormalized = this.Direction.Unitize();
             var rayOriginToPt = pt - this.Position;
             var dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
             var projectedPt = this.Position + rayDirNormalized * dotResult;
