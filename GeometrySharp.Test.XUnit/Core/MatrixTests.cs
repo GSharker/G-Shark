@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
@@ -30,12 +31,42 @@ namespace GeometrySharp.Test.XUnit.Core
         {
             _testOutput = testOutput;
         }
+
+        [Fact]
+        public void It_Initializes_A_Matrix()
+        {
+            var matrix = new Matrix();
+
+            matrix.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void It_Creates_A_Matrix_By_Given_Rows_And_Columns()
+        {
+            var matrix = Matrix.Construct(3, 3);
+
+            matrix.Count.Should().Be(3);
+            matrix[0].Count.Should().Be(3);
+            matrix.Select(x => x.Sum()).Sum().Should().Be(0.0);
+        }
         
         [Fact]
         public void It_Creates_An_Identity_Matrix()
+        { 
+            var matrix = Matrix.Identity(3);
+            
+            matrix.Should().BeEquivalentTo(IdentityMatrix);
+        }
+
+        [Fact]
+        public void It_Returns_A_Transpose_Matrix()
         {
-           int i = 3;
-           Matrix.Identity(i).Should().BeEquivalentTo(IdentityMatrix);
+            var matrix = new Matrix {new List<double> {1, 2}, new List<double> {3, 4}, new List<double> {5, 6}};
+            var expectedMatrix = new Matrix {new List<double> {1, 3, 5}, new List<double> {2, 4, 6}};
+
+            var transposedMatrix = Matrix.Transpose(matrix);
+
+            transposedMatrix.Should().BeEquivalentTo(expectedMatrix);
         }
 
         [Fact]

@@ -14,12 +14,51 @@ namespace GeometrySharp.Core
     /// </summary>
     public class Matrix : List<IList<double>>
     {
+        private readonly List<IList<double>> matrixData;
+
         /// <summary>
-        /// Main constructor.
+        /// Initialize an empty matrix.
         /// </summary>
         public Matrix()
         {
+            matrixData = new List<IList<double>>();
+        }
 
+        /// <summary>
+        /// Constructs a matrix by given number of rows and columns.
+        /// All the parameters are set to zero.
+        /// </summary>
+        /// <param name="row">A positive integer, for the number of rows.</param>
+        /// <param name="column">A positive integer, for the number of columns.</param>
+        public static Matrix Construct(int row, int column)
+        {
+            var tempMatrix = new Matrix();
+            if (row == 0 || column == 0)
+                throw new Exception("Matrix must be at least one row or column");
+            for (int i = 0; i < column; i++)
+            {
+                var tempRow = Sets.RepeatData(0.0, row);
+                tempMatrix.Add(tempRow);
+            }
+
+            return tempMatrix;
+        }
+
+        /// <summary>
+        /// Creates an identity matrix of a given size.
+        /// </summary>
+        /// <param name="size">The size of the matrix.</param>
+        /// <returns>Identity matrix of the given size.</returns>
+        public static Matrix Identity(int size)
+        {
+            var m = new Matrix();
+            var zeros = Vector3.Zero2d(size, size);
+            for (int i = 0; i < size; i++)
+            {
+                zeros[i][i] = 1.0;
+                m.Add(zeros[i]);
+            }
+            return m;
         }
 
         /// <summary>
@@ -139,31 +178,14 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Build an identity matrix of a given size
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public static Matrix Identity(int n)
-        {
-            Matrix m = new Matrix();
-            var zeros = Vector3.Zero2d(n, n);
-            for (int i = 0; i < n; i++)
-            {
-                zeros[i][i] = 1.0;
-                m.Add(zeros[i].ToList());
-            }
-            return m;
-        }
-
-        /// <summary>
-        /// Transpose a matrix
+        /// Transpose a matrix.
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
         public static Matrix Transpose(Matrix a)
         {
             if (a.Count == 0) return null;
-            Matrix t = new Matrix();
+            Matrix transposeMatrix = new Matrix();
             var rows = a.Count;
             var columns = a[0].Count;
             for (var c = 0; c < columns; c++)
@@ -173,9 +195,9 @@ namespace GeometrySharp.Core
                 {
                     rr.Add(a[r][c]);
                 }
-                t.Add(rr);
+                transposeMatrix.Add(rr);
             }
-            return t;
+            return transposeMatrix;
         }
 
         public override string ToString()
@@ -184,149 +206,3 @@ namespace GeometrySharp.Core
         }
     }
 }
-
-//        /// <summary>
-//        /// Solve a system of equations
-//        /// </summary>
-//        /// <param name="a"></param>
-//        /// <param name="b"></param>
-//        /// <returns></returns>
-//        public static Vector3 Solve(Matrix a, Vector3 b) => LUSolve(LU(a), b);
-
-//        /// <summary>
-//        /// Based on methods from numeric.js
-//        /// </summary>
-//        /// <param name="LUP"></param>
-//        /// <param name="b"></param>
-//        /// <returns></returns>
-//        public static Vector3 LUSolve(LUDecomp LUP, Vector3 b)
-//        {
-//            var LU = LUP.LU;
-//            var n = LU.Count;
-//            var x = b;
-//            var P = LUP.P;
-
-//            var i = n - 1;
-//            while (i != -1)
-//            {
-//                x[i] = b[i];
-//                --i;
-//            }
-
-//            i = 0;
-//            while (i < n)
-//            {
-//                var Pi = P[i];
-//                if (P[i] != i)
-//                {
-//                    var tmp = x[i];
-//                    x[i] = x[Pi];
-//                    x[Pi] = tmp;
-//                }
-
-//                var LUi = LU[i];
-//                var j = 0;
-//                while (j < i)
-//                {
-//                    x[i] -= x[j] * LUi[j];
-//                    ++j;
-//                }
-//                ++i;
-//            }
-
-//            i = n - 1;
-//            while (i >= 0)
-//            {
-//                var LUi = LU[i];
-//                var j = i + 1;
-//                while (j < n)
-//                {
-//                    x[i] -= x[j] * LUi[j];
-//                    ++j;
-//                }
-
-//                x[i] /= LUi[i];
-//                --i;
-//            }
-
-//            return x;
-//        }
-
-//        /// <summary>
-//        /// Based on methods from numeric.js
-//        /// </summary>
-//        /// <param name="a"></param>
-//        /// <returns></returns>
-//        public static LUDecomp LU(Matrix a) {
-//            var n = a.Count;
-//            var n1 = n - 1;
-//            var p = new List<int>();
-
-//            var k = 0;
-//            while (k < n)
-//            {
-//                var Pk = k;
-//                var Ak = a[k];
-//                var max = GeoSharpMath.Abs(Ak[k]);
-
-//                var j = k + 1;
-//                while (j < n)
-//                {
-//                    var absAjk = GeoSharpMath.Abs(a[j][k]);
-//                    if (max < absAjk)
-//                    {
-//                        max = absAjk;
-//                        Pk = j;
-//                    }
-//                    ++j;
-//                }
-//                p[k] = Pk;
-
-//                if (Pk != k)
-//                {
-//                    a[k] = a[Pk];
-//                    a[Pk] = Ak;
-//                    Ak = a[k];
-//                }
-
-//                var Akk = Ak[k];
-
-//                var i = k + 1;
-//                while (i < n)
-//                {
-//                    a[i][k] /= Akk;
-//                    ++i;
-//                }
-
-//                i = k + 1;
-//                while (i < n)
-//                {
-//                    var Ai = a[i];
-//                    j = k + 1;
-//                    while (j < n1)
-//                    {
-//                        Ai[j] -= Ai[k] * Ak[j];
-//                        ++j;
-//                        Ai[j] -= Ai[k] * Ak[j];
-//                        ++j;
-//                    }
-//                    if (j == n1) Ai[j] -= Ai[k] * Ak[j];
-//                    ++i;
-//                }
-
-//                ++k;
-//            }
-//            return new LUDecomp(a, p);
-//        }
-//    }
-
-//    public class LUDecomp
-//    {
-//        public Matrix LU { get; set; }
-//        public List<int> P { get; set; }
-//        public LUDecomp(Matrix lU, List<int> p)
-//        {
-//            LU = lU;
-//            P = p;
-//        }
-//    }
