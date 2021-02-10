@@ -78,46 +78,38 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Multiply two matrices assuming they are of compatible dimensions.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Multiplication(Matrix x, Matrix y)
+        /// <param name="a">First matrix.</param>
+        /// <param name="b">Second matrix.</param>
+        /// <returns>The product matrix of the inputs.</returns>
+        public static Matrix operator *(Matrix a, Matrix b)
         {
-            var p = x.Count();
-            var q = y.Count();
-            var r = y[0].Count();
+            var aRows = a.Count;
+            var aCols = a[0].Count;
 
-            var ret = new Matrix();
-            var i = p - 1;
-            var j = 0;
-            var k = 0;
+            var bRows = b.Count;
+            var bCols = b[0].Count;
 
-            while (i >= 0)
+            if(aCols != bRows)
+                throw new Exception("Non-conformable matrices.");
+
+            var resultMatrix = new Matrix();
+
+            for (int i = 0; i < aRows; ++i)
             {
-                var foo = new Vector3();
-                var bar = x[i];
-
-                k = r - 1;
-                while (k >= 0)
+                var tempRow = Sets.RepeatData(0.0, bCols);
+                for (int j = 0; j < bCols; ++j)
                 {
-                    var woo = bar[q - 1] * y[q - 1][k];
-
-                    j = q - 2;
-                    while (j >= 1)
+                    var value = 0.0;
+                    for (int k = 0; k < aCols; ++k)
                     {
-                        var i0 = j - 1;
-                        woo += bar[j] * y[j][k] + bar[i0] * y[i0][k];
-                        j -= 2;
+                        value += a[i][k] * b[k][j];
                     }
-                    if (j == 0) { woo += bar[0] * y[0][k]; }
-                    foo[k] = woo;
-                    k--;
+                    tempRow[j] = value;
                 }
-                ret[i] = foo;
-                i--;
+                resultMatrix.Add(tempRow);
             }
-            return ret;
 
+            return resultMatrix;
         }
 
         /// <summary>
@@ -161,6 +153,7 @@ namespace GeometrySharp.Core
                 r.Add((Vector3)a[i] - (Vector3)b[i]);
             return r;
         }
+
         /// <summary>
         /// Multiply a `Matrix` by a `Vector3`
         /// </summary>
@@ -179,27 +172,37 @@ namespace GeometrySharp.Core
 
         /// <summary>
         /// Transpose a matrix.
+        /// This is like swapping rows with columns.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static Matrix Transpose(Matrix a)
+        /// <param name="a">Matrix that has to be transposed.</param>
+        /// <returns>The matrix transposed.</returns>
+        public Matrix Transpose()
         {
-            if (a.Count == 0) return null;
+            if (this.Count == 0) return null;
             Matrix transposeMatrix = new Matrix();
-            var rows = a.Count;
-            var columns = a[0].Count;
+            var rows = this.Count;
+            var columns = this[0].Count;
             for (var c = 0; c < columns; c++)
             {
                 var rr = new List<double>();
                 for (var r = 0; r < rows; r++)
                 {
-                    rr.Add(a[r][c]);
+                    rr.Add(this[r][c]);
                 }
                 transposeMatrix.Add(rr);
             }
             return transposeMatrix;
         }
 
+        public Matrix Inverse()
+        {
+            return new Matrix();
+        }
+
+        /// <summary>
+        /// Constructs the string representation the matrix.
+        /// </summary>
+        /// <returns>Text string.</returns>
         public override string ToString()
         {
             return string.Join("\n", this.Select(first => $"({string.Join(",", first)})"));

@@ -64,9 +64,32 @@ namespace GeometrySharp.Test.XUnit.Core
             var matrix = new Matrix {new List<double> {1, 2}, new List<double> {3, 4}, new List<double> {5, 6}};
             var expectedMatrix = new Matrix {new List<double> {1, 3, 5}, new List<double> {2, 4, 6}};
 
-            var transposedMatrix = Matrix.Transpose(matrix);
+            var transposedMatrix = matrix.Transpose();
 
             transposedMatrix.Should().BeEquivalentTo(expectedMatrix);
+        }
+
+        [Fact]
+        public void Matrix_Product_Throws_An_Exception_If_Two_Matrices_Are_Not_Compatible()
+        {
+            var matrixA = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };
+            var matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }};
+
+            Func<Matrix> func = () => matrixA * matrixB;
+
+            func.Should().Throw<Exception>().WithMessage("Non-conformable matrices.");
+        }
+
+        [Fact]
+        public void It_Returns_The_Product_Between_Two_Matrices()
+        {
+            var matrixA = new Matrix {new List<double> {1, 2, 3}, new List<double> {4, 5, 6}};
+            var matrixB = new Matrix {new List<double> { 7, 8 }, new List<double> { 9, 10 }, new List<double> { 11, 12 }};
+            var matrixExpected = new Matrix { new List<double> { 58,64 }, new List<double> { 139,154 } };
+
+            var productMatrix = matrixA * matrixB;
+
+            productMatrix.Should().BeEquivalentTo(matrixExpected);
         }
 
         [Fact]
