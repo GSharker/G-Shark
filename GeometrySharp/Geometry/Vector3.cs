@@ -36,6 +36,21 @@ namespace GeometrySharp.Geometry
             {GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE, GeoSharpMath.UNSETVALUE};
 
         /// <summary>
+        /// Gets the value of the vector with components 1,0,0.
+        /// </summary>
+        public static Vector3 XAxis => new Vector3 { 1.0, 0.0, 0.0 };
+
+        /// <summary>
+        /// Gets the value of the vector with components 0,1,0.
+        /// </summary>
+        public static Vector3 YAxis => new Vector3 { 0.0, 1.0, 0.0 };
+
+        /// <summary>
+        /// Gets the value of the vector with components 0,0,1.
+        /// </summary>
+        public static Vector3 ZAxis => new Vector3 { 0.0, 0.0, 1.0 };
+
+        /// <summary>
         /// The angle in radians between two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
@@ -53,7 +68,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The reversed vector.</returns>
         public static Vector3 Reverse(Vector3 a)
         {
-            return new Vector3(a.Select(x => -x));
+            return new Vector3(a.Select(value => -value));
         }
 
         /// <summary>
@@ -78,16 +93,13 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Gets the vector amplified by a scalar value along a direction.
+        /// Gets the vector amplified by a scalar value.
         /// </summary>
-        /// <param name="origin">The start point or vector.</param>
-        /// <param name="dir">The direction.</param>
         /// <param name="amplitude">The scalar value to amplify the vector.</param>
         /// <returns>The vector amplified.</returns>
-        public static Vector3 OnRay(Vector3 origin, Vector3 dir, double amplitude)
+        public Vector3 Amplify(double amplitude)
         {
-            var vectorAmplified = dir.Normalized() * amplitude;
-            return origin + vectorAmplified;
+            return new Vector3(this.Unitize() * amplitude);
         }
 
         /// <summary>
@@ -123,18 +135,119 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Determines if this vector is perpendicular to within one degree of another one.
+        /// </summary>
+        /// <param name="other">Vector to compare to.</param>
+        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
+        /// <returns>True if both vectors are perpendicular.</returns>
+        public bool IsPerpendicularTo(Vector3 other, double tolerance = -1)
+        {
+            var result = false;
+            var toleranceSet = (tolerance < 0) ? GeoSharpMath.ANGLETOLERANCE : tolerance;
+            var length = this.Length() * other.Length();
+            var dotUnitize = Vector3.Dot(this, other) / length;
+            if (length > 0 && dotUnitize <= Math.Sin(toleranceSet)) result = true;
+            return result;
+        }
+
+        /// <summary>
+        /// Determines whether this vector is parallel to another vector, within a provided tolerance.
+        /// </summary>
+        /// <param name="other">Vector to compare to.</param>
+        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
+        /// <returns>A parallel indicator:
+        /// 1 vectors are parallel,
+        /// 0 vectors are not parallel,
+        /// -1 vectors are parallel but with opposite directions </returns>
+        public int IsParallelTo(Vector3 other, double tolerance = -1)
+        {
+            var result = 0;
+            var toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.ANGLETOLERANCE) : Math.Cos(tolerance);
+            var length = this.Length() * other.Length();
+            var dotUnitize = Vector3.Dot(this, other) / length;
+            if (!(length > 0)) return result;
+            if (dotUnitize >= toleranceSet) result = 1;
+            if (dotUnitize <= -toleranceSet) result = -1;
+            return result;
+        }
+
+        /// <summary>
+        /// Rotates this vector around a given axis.
+        /// The rotation is computed using Rodrigues Rotation formula.
+        /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
+        /// </summary>
+        /// <param name="axis">Axis of rotation.</param>
+        /// <param name="angle">Angle of rotation (in radians).</param>
+        /// <returns>Rotated vector.</returns>
+        public Vector3 Rotate(Vector3 axis, double angle)
+        {
+            var cosAngle = Math.Cos(angle);
+            var sinAngle = Math.Sin(angle);
+
+            // Remove the noise in input.
+            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(cosAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(sinAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
+
+            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
+            {
+                var vec = new Vector3{cosAngle, sinAngle};
+                if (vec.Length() > 0.0)
+                {
+                    var vecUnitized = vec.Unitize();
+                    cosAngle = vecUnitized[0];
+                    sinAngle = vecUnitized[1];
+                }
+                else
+                {
+                    throw new Exception("SinAngle and CosAngle are both zero");
+                }
+            }
+
+            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
+
+            var unitizedAxis = axis.Unitize();
+            var cross = Vector3.Cross(unitizedAxis, this);
+            var dot = Vector3.Dot(unitizedAxis, this);
+
+            return (this * cosAngle) + (cross * sinAngle) + (unitizedAxis * dot * (1 - cosAngle));
+        }
+
+        /// <summary>
         /// Cross product.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
         /// <returns>Compute the cross product.</returns>
-        public static Vector3 Cross(Vector3 u, Vector3 v)
+        public static Vector3 Cross(Vector3 a, Vector3 b)
         {
             return new Vector3
             {
-                u[1] * v[2] - u[2] * v[1],
-                u[2] * v[0] - u[0] * v[2],
-                u[0] * v[1] - u[1] * v[0]
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
             };
         }
 
@@ -144,16 +257,21 @@ namespace GeometrySharp.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
-        public static double Dot(Vector3 a, Vector3 b) => a.Select((t, i) => t * b[i]).Sum();
+        public static double Dot(Vector3 a, Vector3 b)
+        {
+            return a.Select((t, i) => t * b[i]).Sum();
+        }
 
-        // ToDo has to tested.
         /// <summary>
-        /// Unitize vector.
+        /// Unitizes the vector. A unit vector has length 1 unit.
         /// </summary>
-        /// <returns>The vector unitized.</returns>
+        /// <returns>A new vector unitized.</returns>
         public Vector3 Unitize()
         {
-            return this * (1 / this.Length());
+            var l = this.Length();
+            if (l <= 0.0)
+                throw new Exception("An invalid or zero length vector cannot be unitized.");
+            return this * (1 / l);
         }
 
         /// <summary>
@@ -209,21 +327,7 @@ namespace GeometrySharp.Geometry
         public double DistanceTo(Vector3 v)
         {
             if (Count != v.Count) throw new Exception("The two list doesn't match in length.");
-
             return Math.Sqrt(this.Select((val, i) => Math.Pow(val - v[i], 2)).Sum());
-        }
-
-        /// <summary>
-        /// Get the distance of a point to a ray.
-        /// </summary>
-        /// <param name="pt">The point to project.</param>
-        /// <param name="ray">The ray from which to calculate the distance.</param>
-        /// <returns>The distance.</returns>
-        public double DistanceTo(Ray ray)
-        {
-            var projectedPt = ClosestPointOn(ray);
-            var ptToProjectedPt = projectedPt - this;
-            return ptToProjectedPt.Length();
         }
 
         /// <summary>
@@ -234,51 +338,18 @@ namespace GeometrySharp.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            var ray = new Ray(line.Start, line.Direction);
-
-            return DistanceTo(ray);
-        }
-
-        /// <summary>
-        /// Get the closest point on a ray from a point.
-        /// </summary>
-        /// <param name="pt">The point.</param>
-        /// <param name="ray">The ray on which to find the point.</param>
-        /// <returns>Get the closest point on a ray from a point.</returns>
-        public Vector3 ClosestPointOn(Ray ray)
-        {
-            var rayDirNormalized = ray.Direction.Normalized();
-            var rayOriginToPt = this - ray.Origin;
-            var dotResult = Dot(rayOriginToPt, rayDirNormalized);
-            var projectedPt = ray.Origin + rayDirNormalized * dotResult;
-
-            return projectedPt;
-        }
-
-        /// <summary>
-        /// Get the closest point on the line from this point.
-        /// </summary>
-        /// <param name="line">The line on which to find the closest point.</param>
-        /// <returns>The closest point on the line from this point.</returns>
-        public Vector3 ClosestPointOn(Line line)
-        {
-            var dir = line.Direction;
-            var v = this - line.Start;
-            var d = Dot(v, dir);
-
-            d = Math.Min(line.Length, d);
-            d = Math.Max(d, 0);
-
-            return line.Start + dir * d;
+            var projectedPt = line.ClosestPoint(this);
+            var ptToProjectedPt = projectedPt - this;
+            return ptToProjectedPt.Length();
         }
 
         /// <summary>
         /// Determinate if the provided point lies on the plane.
         /// </summary>
-        /// <param name="pt">The point to check if it lies on the plane.</param>
         /// <param name="plane">The plane on which to find if the point lies on.</param>
+        /// <param name="tol">If the tolerance is not set, as per default is use 1e-6</param>
         /// <returns>Whether the point is on the plane.</returns>
-        public bool IsPointOnPlane(Plane plane, double tol)
+        public bool IsPointOnPlane(Plane plane, double tol = 1e-6)
         {
             return Math.Abs(Dot(this - plane.Origin, plane.Normal)) < tol;
         }

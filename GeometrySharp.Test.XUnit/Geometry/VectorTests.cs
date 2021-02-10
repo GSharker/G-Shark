@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
+using Plane = GeometrySharp.Geometry.Plane;
+using Vector3 = GeometrySharp.Geometry.Vector3;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -32,11 +36,20 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 new object[] { new Vector3() { -0d, 0d, 0d }, 0.0}
             };
 
-        public static IEnumerable<object[]> AmplifiedVectors =>
-            new List<object[]>
+        public static TheoryData<Vector3, double, Vector3> AmplifiedVectors =>
+            new TheoryData<Vector3, double, Vector3>
             {
-                new object[] { new Vector3() { 3.0930734141595426, 11.54653670707977, 6.726731646460115 }, 15},
-                new object[] { new Vector3() { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
+                { new Vector3{ 5, 5, 0 }, 0, new Vector3{ 0, 0, 0 }},
+                { new Vector3{ 10, 10, 0 }, 15, new Vector3{ 10.606602,10.606602,0 }},
+                { new Vector3{ 20, 15, 0 }, 33, new Vector3{ 26.4,19.8,0 }},
+                { new Vector3{ 35, 15, 0 }, 46, new Vector3{ 42.280671,18.120288,0 }}
+            };
+
+        public static TheoryData<Vector3> NotValidVectorUnitized =>
+            new TheoryData<Vector3>
+            {
+                Vector3.Unset,
+                new Vector3{ 0, 0, 0 },
             };
 
         [Fact]
@@ -152,14 +165,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(AmplifiedVectors))]
-        public void It_Returns_An_Amplified_Vector_Long_A_Direction(Vector3 expected, double amplitude)
+        public void It_Returns_An_Amplified_Vector(Vector3 vector, double amplitude, Vector3 expected)
         {
-            var pt = new Vector3(){ -10, 5, 10 };
-            var dir = new Vector3(){ 20,10,-5};
+            var amplifiedVector = vector.Amplify(amplitude);
 
-            var amplifiedVector = Vector3.OnRay(pt, dir, amplitude);
-
-            amplifiedVector.Should().BeEquivalentTo(expected);
+            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
+            amplifiedVector.Should().BeEquivalentTo(expected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
         }
 
         [Fact]
@@ -234,16 +247,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Distance_Between_A_Point_And_A_Ray()
+        public void It_Checks_If_Vectors_Are_Perpendicular()
         {
-            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            double distanceExpected = 2.7735009811261464;
+            var vec = new Vector3{ -7, 10, -5 };
+            var other1 = new Vector3{ 10, 7, 0 };
+            var other2 = Vector3.YAxis;
 
-            double distance = pt.DistanceTo(ray);
-
-            _testOutput.WriteLine(distance.ToString());
-            distance.Should().Be(distanceExpected);
+            vec.IsPerpendicularTo(other1).Should().BeTrue();
+            vec.IsPerpendicularTo(other2).Should().BeFalse();
         }
 
         [Fact]
@@ -257,30 +268,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             _testOutput.WriteLine(distance.ToString());
             distance.Should().Be(distanceExpected);
-        }
-
-        [Fact]
-        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Ray()
-        {
-            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
-
-            Vector3 closestPt = pt.ClosestPointOn(ray);
-
-            closestPt.Should().BeEquivalentTo(expectedPt);
-        }
-
-        [Fact]
-        public void It_Returns_The_ClosestPoint_Between_A_Point_And_A_Line()
-        {
-            Line ray = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3() { 12.30769230769231, 18.461538461538463, 0 };
-
-            Vector3 closestPt = pt.ClosestPointOn(ray);
-
-            closestPt.Should().BeEquivalentTo(expectedPt);
         }
 
         [Fact]
@@ -302,6 +289,58 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var perVector = tempVec.PerpendicularTo(vector);
 
             perVector.Equals(vectorExpected).Should().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(NotValidVectorUnitized))]
+        public void Unitize_Throws_An_Error_If_Invalid_Vector_Or_Zero_Length(Vector3 vector)
+        {
+            Func<Vector3> func = vector.Unitize;
+
+            func.Should().Throw<Exception>().WithMessage("An invalid or zero length vector cannot be unitized.");
+        }
+
+        [Fact]
+        public void It_Returns_A_Unitized_Vector()
+        {
+            var vector = new Vector3 { -7, 10, -5 };
+            var vectorExpected = new Vector3 { -0.530669, 0.758098, -0.379049 };
+
+            var unitizedVector = vector.Unitize();
+
+            unitizedVector.Should().BeEquivalentTo(vectorExpected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
+        }
+
+        [Theory]
+        [InlineData(-0.0000125, new [] {-7.0, 10.0, -5.0})]
+        [InlineData(0.0, new [] { -7.0, 10.0, -5.0 })]
+        [InlineData(12.5, new [] { -7.454672, 10.649531, -2.239498 })]
+        [InlineData(450, new [] { -2.867312, 4.09616, 12.206556 })]
+        public void It_Returns_A_Rotated_Vector_By_An_Angle(double angle, double[] vectorExpected)
+        {
+            var vector = new Vector3 { -7, 10, -5 };
+            var axis = new Vector3 { 10, 7, 0 };
+            var radiance = GeoSharpMath.ToRadians(angle);
+
+            var vectorRot = vector.Rotate(axis, radiance);
+
+            vectorRot.Should().BeEquivalentTo(vectorExpected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
+        }
+
+        [Theory]
+        [InlineData(new[] {11.5, 0.0, 0.0}, new[] {10.3, 0.0, 0.0}, 1)]
+        [InlineData(new[] {-7.0, 10.0, -5.0}, new[] {7.0, 15.0, 0.0}, 0)]
+        [InlineData(new[] {7.0, 0.0, 0.0}, new[] {-7.0, 0.0, 0.0}, -1)]
+        public void It_Checks_If_Two_Vectors_Are_Parallel(double[] v1, double[] v2, int result)
+        {
+            var vec1 = new Vector3(v1);
+            var vec2 = new Vector3(v2);
+
+            vec1.IsParallelTo(vec2).Should().Be(result);
         }
     }
 }

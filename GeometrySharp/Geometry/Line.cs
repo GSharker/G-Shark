@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
@@ -10,7 +11,7 @@ namespace GeometrySharp.Geometry
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
-    public class Line : Serializable<Line>
+    public class Line
     {
         /// <summary>
         /// Default constructor.
@@ -48,15 +49,21 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Direction => (this.End - this.Start).Normalized();
 
-        public override Line FromJson(string s)
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
-        /// Serialize a line to JSON
+        /// Get the closest point on the line from this point.
         /// </summary>
-        /// <returns></returns>
-        public override string ToJson() => JsonConvert.SerializeObject(this);
+        /// <param name="line">The line on which to find the closest point.</param>
+        /// <returns>The closest point on the line from this point.</returns>
+        public Vector3 ClosestPoint(Vector3 vec)
+        {
+            var dir = this.Direction;
+            var v = vec - this.Start;
+            var d = Vector3.Dot(v, dir);
+
+            d = Math.Min(this.Length, d);
+            d = Math.Max(d, 0);
+
+            return this.Start + dir * d;
+        }
     }
 }
