@@ -9,12 +9,11 @@ using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo normalize the knots when passed in between 0-1.
     /// <summary>
     /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
     /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
     /// /// </summary>
-    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>
+    public class NurbsCurve : IEquatable<NurbsCurve>
     {
         /// <summary>
         /// Basic constructor.

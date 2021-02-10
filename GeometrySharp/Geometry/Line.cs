@@ -1,16 +1,16 @@
 ﻿using System;
-
 using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
     // ToDo add the serializable.
-    // ToDo ToNurbsCurve could be useful?
+    // ToDo add transformation.
+    // Note: ToNurbsCurve method could be useful?
 
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
-    public class Line
+    public class Line : IEquatable<Line>
     {
         /// <summary>
         /// Line by start point and end point.
@@ -46,12 +46,12 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Start point of the line.
         /// </summary>
-        public Vector3 Start { get; set; }
+        public Vector3 Start { get; }
 
         /// <summary>
         /// End point of the line.
         /// </summary>
-        public Vector3 End { get; set; }
+        public Vector3 End { get; }
 
         /// <summary>
         /// Length of the line.
@@ -143,7 +143,25 @@ namespace GeometrySharp.Geometry
             return $"{Start} - {End} - L:{Length}";
         }
 
-        // Transform
-        // Equality
+        /// <summary>
+        /// Check if the line is equal to the provided line.
+        /// Two lines are equal if the end points are the same.
+        /// </summary>
+        /// <param name="other">The line to compare.</param>
+        /// <returns>True if the end points are equal, otherwise false.</returns>
+        public bool Equals(Line other)
+        {
+            if (other is null) return false;
+            return Start.Equals(other.Start) && End.Equals(other.End);
+        }
+
+        /// <summary>
+        /// Get the hash code for the line.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return new[] { Start, End }.GetHashCode();
+        }
     }
 }

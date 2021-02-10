@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 using GeometrySharp.Core;
-
-// Note should we add a method transform as in Hypar?
 
 namespace GeometrySharp.Geometry
 {
@@ -30,6 +27,14 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The evaluated point.</returns>
         public Vector3 PointAt(double t);
+
+        /// <summary>
+        /// Gets the BoundingBox in ascending fashion.
+        /// </summary>
+        public BoundingBox BoundingBox { get; }
+
+        // TransformAt
+        // Transform
 
         /// Note this method doesn't see necessary here, we keep it private and see in the future.
         /// <summary>

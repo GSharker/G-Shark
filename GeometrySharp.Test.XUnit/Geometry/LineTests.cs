@@ -145,5 +145,15 @@ namespace GeometrySharp.Test.XUnit.Geometry
             extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MAXTOLERANCE);
             extendedLine.Start.Should().BeEquivalentTo(ExampleLine.Start);
         }
+
+        [Fact]
+        public void It_Checks_If_Two_Lines_Are_Equals()
+        {
+            var lineFlip = ExampleLine.Flip();
+            var lineFlippedBack = lineFlip.Flip();
+
+            lineFlip.Equals(lineFlippedBack).Should().BeFalse();
+            lineFlippedBack.Equals(ExampleLine).Should().BeTrue();
+        }
     }
 }
