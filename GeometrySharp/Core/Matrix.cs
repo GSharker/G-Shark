@@ -193,6 +193,74 @@ namespace GeometrySharp.Core
             return copy;
         }
 
+        private Matrix Decompose(Matrix m, out int[] permutation)
+        {
+            // https://jamesmccaffrey.wordpress.com/2015/03/06/inverting-a-matrix-using-c/
+            // https://en.wikipedia.org/wiki/LU_decomposition
+            // http://www.mymathlib.com/c_source/matrices/linearsystems/doolittle_pivot.c
+
+            var rows = m.Count;
+            var cols = m[0].Count;
+
+            if(rows != cols)
+                throw new Exception("Attempt to decompose a non-squared matrix");
+
+            var n = rows;
+            var tempPermutation = new int[n];
+            var copyMatrix = Matrix.Duplicate(m);
+
+            for (int i = 0; i < n; ++i) { tempPermutation[i] = i; }
+
+            for (int j = 0; j < n; j++)
+            {
+                var permutationValue = j;
+                var maxColumnValue = Math.Abs(copyMatrix[j][j]); // Find largest value in the column.
+
+                // Find the pivot row.
+                for (int i = j + 1; i < n; i++)
+                {
+                    var absValueAt = Math.Abs(copyMatrix[i][j]);
+                    if (!(maxColumnValue < absValueAt)) continue;
+                    maxColumnValue = absValueAt;
+                    permutationValue = i;
+                }
+
+                // If the matrix is singular, return.
+                // Note: extend this check as in the link.
+                if (Math.Abs(copyMatrix[j][j]) < GeoSharpMath.EPSILON)
+                    throw new Exception("Failed matrix is singular.");
+
+                if(maxColumnValue < GeoSharpMath.EPSILON)
+                    throw new Exception("Failed, matrix is degenerate.");
+
+                // If the pivot row differs from the current row, then
+                // interchange the two rows.
+                if (permutationValue == j) continue;
+                // Pivoting rows.
+                var copyRow = copyMatrix[permutationValue];
+                copyMatrix[permutationValue] = copyMatrix[j];
+                copyMatrix[j] = copyRow;
+                // Pivoting permutation info.
+                var tempPermutationValue = tempPermutation[permutationValue];
+                tempPermutation[permutationValue] = tempPermutation[j];
+                tempPermutation[j] = tempPermutationValue;
+
+                // Find the lower triangular matrix elements.
+                for (int i = j + 1; i < n; i++)
+                {
+                    copyMatrix[i][j] /= copyMatrix[j][j];
+
+                    for (int k = j + 1; k < n; k++)
+                    {
+                        copyMatrix[i][k] -= copyMatrix[i][j] * copyMatrix[j][k];
+                    }
+                }
+            }
+
+            permutation = tempPermutation;
+            return copyMatrix;
+        }
+
         /// <summary>
         /// Constructs the string representation the matrix.
         /// </summary>
