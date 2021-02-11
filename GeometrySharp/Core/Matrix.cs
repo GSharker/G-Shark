@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Geometry;
 
-// ToDo this class has to be tested.
-// ToDo this class has to be commented on all of the parts.
-// ToDo remove code that is not necessary.
 namespace GeometrySharp.Core
 {
     /// <summary>
@@ -14,14 +11,11 @@ namespace GeometrySharp.Core
     /// </summary>
     public class Matrix : List<IList<double>>
     {
-        private readonly List<IList<double>> matrixData;
-
         /// <summary>
         /// Initialize an empty matrix.
         /// </summary>
         public Matrix()
         {
-            matrixData = new List<IList<double>>();
         }
 
         /// <summary>
@@ -62,7 +56,17 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Multiply a Matrix by a constant.
+        /// Gets a value indicating whether this matrix is valid.
+        /// Matrix is valid when has at least one column and one row and rows have at least 2 elements.
+        /// </summary>
+        /// <returns>True if it is a valid matrix.</returns>
+        public bool IsValid()
+        {
+            return this.Count > 0 && this.All(x => x.Count > 1);
+        }
+
+        /// <summary>
+        /// Multiply a matrix by a constant.
         /// </summary>
         /// <param name="m">Matrix has to be multiply.</param>
         /// <param name="a">Value to operate the multiplication.</param>
@@ -80,9 +84,12 @@ namespace GeometrySharp.Core
         /// </summary>
         /// <param name="a">First matrix.</param>
         /// <param name="b">Second matrix.</param>
-        /// <returns>The product matrix of the inputs.</returns>
+        /// <returns>The product matrix.</returns>
         public static Matrix operator *(Matrix a, Matrix b)
         {
+            if (!a.IsValid() || !b.IsValid()) // this pass is not check, because we check for IsValid in another test.
+                throw new Exception("Either first matrix or second matrix are Invalid.");
+
             var aRows = a.Count;
             var aCols = a[0].Count;
 
@@ -91,9 +98,6 @@ namespace GeometrySharp.Core
 
             if(aCols != bRows)
                 throw new Exception("Non-conformable matrices.");
-
-            if (aRows < 1 || aCols < 1 || bCols < 1)
-                throw new Exception("Either first matrix of second matrix are invalid");
 
             var resultMatrix = new Matrix();
 
@@ -120,12 +124,26 @@ namespace GeometrySharp.Core
         /// </summary>
         /// <param name="a">First Matrix.</param>
         /// <param name="b">Second Matrix.</param>
-        /// <returns></returns>
+        /// <returns>The sum matrix.</returns>
         public static Matrix operator +(Matrix a, Matrix b)
         {
+            if (!a.IsValid() || !b.IsValid())
+                throw new Exception("Either first matrix of second matrix are Invalid.");
+
+            var aRows = a.Count;
+            var aCols = a[0].Count;
+
+            var bRows = b.Count;
+            var bCols = b[0].Count;
+
+            if (aCols != bCols || aRows != bRows)
+                throw new Exception("Non-conformable matrices.");
+
             var result = new Matrix();
             for (int i = 0; i < a.Count; i++)
+            {
                 result.Add((a[i].Select((val, j) => val + b[i][j]).ToList()));
+            }
             return result;
         }
 
@@ -133,7 +151,6 @@ namespace GeometrySharp.Core
         /// Transpose a matrix.
         /// This is like swapping rows with columns.
         /// </summary>
-        /// <param name="a">Matrix that has to be transposed.</param>
         /// <returns>The matrix transposed.</returns>
         public Matrix Transpose()
         {

@@ -11,19 +11,27 @@ namespace GeometrySharp.Test.XUnit.Core
 {
     public class MatrixTests
     {
-        public static readonly Matrix IdentityMatrix = new Matrix()
+        public static Matrix IdentityMatrix = new Matrix()
         {
             new List<double> { 1, 0, 0 },
             new List<double> { 0, 1, 0 },
             new List<double> { 0, 0, 1 }
         };
 
-        public static readonly Matrix TransformationMatrixExample = new Matrix()
+        public static Matrix TransformationMatrixExample = new Matrix()
         {
             new List<double>{1.0, 0.0, 0.0, -10.0 },
             new List<double>{0.0, 1.0, 0.0, 20.0 },
             new List<double>{0.0, 0.0, 1.0, 1.0 },
             new List<double>{0.0, 0.0, 0.0, 1.0 }
+        };
+
+        public static TheoryData<Matrix, bool> InvalidMatrices => new TheoryData<Matrix, bool>()
+        {
+            {new Matrix {new List<double> {1}, new List<double> {4, 5, 6}}, false},
+            {new Matrix {new List<double> {1}, new List<double> {4}}, false},
+            {new Matrix {new List<double> {1, 2}, new List<double> {4, 5}}, true},
+            {new Matrix {new List<double> {1, 2}, new List<double> {}}, false}
         };
 
         private readonly ITestOutputHelper _testOutput;
@@ -38,6 +46,13 @@ namespace GeometrySharp.Test.XUnit.Core
             var matrix = new Matrix();
 
             matrix.Should().NotBeNull();
+        }
+
+        [Theory]
+        [MemberData(nameof(InvalidMatrices))]
+        public void It_Checks_If_Matrix_IsValid(Matrix m, bool result)
+        {
+            m.IsValid().Should().Be(result);
         }
 
         [Fact]
@@ -99,6 +114,29 @@ namespace GeometrySharp.Test.XUnit.Core
             var matrixExpected = new Matrix { new List<double> { 58,64 }, new List<double> { 139,154 } };
 
             var productMatrix = matrixA * matrixB;
+
+            productMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
+        public void Matrix_Addition_Throws_An_Exception_If_Two_Matrices_Are_Not_Compatible()
+        {
+            var matrixA = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };
+            var matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 } };
+
+            Func<Matrix> func = () => matrixA + matrixB;
+
+            func.Should().Throw<Exception>().WithMessage("Non-conformable matrices.");
+        }
+
+        [Fact]
+        public void It_Returns_The_Sum_Between_Two_Matrices()
+        {
+            var matrixA = new Matrix { new List<double> { 1, 2, }, new List<double> { 4, 5, } };
+            var matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }};
+            var matrixExpected = new Matrix { new List<double> { 8, 10 }, new List<double> { 13, 15 } };
+
+            var productMatrix = matrixA + matrixB;
 
             productMatrix.Should().BeEquivalentTo(matrixExpected);
         }
