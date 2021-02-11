@@ -176,6 +176,24 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Creates a copy.
+        /// </summary>
+        /// <param name="matrix">Matrix has to be duplicated.</param>
+        /// <returns>Copied matrix.</returns>
+        public static Matrix Duplicate(Matrix matrix)
+        {
+
+            var copy = Matrix.Construct(matrix[0].Count, matrix.Count);
+
+            for (int i = 0; i < matrix.Count; ++i)
+            {
+                for (int j = 0; j < matrix[i].Count; ++j)
+                    copy[i][j] = matrix[i][j];
+            }
+            return copy;
+        }
+
+        /// <summary>
         /// Constructs the string representation the matrix.
         /// </summary>
         /// <returns>Text string.</returns>

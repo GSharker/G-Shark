@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
-using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -132,13 +131,23 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_The_Sum_Between_Two_Matrices()
         {
-            var matrixA = new Matrix { new List<double> { 1, 2, }, new List<double> { 4, 5, } };
+            var matrixA = new Matrix { new List<double> { 1, 2 }, new List<double> { 4, 5 } };
             var matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }};
             var matrixExpected = new Matrix { new List<double> { 8, 10 }, new List<double> { 13, 15 } };
 
             var productMatrix = matrixA + matrixB;
 
             productMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
+        public void It_Returns_A_Copy_Of_The_Given_Matrix()
+        {
+            var matrix = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };
+
+            var copiedMatrix = Matrix.Duplicate(matrix);
+
+            copiedMatrix.Should().BeEquivalentTo(matrix);
         }
     }
 }
