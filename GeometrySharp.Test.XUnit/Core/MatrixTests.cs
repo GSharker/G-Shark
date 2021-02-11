@@ -102,27 +102,5 @@ namespace GeometrySharp.Test.XUnit.Core
 
             productMatrix.Should().BeEquivalentTo(matrixExpected);
         }
-
-        [Fact]
-        public void It_Returns_A_Transformed_Vector()
-        {
-            var homogenizedVec = new Vector3(){-10.0, 20.0, 5.0, 1.0};
-
-            var vecExpected = new Vector3() { -20.0, 40.0, 6.0, 1.0 };
-
-            var transformedVec = Matrix.Dot(TransformationMatrixExample, homogenizedVec);
-
-            transformedVec.Should().BeEquivalentTo(vecExpected);
-        }
-
-        [Fact]
-        public void Dot_Throws_An_Exception_If_The_Vector_And_The_Matrix_Have_Not_The_Same_Dimension()
-        {
-            var vec = new Vector3() { -10.0, 20.0, 5.0 };
-
-            Func<object> funcResult = () => Matrix.Dot(TransformationMatrixExample, vec);
-
-            funcResult.Should().Throw<ArgumentOutOfRangeException>();
-        }
     }
 }

@@ -92,6 +92,9 @@ namespace GeometrySharp.Core
             if(aCols != bRows)
                 throw new Exception("Non-conformable matrices.");
 
+            if (aRows < 1 || aCols < 1 || bCols < 1)
+                throw new Exception("Either first matrix of second matrix are invalid");
+
             var resultMatrix = new Matrix();
 
             for (int i = 0; i < aRows; ++i)
@@ -113,61 +116,17 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Add two matrices
+        /// Add two matrices.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">First Matrix.</param>
+        /// <param name="b">Second Matrix.</param>
         /// <returns></returns>
-        public static Matrix Addition(Matrix a, Matrix b)
+        public static Matrix operator +(Matrix a, Matrix b)
         {
-            Matrix r = new Matrix();
+            var result = new Matrix();
             for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i]+(Vector3)b[i]);
-            return r;
-        }
-
-        /// <summary>
-        /// Divide each of entry of a Matrix by a constant
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Division(Matrix a, double b)
-        {
-            Matrix r = new Matrix();
-            for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i]/ b);
-            return r;
-        }
-
-        /// <summary>
-        /// Subtract two matrices
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Subtraction(Matrix a, Matrix b)
-        {
-            Matrix r = new Matrix();
-            for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i] - (Vector3)b[i]);
-            return r;
-        }
-
-        /// <summary>
-        /// Multiply a `Matrix` by a `Vector3`
-        /// </summary>
-        /// <param name="a">The transformation matrix.</param>
-        /// <param name="b">The vector to transform.</param>
-        /// <returns>The transformed vector.</returns>
-        public static Vector3 Dot(Matrix a, Vector3 b)
-        {
-            if(b.Count != a[0].Count)
-                throw new ArgumentOutOfRangeException(nameof(b), "Vector3 and Matrix must have the same dimension.");
-            Vector3 r = new Vector3();
-            for (int i = 0; i < a.Count; i++)
-                r.Add(Vector3.Dot(new Vector3(a[i]), b));
-            return r;
+                result.Add((a[i].Select((val, j) => val + b[i][j]).ToList()));
+            return result;
         }
 
         /// <summary>
