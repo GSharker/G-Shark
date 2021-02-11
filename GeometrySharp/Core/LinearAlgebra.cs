@@ -52,6 +52,11 @@ namespace GeometrySharp.Core
             return controlPtsHomogenized;
         }
 
+        internal static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>> weights)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
@@ -79,6 +84,11 @@ namespace GeometrySharp.Core
                 point.Add(homogeneousPt[i] / weight);
 
             return point;
+        }
+
+        internal static List<List<Vector3>> Dehomogenize2d(List<List<Vector3>> homogenizedPoints)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
