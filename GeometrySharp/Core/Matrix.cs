@@ -62,17 +62,17 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Multiply a `Matrix` by a constant.
+        /// Multiply a Matrix by a constant.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Muliplication(double a, Matrix b)
+        /// <param name="m">Matrix has to be multiply.</param>
+        /// <param name="a">Value to operate the multiplication.</param>
+        /// <returns>Matrix multiply by a constant.</returns>
+        public static Matrix operator *(Matrix m, double a)
         {
-            Matrix r = new Matrix();
-            foreach (var l in b)
-                r.Add((Vector3)l * a);
-            return r;
+            var result = new Matrix();
+            foreach (var row in m)
+                result.Add(row.Select(val => val * a).ToList());
+            return result;
         }
 
         /// <summary>

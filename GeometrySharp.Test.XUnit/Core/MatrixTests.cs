@@ -70,6 +70,17 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
+        public void It_Returns_A_Matrix_Multiply_By_A_Constant()
+        {
+            var matrix = new Matrix { new List<double> { 4, 0 }, new List<double> { 1, -9 } };
+            var matrixExpected = new Matrix { new List<double> { 8, 0 }, new List<double> { 2, -18 } };
+
+            var resultMatrix = matrix * 2;
+
+            resultMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
         public void Matrix_Product_Throws_An_Exception_If_Two_Matrices_Are_Not_Compatible()
         {
             var matrixA = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };

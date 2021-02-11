@@ -356,6 +356,37 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Multiplying an n x m matrix by a m x 1.
+        /// Transform the vector.
+        /// </summary>
+        /// <param name="v">Vector to transform.</param>
+        /// <param name="m">Matrix to multiply.</param>
+        /// <returns>Vector resulting of multiplying an n x m matrix by a m x 1.</returns>
+        public static Vector3 operator *(Vector3 v, Matrix m)
+        {
+            var mRows = m.Count;
+            var mCols = m[0].Count;
+
+            if(mCols != v.Count)
+                throw new Exception("Non-conformable matrix and vector");
+
+            var resultVector = Vector3.Zero1d(mRows);
+
+            for (int i = 0; i < mRows; i++)
+            {
+                var tempValue = 0.0;
+                for (int j = 0; j < mCols; j++)
+                {
+                    tempValue += m[i][j] * v[j];
+                }
+
+                resultVector[i] = tempValue;
+            }
+
+            return resultVector;
+        }
+
+        /// <summary>
         /// Divide a vector by a scalar.
         /// </summary>
         /// <param name="a">The scalar divisor.</param>
