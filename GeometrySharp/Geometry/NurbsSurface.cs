@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
 
-// ToDo this class need to be tested.
+/// You can find further documentation for this type at
+/// [https://github.com/jdonaldson/promhx](https://github.com/jdonaldson/promhx).
 namespace GeometrySharp.Geometry
 {
     /// <summary>
