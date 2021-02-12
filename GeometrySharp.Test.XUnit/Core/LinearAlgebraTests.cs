@@ -54,11 +54,74 @@ namespace GeometrySharp.Test.XUnit.Core
             }
         };
 
+        public static IEnumerable<object[]> Homogenized2dData => new List<object[]>
+        {
+            new object[]
+            {
+                new List<List<double>>() {
+                    new List<double>(){ 0.5, 0.5, 0.5 },
+                    new List<double>(){ 0.5, 0.5, 0.5 },
+                },
+                new List<List<Vector3>>()
+                {
+                    new List<Vector3>{
+                        new Vector3() {0.0, 0.0, 0.0, 0.5},
+                        new Vector3() {1.25, -1.25, 0.0, 0.5},
+                        new Vector3() {2.5, 0.0, 0.0, 0.5}
+                    },
+                    new List<Vector3>{
+                        new Vector3() {0.0, 0.0, 0.0, 0.5},
+                        new Vector3() {1.25, -1.25, 0.0, 0.5},
+                        new Vector3() {2.5, 0.0, 0.0, 0.5}
+                    }
+                }
+            },
+            new object[]
+            {
+                new List<List<double>>() { new List<double> { 0.5 }, new List<double> { 0.5 }},
+                new List<List<Vector3>>
+                {
+                    new List<Vector3>()
+                    {
+                        new Vector3() {0.0, 0.0, 0.0, 0.5},
+                        new Vector3() {2.5, -2.5, 0.0, 1.0},
+                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                    },
+                    new List<Vector3>()
+                    {
+                        new Vector3() {0.0, 0.0, 0.0, 0.5},
+                        new Vector3() {2.5, -2.5, 0.0, 1.0},
+                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                    }
+                }
+            },
+
+            new object[]
+            {
+                null,
+                new List<List<Vector3>>
+                {
+                    new List<Vector3>()
+                    {
+                        new Vector3() {0.0, 0.0, 0.0, 1.0},
+                        new Vector3() {2.5, -2.5, 0.0, 1.0},
+                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                    },
+                    new List<Vector3>()
+                    {
+                        new Vector3() {0.0, 0.0, 0.0, 1.0},
+                        new Vector3() {2.5, -2.5, 0.0, 1.0},
+                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                    }
+                }
+            }
+        };
+
         [Fact]
         public void Eval_Homogenized1d_Throws_An_Exception_If_The_Weight_Collection_Is_Bigger_Than_ControlPts()
         {
             var controlPts = new List<Vector3>();
-            var weights = new List<double>(){1.0,1.5,1.0};
+            var weights = new List<double>() { 1.0, 1.5, 1.0 };
 
             Func<object> resultFunction = () => LinearAlgebra.Homogenize1d(controlPts, weights);
 
@@ -77,7 +140,30 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             var newControlPts = LinearAlgebra.Homogenize1d(controlPts, weights);
+            newControlPts.Should().BeEquivalentTo(controlPtsExpected);
+        }
 
+        [Theory]
+        [MemberData(nameof(Homogenized2dData))]
+        public void It_Returns_A_New_Set_Of_ControlPoints_Homogenized2d(List<List<double>> weights, List<List<Vector3>> controlPtsExpected)
+        {
+            var controlPts = new List<List<Vector3>>()
+            {
+                new List<Vector3>
+                {
+                    new Vector3() {0.0, 0.0, 0},
+                    new Vector3() {2.5, -2.5, 0},
+                    new Vector3() {5.0, 0.0, 0}
+                },
+                new List<Vector3>
+                {
+                    new Vector3() {0.0, 0.0, 0},
+                    new Vector3() {2.5, -2.5, 0},
+                    new Vector3() {5.0, 0.0, 0}
+                }
+            };
+
+            var newControlPts = LinearAlgebra.Homogenize2d(controlPts, weights);
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
         }
 
@@ -108,14 +194,40 @@ namespace GeometrySharp.Test.XUnit.Core
 
             var weight1d = LinearAlgebra.Weight1d(homegeneousPts);
 
-            weight1d.Should().BeEquivalentTo(new List<double>() {0.5, 0.5, 0.5});
+            weight1d.Should().BeEquivalentTo(new List<double>() { 0.5, 0.5, 0.5 });
+        }
+
+        [Fact]
+        public void It_Returns_A_Weighted2d_Set()
+        {
+            var homegeneousPts = new List<List<Vector3>>()
+            {
+                new List<Vector3>(){
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {1.25, -1.25, 0.0, 0.5},
+                    new Vector3() {2.5, 0.0, 0.0, 0.5}
+                },
+                new List<Vector3>()
+                {
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {1.25, -1.25, 0.0, 0.5},
+                    new Vector3() {2.5, 0.0, 0.0, 0.5}
+                }
+            };
+
+            var weight2d = LinearAlgebra.Weight2d(homegeneousPts);
+            weight2d.Should().BeEquivalentTo(new List<List<double>>() {
+                new List<double>{ 0.5, 0.5, 0.5 },
+                new List<double>{ 0.5, 0.5, 0.5 }
+                }
+            );
         }
 
         [Fact]
         public void It_Returns_A_Set_Of_Points_Dehomogenized()
         {
-            var homegeneousPts = new Vector3() {1.25, -1.25, 0.0, 0.5};
-            var dehomogenizeExpected = new Vector3() {2.5, -2.5, 0};
+            var homegeneousPts = new Vector3() { 1.25, -1.25, 0.0, 0.5 };
+            var dehomogenizeExpected = new Vector3() { 2.5, -2.5, 0 };
 
             var dehomogenizePts = LinearAlgebra.Dehomogenize(homegeneousPts);
 
@@ -145,6 +257,45 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
+        public void It_Returns_A_Set_Of_Points_Dehomogenizer2d()
+        {
+            var homegeneousPts = new List<List<Vector3>>
+            {
+                new List<Vector3>()
+                {
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {1.25, -1.25, 0.0, 0.5},
+                    new Vector3() {2.5, 0.0, 0.0, 0.5}
+                },
+                new List<Vector3>()
+                {
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {1.25, -1.25, 0.0, 0.5},
+                    new Vector3() {2.5, 0.0, 0.0, 0.5}
+                }
+            };
+
+            var dehomogenizeExpected = new List<List<Vector3>>()
+            {
+               new List<Vector3>()
+               {
+                   new Vector3() {0.0, 0.0, 0},
+                   new Vector3() {2.5, -2.5, 0},
+                   new Vector3() {5.0, 0.0, 0}
+               },
+               new List<Vector3>()
+               {
+                   new Vector3() {0.0, 0.0, 0},
+                   new Vector3() {2.5, -2.5, 0},
+                   new Vector3() {5.0, 0.0, 0}
+               }
+            };
+
+            var dehomogenizePts = LinearAlgebra.Dehomogenize2d(homegeneousPts);
+            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+        }
+
+        [Fact]
         public void It_Returns_A_Rationalized_Set_Of_Points()
         {
             List<Vector3> homoPts = new List<Vector3>()
@@ -157,9 +308,46 @@ namespace GeometrySharp.Test.XUnit.Core
             var ratioPts = LinearAlgebra.Rational1d(homoPts);
 
             ratioPts.All(pt => pt.Count == 3).Should().BeTrue();
-            ratioPts[0].Should().BeEquivalentTo(new Vector3() {0.0, 0.0, 0.0});
-            ratioPts[1].Should().BeEquivalentTo(new Vector3() {2.5, -2.5, 0.0});
-            ratioPts[2].Should().BeEquivalentTo(new Vector3() {5.0, 0.0, 0.0});
+            ratioPts[0].Should().BeEquivalentTo(new Vector3() { 0.0, 0.0, 0.0 });
+            ratioPts[1].Should().BeEquivalentTo(new Vector3() { 2.5, -2.5, 0.0 });
+            ratioPts[2].Should().BeEquivalentTo(new Vector3() { 5.0, 0.0, 0.0 });
+        }
+
+        [Fact]
+        public void It_Returns_A_Rationalized_Set_Of_Sets_Points()
+        {
+            List<List<Vector3>> homoPts = new List<List<Vector3>>
+            {
+                new List<Vector3>()
+                {
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {2.5, -2.5, 0.0, 1.0},
+                    new Vector3() {5.0, 0.0, 0.0, 1.0}
+                },
+                new List<Vector3>()
+                {
+                    new Vector3() {0.0, 0.0, 0.0, 0.5},
+                    new Vector3() {2.5, -2.5, 0.0, 1.0},
+                    new Vector3() {5.0, 0.0, 0.0, 1.0}
+                }
+            };
+
+            var ratioPts = LinearAlgebra.Rational2d(homoPts);
+
+            ratioPts.All(lst => lst.Count == 3).Should().BeTrue();
+            ratioPts[0].All(pt => pt.Count == 3).Should().BeTrue();
+            ratioPts[0].Should().BeEquivalentTo(
+                new List<Vector3> {
+                    new Vector3() {0.0, 0.0, 0.0},
+                    new Vector3() {2.5, -2.5, 0.0},
+                    new Vector3() {5.0, 0.0, 0.0}
+            });
+            ratioPts[1].Should().BeEquivalentTo(
+                new List<Vector3> {
+                    new Vector3() {0.0, 0.0, 0.0},
+                    new Vector3() {2.5, -2.5, 0.0},
+                    new Vector3() {5.0, 0.0, 0.0}
+            });
         }
     }
 }
