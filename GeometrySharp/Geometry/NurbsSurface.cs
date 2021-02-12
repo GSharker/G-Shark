@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
+using System.Linq;
 
 /// You can find further documentation for this type at
 /// [https://github.com/jdonaldson/promhx](https://github.com/jdonaldson/promhx).
@@ -46,6 +47,33 @@ namespace GeometrySharp.Geometry
             HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
             Weights = weights;
         }
+
+        /// <summary>
+        /// Creates a Nurbs surface object.
+        /// </summary>
+        /// <param name="controlPoints">Control points, as a 2d collection of Vector3.</param>
+        /// <param name="degreeU">Surface degree u</param>
+        /// <param name="degreeV">Surface degree v</param>
+        public NurbsSurface(List<List<Vector3>> controlPoints, int degreeU, int degreeV)
+            : this(degreeU, degreeV, new Knot(degreeU, controlPoints.Count), new Knot(degreeV, controlPoints[0].Count), controlPoints)
+        {
+        }
+
+        /// <summary>
+        /// Construct a NurbsSurface by a NurbsSurface object.
+        /// </summary>
+        /// <param name="curve">The curve object</param>
+        public NurbsSurface(NurbsSurface surface)
+        {
+            DegreeU = surface.DegreeU;
+            DegreeV = surface.DegreeV;
+            HomogenizedPoints = new List<List<Vector3>>(surface.HomogenizedPoints);
+            KnotsU = new Knot(surface.KnotsU);
+            KnotsV = new Knot(surface.KnotsV);
+            Weights = new List<List<double>>(surface.Weights!);
+        }
+
+
         /// <summary>
         /// Integer degree of surface in u direction.
         /// </summary>
@@ -62,6 +90,26 @@ namespace GeometrySharp.Geometry
         /// List of non-decreasing knot values in v direction.
         /// </summary>
         public Knot KnotsV { get; set; }
+
+        /// <summary>
+        /// Determine the valid u domain of the surface.
+        /// </summary>
+        /// <returns>representing the high and end point of the u domain of the surface.</returns>
+        public Interval DomainU() => new Interval(this.KnotsU.First(), this.KnotsU.Last());
+
+        /// <summary>
+        /// Determine the valid v domain of the surface.
+        /// </summary>
+        /// <returns>representing the high and end point of the v domain of the surface.</returns>
+        public Interval DomainV() => new Interval(this.KnotsV.First(), this.KnotsV.Last());
+
+        /// <summary>
+        /// Obtain a copy of the NurbsSurface.
+        /// </summary>
+        /// <returns>The copied curve.</returns>
+        public NurbsSurface Clone() => new NurbsSurface(this);
+
+
         /// <summary>
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).
