@@ -138,5 +138,12 @@ namespace GeometrySharp.Core
             var dim = homoPoints[0].Count - 1;
             return homoPoints.Select(pt => new Vector3(pt.GetRange(0, dim))).ToList();
         }
+
+        /// <summary>
+        /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.
+        /// </summary>
+        /// <param name="homoPoints">Set of set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns> Set of points represented by an array (wi*pi) with length (dim).</returns>
+        public static List<List<Vector3>> Rational2d(List<List<Vector3>> homoPoints) => homoPoints.Select(vecs => Rational1d(vecs)).ToList();
     }
 }
