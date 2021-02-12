@@ -52,9 +52,28 @@ namespace GeometrySharp.Core
             return controlPtsHomogenized;
         }
 
-        internal static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>> weights)
+        /// <summary>
+        /// Transform a 1d array of points into their homogeneous equivalents.
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
+        /// </summary>
+        /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
+        /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
+        /// <returns> 2d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
         {
-            throw new NotImplementedException();
+            var rows = controlPoints.Count;
+            var controlPtsHomogenized = new List<List<Vector3>>();
+            var newWeights = weights;
+            if (weights == null || weights.Count == 0)
+            {
+                newWeights = new List<List<double>>();
+                for (int i = 0; i < rows; i++)
+                    newWeights.Add(Sets.RepeatData(1.0, controlPoints[i].Count));
+            }
+            if (controlPoints.Count < newWeights.Count) throw new ArgumentOutOfRangeException(nameof(weights), "The weights set is bigger than the control points, it must be the same dimension");
+            for (int i = 0; i < rows; i++)
+                controlPtsHomogenized.Add(Homogenize1d(controlPoints[i], newWeights[i]));
+            return controlPtsHomogenized;
         }
 
         /// <summary>
@@ -68,6 +87,14 @@ namespace GeometrySharp.Core
                 throw new ArgumentOutOfRangeException(nameof(homogeneousPts), "Homogeneous points must have the same dimension.");
             return homogeneousPts.Select(vec => vec[^1]).ToList();
         }
+
+        /// <summary>
+        /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension
+        /// </summary>
+        /// <param name="homogeneousPts">rray of arrays of of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>array of arrays of points, each represented by an array pi with length (dim)</returns>
+        public static List<List<double>> Weight2d(List<List<Vector3>> homogeneousPts) => 
+            homogeneousPts.Select(vec => Weight1d(vec).ToList()).ToList();
 
         /// <summary>
         /// Dehomogenize a point.
@@ -86,10 +113,6 @@ namespace GeometrySharp.Core
             return point;
         }
 
-        internal static List<List<Vector3>> Dehomogenize2d(List<List<Vector3>> homogenizedPoints)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Dehomogenize an set of points.
@@ -97,6 +120,13 @@ namespace GeometrySharp.Core
         /// <param name="homogeneousPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of points, each of length dim.</returns>
         public static List<Vector3> Dehomogenize1d(List<Vector3> homogeneousPts) => homogeneousPts.Select(Dehomogenize).ToList();
+
+        /// <summary>
+        /// Dehomogenize an 2d set of points.
+        /// </summary>
+        /// <param name="homogeneousPts">List of list of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Set of points, each of length dim.</returns>
+        public static List<List<Vector3>> Dehomogenize2d(List<List<Vector3>> homogeneousPts) => homogeneousPts.Select(Dehomogenize1d).ToList();
 
         /// <summary>
         /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.
