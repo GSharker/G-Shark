@@ -1,9 +1,8 @@
-﻿using GeometrySharp.Geometry;
+﻿using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Core
 {
@@ -223,7 +222,12 @@ namespace GeometrySharp.Core
         private static bool IsNonSingular(Matrix matrix)
         {
             for (int i = 0; i < matrix.Count; i++)
-                if (Math.Abs(matrix[i][i]) < GeoSharpMath.EPSILON) return false;
+            {
+                if (Math.Abs(matrix[i][i]) < GeoSharpMath.EPSILON)
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
@@ -258,8 +262,8 @@ namespace GeometrySharp.Core
                 throw new Exception("Matrix is singular.");
             }
 
-            var n = LuMatrix.Count;
-            var bCopy = new double[n];
+            int n = LuMatrix.Count;
+            double[] bCopy = new double[n];
 
             /*
             verbNurbs.
@@ -303,7 +307,7 @@ namespace GeometrySharp.Core
             }
 
             // Solve U*X = Y;
-            var r = n - 1;
+            int r = n - 1;
             while (r >= 0)
             {
                 int j = r + 1;
@@ -384,11 +388,11 @@ namespace GeometrySharp.Core
                 // interchange the two rows.
                 if (permutationValueK != k)
                 {
-                    var copyRow = copyMatrix[permutationValueK];
+                    IList<double> copyRow = copyMatrix[permutationValueK];
                     copyMatrix[permutationValueK] = copyMatrix[k];
                     copyMatrix[k] = copyRow;
 
-                    var tempPermutationVal = tempPermutation[permutationValueK];
+                    int tempPermutationVal = tempPermutation[permutationValueK];
                     tempPermutation[permutationValueK] = tempPermutation[k];
                     tempPermutation[k] = tempPermutationVal;
                 }
@@ -420,6 +424,57 @@ namespace GeometrySharp.Core
 
             permutation = tempPermutation;
             return copyMatrix;
+        }
+
+        public static Matrix Inverse(Matrix matrix)
+        {
+            Matrix matrixLu = Decompose(matrix, out int[] permutation);
+
+            if(!IsNonSingular(matrixLu))
+            {
+                throw new Exception("Matrix is singular");
+            }
+
+            int rows = matrixLu.Count;
+
+            Matrix matrixResult = Matrix.Construct(rows, rows);
+
+            for (int i = 0; i < rows; i++)
+            {
+                int k = permutation[i];
+                matrixResult[i][k] = 1;
+            }
+
+            // Solve L*Y = B(piv,:)
+            for (int k = 0; k < rows; k++)
+            {
+                for (int i = k + 1; i < rows; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        matrixResult[i][j] -= matrixResult[k][j] * matrixLu[i][k];
+                    }
+                }
+            }
+
+            // Solve U*X = I;
+            for (int k = rows - 1; k >= 0; k--)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    matrixResult[k][j] /= matrixLu[k][k];
+                }
+
+                for (int i = 0; i < k; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        matrixResult[i][j] -= matrixResult[k][j] * matrixLu[i][k];
+                    }
+                }
+            }
+
+            return matrixResult;
         }
 
         /// <summary>

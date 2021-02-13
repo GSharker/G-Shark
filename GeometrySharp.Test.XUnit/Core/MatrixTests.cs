@@ -178,6 +178,8 @@ namespace GeometrySharp.Test.XUnit.Core
         [MemberData(nameof(DecomposedMatrixLuData))]
         public void Compute_The_LU_Factorization_Of_A_Matrix(Matrix matrix, Matrix LuMatrixExpected, int[] permutationExpected)
         {
+            // Results compared with https://keisan.casio.com/exec/system/15076953047019
+
             var matrixLu = Matrix.Decompose(matrix, out int[] permutation);
 
             _testOutput.WriteLine($"matrixLu -> {matrixLu}");
@@ -222,6 +224,23 @@ namespace GeometrySharp.Test.XUnit.Core
             Func<object> func = () => Matrix.Solve(matrix, pivot, vector);
 
             func.Should().Throw<Exception>().WithMessage("The matrix should have the same number of rows as the decomposition b parameter.");
+        }
+
+        [Fact]
+        public void It_Returns_The_Inverse_Of_A_Matrix()
+        {
+            var matrix = new Matrix { new List<double> { 1, 2, 4 }, new List<double> { 3, 8, 14 }, new List<double> { 2, 6, 13 } };
+            var matrixExpected = new Matrix
+            {
+                new List<double> { 3.333333333333334, -0.33333333333333304, -0.6666666666666671 }, 
+                new List<double> { -1.8333333333333337, 0.8333333333333331, -0.333333333333333 }, 
+                new List<double> { 0.3333333333333334, -0.33333333333333326, 0.3333333333333332 }
+            };
+
+            var invertedMatrix = Matrix.Inverse(matrix);
+
+            _testOutput.WriteLine(invertedMatrix.ToString());
+            invertedMatrix.Should().BeEquivalentTo(matrixExpected);
         }
     }
 }

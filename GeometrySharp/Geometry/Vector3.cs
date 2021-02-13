@@ -21,9 +21,8 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Vector3 initialized by a list of values.
-        /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">List of values.</param>
         public Vector3(IEnumerable<double> values)
         {
             AddRange(values);
