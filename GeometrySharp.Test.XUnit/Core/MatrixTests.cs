@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -31,6 +33,28 @@ namespace GeometrySharp.Test.XUnit.Core
             {new Matrix {new List<double> {1}, new List<double> {4}}, false},
             {new Matrix {new List<double> {1, 2}, new List<double> {4, 5}}, true},
             {new Matrix {new List<double> {1, 2}, new List<double> {}}, false}
+        };
+
+        public static TheoryData<Matrix, Matrix, int[]> DecomposedMatrixLuData => new TheoryData<Matrix, Matrix, int[]>
+        {
+            {new Matrix {new List<double> {2,1}, new List<double> {-4,-6}}, 
+                new Matrix {new List<double> {-4,-6}, new List<double> {-0.5,-2}},
+                new []{1,0}
+            },
+            {new Matrix {new List<double> {2,1,-4}, new List<double> {2,2,-2}, new List<double> {6,3,11}}, 
+                new Matrix {new List<double> {6,3,11}, new List<double> { 0.33333333333333, 1, -5.6666666666667 }, new List<double> { 0.33333333333333, 0, -7.6666666666667 }},
+                new []{2,1,0}
+            },
+            {new Matrix {new List<double> {1,3,2}, new List<double> {2,8,5}, new List<double> {1,11,4}},
+                new Matrix {new List<double> {2,8,5}, new List<double> {0.5,7,1.5}, new List<double> {0.5, -0.14285714285714, -0.28571428571429 }},
+                new []{1,2,0}
+            }
+        };
+
+        public static TheoryData<Matrix, Vector3, Vector3> SolveMatrixEquation => new TheoryData<Matrix, Vector3, Vector3>
+        {
+            {new Matrix {new List<double> {1,2,4}, new List<double> {3,8,14}, new List<double> {2,6,13}}, new Vector3{3,13,4}, new Vector3{3,4,-2}},
+            {new Matrix {new List<double> {3,1,6}, new List<double> {-6,0,-16}, new List<double> {0,8,-17}}, new Vector3{0,4,17}, new Vector3{2,0,-1}}
         };
 
         private readonly ITestOutputHelper _testOutput;
@@ -148,6 +172,56 @@ namespace GeometrySharp.Test.XUnit.Core
             var copiedMatrix = Matrix.Duplicate(matrix);
 
             copiedMatrix.Should().BeEquivalentTo(matrix);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecomposedMatrixLuData))]
+        public void Compute_The_LU_Factorization_Of_A_Matrix(Matrix matrix, Matrix LuMatrixExpected, int[] permutationExpected)
+        {
+            var matrixLu = Matrix.Decompose(matrix, out int[] permutation);
+
+            _testOutput.WriteLine($"matrixLu -> {matrixLu}");
+            foreach (var i in permutation)
+                _testOutput.WriteLine($"permutation -> {i}");
+
+            permutation.Should().BeEquivalentTo(permutationExpected);
+            matrixLu.Should().BeEquivalentTo(LuMatrixExpected, options => options
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
+                .WhenTypeIs<double>());
+        }
+
+        [Theory]
+        [MemberData(nameof(SolveMatrixEquation))]
+        public void Compute_The_Equation_Between_A_LuMatrix_And_A_Vector(Matrix matrix, Vector3 vector, Vector3 result)
+        {
+            var matrixLu = Matrix.Decompose(matrix, out int[] permutation);
+            var solution = Matrix.Solve(matrixLu, permutation, vector);
+
+            solution.Equals(result).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_An_Exception_If_The_Matrix_Is_Singular()
+        {
+            var matrix = new Matrix { new List<double> { 2,4,6 }, new List<double> { 2,0,2 }, new List<double> { 6,8,14 } };
+            var vector = new Vector3 {3, 13, 4};
+            var pivot = new[] {1, 1, 1};
+
+            Func<object> func = () => Matrix.Solve(matrix, pivot, vector);
+
+            func.Should().Throw<Exception>().WithMessage("Matrix is singular.");
+        }
+
+        [Fact]
+        public void It_Returns_An_Exception_If_The_Decomposition_Value_Dimension_Is_Different_Of_Matrix_Row_Dimension()
+        {
+            var matrix = new Matrix {new List<double> {1, 2, 4}, new List<double> {3, 8, 14}, new List<double> {2, 6, 13}};
+            var vector = new Vector3 { 3, 13};
+            var pivot = new[] { 1, 1, 1 };
+
+            Func<object> func = () => Matrix.Solve(matrix, pivot, vector);
+
+            func.Should().Throw<Exception>().WithMessage("The matrix should have the same number of rows as the decomposition b parameter.");
         }
     }
 }
