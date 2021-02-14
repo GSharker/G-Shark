@@ -330,6 +330,7 @@ namespace GeometrySharp.Core
         /// such that PA = LU. With this method you can always have a LU decomposition, rather than LU factorization.
         /// The LU decomposition with pivoting always exists, even if the matrix is singular, so the constructor will never fail.
         /// The primary use of the LU decomposition is in the solution of square systems of simultaneous linear equations.
+        /// The LUP decomposition provides a more robust method of solving linear systems than LU decomposition without pivoting, and it is approximately the same cost.
         /// This will fail if non singular.
         /// </summary>
         /// <param name="m">Matrix has to be decomposed.</param>
