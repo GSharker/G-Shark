@@ -5,12 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.Geometry;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Core
 {
     public class TransformTests
     {
+        private readonly ITestOutputHelper _testOutput;
+        public TransformTests(ITestOutputHelper testOutput)
+        {
+            _testOutput = testOutput;
+        }
+
         [Fact]
         public void It_Returns_An_Instance_Of_Transform()
         {
@@ -46,6 +54,28 @@ namespace GeometrySharp.Test.XUnit.Core
             transform[1][1].Should().Be(1);
             transform[2][2].Should().Be(1);
             transform[3][3].Should().Be(1);
+        }
+
+        [Fact]
+        public void It_Returns_A_Translated_Transformed_Matrix()
+        {
+            var translation = new Vector3{10,10,0};
+            var transform = Transform.Translation(translation);
+
+            transform[0][3].Should().Be(10);
+            transform[1][3].Should().Be(10);
+            transform[3][3].Should().Be(1);
+        }
+
+        [Fact]
+        public void It_Returns_A_Rotated_Transform_Matrix()
+        {
+            var center = new Vector3{5,5,0};
+            var radiance = GeoSharpMath.ToRadians(30);
+
+            var transform = Transform.Rotation(radiance, center);
+
+            _testOutput.WriteLine(transform.ToString());
         }
     }
 }

@@ -189,11 +189,6 @@ namespace GeometrySharp.Core
             return transposeMatrix;
         }
 
-        public Matrix Inverse()
-        {
-            return new Matrix();
-        }
-
         /// <summary>
         /// Creates a copy.
         /// </summary>

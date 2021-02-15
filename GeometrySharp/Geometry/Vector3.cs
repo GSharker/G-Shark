@@ -173,49 +173,7 @@ namespace GeometrySharp.Geometry
             var cosAngle = Math.Cos(angle);
             var sinAngle = Math.Sin(angle);
 
-            // Remove the noise in input.
-            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
-                Math.Abs(cosAngle) <= GeoSharpMath.MAXTOLERANCE)
-            {
-                cosAngle = 0.0;
-                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
-            }
-
-            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
-                Math.Abs(sinAngle) <= GeoSharpMath.MAXTOLERANCE)
-            {
-                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
-                sinAngle = 0.0;
-            }
-
-            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
-            {
-                var vec = new Vector3{cosAngle, sinAngle};
-                if (vec.Length() > 0.0)
-                {
-                    var vecUnitized = vec.Unitize();
-                    cosAngle = vecUnitized[0];
-                    sinAngle = vecUnitized[1];
-                }
-                else
-                {
-                    throw new Exception("SinAngle and CosAngle are both zero");
-                }
-            }
-
-            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
-            {
-                cosAngle = 0.0;
-                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
-            }
-
-            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
-            {
-                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
-                sinAngle = 0.0;
-            }
+            GeoSharpMath.KillNoise(ref sinAngle, ref cosAngle);
 
             var unitizedAxis = axis.Unitize();
             var cross = Vector3.Cross(unitizedAxis, this);
@@ -383,6 +341,30 @@ namespace GeometrySharp.Geometry
             }
 
             return resultVector;
+        }
+
+        /// <summary>
+        /// Multiplies a 4x4 transformation matrix.
+        /// </summary>
+        /// <param name="v">A vector.</param>
+        /// <param name="t">A transformation.</param>
+        /// <returns>The transformed vector.</returns>
+        public static Vector3 operator *(Vector3 v, Transform t)
+        {
+            var x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
+            var y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3];
+            var z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3];
+            var w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3];
+
+            if (w > 0.0)
+            {
+                var w2 = 1.0 / w;
+                x *= w2;
+                y *= w2;
+                z *= w2;
+            }
+
+            return new Vector3 {x, y, z};
         }
 
         /// <summary>
