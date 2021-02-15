@@ -98,5 +98,35 @@ namespace GeometrySharp.Core
             var dim = homoPoints[0].Count - 1;
             return homoPoints.Select(pt => new Vector3(pt.GetRange(0, dim))).ToList();
         }
+
+        /// <summary>
+        /// Find the Tait-Byran angles (also loosely called Euler angles) for a rotation transformation.
+        /// yaw - angle (in radians) to rotate about the Z axis.
+        /// pitch -  angle(in radians) to rotate about the Y axis.
+        /// roll - angle(in radians) to rotate about the X axis.
+        /// </summary>
+        /// <param name="transform">Transformation to check.</param>
+        /// <returns>A dictionary collecting the 3 values.</returns>
+        public static Dictionary<string, double> GetYawPitchRoll(Transform transform)
+        {
+            var values = new Dictionary<string, double>();
+
+            if ((transform[1][0] == 0.0 && transform[0][0] == 0.0) ||
+                (transform[2][1] == 0.0 && transform[2][2] == 0.0) ||
+                (Math.Abs(transform[2][0]) >= 1.0))
+            {
+                values.Add("Pitch" , (transform[2][0] > 0) ? -Math.PI / 2.0 : Math.PI / 2.0);
+                values.Add("Yaw", Math.Atan2(-transform[0][1], transform[1][1]));
+                values.Add("Roll", 0.0);
+            }
+            else
+            {
+                values.Add("Pitch", Math.Atan2(transform[2][1], transform[2][2]));
+                values.Add("Yaw", Math.Atan2(transform[1][0], transform[0][0]));
+                values.Add("Roll", Math.Asin(-transform[2][0]));
+            }
+
+            return values;
+        }
     }
 }

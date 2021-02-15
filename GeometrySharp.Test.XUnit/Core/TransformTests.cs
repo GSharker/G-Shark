@@ -75,7 +75,9 @@ namespace GeometrySharp.Test.XUnit.Core
 
             var transform = Transform.Rotation(radiance, center);
 
-            _testOutput.WriteLine(transform.ToString());
+            var angles = LinearAlgebra.GetYawPitchRoll(transform);
+
+            GeoSharpMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharpMath.EPSILON);
         }
     }
 }
