@@ -67,6 +67,7 @@ namespace GeometrySharp.Test.XUnit.Core
             transform[3][3].Should().Be(1);
         }
 
+        // ToDo this test has to be finished extracting the axis.
         [Fact]
         public void It_Returns_A_Rotated_Transform_Matrix()
         {
@@ -75,7 +76,9 @@ namespace GeometrySharp.Test.XUnit.Core
 
             var transform = Transform.Rotation(radiance, center);
 
+            // Getting the angles.
             var angles = LinearAlgebra.GetYawPitchRoll(transform);
+            // Getting the direction.
 
             GeoSharpMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharpMath.EPSILON);
         }

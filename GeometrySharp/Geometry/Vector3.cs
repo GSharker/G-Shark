@@ -351,10 +351,25 @@ namespace GeometrySharp.Geometry
         /// <returns>The transformed vector.</returns>
         public static Vector3 operator *(Vector3 v, Transform t)
         {
-            var x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
-            var y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3];
-            var z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3];
-            var w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3];
+            var x = 0.0;
+            var y = 0.0;
+            var z = 0.0;
+            var w = 0.0;
+
+            if (v.Count == 4)
+            {
+                x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3] * v[3];
+                y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3] * v[3];
+                z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3] * v[3];
+                w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3] * v[3];
+
+                return new Vector3 { x, y, z, w};
+            }
+
+            x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
+            y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3];
+            z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3];
+            w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3];
 
             if (w > 0.0)
             {
@@ -543,7 +558,9 @@ namespace GeometrySharp.Geometry
         /// <returns>The vector in string format</returns>
         public override string ToString()
         {
-            return $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
+            return this.Count == 4 
+                ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}" 
+                : $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }
 }
