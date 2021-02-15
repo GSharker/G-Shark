@@ -15,7 +15,7 @@ namespace GeometrySharp.Core
         /// </summary>
         public Transform()
         {
-            this.AddRange(Matrix.Construct(4,4));
+            this.AddRange(Matrix.Construct(4, 4));
         }
 
         /// <summary>
@@ -33,6 +33,24 @@ namespace GeometrySharp.Core
                 [3] = { [3] = 1 },
             };
             return transform;
+        }
+
+        /// <summary>
+        /// Creates a transform matrix copying another transform.
+        /// </summary>
+        /// <param name="other">The transform to copy</param>
+        public static Transform Copy(Transform other)
+        {
+            var transformCopy = new Transform();
+            for (int i = 0; i < other.Count; i++)
+            {
+                for (int j = 0; j < other[0].Count; j++)
+                {
+                    transformCopy[i][j] = other[i][j];
+                }
+            }
+
+            return transformCopy;
         }
     }
 }

@@ -22,6 +22,20 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
+        public void It_Creates_A_Transform_By_Copying_Another_Transform()
+        {
+            var transform = new Transform {[0] = {[0] = 2}, [1] = {[0] = 2}};
+
+            var copyTransform = Transform.Copy(transform);
+
+            copyTransform.Should().BeEquivalentTo(transform);
+
+            transform[0][2] = 3;
+
+            copyTransform.Should().NotBeEquivalentTo(transform);
+        }
+
+        [Fact]
         public void It_Returns_A_Identity_Transform_Matrix()
         {
             var transform = Transform.Identity();
