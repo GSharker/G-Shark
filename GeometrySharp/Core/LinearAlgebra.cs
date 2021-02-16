@@ -128,5 +128,82 @@ namespace GeometrySharp.Core
 
             return values;
         }
+
+        /// <summary>
+        /// Find the rotation axis used in the transformation.
+        /// https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
+        /// </summary>
+        /// <param name="t">Transformation to check.</param>
+        /// <returns>The rotation axis used for the transformation.</returns>
+        public static Vector3 GetRotationAxis(Transform t)
+        {
+            var axis = Vector3.Unset;
+
+            if (Math.Abs(t[0][1] + t[1][0]) < GeoSharpMath.MINTOLERANCE || 
+                Math.Abs(t[0][2] + t[2][0]) < GeoSharpMath.MINTOLERANCE ||
+                Math.Abs(t[1][2] + t[2][1]) < GeoSharpMath.MINTOLERANCE)
+            {
+                double xx = (t[0][0] + 1) / 2;
+                double yy = (t[1][1] + 1) / 2;
+                double zz = (t[2][2] + 1) / 2;
+                double xy = (t[0][1] + t[1][0]) / 4;
+                double xz = (t[0][2] + t[2][0]) / 4;
+                double yz = (t[1][2] + t[2][1]) / 4;
+                if ((xx > yy) && (xx > zz))
+                { // m[0][0] is the largest diagonal term
+                    if (xx < GeoSharpMath.MINTOLERANCE)
+                    {
+                        axis[0] = 0;
+                        axis[1] = 0.7071;
+                        axis[2] = 0.7071;
+                    }
+                    else
+                    {
+                        axis[0] = Math.Sqrt(xx);
+                        axis[1] = xy / axis[0];
+                        axis[2] = xz / axis[0];
+                    }
+                }
+                else if (yy > zz)
+                { // m[1][1] is the largest diagonal term
+                    if (yy < GeoSharpMath.MINTOLERANCE)
+                    {
+                        axis[0] = 0.7071;
+                        axis[1] = 0;
+                        axis[2] = 0.7071;
+                    }
+                    else
+                    {
+                        axis[1] = Math.Sqrt(yy);
+                        axis[0] = xy / axis[1];
+                        axis[2] = yz / axis[1];
+                    }
+                }
+                else
+                { // m[2][2] is the largest diagonal term so base result on this
+                    if (zz < GeoSharpMath.MINTOLERANCE)
+                    {
+                        axis[0] = 0.7071;
+                        axis[1] = 0.7071;
+                        axis[2] = 0;
+                    }
+                    else
+                    {
+                        axis[2] = Math.Sqrt(zz);
+                        axis[0] = xz / axis[2];
+                        axis[1] = yz / axis[2];
+                    }
+                }
+                return axis; // return 180 deg rotation
+            }
+
+            var v = Math.Sqrt(Math.Pow(t[2][1] - t[1][2], 2) + Math.Pow(t[0][2] - t[2][0], 2) + Math.Pow(t[1][0] - t[0][1], 2));
+
+            axis[0] = (t[2][1] - t[1][2]) / v;
+            axis[1] = (t[0][2] - t[2][0]) / v;
+            axis[2] = (t[1][0] - t[0][1]) / v;
+
+            return axis;
+        }
     }
 }
