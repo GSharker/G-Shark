@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using GeometrySharp.Geometry;
+using Vector3 = GeometrySharp.Geometry.Vector3;
 
 namespace GeometrySharp.Core
 {
@@ -87,6 +89,14 @@ namespace GeometrySharp.Core
             return Rotation(Math.Sin(angle), Math.Cos(angle), Vector3.ZAxis, center);
         }
 
+        /// <summary>
+        /// Constructs a new rotation transformation with Sin and Cos angle, rotation center and rotation axis.
+        /// </summary>
+        /// <param name="sinAngle">Sin angle.</param>
+        /// <param name="cosAngle">Cos angle.</param>
+        /// <param name="axis">Axis direction.</param>
+        /// <param name="origin">Rotation center.</param>
+        /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
         internal static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Vector3 origin)
         {
             var sAngle = sinAngle;
@@ -122,6 +132,45 @@ namespace GeometrySharp.Core
             return transform;
         }
 
+        // ToDo add uniform scale transformation.
+
+        /// <summary>
+        /// Create non uniform scale transformation matrix with the origin as the fixed point.
+        /// </summary>
+        /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
+        /// <param name="factorX">Scale factor x direction.</param>
+        /// <param name="factorY">Scale factor y direction.</param>
+        /// <param name="factorZ">Scale factor z direction.</param>
+        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        public static Transform Scale(Vector3 anchorPoint, double factorX, double factorY, double factorZ)
+        {
+            var origin = new Vector3 {0.0, 0.0, 0.0};
+            var scale = Scale(factorX, factorY, factorZ);
+            if(anchorPoint.Equals(origin)) return scale;
+
+            var dir = anchorPoint - origin;
+            var t0 = Translation(Vector3.Reverse(dir));
+            var t1 = Translation(dir);
+
+            return t1 * scale * t0;
+        }
+
+        /// <summary>
+        /// Create non uniform scale transformation matrix with the origin as the fixed point.
+        /// </summary>
+        /// <param name="factorX">Scale factor x direction.</param>
+        /// <param name="factorY">Scale factor y direction.</param>
+        /// <param name="factorZ">Scale factor z direction.</param>
+        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        public static Transform Scale(double factorX, double factorY, double factorZ)
+        {
+            var tIdentity = Transform.Identity();
+            tIdentity[0][0] = factorX;
+            tIdentity[1][1] = factorY;
+            tIdentity[2][2] = factorZ;
+            return tIdentity;
+        }
+
         /// <summary>
         /// Creates a transform matrix copying another transform.
         /// </summary>
@@ -138,6 +187,37 @@ namespace GeometrySharp.Core
             }
 
             return transformCopy;
+        }
+
+        /// <summary>
+        /// Multiply two transformation matrix.
+        /// </summary>
+        /// <param name="t0">First transformation.</param>
+        /// <param name="t1">Second transformation.</param>
+        /// <returns>New transformation.</returns>
+        public static Transform operator *(Transform t0, Transform t1)
+        {
+            var t = new Transform
+            {
+                [0] = {[0] = t0[0][0] * t1[0][0] + t0[0][1] * t1[1][0] + t0[0][2] * t1[2][0] + t0[0][3] * t1[3][0]},
+                [0] = {[1] = t0[0][0] * t1[0][1] + t0[0][1] * t1[1][1] + t0[0][2] * t1[2][1] + t0[0][3] * t1[3][1]},
+                [0] = {[2] = t0[0][0] * t1[0][2] + t0[0][1] * t1[1][2] + t0[0][2] * t1[2][2] + t0[0][3] * t1[3][2]},
+                [0] = {[3] = t0[0][0] * t1[0][3] + t0[0][1] * t1[1][3] + t0[0][2] * t1[2][3] + t0[0][3] * t1[3][3]},
+                [1] = {[0] = t0[1][0] * t1[0][0] + t0[1][1] * t1[1][0] + t0[1][2] * t1[2][0] + t0[1][3] * t1[3][0]},
+                [1] = {[1] = t0[1][0] * t1[0][1] + t0[1][1] * t1[1][1] + t0[1][2] * t1[2][1] + t0[1][3] * t1[3][1]},
+                [1] = {[2] = t0[1][0] * t1[0][2] + t0[1][1] * t1[1][2] + t0[1][2] * t1[2][2] + t0[1][3] * t1[3][2]},
+                [1] = {[3] = t0[1][0] * t1[0][3] + t0[1][1] * t1[1][3] + t0[1][2] * t1[2][3] + t0[1][3] * t1[3][3]},
+                [2] = {[0] = t0[2][0] * t1[0][0] + t0[2][1] * t1[1][0] + t0[2][2] * t1[2][0] + t0[2][3] * t1[3][0]},
+                [2] = {[1] = t0[2][0] * t1[0][1] + t0[2][1] * t1[1][1] + t0[2][2] * t1[2][1] + t0[2][3] * t1[3][1]},
+                [2] = {[2] = t0[2][0] * t1[0][2] + t0[2][1] * t1[1][2] + t0[2][2] * t1[2][2] + t0[2][3] * t1[3][2]},
+                [2] = {[3] = t0[2][0] * t1[0][3] + t0[2][1] * t1[1][3] + t0[2][2] * t1[2][3] + t0[2][3] * t1[3][3]},
+                [3] = {[0] = t0[3][0] * t1[0][0] + t0[3][1] * t1[1][0] + t0[3][2] * t1[2][0] + t0[3][3] * t1[3][0]},
+                [3] = {[1] = t0[3][0] * t1[0][1] + t0[3][1] * t1[1][1] + t0[3][2] * t1[2][1] + t0[3][3] * t1[3][1]},
+                [3] = {[2] = t0[3][0] * t1[0][2] + t0[3][1] * t1[1][2] + t0[3][2] * t1[2][2] + t0[3][3] * t1[3][2]},
+                [3] = {[3] = t0[3][0] * t1[0][3] + t0[3][1] * t1[1][3] + t0[3][2] * t1[2][3] + t0[3][3] * t1[3][3]}
+            };
+
+            return t;
         }
 
         /// <summary>

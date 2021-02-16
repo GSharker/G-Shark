@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -67,7 +68,6 @@ namespace GeometrySharp.Test.XUnit.Core
             transform[3][3].Should().Be(1);
         }
 
-        // ToDo this test has to be finished extracting the axis.
         [Fact]
         public void It_Returns_A_Rotated_Transformed_Matrix()
         {
@@ -83,6 +83,12 @@ namespace GeometrySharp.Test.XUnit.Core
 
             GeoSharpMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharpMath.EPSILON);
             axis.Should().BeEquivalentTo(Vector3.ZAxis);
+        }
+
+        [Fact]
+        public void It_Returns_A_Scaled_Transformation_Matrix()
+        {
+
         }
     }
 }
