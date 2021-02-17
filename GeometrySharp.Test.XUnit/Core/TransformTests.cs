@@ -88,7 +88,16 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Scaled_Transformation_Matrix()
         {
+            var scale1 = Transform.Scale(new Vector3 {0, 0, 0}, 0.5);
+            var scale2 = Transform.Scale(new Vector3 { 10, 10, 0 }, 0.5);
 
+            scale1[0][0].Should().Be(0.5); scale2[0][0].Should().Be(0.5);
+            scale1[1][1].Should().Be(0.5); scale2[1][1].Should().Be(0.5);
+            scale1[2][2].Should().Be(0.5); scale2[2][2].Should().Be(0.5);
+            scale1[3][3].Should().Be(1.0); scale2[3][3].Should().Be(1.0);
+
+            scale2[0][3].Should().Be(5.0);
+            scale2[1][3].Should().Be(5.0);
         }
     }
 }

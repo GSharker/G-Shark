@@ -132,7 +132,16 @@ namespace GeometrySharp.Core
             return transform;
         }
 
-        // ToDo add uniform scale transformation.
+        /// <summary>
+        /// Create a uniform scale transformation matrix with the origin as the fixed point.
+        /// </summary>
+        /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
+        /// <param name="scaleFactor">Scale factor.</param>
+        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        public static Transform Scale(Vector3 anchorPoint, double scaleFactor)
+        {
+            return Scale(anchorPoint, scaleFactor, scaleFactor, scaleFactor);
+        }
 
         /// <summary>
         /// Create non uniform scale transformation matrix with the origin as the fixed point.
@@ -156,7 +165,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create non uniform scale transformation matrix with the origin as the fixed point.
+        /// Create non uniform scale transformation matrix with the anchor point in the origin.
         /// </summary>
         /// <param name="factorX">Scale factor x direction.</param>
         /// <param name="factorY">Scale factor y direction.</param>
