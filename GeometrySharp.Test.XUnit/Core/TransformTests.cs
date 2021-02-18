@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
-using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -98,6 +95,21 @@ namespace GeometrySharp.Test.XUnit.Core
 
             scale2[0][3].Should().Be(5.0);
             scale2[1][3].Should().Be(5.0);
+        }
+
+        [Fact]
+        public void It_Returns_A_Mirrored_Transformation_Matrix()
+        {
+            var pt = new Vector3{10,10,0};
+            var plane = new Plane(pt, Vector3.XAxis);
+
+            var transform = Transform.Reflection(plane);
+
+            transform[0][0].Should().Be(-1.0);
+            transform[1][1].Should().Be(1.0); 
+            transform[2][2].Should().Be(1.0); 
+            transform[3][3].Should().Be(1.0);
+            transform[0][3].Should().Be(20);
         }
     }
 }

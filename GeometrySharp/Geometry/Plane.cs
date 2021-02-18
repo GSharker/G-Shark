@@ -36,13 +36,28 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Get a XY plane.
+        /// </summary>
+        public static Plane PlaneXY => new Plane(new Vector3{0.0,0.0,0.0}, Vector3.ZAxis);
+
+        /// <summary>
+        /// Get a YZ plane.
+        /// </summary>
+        public static Plane PlaneYZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.XAxis);
+
+        /// <summary>
+        /// Get a XY plane.
+        /// </summary>
+        public static Plane PlaneXZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.YAxis);
+
+        /// <summary>
         /// The normal of the plan.
         /// </summary>
-        public Vector3 Normal { get; set; }
+        public Vector3 Normal { get; }
 
         /// <summary>
         /// The origin of the plane.
         /// </summary>
-        public Vector3 Origin { get; set; }
+        public Vector3 Origin { get; }
     }
 }

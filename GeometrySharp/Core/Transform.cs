@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
 using GeometrySharp.Geometry;
-using Vector3 = GeometrySharp.Geometry.Vector3;
 
 namespace GeometrySharp.Core
 {
+    // ToDo: ChangeBasis
+    // ToDo: Concatenate, maybe.
     public class Transform : List<IList<double>>
     {
         /// <summary>
@@ -227,6 +224,38 @@ namespace GeometrySharp.Core
             };
 
             return t;
+        }
+
+        /// <summary>
+        /// Create a transformation matrix to reflect about a plane.
+        /// </summary>
+        /// <param name="plane">The plane used to reflect.</param>
+        /// <returns>The mirror transformation matrix.</returns>
+        public static Transform Reflection(Plane plane)
+        {
+            Vector3 pt = plane.Origin;
+            Vector3 normal = plane.Normal;
+            Transform transform = Transform.Identity();
+
+            Vector3 unitizedN = normal.Unitize();
+            Vector3 translation = unitizedN * (2.0 * (unitizedN[0]*pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
+
+            transform[0][0] = 1 - 2.0 * unitizedN[0] * unitizedN[0];
+            transform[0][1] = - 2.0 * unitizedN[0] * unitizedN[1];
+            transform[0][2] = - 2.0 * unitizedN[0] * unitizedN[2];
+            transform[0][3] = translation[0];
+
+            transform[1][0] = - 2.0 * unitizedN[1] * unitizedN[0];
+            transform[1][1] = 1 - 2.0 * unitizedN[1] * unitizedN[1];
+            transform[1][2] = -2.0 * unitizedN[1] * unitizedN[2];
+            transform[1][3] = translation[1];
+
+            transform[2][0] = -2.0 * unitizedN[2] * unitizedN[0];
+            transform[2][1] = -2.0 * unitizedN[2] * unitizedN[1];
+            transform[2][2] = 1 - 2.0 * unitizedN[2] * unitizedN[2];
+            transform[2][3] = translation[2];
+
+            return transform;
         }
 
         /// <summary>
