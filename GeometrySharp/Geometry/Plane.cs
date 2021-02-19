@@ -18,6 +18,8 @@ namespace GeometrySharp.Geometry
         public Plane(Vector3 origin, Vector3 direction)
         {
             this.ZAxis = direction.Unitize();
+            this.XAxis = ZAxis.PerpendicularTo(Vector3.XAxis).Unitize();
+            this.YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
             this.Origin = origin;
         }
 
@@ -32,6 +34,8 @@ namespace GeometrySharp.Geometry
             this.Origin = pt1;
             var xDir = (pt2 - pt1).Unitize();
             var yDir = (pt3 - pt1).Unitize();
+            this.XAxis = xDir;
+            this.YAxis = yDir;
             this.ZAxis = Vector3.Cross(xDir, yDir).Unitize();
         }
 
@@ -60,9 +64,19 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Origin { get; }
 
+        /// <summary>
+        /// The XAxis of the plane.
+        /// </summary>
         public Vector3 XAxis { get; }
 
+        /// <summary>
+        /// The YAxis of the plane.
+        /// </summary>
         public Vector3 YAxis { get; }
+
+        /// <summary>
+        /// The ZAxis of the plane.
+        /// </summary>
         public Vector3 ZAxis { get; }
     }
 }

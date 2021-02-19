@@ -256,9 +256,16 @@ namespace GeometrySharp.Core
             return transform;
         }
 
+        // ToDo has to be finished.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static Transform ChangeBasis(Plane a, Plane b)
         {
-
+            return new Transform();
         }
 
         /// <summary>
