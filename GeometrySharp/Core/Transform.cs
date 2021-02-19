@@ -6,8 +6,6 @@ using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
-    // ToDo: ChangeBasis
-    // ToDo: Concatenate, maybe.
     public class Transform : List<IList<double>>
     {
         /// <summary>
@@ -256,6 +254,22 @@ namespace GeometrySharp.Core
             transform[2][3] = translation[2];
 
             return transform;
+        }
+
+        public static Transform ChangeBasis(Plane a, Plane b)
+        {
+
+        }
+
+        /// <summary>
+        /// Combines two transformations.
+        /// This is the same as the * operator.
+        /// </summary>
+        /// <param name="t">Transformation to combine.</param>
+        /// <returns>Transformation combined.</returns>
+        public Transform Combine(Transform t)
+        {
+            return this * t;
         }
 
         /// <summary>

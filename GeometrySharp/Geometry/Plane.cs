@@ -17,7 +17,7 @@ namespace GeometrySharp.Geometry
         /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Vector3 origin, Vector3 direction)
         {
-            this.Normal = direction;
+            this.ZAxis = direction.Unitize();
             this.Origin = origin;
         }
 
@@ -32,7 +32,7 @@ namespace GeometrySharp.Geometry
             this.Origin = pt1;
             var xDir = (pt2 - pt1).Unitize();
             var yDir = (pt3 - pt1).Unitize();
-            this.Normal = Vector3.Cross(xDir, yDir);
+            this.ZAxis = Vector3.Cross(xDir, yDir).Unitize();
         }
 
         /// <summary>
@@ -53,11 +53,16 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// The normal of the plan.
         /// </summary>
-        public Vector3 Normal { get; }
+        public Vector3 Normal => ZAxis;
 
         /// <summary>
         /// The origin of the plane.
         /// </summary>
         public Vector3 Origin { get; }
+
+        public Vector3 XAxis { get; }
+
+        public Vector3 YAxis { get; }
+        public Vector3 ZAxis { get; }
     }
 }
