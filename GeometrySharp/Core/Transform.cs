@@ -1,8 +1,7 @@
-﻿using System;
+﻿using GeometrySharp.Geometry;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
@@ -14,7 +13,7 @@ namespace GeometrySharp.Core
         /// </summary>
         public Transform()
         {
-            this.AddRange(Matrix.Construct(4, 4));
+            AddRange(Matrix.Construct(4, 4));
         }
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace GeometrySharp.Core
         /// <returns>Gets the identity transformation matrix.</returns>
         public static Transform Identity()
         {
-            var transform = new Transform
+            Transform transform = new Transform
             {
                 [0] = { [0] = 1 },
                 [1] = { [1] = 1 },
@@ -53,7 +52,7 @@ namespace GeometrySharp.Core
         /// <returns>A transformation matrix which moves the geometry along the vector.</returns>
         public static Transform Translation(double x, double y, double z)
         {
-            var transform = Identity();
+            Transform transform = Identity();
             transform[0][3] = x;
             transform[1][3] = y;
             transform[2][3] = z;
@@ -94,13 +93,13 @@ namespace GeometrySharp.Core
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
         internal static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Vector3 origin)
         {
-            var sAngle = sinAngle;
-            var cAngle = cosAngle;
+            double sAngle = sinAngle;
+            double cAngle = cosAngle;
 
             GeoSharpMath.KillNoise(ref sAngle, ref cAngle);
 
-            var transform = Identity();
-            var oneMinusCosAngle = 1 - cosAngle;
+            Transform transform = Identity();
+            double oneMinusCosAngle = 1 - cosAngle;
 
             transform[0][0] = axis[0] * axis[0] * oneMinusCosAngle + cAngle;
             transform[0][1] = axis[0] * axis[1] * oneMinusCosAngle - axis[2] * sAngle;
@@ -148,13 +147,16 @@ namespace GeometrySharp.Core
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
         public static Transform Scale(Vector3 anchorPoint, double factorX, double factorY, double factorZ)
         {
-            var origin = new Vector3 {0.0, 0.0, 0.0};
-            var scale = Scale(factorX, factorY, factorZ);
-            if(anchorPoint.Equals(origin)) return scale;
+            Vector3 origin = new Vector3 {0.0, 0.0, 0.0};
+            Transform scale = Scale(factorX, factorY, factorZ);
+            if(anchorPoint.Equals(origin))
+            {
+                return scale;
+            }
 
-            var dir = anchorPoint - origin;
-            var t0 = Translation(Vector3.Reverse(dir));
-            var t1 = Translation(dir);
+            Vector3 dir = anchorPoint - origin;
+            Transform t0 = Translation(Vector3.Reverse(dir));
+            Transform t1 = Translation(dir);
 
             return t1 * scale * t0;
         }
@@ -168,7 +170,7 @@ namespace GeometrySharp.Core
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
         public static Transform Scale(double factorX, double factorY, double factorZ)
         {
-            var tIdentity = Transform.Identity();
+            Transform tIdentity = Transform.Identity();
             tIdentity[0][0] = factorX;
             tIdentity[1][1] = factorY;
             tIdentity[2][2] = factorZ;
@@ -181,7 +183,7 @@ namespace GeometrySharp.Core
         /// <param name="other">The transform to copy</param>
         public static Transform Copy(Transform other)
         {
-            var transformCopy = new Transform();
+            Transform transformCopy = new Transform();
             for (int i = 0; i < other.Count; i++)
             {
                 for (int j = 0; j < other[0].Count; j++)
@@ -201,7 +203,7 @@ namespace GeometrySharp.Core
         /// <returns>New transformation.</returns>
         public static Transform operator *(Transform t0, Transform t1)
         {
-            var t = new Transform
+            Transform t = new Transform
             {
                 [0] = {[0] = t0[0][0] * t1[0][0] + t0[0][1] * t1[1][0] + t0[0][2] * t1[2][0] + t0[0][3] * t1[3][0]},
                 [0] = {[1] = t0[0][0] * t1[0][1] + t0[0][1] * t1[1][1] + t0[0][2] * t1[2][1] + t0[0][3] * t1[3][1]},
@@ -264,11 +266,11 @@ namespace GeometrySharp.Core
         /// <returns>A transformation matrix which projects geometry onto a specified plane.</returns>
         public static Transform PlanarProjection(Plane plane)
         {
-            var transform = Transform.Identity();
-            var x = plane.XAxis;
-            var y = plane.YAxis;
-            var pt = plane.Origin;
-            var q = new double[3];
+            Transform transform = Transform.Identity();
+            Vector3 x = plane.XAxis;
+            Vector3 y = plane.YAxis;
+            Vector3 pt = plane.Origin;
+            double[] q = new double[3];
 
             for (int i = 0; i < 3; i++)
             {
@@ -284,6 +286,46 @@ namespace GeometrySharp.Core
             }
 
             return transform;
+        }
+
+        /// <summary>
+        /// Create a transformation that orients a planeA to a planeB.
+        /// </summary>
+        /// <param name="a">The plane to orient from.</param>
+        /// <param name="b">The plane to orient to.</param>
+        /// <returns>The translation transformation.</returns>
+        public static Transform PlaneToPlane(Plane a, Plane b)
+        {
+            Vector3 pt0 = a.Origin;
+            Vector3 x0 = a.XAxis;
+            Vector3 y0 = a.YAxis;
+            Vector3 z0 = a.ZAxis;
+
+            Vector3 pt1 = b.Origin;
+            Vector3 x1 = b.XAxis;
+            Vector3 y1 = b.YAxis;
+            Vector3 z1 = b.ZAxis;
+
+            Vector3 origin = new Vector3 {0.0, 0.0, 0.0};
+
+            // Translating point pt0 to (0,0,0)
+            Transform translation0 = Translation(origin - pt0);
+            // Translating point (0,0,0) to pt1
+            Transform translation1 = Translation(pt1 - origin);
+            // Change x0,y0,z0 to world X,Y,Z
+            Transform map0 = Identity();
+            map0[0][0] = x0[0]; map0[0][1] = x0[1]; map0[0][2] = x0[2];
+            map0[1][0] = y0[0]; map0[1][1] = y0[1]; map0[1][2] = y0[2];
+            map0[2][0] = z0[0]; map0[2][1] = z0[1]; map0[2][2] = z0[2];
+            // Change world X,Y,Z to x1,y2,z3 
+            Transform map1 = Identity();
+            map1[0][0] = x1[0]; map1[0][1] = y1[0]; map1[0][2] = z1[0];
+            map1[1][0] = x1[1]; map1[1][1] = y1[1]; map1[1][2] = z1[1];
+            map1[2][0] = x1[2]; map1[2][1] = y1[2]; map1[2][2] = z1[2];
+
+            // Mapping x0 to x1, y0 to y1, z0 to z1
+            Transform map = map0 * map1;
+            return translation1 * map * translation0;
         }
 
         /// <summary>

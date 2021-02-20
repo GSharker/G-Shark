@@ -129,5 +129,23 @@ namespace GeometrySharp.Test.XUnit.Core
             transform[1][3].Should().BeApproximately(2.307692, GeoSharpMath.MAXTOLERANCE);
             transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAXTOLERANCE);
         }
+
+        [Fact]
+        public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
+        {
+            Vector3 origin = new Vector3 { 5, 0, 0 };
+            Vector3 dir = new Vector3 { -10, -15, 0 };
+            Plane plane = new Plane(origin, dir);
+
+            Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, plane);
+
+            transform[0][0].Should().BeApproximately(-0.832050, GeoSharpMath.MAXTOLERANCE);
+            transform[0][2].Should().BeApproximately(-0.554700, GeoSharpMath.MAXTOLERANCE);
+            transform[0][3].Should().BeApproximately(5.0, GeoSharpMath.MAXTOLERANCE);
+            transform[1][0].Should().BeApproximately(0.554700, GeoSharpMath.MAXTOLERANCE);
+            transform[1][2].Should().BeApproximately(-0.832050, GeoSharpMath.MAXTOLERANCE);
+            transform[2][1].Should().BeApproximately(-1.0, GeoSharpMath.MAXTOLERANCE);
+            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAXTOLERANCE);
+        }
     }
 }
