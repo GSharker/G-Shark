@@ -256,16 +256,34 @@ namespace GeometrySharp.Core
             return transform;
         }
 
-        // ToDo has to be finished.
         /// <summary>
-        /// 
+        /// Get the transformation that project to a plane.
+        /// The transformation maps a point to the point closest to the plane.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Transform ChangeBasis(Plane a, Plane b)
+        /// <param name="plane">Plane to project to.</param>
+        /// <returns>A transformation matrix which projects geometry onto a specified plane.</returns>
+        public static Transform PlanarProjection(Plane plane)
         {
-            return new Transform();
+            var transform = Transform.Identity();
+            var x = plane.XAxis;
+            var y = plane.YAxis;
+            var pt = plane.Origin;
+            var q = new double[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    transform[i][j] = x[i] * x[j] + y[i] * y[j];
+                }
+
+                q[i] = transform[i][0] * pt[0] + transform[i][1] * pt[1] + transform[i][2] * pt[2];
+
+                transform[3][i] = 0.0;
+                transform[i][3] = pt[i] - q[i];
+            }
+
+            return transform;
         }
 
         /// <summary>

@@ -448,7 +448,7 @@ namespace GeometrySharp.Geometry
             if (!(obj is Vector3)) return false;
 
             var vec = (Vector3)obj;
-            return IsAlmostEqualTo(vec);
+            return IsEqualRoundingDecimal(vec);
         }
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace GeometrySharp.Geometry
         /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
         public bool Equals(Vector3 other)
         {
-            return IsAlmostEqualTo(other);
+            return IsEqualRoundingDecimal(other);
         }
 
         /// <summary>
@@ -469,9 +469,17 @@ namespace GeometrySharp.Geometry
         /// True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise
         /// false.
         /// </returns>
-        public bool IsAlmostEqualTo(Vector3 v)
+        public bool IsEqualRoundingDecimal(Vector3 v, int numberOfDecimal = 0)
         {
-            return this.Select((val, i) => Math.Abs(val - v[i]))
+            Vector3 v1 = this;
+            Vector3 v2 = v;
+            if (numberOfDecimal != 0)
+            {
+                v1 = this.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
+                v2 = v.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
+            }
+
+            return v1.Select((val, i) => Math.Abs(val - v2[i]))
                 .All(val => val < GeoSharpMath.EPSILON);
         }
 

@@ -18,7 +18,7 @@ namespace GeometrySharp.Geometry
         public Plane(Vector3 origin, Vector3 direction)
         {
             this.ZAxis = direction.Unitize();
-            this.XAxis = ZAxis.PerpendicularTo(Vector3.XAxis).Unitize();
+            this.XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
             this.YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
             this.Origin = origin;
         }
@@ -42,7 +42,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Get a XY plane.
         /// </summary>
-        public static Plane PlaneXY => new Plane(new Vector3{0.0,0.0,0.0}, Vector3.ZAxis);
+        public static Plane PlaneXY => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.ZAxis);
 
         /// <summary>
         /// Get a YZ plane.
