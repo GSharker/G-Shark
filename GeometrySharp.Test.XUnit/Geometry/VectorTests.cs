@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
@@ -24,16 +23,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public static IEnumerable<object[]> ValidateVectors =>
             new List<object[]>
             {
-                new object[] { new Vector3() { 20d, -10d, 0d }, true},
+                new object[] { new Vector3 { 20d, -10d, 0d }, true},
                 new object[] { Vector3.Unset, false},
             };
 
         public static IEnumerable<object[]> VectorLengths =>
             new List<object[]>
             {
-                new object[] { new Vector3() { -18d, -21d, -17d }, 32.46536616149585},
+                new object[] { new Vector3 { -18d, -21d, -17d }, 32.46536616149585},
                 new object[] { Vector3.Unset, 0.0},
-                new object[] { new Vector3() { -0d, 0d, 0d }, 0.0}
+                new object[] { new Vector3 { -0d, 0d, 0d }, 0.0}
             };
 
         public static TheoryData<Vector3, double, Vector3> AmplifiedVectors =>
@@ -55,8 +54,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Radian_Angle_Between_Two_Vectors()
         {
-            Vector3 v1 = new Vector3(){20d,0d,0d};
-            Vector3 v2 = new Vector3(){-10d,15d,0d};
+            Vector3 v1 = new Vector3 { 20d, 0d, 0d };
+            Vector3 v2 = new Vector3 { -10d, 15d, 0d };
 
             double angle = Vector3.AngleBetween(v1, v2);
 
@@ -66,8 +65,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Reversed_Vector()
         {
-            Vector3 v1 = new Vector3() { 20d, 0d, 0d };
-            Vector3 vectorExpected = new Vector3() { -20d, 0d, 0d };
+            Vector3 v1 = new Vector3 { 20d, 0d, 0d };
+            Vector3 vectorExpected = new Vector3 { -20d, 0d, 0d };
 
             Vector3 reversedVector = Vector3.Reverse(v1);
 
@@ -84,9 +83,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Cross_Product_Between_Two_Vectors()
         {
-            Vector3 v1 = new Vector3() { -10d, 5d, 10d };
-            Vector3 v2 = new Vector3() { 10d, 15d, 5d };
-            Vector3 crossProductExpected = new Vector3() { -125d, 150d, -200d };
+            Vector3 v1 = new Vector3 { -10d, 5d, 10d };
+            Vector3 v2 = new Vector3 { 10d, 15d, 5d };
+            Vector3 crossProductExpected = new Vector3 { -125d, 150d, -200d };
 
             Vector3 crossProduct = Vector3.Cross(v1, v2);
 
@@ -96,8 +95,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Dot_Product_Between_Two_Vectors()
         {
-            Vector3 v1 = new Vector3() { -10d, 5d, 10d };
-            Vector3 v2 = new Vector3() { 10d, 15d, 5d };
+            Vector3 v1 = new Vector3 { -10d, 5d, 10d };
+            Vector3 v2 = new Vector3 { 10d, 15d, 5d };
 
             double dotProduct = Vector3.Dot(v1, v2);
 
@@ -107,7 +106,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Squared_Length_Of_A_Vector()
         {
-            Vector3 v1 = new Vector3() { 10d, 15d, 5d };
+            Vector3 v1 = new Vector3 { 10d, 15d, 5d };
 
             double squaredLength = v1.SquaredLength();
 
@@ -126,7 +125,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_Normalized_Vector()
         {
-            Vector3 v1 = new Vector3() { -18d, -21d, -17d };
+            Vector3 v1 = new Vector3 { -18d, -21d, -17d };
             Vector3 normalizedExpected = new Vector3() { -0.5544369932703277, -0.6468431588153823, -0.5236349380886428 };
 
             Vector3 normalizedVector = v1.Unitize();
@@ -178,9 +177,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Addiction_Between_Two_Vectors()
         {
-            var vec1 = new Vector3(){ 20, 0, 0 };
-            var vec2 = new Vector3(){ -10, 15, 5 };
-            var expectedVec = new Vector3() { 10, 15, 5 };
+            var vec1 = new Vector3 { 20, 0, 0 };
+            var vec2 = new Vector3 { -10, 15, 5 };
+            var expectedVec = new Vector3 { 10, 15, 5 };
 
             (vec1 + vec2).Should().BeEquivalentTo(expectedVec);
         }
@@ -188,9 +187,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Subtraction_Between_Two_Vectors()
         {
-            var vec1 = new Vector3() { 20, 0, 0 };
-            var vec2 = new Vector3() { -10, 15, 5 };
-            var expectedVec = new Vector3() { 30, -15, -5 };
+            var vec1 = new Vector3 { 20, 0, 0 };
+            var vec2 = new Vector3 { -10, 15, 5 };
+            var expectedVec = new Vector3 { 30, -15, -5 };
 
             (vec1 - vec2).Should().BeEquivalentTo(expectedVec);
         }
@@ -198,17 +197,40 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Multiplication_Between_Two_Vectors()
         {
-            var vec = new Vector3() { -10, 15, 5 };
-            var expectedVec = new Vector3() { -70, 105, 35 };
+            var vec = new Vector3 { -10, 15, 5 };
+            var expectedVec = new Vector3 { -70, 105, 35 };
 
             (vec * 7).Should().BeEquivalentTo(expectedVec);
         }
 
         [Fact]
+        public void Multiply_Between_Vector_And_Matrix_Throws_An_Exception_If_Vector_And_Matrix_Are_Not_Compatible()
+        {
+            var vec = new Vector3 { -10, 15, 5 };
+            var matrix = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 } };
+
+            Func<Vector3> func = () => vec * matrix;
+
+            func.Should().Throw<Exception>().WithMessage("Non-conformable matrix and vector");
+        }
+
+        [Fact]
+        public void It_Returns_A_Vector_Transform_By_A_Matrix()
+        {
+            var vec = new Vector3 { 1, 3 };
+            var matrix = new Matrix { new List<double> { 1, 0 }, new List<double> { 0, -1 } };
+            var expectedVec = new Vector3 { 1, -3 };
+
+            var transformedVector = vec * matrix;
+
+            transformedVector.Should().BeEquivalentTo(expectedVec);
+        }
+
+        [Fact]
         public void It_Returns_The_Division_Between_Two_Vectors()
         {
-            var vec = new Vector3() { -10, 15, 5 };
-            var expectedVec = new Vector3() { -1.428571, 2.142857, 0.714286 };
+            var vec = new Vector3 { -10, 15, 5 };
+            var expectedVec = new Vector3{ -1.428571, 2.142857, 0.714286 };
 
             var divisionResult = vec / 7;
 
@@ -218,8 +240,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_True_If_Vectors_Are_Equal()
         {
-            var vec1 = new Vector3() { 5.982099, 5.950299, 0 };
-            var vec2 = new Vector3() { 5.982099, 5.950299, 0 };
+            var vec1 = new Vector3 { 5.982099, 5.950299, 0 };
+            var vec2 = new Vector3 { 5.982099, 5.950299, 0 };
 
             (vec1 == vec2).Should().BeTrue();
         }
@@ -227,8 +249,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void DistanceTo_Throws_An_Exception_If_The_Two_Vector_Have_Different_Length()
         {
-            var vec1 = new Vector3() { -10, 15, 5 };
-            var vec2 = new Vector3() { 10, 15 };
+            var vec1 = new Vector3 { -10, 15, 5 };
+            var vec2 = new Vector3 { 10, 15 };
 
             Func<object> funcResult = () => vec1.DistanceTo(vec2);
 
@@ -238,8 +260,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_DistanceTo_TwoVectors()
         {
-            var vec1 = new Vector3() { -20, 15, 5 };
-            var vec2 = new Vector3() { 10, 0, 15 };
+            var vec1 = new Vector3 { -20, 15, 5 };
+            var vec2 = new Vector3 { 10, 0, 15 };
 
             var distance = vec1.DistanceTo(vec2);
 
@@ -249,8 +271,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Checks_If_Vectors_Are_Perpendicular()
         {
-            var vec = new Vector3{ -7, 10, -5 };
-            var other1 = new Vector3{ 10, 7, 0 };
+            var vec = new Vector3 { -7, 10, -5 };
+            var other1 = new Vector3 { 10, 7, 0 };
             var other2 = Vector3.YAxis;
 
             vec.IsPerpendicularTo(other1).Should().BeTrue();
@@ -260,8 +282,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
         {
-            var line = new Line(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 10, 20, 0 };
+            var line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
+            Vector3 pt = new Vector3 { 10, 20, 0 };
             double distanceExpected = 2.7735009811261464;
 
             double distance = pt.DistanceTo(line);
@@ -274,7 +296,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Checks_If_A_Point_Lies_On_A_Plane()
         {
             Plane plane = new Plane(new Vector3 { 30, 45, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3() { 26.565905, 47.289396, 0.0 };
+            Vector3 pt = new Vector3 { 26.565905, 47.289396, 0.0 };
 
             pt.IsPointOnPlane(plane, 0.001).Should().BeTrue();
         }
@@ -282,9 +304,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Perpendicular_Vector()
         {
-            var vector = new Vector3 {-7, 10, -5};
-            var tempVec = new Vector3 {0, 1, 0};
-            var vectorExpected = new Vector3 {10, 7, 0};
+            var vector = new Vector3 { -7, 10, -5 };
+            var tempVec = new Vector3 { 0, 1, 0 };
+            var vectorExpected = new Vector3 { 10, 7, 0 };
 
             var perVector = tempVec.PerpendicularTo(vector);
 

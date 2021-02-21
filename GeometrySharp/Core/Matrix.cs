@@ -1,11 +1,9 @@
-﻿using System;
+﻿using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry;
 
-// ToDo this class has to be tested.
-// ToDo this class has to be commented on all of the parts.
-// ToDo remove code that is not necessary.
 namespace GeometrySharp.Core
 {
     /// <summary>
@@ -15,318 +13,478 @@ namespace GeometrySharp.Core
     public class Matrix : List<IList<double>>
     {
         /// <summary>
-        /// Main constructor.
+        /// Initialize an empty matrix.
         /// </summary>
         public Matrix()
         {
-
         }
 
         /// <summary>
-        /// Multiply a `Matrix` by a constant.
+        /// Constructs a matrix by given number of rows and columns.
+        /// All the parameters are set to zero.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Muliplication(double a, Matrix b)
+        /// <param name="row">A positive integer, for the number of rows.</param>
+        /// <param name="column">A positive integer, for the number of columns.</param>
+        public static Matrix Construct(int row, int column)
         {
-            Matrix r = new Matrix();
-            foreach (var l in b)
-                r.Add((Vector3)l * a);
-            return r;
-        }
-
-        /// <summary>
-        /// Multiply two matrices assuming they are of compatible dimensions.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Multiplication(Matrix x, Matrix y)
-        {
-            var p = x.Count();
-            var q = y.Count();
-            var r = y[0].Count();
-
-            var ret = new Matrix();
-            var i = p - 1;
-            var j = 0;
-            var k = 0;
-
-            while (i >= 0)
+            Matrix tempMatrix = new Matrix();
+            if (row == 0 || column == 0)
             {
-                var foo = new Vector3();
-                var bar = x[i];
-
-                k = r - 1;
-                while (k >= 0)
-                {
-                    var woo = bar[q - 1] * y[q - 1][k];
-
-                    j = q - 2;
-                    while (j >= 1)
-                    {
-                        var i0 = j - 1;
-                        woo += bar[j] * y[j][k] + bar[i0] * y[i0][k];
-                        j -= 2;
-                    }
-                    if (j == 0) { woo += bar[0] * y[0][k]; }
-                    foo[k] = woo;
-                    k--;
-                }
-                ret[i] = foo;
-                i--;
+                throw new Exception("Matrix must be at least one row or column");
             }
-            return ret;
 
+            for (int i = 0; i < column; i++)
+            {
+                List<double> tempRow = Sets.RepeatData(0.0, row);
+                tempMatrix.Add(tempRow);
+            }
+
+            return tempMatrix;
         }
 
         /// <summary>
-        /// Add two matrices
+        /// Creates an identity matrix of a given size.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Addition(Matrix a, Matrix b)
-        {
-            Matrix r = new Matrix();
-            for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i]+(Vector3)b[i]);
-            return r;
-        }
-
-        /// <summary>
-        /// Divide each of entry of a Matrix by a constant
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Division(Matrix a, double b)
-        {
-            Matrix r = new Matrix();
-            for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i]/ b);
-            return r;
-        }
-
-        /// <summary>
-        /// Subtract two matrices
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Matrix Subtraction(Matrix a, Matrix b)
-        {
-            Matrix r = new Matrix();
-            for (int i = 0; i < a.Count; i++)
-                r.Add((Vector3)a[i] - (Vector3)b[i]);
-            return r;
-        }
-        /// <summary>
-        /// Multiply a `Matrix` by a `Vector3`
-        /// </summary>
-        /// <param name="a">The transformation matrix.</param>
-        /// <param name="b">The vector to transform.</param>
-        /// <returns>The transformed vector.</returns>
-        public static Vector3 Dot(Matrix a, Vector3 b)
-        {
-            if(b.Count != a[0].Count)
-                throw new ArgumentOutOfRangeException(nameof(b), "Vector3 and Matrix must have the same dimension.");
-            Vector3 r = new Vector3();
-            for (int i = 0; i < a.Count; i++)
-                r.Add(Vector3.Dot(new Vector3(a[i]), b));
-            return r;
-        }
-
-        /// <summary>
-        /// Build an identity matrix of a given size
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public static Matrix Identity(int n)
+        /// <param name="size">The size of the matrix.</param>
+        /// <returns>Identity matrix of the given size.</returns>
+        public static Matrix Identity(int size)
         {
             Matrix m = new Matrix();
-            var zeros = Vector3.Zero2d(n, n);
-            for (int i = 0; i < n; i++)
+            List<Vector3> zeros = Vector3.Zero2d(size, size);
+            for (int i = 0; i < size; i++)
             {
                 zeros[i][i] = 1.0;
-                m.Add(zeros[i].ToList());
+                m.Add(zeros[i]);
             }
             return m;
         }
 
         /// <summary>
-        /// Transpose a matrix
+        /// Gets a value indicating whether this matrix is valid.
+        /// Matrix is valid when has at least one column and one row and rows have at least 2 elements.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static Matrix Transpose(Matrix a)
+        /// <returns>True if it is a valid matrix.</returns>
+        public bool IsValid()
         {
-            if (a.Count == 0) return null;
-            Matrix t = new Matrix();
-            var rows = a.Count;
-            var columns = a[0].Count;
-            for (var c = 0; c < columns; c++)
-            {
-                var rr = new List<double>();
-                for (var r = 0; r < rows; r++)
-                {
-                    rr.Add(a[r][c]);
-                }
-                t.Add(rr);
-            }
-            return t;
+            return Count > 0 && this.All(x => x.Count > 1);
         }
 
+        /// <summary>
+        /// Multiply a matrix by a constant.
+        /// </summary>
+        /// <param name="m">Matrix has to be multiply.</param>
+        /// <param name="a">Value to operate the multiplication.</param>
+        /// <returns>Matrix multiply by a constant.</returns>
+        public static Matrix operator *(Matrix m, double a)
+        {
+            Matrix result = new Matrix();
+            foreach (IList<double> row in m)
+            {
+                result.Add(row.Select(val => val * a).ToList());
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Multiply two matrices assuming they are of compatible dimensions.
+        /// </summary>
+        /// <param name="a">First matrix.</param>
+        /// <param name="b">Second matrix.</param>
+        /// <returns>The product matrix.</returns>
+        public static Matrix operator *(Matrix a, Matrix b)
+        {
+            if (!a.IsValid() || !b.IsValid()) // this pass is not check, because we check for IsValid in another test.
+            {
+                throw new Exception("Either first matrix or second matrix are Invalid.");
+            }
+
+            int aRows = a.Count;
+            int aCols = a[0].Count;
+
+            int bRows = b.Count;
+            int bCols = b[0].Count;
+
+            if(aCols != bRows)
+            {
+                throw new Exception("Non-conformable matrices.");
+            }
+
+            Matrix resultMatrix = new Matrix();
+
+            for (int i = 0; i < aRows; ++i)
+            {
+                List<double> tempRow = Sets.RepeatData(0.0, bCols);
+                for (int j = 0; j < bCols; ++j)
+                {
+                    double value = 0.0;
+                    for (int k = 0; k < aCols; ++k)
+                    {
+                        value += a[i][k] * b[k][j];
+                    }
+                    tempRow[j] = value;
+                }
+                resultMatrix.Add(tempRow);
+            }
+
+            return resultMatrix;
+        }
+
+        /// <summary>
+        /// Add two matrices.
+        /// </summary>
+        /// <param name="a">First Matrix.</param>
+        /// <param name="b">Second Matrix.</param>
+        /// <returns>The sum matrix.</returns>
+        public static Matrix operator +(Matrix a, Matrix b)
+        {
+            if (!a.IsValid() || !b.IsValid())
+            {
+                throw new Exception("Either first matrix of second matrix are Invalid.");
+            }
+
+            int aRows = a.Count;
+            int aCols = a[0].Count;
+
+            int bRows = b.Count;
+            int bCols = b[0].Count;
+
+            if (aCols != bCols || aRows != bRows)
+            {
+                throw new Exception("Non-conformable matrices.");
+            }
+
+            Matrix result = new Matrix();
+            for (int i = 0; i < a.Count; i++)
+            {
+                result.Add((a[i].Select((val, j) => val + b[i][j]).ToList()));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Transpose a matrix.
+        /// This is like swapping rows with columns.
+        /// </summary>
+        /// <returns>The matrix transposed.</returns>
+        public Matrix Transpose()
+        {
+            if (Count == 0)
+            {
+                return null;
+            }
+
+            Matrix transposeMatrix = new Matrix();
+            int rows = Count;
+            int columns = this[0].Count;
+            for (int c = 0; c < columns; c++)
+            {
+                List<double> rr = new List<double>();
+                for (int r = 0; r < rows; r++)
+                {
+                    rr.Add(this[r][c]);
+                }
+                transposeMatrix.Add(rr);
+            }
+            return transposeMatrix;
+        }
+
+        public Matrix Inverse()
+        {
+            return new Matrix();
+        }
+
+        /// <summary>
+        /// Creates a copy.
+        /// </summary>
+        /// <param name="matrix">Matrix has to be duplicated.</param>
+        /// <returns>Copied matrix.</returns>
+        public static Matrix Duplicate(Matrix matrix)
+        {
+
+            Matrix copy = Matrix.Construct(matrix[0].Count, matrix.Count);
+
+            for (int i = 0; i < matrix.Count; ++i)
+            {
+                for (int j = 0; j < matrix[i].Count; ++j)
+                {
+                    copy[i][j] = matrix[i][j];
+                }
+            }
+            return copy;
+        }
+
+        /// <summary>
+        /// Returns if the matrix is non-singular (i.e. invertible).
+        /// </summary>
+        /// <param name="matrix">Matrix to check.</param>
+        /// <returns>True if is Nonsingular.</returns>
+        private static bool IsNonSingular(Matrix matrix)
+        {
+            for (int i = 0; i < matrix.Count; i++)
+            {
+                if (Math.Abs(matrix[i][i]) < GeoSharpMath.EPSILON)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// This routine uses Doolittle's method to solve the linear equation Ax = B.
+        /// This routine is called after the matrix A has been decomposed.
+        /// The solution proceeds by solving the linear equation Ly = B for y and,
+        /// subsequently solving the linear equation Ux = y for x.
+        /// </summary>
+        /// <param name="LuMatrix">Decomposed matrix in lower and upper triangle.</param>
+        /// <param name="permutation">The permutation row, or pivot row interchanged with row i.</param>
+        /// <param name="b">Column vector.</param>
+        /// <returns>The solution of the equation Ax = B is a vector.</returns>
+        public static Vector3 Solve(Matrix LuMatrix, int[] permutation, Vector3 b)
+        {
+            int rows = LuMatrix.Count;
+            int cols = LuMatrix[0].Count;
+
+            if (rows != cols)
+            {
+                throw new Exception("Attempt to decompose a non-squared matrix");
+            }
+
+            if (rows != b.Count)
+            {
+                throw new Exception("The matrix should have the same number of rows as the decomposition b parameter.");
+            }
+
+            if (!IsNonSingular(LuMatrix))
+            {
+                throw new Exception("Matrix is singular.");
+            }
+
+            int n = LuMatrix.Count;
+            double[] bCopy = new double[n];
+
+            /*
+            verbNurbs.
+            var bCopy = new List<double>(b);
+            var i = n - 1;
+            while (i != -1)
+            {
+                bCopy[i] = b[i];
+                i--;
+            }
+            */
+
+            for (int i = 0; i < b.Count; i++)
+            {
+                bCopy[i] = b[permutation[i]];
+            }
+
+            // Solve L*Y = B(piv,:)
+            int t = 0;
+            while (t < n)
+            {
+                /*
+                verbNurbs.
+                int pAtt = permutation[t];
+                if (pAtt != t)
+                {
+                    var tempP = bCopy[t];
+                    bCopy[t] = bCopy[pAtt];
+                    bCopy[pAtt] = tempP;
+                }
+                */
+
+                int j = 0;
+                while (j < t)
+                {
+                    bCopy[t] -= bCopy[j] * LuMatrix[t][j];
+                    j++;
+                }
+
+                t++;
+            }
+
+            // Solve U*X = Y;
+            int r = n - 1;
+            while (r >= 0)
+            {
+                int j = r + 1;
+                while (j < n)
+                {
+                    bCopy[r] -= bCopy[j] * LuMatrix[r][j];
+                    j++;
+                }
+
+                bCopy[r] /= LuMatrix[r][r];
+                r--;
+            }
+
+            return bCopy.ToVector();
+        }
+
+        /// <summary>
+        /// This routine uses Doolittle's method with partial pivoting to decompose the n x n matrix A,
+        /// into a unit lower triangular matrix L and an upper triangular matrix U and P is a permutation array
+        /// such that PA = LU. With this method you can always have a LU decomposition, rather than LU factorization.
+        /// The LU decomposition with pivoting always exists, even if the matrix is singular, so the constructor will never fail.
+        /// The primary use of the LU decomposition is in the solution of square systems of simultaneous linear equations.
+        /// The LUP decomposition provides a more robust method of solving linear systems than LU decomposition without pivoting, and it is approximately the same cost.
+        /// This will fail if non singular.
+        /// </summary>
+        /// <param name="m">Matrix has to be decomposed.</param>
+        /// <param name="permutation">The row pivot information is in one-dimensional array.</param>
+        /// <returns>The matrix representing the L matrix and U matrix together.</returns>
+        public static Matrix Decompose(Matrix m, out int[] permutation)
+        {
+            // http://www.mymathlib.com/c_source/matrices/linearsystems/doolittle_pivot.c
+            // https://github.com/sloisel/numeric/blob/master/src/numeric.js
+            // https://github.com/accord-net/framework/blob/development/Sources/Accord.Math/Decompositions/LuDecomposition.cs
+
+            int rows = m.Count;
+            int cols = m[0].Count;
+
+            if(rows != cols)
+            {
+                throw new Exception("Attempt to decompose a non-squared matrix");
+            }
+
+            int n = rows;
+            int[] tempPermutation = new int[n];
+            Matrix copyMatrix = Matrix.Duplicate(m);
+
+            for (int i = 0; i < n; ++i) { tempPermutation[i] = i; } // Populate the permutation.
+
+            int k = 0;
+            while (k < n)
+            {
+                int permutationValueK = k;
+                double maxColumnValue = Math.Abs(copyMatrix[k][k]); // Find largest value in the column.
+
+                // Find the pivot row.
+                int j = k + 1;
+                while (j < n)
+                {
+                    double absValueAt = Math.Abs(copyMatrix[j][k]);
+                    if (maxColumnValue < absValueAt)
+                    {
+                        maxColumnValue = absValueAt;
+                        permutationValueK = j;
+                    }
+                    j++;
+                }
+
+                /*
+                 * verbNurbs.
+                 * tempPermutation[k] = permutationValueK;
+                 */
+
+                if (maxColumnValue < GeoSharpMath.EPSILON)
+                {
+                    throw new Exception("Failed, matrix is degenerate.");
+                }
+
+                // If the pivot row differs from the current row, then
+                // interchange the two rows.
+                if (permutationValueK != k)
+                {
+                    IList<double> copyRow = copyMatrix[permutationValueK];
+                    copyMatrix[permutationValueK] = copyMatrix[k];
+                    copyMatrix[k] = copyRow;
+
+                    int tempPermutationVal = tempPermutation[permutationValueK];
+                    tempPermutation[permutationValueK] = tempPermutation[k];
+                    tempPermutation[k] = tempPermutationVal;
+                }
+
+                // Find the lower triangular matrix elements.
+                int i = k + 1;
+                while (i < n)
+                {
+                    copyMatrix[i][k] /= copyMatrix[k][k];
+                    j = k + 1;
+                    while (j < n - 1)
+                    {
+                        copyMatrix[i][j] -= copyMatrix[i][k] * copyMatrix[k][j];
+                        j++;
+                        copyMatrix[i][j] -= copyMatrix[i][k] * copyMatrix[k][j];
+                        j++;
+                    }
+
+                    if (j == n - 1)
+                    {
+                        copyMatrix[i][j] -= copyMatrix[i][k] * copyMatrix[k][j];
+                    }
+
+                    i++;
+                }
+
+                k++;
+            }
+
+            permutation = tempPermutation;
+            return copyMatrix;
+        }
+
+        public static Matrix Inverse(Matrix matrix)
+        {
+            Matrix matrixLu = Decompose(matrix, out int[] permutation);
+
+            if(!IsNonSingular(matrixLu))
+            {
+                throw new Exception("Matrix is singular");
+            }
+
+            int rows = matrixLu.Count;
+
+            Matrix matrixResult = Matrix.Construct(rows, rows);
+
+            for (int i = 0; i < rows; i++)
+            {
+                int k = permutation[i];
+                matrixResult[i][k] = 1;
+            }
+
+            // Solve L*Y = B(piv,:)
+            for (int k = 0; k < rows; k++)
+            {
+                for (int i = k + 1; i < rows; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        matrixResult[i][j] -= matrixResult[k][j] * matrixLu[i][k];
+                    }
+                }
+            }
+
+            // Solve U*X = I;
+            for (int k = rows - 1; k >= 0; k--)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    matrixResult[k][j] /= matrixLu[k][k];
+                }
+
+                for (int i = 0; i < k; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        matrixResult[i][j] -= matrixResult[k][j] * matrixLu[i][k];
+                    }
+                }
+            }
+
+            return matrixResult;
+        }
+
+        /// <summary>
+        /// Constructs the string representation the matrix.
+        /// </summary>
+        /// <returns>Text string.</returns>
         public override string ToString()
         {
             return string.Join("\n", this.Select(first => $"({string.Join(",", first)})"));
         }
     }
 }
-
-//        /// <summary>
-//        /// Solve a system of equations
-//        /// </summary>
-//        /// <param name="a"></param>
-//        /// <param name="b"></param>
-//        /// <returns></returns>
-//        public static Vector3 Solve(Matrix a, Vector3 b) => LUSolve(LU(a), b);
-
-//        /// <summary>
-//        /// Based on methods from numeric.js
-//        /// </summary>
-//        /// <param name="LUP"></param>
-//        /// <param name="b"></param>
-//        /// <returns></returns>
-//        public static Vector3 LUSolve(LUDecomp LUP, Vector3 b)
-//        {
-//            var LU = LUP.LU;
-//            var n = LU.Count;
-//            var x = b;
-//            var P = LUP.P;
-
-//            var i = n - 1;
-//            while (i != -1)
-//            {
-//                x[i] = b[i];
-//                --i;
-//            }
-
-//            i = 0;
-//            while (i < n)
-//            {
-//                var Pi = P[i];
-//                if (P[i] != i)
-//                {
-//                    var tmp = x[i];
-//                    x[i] = x[Pi];
-//                    x[Pi] = tmp;
-//                }
-
-//                var LUi = LU[i];
-//                var j = 0;
-//                while (j < i)
-//                {
-//                    x[i] -= x[j] * LUi[j];
-//                    ++j;
-//                }
-//                ++i;
-//            }
-
-//            i = n - 1;
-//            while (i >= 0)
-//            {
-//                var LUi = LU[i];
-//                var j = i + 1;
-//                while (j < n)
-//                {
-//                    x[i] -= x[j] * LUi[j];
-//                    ++j;
-//                }
-
-//                x[i] /= LUi[i];
-//                --i;
-//            }
-
-//            return x;
-//        }
-
-//        /// <summary>
-//        /// Based on methods from numeric.js
-//        /// </summary>
-//        /// <param name="a"></param>
-//        /// <returns></returns>
-//        public static LUDecomp LU(Matrix a) {
-//            var n = a.Count;
-//            var n1 = n - 1;
-//            var p = new List<int>();
-
-//            var k = 0;
-//            while (k < n)
-//            {
-//                var Pk = k;
-//                var Ak = a[k];
-//                var max = GeoSharpMath.Abs(Ak[k]);
-
-//                var j = k + 1;
-//                while (j < n)
-//                {
-//                    var absAjk = GeoSharpMath.Abs(a[j][k]);
-//                    if (max < absAjk)
-//                    {
-//                        max = absAjk;
-//                        Pk = j;
-//                    }
-//                    ++j;
-//                }
-//                p[k] = Pk;
-
-//                if (Pk != k)
-//                {
-//                    a[k] = a[Pk];
-//                    a[Pk] = Ak;
-//                    Ak = a[k];
-//                }
-
-//                var Akk = Ak[k];
-
-//                var i = k + 1;
-//                while (i < n)
-//                {
-//                    a[i][k] /= Akk;
-//                    ++i;
-//                }
-
-//                i = k + 1;
-//                while (i < n)
-//                {
-//                    var Ai = a[i];
-//                    j = k + 1;
-//                    while (j < n1)
-//                    {
-//                        Ai[j] -= Ai[k] * Ak[j];
-//                        ++j;
-//                        Ai[j] -= Ai[k] * Ak[j];
-//                        ++j;
-//                    }
-//                    if (j == n1) Ai[j] -= Ai[k] * Ak[j];
-//                    ++i;
-//                }
-
-//                ++k;
-//            }
-//            return new LUDecomp(a, p);
-//        }
-//    }
-
-//    public class LUDecomp
-//    {
-//        public Matrix LU { get; set; }
-//        public List<int> P { get; set; }
-//        public LUDecomp(Matrix lU, List<int> p)
-//        {
-//            LU = lU;
-//            P = p;
-//        }
-//    }

@@ -21,9 +21,8 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Vector3 initialized by a list of values.
-        /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">List of values.</param>
         public Vector3(IEnumerable<double> values)
         {
             AddRange(values);
@@ -353,6 +352,37 @@ namespace GeometrySharp.Geometry
         public static Vector3 operator *(Vector3 v, double a)
         {
             return v.Select(val => val * a).ToVector();
+        }
+
+        /// <summary>
+        /// Multiplying an n x m matrix by a m x 1.
+        /// Transform the vector.
+        /// </summary>
+        /// <param name="v">Vector to transform.</param>
+        /// <param name="m">Matrix to multiply.</param>
+        /// <returns>Vector resulting of multiplying an n x m matrix by a m x 1.</returns>
+        public static Vector3 operator *(Vector3 v, Matrix m)
+        {
+            var mRows = m.Count;
+            var mCols = m[0].Count;
+
+            if(mCols != v.Count)
+                throw new Exception("Non-conformable matrix and vector");
+
+            var resultVector = Vector3.Zero1d(mRows);
+
+            for (int i = 0; i < mRows; i++)
+            {
+                var tempValue = 0.0;
+                for (int j = 0; j < mCols; j++)
+                {
+                    tempValue += m[i][j] * v[j];
+                }
+
+                resultVector[i] = tempValue;
+            }
+
+            return resultVector;
         }
 
         /// <summary>
