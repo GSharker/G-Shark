@@ -3,37 +3,48 @@ using System;
 using System.Collections.Generic;
 using GeometrySharp.Core;
 
-// ToDo this class need to be tested.
+/// You can find further documentation for this type at
+/// [https://github.com/jdonaldson/promhx](https://github.com/jdonaldson/promhx).
 namespace GeometrySharp.Geometry
 {
     /// <summary>
     /// A simple data structure representing a NURBS surface.
     /// NurbsSurfaceData does no checks for legality. You can use <see cref="GeometrySharp.Evaluation.Check"/> for that.
     /// </summary>
-    public class NurbsSurface : Serializable<NurbsSurface>
+    public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>, ISurface
     {
-        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints)
+        /// <summary>
+        /// Construct a NurbsSurface by degree, knots, control points, weights
+        /// </summary>
+        /// <param name="degreeU">The degree in the U direction</param>
+        /// <param name="degreeV">The degree in the V direction</param>
+        /// <param name="knotsU">The knot array in the U direction</param>
+        /// <param name="knotsV">The knot array in the V direction</param>
+        /// <param name="controlPoints">Two dimensional array of points</param>
+        /// <param name="weights">Two dimensional array of weight values</param>
+        /// <return>A new NurbsSurface</return>
+        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
         {
 
-            //if (data.ControlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
-            //if (data.DegreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
-            //if (data.DegreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
-            //if (data.KnotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
-            //if (data.KnotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
-
-            //if (data.KnotsU.Count != data.ControlPoints.Count + data.DegreeU + 1)
-            //    throw new ArgumentException("controlPointsU.length + degreeU + 1 must equal knotsU.length!");
-            //if (data.KnotsV.Count != data.ControlPoints[0].Count + data.DegreeV + 1)
-            //    throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
-            ////if (!Check.AreValidKnots(data.KnotsU, data.DegreeU) || !Check.AreValidKnots(data.KnotsV, data.DegreeV))
-            ////throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
+            if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
+            if (degreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
+            if (degreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
+            if (knotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
+            if (knotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
+            if (knotsU.Count != controlPoints.Count + degreeU + 1)
+                throw new ArgumentException("controlPointsU.length + degreeU + 1 must equal knotsU.length!");
+            if (knotsV.Count != controlPoints[0].Count + degreeV + 1)
+                throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
+            if (!knotsU.AreValidKnots(degreeU, controlPoints.Count) || !knotsV.AreValidKnots(degreeV, controlPoints[0].Count)) 
+                throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             //return data;
 
             DegreeU = degreeU;
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
-            ControlPoints = controlPoints;
+            HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
+            Weights = weights;
         }
         /// <summary>
         /// Integer degree of surface in u direction.
@@ -55,12 +66,16 @@ namespace GeometrySharp.Geometry
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).
         /// </summary>
-        public List<List<Vector3>> ControlPoints { get; set; }
+        public List<List<Vector3>> ControlPoints => LinearAlgebra.Dehomogenize2d(HomogenizedPoints);
+        /// <summary>
+        ///Two dimensional array of weight values
+        /// </summary>
+        public List<List<double>> Weights {get;set;}
+        public List<List<Vector3>> HomogenizedPoints { get; }
 
-        public override NurbsSurface FromJson(string s)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Equals(NurbsSurface other) => throw new NotImplementedException();
+
+        public override NurbsSurface FromJson(string s) =>throw new NotImplementedException();
 
         /// <summary>
         /// Serialize a nurbs surface to JSON
