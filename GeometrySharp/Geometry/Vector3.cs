@@ -173,49 +173,7 @@ namespace GeometrySharp.Geometry
             var cosAngle = Math.Cos(angle);
             var sinAngle = Math.Sin(angle);
 
-            // Remove the noise in input.
-            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
-                Math.Abs(cosAngle) <= GeoSharpMath.MAXTOLERANCE)
-            {
-                cosAngle = 0.0;
-                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
-            }
-
-            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
-                Math.Abs(sinAngle) <= GeoSharpMath.MAXTOLERANCE)
-            {
-                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
-                sinAngle = 0.0;
-            }
-
-            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
-            {
-                var vec = new Vector3{cosAngle, sinAngle};
-                if (vec.Length() > 0.0)
-                {
-                    var vecUnitized = vec.Unitize();
-                    cosAngle = vecUnitized[0];
-                    sinAngle = vecUnitized[1];
-                }
-                else
-                {
-                    throw new Exception("SinAngle and CosAngle are both zero");
-                }
-            }
-
-            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
-            {
-                cosAngle = 0.0;
-                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
-            }
-
-            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
-            {
-                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
-                sinAngle = 0.0;
-            }
+            GeoSharpMath.KillNoise(ref sinAngle, ref cosAngle);
 
             var unitizedAxis = axis.Unitize();
             var cross = Vector3.Cross(unitizedAxis, this);
@@ -386,6 +344,45 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Multiplies a 4x4 transformation matrix.
+        /// </summary>
+        /// <param name="v">A vector.</param>
+        /// <param name="t">A transformation.</param>
+        /// <returns>The transformed vector.</returns>
+        public static Vector3 operator *(Vector3 v, Transform t)
+        {
+            var x = 0.0;
+            var y = 0.0;
+            var z = 0.0;
+            var w = 0.0;
+
+            if (v.Count == 4)
+            {
+                x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3] * v[3];
+                y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3] * v[3];
+                z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3] * v[3];
+                w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3] * v[3];
+
+                return new Vector3 { x, y, z, w};
+            }
+
+            x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
+            y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3];
+            z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3];
+            w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3];
+
+            if (w > 0.0)
+            {
+                var w2 = 1.0 / w;
+                x *= w2;
+                y *= w2;
+                z *= w2;
+            }
+
+            return new Vector3 {x, y, z};
+        }
+
+        /// <summary>
         /// Divide a vector by a scalar.
         /// </summary>
         /// <param name="a">The scalar divisor.</param>
@@ -451,7 +448,7 @@ namespace GeometrySharp.Geometry
             if (!(obj is Vector3)) return false;
 
             var vec = (Vector3)obj;
-            return IsAlmostEqualTo(vec);
+            return IsEqualRoundingDecimal(vec);
         }
 
         /// <summary>
@@ -461,7 +458,7 @@ namespace GeometrySharp.Geometry
         /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
         public bool Equals(Vector3 other)
         {
-            return IsAlmostEqualTo(other);
+            return IsEqualRoundingDecimal(other);
         }
 
         /// <summary>
@@ -472,9 +469,17 @@ namespace GeometrySharp.Geometry
         /// True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise
         /// false.
         /// </returns>
-        public bool IsAlmostEqualTo(Vector3 v)
+        public bool IsEqualRoundingDecimal(Vector3 v, int numberOfDecimal = 0)
         {
-            return this.Select((val, i) => Math.Abs(val - v[i]))
+            Vector3 v1 = this;
+            Vector3 v2 = v;
+            if (numberOfDecimal != 0)
+            {
+                v1 = this.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
+                v2 = v.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
+            }
+
+            return v1.Select((val, i) => Math.Abs(val - v2[i]))
                 .All(val => val < GeoSharpMath.EPSILON);
         }
 
@@ -561,7 +566,9 @@ namespace GeometrySharp.Geometry
         /// <returns>The vector in string format</returns>
         public override string ToString()
         {
-            return $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
+            return this.Count == 4 
+                ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}" 
+                : $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }
 }

@@ -135,6 +135,18 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Transform the line using the transformation matrix.
+        /// </summary>
+        /// <param name="xForm">Transform matrix to apply.</param>
+        /// <returns>A line transformed.</returns>
+        public Line Transform(Transform xForm)
+        {
+            var pt1 = Start * xForm;
+            var pt2 = End * xForm;
+            return new Line(pt1, pt2);
+        }
+
+        /// <summary>
         /// Constructs the string representation of the line.
         /// </summary>
         /// <returns>A text string.</returns>

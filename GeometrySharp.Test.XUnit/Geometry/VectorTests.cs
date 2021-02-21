@@ -364,5 +364,21 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             vec1.IsParallelTo(vec2).Should().Be(result);
         }
+
+        [Fact]
+        public void It_Returns_A_Point_And_A_HomogenizedPoint_Transformed()
+        {
+            var pt1 = new Vector3{5,5,0};
+            var pt2 = new Vector3{5,5,0,0.2};
+            var pt1Expected = new Vector3 { 15, 15, 0 };
+            var pt2Expected = new Vector3 { 7, 7, 0, 0.2 };
+            var transform = Transform.Translation(new Vector3 {10, 10, 0});
+
+            var pt1Translated = pt1 * transform;
+            var pt2Translated = pt2 * transform;
+
+            pt1Translated.Should().BeEquivalentTo(pt1Expected);
+            pt2Translated.Should().BeEquivalentTo(pt2Expected);
+        }
     }
 }
