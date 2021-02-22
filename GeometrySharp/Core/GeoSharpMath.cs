@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
@@ -66,6 +68,57 @@ namespace GeometrySharp.Core
         public static bool IsValidDouble(double x)
         {
             return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
+        }
+
+        /// <summary>
+        /// Reduce the nice from the input.
+        /// </summary>
+        /// <param name="sinAngle">Sin angle value.</param>
+        /// <param name="cosAngle">Cos angle value.</param>
+        internal static void KillNoise(ref double sinAngle, ref double cosAngle)
+        {
+            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(cosAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAXTOLERANCE &&
+                Math.Abs(sinAngle) <= GeoSharpMath.MAXTOLERANCE)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
+
+            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
+            {
+                var vec = new Vector3 { cosAngle, sinAngle };
+                if (vec.Length() > 0.0)
+                {
+                    var vecUnitized = vec.Unitize();
+                    cosAngle = vecUnitized[0];
+                    sinAngle = vecUnitized[1];
+                }
+                else
+                {
+                    throw new Exception("SinAngle and CosAngle are both zero");
+                }
+            }
+
+            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = 0.0;
+                sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
+            }
+
+            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
+                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
+            {
+                cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
+                sinAngle = 0.0;
+            }
         }
     }
 }

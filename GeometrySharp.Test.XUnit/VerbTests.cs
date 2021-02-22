@@ -118,5 +118,36 @@ namespace GeometrySharp.Test.XUnit
                 _testOutput.WriteLine($"{p[i]}");
             }
         }
+
+        [Fact]
+        public void decomposeMatrix()
+        {
+            var matrix = new Array<object> ();
+
+            //matrix.push(new Array<object>(new object[] {10, -7, 0}));
+            //matrix.push(new Array<object>(new object[] { -3, 2, 6 }));
+            //matrix.push(new Array<object>(new object[] { 5, -1, 5 }));
+
+            matrix.push(new Array<object>(new object[] { 1,2,3 }));
+            matrix.push(new Array<object>(new object[] { 2,4,5 }));
+            matrix.push(new Array<object>(new object[] { 1,3,4 }));
+
+            //matrix.push(new Array<object>(new object[] { 4,3 }));
+            //matrix.push(new Array<object>(new object[] { 6,3 }));
+
+
+            var matrixLU = Mat.LU(matrix);
+
+            //var vector = new Array<double>(new double[] {3,13,4});
+            var vector = new Array<double>(new double[] { 0,4,17});
+
+            var solved = Mat.LUsolve(matrixLU, vector);
+
+            for (int i = 0; i < matrixLU.LU.length; i++)
+            {
+                _testOutput.WriteLine($"{matrixLU.LU[i]}");
+            }
+            _testOutput.WriteLine($"Solved - {solved}");
+        }
     }
 }

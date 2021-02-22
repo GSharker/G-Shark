@@ -17,7 +17,9 @@ namespace GeometrySharp.Geometry
         /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Vector3 origin, Vector3 direction)
         {
-            this.Normal = direction;
+            this.ZAxis = direction.Unitize();
+            this.XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
+            this.YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
             this.Origin = origin;
         }
 
@@ -32,17 +34,49 @@ namespace GeometrySharp.Geometry
             this.Origin = pt1;
             var xDir = (pt2 - pt1).Unitize();
             var yDir = (pt3 - pt1).Unitize();
-            this.Normal = Vector3.Cross(xDir, yDir);
+            this.XAxis = xDir;
+            this.YAxis = yDir;
+            this.ZAxis = Vector3.Cross(xDir, yDir).Unitize();
         }
+
+        /// <summary>
+        /// Get a XY plane.
+        /// </summary>
+        public static Plane PlaneXY => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.ZAxis);
+
+        /// <summary>
+        /// Get a YZ plane.
+        /// </summary>
+        public static Plane PlaneYZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.XAxis);
+
+        /// <summary>
+        /// Get a XY plane.
+        /// </summary>
+        public static Plane PlaneXZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.YAxis);
 
         /// <summary>
         /// The normal of the plan.
         /// </summary>
-        public Vector3 Normal { get; set; }
+        public Vector3 Normal => ZAxis;
 
         /// <summary>
         /// The origin of the plane.
         /// </summary>
-        public Vector3 Origin { get; set; }
+        public Vector3 Origin { get; }
+
+        /// <summary>
+        /// The XAxis of the plane.
+        /// </summary>
+        public Vector3 XAxis { get; }
+
+        /// <summary>
+        /// The YAxis of the plane.
+        /// </summary>
+        public Vector3 YAxis { get; }
+
+        /// <summary>
+        /// The ZAxis of the plane.
+        /// </summary>
+        public Vector3 ZAxis { get; }
     }
 }

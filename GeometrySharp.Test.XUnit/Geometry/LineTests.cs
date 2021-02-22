@@ -155,5 +155,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
             lineFlip.Equals(lineFlippedBack).Should().BeFalse();
             lineFlippedBack.Equals(ExampleLine).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Transformed_Line()
+        {
+            var translatedVec = new Vector3{10,10,0};
+            var transform = Transform.Translation(translatedVec);
+
+            var transformedLine = ExampleLine.Transform(transform);
+
+            transformedLine.Start.Should().BeEquivalentTo(new Vector3 {15, 10, 0});
+            transformedLine.End.Should().BeEquivalentTo(new Vector3 { 25, 25, 0 });
+        }
     }
 }
