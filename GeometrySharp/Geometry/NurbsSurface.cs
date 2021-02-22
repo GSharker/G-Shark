@@ -73,6 +73,18 @@ namespace GeometrySharp.Geometry
             Weights = new List<List<double>>(surface.Weights!);
         }
 
+        /// <summary>
+        /// Construct a NurbsSurface from four perimeter points in counter-clockwise order
+        /// </summary>
+        /// <param name="p1">The first point</param>
+        /// <param name="p2">The second point</param>
+        /// <param name="p3">The third point</param>
+        /// <param name="p4">The fourth point</param>
+        public NurbsSurface(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
+        {
+            Sets.LinearSpace()
+        }
+
 
         /// <summary>
         /// Integer degree of surface in u direction.
