@@ -98,8 +98,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
-            _testOutput.WriteLine(transformedPlane.ToString());
+            transformedPlane.Origin.IsEqualRoundingDecimal(new Vector3 {17.320508, 42.320508, 0}, 6).Should().BeTrue();
+            transformedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0, 0, -1 }, 6).Should().BeTrue();
         }
     }
-
 }

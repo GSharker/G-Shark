@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GeometrySharp.Core;
+using System;
 using System.Text;
-using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
@@ -16,10 +16,10 @@ namespace GeometrySharp.Geometry
         /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Vector3 origin, Vector3 direction)
         {
-            this.ZAxis = direction.Unitize();
-            this.XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
-            this.YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
-            this.Origin = origin;
+            ZAxis = direction.Unitize();
+            XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
+            YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
+            Origin = origin;
         }
 
         /// <summary>
@@ -31,16 +31,18 @@ namespace GeometrySharp.Geometry
         public Plane(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
             if(LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
+            {
                 throw new Exception("Plane cannot be created, the tree points must not be collinear");
+            }
 
             Vector3 dir1 = pt2 - pt1;
             Vector3 dir2 = pt3 - pt1;
             Vector3 normal = Vector3.Cross(dir1, dir2);
 
-            this.Origin = pt1;
-            this.XAxis = dir1.Unitize();
-            this.YAxis = Vector3.Cross(normal, dir1).Unitize();
-            this.ZAxis = normal.Unitize();
+            Origin = pt1;
+            XAxis = dir1.Unitize();
+            YAxis = Vector3.Cross(normal, dir1).Unitize();
+            ZAxis = normal.Unitize();
         }
 
         /// <summary>
@@ -52,10 +54,10 @@ namespace GeometrySharp.Geometry
         /// <param name="zDirection">Z direction.</param>
         public Plane(Vector3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
         {
-            this.Origin = origin;
-            this.XAxis = xDirection.Unitize();
-            this.YAxis = yDirection.Unitize();
-            this.ZAxis = zDirection.Unitize();
+            Origin = origin;
+            XAxis = xDirection.Unitize();
+            YAxis = yDirection.Unitize();
+            ZAxis = zDirection.Unitize();
         }
 
         /// <summary>
@@ -106,9 +108,9 @@ namespace GeometrySharp.Geometry
         /// <returns>The point on the plane that is closest to the sample point.</returns>
         public Vector3 ClosestPoint(Vector3 pt, out double length)
         {
-            Vector3 ptToOrigin = this.Origin - pt;
+            Vector3 ptToOrigin = Origin - pt;
 
-            var projection = this.Normal * (Vector3.Dot(ptToOrigin, this.Normal));
+            Vector3 projection = Normal * (Vector3.Dot(ptToOrigin, Normal));
 
             length = projection.Length();
             return pt + projection;
@@ -120,11 +122,20 @@ namespace GeometrySharp.Geometry
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-            Vector3 zDir = Vector3.Reverse(this.Normal);
-            return  new Plane(this.Origin, this.YAxis, this.XAxis, zDir);
+            Vector3 zDir = Vector3.Reverse(Normal);
+            return  new Plane(Origin, YAxis, XAxis, zDir);
         }
 
-        // ToDo: add set origin.
+        /// <summary>
+        /// Change the origin of a plane.
+        /// </summary>
+        /// <param name="origin">The new origin point of a plane.</param>
+        /// <returns>The plane with the new origin.</returns>
+        public Plane SetOrigin(Vector3 origin)
+        {
+            return new Plane(origin, this.XAxis, this.YAxis, this.ZAxis);
+        }
+
         // ToDo: add rotate.
 
         /// <summary>
@@ -134,16 +145,16 @@ namespace GeometrySharp.Geometry
         /// <returns>The transformed plane.</returns>
         public Plane Transform(Transform t)
         {
-            Vector3 origin = this.Origin * t;
+            Vector3 origin = Origin * t;
 
             bool check = (Math.Abs(t[3][0]) <= GeoSharpMath.MAXTOLERANCE &&
                           Math.Abs(t[3][1]) <= GeoSharpMath.MAXTOLERANCE &&
                           Math.Abs(t[3][2]) <= GeoSharpMath.MAXTOLERANCE &&
                           Math.Abs(1.0 - t[3][3]) <= GeoSharpMath.MAXTOLERANCE);
 
-            Vector3 xDir = check ? ((this.Origin + this.XAxis) * t) - origin : this.XAxis * t;
-            Vector3 yDir = check ? ((this.Origin + this.YAxis) * t) - origin : this.YAxis * t;
-            Vector3 zDir = check ? ((this.Origin + this.ZAxis) * t) - origin : this.ZAxis * t;
+            Vector3 xDir = check ? ((Origin + XAxis) * t) - origin : XAxis * t;
+            Vector3 yDir = check ? ((Origin + YAxis) * t) - origin : YAxis * t;
+            Vector3 zDir = check ? ((Origin + ZAxis) * t) - origin : ZAxis * t;
 
             return new Plane(origin, xDir, yDir, zDir);
         }
@@ -177,10 +188,10 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the other Plane is equal to this instance; False otherwise.</returns>
         public bool Equals(Plane other)
         {
-            return this.Origin.Equals(other.Origin) &&
-                   this.XAxis.Equals(other.XAxis) &&
-                   this.YAxis.Equals(other.YAxis) &&
-                   this.ZAxis.Equals(other.ZAxis);
+            return other != null && (Origin.Equals(other.Origin) &&
+                                     XAxis.Equals(other.XAxis) &&
+                                     YAxis.Equals(other.YAxis) &&
+                                     ZAxis.Equals(other.ZAxis));
         }
 
         /// <summary>
@@ -204,7 +215,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The hash code.</returns>
         public override int GetHashCode()
         {
-            return this.Origin.GetHashCode() + this.Normal.GetHashCode();
+            return Origin.GetHashCode() + Normal.GetHashCode();
         }
 
         /// <summary>
@@ -215,10 +226,10 @@ namespace GeometrySharp.Geometry
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine($"Origin({this.Origin})");
-            builder.AppendLine($"X({this.XAxis})");
-            builder.AppendLine($"Y({this.YAxis})");
-            builder.AppendLine($"Z({this.ZAxis})");
+            builder.AppendLine($"Origin({Origin})");
+            builder.AppendLine($"X({XAxis})");
+            builder.AppendLine($"Y({YAxis})");
+            builder.AppendLine($"Z({ZAxis})");
 
             return builder.ToString();
         }
