@@ -1,9 +1,4 @@
-﻿
-
-// ToDo this class need to be tested.
-// ToDo this class need to be commented.
-// Note this class can be developed bit more looking Hypar or RhinoCommon.
-namespace GeometrySharp.Geometry
+﻿namespace GeometrySharp.Geometry
 {
     /// <summary>
     /// A Plane is simply an origin point and normal.
@@ -78,5 +73,27 @@ namespace GeometrySharp.Geometry
         /// The ZAxis of the plane.
         /// </summary>
         public Vector3 ZAxis { get; }
+
+        /// <summary>
+        /// Finds the closest point on a plane.
+        /// </summary>
+        /// <param name="pt">The point to get close to plane.</param>
+        /// <param name="length">The distance between the point and his projection.</param>
+        /// <returns>The point on the plane that is closest to the sample point.</returns>
+        public Vector3 ClosestPoint(Vector3 pt, out double length)
+        {
+            Vector3 ptToOrigin = this.Origin - pt;
+
+            var projection = this.Normal * (Vector3.Dot(ptToOrigin, this.Normal));
+
+            length = projection.Length();
+            return pt + projection;
+        }
+
+        // Flip
+        // Rotate
+        // Align
+        // IEquatable
+        // ToString
     }
 }
