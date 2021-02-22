@@ -127,7 +127,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Change the origin of a plane.
+        /// Changes the origin of a plane.
         /// </summary>
         /// <param name="origin">The new origin point of a plane.</param>
         /// <returns>The plane with the new origin.</returns>
@@ -136,7 +136,18 @@ namespace GeometrySharp.Geometry
             return new Plane(origin, this.XAxis, this.YAxis, this.ZAxis);
         }
 
-        // ToDo: add rotate.
+        /// <summary>
+        /// Rotates the plane around is own Z-axis.
+        /// </summary>
+        /// <param name="angle">Angle to rotate the plane, expressed in radians.</param>
+        /// <returns>The plan rotated.</returns>
+        public Plane Rotate(double angle)
+        {
+            Vector3 xRotate = this.XAxis.Rotate(this.ZAxis, angle);
+            Vector3 yRotate = Vector3.Cross(this.ZAxis, xRotate);
+
+            return new Plane(this.Origin, xRotate, yRotate, this.ZAxis);
+        }
 
         /// <summary>
         /// Transforms the plane by a transformation matrix.

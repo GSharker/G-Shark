@@ -17,6 +17,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         public static Plane BasePlane => new Plane(new Vector3 {5, 0, 0}, new Vector3 {10, 15, 0});
+        public static Plane BasePlaneByPoints => new Plane(new Vector3 { 20, 20, 0 }, new Vector3 { 5, 5, 0 }, new Vector3 { -5, 10, 0 });
 
         [Fact]
         public void It_Initializes_A_Plane()
@@ -100,6 +101,18 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             transformedPlane.Origin.IsEqualRoundingDecimal(new Vector3 {17.320508, 42.320508, 0}, 6).Should().BeTrue();
             transformedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0, 0, -1 }, 6).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Rotated_Plane()
+        {
+            Plane plane = BasePlaneByPoints;
+
+            Plane rotatedPlane = plane.Rotate(GeoSharpMath.ToRadians(30));
+
+            rotatedPlane.XAxis.IsEqualRoundingDecimal(new Vector3 { -0.965926, -0.258819, 0 }, 6).Should().BeTrue();
+            rotatedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { -0.258819, 0.965926, 0 }, 6).Should().BeTrue();
+            rotatedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0, 0, -1 }, 6).Should().BeTrue();
         }
     }
 }
