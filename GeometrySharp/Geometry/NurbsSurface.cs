@@ -80,9 +80,28 @@ namespace GeometrySharp.Geometry
         /// <param name="p2">The second point</param>
         /// <param name="p3">The third point</param>
         /// <param name="p4">The fourth point</param>
-        public NurbsSurface(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
-        {
-            Sets.LinearSpace()
+        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3) {
+            var pts = new List<List<Vector3>>();
+            for(int i = 0;i < degree + 1 ; i++)
+            {
+                var row = new List<Vector3>();
+                for (int j = 0; j < degree + 1; j++)
+                {
+                    var l = (1.0d-i/degree);
+                    var p1p2 = Vector3.Lerp(p1, p2, l);
+                    var p4p3 = Vector3.Lerp(p4, p3, l);
+                    var res = Vector3.Lerp(p1p2, p4p3, 1.0d - j / degree);
+                    res.Add(1.0d);
+                    row.Add(res);
+                }
+                pts.Add(row);
+            }
+            var zeros = Sets.RepeatData(0.0d, degree + 1);
+            var ones = Sets.RepeatData(1.0d, degree + 1);
+            Knot knotU = new Knot(zeros.Concat(ones));
+            Knot knotV = new Knot(zeros.Concat(ones));
+
+            return new NurbsSurface(degree, degree, knotU, knotV, pts);
         }
 
 

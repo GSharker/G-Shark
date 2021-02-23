@@ -63,6 +63,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_The_Linear_Interpolation_Between_Two_Vectors()
+        {
+            Vector3 v1 = new Vector3 { 0d, 0d, 0d };
+            Vector3 v2 = new Vector3 { 10d, 10d, 10d };
+
+            double amount = 0.5;
+            Vector3.Lerp(v1, v2, amount).Should().BeEquivalentTo(new Vector3 { 5d, 5d, 5d });
+        }
+
+        [Fact]
         public void It_Returns_A_Reversed_Vector()
         {
             Vector3 v1 = new Vector3 { 20d, 0d, 0d };

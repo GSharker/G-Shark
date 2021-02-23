@@ -114,6 +114,15 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Linearly interpolates between two vectors based on the given weighting.
+        /// </summary>
+        /// <param name="u">The first source vector.</param>
+        /// <param name="v">The second source vector.</param>
+        /// <param name="amount">Value between 0 and 1 indicating the weight of the second source vector.</param>
+        /// <returns>The interpolated vector.</returns>
+        public static Vector3 Lerp(Vector3 u, Vector3 v, double amount) => (u * amount) + (v * (1.0 - amount));
+
+        /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
         /// <param name="a">The vector.</param>
