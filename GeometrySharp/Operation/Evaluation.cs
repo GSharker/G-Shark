@@ -98,6 +98,58 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
+        /// Compute a point on a non-uniform, non-rational B spline surface
+        /// (corresponds to algorithm 3.5 from The NURBS book, Piegl & Tiller 2nd edition)
+        /// </summary>
+        /// <param name="surface">Object representing the surface.</param>
+        /// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
+        /// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
+        /// <returns>The evaluated point.</returns>
+        public static Vector3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        {
+            var n = surface.KnotsU.Count - surface.DegreeU - 2;
+            var m = surface.KnotsV.Count - surface.DegreeV - 2;
+            var controlPoints = surface.ControlPoints;
+            var surfaceHomoPts = surface.HomogenizedPoints;
+            var dim = controlPoints[0][0].Count;
+
+            if (!surface.KnotsU.AreValidKnots(surface.DegreeU, surfaceHomoPts.Count))
+                throw new ArgumentException("Invalid relations between control points, knot in u direction");
+            if (!surface.KnotsV.AreValidKnots(surface.DegreeV, surfaceHomoPts[0].Count))
+                throw new ArgumentException("Invalid relations between control points, knot in v direction");
+
+            var knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
+            var knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, u);
+            var basisUValue = BasicFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
+            var basisVValue = BasicFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
+            var uIndex = knotSpanU - surface.DegreeU;
+            var vIndex = knotSpanV - surface.DegreeV;
+            var position = Vector3.Zero1d(dim);
+            var temp = Vector3.Zero1d(dim);
+            for (int l = 0; l < surface.DegreeV + 1; l++)
+            {
+                temp = Vector3.Zero1d(dim);
+                vIndex = knotSpanV - surface.DegreeV + 1;
+
+                //sample u isoline
+                for (int k = 0; k < surface.DegreeU + 1; k++)
+                {
+                    var val = basisUValue[k];
+                    var p = surfaceHomoPts[knotSpanU - surface.DegreeU + k][vIndex];
+                    for (int j = 0; j < temp.Count; j++)
+                        temp[j] = temp[j] + val * p[j];
+                }
+
+                //add point from u isoline
+                var valToMultiply = basisVValue[l];
+                for (int j = 0; j < position.Count; j++)
+                    position[j] = position[j] + valToMultiply * temp[j];
+            }
+            return position;
+
+        }
+
+        /// <summary>
         /// Compute the tangent at a point on a NURBS curve.
         /// </summary>
         /// <param name="curve">NurbsCurve object representing the curve.</param>
