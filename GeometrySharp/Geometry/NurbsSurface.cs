@@ -112,29 +112,29 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Integer degree of surface in u direction.
         /// </summary>
-        public int DegreeU { get; set; }
+        public int DegreeU { get; }
         /// <summary>
         /// Integer degree of surface in v direction.
         /// </summary>
-        public int DegreeV { get; set; }
+        public int DegreeV { get; }
         /// <summary>
         /// List of non-decreasing knot values in u direction.
         /// </summary>
-        public Knot KnotsU { get; set; }
+        public Knot KnotsU { get; }
         /// <summary>
         /// List of non-decreasing knot values in v direction.
         /// </summary>
-        public Knot KnotsV { get; set; }
+        public Knot KnotsV { get; }
 
         /// <summary>
         /// Determine the valid u domain of the surface.
         /// </summary>
-        public Interval DomainU { get; set; }
+        public Interval DomainU { get; }
 
         /// <summary>
         /// Determine the valid v domain of the surface.
         /// </summary>
-        public Interval DomainV { get; set; }
+        public Interval DomainV { get; }
 
         /// <summary>
         /// Obtain a copy of the NurbsSurface.
@@ -151,7 +151,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         ///Two dimensional array of weight values
         /// </summary>
-        public List<List<double>> Weights { get; set; }
+        public List<List<double>> Weights { get; }
         public List<List<Vector3>> HomogenizedPoints { get; }
 
         public bool Equals(NurbsSurface other) => throw new NotImplementedException();

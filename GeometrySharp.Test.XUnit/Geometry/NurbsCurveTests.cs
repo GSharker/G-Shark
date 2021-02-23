@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Test.XUnit.Core;
+using GeometrySharp.Test.XUnit.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
-using GeometrySharp.Test.XUnit.Data;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -49,7 +49,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var nurbsCurve = NurbsCurveCollection.NurbsCurvePtsAndWeightsExample();
 
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() {10, 0, 0, 0.5});
+            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() { 10, 0, 0, 0.5 });
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() { 20, 0, 0 });
         }
 
@@ -103,7 +103,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
         {
-            var knots = new Knot(){0,0,1,1,2,2};
+            var knots = new Knot() { 0, 0, 1, 1, 2, 2 };
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);
 
             curve.Should().Throw<ArgumentException>()
