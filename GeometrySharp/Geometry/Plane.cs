@@ -117,6 +117,16 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Perform the rotation to align the XAxis of a plane to a given guide vector.
+        /// </summary>
+        /// <param name="direction">The guide vector.</param>
+        /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
+        public Plane Align(Vector3 direction)
+        {
+            return PlaneXY;
+        }
+
+        /// <summary>
         /// Swapping out the X and Y axes and inverting the Z axis.
         /// </summary>
         /// <returns>The flipped plane.</returns>
