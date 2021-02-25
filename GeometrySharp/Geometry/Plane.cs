@@ -123,7 +123,15 @@ namespace GeometrySharp.Geometry
         /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
         public Plane Align(Vector3 direction)
         {
-            return PlaneXY;
+            Vector3 tempPt = this.Origin + direction;
+            Vector3 tempDir = tempPt - this.Origin;
+
+            double u = Vector3.Dot(this.XAxis, tempDir);
+            double v = Vector3.Dot(this.YAxis, tempDir);
+
+            double angle = -(Math.Atan2(u, v)) + Math.PI / 2.0;
+
+            return this.Rotate(angle);
         }
 
         /// <summary>
