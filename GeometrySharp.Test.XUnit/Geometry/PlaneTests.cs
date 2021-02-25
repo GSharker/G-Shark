@@ -121,7 +121,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             Plane alignedPlane = plane.Align(Vector3.XAxis);
 
-            _testOutput.WriteLine(alignedPlane.ToString());
+            alignedPlane.XAxis.IsEqualRoundingDecimal(Vector3.XAxis, 6).Should().BeTrue();
+            alignedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, -1.0, 0.0 }, 6).Should().BeTrue();
+            alignedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, 0.0, -1.0 }, 6).Should().BeTrue();
         }
     }
 }
