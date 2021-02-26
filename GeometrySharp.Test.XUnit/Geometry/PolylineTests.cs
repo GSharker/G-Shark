@@ -62,5 +62,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             length.Should().BeApproximately(40.388436, GeoSharpMath.MAXTOLERANCE);
         }
+
+        [Fact]
+        public void It_Returns_A_Collection_Of_Lines()
+        {
+            Polyline polyline = new Polyline(ExamplePts);
+
+            var segments = polyline.Segments();
+
+            segments.Length.Should().Be(3);
+            segments[1].Length.Should().Be(segments[2].Length).And.BeApproximately(11.18034, GeoSharpMath.MAXTOLERANCE);
+        }
     }
 }
