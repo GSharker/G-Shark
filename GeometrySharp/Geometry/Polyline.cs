@@ -5,16 +5,15 @@ using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: ClosestPoint
+    // ToDo: Transform
+
     /// <summary>
     /// A simple data structure representing a polyline.
     /// PolylineData is useful, for example, as the result of a curve tessellation.
     /// </summary>
     public class Polyline : List<Vector3>
     {
-        // PointAt
-        // TangentAt
-        // ClosestPointTo
-
         /// <summary>
         /// Initializes a new empty polyline.
         /// </summary>
@@ -70,6 +69,7 @@ namespace GeometrySharp.Geometry
             return lines;
         }
 
+        // ToDo: output tangent value.
         /// <summary>
         /// Get the point on the polyline at the give parameter.
         /// The parameter must be between 0.0 and 1.0.
