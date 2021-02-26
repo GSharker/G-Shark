@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -50,6 +51,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             polyline.Should().BeEquivalentTo(ptsExpected);
             _testOutput.WriteLine(polyline.ToString());
+        }
+
+        [Fact]
+        public void It_Returns_The_Length_Of_A_Polyline()
+        {
+            Polyline polyline = new Polyline(ExamplePts);
+
+            double length = polyline.Length();
+
+            length.Should().BeApproximately(40.388436, GeoSharpMath.MAXTOLERANCE);
         }
     }
 }

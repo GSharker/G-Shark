@@ -14,7 +14,6 @@ namespace GeometrySharp.Geometry
     {
         // PointAt
         // TangentAt
-        // Segments
         // ClosestPointTo
         // Center
 
@@ -50,6 +49,21 @@ namespace GeometrySharp.Geometry
                 length += this[i].DistanceTo(this[i + 1]);
 
             return length;
+        }
+
+        /// <summary>
+        /// Constructs a collections of lines, which make the polyline.
+        /// </summary>
+        /// <returns>A collection of lines.</returns>
+        public Line[] Segments()
+        {
+            int count = this.Count;
+            Line[] lines = new Line[count - 1];
+
+            for (int i = 0; i < count - 1; i++)
+                lines[i] = new Line(this[i], this[i+1]);
+
+            return lines;
         }
 
         /// <summary>
