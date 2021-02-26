@@ -24,8 +24,8 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="values">List of values.</param>
         public Vector3(IEnumerable<double> values)
+        : base(values)
         {
-            AddRange(values);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace GeometrySharp.Geometry
         {
             if (isUnitize()) return this;
             var l = this.Length();
-            if (Math.Abs(l - 1.0) <= Double.Epsilon)
+            if (l <= Double.Epsilon)
                 throw new Exception("An invalid or zero length vector cannot be unitized.");
             return this * (1 / l);
         }
