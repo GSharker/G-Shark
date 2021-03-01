@@ -120,6 +120,17 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Reverses the order of the polyline.
+        /// </summary>
+        /// <returns>A polyline reversed.</returns>
+        public Polyline Reverse()
+        {
+            var copyVertices = new List<Vector3>(this);
+            copyVertices.Reverse();
+            return new Polyline(copyVertices);
+        }
+
+        /// <summary>
         /// Get the point on the polyline at the give parameter.
         /// The parameter must be between 0.0 and 1.0.
         /// </summary>

@@ -139,5 +139,18 @@ namespace GeometrySharp.Test.XUnit.Geometry
             bBox.Min.Should().BeEquivalentTo(minExpected);
             bBox.Max.Should().BeEquivalentTo(maxExpected);
         }
+
+        [Fact]
+        public void It_Returns_A_Reversed_Polyline()
+        {
+            Polyline polyline = new Polyline(ExamplePts);
+            List<Vector3> reversedPts = new List<Vector3>(ExamplePts);
+            reversedPts.Reverse();
+
+            Polyline reversedPolyline = polyline.Reverse();
+
+            reversedPolyline.Should().NotBeSameAs(polyline);
+            reversedPolyline.Should().BeEquivalentTo(reversedPts);
+        }
     }
 }
