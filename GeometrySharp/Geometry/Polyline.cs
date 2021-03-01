@@ -5,8 +5,6 @@ using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: ClosestPoint
-
     /// <summary>
     /// A simple data structure representing a polyline.
     /// PolylineData is useful, for example, as the result of a curve tessellation.
@@ -68,14 +66,66 @@ namespace GeometrySharp.Geometry
             return lines;
         }
 
-        // ToDo: output tangent value.
+        /// <summary>
+        /// Gets the point which is the closest point to the given point.
+        /// </summary>
+        /// <param name="pt">Point to test.</param>
+        /// <returns>The point closest to the given point.</returns>
+        public Vector3 ClosestPt(Vector3 pt)
+        {
+            double distance = double.MaxValue;
+            Vector3 closestPt = Vector3.Unset;
+
+            for (int i = 0; i < this.Count - 1; i++)
+            {
+                Line tempLine = new Line(this[i], this[i + 1]);
+                Vector3 tempPt = tempLine.ClosestPoint(pt);
+                double tempDistance = tempPt.DistanceTo(pt);
+
+                if (!(tempDistance < distance)) continue;
+                closestPt = tempPt;
+                distance = tempDistance;
+            }
+
+            return closestPt;
+        }
+
+        /// <summary>
+        /// Calculates the bounding box of the list of points.
+        /// </summary>
+        /// <returns>The bounding box.</returns>
+        public BoundingBox BoundingBox()
+        {
+            double minX = double.MaxValue;
+            double minY = double.MaxValue;
+            double minZ = double.MaxValue;
+            double maxX = double.MinValue;
+            double maxY = double.MinValue;
+            double maxZ = double.MinValue;
+
+            for (int i = 0; i < this.Count; i++)
+            {
+                minX = Math.Min(minX, this[i][0]);
+                maxX = Math.Max(maxX, this[i][0]);
+                minY = Math.Min(minY, this[i][1]);
+                maxY = Math.Max(maxY, this[i][1]);
+                minZ = Math.Min(minZ, this[i][2]);
+                maxZ = Math.Max(maxZ, this[i][2]);
+            }
+
+            Vector3 minPt = new Vector3 {minX, minY, minZ};
+            Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
+
+            return new BoundingBox(minPt, maxPt);
+        }
+
         /// <summary>
         /// Get the point on the polyline at the give parameter.
         /// The parameter must be between 0.0 and 1.0.
         /// </summary>
         /// <param name="t">Parameter to evaluate at.</param>
         /// <returns>The point on the polyline at t.</returns>
-        public Vector3 PointAt(double t, out Vector3 tanget)
+        public Vector3 PointAt(double t, out Vector3 tangent)
         {
             if (t < 0.0 || t > 1.0)
             {
@@ -85,13 +135,13 @@ namespace GeometrySharp.Geometry
             int verticesCount = Count;
             if (t <= GeoSharpMath.EPSILON)
             {
-                tanget = (this[1] - this[0]).Unitize();
+                tangent = (this[1] - this[0]).Unitize();
                 return this[0];
             }
 
             if (Math.Abs(t - 1) <= GeoSharpMath.EPSILON)
             {
-                tanget = (this[verticesCount - 1] - this[verticesCount - 2]).Unitize();
+                tangent = (this[verticesCount - 1] - this[verticesCount - 2]).Unitize();
                 return this[verticesCount - 1];
             }
 
@@ -101,7 +151,7 @@ namespace GeometrySharp.Geometry
             int segmentIndex = (int)floorValue;
             tRemapped -= floorValue;
 
-            tanget = (this[segmentIndex + 1] - this[segmentIndex]).Unitize();
+            tangent = (this[segmentIndex + 1] - this[segmentIndex]).Unitize();
             return this[segmentIndex] * (1 - tRemapped) + this[segmentIndex + 1] * tRemapped;
         }
 

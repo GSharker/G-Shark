@@ -114,5 +114,30 @@ namespace GeometrySharp.Test.XUnit.Geometry
             double[] lengths = polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
             lengths.Select((val, i) => val.Should().BeApproximately(distanceToCheck[i], GeoSharpMath.MAXTOLERANCE));
         }
+
+        [Fact]
+        public void It_Returns_The_Closest_Point()
+        {
+            Polyline polyline = new Polyline(ExamplePts);
+            Vector3 testPt = new Vector3 {17.0, 8.0, 0.0};
+            Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
+
+            Vector3 closestPt = polyline.ClosestPt(testPt);
+
+            closestPt.IsEqualRoundingDecimal(expectedPt, 2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Bounding_Box_Of_The_Polyline()
+        {
+            Polyline polyline = new Polyline(ExamplePts);
+            Vector3 minExpected = new Vector3 { 5.0, 0.0, 0.0 };
+            Vector3 maxExpected = new Vector3 { 30.0, 15.0, 0.0 };
+
+            BoundingBox bBox = polyline.BoundingBox();
+
+            bBox.Min.Should().BeEquivalentTo(minExpected);
+            bBox.Max.Should().BeEquivalentTo(maxExpected);
+        }
     }
 }
