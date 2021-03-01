@@ -10,6 +10,7 @@ using System.Linq;
 /// [https://github.com/jdonaldson/promhx](https://github.com/jdonaldson/promhx).
 namespace GeometrySharp.Geometry
 {
+
     /// <summary>
     /// A simple data structure representing a NURBS surface.
     /// NurbsSurfaceData does no checks for legality. You can use <see cref="GeometrySharp.Evaluation.Check"/> for that.

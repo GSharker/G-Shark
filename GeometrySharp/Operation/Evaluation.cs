@@ -142,6 +142,36 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
+        /// Extracts the isocurve in u or v direction at a specified parameter.
+        /// </summary>
+        /// <param name="nurbsSurface">urbs surface to be evaluated</param>
+        /// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
+        /// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
+        /// <returns></returns>
+        public static NurbsCurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
+        {
+            Knot knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
+            int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
+            var knotMults = knots.Multiplicities();
+
+            int reqKnotIndex = -1;
+            foreach(var i in knotMults.Keys)
+            {
+                if (Math.Abs(t - i) < GeoSharpMath.EPSILON)
+                {
+                    reqKnotIndex = knotMults.GetValueOrDefault(i);
+                    break;
+                }
+            }
+
+            var numKnotsToInsert = degree + 1;
+            if (reqKnotIndex >= 0)
+                numKnotsToInsert = numKnotsToInsert - knotMults.GetValueOrDefault(reqKnotIndex);
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Compute the tangent at a point on a NURBS curve.
         /// </summary>
         /// <param name="curve">NurbsCurve object representing the curve.</param>
