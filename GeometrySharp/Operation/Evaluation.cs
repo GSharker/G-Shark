@@ -119,31 +119,23 @@ namespace GeometrySharp.Operation
                 throw new ArgumentException("Invalid relations between control points, knot in v direction");
 
             var knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
-            var knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, u);
+            var knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
             var basisUValue = BasicFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
             var basisVValue = BasicFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             var uIndex = knotSpanU - surface.DegreeU;
-            var vIndex = knotSpanV - surface.DegreeV;
+            var vIndex = knotSpanV;
             var position = Vector3.Zero1d(dim);
             var temp = Vector3.Zero1d(dim);
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
                 temp = Vector3.Zero1d(dim);
-                vIndex = knotSpanV - surface.DegreeV + 1;
-
-                //sample u isoline
-                for (int k = 0; k < surface.DegreeU + 1; k++)
-                {
-                    var val = basisUValue[k];
-                    var p = surfaceHomoPts[knotSpanU - surface.DegreeU + k][vIndex];
+                vIndex = knotSpanV - surface.DegreeV + l;
+                for(int x = 0; x < surface.DegreeU + 1; x++)
                     for (int j = 0; j < temp.Count; j++)
-                        temp[j] = temp[j] + val * p[j];
-                }
-
-                //add point from u isoline
-                var valToMultiply = basisVValue[l];
+                        temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
+                
                 for (int j = 0; j < position.Count; j++)
-                    position[j] = position[j] + valToMultiply * temp[j];
+                    position[j] = position[j] + basisVValue[l] * temp[j];
             }
             return position;
 

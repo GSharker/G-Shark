@@ -1,5 +1,6 @@
 ﻿using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Operation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace GeometrySharp.Geometry
         /// <param name="controlPoints">Two dimensional array of points</param>
         /// <param name="weights">Two dimensional array of weight values</param>
         /// <return>A new NurbsSurface</return>
-        private NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
+        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
         {
 
             if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
@@ -45,8 +46,8 @@ namespace GeometrySharp.Geometry
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
+            Weights = weights == null ? LinearAlgebra.Weight2d(controlPoints) : weights;
             HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
-            Weights = weights;
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         }
@@ -83,8 +84,9 @@ namespace GeometrySharp.Geometry
         /// <param name="p2">The second point</param>
         /// <param name="p3">The third point</param>
         /// <param name="p4">The fourth point</param>
-        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
+        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
         {
+            int degree = 1;
             var pts = new List<List<Vector3>>();
             for (int i = 0; i < degree + 1; i++)
             {
