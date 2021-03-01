@@ -16,7 +16,8 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             _testOutput = testOutput;
         }
-        public static Vector3[] ExamplePts => new[] { new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 }, new Vector3 { 20, 5, 0 }, new Vector3 { 30, 10, 0 } };
+        public static Vector3[] ExamplePts => new[] { new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 }, 
+            new Vector3 { 20, 5, 0 }, new Vector3 { 30, 10, 0 }, new Vector3 { 45, 12.5, 0 } };
 
         [Fact]
         public void It_Returns_A_Polyline()
@@ -58,7 +59,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             double length = polyline.Length();
 
-            length.Should().BeApproximately(40.388436, GeoSharpMath.MAXTOLERANCE);
+            length.Should().BeApproximately(55.595342, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -68,24 +69,25 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             Line[] segments = polyline.Segments();
 
-            segments.Length.Should().Be(3);
+            segments.Length.Should().Be(4);
             segments[1].Length.Should().Be(segments[2].Length).And.BeApproximately(11.18034, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Theory]
         [InlineData(0.0, new double[]{ 5, 0, 0 }, new double[] { 0.5547, 0.83205, 0 })]
-        [InlineData(0.25, new double[] { 12.5, 11.25, 0 }, new double[] { 0.5547, 0.83205, 0 })]
-        [InlineData(0.55, new double[] { 18.25, 8.5, 0 }, new double[] { 0.447214, -0.894427, 0 })]
-        [InlineData(1.0, new double[] { 30, 10, 0 }, new double[] { 0.894427, 0.447214, 0 })]
+        [InlineData(0.25, new double[] { 15, 15, 0 }, new double[] { 0.447214, -0.894427, 0 })]
+        [InlineData(0.55, new double[] { 22, 6, 0 }, new double[] { 0.894427, 0.447214, 0 })]
+        [InlineData(1.0, new double[] { 45, 12.5, 0 }, new double[] { 0.986394, 0.164399, 0 })]
         public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] ptExpected, double[] tangentExpected)
         {
             Polyline polyline = new Polyline(ExamplePts);
 
             Vector3 pt = polyline.PointAt(t, out Vector3 tangent);
 
-            Vector3 tang = new Vector3(tangentExpected);
-            tangent.IsEqualRoundingDecimal(tang, 6).Should().BeTrue();
-            pt.Should().BeEquivalentTo(new Vector3(ptExpected));
+            Vector3 tangToCheck = new Vector3(tangentExpected);
+            Vector3 ptToCheck = new Vector3(ptExpected);
+            tangent.IsEqualRoundingDecimal(tangToCheck, 6).Should().BeTrue();
+            pt.IsEqualRoundingDecimal(ptToCheck, 6).Should().BeTrue();
         }
 
         [Theory]
@@ -106,7 +108,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Transform translation = Transform.Translation(new Vector3 { 10, 15, 0 });
             Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Vector3 { 0, 0, 0 });
             Transform combinedTransformations = translation.Combine(rotation);
-            double[] distanceToCheck = new[] {19.831825, 20.496248, 24.803072, 28.67703};
+            double[] distanceToCheck = new[] {19.831825, 20.496248, 24.803072, 28.67703, 35.897724};
             Polyline polyline = new Polyline(ExamplePts);
 
             Polyline transformedPoly = polyline.Transform(combinedTransformations);
@@ -118,9 +120,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Closest_Point()
         {
-            Vector3[] Pts = new[] { new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 }, new Vector3 { 20, 5, 0 }, new Vector3 { 30, 10, 0 }, new Vector3 { 45, 12.5, 0 } };
-
-            Polyline polyline = new Polyline(Pts);
+            Polyline polyline = new Polyline(ExamplePts);
             Vector3 testPt = new Vector3 {17.0, 8.0, 0.0};
             Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
 
@@ -134,9 +134,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             Polyline polyline = new Polyline(ExamplePts);
             Vector3 minExpected = new Vector3 { 5.0, 0.0, 0.0 };
-            Vector3 maxExpected = new Vector3 { 30.0, 15.0, 0.0 };
+            Vector3 maxExpected = new Vector3 { 45.0, 15.0, 0.0 };
 
-            BoundingBox bBox = polyline.BoundingBox();
+            BoundingBox bBox = polyline.BoundingBox;
 
             bBox.Min.Should().BeEquivalentTo(minExpected);
             bBox.Max.Should().BeEquivalentTo(maxExpected);

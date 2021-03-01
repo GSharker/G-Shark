@@ -127,29 +127,32 @@ namespace GeometrySharp.Geometry
         /// Calculates the bounding box of the list of points.
         /// </summary>
         /// <returns>The bounding box.</returns>
-        public BoundingBox BoundingBox()
+        public BoundingBox BoundingBox
         {
-            double minX = double.MaxValue;
-            double minY = double.MaxValue;
-            double minZ = double.MaxValue;
-            double maxX = double.MinValue;
-            double maxY = double.MinValue;
-            double maxZ = double.MinValue;
-
-            for (int i = 0; i < Count; i++)
+            get
             {
-                minX = Math.Min(minX, this[i][0]);
-                maxX = Math.Max(maxX, this[i][0]);
-                minY = Math.Min(minY, this[i][1]);
-                maxY = Math.Max(maxY, this[i][1]);
-                minZ = Math.Min(minZ, this[i][2]);
-                maxZ = Math.Max(maxZ, this[i][2]);
+                double minX = double.MaxValue;
+                double minY = double.MaxValue;
+                double minZ = double.MaxValue;
+                double maxX = double.MinValue;
+                double maxY = double.MinValue;
+                double maxZ = double.MinValue;
+
+                for (int i = 0; i < Count; i++)
+                {
+                    minX = Math.Min(minX, this[i][0]);
+                    maxX = Math.Max(maxX, this[i][0]);
+                    minY = Math.Min(minY, this[i][1]);
+                    maxY = Math.Max(maxY, this[i][1]);
+                    minZ = Math.Min(minZ, this[i][2]);
+                    maxZ = Math.Max(maxZ, this[i][2]);
+                }
+
+                Vector3 minPt = new Vector3 { minX, minY, minZ };
+                Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
+
+                return new BoundingBox(minPt, maxPt);
             }
-
-            Vector3 minPt = new Vector3 {minX, minY, minZ};
-            Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
-
-            return new BoundingBox(minPt, maxPt);
         }
 
         /// <summary>
