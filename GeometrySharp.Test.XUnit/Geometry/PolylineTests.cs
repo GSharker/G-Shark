@@ -2,6 +2,8 @@
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -96,6 +98,21 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Func<Vector3> func = () => polyline.PointAt(t, out _);
 
             func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void It_Returns_A_Transformed_Polyline()
+        {
+            Transform translation = Transform.Translation(new Vector3 { 10, 15, 0 });
+            Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Vector3 { 0, 0, 0 });
+            Transform combinedTransformations = translation.Combine(rotation);
+            double[] distanceToCheck = new[] {19.831825, 20.496248, 24.803072, 28.67703};
+            Polyline polyline = new Polyline(ExamplePts);
+
+            Polyline transformedPoly = polyline.Transform(combinedTransformations);
+
+            double[] lengths = polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
+            lengths.Select((val, i) => val.Should().BeApproximately(distanceToCheck[i], GeoSharpMath.MAXTOLERANCE));
         }
     }
 }

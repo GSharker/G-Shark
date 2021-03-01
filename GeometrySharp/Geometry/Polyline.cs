@@ -6,7 +6,6 @@ using System.Linq;
 namespace GeometrySharp.Geometry
 {
     // ToDo: ClosestPoint
-    // ToDo: Transform
 
     /// <summary>
     /// A simple data structure representing a polyline.
@@ -104,6 +103,18 @@ namespace GeometrySharp.Geometry
 
             tanget = (this[segmentIndex + 1] - this[segmentIndex]).Unitize();
             return this[segmentIndex] * (1 - tRemapped) + this[segmentIndex + 1] * tRemapped;
+        }
+
+        /// <summary>
+        /// Applies a transformation to all the points.
+        /// </summary>
+        /// <param name="transform">Transformation matrix to apply.</param>
+        /// <returns>A polyline transformed.</returns>
+        public Polyline Transform(Transform transform)
+        {
+            List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
+
+            return new Polyline(transformedPts);
         }
 
         /// <summary>
