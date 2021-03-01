@@ -73,21 +73,54 @@ namespace GeometrySharp.Geometry
         /// <returns>The point closest to the given point.</returns>
         public Vector3 ClosestPt(Vector3 pt)
         {
-            double distance = double.MaxValue;
-            Vector3 closestPt = Vector3.Unset;
-
-            for (int i = 0; i < this.Count - 1; i++)
+            // Brute force
+            if (this.Count <= 4)
             {
-                Line tempLine = new Line(this[i], this[i + 1]);
-                Vector3 tempPt = tempLine.ClosestPoint(pt);
-                double tempDistance = tempPt.DistanceTo(pt);
+                double distance = double.MaxValue;
+                Vector3 closestPt = Vector3.Unset;
 
-                if (!(tempDistance < distance)) continue;
-                closestPt = tempPt;
-                distance = tempDistance;
+                for (int i = 0; i < this.Count - 1; i++)
+                {
+                    Line tempLine = new Line(this[i], this[i + 1]);
+                    Vector3 tempPt = tempLine.ClosestPoint(pt);
+                    double tempDistance = tempPt.DistanceTo(pt);
+
+                    if (!(tempDistance < distance)) continue;
+                    closestPt = tempPt;
+                    distance = tempDistance;
+                }
+
+                return closestPt;
             }
 
-            return closestPt;
+            // Divide and conquer.
+            List<Vector3> leftSubCollection = new List<Vector3>();
+            List<Vector3> rightSubCollection = new List<Vector3>();
+            List<Vector3> conquer = new List<Vector3>(this);
+
+            while (leftSubCollection.Count != 2 || rightSubCollection.Count != 2)
+            {
+                int mid = (int) ((double) conquer.Count / 2);
+                leftSubCollection = conquer.Take(mid+1).ToList();
+                rightSubCollection = conquer.Skip(mid).ToList();
+
+                Polyline leftPoly = new Polyline(leftSubCollection);
+                Polyline rightPoly = new Polyline(rightSubCollection);
+
+                Vector3 leftPt = leftPoly.PointAt(0.5, out _);
+                Vector3 rightPt = rightPoly.PointAt(0.5, out _);
+
+                double leftDistance = leftPt.DistanceTo(pt);
+                double rightDistance = rightPt.DistanceTo(pt);
+
+                conquer  = leftDistance > rightDistance 
+                    ? new List<Vector3>(rightSubCollection) 
+                    : new List<Vector3>(leftSubCollection);
+            }
+
+            Line l = new Line(conquer [0], conquer [1]);
+
+            return l.ClosestPoint(pt);
         }
 
         /// <summary>
@@ -103,7 +136,7 @@ namespace GeometrySharp.Geometry
             double maxY = double.MinValue;
             double maxZ = double.MinValue;
 
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 minX = Math.Min(minX, this[i][0]);
                 maxX = Math.Max(maxX, this[i][0]);
@@ -125,7 +158,7 @@ namespace GeometrySharp.Geometry
         /// <returns>A polyline reversed.</returns>
         public Polyline Reverse()
         {
-            var copyVertices = new List<Vector3>(this);
+            List<Vector3> copyVertices = new List<Vector3>(this);
             copyVertices.Reverse();
             return new Polyline(copyVertices);
         }

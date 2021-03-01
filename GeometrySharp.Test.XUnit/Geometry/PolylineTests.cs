@@ -118,7 +118,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Closest_Point()
         {
-            Polyline polyline = new Polyline(ExamplePts);
+            Vector3[] Pts = new[] { new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 }, new Vector3 { 20, 5, 0 }, new Vector3 { 30, 10, 0 }, new Vector3 { 45, 12.5, 0 } };
+
+            Polyline polyline = new Polyline(Pts);
             Vector3 testPt = new Vector3 {17.0, 8.0, 0.0};
             Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
 
