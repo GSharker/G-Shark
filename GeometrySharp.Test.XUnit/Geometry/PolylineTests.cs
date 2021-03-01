@@ -71,16 +71,18 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.0, new double[]{ 5, 0, 0 })]
-        [InlineData(0.25, new double[] { 12.5, 11.25, 0 })]
-        [InlineData(0.55, new double[] { 18.25, 8.5, 0 })]
-        [InlineData(1.0, new double[] { 30, 10, 0 })]
-        public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] ptExpected)
+        [InlineData(0.0, new double[]{ 5, 0, 0 }, new double[] { 0.5547, 0.83205, 0 })]
+        [InlineData(0.25, new double[] { 12.5, 11.25, 0 }, new double[] { 0.5547, 0.83205, 0 })]
+        [InlineData(0.55, new double[] { 18.25, 8.5, 0 }, new double[] { 0.447214, -0.894427, 0 })]
+        [InlineData(1.0, new double[] { 30, 10, 0 }, new double[] { 0.894427, 0.447214, 0 })]
+        public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] ptExpected, double[] tangentExpected)
         {
             Polyline polyline = new Polyline(ExamplePts);
 
-            Vector3 pt = polyline.PointAt(t);
+            Vector3 pt = polyline.PointAt(t, out Vector3 tangent);
 
+            Vector3 tang = new Vector3(tangentExpected);
+            tangent.IsEqualRoundingDecimal(tang, 6).Should().BeTrue();
             pt.Should().BeEquivalentTo(new Vector3(ptExpected));
         }
 
@@ -91,7 +93,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             Polyline polyline = new Polyline(ExamplePts);
 
-            Func<Vector3> func = () => polyline.PointAt(t);
+            Func<Vector3> func = () => polyline.PointAt(t, out _);
 
             func.Should().Throw<Exception>();
         }

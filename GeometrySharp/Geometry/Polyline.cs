@@ -76,7 +76,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter to evaluate at.</param>
         /// <returns>The point on the polyline at t.</returns>
-        public Vector3 PointAt(double t)
+        public Vector3 PointAt(double t, out Vector3 tanget)
         {
             if (t < 0.0 || t > 1.0)
             {
@@ -86,11 +86,13 @@ namespace GeometrySharp.Geometry
             int verticesCount = Count;
             if (t <= GeoSharpMath.EPSILON)
             {
+                tanget = (this[1] - this[0]).Unitize();
                 return this[0];
             }
 
             if (Math.Abs(t - 1) <= GeoSharpMath.EPSILON)
             {
+                tanget = (this[verticesCount - 1] - this[verticesCount - 2]).Unitize();
                 return this[verticesCount - 1];
             }
 
@@ -100,6 +102,7 @@ namespace GeometrySharp.Geometry
             int segmentIndex = (int)floorValue;
             tRemapped -= floorValue;
 
+            tanget = (this[segmentIndex + 1] - this[segmentIndex]).Unitize();
             return this[segmentIndex] * (1 - tRemapped) + this[segmentIndex + 1] * tRemapped;
         }
 
