@@ -24,8 +24,8 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="values">List of values.</param>
         public Vector3(IEnumerable<double> values)
+        : base(values)
         {
-            AddRange(values);
         }
 
         /// <summary>
@@ -79,6 +79,17 @@ namespace GeometrySharp.Geometry
         public bool IsValid()
         {
             return this.Any(GeoSharpMath.IsValidDouble);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not this is a unit vector.
+        /// </summary>
+        /// <returns>True if </returns>
+        public bool isUnitize()
+        {
+            return (GeoSharpMath.IsValidDouble(this[0]) && 
+                    GeoSharpMath.IsValidDouble(this[1]) &&
+                    (Math.Abs(Length() - 1.0) <= GeoSharpMath.EPSILON));
         }
 
         /// <summary>
@@ -224,8 +235,9 @@ namespace GeometrySharp.Geometry
         /// <returns>A new vector unitized.</returns>
         public Vector3 Unitize()
         {
+            if (isUnitize()) return this;
             var l = this.Length();
-            if (l <= 0.0)
+            if (l <= Double.Epsilon)
                 throw new Exception("An invalid or zero length vector cannot be unitized.");
             return this * (1 / l);
         }

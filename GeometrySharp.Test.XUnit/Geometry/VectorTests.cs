@@ -328,7 +328,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void Unitize_Throws_An_Error_If_Invalid_Vector_Or_Zero_Length(Vector3 vector)
         {
             Func<Vector3> func = vector.Unitize;
-
             func.Should().Throw<Exception>().WithMessage("An invalid or zero length vector cannot be unitized.");
         }
 

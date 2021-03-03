@@ -71,6 +71,18 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Remap a value into a new numerical range.
+        /// </summary>
+        /// <param name="value">Value to remap.</param>
+        /// <param name="source">Numerical interval of the value.</param>
+        /// <param name="target">Numerical interval into the value will be remapped.</param>
+        /// <returns>Remapped value.</returns>
+        public static double RemapValue(double value, Interval source, Interval target)
+        {
+            return target.Min + (value - source.Min) * (target.Max - target.Min) / (source.Max - source.Min);
+        }
+
+        /// <summary>
         /// Reduce the nice from the input.
         /// </summary>
         /// <param name="sinAngle">Sin angle value.</param>

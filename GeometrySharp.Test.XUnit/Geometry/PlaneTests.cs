@@ -84,7 +84,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
             flippedPlane.ZAxis.Equals(Vector3.Reverse(plane.ZAxis)).Should().BeTrue();
         }
 
-        // ToDo: finish the test
         [Fact]
         public void It_Returns_A_Transformed_Plane()
         {
@@ -113,6 +112,18 @@ namespace GeometrySharp.Test.XUnit.Geometry
             rotatedPlane.XAxis.IsEqualRoundingDecimal(new Vector3 { -0.965926, -0.258819, 0 }, 6).Should().BeTrue();
             rotatedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { -0.258819, 0.965926, 0 }, 6).Should().BeTrue();
             rotatedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0, 0, -1 }, 6).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Plane_Aligned_To_A_Given_Vector()
+        {
+            Plane plane = BasePlaneByPoints;
+
+            Plane alignedPlane = plane.Align(Vector3.XAxis);
+
+            alignedPlane.XAxis.IsEqualRoundingDecimal(Vector3.XAxis, 6).Should().BeTrue();
+            alignedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, -1.0, 0.0 }, 6).Should().BeTrue();
+            alignedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, 0.0, -1.0 }, 6).Should().BeTrue();
         }
     }
 }

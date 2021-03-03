@@ -3,10 +3,6 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo add the serializable.
-    // ToDo add transformation.
-    // Note: ToNurbsCurve method could be useful?
-
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
