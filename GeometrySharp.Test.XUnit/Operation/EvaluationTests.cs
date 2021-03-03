@@ -186,15 +186,15 @@ namespace GeometrySharp.Test.XUnit.Operation
             p2[1].Should().BeApproximately(-6d, 5);
             p2[2].Should().BeApproximately(-1.47456d, 5);
 
-            var t = 0.3;
-            var v = 0.2;
+            var t = 0.2;
+            var v = 0.3;
             var res1 = Evaluation.SurfaceIsoCurve(nurbSurface, t , false);
             var p3 = Evaluation.CurvePointAt(res1, v);
-            p3[0].Should().BeApproximately(9d, 5);
-            p3[1].Should().BeApproximately(-6d, 5);
-            p3[2].Should().BeApproximately(1.69344d, 5);
+            p3[0].Should().BeApproximately(9d,3);
+            p3[1].Should().BeApproximately(-6d, 3);
+            p3[2].Should().BeApproximately(1.69344d, 3);
 
-            _testOutput.WriteLine($"Isocurve evaluated along v direction at parameter {t}.\nPoint at parameter {v}: {JsonConvert.SerializeObject(p3)}");
+            _testOutput.WriteLine($"{p3[0]}, {p3[1]}, {p3[2]}");
         }
 
         [Fact]
