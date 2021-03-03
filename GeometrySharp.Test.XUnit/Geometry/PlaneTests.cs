@@ -125,5 +125,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
             alignedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, -1.0, 0.0 }, 6).Should().BeTrue();
             alignedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, 0.0, -1.0 }, 6).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Plane_With_A_New_Origin()
+        {
+            Plane plane = BasePlaneByPoints;
+            Vector3 newOrigin = new Vector3 { 50, 60, 5 };
+
+            Plane translatedPlane = plane.SetOrigin(newOrigin);
+
+            translatedPlane.Origin.Should().BeEquivalentTo(newOrigin);
+            translatedPlane.Normal.Should().BeEquivalentTo(plane.Normal);
+        }
     }
 }

@@ -4,8 +4,6 @@ using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo Area
-    // ToDo Center
     // ToDo Valid if it is planar
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
     /// <summary>
