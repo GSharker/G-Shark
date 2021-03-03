@@ -130,10 +130,10 @@ namespace GeometrySharp.Operation
             {
                 temp = Vector3.Zero1d(dim);
                 vIndex = knotSpanV - surface.DegreeV + l;
-                for(int x = 0; x < surface.DegreeU + 1; x++)
+                for (int x = 0; x < surface.DegreeU + 1; x++)
                     for (int j = 0; j < temp.Count; j++)
                         temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
-                
+
                 for (int j = 0; j < position.Count; j++)
                     position[j] = position[j] + basisVValue[l] * temp[j];
             }
@@ -155,7 +155,7 @@ namespace GeometrySharp.Operation
             var knotMults = knots.Multiplicities();
 
             int reqKnotIndex = -1;
-            foreach(var i in knotMults.Keys)
+            foreach (var i in knotMults.Keys)
             {
                 if (Math.Abs(t - i) < GeoSharpMath.EPSILON)
                 {
@@ -168,7 +168,23 @@ namespace GeometrySharp.Operation
             if (reqKnotIndex >= 0)
                 numKnotsToInsert = numKnotsToInsert - knotMults.GetValueOrDefault(reqKnotIndex);
 
-            throw new NotImplementedException();
+            //Insert the knots
+            NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new Knot(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
+            var span = knots.Span(degree, t);
+
+            if (Math.Abs(t - knots[0]) < GeoSharpMath.EPSILON)
+                span = 0;
+            if (Math.Abs(t - knots[knots.Count - 1]) < GeoSharpMath.EPSILON)
+                span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
+
+            var ctrlPts = new List<Vector3>();
+            if (useU)
+            {
+                foreach (var row in newSrf.ControlPoints)
+                    ctrlPts.Add(row[span]);
+                return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
+            }
+            return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.ControlPoints[span]);
         }
 
         /// <summary>

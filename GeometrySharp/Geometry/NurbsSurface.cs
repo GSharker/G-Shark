@@ -47,7 +47,7 @@ namespace GeometrySharp.Geometry
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
-            Weights = weights == null ? LinearAlgebra.Weight2d(controlPoints) : weights;
+            Weights = weights == null ? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count) : weights;
             HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());

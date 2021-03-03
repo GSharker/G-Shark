@@ -23,10 +23,10 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             var degree = 2;
             var span = 4;
-            var knots = new Knot() {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
+            var knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
 
             var result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
-            var result2 = Evaluation.BasicFunction(degree, knots,2.5);
+            var result2 = Evaluation.BasicFunction(degree, knots, 2.5);
 
             result1.Should().BeEquivalentTo(result2);
             result1.Count.Should().Be(3);
@@ -36,7 +36,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Theory]
-        [InlineData(0.0, new double[] {5.0,5.0,0.0})]
+        [InlineData(0.0, new double[] { 5.0, 5.0, 0.0 })]
         [InlineData(0.3, new double[] { 18.617, 13.377, 0.0 })]
         [InlineData(0.5, new double[] { 27.645, 14.691, 0.0 })]
         [InlineData(0.6, new double[] { 32.143, 14.328, 0.0 })]
@@ -116,23 +116,69 @@ namespace GeometrySharp.Test.XUnit.Operation
                 u1, u2, u3, u4
             };
             int degreeU = 3; int degreeV = degreeU;
-            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1 ,1};
+            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
             Knot knotsV = knotsU;
 
             NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
             Vector3 pt1 = Evaluation.SurfacePointAt(nurbsSurface, 0, 0);
-            pt1[0].Should().BeApproximately(u1[0][0],0.00001);
+            pt1[0].Should().BeApproximately(u1[0][0], 0.00001);
             pt1[1].Should().BeApproximately(u1[0][1], 0.00001);
             pt1[2].Should().BeApproximately(u1[0][2], 0.00001);
-            
+
             Vector3 ptMid = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
             ptMid[0].Should().BeApproximately(15d, 0.00001);
             ptMid[1].Should().BeApproximately(-15d, 0.00001);
             ptMid[2].Should().BeApproximately(6.40625d, 0.00001);
         }
 
+        [Fact]
+        public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
+        {
+            int degreeU = 3;
+            int degreeV = 3;
+            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            Knot knotsV = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
 
-            [Fact]
+            List<Vector3> u1 = new List<Vector3>()
+            {
+                new Vector3() { 0d, 0d, 0d },
+                new Vector3() { 10d, 0d, 0d },
+                new Vector3() { 20d, 0d, 0d },
+                new Vector3() { 30d, 0d, 0d }
+            };
+            List<Vector3> u2 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -10d, 0d },
+                new Vector3() { 10d, -10d, 10d },
+                new Vector3() { 20d, -10d, 0d },
+                new Vector3() { 30d, -10d, 0d }
+            };
+            List<Vector3> u3 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -20d, 0d },
+                new Vector3() { 10d, -20d, 0d },
+                new Vector3() { 20d, -20d, 0d },
+                new Vector3() { 30d, -20d, 0d }
+            };
+            List<Vector3> u4 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -30d, 0d },
+                new Vector3() { 10d, -30d, 0d },
+                new Vector3() { 20d, -30d, 0d },
+                new Vector3() { 30d, -30d, 0d }
+            };
+            List<List<Vector3>> controlPoints = new List<List<Vector3>>()
+            {
+                u1, u2, u3, u4
+            };
+
+            NurbsSurface nurbSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
+            var res = Evaluation.SurfaceIsoCurve(nurbSurface, 0.2);
+            var ctrlPts = res.ControlPoints;
+            var pMid = Evaluation.CurvePointAt(res, 0.5).Should().BeEquivalentTo(new Vector3 { 6d, -15d, 1.44d, 1d });
+        }
+
+        [Fact]
         public void It_Returns_A_Derive_Basic_Function_Given_NI()
         {
             // Arrange
@@ -141,8 +187,8 @@ namespace GeometrySharp.Test.XUnit.Operation
             var span = 4;
             var order = 2;
             var parameter = 2.5;
-            var knots = new Knot(){ 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
-            var expectedResult = new double[,] {{0.125, 0.75, 0.125}, {-0.5, 0.0, 0.5}, {1.0, -2.0, 1.0}};
+            var knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
 
             // Act
             var resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
@@ -195,7 +241,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             // Example at page 126.
             var degree = 2;
             var knots = new Knot() { 0, 0, 0, 1, 1, 1 };
-            var weight = new List<double>() {1, 1, 2};
+            var weight = new List<double>() { 1, 1, 2 };
             var controlPts = new List<Vector3>()
             {
                 new Vector3() {1, 0},

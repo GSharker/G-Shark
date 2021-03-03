@@ -39,10 +39,10 @@ namespace GeometrySharp.Geometry
             if (!knots.AreValidKnots(degree, controlPoints.Count))
                 throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
 
-            HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, weights);
             Weights = weights ?? Sets.RepeatData(1.0, controlPoints.Count);
             Degree = degree;
             Knots = knots;
+            HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, Weights);
         }
 
         /// <summary>
