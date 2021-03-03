@@ -4,6 +4,7 @@ using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -174,8 +175,26 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             NurbsSurface nurbSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
             var res = Evaluation.SurfaceIsoCurve(nurbSurface, 0.2);
+            
             var ctrlPts = res.ControlPoints;
-            var pMid = Evaluation.CurvePointAt(res, 0.5).Should().BeEquivalentTo(new Vector3 { 6d, -15d, 1.44d, 1d });
+            var p1 = Evaluation.CurvePointAt(res, 0.5);
+            p1[0].Should().BeApproximately(6d, 5);
+            p1[1].Should().BeApproximately(-15d, 5);
+            p1[2].Should().BeApproximately(-1.44d, 5);
+            var p2 = Evaluation.CurvePointAt(res, 0.2);
+            p2[0].Should().BeApproximately(6d, 5);
+            p2[1].Should().BeApproximately(-6d, 5);
+            p2[2].Should().BeApproximately(-1.47456d, 5);
+
+            var t = 0.3;
+            var v = 0.2;
+            var res1 = Evaluation.SurfaceIsoCurve(nurbSurface, t , false);
+            var p3 = Evaluation.CurvePointAt(res1, v);
+            p3[0].Should().BeApproximately(9d, 5);
+            p3[1].Should().BeApproximately(-6d, 5);
+            p3[2].Should().BeApproximately(1.69344d, 5);
+
+            _testOutput.WriteLine($"Isocurve evaluated along v direction at parameter {t}.\nPoint at parameter {v}: {JsonConvert.SerializeObject(p3)}");
         }
 
         [Fact]

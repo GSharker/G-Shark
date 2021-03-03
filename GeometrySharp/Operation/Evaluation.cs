@@ -174,11 +174,11 @@ namespace GeometrySharp.Operation
 
             if (Math.Abs(t - knots[0]) < GeoSharpMath.EPSILON)
                 span = 0;
-            if (Math.Abs(t - knots[knots.Count - 1]) < GeoSharpMath.EPSILON)
+            if (Math.Abs(t - knots[^1]) < GeoSharpMath.EPSILON)
                 span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
 
             var ctrlPts = new List<Vector3>();
-            if (useU)
+            if (!useU)
             {
                 foreach (var row in newSrf.ControlPoints)
                     ctrlPts.Add(row[span]);
