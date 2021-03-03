@@ -1,5 +1,6 @@
 ﻿using GeometrySharp.Core;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GeometrySharp.Geometry
@@ -152,6 +153,12 @@ namespace GeometrySharp.Geometry
         public Plane SetOrigin(Vector3 origin)
         {
             return new Plane(origin, this.XAxis, this.YAxis, this.ZAxis);
+        }
+
+        public Plane FitPlane(IList<Vector3> pts, out double deviation)
+        {
+            deviation = 0.0;
+            return PlaneXY;
         }
 
         /// <summary>
