@@ -323,6 +323,32 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Add to each component of the first vector the respective component of the second vector multiplied by a scalar
+        /// </summary>
+        /// <param name="a">First vector</param>
+        /// <param name="s">Scalar</param>
+        /// <param name="b">Second Vector</param>
+        /// <returns></returns>
+        public static void AddMulMutate(Vector3 a, double s, Vector3 b)
+        {
+            for (int i = 0; i < a.Count; i++)
+                a[i] = a[i] + s * b[i];
+        }
+
+        /// <summary>
+        /// Subtract to each component of the first vector the respective component of the second vector multiplied by a scalar
+        /// </summary>
+        /// <param name="a">First vector</param>
+        /// <param name="s">Scalar</param>
+        /// <param name="b">Second Vector</param>
+        /// <returns></returns>
+        public static void SubMulMutate(Vector3 a, double s, Vector3 b)
+        {
+            for (int i = 0; i < a.Count; i++)
+                a[i] = a[i] - s * b[i];
+        }
+
+        /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         /// <param name="v">The vector to multiply.</param>

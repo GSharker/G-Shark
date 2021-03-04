@@ -15,7 +15,7 @@ namespace GeometrySharp.Geometry
     /// A simple data structure representing a NURBS surface.
     /// NurbsSurfaceData does no checks for legality. You can use <see cref="GeometrySharp.Evaluation.Check"/> for that.
     /// </summary>
-    public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>, ISurface
+    public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>
     {
         /// <summary>
         /// Construct a NurbsSurface by degree, knots, control points, weights
@@ -111,6 +111,13 @@ namespace GeometrySharp.Geometry
             return new NurbsSurface(degree, degree, knotU, knotV, pts);
         }
 
+        /// <summary>
+        /// Obtain the surface normal at the given u and v parameters
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v);
 
         /// <summary>
         /// Integer degree of surface in u direction.
@@ -157,8 +164,19 @@ namespace GeometrySharp.Geometry
         public List<List<double>> Weights { get; }
         public List<List<Vector3>> HomogenizedPoints { get; }
 
-        public bool Equals(NurbsSurface other) => throw new NotImplementedException();
+        public bool Equals(NurbsSurface other){
+            //var pts = this.ControlPoints;
+            //var otherPts = other?.ControlPoints;
 
+            //if (other == null) return false;
+            //if (pts.Count != otherPts.Count) return false;
+            //if (this.KnotsU.Count != other.KnotsU.Count) return false;
+            //if (this.KnotsV.Count != other.KnotsV.Count) return false;
+            //if (this.DegreeU != other.DegreeU) return false;
+            //if (this.DegreeV != other.DegreeV) return false;
+            /////
+            throw new NotImplementedException();
+        }
         public override NurbsSurface FromJson(string s) => throw new NotImplementedException();
 
         /// <summary>

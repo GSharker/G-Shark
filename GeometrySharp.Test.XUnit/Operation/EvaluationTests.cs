@@ -19,6 +19,49 @@ namespace GeometrySharp.Test.XUnit.Operation
             _testOutput = testOutput;
         }
 
+        private NurbsSurface BuildTestNurbsSurface()
+        {
+            int degreeU = 3;
+            int degreeV = 3;
+            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            Knot knotsV = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+
+            List<Vector3> u1 = new List<Vector3>()
+            {
+                new Vector3() { 0d, 0d, 0d },
+                new Vector3() { 10d, 0d, 0d },
+                new Vector3() { 20d, 0d, 0d },
+                new Vector3() { 30d, 0d, 0d }
+            };
+            List<Vector3> u2 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -10d, 0d },
+                new Vector3() { 10d, -10d, 10d },
+                new Vector3() { 20d, -10d, 0d },
+                new Vector3() { 30d, -10d, 0d }
+            };
+            List<Vector3> u3 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -20d, 0d },
+                new Vector3() { 10d, -20d, 0d },
+                new Vector3() { 20d, -20d, 0d },
+                new Vector3() { 30d, -20d, 0d }
+            };
+            List<Vector3> u4 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -30d, 0d },
+                new Vector3() { 10d, -30d, 0d },
+                new Vector3() { 20d, -30d, 0d },
+                new Vector3() { 30d, -30d, 0d }
+            };
+            List<List<Vector3>> controlPoints = new List<List<Vector3>>()
+            {
+                u1, u2, u3, u4
+            };
+
+            return new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
+        }
+
         [Fact]
         public void It_Tests_A_Basic_Function()
         {
@@ -133,7 +176,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
+        public void It_Return_Surface_Derivatives_At_Given_NM()
         {
             int degreeU = 3;
             int degreeV = 3;
@@ -143,22 +186,22 @@ namespace GeometrySharp.Test.XUnit.Operation
             List<Vector3> u1 = new List<Vector3>()
             {
                 new Vector3() { 0d, 0d, 0d },
-                new Vector3() { 10d, 0d, 0d },
-                new Vector3() { 20d, 0d, 0d },
+                new Vector3() { 10d, 10d, 0d },
+                new Vector3() { 20d, 10d, 0d },
                 new Vector3() { 30d, 0d, 0d }
             };
             List<Vector3> u2 = new List<Vector3>()
             {
                 new Vector3() { 0d, -10d, 0d },
                 new Vector3() { 10d, -10d, 10d },
-                new Vector3() { 20d, -10d, 0d },
+                new Vector3() { 20d, -10d, 10d },
                 new Vector3() { 30d, -10d, 0d }
             };
             List<Vector3> u3 = new List<Vector3>()
             {
                 new Vector3() { 0d, -20d, 0d },
-                new Vector3() { 10d, -20d, 0d },
-                new Vector3() { 20d, -20d, 0d },
+                new Vector3() { 10d, -20d, 10d },
+                new Vector3() { 20d, -20d, 10d },
                 new Vector3() { 30d, -20d, 0d }
             };
             List<Vector3> u4 = new List<Vector3>()
@@ -173,8 +216,105 @@ namespace GeometrySharp.Test.XUnit.Operation
                 u1, u2, u3, u4
             };
 
-            NurbsSurface nurbSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-            var res = Evaluation.SurfaceIsoCurve(nurbSurface, 0.2);
+            NurbsSurface nurbsSurface =  new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
+            int n = 3;
+            int m = 3;
+            int numDers = 1;
+            var res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
+
+            // 0th derivative with respect to u & v
+            res[0][0][0].Should().Be(0d);
+            res[0][0][1].Should().Be(0d);
+            res[0][0][2].Should().Be(0d);
+
+            // d/du
+            (res[0][1][0] / res[0][1][0]).Should().Be(1d);
+            res[0][1][2].Should().Be(0d);
+
+            // d/dv
+            res[1][0][0].Should().Be(0d);
+            res[1][0][1].Should().Be(-30d);
+            res[1][0][2].Should().Be(0d);
+
+            // dd/dudv
+            res[1][1][0].Should().Be(0d);
+            res[1][1][1].Should().Be(0d);
+            res[1][1][2].Should().Be(0d);
+
+        }
+
+        [Fact]
+        public void It_Return_Surface_Derivatives()
+        {
+            int degreeU = 3;
+            int degreeV = 3;
+            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            Knot knotsV = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+
+            List<Vector3> u1 = new List<Vector3>()
+            {
+                new Vector3() { 0d, 0d, 0d },
+                new Vector3() { 10d, 10d, 0d },
+                new Vector3() { 20d, 10d, 0d },
+                new Vector3() { 30d, 0d, 0d }
+            };
+            List<Vector3> u2 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -10d, 0d },
+                new Vector3() { 10d, -10d, 10d },
+                new Vector3() { 20d, -10d, 10d },
+                new Vector3() { 30d, -10d, 0d }
+            };
+            List<Vector3> u3 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -20d, 0d },
+                new Vector3() { 10d, -20d, 10d },
+                new Vector3() { 20d, -20d, 10d },
+                new Vector3() { 30d, -20d, 0d }
+            };
+            List<Vector3> u4 = new List<Vector3>()
+            {
+                new Vector3() { 0d, -30d, 0d },
+                new Vector3() { 10d, -30d, 0d },
+                new Vector3() { 20d, -30d, 0d },
+                new Vector3() { 30d, -30d, 0d }
+            };
+            List<List<Vector3>> controlPoints = new List<List<Vector3>>()
+            {
+                u1, u2, u3, u4
+            };
+
+            NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
+            int n = 3;
+            int m = 3;
+            int numDers = 1;
+            var res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
+            // 0th derivative with respect to u & v
+            res[0][0][0].Should().Be(0d);
+            res[0][0][1].Should().Be(0d);
+            res[0][0][2].Should().Be(0d);
+
+            // d/du
+            (res[0][1][0] / res[0][1][0]).Should().Be(1d);
+            res[0][1][2].Should().Be(0d);
+
+            // d/dv
+            res[1][0][0].Should().Be(0d);
+            res[1][0][1].Should().Be(-30d);
+            res[1][0][2].Should().Be(0d);
+
+            // dd/dudv
+            res[1][1][0].Should().Be(0d);
+            res[1][1][1].Should().Be(0d);
+            res[1][1][2].Should().Be(0d);
+
+        }
+
+        [Fact]
+        public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
+        {
+            var nurbsSurface = BuildTestNurbsSurface();
+            var res = Evaluation.SurfaceIsoCurve(nurbsSurface, 0.2);
             
             var ctrlPts = res.ControlPoints;
             var p1 = Evaluation.CurvePointAt(res, 0.5);
@@ -188,13 +328,28 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             var t = 0.2;
             var v = 0.3;
-            var res1 = Evaluation.SurfaceIsoCurve(nurbSurface, t , false);
+            var res1 = Evaluation.SurfaceIsoCurve(nurbsSurface, t , false);
             var p3 = Evaluation.CurvePointAt(res1, v);
             p3[0].Should().BeApproximately(9d,3);
             p3[1].Should().BeApproximately(-6d, 3);
             p3[2].Should().BeApproximately(1.69344d, 3);
 
             _testOutput.WriteLine($"{p3[0]}, {p3[1]}, {p3[2]}");
+        }
+
+        //[Fact]
+        //public void It_Returns_Expected_Results_With_1_Derivative()
+        //{
+
+        //}
+
+        [Fact]
+        public void It_Returns_The_Surface_Normal_At_A_Given_U_And_V_Parameter()
+        {
+            var nurbsSurface = BuildTestNurbsSurface();
+            var res = nurbsSurface.Normal(0.5, 0.5);
+            res.Should().NotBeNullOrEmpty();
+            res.Should().BeEquivalentTo(new Vector3 { 0.034d, -0.140d, 0.990d });
         }
 
         [Fact]
