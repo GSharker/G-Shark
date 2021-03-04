@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
@@ -124,6 +125,36 @@ namespace GeometrySharp.Test.XUnit.Geometry
             alignedPlane.XAxis.IsEqualRoundingDecimal(Vector3.XAxis, 6).Should().BeTrue();
             alignedPlane.YAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, -1.0, 0.0 }, 6).Should().BeTrue();
             alignedPlane.ZAxis.IsEqualRoundingDecimal(new Vector3 { 0.0, 0.0, -1.0 }, 6).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Plane_With_A_New_Origin()
+        {
+            Plane plane = BasePlaneByPoints;
+            Vector3 newOrigin = new Vector3 { 50, 60, 5 };
+
+            Plane translatedPlane = plane.SetOrigin(newOrigin);
+
+            translatedPlane.Origin.Should().BeEquivalentTo(newOrigin);
+            translatedPlane.Normal.Should().BeEquivalentTo(plane.Normal);
+        }
+
+        [Fact]
+        public void It_Returns_A_Plane_Which_Fits_Through_A_Set_Of_Points()
+        {
+            Vector3[] pts = new[]
+            {
+                new Vector3 {74.264416, 36.39316, -1.884313}, new Vector3 {79.65881, 22.402983, 1.741763},
+                new Vector3 {97.679126, 13.940616, 3.812853}, new Vector3 {100.92443, 30.599893, -0.585116},
+                new Vector3 {78.805261, 45.16886, -4.22451}, new Vector3 {74.264416, 36.39316, -1.884313}
+            };
+            Vector3 originCheck = new Vector3 {86.266409, 29.701102, -0.227864};
+            Vector3 normalCheck = new Vector3 { 0.008012, 0.253783, 0.967228 };
+
+            Plane fitPlane = Plane.FitPlane(pts, out _);
+
+            fitPlane.Origin.IsEqualRoundingDecimal(originCheck, 5).Should().BeTrue();
+            fitPlane.Normal.IsEqualRoundingDecimal(normalCheck, 5).Should().BeTrue();
         }
     }
 }

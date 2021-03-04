@@ -1,6 +1,8 @@
 ﻿using GeometrySharp.Core;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
@@ -152,6 +154,77 @@ namespace GeometrySharp.Geometry
         public Plane SetOrigin(Vector3 origin)
         {
             return new Plane(origin, this.XAxis, this.YAxis, this.ZAxis);
+        }
+
+        /// <summary>
+        /// Fits a plane through a set of points.
+        /// http://www.ilikebigbits.com/2015_03_04_plane_from_points.html
+        /// </summary>
+        /// <param name="pts">Points to fit.</param>
+        /// <param name="deviation">Maximum deviation between the points and the plane.</param>
+        /// <returns>The defined plane generated.</returns>
+        public static Plane FitPlane(IList<Vector3> pts, out double deviation)
+        {
+            if (pts.Count < 3)
+                throw new Exception("The collection must have minimum three points.");
+
+            Vector3 centroid = Evaluation.CentroidByVertices(pts);
+            Vector3 normal = Vector3.Unset;
+
+            double xx = 0.0; double xy = 0.0; double xz = 0.0;
+            double yy = 0.0; double yz = 0.0; double zz = 0.0;
+
+            foreach (Vector3 pt in pts)
+            {
+                Vector3 tempDir = pt - centroid;
+
+                xx += tempDir[0] * tempDir[0];
+                xy += tempDir[0] * tempDir[1];
+                xz += tempDir[0] * tempDir[2];
+                yy += tempDir[1] * tempDir[1];
+                yz += tempDir[1] * tempDir[2];
+                zz += tempDir[2] * tempDir[2];
+            }
+
+            double determinantX = yy * zz - yz * yz;
+            double determinantY = xx * zz - xz * xz;
+            double determinantZ = xx * yy - xy * xy;
+
+            double determinantMax = Math.Max(determinantX, Math.Max(determinantY, determinantZ));
+
+            if(determinantMax <= 0.0)
+                throw new Exception("The points don't span a plane.");
+
+            if (Math.Abs(determinantMax - determinantX) < GeoSharpMath.MAXTOLERANCE)
+            {
+                normal[0] = determinantX;
+                normal[1] = xz * yz - xy * zz;
+                normal[2] = xy * yz - xz * yy;
+            }
+            else if (Math.Abs(determinantMax - determinantY) < GeoSharpMath.MAXTOLERANCE)
+            {
+                normal[0] = xz * yz - xy * zz;
+                normal[1] = determinantY;
+                normal[2] = xy * xz - yz * xx;
+            }
+            else
+            {
+                normal[0] = xy * yz - xz * yy;
+                normal[1] = xy * xz - yz * xx;
+                normal[2] = determinantZ;
+            }
+
+            Plane plane = new Plane(centroid, normal);
+            double maxDeviation = double.MinValue;
+
+            foreach (Vector3 pt in pts)
+            {
+                Vector3 tempPt = plane.ClosestPoint(pt, out double tempLength);
+                maxDeviation = Math.Max(maxDeviation, tempLength);
+            }
+
+            deviation = maxDeviation;
+            return plane;
         }
 
         /// <summary>

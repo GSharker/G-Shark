@@ -1,4 +1,7 @@
-﻿using GeometrySharp.Core;
+using GeometrySharp.Core;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 using GeometrySharp.Geometry;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,9 @@ namespace GeometrySharp.Operation
     /// Evaluation also provides experimental tools for evaluating points in NURBS volumes.
     /// Many of these algorithms owe their implementation to Piegl & Tiller's "The NURBS Book".
     /// </summary>
+    // ToDo: Add Centroid calculated by area
+    // https://stackoverflow.com/questions/9815699/how-to-calculate-centroid
+    // http://csharphelper.com/blog/2014/07/find-the-centroid-of-a-polygon-in-c/
     public class Evaluation
     {
         /// <summary>
@@ -197,6 +203,49 @@ namespace GeometrySharp.Operation
         {
             var derivs = RationalCurveDerivatives(curve, t, 1);
             return derivs[1];
+        }
+
+        /// <summary>
+        /// Gets the area from a list o points.
+        /// The list should represent a closed curve and planar.
+        /// https://stackoverflow.com/questions/25340106/boostgeometry-find-area-of-2d-polygon-in-3d-space
+        /// http://geomalgorithms.com/a01-_area.html
+        /// </summary>
+        /// <param name="pts">Set of points.</param>
+        /// <returns>Area calculated.</returns>
+        public static double CalculateArea(IList<Vector3> pts)
+        {
+            if(pts.Count < 3)
+                throw new Exception("The collection must have minimum three points.");
+
+            double area = 0.0;
+            Vector3 normal = Vector3.Cross(pts[1] - pts[0], pts[2] - pts[0]).Unitize();
+
+            for (int i = 0; i < pts.Count - 1; i++)
+            {
+                Vector3 product = Vector3.Cross(pts[i] - pts[0], pts[i + 1] - pts[0]);
+                area += Vector3.Dot(product, normal);
+            }
+
+            area *= 0.5;
+            return Math.Abs(area);
+        }
+
+        /// <summary>
+        /// Calculates the centroid averaging the points collection.  
+        /// </summary>
+        /// <param name="pts">The points collection to evaluate.</param>
+        /// <returns></returns>
+        public static Vector3 CentroidByVertices(IList<Vector3> pts)
+        {
+            Vector3 centroid = new Vector3 { 0.0, 0.0, 0.0 };
+            bool isClosed = pts[0] == pts[^1];
+            int count = pts.Count;
+
+            for (int i = 0; i < count && !(i == count - 1 & isClosed); i++)
+                centroid += pts[i];
+
+            return !isClosed ? centroid / count : centroid / (count - 1);
         }
 
         /// <summary>

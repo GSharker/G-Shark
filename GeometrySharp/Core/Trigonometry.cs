@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
@@ -12,7 +11,6 @@ namespace GeometrySharp.Core
     public class Trigonometry
     {
         // ToDo isPointOnPlane.
-        // ToDo closedPointToPlane.
 
         /// <summary>
         /// Determine if the provide points are on the same plane.

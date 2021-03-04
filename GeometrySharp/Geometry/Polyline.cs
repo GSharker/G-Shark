@@ -219,7 +219,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
         /// <returns>A cleaned collections of points if necessary otherwise the same collection of points.</returns>
-        private static IList<Vector3> CleanVerticesForShortLength(IList<Vector3> vertices)
+        protected static IList<Vector3> CleanVerticesForShortLength(IList<Vector3> vertices)
         {
             int verticesCount = vertices.Count;
 
