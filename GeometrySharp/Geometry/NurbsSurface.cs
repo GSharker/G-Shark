@@ -1,5 +1,6 @@
 ﻿using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Operation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,12 @@ using System.Linq;
 /// [https://github.com/jdonaldson/promhx](https://github.com/jdonaldson/promhx).
 namespace GeometrySharp.Geometry
 {
+
     /// <summary>
     /// A simple data structure representing a NURBS surface.
     /// NurbsSurfaceData does no checks for legality. You can use <see cref="GeometrySharp.Evaluation.Check"/> for that.
     /// </summary>
-    public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>, ISurface
+    public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>
     {
         /// <summary>
         /// Construct a NurbsSurface by degree, knots, control points, weights
@@ -25,7 +27,7 @@ namespace GeometrySharp.Geometry
         /// <param name="controlPoints">Two dimensional array of points</param>
         /// <param name="weights">Two dimensional array of weight values</param>
         /// <return>A new NurbsSurface</return>
-        private NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
+        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
         {
 
             if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
@@ -45,8 +47,8 @@ namespace GeometrySharp.Geometry
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
+            Weights = weights == null ? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count) : weights;
             HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
-            Weights = weights;
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         }
@@ -83,8 +85,9 @@ namespace GeometrySharp.Geometry
         /// <param name="p2">The second point</param>
         /// <param name="p3">The third point</param>
         /// <param name="p4">The fourth point</param>
-        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
+        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
         {
+            int degree = 1;
             var pts = new List<List<Vector3>>();
             for (int i = 0; i < degree + 1; i++)
             {
@@ -108,6 +111,29 @@ namespace GeometrySharp.Geometry
             return new NurbsSurface(degree, degree, knotU, knotV, pts);
         }
 
+        /// <summary>
+        /// Obtain the surface normal at the given u and v parameters
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+
+        /// <summary>
+        /// Obtain the surface tangent at the given u and v parameters in the u direction
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
+
+        /// <summary>
+        /// Obtain the surface tangent at the given u and v parameters in the v direction
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
 
         /// <summary>
         /// Integer degree of surface in u direction.
@@ -154,8 +180,19 @@ namespace GeometrySharp.Geometry
         public List<List<double>> Weights { get; }
         public List<List<Vector3>> HomogenizedPoints { get; }
 
-        public bool Equals(NurbsSurface other) => throw new NotImplementedException();
+        public bool Equals(NurbsSurface other){
+            //var pts = this.ControlPoints;
+            //var otherPts = other?.ControlPoints;
 
+            //if (other == null) return false;
+            //if (pts.Count != otherPts.Count) return false;
+            //if (this.KnotsU.Count != other.KnotsU.Count) return false;
+            //if (this.KnotsV.Count != other.KnotsV.Count) return false;
+            //if (this.DegreeU != other.DegreeU) return false;
+            //if (this.DegreeV != other.DegreeV) return false;
+            /////
+            throw new NotImplementedException();
+        }
         public override NurbsSurface FromJson(string s) => throw new NotImplementedException();
 
         /// <summary>
