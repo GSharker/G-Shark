@@ -117,7 +117,23 @@ namespace GeometrySharp.Geometry
         /// <param name="u">u parameter</param>
         /// <param name="v">v parameter</param>
         /// <returns></returns>
-        public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v);
+        public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+
+        /// <summary>
+        /// Obtain the surface tangent at the given u and v parameters in the u direction
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
+
+        /// <summary>
+        /// Obtain the surface tangent at the given u and v parameters in the v direction
+        /// </summary>
+        /// <param name="u">u parameter</param>
+        /// <param name="v">v parameter</param>
+        /// <returns></returns>
+        public Vector3 TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
 
         /// <summary>
         /// Integer degree of surface in u direction.

@@ -975,7 +975,7 @@
       "MaximumValue": 1.0,
       "MinimumValue": 0.0,
       "StepValue": 0.001,
-      "InputValue": 0.637,
+      "InputValue": 0.2,
       "Id": "323154c034bb4953ae31b636efdfc79c",
       "Inputs": [],
       "Outputs": [
@@ -999,7 +999,7 @@
       "MaximumValue": 1.0,
       "MinimumValue": 0.0,
       "StepValue": 0.001,
-      "InputValue": 0.41100000000000003,
+      "InputValue": 0.7,
       "Id": "3e6fd423e17b44f5960b45b2c1a36eeb",
       "Inputs": [],
       "Outputs": [
@@ -1237,6 +1237,227 @@
       ],
       "Replication": "Disabled",
       "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[0.5,0.2];\n[0.5,0.7];",
+      "Id": "eec484353b5d43d3885b79f69955b3fe",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "198a55e1f83b44428305a0a070f58da4",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5c5a03a7ed83464dbfadf82fb48b89c6",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.TangentAtUParameter@double,double",
+      "Id": "2d4aa6a10dfa43e69380a902b747ab5b",
+      "Inputs": [
+        {
+          "Id": "51f242f68d464e7797831bdbfac63c67",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b52206fa181e457ab7fccb1d31733933",
+          "Name": "u",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "baa840198d6849aabcbdfa254c802a78",
+          "Name": "v",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ed3cb0ab73004ed69102c8e7f208aa24",
+          "Name": "Vector",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Return the U tangent Vector at specified U and V parameters.\n\nSurface.TangentAtUParameter (u: double = 0, v: double = 0): Vector"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Line.ByStartPointDirectionLength@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,double",
+      "Id": "96a95322011e4f8baf6b7b6ff1c0f920",
+      "Inputs": [
+        {
+          "Id": "54c701281dfd435099424cab2b7dfe8e",
+          "Name": "startPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "24f5c9a22063493cae8506dc01b629be",
+          "Name": "direction",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7482d50e86bd48959af536f47667d812",
+          "Name": "length",
+          "Description": "double\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8ca198c22bb7479593fa9d025f97e7ce",
+          "Name": "Line",
+          "Description": "Line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a straight Line starting at start Point, extending in Vector direction by specified length.\n\nLine.ByStartPointDirectionLength (startPoint: Point, direction: Vector, length: double = 1): Line"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.TangentAtVParameter@double,double",
+      "Id": "289230fad93741ac9ba494e975f6ffd4",
+      "Inputs": [
+        {
+          "Id": "56bf0e2358c142549f72083fa244e3e1",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c889adb4daa144a68671976ff0be0ff1",
+          "Name": "u",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e49f36c4d375414a9910ef2d67940c3b",
+          "Name": "v",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f2eaf5d4af614d99b6e33a696de9d3b6",
+          "Name": "Vector",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Return the V tangent Vector at specified U and V parameters.\n\nSurface.TangentAtVParameter (u: double = 0, v: double = 0): Vector"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Line.ByStartPointDirectionLength@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector,double",
+      "Id": "c60e8ff6a7d649f58badf7c1630b7fbe",
+      "Inputs": [
+        {
+          "Id": "c170627e86fd4c8f8f613e52059271ff",
+          "Name": "startPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "89f0d1a5ec494b1e9d785353c9242a50",
+          "Name": "direction",
+          "Description": "Vector",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "214c8a2c20bc4e79b9d5390b7115b466",
+          "Name": "length",
+          "Description": "double\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4d9b831961a848718a51629dfbdbd440",
+          "Name": "Line",
+          "Description": "Line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a straight Line starting at start Point, extending in Vector direction by specified length.\n\nLine.ByStartPointDirectionLength (startPoint: Point, direction: Vector, length: double = 1): Line"
     }
   ],
   "Connectors": [
@@ -1436,6 +1657,16 @@
       "Id": "8ab0eeed5c1944cb8d3efcc4ad67c901"
     },
     {
+      "Start": "82125e1f5a24404eb504fc7c4d5e8201",
+      "End": "51f242f68d464e7797831bdbfac63c67",
+      "Id": "3542a4cb6c0c4826b4f616538aefe3d2"
+    },
+    {
+      "Start": "82125e1f5a24404eb504fc7c4d5e8201",
+      "End": "56bf0e2358c142549f72083fa244e3e1",
+      "Id": "089ad97ef96044ad9c869898bb1f770b"
+    },
+    {
       "Start": "21b022b12d0549bda0b3e57443490d82",
       "End": "d25325c0ee2d4891ae68e2b57158c8c6",
       "Id": "2be757fde89d483e8433708edf64922c"
@@ -1451,29 +1682,19 @@
       "Id": "e7a72b87e1c0478fa5b71de714339fce"
     },
     {
-      "Start": "45b6b1ec76ad4d9cb3f9d6948f5b4e3a",
-      "End": "22e51ca5a8dc40e18ea24909aafc0a5e",
-      "Id": "7e41a34e7fc84216985c49060762130b"
+      "Start": "3b8b62328f414ee7b68565d1662a8268",
+      "End": "54c701281dfd435099424cab2b7dfe8e",
+      "Id": "fa9a48063fea419caaf99ad9d486330f"
     },
     {
-      "Start": "45b6b1ec76ad4d9cb3f9d6948f5b4e3a",
-      "End": "71483d4b14e84dc0908536ff8925a431",
-      "Id": "1293485dd62e4f3ba8810ea6bc14805a"
+      "Start": "3b8b62328f414ee7b68565d1662a8268",
+      "End": "c170627e86fd4c8f8f613e52059271ff",
+      "Id": "38ed05d52fbc478384489b336a1379cf"
     },
     {
       "Start": "45b6b1ec76ad4d9cb3f9d6948f5b4e3a",
       "End": "86345ef5aeb24f14a2faca9a32df039d",
       "Id": "e6d7d09e97b1475da4a98e2d27592f9b"
-    },
-    {
-      "Start": "edc21ae31fdc4a4e92bc43b38639dfad",
-      "End": "5402303be7204ef5bfd45aadbb031ea1",
-      "Id": "329e6af8eb2e4d9d90177c4d10717fea"
-    },
-    {
-      "Start": "edc21ae31fdc4a4e92bc43b38639dfad",
-      "End": "f7b32ee7a64045dea3c0eefd83b0b2bf",
-      "Id": "c3b2f25c95f245bfb9ad898ff9526379"
     },
     {
       "Start": "edc21ae31fdc4a4e92bc43b38639dfad",
@@ -1494,6 +1715,66 @@
       "Start": "526844d4576246b99d1c466dfa96c775",
       "End": "225844c9a7bb461ab43edfd2ca8c489b",
       "Id": "b1e7fbc479a24d248c183b03f4476814"
+    },
+    {
+      "Start": "526844d4576246b99d1c466dfa96c775",
+      "End": "7482d50e86bd48959af536f47667d812",
+      "Id": "98ae7efa029649e5b3fb84e58e8da17c"
+    },
+    {
+      "Start": "526844d4576246b99d1c466dfa96c775",
+      "End": "214c8a2c20bc4e79b9d5390b7115b466",
+      "Id": "e889e16ffaa941dc917d1cd26f60cd38"
+    },
+    {
+      "Start": "198a55e1f83b44428305a0a070f58da4",
+      "End": "22e51ca5a8dc40e18ea24909aafc0a5e",
+      "Id": "bf093b43f27742109338b7ef952a7b70"
+    },
+    {
+      "Start": "198a55e1f83b44428305a0a070f58da4",
+      "End": "71483d4b14e84dc0908536ff8925a431",
+      "Id": "9f744553d35a4df6bef06e93bdb7d9f7"
+    },
+    {
+      "Start": "198a55e1f83b44428305a0a070f58da4",
+      "End": "b52206fa181e457ab7fccb1d31733933",
+      "Id": "6c574a7b998d4ffcb75d6b5ea4d9281a"
+    },
+    {
+      "Start": "198a55e1f83b44428305a0a070f58da4",
+      "End": "c889adb4daa144a68671976ff0be0ff1",
+      "Id": "bbfba240a8e54bffb9ba8bd2ec8606d4"
+    },
+    {
+      "Start": "5c5a03a7ed83464dbfadf82fb48b89c6",
+      "End": "5402303be7204ef5bfd45aadbb031ea1",
+      "Id": "10bf8d4d89114a3cb5b54906fa3671ea"
+    },
+    {
+      "Start": "5c5a03a7ed83464dbfadf82fb48b89c6",
+      "End": "f7b32ee7a64045dea3c0eefd83b0b2bf",
+      "Id": "f54814929f964f028212c6ce97bac7e7"
+    },
+    {
+      "Start": "5c5a03a7ed83464dbfadf82fb48b89c6",
+      "End": "baa840198d6849aabcbdfa254c802a78",
+      "Id": "701186cb516d4b79a6765f60dbf0493d"
+    },
+    {
+      "Start": "5c5a03a7ed83464dbfadf82fb48b89c6",
+      "End": "e49f36c4d375414a9910ef2d67940c3b",
+      "Id": "0b30c869a66b4fab8f506b94efd5464e"
+    },
+    {
+      "Start": "ed3cb0ab73004ed69102c8e7f208aa24",
+      "End": "24f5c9a22063493cae8506dc01b629be",
+      "Id": "628e23d893d44dd09e1ba5b2d05697c0"
+    },
+    {
+      "Start": "f2eaf5d4af614d99b6e33a696de9d3b6",
+      "End": "89f0d1a5ec494b1e9d785353c9242a50",
+      "Id": "69298d7c7d644c2da04e3e3c26124840"
     }
   ],
   "Dependencies": [],
@@ -1510,15 +1791,15 @@
     },
     "Camera": {
       "Name": "Background Preview",
-      "EyeX": 29.853878021240234,
-      "EyeY": 19.285160064697266,
-      "EyeZ": 36.538604736328125,
-      "LookX": -30.275482177734375,
-      "LookY": -33.728195190429688,
-      "LookZ": -29.948940277099609,
-      "UpX": -0.31165146827697754,
-      "UpY": 0.89879393577575684,
-      "UpZ": -0.30829015374183655
+      "EyeX": 36.773578643798828,
+      "EyeY": 19.878805160522461,
+      "EyeZ": 17.631622314453125,
+      "LookX": -21.588695526123047,
+      "LookY": -38.806133270263672,
+      "LookZ": -19.914051055908203,
+      "UpX": -0.47737187147140503,
+      "UpY": 0.76040530204772949,
+      "UpZ": -0.4403405487537384
     },
     "NodeViews": [
       {
@@ -1718,8 +1999,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1441.3449341657315,
-        "Y": 442.16184912547732
+        "X": 1827.0806295431346,
+        "Y": 428.01140040303886
       },
       {
         "ShowGeometry": true,
@@ -1728,8 +2009,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1443.2260679797851,
-        "Y": 595.81168661422134
+        "X": 1420.9013891129284,
+        "Y": 659.40319611375173
       },
       {
         "ShowGeometry": true,
@@ -1758,8 +2039,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1490.1488918380282,
-        "Y": 948.79959118725264
+        "X": 1468.8436783721427,
+        "Y": 955.19115522701827
       },
       {
         "ShowGeometry": true,
@@ -1798,8 +2079,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1847.3722228404376,
-        "Y": 737.11307513715781
+        "X": 2094.9114614504933,
+        "Y": 420.4344102440059
       },
       {
         "ShowGeometry": true,
@@ -1808,13 +2089,63 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1726.2675421867186,
-        "Y": 439.33852156891771
+        "X": 2093.481319654114,
+        "Y": -17.705665175728512
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "eec484353b5d43d3885b79f69955b3fe",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 908.0,
+        "Y": 758.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Surface.TangentAtUParameter",
+        "Id": "2d4aa6a10dfa43e69380a902b747ab5b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1826.0526239155663,
+        "Y": 152.42675822297406
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Line.ByStartPointDirectionLength",
+        "Id": "96a95322011e4f8baf6b7b6ff1c0f920",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2094.845338090237,
+        "Y": 142.14615191046718
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Surface.TangentAtVParameter",
+        "Id": "289230fad93741ac9ba494e975f6ffd4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1825.5756390589227,
+        "Y": 289.27125933066895
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Line.ByStartPointDirectionLength",
+        "Id": "c60e8ff6a7d649f58badf7c1630b7fbe",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2093.6418395818673,
+        "Y": 280.17549807686709
       }
     ],
     "Annotations": [],
-    "X": -1418.8980411548125,
-    "Y": -256.14009914881694,
-    "Zoom": 1.1793641433910496
+    "X": -1550.8298190465594,
+    "Y": 195.66333630197994,
+    "Zoom": 1.0195238624315748
   }
 }

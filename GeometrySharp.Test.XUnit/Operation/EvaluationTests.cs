@@ -337,24 +337,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             _testOutput.WriteLine($"{p3[0]}, {p3[1]}, {p3[2]}");
         }
 
-        [Fact]
-        public void It_Returns_The_Surface_Normal_At_A_Given_U_And_V_Parameter()
-        {
-            var nurbsSurface = BuildTestNurbsSurface();
-            var res1 = nurbsSurface.Normal(0.5, 0.5).Unitize();
-            res1.Should().NotBeNullOrEmpty();
-            res1[0].Should().BeApproximately(0.093d, 3);
-            res1[1].Should().BeApproximately(-0.093d, 3);
-            res1[2].Should().BeApproximately(0.991d, 3);
-
-            var res2 = nurbsSurface.Normal(0.2, 0.7).Unitize();
-            res2.Should().NotBeNullOrEmpty();
-            res2[0].Should().BeApproximately(0.125d, 3);
-            res2[1].Should().BeApproximately(0.060d, 3);
-            res2[2].Should().BeApproximately(0.990d, 3);
-
-            _testOutput.WriteLine($"Vector1[0.5,0.5]: {res1}\nVector2[0.2,0.7]: {res2}\n");
-        }
+        
 
         [Fact]
         public void It_Returns_A_Derive_Basic_Function_Given_NI()
