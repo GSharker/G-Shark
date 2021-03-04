@@ -1,9 +1,8 @@
-﻿using Xunit.Abstractions;
-using FluentAssertions;
+﻿using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
-using GeometrySharp.Core;
-using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Geometry
 {
@@ -23,13 +22,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var p3 = new Vector3() { 1.0d, 1.0d, 1.0d };
             var p4 = new Vector3() { 0.0d, 1.0d, 1.0d };
 
-            Knot knotU = new Knot { 0.0d, 0.0d, 0.0d, 0.0d, 1.0d, 1.0d, 1.0d, 1.0d };
-            Knot knotV = new Knot { 0.0d, 0.0d, 0.0d, 0.0d, 1.0d, 1.0d, 1.0d, 1.0d };
+            Knot knotU = new Knot { 0.0d, 0.0d, 1.0d, 1.0d };
+            Knot knotV = new Knot { 0.0d, 0.0d, 1.0d, 1.0d };
 
             var nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
             nurbsSurface.Should().NotBeNull();
-            nurbsSurface.DegreeU.Should().Be(3);
-            nurbsSurface.DegreeV.Should().Be(3);
+            nurbsSurface.DegreeU.Should().Be(1);
+            nurbsSurface.DegreeV.Should().Be(1);
             nurbsSurface.KnotsU.Should().BeEquivalentTo(knotU);
             nurbsSurface.KnotsV.Should().BeEquivalentTo(knotV);
         }
