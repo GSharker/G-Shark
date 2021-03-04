@@ -175,6 +175,9 @@ namespace GeometrySharp.Operation
         /// <returns>Area calculated.</returns>
         public static double CalculateArea(IList<Vector3> pts)
         {
+            if(pts.Count < 3)
+                throw new Exception("The collection must have minimum three points.");
+
             double area = 0.0;
             Vector3 normal = Vector3.Cross(pts[1] - pts[0], pts[2] - pts[0]).Unitize();
 

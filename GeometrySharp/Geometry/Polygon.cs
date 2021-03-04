@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using GeometrySharp.Core;
 using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo Valid if it is planar
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
+    // ToDo: Centroid by area.
     /// <summary>
     /// A closed planar Polyline.
     /// </summary>
@@ -20,6 +21,13 @@ namespace GeometrySharp.Geometry
             if (vertices.Count < 3)
             {
                 throw new Exception("Insufficient points for a Polygon.");
+            }
+
+            Plane fitPlane = Plane.FitPlane(vertices, out double deviation);
+
+            if (!(Math.Abs(deviation) < GeoSharpMath.MINTOLERANCE))
+            {
+                throw new Exception("The points must be co-planar.");
             }
 
             IList<Vector3> cleanedVertices = CleanVerticesForShortLength(vertices);
