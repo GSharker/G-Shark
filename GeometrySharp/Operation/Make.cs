@@ -52,54 +52,7 @@ namespace GeometrySharp.Operation
 
         //////////////////////////// =================================== not implemented yet ================================== ///////////////////
 
-        /// <summary>
-        /// Create a surface by translating a profile curve along a rail curve
-        /// </summary>
-        /// <param name="profile">NurbCurveData Profile</param>
-        /// <param name="rail">NurbCurveData Rail</param>
-        /// <returns></returns>
-        public static NurbsSurface RationalTranslationalSurface(NurbsCurve profile, NurbsCurve rail)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        /// <summary>
-        /// Extract the boundary curves from a surface
-        /// </summary>
-        /// <param name="surface"></param>
-        /// <returns>an List containing 4 elements, first 2 curves in the V direction, then 2 curves in the U direction</returns>
-        public static List<NurbsCurve> SurfaceBoundaryCurves(NurbsSurface surface)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static NurbsCurve SurfaceIsocurve(NurbsSurface surface, double u, bool useV = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static NurbsSurface LoftedSurface(List<NurbsCurve> curves, int degreeV = 0)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="p1">first point in counter-clockwise form</param>
-        /// <param name="p2">second point in counter-clockwise form</param>
-        /// <param name="p3">third point in counter-clockwise form</param>
-        /// <param name="p4">forth point in counter-clockwise form</param>
-        /// <param name="degree"></param>
-        /// <returns></returns>
-        public static NurbsSurface FourPointSurface(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, int degree = 3)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Create the control points, weights, and knots of an elliptical arc
         /// </summary>
