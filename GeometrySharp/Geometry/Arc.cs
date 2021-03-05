@@ -7,7 +7,6 @@ namespace GeometrySharp.Geometry
     // ToDo: ClosestPoint
     // ToDo: Transform
     // ToDo: IEquatable
-    // ToDo: IsCircle
     // ToDo: ArcFrom3Pts
     // ToDo: ToString - Arc(R: A:)
     // ToDo: ArcFromTangent
@@ -69,6 +68,11 @@ namespace GeometrySharp.Geometry
         public double Length => Math.Abs(Angle * this.Radius);
 
         /// <summary>
+        /// Gets true if the arc is a circle, so the angle is describable as 2Pi.
+        /// </summary>
+        public bool isCircle => Math.Abs(this.Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
+
+        /// <summary>
         /// Returns the point at the parameter t on the arc.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0./param>
@@ -90,7 +94,16 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                // ToDo: check if it is a circle.
+                if (isCircle)
+                {
+                    Vector3 xDir = this.Plane.XAxis * this.Radius;
+                    Vector3 yDir = this.Plane.YAxis * this.Radius;
+
+                    Vector3 min = this.Center - xDir - yDir;
+                    Vector3 max = this.Center + xDir + yDir;
+
+                    return new BoundingBox(min, max);
+                }
                 Vector3 pt0 = PointAt(0.0);
                 Vector3 pt1 = PointAt(0.5);
                 Vector3 pt2 = PointAt(1.0);
