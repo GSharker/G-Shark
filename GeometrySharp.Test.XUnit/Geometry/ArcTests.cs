@@ -8,5 +8,6 @@ namespace GeometrySharp.Test.XUnit.Geometry
 {
     public class ArcTests
     {
+        
     }
 }

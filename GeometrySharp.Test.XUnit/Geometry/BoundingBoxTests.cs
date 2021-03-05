@@ -33,7 +33,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             var conteinedPt = new Vector3 {2.5, 4.5, 0.0};
 
-            var bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
+            var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var containsResult = bBox.Contains(conteinedPt, false);
 
             containsResult.Should().BeTrue();
@@ -44,7 +44,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             var externalPt = new Vector3 {12.4, 5.0, 0.0};
 
-            var bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
+            var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var containsResult = bBox.Contains(externalPt, false);
 
             containsResult.Should().BeFalse();
@@ -70,7 +70,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var pts = new List<Vector3> {pt1, pt2};
             var pMax = new Vector3 {10, 10, 0};
 
-            var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
+            var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts);
             var bBoxResult = bBox1.Union(bBox2);
 
@@ -101,23 +101,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
             var pt2 = new Vector3 {15d, 15d, 0d};
             var pts2 = new List<Vector3> {pt1, pt2};
 
-            var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
+            var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts2);
             var bBoxResult = bBox1.Intersect(bBox2);
 
             bBoxResult.IsValid.Should().BeTrue();
             bBoxResult.Max.Should().BeEquivalentTo(bBox1.Max);
             bBoxResult.Min.Should().BeEquivalentTo(bBox2.Min);
-        }
-
-        [Fact]
-        public void It_Returns_A_BBox_NotInitialized()
-        {
-            var bBox = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
-
-            bBox.Clear();
-
-            bBox.IsValid.Should().BeFalse();
         }
 
         [Theory]
@@ -145,7 +135,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void Union_Returns_ValidBoundingBox_If_Other_IsNotValid()
         {
             var bBox1 = BoundingBox.Unset;
-            var bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBoxFrom5Points());
+            var bBox2 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
 
             var bBoxResult = BoundingBox.Union(bBox1, bBox2);
 
