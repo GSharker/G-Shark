@@ -7,9 +7,10 @@ namespace GeometrySharp.Geometry
     // ToDo: ClosestPoint
     // ToDo: Transform
     // ToDo: IEquatable
-    // ToDo: Length
     // ToDo: IsCircle
     // ToDo: ArcFrom3Pts
+    // ToDo: ToString - Arc(R: A:)
+    // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
@@ -61,6 +62,11 @@ namespace GeometrySharp.Geometry
         /// Angle value in radians.
         /// </summary>
         public double Angle => AngleDomain.Length;
+
+        /// <summary>
+        /// Calculates the length of the arc.
+        /// </summary>
+        public double Length => Math.Abs(Angle * this.Radius);
 
         /// <summary>
         /// Returns the point at the parameter t on the arc.

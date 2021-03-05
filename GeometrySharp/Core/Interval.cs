@@ -2,7 +2,8 @@
 
 namespace GeometrySharp.Core
 {
-    // ToDo possible methods to add -> IsValid, Equality.
+    // ToDo: IsValid.
+    // ToDo: IEquatable.
     /// <summary>
     /// A simple parametric data representing an "interval" between two numbers.
     /// </summary>
