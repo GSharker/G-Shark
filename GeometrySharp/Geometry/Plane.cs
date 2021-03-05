@@ -6,6 +6,8 @@ using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: ClosestPointTo (used in alignment, and arc 3 points)
+    // ToDo: PointAt
     /// <summary>
     /// A Plane is simply an origin point and normal.
     /// </summary>

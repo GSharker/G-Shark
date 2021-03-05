@@ -34,6 +34,20 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Initializes_An_Arc_By_Three_Points()
+        {
+            Vector3 pt1 = new Vector3 {74.264416, 36.39316, -1.884313};
+            Vector3 pt2 = new Vector3 {97.679126, 13.940616, 3.812853};
+            Vector3 pt3 = new Vector3 {100.92443, 30.599893, -0.585116};
+
+            Arc arc = new Arc(pt1, pt2, pt3);
+
+            arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAXTOLERANCE);
+            arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAXTOLERANCE);
+            GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
             double angle = GeoSharpMath.ToRadians(40);

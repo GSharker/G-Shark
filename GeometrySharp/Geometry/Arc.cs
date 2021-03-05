@@ -7,8 +7,6 @@ namespace GeometrySharp.Geometry
     // ToDo: ClosestPoint
     // ToDo: Transform
     // ToDo: IEquatable
-    // ToDo: ArcFrom3Pts
-    // ToDo: ToString - Arc(R: A:)
     // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
@@ -39,6 +37,45 @@ namespace GeometrySharp.Geometry
         public Arc(Plane plane, double radius, double angle)
             : this(plane, radius, new Interval(0.0, angle))
         {
+        }
+
+        /// <summary>
+        /// Initializes an arc from three points.
+        /// https://github.com/sergarrido/random/tree/master/circle3d
+        /// </summary>
+        /// <param name="pt1">Start point of the arc.</param>
+        /// <param name="pt2">Interior point on arc.</param>
+        /// <param name="pt3">End point of the arc.</param>
+        public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        {
+            Vector3 v1 = pt2 - pt1;
+            Vector3 v2 = pt3 - pt1;
+
+            double v1v1 = Vector3.Dot(v1, v1);
+            double v2v2 = Vector3.Dot(v2, v2);
+            double v1v2 = Vector3.Dot(v1, v2);
+
+            double a = 0.5 / (v1v1 * v2v2 - v1v2 * v1v2);
+            double k1 = a * v2v2 * (v1v1 - v1v2);
+            double k2 = a * v1v1 * (v2v2 - v1v2);
+
+            Vector3 center = pt1 + v1 * k1 + v2 * k2;
+            Vector3 xDir = pt1 - center;
+            Vector3 v3 = pt3 - center;
+            Vector3 v4 = Vector3.Cross(xDir, v3);
+            Vector3 yDir = Vector3.Cross(xDir, v4);
+
+            double u = Vector3.Dot(v3, xDir.Unitize());
+            double v = Vector3.Dot(v3, yDir.Unitize());
+
+            double angle = Math.Atan2(v, u);
+            if (angle < 0.0) angle += 2.0 * Math.PI;
+
+            double radius = xDir.Length();
+
+            Plane = new Plane(center, pt1, center + yDir.Amplify(radius));
+            Radius = radius;
+            AngleDomain = new Interval(0.0, angle);
         }
 
         /// <summary>
@@ -112,6 +149,15 @@ namespace GeometrySharp.Geometry
 
                 return new BoundingBox(pts);
             }
+        }
+
+        /// <summary>
+        /// Gets the text representation of an arc.
+        /// </summary>
+        /// <returns>Text value.</returns>
+        public override string ToString()
+        {
+            return $"Arc(R:{this.Radius} - A:{GeoSharpMath.ToDegrees(this.Angle)})";
         }
     }
 }
