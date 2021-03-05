@@ -69,5 +69,22 @@ namespace GeometrySharp.Geometry
 
             return this.Plane.Origin + xDir + yDir;
         }
+        
+        /// <summary>
+        /// Gets the BoundingBox of this arc.
+        /// </summary>
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                Vector3 pt0 = PointAt(0.0);
+                Vector3 pt1 = PointAt(0.5);
+                Vector3 pt2 = PointAt(1.0);
+
+                Vector3[] pts = new[] {pt0, pt1, pt2};
+
+                return new BoundingBox(pts);
+            }
+        }
     }
 }

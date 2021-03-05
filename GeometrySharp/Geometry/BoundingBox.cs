@@ -4,6 +4,8 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: BoundingBox align to a plane.
+    // ToDo: Minimum BoundingBox.
     /// <summary>
     /// Represents the value of two points in a bounding box
     /// defined by the two extreme corner points.
