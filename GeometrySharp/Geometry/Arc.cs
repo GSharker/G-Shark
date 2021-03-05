@@ -3,6 +3,13 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: TangentAt need the DerivativeAt
+    // ToDo: ClosestPoint
+    // ToDo: Transform
+    // ToDo: IEquatable
+    // ToDo: Length
+    // ToDo: IsCircle
+    // ToDo: ArcFrom3Pts
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
@@ -15,7 +22,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="plane">Base plane.</param>
         /// <param name="radius">Radius value.</param>
-        /// <param name="angleDomain">Interval defining the angle of the arc.</param>
+        /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
             Plane = plane;
@@ -77,6 +84,7 @@ namespace GeometrySharp.Geometry
         {
             get
             {
+                // ToDo: check if it is a circle.
                 Vector3 pt0 = PointAt(0.0);
                 Vector3 pt1 = PointAt(0.5);
                 Vector3 pt2 = PointAt(1.0);
