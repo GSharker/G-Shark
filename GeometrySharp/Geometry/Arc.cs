@@ -1,10 +1,9 @@
-﻿using System;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
+using System;
 
 namespace GeometrySharp.Geometry
 {
     // ToDo: TangentAt need the DerivativeAt
-    // ToDo: ClosestPoint
     // ToDo: Transform
     // ToDo: IEquatable
     // ToDo: ArcFromTangent
@@ -48,6 +47,7 @@ namespace GeometrySharp.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
+            // ToDo: check if the point are collinear return
             Vector3 v1 = pt2 - pt1;
             Vector3 v2 = pt3 - pt1;
 
@@ -69,7 +69,10 @@ namespace GeometrySharp.Geometry
             double v = Vector3.Dot(v3, yDir.Unitize());
 
             double angle = Math.Atan2(v, u);
-            if (angle < 0.0) angle += 2.0 * Math.PI;
+            if (angle < 0.0)
+            {
+                angle += 2.0 * Math.PI;
+            }
 
             double radius = xDir.Length();
 
@@ -102,28 +105,13 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Calculates the length of the arc.
         /// </summary>
-        public double Length => Math.Abs(Angle * this.Radius);
+        public double Length => Math.Abs(Angle * Radius);
 
         /// <summary>
         /// Gets true if the arc is a circle, so the angle is describable as 2Pi.
         /// </summary>
-        public bool isCircle => Math.Abs(this.Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
+        public bool isCircle => Math.Abs(Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
 
-        /// <summary>
-        /// Returns the point at the parameter t on the arc.
-        /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0./param>
-        /// <returns>Point on the arc.</returns>
-        public Vector3 PointAt(double t)
-        {
-            double tRemap = GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain);
-
-            Vector3 xDir = this.Plane.XAxis * Math.Cos(tRemap) * this.Radius;
-            Vector3 yDir = this.Plane.YAxis * Math.Sin(tRemap) * this.Radius;
-
-            return this.Plane.Origin + xDir + yDir;
-        }
-        
         /// <summary>
         /// Gets the BoundingBox of this arc.
         /// </summary>
@@ -133,11 +121,11 @@ namespace GeometrySharp.Geometry
             {
                 if (isCircle)
                 {
-                    Vector3 xDir = this.Plane.XAxis * this.Radius;
-                    Vector3 yDir = this.Plane.YAxis * this.Radius;
+                    Vector3 xDir = Plane.XAxis * Radius;
+                    Vector3 yDir = Plane.YAxis * Radius;
 
-                    Vector3 min = this.Center - xDir - yDir;
-                    Vector3 max = this.Center + xDir + yDir;
+                    Vector3 min = Center - xDir - yDir;
+                    Vector3 max = Center + xDir + yDir;
 
                     return new BoundingBox(min, max);
                 }
@@ -145,19 +133,85 @@ namespace GeometrySharp.Geometry
                 Vector3 pt1 = PointAt(0.5);
                 Vector3 pt2 = PointAt(1.0);
 
-                Vector3[] pts = new[] {pt0, pt1, pt2};
+                Vector3[] pts = new[] { pt0, pt1, pt2 };
 
                 return new BoundingBox(pts);
             }
         }
 
         /// <summary>
+        /// Returns the point at the parameter t on the arc.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
+        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
+        /// <returns>Point on the arc.</returns>
+        public Vector3 PointAt(double t, bool parametrize = true)
+        {
+
+            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
+
+            Vector3 xDir = Plane.XAxis * Math.Cos(tRemap) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(tRemap) * Radius;
+
+            return Plane.Origin + xDir + yDir;
+        }
+
+        /// <summary>
+        /// Calculates the point on an arc that is close to a test point.
+        /// </summary>
+        /// <param name="pt">The test point. Point to get close to.</param>
+        /// <returns>The point on the arc that is close to the test point.</returns>
+        public Vector3 ClosestPt(Vector3 pt)
+        {
+            double twoPi = 2.0 * Math.PI;
+            double t = 0.0;
+
+            (double u, double v) = Plane.ClosestParameters(pt);
+            if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
+            {
+                t = 0.0;
+                return PointAt(t);
+            }
+
+            t = Math.Atan2(v, u);
+            if (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            if (isCircle)
+            {
+                return PointAt(t, false);
+            }
+
+            t -= AngleDomain.Min;
+
+            while (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            while (t >= twoPi)
+            {
+                t -= twoPi;
+            }
+
+            double t1 = AngleDomain.Length;
+            if (t > t1)
+            {
+                t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
+            }
+
+            return PointAt(AngleDomain.Min + t, false);
+        }
+        
+        /// <summary>
         /// Gets the text representation of an arc.
         /// </summary>
         /// <returns>Text value.</returns>
         public override string ToString()
         {
-            return $"Arc(R:{this.Radius} - A:{GeoSharpMath.ToDegrees(this.Angle)})";
+            return $"Arc(R:{Radius} - A:{GeoSharpMath.ToDegrees(Angle)})";
         }
     }
 }

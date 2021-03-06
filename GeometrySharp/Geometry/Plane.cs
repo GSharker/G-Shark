@@ -1,13 +1,12 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: ClosestPointTo (used in alignment, and arc 3 points)
-    // ToDo: PointAt
+    // ToDo: PointAt commented, see if it can be useful.
     /// <summary>
     /// A Plane is simply an origin point and normal.
     /// </summary>
@@ -127,16 +126,37 @@ namespace GeometrySharp.Geometry
         /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
         public Plane Align(Vector3 direction)
         {
-            Vector3 tempPt = this.Origin + direction;
-            Vector3 tempDir = tempPt - this.Origin;
+            Vector3 tempPt = Origin + direction;
 
-            double u = Vector3.Dot(this.XAxis, tempDir);
-            double v = Vector3.Dot(this.YAxis, tempDir);
-
+            var (u, v) = ClosestParameters(tempPt);
             double angle = -(Math.Atan2(u, v)) + Math.PI / 2.0;
 
-            return this.Rotate(angle);
+            return Rotate(angle);
         }
+
+        /// <summary>
+        /// Gets the parameters of a point on the plane closest to the test point.
+        /// </summary>
+        /// <param name="pt">Test point, the point to get close to.</param>
+        /// <returns>The u parameter is along X-direction and v parameter is along the Y-direction.</returns>
+        public (double u, double v) ClosestParameters(Vector3 pt)
+        {
+            Vector3 v1 = pt - Origin;
+            double u = Vector3.Dot(v1, XAxis);
+            double v = Vector3.Dot(v1, YAxis);
+            return (u, v);
+        }
+
+        /// <summary>
+        /// Evaluates a point on the plane.
+        /// </summary>
+        /// <param name="u">Evaluation parameter.</param>
+        /// <param name="v">Evaluation parameter.</param>
+        /// <returns>The evaluated point.</returns>
+        //private Vector3 PointAt(double u, double v)
+        //{
+        //    return Origin + XAxis * u + YAxis * v;
+        //}
 
         /// <summary>
         /// Swapping out the X and Y axes and inverting the Z axis.
@@ -155,7 +175,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The plane with the new origin.</returns>
         public Plane SetOrigin(Vector3 origin)
         {
-            return new Plane(origin, this.XAxis, this.YAxis, this.ZAxis);
+            return new Plane(origin, XAxis, YAxis, ZAxis);
         }
 
         /// <summary>
@@ -168,7 +188,9 @@ namespace GeometrySharp.Geometry
         public static Plane FitPlane(IList<Vector3> pts, out double deviation)
         {
             if (pts.Count < 3)
+            {
                 throw new Exception("The collection must have minimum three points.");
+            }
 
             Vector3 centroid = Evaluation.CentroidByVertices(pts);
             Vector3 normal = Vector3.Unset;
@@ -195,7 +217,9 @@ namespace GeometrySharp.Geometry
             double determinantMax = Math.Max(determinantX, Math.Max(determinantY, determinantZ));
 
             if(determinantMax <= 0.0)
+            {
                 throw new Exception("The points don't span a plane.");
+            }
 
             if (Math.Abs(determinantMax - determinantX) < GeoSharpMath.MAXTOLERANCE)
             {
@@ -236,10 +260,10 @@ namespace GeometrySharp.Geometry
         /// <returns>The plan rotated.</returns>
         public Plane Rotate(double angle)
         {
-            Vector3 xRotate = this.XAxis.Rotate(this.ZAxis, angle);
-            Vector3 yRotate = Vector3.Cross(this.ZAxis, xRotate);
+            Vector3 xRotate = XAxis.Rotate(ZAxis, angle);
+            Vector3 yRotate = Vector3.Cross(ZAxis, xRotate);
 
-            return new Plane(this.Origin, xRotate, yRotate, this.ZAxis);
+            return new Plane(Origin, xRotate, yRotate, ZAxis);
         }
 
         /// <summary>
