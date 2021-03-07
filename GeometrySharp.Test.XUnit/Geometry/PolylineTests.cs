@@ -16,8 +16,12 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             _testOutput = testOutput;
         }
-        public static Vector3[] ExamplePts => new[] { new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 }, 
-            new Vector3 { 20, 5, 0 }, new Vector3 { 30, 10, 0 }, new Vector3 { 45, 12.5, 0 } };
+
+        public static Vector3[] ExamplePts => new[]
+        {
+            new Vector3 {5, 0, 0}, new Vector3 {15, 15, 0},
+            new Vector3 {20, 5, 0}, new Vector3 {30, 10, 0}, new Vector3 {45, 12.5, 0}
+        };
 
         [Fact]
         public void It_Returns_A_Polyline()

@@ -9,7 +9,7 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Interval()
         {
-            var interval = new Interval(-10, 20);
+            Interval interval = new Interval(-10, 20);
 
             interval.Should().NotBeNull();
             interval.Max.Should().Be(20);
@@ -24,11 +24,31 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(1, 20)]
         public void It_Returns_The_Value_At_The_Give_Normalized_Parameter(double normalizeParam, double valueExpected)
         {
-            var interval = new Interval(-10, 20);
+            Interval interval = new Interval(-10, 20);
 
-            var valueResult = interval.ParameterAt(normalizeParam);
+            double valueResult = interval.ParameterAt(normalizeParam);
 
             valueResult.Should().Be(valueExpected);
+        }
+
+        [Fact]
+        public void It_Returns_The_Interval_Length()
+        {
+            Interval interval = new Interval(1.5, 15.3);
+
+            double intervalLength = interval.Length;
+
+            intervalLength.Should().Be(13.8);
+        }
+
+        [Fact]
+        public void It_Returns_The_Interval_Medium_Value()
+        {
+            Interval interval = new Interval(1.5, 15.3);
+
+            double intervalMidVal = interval.Mid;
+
+            intervalMidVal.Should().Be(8.4);
         }
     }
 }

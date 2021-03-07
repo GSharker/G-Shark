@@ -4,15 +4,14 @@ using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: BoundingBox align to a plane.
+    // ToDo: Minimum BoundingBox.
     /// <summary>
-    /// BoundingBox is an n-dimensional bounding box implementation. It is used by many of verb's intersection algorithms.
-    /// The first point added to the BoundingBox using BoundingBox.add will be used to define the dimensionality of the
-    /// bounding box.
+    /// Represents the value of two points in a bounding box
+    /// defined by the two extreme corner points.
     /// </summary>
     public class BoundingBox
     {
-        private int _dim = 3;
-
         /// <summary>
         /// Constructs a new bounding box from two corner points.
         /// </summary>
@@ -22,111 +21,68 @@ namespace GeometrySharp.Geometry
         {
             this.Min = min;
             this.Max = max;
-            this.IsValid = true;
         }
 
         /// <summary>
-        /// Create a BoundingBox from a list of points.
+        /// Constructs a BoundingBox from a list of points.
         /// </summary>
-        /// <param name="pts"></param>
+        /// <param name="pts">Collection of points will be contained in the BoundingBox.</param>
         public BoundingBox(IList<Vector3> pts)
         {
-            if (pts != null)
-                AddRange(pts);
-        }
+            Vector3 min = new Vector3 { double.MaxValue, double.MaxValue, double.MaxValue };
+            Vector3 max = new Vector3 { double.MinValue, double.MinValue, double.MinValue };
+            bool flag = true;
 
-        /// <summary>
-        /// Create a BoundingBox with a single element.
-        /// </summary>
-        /// <param name="pt"></param>
-        public BoundingBox(Vector3 pt)
-        {
-            Add(pt);
+            foreach (Vector3 pt in pts)
+            {
+                if (pt[0] < min[0]) min[0] = pt[0];
+                if (pt[1] < min[1]) min[1] = pt[1];
+                if (pt[2] < min[2]) min[2] = pt[2];
+
+                if (pt[0] > max[0]) max[0] = pt[0];
+                if (pt[1] > max[1]) max[1] = pt[1];
+                if (pt[2] > max[2]) max[2] = pt[2];
+            }
+
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
         /// The minimum point of the BoundingBox - the coordinates of this point are always <= max.
         /// </summary>
-        public Vector3 Min { get; private set; }
+        public Vector3 Min { get; }
 
         /// <summary>
         /// The maximum point of the BoundingBox. The coordinates of this point are always >= min.
         /// </summary>
-        public Vector3 Max { get; private set; }
+        public Vector3 Max { get; }
 
         /// <summary>
         /// Gets a BoundingBox that has Unset coordinates for Min and Max.
         /// </summary>
-        public static BoundingBox Unset { get; } = new BoundingBox(Vector3.Unset){IsValid = false};
+        public static BoundingBox Unset { get; } = new BoundingBox(Vector3.Unset, Vector3.Unset);
 
         /// <summary>
-        /// If the BoundingBox is initialized is a bounding box valid.
+        /// Gets if the BoundingBox is valid.
         /// </summary>
-        public bool IsValid { get; private set; }
+        public bool IsValid => this.Min.IsValid() && this.Max.IsValid() &&
+                               (this.Min[0] <= this.Max[0] && this.Min[1] <= this.Max[1]) &&
+                               this.Min[2] <= this.Max[2];
 
         /// <summary>
-        /// Adds a point to the BoundingBox, expanding the BoundingBox if the point is outside of it.
-        /// If the BoundingBox is not _initialized, this method has that side effect.
-        /// </summary>
-        /// <param name="pt"></param>
-        /// <returns>Return the BoundingBox changed.</returns>
-        public BoundingBox Add(Vector3 pt)
-        {
-            if (!IsValid)
-            {
-                _dim = pt.Count;
-                Min = new Vector3 {pt[0], pt[1], pt[2]};
-                Max = new Vector3 {pt[0], pt[1], pt[2]};
-                IsValid = true;
-                return this;
-            }
-
-            for (var i = 0; i < _dim; i++)
-            {
-                if (pt[i] > Max[i])
-                    Max[i] = pt[i];
-                if (pt[i] < Min[i])
-                    Min[i] = pt[i];
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Add an array of points to the BoundingBox.
-        /// </summary>
-        /// <param name="pts"></param>
-        /// <returns>Return a BoundingBox from a list of points.</returns>
-        public BoundingBox AddRange(IList<Vector3> pts)
-        {
-            foreach (var t in pts)
-                Add(t);
-            return this;
-        }
-
-        /// <summary>
-        /// Clear the BoundingBox, leaving it in an uninitialized state.  Call add, addRange in order to initialize.
-        /// </summary>
-        /// <returns>A BoundingBox cleared.</returns>
-        public BoundingBox Clear()
-        {
-            IsValid = false;
-            return this;
-        }
-
-        /// <summary>
-        /// Get length of given axis.
+        /// Gets length of given axis.
         /// </summary>
         /// <param name="i">Index of axis to inspect (between 0 and 2)</param>
         /// <returns>Return the value length of the axis.</returns>
         public double GetAxisLength(int i)
         {
-            if (i < 0 || i > _dim - 1) return 0.0;
+            if (i < 0 || i > 2) return 0.0;
             return Math.Abs(Min[i] - Max[i]);
         }
 
         /// <summary>
-        /// Get longest axis of bounding box.
+        /// Gets longest axis of bounding box.
         /// Value 0 = X, 1 = Y, 2 = Z.
         /// </summary>
         /// <returns>Return the value of the longest axis of BoundingBox.</returns>
@@ -135,7 +91,7 @@ namespace GeometrySharp.Geometry
             var max = double.MinValue;
             var axisIndex = 0;
 
-            for (var i = 0; i < _dim; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var axisLength = GetAxisLength(i);
                 if (axisLength > max)
@@ -161,7 +117,7 @@ namespace GeometrySharp.Geometry
             if (!bBox1.IsValid || !bBox2.IsValid) return false;
             tol = tol < -0.5 ? GeoSharpMath.MAXTOLERANCE : tol;
             var count = 0;
-            for (var i = 0; i < bBox1._dim; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var x1 = Math.Min(bBox1.Min[i], bBox1.Max[i]) - tol;
                 var x2 = Math.Max(bBox1.Min[i], bBox1.Max[i]) + tol;

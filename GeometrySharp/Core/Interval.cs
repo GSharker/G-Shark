@@ -1,8 +1,9 @@
-﻿namespace GeometrySharp.Core
+﻿using System;
+
+namespace GeometrySharp.Core
 {
-    // Note originally interval took T as type. If necessary re-introduce as a T.
-    // Note this class can be implemented using some method from RhinoCommon.
-    // ToDo possible methods to add -> IsValid, Mid, Length, Equality.
+    // ToDo: IsValid.
+    // ToDo: IEquatable.
     /// <summary>
     /// A simple parametric data representing an "interval" between two numbers.
     /// </summary>
@@ -22,12 +23,23 @@
         /// <summary>
         /// The minimum value of the interval.
         /// </summary>
-        public double Min { get; set; }
+        public double Min { get; }
 
         /// <summary>
         /// The maximum value of the interval.
         /// </summary>
-        public double Max { get; set; }
+        public double Max { get; }
+
+        /// <summary>
+        /// Gets the average value.
+        /// </summary>
+        public double Mid => Math.Abs(this.Min - this.Max) > GeoSharpMath.MAXTOLERANCE ? 0.5 * (this.Min + this.Max) : this.Min;
+
+        /// <summary>
+        /// Gets the length of the interval range.
+        /// If the interval is decreasing, negative number will be returned.
+        /// </summary>
+        public double Length => this.Max - this.Min;
 
         /// <summary>
         /// Converts normalized parameter to interval value, or pair of values.

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -65,12 +64,12 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Tests_A_Basic_Function()
         {
-            var degree = 2;
-            var span = 4;
-            var knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            int degree = 2;
+            int span = 4;
+            Knot knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
 
-            var result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
-            var result2 = Evaluation.BasicFunction(degree, knots, 2.5);
+            List<double> result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
+            List<double> result2 = Evaluation.BasicFunction(degree, knots, 2.5);
 
             result1.Should().BeEquivalentTo(result2);
             result1.Count.Should().Be(3);
@@ -87,9 +86,9 @@ namespace GeometrySharp.Test.XUnit.Operation
         [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_A_Given_Parameter(double parameter, double[] result)
         {
-            var knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
-            var degree = 3;
-            var controlPts = new List<Vector3>()
+            Knot knots = new Knot() { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
+            int degree = 3;
+            List<Vector3> controlPts = new List<Vector3>()
             {
                 new Vector3() {5,5,0},
                 new Vector3() {10, 10, 0},
@@ -98,9 +97,9 @@ namespace GeometrySharp.Test.XUnit.Operation
                 new Vector3() {45, 10, 0},
                 new Vector3() {50, 5, 0}
             };
-            var curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
-            var pt = Evaluation.CurvePointAt(curve, parameter);
+            Vector3 pt = Evaluation.CurvePointAt(curve, parameter);
 
             pt[0].Should().BeApproximately(result[0], 0.001);
             pt[1].Should().BeApproximately(result[1], 0.001);
@@ -109,14 +108,14 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Returns_A_Point_On_Four_Points_Surface_At_A_Given_U_And_V_Parameter()
         {
-            var p1 = new Vector3() { 6.292d, -3.297d, -1.311d };
-            var p2 = new Vector3() { 4.599d, 4.910d, 5.869d };
-            var p3 = new Vector3() { -8.032d, -8.329d, -0.556d };
-            var p4 = new Vector3() { -7.966d, 7.580d, 5.366d };
+            Vector3 p1 = new Vector3() { 6.292d, -3.297d, -1.311d };
+            Vector3 p2 = new Vector3() { 4.599d, 4.910d, 5.869d };
+            Vector3 p3 = new Vector3() { -8.032d, -8.329d, -0.556d };
+            Vector3 p4 = new Vector3() { -7.966d, 7.580d, 5.366d };
 
-            var nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
+            NurbsSurface nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
             nurbsSurface.Should().NotBeNull();
-            var pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
+            Vector3 pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
 
             pt.Should().NotBeEmpty();
             pt[0].Should().BeApproximately(-1.27675, 0.00001);
@@ -220,7 +219,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             int n = 3;
             int m = 3;
             int numDers = 1;
-            var res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
+            List<List<Vector3>> res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
 
             // 0th derivative with respect to u & v
             res[0][0][0].Should().Be(0d);
@@ -285,10 +284,8 @@ namespace GeometrySharp.Test.XUnit.Operation
             };
 
             NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-            int n = 3;
-            int m = 3;
             int numDers = 1;
-            var res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
+            List<List<Vector3>> res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
             // 0th derivative with respect to u & v
             res[0][0][0].Should().Be(0d);
             res[0][0][1].Should().Be(0d);
@@ -313,23 +310,23 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
         {
-            var nurbsSurface = BuildTestNurbsSurface();
-            var res = Evaluation.SurfaceIsoCurve(nurbsSurface, 0.2);
-            
-            var ctrlPts = res.ControlPoints;
-            var p1 = Evaluation.CurvePointAt(res, 0.5);
+            NurbsSurface nurbsSurface = BuildTestNurbsSurface();
+            NurbsCurve res = Evaluation.SurfaceIsoCurve(nurbsSurface, 0.2);
+
+            List<Vector3> ctrlPts = res.ControlPoints;
+            Vector3 p1 = Evaluation.CurvePointAt(res, 0.5);
             p1[0].Should().BeApproximately(6d, 5);
             p1[1].Should().BeApproximately(-15d, 5);
             p1[2].Should().BeApproximately(-1.44d, 5);
-            var p2 = Evaluation.CurvePointAt(res, 0.2);
+            Vector3 p2 = Evaluation.CurvePointAt(res, 0.2);
             p2[0].Should().BeApproximately(6d, 5);
             p2[1].Should().BeApproximately(-6d, 5);
             p2[2].Should().BeApproximately(-1.47456d, 5);
 
-            var t = 0.2;
-            var v = 0.3;
-            var res1 = Evaluation.SurfaceIsoCurve(nurbsSurface, t , false);
-            var p3 = Evaluation.CurvePointAt(res1, v);
+            double t = 0.2;
+            double v = 0.3;
+            NurbsCurve res1 = Evaluation.SurfaceIsoCurve(nurbsSurface, t , false);
+            Vector3 p3 = Evaluation.CurvePointAt(res1, v);
             p3[0].Should().BeApproximately(9d,3);
             p3[1].Should().BeApproximately(-6d, 3);
             p3[2].Should().BeApproximately(1.69344d, 3);
@@ -344,15 +341,15 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             // Arrange
             // Values and formulas from The Nurbs Book p.69 & p.72
-            var degree = 2;
-            var span = 4;
-            var order = 2;
-            var parameter = 2.5;
-            var knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
-            var expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
+            int degree = 2;
+            int span = 4;
+            int order = 2;
+            double parameter = 2.5;
+            Knot knots = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            double[,] expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
 
             // Act
-            var resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
+            List<Vector3> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
             resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.MAXTOLERANCE);
@@ -374,11 +371,11 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Returns_The_Result_Of_A_Curve_Derivatives()
         {
-            var degree = 3;
-            var parameter = 0;
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
-            var numberDerivs = 2;
-            var controlPts = new List<Vector3>()
+            int degree = 3;
+            int parameter = 0;
+            Knot knots = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            int numberDerivs = 2;
+            List<Vector3> controlPts = new List<Vector3>()
             {
                 new Vector3() {10, 0, 0},
                 new Vector3() {20, 10, 0},
@@ -386,9 +383,9 @@ namespace GeometrySharp.Test.XUnit.Operation
                 new Vector3() {50, 50, 0}
             };
 
-            var curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
-            var p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
+            List<Vector3> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
 
             p[0][0].Should().Be(10);
             p[0][1].Should().Be(0);
@@ -400,19 +397,19 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             // Consider the quadratic rational Bezier circular arc.
             // Example at page 126.
-            var degree = 2;
-            var knots = new Knot() { 0, 0, 0, 1, 1, 1 };
-            var weight = new List<double>() { 1, 1, 2 };
-            var controlPts = new List<Vector3>()
+            int degree = 2;
+            Knot knots = new Knot() { 0, 0, 0, 1, 1, 1 };
+            List<double> weight = new List<double>() { 1, 1, 2 };
+            List<Vector3> controlPts = new List<Vector3>()
             {
                 new Vector3() {1, 0},
                 new Vector3() {1, 1},
                 new Vector3() {0, 1}
             };
-            var curve = new NurbsCurve(degree, knots, controlPts, weight);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts, weight);
 
-            var derivativesOrder = 2;
-            var resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
+            int derivativesOrder = 2;
+            List<Vector3> resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
 
             resultToCheck[0][0].Should().Be(1);
             resultToCheck[0][1].Should().Be(0);
@@ -423,7 +420,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             resultToCheck[2][0].Should().Be(-4);
             resultToCheck[2][1].Should().Be(0);
 
-            var resultToCheck2 = Evaluation.RationalCurveDerivatives(curve, 1, derivativesOrder);
+            List<Vector3> resultToCheck2 = Evaluation.RationalCurveDerivatives(curve, 1, derivativesOrder);
 
             resultToCheck2[0][0].Should().Be(0);
             resultToCheck2[0][1].Should().Be(1);
@@ -434,12 +431,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             resultToCheck2[2][0].Should().Be(1);
             resultToCheck2[2][1].Should().Be(-1);
 
-            var resultToCheck3 = Evaluation.RationalCurveDerivatives(curve, 0, 3);
+            List<Vector3> resultToCheck3 = Evaluation.RationalCurveDerivatives(curve, 0, 3);
 
             resultToCheck3[3][0].Should().Be(0);
             resultToCheck3[3][1].Should().Be(-12);
 
-            var resultToCheck4 = Evaluation.RationalCurveDerivatives(curve, 1, 3);
+            List<Vector3> resultToCheck4 = Evaluation.RationalCurveDerivatives(curve, 1, 3);
 
             resultToCheck4[3][0].Should().Be(0);
             resultToCheck4[3][1].Should().Be(3);
@@ -455,8 +452,8 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
         {
             // Verb test
-            var degree = 3;
-            var knots = new Knot() { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
+            int degree = 3;
+            Knot knots = new Knot() { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
             List<Vector3> pts = new List<Vector3>()
             {
                 new Vector3(){0, 0, 0},
@@ -465,16 +462,16 @@ namespace GeometrySharp.Test.XUnit.Operation
                 new Vector3(){3, 0, 0},
                 new Vector3(){4, 0, 0}
             };
-            var weights = new List<double>() { 1, 1, 1, 1, 1 };
-            var curve = new NurbsCurve(degree, knots, pts, weights);
-            var tangent = Evaluation.RationalCurveTanget(curve, 0.5);
+            List<double> weights = new List<double>() { 1, 1, 1, 1, 1 };
+            NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
+            Vector3 tangent = Evaluation.RationalCurveTanget(curve, 0.5);
 
             tangent.Should().BeEquivalentTo(new Vector3() { 3, 0, 0 });
 
             // Custom test
-            var tangentToCheck = Evaluation.RationalCurveTanget(NurbsCurveCollection.NurbsCurveExample2(), t);
-            var tangentNormalized = tangentToCheck.Unitize();
-            var tangentExpected = new Vector3(tangentData);
+            Vector3 tangentToCheck = Evaluation.RationalCurveTanget(NurbsCurveCollection.NurbsCurveExample2(), t);
+            Vector3 tangentNormalized = tangentToCheck.Unitize();
+            Vector3 tangentExpected = new Vector3(tangentData);
 
             tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
