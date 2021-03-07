@@ -153,10 +153,10 @@ namespace GeometrySharp.Geometry
         /// <param name="u">Evaluation parameter.</param>
         /// <param name="v">Evaluation parameter.</param>
         /// <returns>The evaluated point.</returns>
-        //private Vector3 PointAt(double u, double v)
-        //{
-        //    return Origin + XAxis * u + YAxis * v;
-        //}
+        public Vector3 PointAt(double u, double v)
+        {
+            return Origin + XAxis * u + YAxis * v;
+        }
 
         /// <summary>
         /// Swapping out the X and Y axes and inverting the Z axis.

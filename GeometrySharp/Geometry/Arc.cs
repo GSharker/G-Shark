@@ -4,7 +4,6 @@ using System;
 namespace GeometrySharp.Geometry
 {
     // ToDo: TangentAt need the DerivativeAt
-    // ToDo: IEquatable
     // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
@@ -109,7 +108,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Gets true if the arc is a circle, so the angle is describable as 2Pi.
         /// </summary>
-        public bool isCircle => Math.Abs(Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
+        public bool IsCircle => Math.Abs(Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
 
         /// <summary>
         /// Gets the BoundingBox of this arc.
@@ -118,16 +117,6 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                if (isCircle)
-                {
-                    Vector3 xDir = Plane.XAxis * Radius;
-                    Vector3 yDir = Plane.YAxis * Radius;
-
-                    Vector3 min = Center - xDir - yDir;
-                    Vector3 max = Center + xDir + yDir;
-
-                    return new BoundingBox(min, max);
-                }
                 Vector3 pt0 = PointAt(0.0);
                 Vector3 pt1 = PointAt(0.5);
                 Vector3 pt2 = PointAt(1.0);
@@ -176,11 +165,6 @@ namespace GeometrySharp.Geometry
             if (t < 0.0)
             {
                 t += twoPi;
-            }
-
-            if (isCircle)
-            {
-                return PointAt(t, false);
             }
 
             t -= AngleDomain.Min;
