@@ -4,13 +4,12 @@ using System;
 namespace GeometrySharp.Geometry
 {
     // ToDo: TangentAt need the DerivativeAt
-    // ToDo: Transform
     // ToDo: IEquatable
     // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
-    public class Arc
+    public class Arc : IEquatable<Arc>
     {
         internal Interval AngleDomain;
 
@@ -217,7 +216,51 @@ namespace GeometrySharp.Geometry
 
             return new Arc(plane, this.Radius, angleDomain);
         }
-        
+
+        /// <summary>
+        /// Determines whether the arc is equal to another arc.
+        /// The arcs are equal if have the same plane, radius and angle.
+        /// </summary>
+        /// <param name="other">The arc to compare to.</param>
+        /// <returns>True if the arc are equal, otherwise false.</returns>
+        public bool Equals(Arc other)
+        {
+            return Math.Abs(this.Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
+                   Math.Abs(this.Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
+                   this.Plane == other.Plane;
+        }
+
+        /// <summary>
+        /// Computes a hash code for the arc.
+        /// </summary>
+        /// <returns>A unique hashCode of an arc.</returns>
+        public override int GetHashCode()
+        {
+            return this.Radius.GetHashCode() ^ this.Angle.GetHashCode() ^ this.Plane.GetHashCode();
+        }
+
+        /// <summary>
+        /// Determines whether two arcs have same values.
+        /// </summary>
+        /// <param name="a">The first arc.</param>
+        /// <param name="b">The second arc.</param>
+        /// <returns>True if all the value are equal, otherwise false.</returns>
+        public static bool operator ==(Arc a, Arc b)
+        {
+            return Equals(a, b);
+        }
+
+        /// <summary>
+        /// Determines whether two arcs have different values.
+        /// </summary>
+        /// <param name="a">The first arc.</param>
+        /// <param name="b">The second arc.</param>
+        /// <returns>True if all the value are different, otherwise false.</returns>
+        public static bool operator !=(Arc a, Arc b)
+        {
+            return !Equals(a, b);
+        }
+
         /// <summary>
         /// Gets the text representation of an arc.
         /// </summary>
