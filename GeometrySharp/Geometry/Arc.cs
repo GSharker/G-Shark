@@ -204,6 +204,19 @@ namespace GeometrySharp.Geometry
 
             return PointAt(AngleDomain.Min + t, false);
         }
+
+        /// <summary>
+        /// Applies a transformation to the plane where the arc is on.
+        /// </summary>
+        /// <param name="transformation">Transformation matrix to apply.</param>
+        /// <returns>A transformed arc.</returns>
+        public Arc Transform(Transform transformation)
+        {
+            Plane plane = this.Plane.Transform(transformation);
+            Interval angleDomain = new Interval(this.AngleDomain.Min, this.AngleDomain.Max);
+
+            return new Arc(plane, this.Radius, angleDomain);
+        }
         
         /// <summary>
         /// Gets the text representation of an arc.

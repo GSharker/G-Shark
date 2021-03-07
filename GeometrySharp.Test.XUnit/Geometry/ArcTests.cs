@@ -92,6 +92,20 @@ namespace GeometrySharp.Test.XUnit.Geometry
             _testOutput.WriteLine(pt.ToString());
             pt.IsEqualRoundingDecimal(expectedPt, 5).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Transformed_Arc()
+        {
+            Arc arc = ExampleArc3D;
+            Vector3 expectedStartPt = new Vector3 { 16.47719, 0, 0 };
+            Vector3 expectedEndPt = new Vector3 { -6.160353, -15.282272, 0 };
+            Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
+
+            Arc arcTransformed = arc.Transform(transform);
+
+            arcTransformed.PointAt(0.0).IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
+            arcTransformed.PointAt(1.0).IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
+        }
     }
 }
 
