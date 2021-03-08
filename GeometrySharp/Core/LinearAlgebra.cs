@@ -286,7 +286,7 @@ namespace GeometrySharp.Core
 
         /// <summary>
         /// Get the orientation between tree points in the plane.
-        /// The order can be: colinear (result 0), clockwise (result 1), counterclockwise (result 2)
+        /// The order can be: collinear (result 0), clockwise (result 1), counterclockwise (result 2)
         /// https://www.geeksforgeeks.org/orientation-3-ordered-points/
         /// </summary>
         /// <param name="pt1">First point.</param>

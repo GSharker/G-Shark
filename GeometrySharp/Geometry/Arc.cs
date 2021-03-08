@@ -45,37 +45,18 @@ namespace GeometrySharp.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
-            // ToDo: check if the point are collinear return
-            Vector3 v1 = pt2 - pt1;
-            Vector3 v2 = pt3 - pt1;
+            Circle c = new Circle(pt1, pt2, pt3);
+            Plane p = c.Plane;
+            (double u, double v) parameters = p.ClosestParameters(pt3);
 
-            double v1v1 = Vector3.Dot(v1, v1);
-            double v2v2 = Vector3.Dot(v2, v2);
-            double v1v2 = Vector3.Dot(v1, v2);
-
-            double a = 0.5 / (v1v1 * v2v2 - v1v2 * v1v2);
-            double k1 = a * v2v2 * (v1v1 - v1v2);
-            double k2 = a * v1v1 * (v2v2 - v1v2);
-
-            Vector3 center = pt1 + v1 * k1 + v2 * k2;
-            Vector3 xDir = pt1 - center;
-            Vector3 v3 = pt3 - center;
-            Vector3 v4 = Vector3.Cross(xDir, v3);
-            Vector3 yDir = Vector3.Cross(xDir, v4);
-
-            double u = Vector3.Dot(v3, xDir.Unitize());
-            double v = Vector3.Dot(v3, yDir.Unitize());
-
-            double angle = Math.Atan2(v, u);
+            double angle = Math.Atan2(parameters.v, parameters.u);
             if (angle < 0.0)
             {
                 angle += 2.0 * Math.PI;
             }
 
-            double radius = xDir.Length();
-
-            Plane = new Plane(center, pt1, center + yDir.Amplify(radius));
-            Radius = radius;
+            Plane = p;
+            Radius = c.Radius;
             AngleDomain = new Interval(0.0, angle);
         }
 
