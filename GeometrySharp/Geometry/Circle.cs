@@ -163,23 +163,19 @@ namespace GeometrySharp.Geometry
         /// <returns>The point on the circle that is close to the test point.</returns>
         public Vector3 ClosestPt(Vector3 pt)
         {
-            Vector3 closestPt = Vector3.Unset;
-            double t = 0.0;
-
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
             {
-                t = 0.0;
-                return PointAt(t);
+                return PointAt(0.0);
             }
 
-            t = Math.Atan2(v, u);
+            double t = Math.Atan2(v, u);
             if (t < 0.0)
             {
                 t += 2.0 * Math.PI;
             }
 
-            return PointAt(t);
+            return PointAt(t, false);
         }
     }
 }

@@ -47,9 +47,9 @@ namespace GeometrySharp.Geometry
         {
             Circle c = new Circle(pt1, pt2, pt3);
             Plane p = c.Plane;
-            (double u, double v) parameters = p.ClosestParameters(pt3);
+            (double u, double v) = p.ClosestParameters(pt3);
 
-            double angle = Math.Atan2(parameters.v, parameters.u);
+            double angle = Math.Atan2(v, u);
             if (angle < 0.0)
             {
                 angle += 2.0 * Math.PI;
@@ -126,6 +126,13 @@ namespace GeometrySharp.Geometry
             return Plane.Origin + xDir + yDir;
         }
 
+        public Vector3 TangentAt(double t, bool parametrize = true)
+        {
+            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
+
+            return new Circle(this.Plane, this.Radius).TangentAt(tRemap, false);
+        }
+
         /// <summary>
         /// Calculates the point on an arc that is close to a test point.
         /// </summary>
@@ -134,16 +141,14 @@ namespace GeometrySharp.Geometry
         public Vector3 ClosestPt(Vector3 pt)
         {
             double twoPi = 2.0 * Math.PI;
-            double t = 0.0;
 
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
             {
-                t = 0.0;
-                return PointAt(t);
+                return PointAt(0.0);
             }
 
-            t = Math.Atan2(v, u);
+            double t = Math.Atan2(v, u);
             if (t < 0.0)
             {
                 t += twoPi;

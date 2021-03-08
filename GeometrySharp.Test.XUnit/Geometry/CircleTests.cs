@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -89,6 +84,21 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             bBox.Min.IsEqualRoundingDecimal(minCheck, 6).Should().BeTrue();
             bBox.Max.IsEqualRoundingDecimal(maxCheck, 6).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 77.787891, 3.884768, 6.616098 })]
+        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 69.780279, 40.984093, -3.051743 })]
+        public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
+        {
+            Vector3 testPt = new Vector3(ptToTest);
+            Vector3 expectedPt = new Vector3(result);
+
+            Circle circle = BaseCircle;
+            Vector3 pt = circle.ClosestPt(testPt);
+
+            _testOutput.WriteLine(pt.ToString());
+            pt.IsEqualRoundingDecimal(expectedPt, 4).Should().BeTrue();
         }
     }
 }

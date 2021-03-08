@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using Xunit;
@@ -105,6 +100,19 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             arcTransformed.PointAt(0.0).IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
             arcTransformed.PointAt(1.0).IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0.0, new double[] { -0.726183, -0.663492, 0.180104 })]
+        [InlineData(0.1, new double[] { -0.370785, -0.897553, 0.238573 })]
+        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] expectedPt)
+        {
+            Vector3 checkTangent = new Vector3(expectedPt);
+            Arc arc = ExampleArc3D;
+
+            Vector3 tangent = arc.TangentAt(t);
+
+            tangent.IsEqualRoundingDecimal(checkTangent, 4).Should().BeTrue();
         }
     }
 }
