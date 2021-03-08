@@ -3,7 +3,6 @@ using System;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: TangentAt need the DerivativeAt
     // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
