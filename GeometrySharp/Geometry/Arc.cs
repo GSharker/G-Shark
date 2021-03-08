@@ -115,6 +115,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public BoundingBox BoundingBox
         {
+            // ToDo this way to do the BoundingBox doesn't provide accuracy if the arc is oriented in the space or close to a circle.
             get
             {
                 Vector3 pt0 = PointAt(0.0);

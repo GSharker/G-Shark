@@ -58,9 +58,9 @@ namespace GeometrySharp.Geometry
         public Plane(Vector3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
         {
             Origin = origin;
-            XAxis = xDirection.Unitize();
-            YAxis = yDirection.Unitize();
-            ZAxis = zDirection.Unitize();
+            XAxis = (xDirection.isUnitize()) ? xDirection.Unitize() : xDirection;
+            YAxis = (yDirection.isUnitize()) ? yDirection.Unitize() : yDirection;
+            ZAxis = (zDirection.isUnitize()) ? zDirection.Unitize() : zDirection;
         }
 
         /// <summary>

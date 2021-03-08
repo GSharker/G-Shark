@@ -53,24 +53,56 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                Vector3 xDir = Plane.XAxis * Radius;
-                Vector3 yDir = Plane.YAxis * Radius;
+                double val1 = this.Radius * length(this.Plane.ZAxis[1], this.Plane.ZAxis[2]);
+                double val2 = this.Radius * length(this.Plane.ZAxis[2], this.Plane.ZAxis[0]);
+                double val3 = this.Radius * length(this.Plane.ZAxis[0], this.Plane.ZAxis[1]);
 
-                Vector3 min = Center - xDir - yDir;
-                Vector3 max = Center + xDir + yDir;
+                double minX = this.Plane.Origin[0] - val1;
+                double maxX = this.Plane.Origin[0] + val1;
+                double minY = this.Plane.Origin[1] - val2;
+                double maxY = this.Plane.Origin[1] + val2;
+                double minZ = this.Plane.Origin[2] - val3;
+                double maxZ = this.Plane.Origin[2] + val3;
+
+                Vector3 min = new Vector3 {minX, minY, minZ};
+                Vector3 max = new Vector3 { maxX, maxY, maxZ };
 
                 return new BoundingBox(min, max);
             }
+        }
+
+        private double length(double x, double y)
+        {
+            x = Math.Abs(x);
+            y = Math.Abs(y);
+            if (y > x)
+            {
+                double num = x;
+                x = y;
+                y = num;
+            }
+            double num1;
+            if (x > double.Epsilon)
+            {
+                double num2 = 1.0 / x;
+                y *= num2;
+                num1 = x * Math.Sqrt(1.0 + y * y);
+            }
+            else
+                num1 = x <= 0.0 || double.IsInfinity(x) ? 0.0 : x;
+            return num1;
         }
 
         /// <summary>
         /// Calculates the point on a circle at the given parameter.
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
+        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public Vector3 PointAt(double t)
+        public Vector3 PointAt(double t, bool parametrize = true)
         {
-            return Plane.PointAt(Math.Cos(t) * this.Radius, Math.Sin(t) * this.Radius);
+            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
+            return Plane.PointAt(Math.Cos(tRemap) * this.Radius, Math.Sin(tRemap) * this.Radius);
         }
 
         /// <summary>
@@ -78,10 +110,11 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public Vector3 TangentAt(double t)
+        public Vector3 TangentAt(double t, bool parametrize = true)
         {
-            double r1 = this.Radius * (-Math.Sin(t));
-            double r2 = this.Radius * (Math.Cos(t));
+            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
+            double r1 = this.Radius * (-Math.Sin(tRemap));
+            double r2 = this.Radius * (Math.Cos(tRemap));
 
             Vector3 vector = this.Plane.XAxis * r1 + this.Plane.YAxis * r2;
 
