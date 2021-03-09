@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Operation;
 
@@ -48,5 +49,17 @@ namespace GeometrySharp.Geometry
         /// Gets the area of the polyline.
         /// </summary>
         public double Area => Evaluation.CalculateArea(this);
+
+        /// <summary>
+        /// Applies a transformation to all the points.
+        /// </summary>
+        /// <param name="transform">Transformation matrix to apply.</param>
+        /// <returns>A polygon transformed.</returns>
+        public new Polygon Transform(Transform transform)
+        {
+            List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
+
+            return new Polygon(transformedPts);
+        }
     }
 }

@@ -207,7 +207,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polyline transformed.</returns>
-        public Polyline Transform(Transform transform)
+        public virtual Polyline Transform(Transform transform)
         {
             List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
 
