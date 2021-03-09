@@ -58,9 +58,9 @@ namespace GeometrySharp.Geometry
         public Plane(Vector3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
         {
             Origin = origin;
-            XAxis = xDirection.Unitize();
-            YAxis = yDirection.Unitize();
-            ZAxis = zDirection.Unitize();
+            XAxis = (xDirection.isUnitize()) ? xDirection.Unitize() : xDirection;
+            YAxis = (yDirection.isUnitize()) ? yDirection.Unitize() : yDirection;
+            ZAxis = (zDirection.isUnitize()) ? zDirection.Unitize() : zDirection;
         }
 
         /// <summary>
@@ -153,10 +153,10 @@ namespace GeometrySharp.Geometry
         /// <param name="u">Evaluation parameter.</param>
         /// <param name="v">Evaluation parameter.</param>
         /// <returns>The evaluated point.</returns>
-        //private Vector3 PointAt(double u, double v)
-        //{
-        //    return Origin + XAxis * u + YAxis * v;
-        //}
+        public Vector3 PointAt(double u, double v)
+        {
+            return Origin + XAxis * u + YAxis * v;
+        }
 
         /// <summary>
         /// Swapping out the X and Y axes and inverting the Z axis.
