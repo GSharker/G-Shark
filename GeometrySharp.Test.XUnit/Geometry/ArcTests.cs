@@ -54,12 +54,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
             double angle = GeoSharpMath.ToRadians(40);
-            Arc arc = new Arc(Plane.PlaneXY, 15, angle);
+            Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
+            Arc arc3D = ExampleArc3D;
 
-            BoundingBox bBox = arc.BoundingBox;
+            BoundingBox bBox2D = arc2D.BoundingBox;
+            BoundingBox bBox3D = arc3D.BoundingBox;
 
-            bBox.Min.IsEqualRoundingDecimal(new Vector3 {11.490667, 0, 0}, 6).Should().BeTrue();
-            bBox.Max.IsEqualRoundingDecimal(new Vector3 { 15, 9.641814, 0 }, 6).Should().BeTrue();
+            bBox2D.Min.IsEqualRoundingDecimal(new Vector3 {11.490667, 0, 0}, 6).Should().BeTrue();
+            bBox2D.Max.IsEqualRoundingDecimal(new Vector3 { 15, 9.641814, 0 }, 6).Should().BeTrue();
+
+            bBox3D.Min.IsEqualRoundingDecimal(new Vector3 { 69.115079, 8.858347, -1.884313 }, 6).Should().BeTrue();
+            bBox3D.Max.IsEqualRoundingDecimal(new Vector3 { 102.068402, 36.39316, 5.246477 }, 6).Should().BeTrue();
         }
 
         [Fact]

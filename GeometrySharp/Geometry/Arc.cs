@@ -1,5 +1,6 @@
 ﻿using GeometrySharp.Core;
 using System;
+using System.Collections.Generic;
 
 namespace GeometrySharp.Geometry
 {
@@ -95,17 +96,50 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public BoundingBox BoundingBox
         {
-            // ToDo this way to do the BoundingBox doesn't provide accuracy if the arc is oriented in the space or close to a circle.
             get
             {
-                Vector3 pt0 = PointAt(0.0);
-                Vector3 pt1 = PointAt(0.5);
-                Vector3 pt2 = PointAt(1.0);
+                Plane orientedPlane = Plane.Align(Vector3.XAxis);
+                Vector3[] quadrantPts = new[]
+                {
+                    Center + orientedPlane.XAxis * Radius,
+                    Center + orientedPlane.YAxis * Radius,
+                    Center - orientedPlane.XAxis * Radius,
+                    Center - orientedPlane.YAxis * Radius
+                };
 
-                Vector3[] pts = new[] { pt0, pt1, pt2 };
+                List<Vector3> pts = new List<Vector3>();
+
+                pts.Add(PointAt(0.0));
+                pts.Add(PointAt(1.0));
+
+                foreach (var t in quadrantPts)
+                {
+                    Vector3 tempPt = this.ClosestPt(t);
+                    double tempLength = t.DistanceTo(tempPt);
+                    if (!(Math.Abs(tempLength) < GeoSharpMath.MAXTOLERANCE)) continue;
+                    pts.Add(t);
+                }
 
                 return new BoundingBox(pts);
             }
+        }
+
+        private Vector3 GetQuadrantPoint(Plane plane, double radius, Vector3 pt)
+        {
+            Vector3 origin = plane.Origin;
+            if (pt[0] > origin[0] && pt[1] >= origin[1])
+                return plane.YAxis.Amplify(radius);
+
+            if (pt[0] <= origin[0] && pt[1] > origin[1])
+                return Vector3.Reverse(plane.XAxis.Amplify(radius));
+
+            if (pt[0] < origin[0] && pt[1] <= origin[1])
+                return Vector3.Reverse(plane.YAxis.Amplify(radius));
+
+            if (pt[0] >= origin[0] && pt[1] < origin[1])
+                return plane.YAxis.Amplify(radius);
+
+            return pt;
         }
 
         /// <summary>
