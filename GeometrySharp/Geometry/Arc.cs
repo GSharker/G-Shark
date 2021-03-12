@@ -1,5 +1,6 @@
 ﻿using GeometrySharp.Core;
 using System;
+using System.Collections.Generic;
 
 namespace GeometrySharp.Geometry
 {
@@ -86,26 +87,57 @@ namespace GeometrySharp.Geometry
         public double Length => Math.Abs(Angle * Radius);
 
         /// <summary>
-        /// Gets true if the arc is a circle, so the angle is describable as 2Pi.
-        /// </summary>
-        public bool IsCircle => Math.Abs(Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
-
-        /// <summary>
         /// Gets the BoundingBox of this arc.
+        /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
         public BoundingBox BoundingBox
         {
-            // ToDo this way to do the BoundingBox doesn't provide accuracy if the arc is oriented in the space or close to a circle.
             get
             {
+                Plane orientedPlane = Plane.Align(Vector3.XAxis);
                 Vector3 pt0 = PointAt(0.0);
-                Vector3 pt1 = PointAt(0.5);
-                Vector3 pt2 = PointAt(1.0);
+                Vector3 pt1 = PointAt(1.0);
+                Vector3 ptC = orientedPlane.Origin;
 
-                Vector3[] pts = new[] { pt0, pt1, pt2 };
+                double theta0 = Math.Atan2(pt0[1] - ptC[1], pt0[0] - ptC[0]);
+                double theta1 = Math.Atan2(pt1[1] - ptC[1], pt1[0] - ptC[0]);
+
+                List<Vector3> pts = new List<Vector3>{ pt0, pt1 };
+
+                if (AnglesSequence(theta0, 0, theta1))
+                {
+                    pts.Add(ptC + orientedPlane.XAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI / 2, theta1))
+                {
+                    pts.Add(ptC + orientedPlane.YAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI, theta1))
+                {
+                    pts.Add(ptC - orientedPlane.XAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI * 3 / 2, theta1))
+                {
+                    pts.Add(ptC - orientedPlane.YAxis * Radius);
+                }
 
                 return new BoundingBox(pts);
             }
+        }
+
+        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        {
+            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
+        }
+
+        private double AngularDiff(double theta1, double theta2)
+        {
+            double dif = theta2 - theta1;
+            while (dif >= 2 * Math.PI)
+                dif -= 2 * Math.PI;
+            while (dif <= 0)
+                dif += 2 * Math.PI;
+            return dif;
         }
 
         /// <summary>
