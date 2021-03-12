@@ -87,59 +87,57 @@ namespace GeometrySharp.Geometry
         public double Length => Math.Abs(Angle * Radius);
 
         /// <summary>
-        /// Gets true if the arc is a circle, so the angle is describable as 2Pi.
-        /// </summary>
-        public bool IsCircle => Math.Abs(Angle - 2.0 * Math.PI) <= GeoSharpMath.EPSILON;
-
-        /// <summary>
         /// Gets the BoundingBox of this arc.
+        /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
         public BoundingBox BoundingBox
         {
             get
             {
                 Plane orientedPlane = Plane.Align(Vector3.XAxis);
-                Vector3[] quadrantPts = new[]
+                Vector3 pt0 = PointAt(0.0);
+                Vector3 pt1 = PointAt(1.0);
+                Vector3 ptC = orientedPlane.Origin;
+
+                double theta0 = Math.Atan2(pt0[1] - ptC[1], pt0[0] - ptC[0]);
+                double theta1 = Math.Atan2(pt1[1] - ptC[1], pt1[0] - ptC[0]);
+
+                List<Vector3> pts = new List<Vector3>{ pt0, pt1 };
+
+                if (AnglesSequence(theta0, 0, theta1))
                 {
-                    Center + orientedPlane.XAxis * Radius,
-                    Center + orientedPlane.YAxis * Radius,
-                    Center - orientedPlane.XAxis * Radius,
-                    Center - orientedPlane.YAxis * Radius
-                };
-
-                List<Vector3> pts = new List<Vector3>();
-
-                pts.Add(PointAt(0.0));
-                pts.Add(PointAt(1.0));
-
-                foreach (var t in quadrantPts)
+                    pts.Add(ptC + orientedPlane.XAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI / 2, theta1))
                 {
-                    Vector3 tempPt = this.ClosestPt(t);
-                    double tempLength = t.DistanceTo(tempPt);
-                    if (!(Math.Abs(tempLength) < GeoSharpMath.MAXTOLERANCE)) continue;
-                    pts.Add(t);
+                    pts.Add(ptC + orientedPlane.YAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI, theta1))
+                {
+                    pts.Add(ptC - orientedPlane.XAxis * Radius);
+                }
+                if (AnglesSequence(theta0, Math.PI * 3 / 2, theta1))
+                {
+                    pts.Add(ptC - orientedPlane.YAxis * Radius);
                 }
 
                 return new BoundingBox(pts);
             }
         }
 
-        private Vector3 GetQuadrantPoint(Plane plane, double radius, Vector3 pt)
+        private bool AnglesSequence(double angle1, double angle2, double angle3)
         {
-            Vector3 origin = plane.Origin;
-            if (pt[0] > origin[0] && pt[1] >= origin[1])
-                return plane.YAxis.Amplify(radius);
+            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
+        }
 
-            if (pt[0] <= origin[0] && pt[1] > origin[1])
-                return Vector3.Reverse(plane.XAxis.Amplify(radius));
-
-            if (pt[0] < origin[0] && pt[1] <= origin[1])
-                return Vector3.Reverse(plane.YAxis.Amplify(radius));
-
-            if (pt[0] >= origin[0] && pt[1] < origin[1])
-                return plane.YAxis.Amplify(radius);
-
-            return pt;
+        private double AngularDiff(double theta1, double theta2)
+        {
+            double dif = theta2 - theta1;
+            while (dif >= 2 * Math.PI)
+                dif -= 2 * Math.PI;
+            while (dif <= 0)
+                dif += 2 * Math.PI;
+            return dif;
         }
 
         /// <summary>
