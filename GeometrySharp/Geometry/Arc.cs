@@ -157,6 +157,12 @@ namespace GeometrySharp.Geometry
             return Plane.Origin + xDir + yDir;
         }
 
+        /// <summary>
+        /// Returns the tangent at the parameter t on the arc.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
+        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
+        /// <returns>Tangent at the t parameter.</returns>
         public Vector3 TangentAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
