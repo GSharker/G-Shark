@@ -7,7 +7,7 @@ namespace GeometrySharp.Operation
     /// <summary>
     /// Intersection provides various tools for all kinds of intersection
     /// </summary>
-    public static class Intersect
+    public class Intersect
     {
         // ToDo: Curve-Plane
         // ToDo: Curve-Curve
@@ -16,7 +16,6 @@ namespace GeometrySharp.Operation
         // ToDo: Polyline-Plane
         // ToDo: Polyline-Polyline
         // ToDo: Polyline-Self
-        // ToDo: Plane-Plane-Plane
         // ToDo: Line-Plane
         // ToDo: Line-Line
 
@@ -26,7 +25,7 @@ namespace GeometrySharp.Operation
         /// <param name="p1">The first plane.</param>
         /// <param name="p2">The second plane.</param>
         /// <returns>The intersection as <see cref="Ray"/>.</returns>
-        public static Ray PlaneToPlane(Plane p1, Plane p2)
+        public static Ray PlanePlane(Plane p1, Plane p2)
         {
             Vector3 plNormal1 = p1.Normal;
             Vector3 plNormal2 = p2.Normal;
@@ -37,33 +36,32 @@ namespace GeometrySharp.Operation
 
             // Find the largest index of directionVec of the line of intersection.
 
-            int largIndex = 0;
-            double mI = Math.Abs(directionVec[0]);
-            double m1 = Math.Abs(directionVec[1]);
-            double m2 = Math.Abs(directionVec[2]);
+            int largeIndex = 0;
+            double ai = Math.Abs(directionVec[0]);
+            double ay = Math.Abs(directionVec[1]);
+            double az = Math.Abs(directionVec[2]);
 
-            if (m1 > m2)
+            if (ay > ai)
             {
-                largIndex = 1;
-                mI = m1;
+                largeIndex = 1;
+                ai = ay;
             }
 
-            if (m2 > m1)
+            if (az > ai)
             {
-                largIndex = 2;
-                mI = m2;
+                largeIndex = 2;
             }
 
             double a1, b1, a2, b2;
 
-            if (largIndex == 0)
+            if (largeIndex == 0)
             {
                 a1 = plNormal1[1];
                 b1 = plNormal1[2];
                 a2 = plNormal2[1];
                 b2 = plNormal2[2];
             }
-            else if (largIndex == 1)
+            else if (largeIndex == 1)
             {
                 a1 = plNormal1[0];
                 b1 = plNormal1[2];
@@ -88,14 +86,38 @@ namespace GeometrySharp.Operation
 
             Vector3 pt = new Vector3();
 
-            if (largIndex == 0)
+            if (largeIndex == 0)
                 pt.AddRange(new[] { 0.0, corX, corY });
-            else if (largIndex == 1)
+            else if (largeIndex == 1)
                 pt.AddRange(new[] { corX, 0.0, corY });
             else
                 pt.AddRange(new[] { corX, corY, 0.0 });
 
             return new Ray(pt, directionVec.Unitize());
+        }
+
+        /// <summary>
+        /// Find the point intersection of a line and a plane.
+        /// http://geomalgorithms.com/a05-_intersect-1.html
+        /// </summary>
+        /// <param name="line">The segment to intersect.</param>
+        /// <param name="plane">The plane has to be intersected.</param>
+        /// <returns>The point representing the unique intersection.</returns>
+        public static Vector3 LinePlane(Line line, Plane plane)
+        {
+            Vector3 lnDir = line.Direction;
+            Vector3 ptPlane = plane.Origin - line.Start;
+
+            double denominator = Vector3.Dot(plane.Normal, lnDir);
+            double numeric = Vector3.Dot(plane.Normal, ptPlane);
+
+            if (Math.Abs(denominator) < GeoSharpMath.EPSILON)
+                throw new Exception("Segment parallel to the plane or lies in plane.");
+
+            // Compute the intersect parameter.
+            double t = numeric / denominator;
+
+            return line.Start + lnDir * t;
         }
     }
 }
