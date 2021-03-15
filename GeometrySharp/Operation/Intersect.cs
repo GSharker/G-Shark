@@ -16,8 +16,6 @@ namespace GeometrySharp.Operation
         // ToDo: Polyline-Plane
         // ToDo: Polyline-Polyline
         // ToDo: Polyline-Self
-        // ToDo: Line-Plane
-        // ToDo: Line-Line
 
         /// <summary>
         /// Solves the intersection between two planes.
@@ -97,10 +95,10 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Find the point intersection of a line and a plane.
+        /// Finds the unique point intersection of a line and a plane.
         /// http://geomalgorithms.com/a05-_intersect-1.html
         /// </summary>
-        /// <param name="line">The segment to intersect.</param>
+        /// <param name="line">The segment to intersect. Assumed as infinite.</param>
         /// <param name="plane">The plane has to be intersected.</param>
         /// <returns>The point representing the unique intersection.</returns>
         public static Vector3 LinePlane(Line line, Plane plane)
@@ -109,15 +107,49 @@ namespace GeometrySharp.Operation
             Vector3 ptPlane = plane.Origin - line.Start;
 
             double denominator = Vector3.Dot(plane.Normal, lnDir);
-            double numeric = Vector3.Dot(plane.Normal, ptPlane);
+            double numerator = Vector3.Dot(plane.Normal, ptPlane);
 
             if (Math.Abs(denominator) < GeoSharpMath.EPSILON)
                 throw new Exception("Segment parallel to the plane or lies in plane.");
 
             // Compute the intersect parameter.
-            double t = numeric / denominator;
+            double t = numerator / denominator;
 
             return line.Start + lnDir * t;
+        }
+
+        /// <summary>
+        /// Solves the intersection between two lines, assumed as infinite.
+        /// Returns as outputs two points describing the minimum distance between the two lines.
+        /// http://geomalgorithms.com/a07-_distance.html
+        /// </summary>
+        /// <param name="ln0">The first line.</param>
+        /// <param name="ln1">The second line.</param>
+        /// <param name="pt0">The output point of the first line.</param>
+        /// <param name="pt1">The output point of the second line.</param>
+        /// <returns>True if the intersection succeed.</returns>
+        public static bool LineLine(Line ln0, Line ln1, out Vector3 pt0, out Vector3 pt1)
+        {
+            Vector3 lnDir0 = ln0.Direction;
+            Vector3 lnDir1 = ln1.Direction;
+            Vector3 ln0Ln1Dir = ln0.Start - ln1.Start;
+
+            double a = Vector3.Dot(lnDir0, lnDir0);
+            double b = Vector3.Dot(lnDir0, lnDir1);
+            double c = Vector3.Dot(lnDir1, lnDir1);
+            double d = Vector3.Dot(lnDir0, ln0Ln1Dir);
+            double e = Vector3.Dot(lnDir1, ln0Ln1Dir);
+            double div = a * c - b * b;
+
+            if(Math.Abs(div) < GeoSharpMath.EPSILON)
+                throw new Exception("Segments must not be parallel.");
+
+            double s = (b * e - c * d) / div;
+            double t = (a * e - b * d) / div;
+
+            pt0 = ln0.Start + lnDir0 * s;
+            pt1 = ln1.Start + lnDir1 * t;
+            return true;
         }
     }
 }

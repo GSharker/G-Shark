@@ -70,5 +70,33 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             func.Should().Throw<Exception>().WithMessage("Segment parallel to the plane or lies in plane.");
         }
+
+        [Theory]
+        [InlineData(new double[] { 0, 0, 0 }, new double[] { 3, 3, 2 }, new double[] { 4.565217, 5, 4.782609 }, new double[] { 5.217391, 5.217391, 3.478261 })]
+        [InlineData(new double[] { 0, 0, 0 }, new double[] { 0, 20, 0 }, new double[] { -1, 5, 2 }, new double[] { 0, 5, 0 })]
+        [InlineData(new double[] { -5, 5, 0 }, new double[] { 5, 5, 0 }, new double[] { -5, 5, 0 }, new double[] { -5, 5, 0 })]
+        public void It_Returns_The_Intersection_Points_Between_Segments(double[] startPt, double[] endPt, double[] output0, double[] output1)
+        {
+            Line ln0 = new Line(new Vector3 { -5, 5, 0 }, new Vector3 { 5, 5, 5 });
+            Line ln1 = new Line(new Vector3(startPt), new Vector3(endPt));
+            Vector3 ptCheck0 = new Vector3(output0);
+            Vector3 ptCheck1 = new Vector3(output1);
+
+            bool intersection = Intersect.LineLine(ln0, ln1, out Vector3 pt0, out Vector3 pt1);
+
+            pt0.IsEqualRoundingDecimal(ptCheck0, 6).Should().BeTrue();
+            pt1.IsEqualRoundingDecimal(ptCheck1, 6).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LineLine_Throws_An_Exception_If_Segments_Are_Parallel()
+        {
+            Line ln0 = new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 5, 5, 0 });
+            Line ln1 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 5, 0 });
+
+            Func<object> func = () => Intersect.LineLine(ln0, ln1, out _, out _);
+
+            func.Should().Throw<Exception>().WithMessage("Segments must not be parallel.");
+        }
     }
 }
