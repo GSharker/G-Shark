@@ -8,6 +8,7 @@ namespace GeometrySharp.Geometry
 {
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
     // ToDo: Centroid by area.
+    // ToDo: throw exception if the polyline self intersect.
     /// <summary>
     /// A closed planar Polyline.
     /// </summary>

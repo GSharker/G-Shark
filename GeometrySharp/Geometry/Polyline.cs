@@ -18,7 +18,6 @@ namespace GeometrySharp.Geometry
         {
         }
 
-        // ToDo: throw exception if the polyline self intersect.
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>

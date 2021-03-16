@@ -1,6 +1,7 @@
-﻿using System;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using System;
+using System.Collections.Generic;
 
 namespace GeometrySharp.Operation
 {
@@ -13,27 +14,31 @@ namespace GeometrySharp.Operation
         // ToDo: Curve-Curve
         // ToDo: Curve-Line
         // ToDo: Curve-Self
-        // ToDo: Polyline-Plane
         // ToDo: Polyline-Polyline
         // ToDo: Polyline-Self
 
         /// <summary>
         /// Solves the intersection between two planes.
+        /// This method returns true if intersection is found, false if the
+        /// planes are parallel.
         /// </summary>
         /// <param name="p1">The first plane.</param>
         /// <param name="p2">The second plane.</param>
-        /// <returns>The intersection as <see cref="Ray"/>.</returns>
-        public static Ray PlanePlane(Plane p1, Plane p2)
+        /// <param name="ray">The intersection as <see cref="Ray"/>.</param>
+        /// <returns>True if the intersection success.</returns>
+        public static bool PlanePlane(Plane p1, Plane p2, out Ray ray)
         {
             Vector3 plNormal1 = p1.Normal;
             Vector3 plNormal2 = p2.Normal;
 
             Vector3 directionVec = Vector3.Cross(plNormal1, plNormal2);
-            if(Vector3.Dot(directionVec, directionVec) < GeoSharpMath.EPSILON)
-                throw new Exception("The two planes are parallel.");
+            if (Vector3.Dot(directionVec, directionVec) < GeoSharpMath.EPSILON)
+            {
+                ray = new Ray(Vector3.Unset, Vector3.Unset);
+                return false;
+            }
 
             // Find the largest index of directionVec of the line of intersection.
-
             int largeIndex = 0;
             double ai = Math.Abs(directionVec[0]);
             double ay = Math.Abs(directionVec[1]);
@@ -85,42 +90,61 @@ namespace GeometrySharp.Operation
             Vector3 pt = new Vector3();
 
             if (largeIndex == 0)
+            {
                 pt.AddRange(new[] { 0.0, corX, corY });
+            }
             else if (largeIndex == 1)
+            {
                 pt.AddRange(new[] { corX, 0.0, corY });
+            }
             else
+            {
                 pt.AddRange(new[] { corX, corY, 0.0 });
+            }
 
-            return new Ray(pt, directionVec.Unitize());
+            ray = new Ray(pt, directionVec.Unitize());
+            return true;
         }
 
         /// <summary>
         /// Finds the unique point intersection of a line and a plane.
+        /// This method returns true if intersection return the unique point, it returns
+        /// false if the segment is parallel to the plane or lies in plane.
         /// http://geomalgorithms.com/a05-_intersect-1.html
         /// </summary>
         /// <param name="line">The segment to intersect. Assumed as infinite.</param>
         /// <param name="plane">The plane has to be intersected.</param>
-        /// <returns>The point representing the unique intersection.</returns>
-        public static Vector3 LinePlane(Line line, Plane plane)
+        /// <param name="pt">The point representing the unique intersection.</param>
+        /// <param name="t">The parameter on the line between 0.0</param>
+        /// <returns>True if the intersection success.</returns>
+        public static bool LinePlane(Line line, Plane plane, out Vector3 pt, out double t)
         {
             Vector3 lnDir = line.Direction;
             Vector3 ptPlane = plane.Origin - line.Start;
+            double segmentLength = line.Length;
 
             double denominator = Vector3.Dot(plane.Normal, lnDir);
             double numerator = Vector3.Dot(plane.Normal, ptPlane);
 
             if (Math.Abs(denominator) < GeoSharpMath.EPSILON)
-                throw new Exception("Segment parallel to the plane or lies in plane.");
+            {
+                pt = Vector3.Unset;
+                t = 0.0;
+                return false;
+            }
 
             // Compute the intersect parameter.
-            double t = numerator / denominator;
-
-            return line.Start + lnDir * t;
+            double s = numerator / denominator;
+            pt = line.Start + lnDir * s;
+            // Parametrize the t value between 0.0 to 1.0.
+            t = s / segmentLength;
+            return true;
         }
 
         /// <summary>
         /// Solves the intersection between two lines, assumed as infinite.
         /// Returns as outputs two points describing the minimum distance between the two lines.
+        /// Returns false if the segments are parallel.
         /// http://geomalgorithms.com/a07-_distance.html
         /// </summary>
         /// <param name="ln0">The first line.</param>
@@ -141,8 +165,12 @@ namespace GeometrySharp.Operation
             double e = Vector3.Dot(lnDir1, ln0Ln1Dir);
             double div = a * c - b * b;
 
-            if(Math.Abs(div) < GeoSharpMath.EPSILON)
-                throw new Exception("Segments must not be parallel.");
+            if (Math.Abs(div) < GeoSharpMath.EPSILON)
+            {
+                pt0 = Vector3.Unset;
+                pt1 = Vector3.Unset;
+                return false;
+            }
 
             double s = (b * e - c * d) / div;
             double t = (a * e - b * d) / div;
@@ -150,6 +178,31 @@ namespace GeometrySharp.Operation
             pt0 = ln0.Start + lnDir0 * s;
             pt1 = ln1.Start + lnDir1 * t;
             return true;
+        }
+
+        /// <summary>
+        /// Computes the intersection between a polyline and a plane.
+        /// Under the hood, is intersecting each segment with the plane and storing the intersection point into a collection.
+        /// If no intersections are found a empty collection is returned.
+        /// </summary>
+        /// <param name="poly">The polyline to intersect with.</param>
+        /// <param name="pl">The section plane.</param>
+        /// <returns>A collection of the unique intersection points.</returns>
+        public static List<Vector3> PolylinePlane(Polyline poly, Plane pl)
+        {
+            List<Vector3> intersectionPts = new List<Vector3>();
+            Line[] segments = poly.Segments();
+
+            foreach (Line segment in segments)
+            {
+                if (!LinePlane(segment, pl, out Vector3 pt, out double t)) continue;
+                if(t >= 0.0 && t <= 1.0)
+                {
+                    intersectionPts.Add(pt);
+                }
+            }
+
+            return intersectionPts;
         }
     }
 }

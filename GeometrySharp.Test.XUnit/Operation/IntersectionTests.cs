@@ -1,9 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
+using verb.core;
 using Xunit;
 using Xunit.Abstractions;
+using Plane = GeometrySharp.Geometry.Plane;
+using Ray = GeometrySharp.Geometry.Ray;
 
 namespace GeometrySharp.Test.XUnit.Operation
 {
@@ -22,14 +25,16 @@ namespace GeometrySharp.Test.XUnit.Operation
             Plane pl1 = Plane.PlaneYZ.SetOrigin(new Vector3{10,10,5});
             Plane pl2 = Plane.PlaneXZ.SetOrigin(new Vector3 {10, -10, -5});
 
-            Ray intersection0 = Intersect.PlanePlane(pl0, pl1);
-            Ray intersection1 = Intersect.PlanePlane(pl1, pl2);
+            bool intersection0 = Intersect.PlanePlane(pl0, pl1, out Ray rayIntersect0);
+            bool intersection1 = Intersect.PlanePlane(pl1, pl2, out Ray rayIntersect1);
 
-            intersection0.Position.Should().BeEquivalentTo(new Vector3 {10, 0, 0});
-            intersection0.Direction.Should().BeEquivalentTo(new Vector3 { 0, 1, 0 });
+            intersection0.Should().BeTrue();
+            rayIntersect0.Position.Should().BeEquivalentTo(new Vector3 {10, 0, 0});
+            rayIntersect0.Direction.Should().BeEquivalentTo(new Vector3 { 0, 1, 0 });
 
-            intersection1.Position.Should().BeEquivalentTo(new Vector3 { 10, -10, 0 });
-            intersection1.Direction.Should().BeEquivalentTo(new Vector3 { 0, 0, 1 });
+            intersection1.Should().BeTrue();
+            rayIntersect1.Position.Should().BeEquivalentTo(new Vector3 { 10, -10, 0 });
+            rayIntersect1.Direction.Should().BeEquivalentTo(new Vector3 { 0, 0, 1 });
         }
 
         [Fact]
@@ -38,9 +43,9 @@ namespace GeometrySharp.Test.XUnit.Operation
             Plane pl0 = Plane.PlaneXY;
             Plane pl1 = Plane.PlaneXY.SetOrigin(new Vector3 { 10, 10, 5 });
 
-            Func<object> func = () => Intersect.PlanePlane(pl0, pl1);
+            bool intersection = Intersect.PlanePlane(pl0, pl1, out _);
 
-            func.Should().Throw<Exception>().WithMessage("The two planes are parallel.");
+            intersection.Should().BeFalse();
         }
 
         [Fact]
@@ -50,9 +55,11 @@ namespace GeometrySharp.Test.XUnit.Operation
             Line ln0 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 20, 20, 10 });
             Line ln1 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 5, 5, 10 });
 
-            Vector3 pt0 = Intersect.LinePlane(ln0, pl);
-            Vector3 pt1 = Intersect.LinePlane(ln1, pl);
+            bool intersection0 = Intersect.LinePlane(ln0, pl, out Vector3 pt0, out _);
+            bool intersection1 = Intersect.LinePlane(ln1, pl, out Vector3 pt1, out _);
 
+            intersection0.Should().BeTrue();
+            intersection1.Should().BeTrue();
             pt0.Equals(new Vector3 {10, 10, 5}).Should().BeTrue();
             pt1.Equals(new Vector3 { 10, 10, 20 }).Should().BeTrue();
         }
@@ -66,9 +73,9 @@ namespace GeometrySharp.Test.XUnit.Operation
             Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
             Line ln = new Line(new Vector3 (startPt), new Vector3(endPt));
 
-            Func<object> func = () => Intersect.LinePlane(ln, pl);
+            bool intersection = Intersect.LinePlane(ln, pl, out _, out _);
 
-            func.Should().Throw<Exception>().WithMessage("Segment parallel to the plane or lies in plane.");
+            intersection.Should().BeFalse();
         }
 
         [Theory]
@@ -94,9 +101,36 @@ namespace GeometrySharp.Test.XUnit.Operation
             Line ln0 = new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 5, 5, 0 });
             Line ln1 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 5, 0 });
 
-            Func<object> func = () => Intersect.LineLine(ln0, ln1, out _, out _);
+            bool intersection = Intersect.LineLine(ln0, ln1, out _, out _);
 
-            func.Should().Throw<Exception>().WithMessage("Segments must not be parallel.");
+            intersection.Should().BeFalse();
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersection_Points_Between_A_Polyline_And_A_Plane()
+        {
+            Vector3[] pts = new[] { 
+                new Vector3 { -1.673787, -0.235355, 14.436008 }, 
+                new Vector3 { 13.145523, 6.066452, 0 }, 
+                new Vector3 { 2.328185, 22.89864, 0 },
+                new Vector3 { 18.154088, 30.745098, 7.561387 }, 
+                new Vector3 { 18.154088, 12.309505, 7.561387 }};
+
+            Vector3[] intersectionChecks = new[] {
+                new Vector3 { 10, 4.728841, 3.064164 },
+                new Vector3 { 10, 10.961005, 0 },
+                new Vector3 { 10, 26.702314, 3.665482 }};
+
+            Polyline poly = new Polyline(pts);
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
+
+            List<Vector3> intersections = Intersect.PolylinePlane(poly, pl);
+
+            intersections.Count.Should().Be(intersectionChecks.Length);
+            for (int i = 0; i < intersectionChecks.Length; i++)
+            {
+                intersections[i].IsEqualRoundingDecimal(intersectionChecks[i], 6).Should().BeTrue();
+            }
         }
     }
 }
