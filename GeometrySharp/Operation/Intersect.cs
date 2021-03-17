@@ -16,6 +16,15 @@ namespace GeometrySharp.Operation
         // ToDo: Curve-Self
         // ToDo: Polyline-Polyline
         // ToDo: Polyline-Self
+        // ToDo: Arc-Plane
+        // ToDo: Arc-Line
+        // ToDo: Arc-Polyline
+        // ToDo: Arc-Polygon
+        // ToDo: Circle-Plane
+        // ToDo: Circle-Line
+        // ToDo: Circle-Polyline
+        // ToDo: Circle-Polygon
+        // ToDo: Polygon-Line
 
         /// <summary>
         /// Solves the intersection between two planes.
@@ -115,7 +124,7 @@ namespace GeometrySharp.Operation
         /// <param name="line">The segment to intersect. Assumed as infinite.</param>
         /// <param name="plane">The plane has to be intersected.</param>
         /// <param name="pt">The point representing the unique intersection.</param>
-        /// <param name="t">The parameter on the line between 0.0</param>
+        /// <param name="t">The parameter on the line between 0.0 to 1.0</param>
         /// <returns>True if the intersection success.</returns>
         public static bool LinePlane(Line line, Plane plane, out Vector3 pt, out double t)
         {
@@ -151,9 +160,13 @@ namespace GeometrySharp.Operation
         /// <param name="ln1">The second line.</param>
         /// <param name="pt0">The output point of the first line.</param>
         /// <param name="pt1">The output point of the second line.</param>
+        /// <param name="t0">The parameter on the first line between 0.0 to 1.0</param>
+        /// <param name="t1">The parameter on the second line between 0.0 to 1.0</param>
         /// <returns>True if the intersection succeed.</returns>
-        public static bool LineLine(Line ln0, Line ln1, out Vector3 pt0, out Vector3 pt1)
+        public static bool LineLine(Line ln0, Line ln1, out Vector3 pt0, out Vector3 pt1, out double t0, out double t1)
         {
+            double ln0Length = ln0.Length;
+            double ln1Length = ln1.Length;
             Vector3 lnDir0 = ln0.Direction;
             Vector3 lnDir1 = ln1.Direction;
             Vector3 ln0Ln1Dir = ln0.Start - ln1.Start;
@@ -169,6 +182,8 @@ namespace GeometrySharp.Operation
             {
                 pt0 = Vector3.Unset;
                 pt1 = Vector3.Unset;
+                t0 = 0.0;
+                t1 = 0.0;
                 return false;
             }
 
@@ -177,6 +192,8 @@ namespace GeometrySharp.Operation
 
             pt0 = ln0.Start + lnDir0 * s;
             pt1 = ln1.Start + lnDir1 * t;
+            t0 = s / ln0Length;
+            t1 = t / ln1Length;
             return true;
         }
 
@@ -203,6 +220,53 @@ namespace GeometrySharp.Operation
             }
 
             return intersectionPts;
+        }
+
+        /// <summary>
+        /// Computes the intersection between a circle and a line.
+        /// If the intersection is computed the result points can be 1 or 2 depending on whether the line touches the circle tangentially or cuts through it.
+        /// The intersection result false if the line misses the circle entirely.
+        /// http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
+        /// </summary>
+        /// <param name="cl">The circle for intersection.</param>
+        /// <param name="ln">The line for intersection.</param>
+        /// <param name="pts">Output the intersection points.</param>
+        /// <returns>True if intersection is computed.</returns>
+        public static bool CircleLine(Circle cl, Line ln, out Vector3[] pts)
+        {
+            Vector3 pt0 = ln.Start;
+            Vector3 ptCircle = cl.Center;
+            Vector3 lnDir = ln.Direction;
+            Vector3 pt0PtCir = pt0 - ptCircle;
+
+            double a = Vector3.Dot(lnDir, lnDir);
+            double b = Vector3.Dot(lnDir, pt0PtCir) * 2;
+            double c = Vector3.Dot(pt0PtCir, pt0PtCir) - (cl.Radius * cl.Radius);
+
+            double det = b * b - 4 * a * c;
+            double t;
+
+            if ((a <= GeoSharpMath.MAXTOLERANCE) || (det < 0))
+            {
+                pts = new Vector3[]{};
+                return false;
+            }
+            else if (Math.Abs(det) < GeoSharpMath.MAXTOLERANCE)
+            {
+                t = -b / (2 * a);
+                Vector3 intersection = pt0 + lnDir * t;
+                pts = new Vector3[] { intersection};
+                return true;
+            }
+            else
+            {
+                t = (-b + Math.Sqrt(det)) / (2 * a);
+                double t1 = (-b - Math.Sqrt(det)) / (2 * a);
+                Vector3 intersection0 = pt0 + lnDir * t;
+                Vector3 intersection1 = pt0 + lnDir * t1;
+                pts = new Vector3[] { intersection0, intersection1 };
+                return true;
+            }
         }
     }
 }

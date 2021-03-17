@@ -89,7 +89,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             Vector3 ptCheck0 = new Vector3(output0);
             Vector3 ptCheck1 = new Vector3(output1);
 
-            bool intersection = Intersect.LineLine(ln0, ln1, out Vector3 pt0, out Vector3 pt1);
+            bool intersection = Intersect.LineLine(ln0, ln1, out Vector3 pt0, out Vector3 pt1, out _, out _);
 
             pt0.IsEqualRoundingDecimal(ptCheck0, 6).Should().BeTrue();
             pt1.IsEqualRoundingDecimal(ptCheck1, 6).Should().BeTrue();
@@ -101,7 +101,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             Line ln0 = new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 5, 5, 0 });
             Line ln1 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 5, 0 });
 
-            bool intersection = Intersect.LineLine(ln0, ln1, out _, out _);
+            bool intersection = Intersect.LineLine(ln0, ln1, out _, out _, out _, out _);
 
             intersection.Should().BeFalse();
         }
@@ -131,6 +131,43 @@ namespace GeometrySharp.Test.XUnit.Operation
             {
                 intersections[i].IsEqualRoundingDecimal(intersectionChecks[i], 6).Should().BeTrue();
             }
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersection_Points_Between_A_Circle_And_A_Line()
+        {
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
+            Circle cl = new Circle(pl, 20);
+            Line ln0 = new Line(new Vector3 { 10, 29.769674, 17.028815 }, new Vector3 { 10, 37.594559, 24.680781 });
+            Line ln1 = new Line(new Vector3 { 10, 40, 25 }, new Vector3 { 10, 40, 17 });
+
+            Vector3[] intersectionChecks = new[] {
+                new Vector3 { 10, 33.00596, 20.193584 },
+                new Vector3 { 10, 4.51962, -7.663248 }};
+
+            Vector3 intersectionCheck = new Vector3 {10, 40, 5};
+
+            bool intersection0 = Intersect.CircleLine(cl, ln0, out Vector3[] pts0);
+            bool intersection1 = Intersect.CircleLine(cl, ln1, out Vector3[] pts1);
+
+            for (int i = 0; i < intersectionChecks.Length; i++)
+            {
+                pts0[i].IsEqualRoundingDecimal(intersectionChecks[i], 6).Should().BeTrue();
+            }
+
+            pts1[0].IsEqualRoundingDecimal(intersectionCheck, 6).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CircleLine_Intersection_Returns_False_If_No_Intersections_Are_Computed()
+        {
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
+            Circle cl = new Circle(pl, 20);
+            Line ln = new Line(new Vector3 { -15, 45, 17 }, new Vector3 { 15, 45, 25 });
+
+            bool intersection = Intersect.CircleLine(cl, ln, out Vector3[] pts);
+
+            intersection.Should().BeFalse();
         }
     }
 }
