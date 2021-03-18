@@ -25,20 +25,20 @@ namespace GeometrySharp.Test.XUnit.Operation
             Plane pl1 = Plane.PlaneYZ.SetOrigin(new Vector3{10,10,5});
             Plane pl2 = Plane.PlaneXZ.SetOrigin(new Vector3 {10, -10, -5});
 
-            bool intersection0 = Intersect.PlanePlane(pl0, pl1, out Ray rayIntersect0);
-            bool intersection1 = Intersect.PlanePlane(pl1, pl2, out Ray rayIntersect1);
+            bool intersection0 = Intersect.PlanePlane(pl0, pl1, out Line lineIntersect0);
+            bool intersection1 = Intersect.PlanePlane(pl1, pl2, out Line lineIntersect1);
 
             intersection0.Should().BeTrue();
-            rayIntersect0.Position.Should().BeEquivalentTo(new Vector3 {10, 0, 0});
-            rayIntersect0.Direction.Should().BeEquivalentTo(new Vector3 { 0, 1, 0 });
+            lineIntersect0.Start.Should().BeEquivalentTo(new Vector3 {10, 0, 0});
+            lineIntersect0.Direction.Should().BeEquivalentTo(new Vector3 { 0, 1, 0 });
 
             intersection1.Should().BeTrue();
-            rayIntersect1.Position.Should().BeEquivalentTo(new Vector3 { 10, -10, 0 });
-            rayIntersect1.Direction.Should().BeEquivalentTo(new Vector3 { 0, 0, 1 });
+            lineIntersect1.Start.Should().BeEquivalentTo(new Vector3 { 10, -10, 0 });
+            lineIntersect1.Direction.Should().BeEquivalentTo(new Vector3 { 0, 0, 1 });
         }
 
         [Fact]
-        public void PlaneToPlane_Throws_An_Exception_If_Planes_Are_Parallel()
+        public void PlanePlane_Is_False_If_Planes_Are_Parallel()
         {
             Plane pl0 = Plane.PlaneXY;
             Plane pl1 = Plane.PlaneXY.SetOrigin(new Vector3 { 10, 10, 5 });
@@ -68,7 +68,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         [InlineData(new double[] { 0, 0, 0 }, new double[] { 0, 10, 0 })]
         [InlineData(new double[] { 0, 0, 0 }, new double[] { 0, 0, 10 })]
         [InlineData(new double[] { 10, 20, 5 }, new double[] { 10, 20, 10 })]
-        public void LinePlane_Throws_An_Exception_If_Line_Is_Parallel(double[] startPt, double[] endPt)
+        public void LinePlane_Is_False_If_Line_Is_Parallel(double[] startPt, double[] endPt)
         {
             Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
             Line ln = new Line(new Vector3 (startPt), new Vector3(endPt));
@@ -96,7 +96,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void LineLine_Throws_An_Exception_If_Segments_Are_Parallel()
+        public void LineLine_Is_False_If_Segments_Are_Parallel()
         {
             Line ln0 = new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 5, 5, 0 });
             Line ln1 = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 5, 0 });
@@ -147,8 +147,8 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             Vector3 intersectionCheck = new Vector3 {10, 40, 5};
 
-            bool intersection0 = Intersect.CircleLine(cl, ln0, out Vector3[] pts0);
-            bool intersection1 = Intersect.CircleLine(cl, ln1, out Vector3[] pts1);
+            bool intersection0 = Intersect.LineCircle(cl, ln0, out Vector3[] pts0);
+            bool intersection1 = Intersect.LineCircle(cl, ln1, out Vector3[] pts1);
 
             for (int i = 0; i < intersectionChecks.Length; i++)
             {
@@ -165,9 +165,40 @@ namespace GeometrySharp.Test.XUnit.Operation
             Circle cl = new Circle(pl, 20);
             Line ln = new Line(new Vector3 { -15, 45, 17 }, new Vector3 { 15, 45, 25 });
 
-            bool intersection = Intersect.CircleLine(cl, ln, out Vector3[] pts);
+            bool intersection = Intersect.LineCircle(cl, ln, out Vector3[] pts);
 
             intersection.Should().BeFalse();
+        }
+
+        [Fact]
+        public void PlaneCircle_Is_False_If_Planes_Are_Parallel()
+        {
+            Plane pl0 = Plane.PlaneXY;
+            Plane pl1 = Plane.PlaneXY.SetOrigin(new Vector3 { 10, 10, 5 });
+            Circle cl = new Circle(pl1, 20);
+
+            bool intersection = Intersect.PlaneCircle(pl0, cl, out _);
+
+            intersection.Should().BeFalse();
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersection_Points_Between_A_Plane_And_A_Circle()
+        {
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
+            Circle cl = new Circle(pl, 20);
+            Plane plSec = new Plane(new Vector3 {10, 10, 10}, new Vector3 {10, 20, 25});
+
+            Vector3[] intersectionChecks = new[] {
+                new Vector3 { 10, 34.04646, -9.237168 },
+                new Vector3 { 10, 3.026711, 15.578632 }};
+
+            bool intersection = Intersect.PlaneCircle(plSec, cl, out Vector3[] pts);
+
+            for (int i = 0; i < intersectionChecks.Length; i++)
+            {
+                pts[i].IsEqualRoundingDecimal(intersectionChecks[i], 6).Should().BeTrue();
+            }
         }
     }
 }

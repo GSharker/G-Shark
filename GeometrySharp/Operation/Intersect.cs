@@ -21,7 +21,6 @@ namespace GeometrySharp.Operation
         // ToDo: Arc-Polyline
         // ToDo: Arc-Polygon
         // ToDo: Circle-Plane
-        // ToDo: Circle-Line
         // ToDo: Circle-Polyline
         // ToDo: Circle-Polygon
         // ToDo: Polygon-Line
@@ -33,17 +32,17 @@ namespace GeometrySharp.Operation
         /// </summary>
         /// <param name="p1">The first plane.</param>
         /// <param name="p2">The second plane.</param>
-        /// <param name="ray">The intersection as <see cref="Ray"/>.</param>
+        /// <param name="line">The intersection as <see cref="Line"/>.</param>
         /// <returns>True if the intersection success.</returns>
-        public static bool PlanePlane(Plane p1, Plane p2, out Ray ray)
+        public static bool PlanePlane(Plane p1, Plane p2, out Line line)
         {
             Vector3 plNormal1 = p1.Normal;
             Vector3 plNormal2 = p2.Normal;
+            line = new Line(new Vector3{0,0,0}, new Vector3{0,0,1});
 
             Vector3 directionVec = Vector3.Cross(plNormal1, plNormal2);
             if (Vector3.Dot(directionVec, directionVec) < GeoSharpMath.EPSILON)
             {
-                ray = new Ray(Vector3.Unset, Vector3.Unset);
                 return false;
             }
 
@@ -111,7 +110,7 @@ namespace GeometrySharp.Operation
                 pt.AddRange(new[] { corX, corY, 0.0 });
             }
 
-            ray = new Ray(pt, directionVec.Unitize());
+            line = new Line(pt, pt + directionVec.Unitize());
             return true;
         }
 
@@ -232,7 +231,7 @@ namespace GeometrySharp.Operation
         /// <param name="ln">The line for intersection.</param>
         /// <param name="pts">Output the intersection points.</param>
         /// <returns>True if intersection is computed.</returns>
-        public static bool CircleLine(Circle cl, Line ln, out Vector3[] pts)
+        public static bool LineCircle(Circle cl, Line ln, out Vector3[] pts)
         {
             Vector3 pt0 = ln.Start;
             Vector3 ptCircle = cl.Center;
@@ -267,6 +266,31 @@ namespace GeometrySharp.Operation
                 pts = new Vector3[] { intersection0, intersection1 };
                 return true;
             }
+        }
+
+        public static bool PlaneCircle(Plane pl, Circle cl, out Vector3[] pts)
+        {
+            pts = new Vector3[] { };
+            Vector3 clPt = cl.Center;
+
+            Vector3 cCross = Vector3.Cross(pl.Origin, clPt);
+            if (Math.Abs(cCross.Length()) < GeoSharpMath.EPSILON)
+            {
+                return false;
+            }
+
+            bool intersection = PlanePlane(pl, cl.Plane, out Line intersectionLine);
+            Vector3 closestPt = intersectionLine.ClosestPoint(clPt);
+            double distance = clPt.DistanceTo(intersectionLine);
+
+            if (Math.Abs(distance) < GeoSharpMath.EPSILON)
+            {
+                Vector3 pt = cl.ClosestPt(closestPt);
+                pts = new[] {pt};
+                return true;
+            }
+
+            return LineCircle(cl, intersectionLine, out pts);
         }
     }
 }
