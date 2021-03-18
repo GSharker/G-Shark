@@ -225,6 +225,11 @@ namespace GeometrySharp.Geometry
             return new Arc(plane, this.Radius, angleDomain);
         }
 
+        public NurbsCurve ToNurbsCurve()
+        {
+            return new NurbsCurve();
+        }
+
         /// <summary>
         /// Determines whether the arc is equal to another arc.
         /// The arcs are equal if have the same plane, radius and angle.

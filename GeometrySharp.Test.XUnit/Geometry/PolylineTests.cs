@@ -158,5 +158,28 @@ namespace GeometrySharp.Test.XUnit.Geometry
             reversedPolyline.Should().NotBeSameAs(polyline);
             reversedPolyline.Should().BeEquivalentTo(reversedPts);
         }
+
+        [Fact]
+        public void It_Returns_A_Polyline_Transformed_In_NurbsCurve()
+        {
+            Vector3[] pts = new[] {
+                new Vector3 { -1.673787, -0.235355, 14.436008 },
+                new Vector3 { 13.145523, 6.066452, 0 },
+                new Vector3 { 2.328185, 22.89864, 0 },
+                new Vector3 { 18.154088, 30.745098, 7.561387 },
+                new Vector3 { 18.154088, 12.309505, 7.561387 }};
+
+            Polyline poly = new Polyline(pts);
+
+            NurbsCurve curve = poly.ToNurbsCurve();
+            Knot knots = curve.Knots;
+
+            curve.Degree.Should().Be(1);
+            for (int i = 1; i < curve.Knots.Count - 1; i++)
+            {
+                Vector3 pt = curve.PointAt(knots[i]);
+                pts[i - 1].Equals(curve.PointAt(knots[i])).Should().BeTrue();
+            }
+        }
     }
 }

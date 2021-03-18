@@ -20,7 +20,6 @@ namespace GeometrySharp.Operation
         // ToDo: Arc-Line
         // ToDo: Arc-Polyline
         // ToDo: Arc-Polygon
-        // ToDo: Circle-Plane
         // ToDo: Circle-Polyline
         // ToDo: Circle-Polygon
         // ToDo: Polygon-Line
