@@ -268,6 +268,15 @@ namespace GeometrySharp.Operation
             }
         }
 
+        /// <summary>
+        /// Computes the intersection between a plane and a circle.
+        /// If the intersection is computed the result points can be 1 or 2 depending on whether the plane touches the circle tangentially or cuts through it.
+        /// The intersection result false if the plane is parallel to the circle or misses the circle entirely.
+        /// </summary>
+        /// <param name="pl">The plane for intersection.</param>
+        /// <param name="cl">The circle for intersection.</param>
+        /// <param name="pts">Output the intersection points.</param>
+        /// <returns>True if intersection is computed.</returns>
         public static bool PlaneCircle(Plane pl, Circle cl, out Vector3[] pts)
         {
             pts = new Vector3[] { };

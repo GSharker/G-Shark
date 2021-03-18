@@ -171,15 +171,18 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void PlaneCircle_Is_False_If_Planes_Are_Parallel()
+        public void PlaneCircle_Is_False_If_Planes_Are_Parallel_Or_Intersection_Plane_Misses_The_Circle()
         {
-            Plane pl0 = Plane.PlaneXY;
-            Plane pl1 = Plane.PlaneXY.SetOrigin(new Vector3 { 10, 10, 5 });
+            Plane pl0 = Plane.PlaneYZ;
+            Plane pl1 = Plane.PlaneYZ.SetOrigin(new Vector3 { 10, 20, 5 });
+            Plane pl2 = Plane.PlaneXZ.SetOrigin(new Vector3 { 10, -10, -5 });
             Circle cl = new Circle(pl1, 20);
 
-            bool intersection = Intersect.PlaneCircle(pl0, cl, out _);
+            bool intersection0 = Intersect.PlaneCircle(pl0, cl, out _);
+            bool intersection1 = Intersect.PlaneCircle(pl2, cl, out _);
 
-            intersection.Should().BeFalse();
+            intersection0.Should().BeFalse();
+            intersection1.Should().BeFalse();
         }
 
         [Fact]
