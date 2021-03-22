@@ -2,6 +2,7 @@
 using GeometrySharp.Geometry;
 using System;
 using System.Collections.Generic;
+using GeometrySharp.Optimization;
 
 namespace GeometrySharp.Operation
 {
@@ -293,6 +294,13 @@ namespace GeometrySharp.Operation
             }
 
             return LineCircle(cl, intersectionLine, out pts);
+        }
+
+        private void CurvesWithEstimation(NurbsCurve c0, NurbsCurve c1, double u0, double u1, double tolerance)
+        {
+            MinimizerFunctions functions = new MinimizerFunctions(c0, c1);
+            Minimizer min = new Minimizer(functions.Objective, functions.Gradient);
+
         }
     }
 }
