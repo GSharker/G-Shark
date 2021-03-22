@@ -14,15 +14,9 @@ namespace GeometrySharp.Operation
         // ToDo: Curve-Curve
         // ToDo: Curve-Line
         // ToDo: Curve-Self
-        // ToDo: Polyline-Polyline
-        // ToDo: Polyline-Self
-        // ToDo: Arc-Plane
-        // ToDo: Arc-Line
-        // ToDo: Arc-Polyline
-        // ToDo: Arc-Polygon
-        // ToDo: Circle-Polyline
-        // ToDo: Circle-Polygon
-        // ToDo: Polygon-Line
+        // ToDo: Curve-Surface
+        // ToDo: Line-Bbox
+        // ToDo: Surface-Surface
 
         /// <summary>
         /// Solves the intersection between two planes.

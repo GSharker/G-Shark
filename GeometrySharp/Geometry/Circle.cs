@@ -4,6 +4,7 @@ using GeometrySharp.Core;
 namespace GeometrySharp.Geometry
 {
     // ToDo: Circle by 3 points.
+    // ToDo: ToNurbs maybe.
     public class Circle
     {
         /// <summary>

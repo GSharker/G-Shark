@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
@@ -232,6 +231,7 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Constructs a nurbs curve representation of this arc.
+        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this arc.</returns>
         public NurbsCurve ToNurbsCurve()
@@ -244,7 +244,7 @@ namespace GeometrySharp.Geometry
             Vector3[] ctrPts;
             double[] weights;
 
-            // Number of arcs
+            // Number of arcs.
             double piNum = 0.5 * Math.PI;
             if (theta <= piNum)
             {
