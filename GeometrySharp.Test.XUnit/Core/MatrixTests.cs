@@ -108,6 +108,17 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
+        public void It_Returns_A_Matrix_Divided_By_A_Constant()
+        {
+            var matrix = new Matrix { new List<double> { 8, 0 }, new List<double> { 2, -18 } };
+            var matrixExpected = new Matrix { new List<double> { 4, 0 }, new List<double> { 1, -9 } };
+
+            var resultMatrix = matrix / 2;
+
+            resultMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
         public void It_Returns_A_Matrix_Multiply_By_A_Constant()
         {
             var matrix = new Matrix { new List<double> { 4, 0 }, new List<double> { 1, -9 } };
@@ -160,6 +171,18 @@ namespace GeometrySharp.Test.XUnit.Core
             var matrixExpected = new Matrix { new List<double> { 8, 10 }, new List<double> { 13, 15 } };
 
             var productMatrix = matrixA + matrixB;
+
+            productMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
+        public void It_Returns_The_Subtraction_Between_Two_Matrices()
+        {
+            var matrixA = new Matrix { new List<double> { 1, 2 }, new List<double> { 4, 5 } };
+            var matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 } };
+            var matrixExpected = new Matrix { new List<double> { -6, -6 }, new List<double> { -5, -5 } };
+
+            var productMatrix = matrixA - matrixB;
 
             productMatrix.Should().BeEquivalentTo(matrixExpected);
         }
