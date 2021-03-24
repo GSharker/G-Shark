@@ -87,6 +87,23 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Divides a matrix by a constant.
+        /// </summary>
+        /// <param name="m">Matrix has to be multiply.</param>
+        /// <param name="a">Value to operate the division.</param>
+        /// <returns>Matrix divided by a constant.</returns>
+        public static Matrix operator /(Matrix m, double a)
+        {
+            Matrix result = new Matrix();
+            foreach (IList<double> row in m)
+            {
+                result.Add(row.Select(val => val / a).ToList());
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Multiply two matrices assuming they are of compatible dimensions.
         /// </summary>
         /// <param name="a">First matrix.</param>

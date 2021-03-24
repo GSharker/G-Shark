@@ -298,8 +298,8 @@ namespace GeometrySharp.Operation
 
         private void CurvesWithEstimation(NurbsCurve c0, NurbsCurve c1, double u0, double u1, double tolerance)
         {
-            MinimizerFunctions functions = new MinimizerFunctions(c0, c1);
-            Minimizer min = new Minimizer(functions.Objective, functions.Gradient);
+            ObjectiveFunction functions = new ObjectiveFunction(c0, c1);
+            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
 
         }
     }
