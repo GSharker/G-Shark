@@ -24,11 +24,19 @@ namespace GeometrySharp.Optimization
             _gradientFunc = gradientFunc;
         }
 
+        /// <summary>
+        /// The Minimizer solves for unconstrained problems, using a gradient descendent.
+        /// </summary>
+        /// <param name="initialGuess">The vector initial guess.</param>
+        /// <param name="gradientTolerance">The gradient tolerance set per default to 1e-8.</param>
+        /// <param name="maxIteration">The number of iteration used, set per default 1000.</param>
+        /// <returns>The minimization result, <see cref="MinimizationResult"/>.</returns>
         public MinimizationResult UnconstrainedMinimizer(Vector3 initialGuess, double gradientTolerance = 1e-8, int maxIteration = 1000)
         {
             Vector3 x0 = new Vector3(initialGuess);
             int n = x0.Count;
             double f0 = _objectiveFunction(x0);
+            double f1 = 0.0;
             Vector3 x1 = null;
             Vector3 s = null;
 
@@ -67,7 +75,7 @@ namespace GeometrySharp.Optimization
 
                     s = step * t;
                     x1 = x0 + s;
-                    double f1 = _objectiveFunction(x1);
+                    f1 = _objectiveFunction(x1);
 
                     if (f1 - f0 >= 0.1 * t * df0 || double.IsNaN(f1))
                     {
@@ -93,11 +101,18 @@ namespace GeometrySharp.Optimization
                 double ys = Vector3.Dot(y, s);
                 Vector3 Hy = y * H1;
 
+                Matrix T0 = Tensor(s, s);
+                Matrix T1 = Tensor(Hy, s);
+                Matrix T2 = Tensor(s, Hy);
 
+                H1 = (H1 + (T0 * (ys + Vector3.Dot(y, Hy)) / (ys * ys))) - (T1 + T2) / ys;
+                x0 = x1;
+                f0 = f1;
+                g0 = g1;
+                iteration++;
             }
 
-
-            throw new NotImplementedException();
+            return new MinimizationResult(x0, f0, g0, H1, iteration);
         }
 
         private void ValidateGradient(Vector3 eval)
