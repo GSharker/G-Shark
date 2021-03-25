@@ -28,7 +28,7 @@ namespace GeometrySharp.Test.XUnit
             pts.push(new Array<double>(new double[] { 2.5, 0, 0, 1 }));
             pts.push(new Array<double>(new double[] { 3, 0, 0, 1 }));
 
-            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 });
+            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0 });
             var weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
 
             var curve = verb.geom.NurbsCurve.byPoints(pts, 3);
@@ -67,6 +67,11 @@ namespace GeometrySharp.Test.XUnit
 
             _testOutput.WriteLine($"{k}");
             _testOutput.WriteLine($"{ptAt[0]},{ptAt[1]},{ptAt[2]}");
+
+            var lazy = new verb.core.LazyCurveBoundingBoxTree(curve._data, null);
+
+            _testOutput.WriteLine($"{lazy._knotTol}");
+            _testOutput.WriteLine($"{curve._data.knots}");
         }
 
         [Fact]
