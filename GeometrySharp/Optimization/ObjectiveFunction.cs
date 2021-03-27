@@ -46,7 +46,7 @@ namespace GeometrySharp.Optimization
         public Vector3 Gradient(Vector3 v)
         {
             List<Vector3> deriveC0 = Evaluation.RationalCurveDerivatives(_curve0, v[0], 1);
-            List<Vector3> deriveC1 = Evaluation.RationalCurveDerivatives(_curve0, v[1], 1);
+            List<Vector3> deriveC1 = Evaluation.RationalCurveDerivatives(_curve1, v[1], 1);
 
             Vector3 r = deriveC0[0] - deriveC1[0];
             Vector3 drDt = deriveC1[1] * -1.0;

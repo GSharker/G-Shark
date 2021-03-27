@@ -1,33 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 
 namespace GeometrySharp.Core.BoundingBoxTree
 {
+    // ToDo: Make the test for the methods.
     public class LazyCurveBBT : IBoundingBoxTree<NurbsCurve>
     {
         private readonly NurbsCurve _curve;
         private readonly BoundingBox _boundingBox;
         private readonly double _knotTolerance;
 
-        public LazyCurveBBT(NurbsCurve curve, double knotTolerance = -1)
+        public LazyCurveBBT(NurbsCurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
+            _boundingBox = new BoundingBox(curve.ControlPoints);
 
-            if (knotTolerance < 0.0)
+            if (double.IsNaN(knotTolerance))
             {
-                _knotTolerance = (_curve.Knots[^1] - _curve.Knots[0]) / 64;
+                knotTolerance = _curve.Knots.Domain / 64;
             }
 
             _knotTolerance = knotTolerance;
         }
         public BoundingBox BoundingBox()
         {
-            throw new NotImplementedException();
+            return _boundingBox;
         }
 
         public Tuple<IBoundingBoxTree<NurbsCurve>, IBoundingBoxTree<NurbsCurve>> Split()
@@ -43,17 +42,17 @@ namespace GeometrySharp.Core.BoundingBoxTree
 
         public NurbsCurve Yield()
         {
-            throw new NotImplementedException();
+            return _curve;
         }
 
-        public bool Indivisible(double tolerance)
+        public bool IsIndivisible(double tolerance)
         {
-            throw new NotImplementedException();
+            return _curve.Knots.Domain < _knotTolerance;
         }
 
-        public bool Empty()
+        public bool IsEmpty()
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using verb.core;
@@ -202,6 +203,26 @@ namespace GeometrySharp.Test.XUnit.Operation
             {
                 pts[i].IsEqualRoundingDecimal(intersectionChecks[i], 6).Should().BeTrue();
             }
+        }
+
+        [Fact]
+        public void TestIntersection()
+        {
+            // Assert
+            int crvDegree0 = 1;
+            Knot crvKnots0 = new Knot{0,0,1,1};
+            List<Vector3> crvCtrPts0 = new List<Vector3>{new Vector3{0,0,0}, new Vector3 { 2, 0, 0 } };
+
+            int crvDegree1 = 1;
+            Knot crvKnots1 = new Knot { 0, 0, 1, 1 };
+            List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.5, -1.5, 0 } };
+
+            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
+            NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+
+            var intersection = Intersect.CurveCurve(crv0, crv1, GeoSharpMath.MAXTOLERANCE);
+
+            _testOutput.WriteLine(intersection.ToString());
         }
     }
 }

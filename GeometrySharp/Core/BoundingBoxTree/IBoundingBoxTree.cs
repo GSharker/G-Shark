@@ -11,8 +11,8 @@ namespace GeometrySharp.Core.BoundingBoxTree
 
         public T Yield();
 
-        public bool Indivisible(double tolerance);
+        public bool IsIndivisible(double tolerance);
 
-        public bool Empty();
+        public bool IsEmpty();
     }
 }

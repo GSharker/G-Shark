@@ -1,8 +1,11 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Core.BoundingBoxTree;
 using GeometrySharp.Geometry;
+using GeometrySharp.Optimization;
 using System;
 using System.Collections.Generic;
-using GeometrySharp.Optimization;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GeometrySharp.Operation
 {
@@ -205,8 +208,12 @@ namespace GeometrySharp.Operation
 
             foreach (Line segment in segments)
             {
-                if (!LinePlane(segment, pl, out Vector3 pt, out double t)) continue;
-                if(t >= 0.0 && t <= 1.0)
+                if (!LinePlane(segment, pl, out Vector3 pt, out double t))
+                {
+                    continue;
+                }
+
+                if (t >= 0.0 && t <= 1.0)
                 {
                     intersectionPts.Add(pt);
                 }
@@ -296,11 +303,126 @@ namespace GeometrySharp.Operation
             return LineCircle(cl, intersectionLine, out pts);
         }
 
-        private void CurvesWithEstimation(NurbsCurve c0, NurbsCurve c1, double u0, double u1, double tolerance)
+        public static (Vector3 pt0, Vector3 pt1, double t0, double t1) CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance)
         {
-            ObjectiveFunction functions = new ObjectiveFunction(c0, c1);
-            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
+            var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
+            (Vector3 pt0, Vector3 pt1, double t0, double t1) seed = (Vector3.Unset, Vector3.Unset, 0.0, 0.0);
 
+            //var t = CurvesWithEstimation(crv1, crv2, bBoxTreeIntersections[0].Item1.Knots[0],
+            //    bBoxTreeIntersections[0].Item2.Knots[0], tolerance);
+
+            var t = bBoxTreeIntersections
+                .Select(x => CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
+                .Where(tuple => (tuple.pt0 - tuple.pt1).SquaredLength() < tolerance)
+                .Aggregate(seed, (a, b) =>
+                {
+                    if (!(Math.Abs(a.t0 - b.t0) < tolerance)) return a = b;
+                    return a;
+                });
+
+            return t;
+        }
+
+        /// <summary>
+        /// The core algorithm for bounding box tree intersection, supporting both lazy and pre-computed bounding box trees
+        /// via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// </summary>
+        /// <param name="bbt1">The first Bounding box tree object.</param>
+        /// <param name="bbt2">The second Bounding box tree object.</param>
+        /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
+        /// <returns>A collection of tuples extracted from the Yield method of the BoundingBoxTree.</returns>
+        private static List<Tuple<T1, T2>> BoundingBoxTree<T1, T2>(IBoundingBoxTree<T1> bbt1, IBoundingBoxTree<T2> bbt2,
+            double tolerance = 1e-9)
+        {
+            List<IBoundingBoxTree<T1>> aTrees = new List<IBoundingBoxTree<T1>>();
+            List<IBoundingBoxTree<T2>> bTrees = new List<IBoundingBoxTree<T2>>();
+
+            aTrees.Add(bbt1);
+            bTrees.Add(bbt2);
+
+            List<Tuple<T1, T2>> result = new List<Tuple<T1, T2>>();
+
+            while (aTrees.Count > 0)
+            {
+                IBoundingBoxTree<T1> a = aTrees[^1];
+                aTrees.RemoveAt(aTrees.Count - 1);
+                IBoundingBoxTree<T2> b = bTrees[^1];
+                bTrees.RemoveAt(bTrees.Count - 1);
+
+                if (a.IsEmpty() || b.IsEmpty())
+                {
+                    continue;
+                }
+
+                if (BoundingBox.AreOverlapping(a.BoundingBox(), b.BoundingBox(), tolerance) == false)
+                {
+                    continue;
+                }
+
+                bool aIndivisible = a.IsIndivisible(tolerance);
+                bool bIndivisible = b.IsIndivisible(tolerance);
+                Tuple<IBoundingBoxTree<T2>, IBoundingBoxTree<T2>> bSplit = b.Split();
+                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> aSplit = a.Split();
+
+                if (aIndivisible && bIndivisible)
+                {
+                    result.Add(new Tuple<T1, T2>(a.Yield(), b.Yield()));
+                    continue;
+                }
+                if (aIndivisible)
+                {
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item2);
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item1);
+                    continue;
+                }
+                if (bIndivisible)
+                {
+                    aTrees.Add(aSplit.Item2);
+                    bTrees.Add(b);
+                    aTrees.Add(aSplit.Item1);
+                    bTrees.Add(b);
+                    continue;
+                }
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item1);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item1);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Refine an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
+        /// so the caller is responsible for providing a very good initial guess.
+        /// </summary>
+        /// <param name="crv0">The first curve.</param>
+        /// <param name="crv1">The second curve.</param>
+        /// <param name="firstGuess">The first guess parameter.</param>
+        /// <param name="secondGuess">The second guess parameter.</param>
+        /// <param name="tolerance">The value tolerance for the intersection.</param>
+        /// <returns>The curves intersection, expressed as a tuple of two intersection points and the t parameters.</returns>
+        private static (Vector3 pt0, Vector3 pt1, double t0, double t1) CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
+            double firstGuess, double secondGuess, double tolerance)
+        {
+            ObjectiveFunction functions = new ObjectiveFunction(crv0, crv1);
+            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 {firstGuess, secondGuess}, tolerance * tolerance);
+
+            Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
+            Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
+
+            return (pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
         }
     }
 }

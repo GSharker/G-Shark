@@ -59,6 +59,7 @@ namespace GeometrySharp.Optimization
                 double lengthStep = step.Length();
                 if (lengthStep < gradientTolerance)
                 {
+                    break;
                     throw new Exception("Newton step smaller than tolerance.");
                 }
 
@@ -89,10 +90,12 @@ namespace GeometrySharp.Optimization
 
                 if (t * lengthStep < gradientTolerance)
                 {
+                    break;
                     throw new Exception("Line search step size smaller than gradient tolerance.");
                 }
                 if (iteration > maxIteration)
                 {
+                    break;
                     throw new Exception("Max iteration reached during line search.");
                 }
 
@@ -121,6 +124,7 @@ namespace GeometrySharp.Optimization
             {
                 if (double.IsNaN(val) || double.IsInfinity(val))
                 {
+                    break;
                     throw new Exception("Non-finite gradient returned.");
                 }
             }
@@ -131,13 +135,13 @@ namespace GeometrySharp.Optimization
             int m = vec0.Count;
             int n = vec1.Count;
             int i = m - 1;
-            Matrix A = new Matrix();
+            Matrix A = Matrix.Identity(m);
 
             while (i >= 0)
             {
                 double xi = vec0[i];
                 int j = n - 1;
-                double[] Ai = new double[j];
+                double[] Ai = new double[n];
 
                 while (j >= 3)
                 {

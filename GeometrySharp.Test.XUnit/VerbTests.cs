@@ -68,7 +68,7 @@ namespace GeometrySharp.Test.XUnit
             _testOutput.WriteLine($"{k}");
             _testOutput.WriteLine($"{ptAt[0]},{ptAt[1]},{ptAt[2]}");
 
-            var lazy = new verb.core.LazyCurveBoundingBoxTree(curve._data, null);
+            var lazy = new verb.core.LazyCurveBoundingBoxTree(curve._data, -10);
 
             _testOutput.WriteLine($"{lazy._knotTol}");
             _testOutput.WriteLine($"{curve._data.knots}");
