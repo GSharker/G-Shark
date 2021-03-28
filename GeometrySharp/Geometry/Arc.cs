@@ -1,6 +1,8 @@
 ﻿using GeometrySharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
@@ -20,6 +22,8 @@ namespace GeometrySharp.Geometry
         /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
+            // ToDo: If interval isDecreasing interval 0 to -40 -> 360-40 to 0 use angular diff.
+            // ToDo: If angle length > 2.0*Pi use angular diff. 
             Plane = plane;
             Radius = radius;
             AngleDomain = angleDomain;
@@ -157,6 +161,12 @@ namespace GeometrySharp.Geometry
             return Plane.Origin + xDir + yDir;
         }
 
+        /// <summary>
+        /// Returns the tangent at the parameter t on the arc.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
+        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
+        /// <returns>Tangent at the t parameter.</returns>
         public Vector3 TangentAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
@@ -217,6 +227,109 @@ namespace GeometrySharp.Geometry
             Interval angleDomain = new Interval(this.AngleDomain.Min, this.AngleDomain.Max);
 
             return new Arc(plane, this.Radius, angleDomain);
+        }
+
+        /// <summary>
+        /// Constructs a nurbs curve representation of this arc.
+        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
+        /// </summary>
+        /// <returns>A Nurbs curve shaped like this arc.</returns>
+        public NurbsCurve ToNurbsCurve()
+        {
+            double radius = Radius;
+            Vector3 axisX = Plane.XAxis;
+            Vector3 axisY = Plane.YAxis;
+            double theta = Angle;
+            int numberOfArc;
+            Vector3[] ctrPts;
+            double[] weights;
+
+            // Number of arcs.
+            double piNum = 0.5 * Math.PI;
+            if (theta <= piNum)
+            {
+                numberOfArc = 1;
+                ctrPts = new Vector3[3];
+                weights = new double[3];
+            }
+            else if (theta <= piNum * 2)
+            {
+                numberOfArc = 2;
+                ctrPts = new Vector3[5];
+                weights = new double[5];
+            }
+            else if (theta <= piNum * 3)
+            {
+                numberOfArc = 3;
+                ctrPts = new Vector3[7];
+                weights = new double[7];
+            }
+            else
+            {
+                numberOfArc = 4;
+                ctrPts = new Vector3[9];
+                weights = new double[9];
+            }
+
+            double detTheta = theta / numberOfArc;
+            double weight1 = Math.Cos(detTheta / 2);
+            Vector3 p0 = Center + (axisX * (radius * Math.Cos(AngleDomain.Min)) + axisY * (radius * Math.Sin(AngleDomain.Min)));
+            Vector3 t0 = axisY * Math.Cos(AngleDomain.Min) - axisX * Math.Sin(AngleDomain.Min);
+
+            Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
+            int index = 0;
+            double angle = AngleDomain.Min;
+
+            ctrPts[0] = p0;
+            weights[0] = 1.0;
+
+            for (int i = 1; i < numberOfArc + 1; i++)
+            {
+                angle += detTheta;
+                Vector3 p2 = Center + (axisX * (radius * Math.Cos(angle)) + axisY * (radius * Math.Sin(angle)));
+                
+                weights[index + 2] = 1;
+                ctrPts[index + 2] = p2;
+
+                Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
+                Line ln0 = new Line(p0, t0.Unitize() + p0);
+                Line ln1 = new Line(p2, t2.Unitize() + p2);
+                bool intersect = Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out double u1);
+                Vector3 p1 = p0 + (t0 * u0);
+
+                weights[index + 1] = weight1;
+                ctrPts[index + 1] = p1;
+                index += 2;
+
+                if (i >= numberOfArc) continue;
+                p0 = p2;
+                t0 = t2;
+            }
+
+            int j = 2 * numberOfArc + 1;
+            for (int i = 0; i < 3; i++)
+            {
+                knots[i] = 0.0;
+                knots[i + j] = 1.0;
+            }
+
+            switch (numberOfArc)
+            {
+                case 2:
+                    knots[3] = knots[4] = 0.5;
+                    break;
+                case 3:
+                    knots[3] = knots[4] = (double) 1 / 3;
+                    knots[5] = knots[6] = (double) 2 / 3;
+                    break;
+                case 4:
+                    knots[3] = knots[4] = 0.25;
+                    knots[5] = knots[6] = 0.5;
+                    knots[7] = knots[8] = 0.75;
+                    break;
+            }
+
+            return new NurbsCurve(2, knots, ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>

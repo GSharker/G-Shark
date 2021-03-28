@@ -15,7 +15,6 @@ namespace GeometrySharp.Core
         /// </summary>
         public Knot()
         {
-
         }
 
         /// <summary>
@@ -72,6 +71,11 @@ namespace GeometrySharp.Core
             }
             return true;
         }
+
+        /// <summary>
+        /// Gets the domain of the knots, as the max value - min value.
+        /// </summary>
+        public double Domain => this[^1] - this[0];
 
         /// <summary>
         /// Find the span on the knot Array without supplying a number of control points.

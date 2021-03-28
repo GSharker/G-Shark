@@ -18,7 +18,6 @@ namespace GeometrySharp.Geometry
         {
         }
 
-        // ToDo: throw exception if the polyline self intersect.
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
@@ -207,11 +206,35 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polyline transformed.</returns>
-        public virtual Polyline Transform(Transform transform)
+        public Polyline Transform(Transform transform)
         {
             List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
 
             return new Polyline(transformedPts);
+        }
+
+        /// <summary>
+        /// Constructs a nurbs curve representation of this polyline.
+        /// </summary>
+        /// <returns>A Nurbs curve shaped like this polyline.</returns>
+        public NurbsCurve ToNurbsCurve()
+        {
+            int ptsCount = this.Count;
+            double lengthSum = 0;
+            Knot knots = new Knot(){0};
+            List<double> weights = new List<double>();
+
+            for (int i = 0; i < ptsCount; i++)
+            {
+                lengthSum += 1;
+                knots.Add(i);
+                weights.Add(1.0);
+            }
+            knots.Add(lengthSum-1);
+
+            Knot normalizedKnots = Knot.Normalize(knots);
+
+            return new NurbsCurve(1, normalizedKnots, this, weights);
         }
 
         /// <summary>

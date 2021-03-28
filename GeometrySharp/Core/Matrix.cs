@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace GeometrySharp.Core
 {
+    // ToDo: Checks that all the methods have are tested.
     /// <summary>
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
@@ -87,6 +88,23 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
+        /// Divides a matrix by a constant.
+        /// </summary>
+        /// <param name="m">Matrix has to be multiply.</param>
+        /// <param name="a">Value to operate the division.</param>
+        /// <returns>Matrix divided by a constant.</returns>
+        public static Matrix operator /(Matrix m, double a)
+        {
+            Matrix result = new Matrix();
+            foreach (IList<double> row in m)
+            {
+                result.Add(row.Select(val => val / a).ToList());
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Multiply two matrices assuming they are of compatible dimensions.
         /// </summary>
         /// <param name="a">First matrix.</param>
@@ -131,7 +149,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Add two matrices.
+        /// Adds two matrices.
         /// </summary>
         /// <param name="a">First Matrix.</param>
         /// <param name="b">Second Matrix.</param>
@@ -158,6 +176,38 @@ namespace GeometrySharp.Core
             for (int i = 0; i < a.Count; i++)
             {
                 result.Add((a[i].Select((val, j) => val + b[i][j]).ToList()));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Subtracts two matrices.
+        /// </summary>
+        /// <param name="a">First Matrix.</param>
+        /// <param name="b">Second Matrix.</param>
+        /// <returns>The subtraction matrix.</returns>
+        public static Matrix operator -(Matrix a, Matrix b)
+        {
+            if (!a.IsValid() || !b.IsValid())
+            {
+                throw new Exception("Either first matrix of second matrix are Invalid.");
+            }
+
+            int aRows = a.Count;
+            int aCols = a[0].Count;
+
+            int bRows = b.Count;
+            int bCols = b[0].Count;
+
+            if (aCols != bCols || aRows != bRows)
+            {
+                throw new Exception("Non-conformable matrices.");
+            }
+
+            Matrix result = new Matrix();
+            for (int i = 0; i < a.Count; i++)
+            {
+                result.Add((a[i].Select((val, j) => val - b[i][j]).ToList()));
             }
             return result;
         }

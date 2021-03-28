@@ -6,6 +6,8 @@ using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: Review the xml documentation.
+    // ToDo: Review all the methods have a test.
     /// <summary>
     /// Vector3 is represented simply by an list of double point numbers.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
