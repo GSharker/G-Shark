@@ -222,7 +222,7 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             var intersection = Intersect.CurveCurve(crv0, crv1, GeoSharpMath.MAXTOLERANCE);
 
-            _testOutput.WriteLine(intersection.ToString());
+            _testOutput.WriteLine(intersection[0].ToString());
         }
     }
 }
