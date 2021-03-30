@@ -304,7 +304,12 @@ namespace GeometrySharp.Operation
             return LineCircle(cl, intersectionLine, out pts);
         }
 
-        public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance)
+        public static List<CurveIntersectionResult> LineCurve(Line l, NurbsCurve crv)
+        {
+            return CurveCurve(l.ToNurbsCurve(), crv);
+        }
+
+        public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
             var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
             CurveIntersectionResult seed = new CurveIntersectionResult();

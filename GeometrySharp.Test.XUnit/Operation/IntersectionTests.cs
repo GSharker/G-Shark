@@ -206,9 +206,10 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void TestIntersection()
+        public void It_Returns_The_Intersection_Between_Two_Planar_Lines()
         {
-            // Assert
+            // Arrange
+            // ToDo: create a line and use the ToNurbs method.
             int crvDegree0 = 1;
             Knot crvKnots0 = new Knot{0,0,1,1};
             List<Vector3> crvCtrPts0 = new List<Vector3>{new Vector3{0,0,0}, new Vector3 { 2, 0, 0 } };
@@ -220,9 +221,127 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
             NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
 
+            // Act
             var intersection = Intersect.CurveCurve(crv0, crv1, GeoSharpMath.MAXTOLERANCE);
 
+            // Assert
+            intersection.Count.Should().Be(1);
+            intersection[0].Parameter0.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].Parameter1.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersection_Between_A_Curve_And_Line_Planar()
+        {
+            // Arrange
+            Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
+            Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
+            Line l = new Line(p1, p2);
+
+            int crvDegree1 = 2;
+            Knot crvKnots1 = new Knot { 0, 0, 0, 1, 1, 1 };
+            List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.7, 0, 0 }, new Vector3 { 0.5, -1.5, 0 } };
+            NurbsCurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+
+            // Act
+            var intersection = Intersect.LineCurve(l, crv);
+
+            // Assert
             _testOutput.WriteLine(intersection[0].ToString());
+            intersection.Count.Should().Be(1);
+            intersection[0].Parameter0.Should().BeApproximately(0.2964101616038012, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].Parameter1.Should().BeApproximately(0.3660254038069307, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersection_Between_A_Planar_Curves()
+        {
+            // Arrange
+            int crvDegree0 = 2;
+            Knot crvKnots0 = new Knot { 0, 0, 0, 1, 1, 1 };
+            List<Vector3> crvCtrPts0 = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.1, 0 }, new Vector3 { 2, 0, 0 } };
+
+            int crvDegree1 = 2;
+            Knot crvKnots1 = new Knot { 0, 0, 0, 1, 1, 1 };
+            List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.7, 0, 0 }, new Vector3 { 0.5, -1.5, 0 } };
+
+            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
+            NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+
+            // Act
+            var intersection = Intersect.CurveCurve(crv0, crv1);
+
+            // Assert
+            _testOutput.WriteLine(intersection[0].ToString());
+            intersection.Count.Should().Be(1);
+            intersection[0].Point0.DistanceTo(intersection[0].Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersections_Between_A_Planar_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts0 = new List<Vector3>
+            {
+                new Vector3 { -5, 0, 0 }, new Vector3 { 10, 0, 0 }, new Vector3 { 10, 10, 0 },
+                new Vector3 { 0, 10, 0 }, new Vector3 { 5, 5, 0 }
+            };
+
+            List<Vector3> crvCtrPts1 = new List<Vector3>
+            {
+                new Vector3 { -5, 0, 0 }, new Vector3 { 5, -1, 0 }, new Vector3 { 10, 5, 0 },
+                new Vector3 { 3, 10, 0 }, new Vector3 { 5, 12, 0 }
+            };
+
+            NurbsCurve crv0 = new NurbsCurve(degree, knots, crvCtrPts0);
+            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+
+            // Act
+            var intersections = Intersect.CurveCurve(crv0, crv1);
+
+            // Assert
+            intersections.Count.Should().Be(3);
+            foreach (var intersection in intersections)
+            {
+                _testOutput.WriteLine(intersection.ToString());
+                intersection.Point0.DistanceTo(intersection.Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            }
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersections_Between_A_3D_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts0 = new List<Vector3>
+            {
+                new Vector3 { 0, 0, 0 }, new Vector3 { 5, 2.5, 5 }, new Vector3 { 5, 5, 0 },
+                new Vector3 { 7.5, 10, 5 }, new Vector3 { 10, 10, 0 }
+            };
+
+            List<Vector3> crvCtrPts1 = new List<Vector3>
+            {
+                new Vector3 { 2.225594, 1.226218, 2.01283 }, new Vector3 { 8.681402, 4.789645, 5.010206 }, new Vector3 { 6.181402, 4.789645, 0.010206 },
+                new Vector3 { 1.181402, 7.289645, 5.010206 }, new Vector3 { 8.496731, 9.656647, 2.348212 }
+            };
+
+            NurbsCurve crv0 = new NurbsCurve(degree, knots, crvCtrPts0);
+            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+
+            // Act
+            var intersections = Intersect.CurveCurve(crv0, crv1);
+
+            // Assert
+            intersections.Count.Should().Be(3);
+            foreach (var intersection in intersections)
+            {
+                _testOutput.WriteLine(intersection.ToString());
+                intersection.Point0.DistanceTo(intersection.Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            }
         }
     }
 }
+

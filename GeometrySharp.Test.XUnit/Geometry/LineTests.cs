@@ -167,5 +167,20 @@ namespace GeometrySharp.Test.XUnit.Geometry
             transformedLine.Start.Should().BeEquivalentTo(new Vector3 {15, 10, 0});
             transformedLine.End.Should().BeEquivalentTo(new Vector3 { 25, 25, 0 });
         }
+
+        [Fact]
+        public void It_Returns_A_NurbsCurve_From_The_Line()
+        {
+            Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
+            Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
+            Line l = new Line(p1, p2);
+
+            NurbsCurve curve = l.ToNurbsCurve();
+
+            curve.ControlPoints.Count.Should().Be(2);
+            curve.Degree.Should().Be(1);
+            curve.ControlPoints[0].Should().BeEquivalentTo(p1);
+            curve.ControlPoints[1].Should().BeEquivalentTo(p2);
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: Checks if all the methods have the associated test.
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
@@ -128,6 +130,18 @@ namespace GeometrySharp.Geometry
                 end = this.End + (this.Direction * endLength);
 
             return new Line(start, end);
+        }
+
+        /// <summary>
+        /// Constructs a nurbs curve representation of this line.
+        /// </summary>
+        /// <returns>A Nurbs curve shaped like this line.</returns>
+        public NurbsCurve ToNurbsCurve()
+        {
+            List<Vector3> pts = new List<Vector3>{Start, End};
+            Knot knots = new Knot{0,0,1,1};
+
+            return new NurbsCurve(degree: 1, knots, pts);
         }
 
         /// <summary>

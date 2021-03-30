@@ -22,6 +22,7 @@ namespace GeometrySharp.ExtendedMethods
 
         /// <summary>
         /// Obtains the unique set of elements in an array.
+        /// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-add-custom-methods-for-linq-queries
         /// </summary>
         /// <param name="enumerable">A collection of things.</param>
         /// <param name="comparisonFunc">Function comparing two elements of the collection. Returning true if the comparison is confirmed.</param>
