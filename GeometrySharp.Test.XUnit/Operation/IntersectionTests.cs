@@ -244,7 +244,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
 
             // Act
-            var intersection = Intersect.LineCurve(l, crv);
+            var intersection = Intersect.CurveLine(crv,l);
 
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
