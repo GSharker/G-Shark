@@ -209,7 +209,6 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Returns_The_Intersection_Between_Two_Planar_Lines()
         {
             // Arrange
-            // ToDo: create a line and use the ToNurbs method.
             int crvDegree0 = 1;
             Knot crvKnots0 = new Knot{0,0,1,1};
             List<Vector3> crvCtrPts0 = new List<Vector3>{new Vector3{0,0,0}, new Vector3 { 2, 0, 0 } };
