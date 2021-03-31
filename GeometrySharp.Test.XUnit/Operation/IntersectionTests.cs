@@ -248,8 +248,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
             intersection.Count.Should().Be(1);
-            intersection[0].Parameter0.Should().BeApproximately(0.2964101616038012, GeoSharpMath.MAXTOLERANCE);
-            intersection[0].Parameter1.Should().BeApproximately(0.3660254038069307, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].Point0.DistanceTo(intersection[0].Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]

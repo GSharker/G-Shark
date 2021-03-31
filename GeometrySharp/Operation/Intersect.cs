@@ -321,7 +321,6 @@ namespace GeometrySharp.Operation
         public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
             var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
-            CurveIntersectionResult seed = new CurveIntersectionResult();
 
             var intersectionResults = bBoxTreeIntersections
                 .Select(x => CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
