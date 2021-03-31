@@ -3,11 +3,8 @@ using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
-using verb.core;
 using Xunit;
 using Xunit.Abstractions;
-using Plane = GeometrySharp.Geometry.Plane;
-using Ray = GeometrySharp.Geometry.Ray;
 
 namespace GeometrySharp.Test.XUnit.Operation
 {
@@ -340,6 +337,19 @@ namespace GeometrySharp.Test.XUnit.Operation
                 _testOutput.WriteLine(intersection.ToString());
                 intersection.Point0.DistanceTo(intersection.Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
             }
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersections_Between_Curve_And_A_Plane()
+        {
+            // Arrange
+            Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
+            Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
+            Line l = new Line(p1, p2);
+
+            Plane p = Plane.PlaneYZ.SetOrigin(new Vector3 {1.0, 0.0, 0.0});
+
+            Intersect.CurvePlane(l.ToNurbsCurve(), p);
         }
     }
 }

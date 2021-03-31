@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Transactions;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 
@@ -53,6 +54,11 @@ namespace GeometrySharp.Core.BoundingBoxTree
         public bool IsEmpty()
         {
             return false;
+        }
+
+        public double Length()
+        {
+            return _curve.ControlPoints[0].DistanceTo(_curve.ControlPoints[^1]);
         }
     }
 }

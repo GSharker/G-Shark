@@ -1,11 +1,11 @@
 ﻿using GeometrySharp.Core;
 using GeometrySharp.Core.BoundingBoxTree;
+using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Optimization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Operation
 {
@@ -320,15 +320,19 @@ namespace GeometrySharp.Operation
         /// <returns>A collection of <see cref="CurveIntersectionResult"/>.</returns>
         public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
-            var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
-            CurveIntersectionResult seed = new CurveIntersectionResult();
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
 
-            var intersectionResults = bBoxTreeIntersections
+            List<CurveIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
                 .Where(crInRe => (crInRe.Point0 - crInRe.Point1).SquaredLength() < tolerance)
                 .Unique((a, b) => Math.Abs(a.Parameter0 - b.Parameter0) < tolerance * 5);
 
             return intersectionResults;
+        }
+
+        public static void CurvePlane(NurbsCurve crv, Plane p, double tolerance = 1e-6)
+        {
+            List<NurbsCurve> bBoxRoot = BoundingBoxRoot(new LazyCurveBBT(crv), p);
         }
 
         /// <summary>
@@ -344,7 +348,7 @@ namespace GeometrySharp.Operation
         private static CurveIntersectionResult CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
             double firstGuess, double secondGuess, double tolerance)
         {
-            ObjectiveFunction functions = new ObjectiveFunction(crv0, crv1);
+            CurvesIntersectionObjectives functions = new CurvesIntersectionObjectives(crv0, crv1);
             Minimizer min = new Minimizer(functions.Value, functions.Gradient);
             MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
 
@@ -352,6 +356,52 @@ namespace GeometrySharp.Operation
             Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
 
             return new CurveIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
+        }
+
+        private static List<NurbsCurve> BoundingBoxRoot(LazyCurveBBT bbt, Plane p, double tolerance = 1e-9)
+        {
+            List<IBoundingBoxTree<NurbsCurve>> aTrees = new List<IBoundingBoxTree<NurbsCurve>> {bbt};
+            List<NurbsCurve> result = new List<NurbsCurve>();
+
+            while (aTrees.Count > 0)
+            {
+                IBoundingBoxTree<NurbsCurve> a = aTrees[^1];
+                aTrees.RemoveAt(aTrees.Count - 1);
+
+                if (a.IsEmpty())
+                {
+                    continue;
+                }
+
+                Tuple<IBoundingBoxTree<NurbsCurve>, IBoundingBoxTree<NurbsCurve>> aSplit = a.Split();
+                NurbsCurve crv = a.Yield();
+                Vector3 pt1 = crv.ControlPoints[0];
+                Vector3 pt2 = crv.ControlPoints[^1];
+                double pt1pt2Length = pt1.DistanceTo(pt2);
+                Vector3 pt1ToPlane = p.ClosestPoint(pt1, out double h1);
+                Vector3 pt2ToPlane = p.ClosestPoint(pt2, out double h2);
+
+                if (Math.Abs(h1) < tolerance || Math.Abs(h2) < tolerance || h1 * h2 > 0.0)
+                {
+                    continue;
+                }
+
+                if (crv.Length() < Math.Sqrt(4 * Math.Abs(h1) * Math.Abs(h2) + pt1pt2Length * pt1pt2Length) + tolerance)
+                {
+                    continue;
+                }
+
+                if (a.IsIndivisible(tolerance))
+                {
+                    result.Add(crv);
+                    continue;
+                }
+
+                aTrees.Add(aSplit.Item1);
+                aTrees.Add(aSplit.Item2);
+            }
+
+            return result;
         }
 
         /// <summary>
