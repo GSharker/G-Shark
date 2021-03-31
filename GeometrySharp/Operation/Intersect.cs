@@ -5,7 +5,7 @@ using GeometrySharp.Optimization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Operation
 {
@@ -15,11 +15,8 @@ namespace GeometrySharp.Operation
     public class Intersect
     {
         // ToDo: Curve-Plane
-        // ToDo: Curve-Curve
-        // ToDo: Curve-Line
         // ToDo: Curve-Self
         // ToDo: Curve-Surface
-        // ToDo: Line-Bbox
         // ToDo: Surface-Surface
 
         /// <summary>
@@ -303,24 +300,58 @@ namespace GeometrySharp.Operation
             return LineCircle(cl, intersectionLine, out pts);
         }
 
-        public static (Vector3 pt0, Vector3 pt1, double t0, double t1) CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance)
+        /// <summary>
+        /// Computes the intersection between a curve and a line.
+        /// </summary>
+        /// <param name="crv">The curve to intersect.</param>
+        /// <param name="l">The line to intersect with.</param>
+        /// <returns>A collection of <see cref="CurveIntersectionResult"/>.</returns>
+        public static List<CurveIntersectionResult> CurveLine(NurbsCurve crv, Line l)
+        {
+            return CurveCurve(crv, l.ToNurbsCurve());
+        }
+
+        /// <summary>
+        /// Computes the intersection between two curves.
+        /// </summary>
+        /// <param name="crv1">First curve to intersect.</param>
+        /// <param name="crv2">Second curve to intersect.</param>
+        /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
+        /// <returns>A collection of <see cref="CurveIntersectionResult"/>.</returns>
+        public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
             var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
-            (Vector3 pt0, Vector3 pt1, double t0, double t1) seed = (Vector3.Unset, Vector3.Unset, 0.0, 0.0);
+            CurveIntersectionResult seed = new CurveIntersectionResult();
 
-            //var t = CurvesWithEstimation(crv1, crv2, bBoxTreeIntersections[0].Item1.Knots[0],
-            //    bBoxTreeIntersections[0].Item2.Knots[0], tolerance);
-
-            var t = bBoxTreeIntersections
+            var intersectionResults = bBoxTreeIntersections
                 .Select(x => CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
-                .Where(tuple => (tuple.pt0 - tuple.pt1).SquaredLength() < tolerance)
-                .Aggregate(seed, (a, b) =>
-                {
-                    if (!(Math.Abs(a.t0 - b.t0) < tolerance)) return a = b;
-                    return a;
-                });
+                .Where(crInRe => (crInRe.Point0 - crInRe.Point1).SquaredLength() < tolerance)
+                .Unique((a, b) => Math.Abs(a.Parameter0 - b.Parameter0) < tolerance * 5);
 
-            return t;
+            return intersectionResults;
+        }
+
+        /// <summary>
+        /// Refine an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
+        /// so the caller is responsible for providing a very good initial guess.
+        /// </summary>
+        /// <param name="crv0">The first curve.</param>
+        /// <param name="crv1">The second curve.</param>
+        /// <param name="firstGuess">The first guess parameter.</param>
+        /// <param name="secondGuess">The second guess parameter.</param>
+        /// <param name="tolerance">The value tolerance for the intersection.</param>
+        /// <returns>The curves intersection, expressed as a tuple of two intersection points and the t parameters.</returns>
+        private static CurveIntersectionResult CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
+            double firstGuess, double secondGuess, double tolerance)
+        {
+            ObjectiveFunction functions = new ObjectiveFunction(crv0, crv1);
+            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
+
+            Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
+            Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
+
+            return new CurveIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
         }
 
         /// <summary>
@@ -400,29 +431,6 @@ namespace GeometrySharp.Operation
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Refine an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
-        /// so the caller is responsible for providing a very good initial guess.
-        /// </summary>
-        /// <param name="crv0">The first curve.</param>
-        /// <param name="crv1">The second curve.</param>
-        /// <param name="firstGuess">The first guess parameter.</param>
-        /// <param name="secondGuess">The second guess parameter.</param>
-        /// <param name="tolerance">The value tolerance for the intersection.</param>
-        /// <returns>The curves intersection, expressed as a tuple of two intersection points and the t parameters.</returns>
-        private static (Vector3 pt0, Vector3 pt1, double t0, double t1) CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
-            double firstGuess, double secondGuess, double tolerance)
-        {
-            ObjectiveFunction functions = new ObjectiveFunction(crv0, crv1);
-            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 {firstGuess, secondGuess}, tolerance * tolerance);
-
-            Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
-            Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
-
-            return (pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
         }
     }
 }

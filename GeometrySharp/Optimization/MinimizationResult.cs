@@ -11,13 +11,14 @@ namespace GeometrySharp.Optimization
         /// <summary>
         /// Initialize the class.
         /// </summary>
-        public MinimizationResult(Vector3 solutionPoint, double initialGuess, Vector3 gradient, Matrix hessianMatrix, int iterations)
+        public MinimizationResult(Vector3 solutionPoint, double initialGuess, Vector3 gradient, Matrix hessianMatrix, int iterations, string message)
         {
             SolutionPoint = solutionPoint;
             InitialGuess = initialGuess;
             Gradient = gradient;
             HessianMatrix = hessianMatrix;
             Iterations = iterations;
+            Message = message;
         }
 
         public Vector3 SolutionPoint { get; private set; }
@@ -25,5 +26,7 @@ namespace GeometrySharp.Optimization
         public Vector3 Gradient { get; private set; }
         public Matrix HessianMatrix { get; private set; }
         public int Iterations { get; private set; }
+
+        public string Message { get; private set; }
     }
 }

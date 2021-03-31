@@ -75,6 +75,41 @@ namespace GeometrySharp.Test.XUnit
         }
 
         [Fact]
+        public void CurvesIntersections()
+        {
+            var pts0 = new Array<object>();
+            var pts1 = new Array<object>();
+
+            pts0.push(new Array<double>(new double[] { -5,0,0 }));
+            pts0.push(new Array<double>(new double[] { 10, 0, 0 }));
+            pts0.push(new Array<double>(new double[] { 10, 10, 0 }));
+            pts0.push(new Array<double>(new double[] { 0, 10, 0 }));
+            pts0.push(new Array<double>(new double[] { 5, 5, 0 }));
+
+            pts1.push(new Array<double>(new double[] { -5, 0, 0 }));
+            pts1.push(new Array<double>(new double[] { 5, -1, 0 }));
+            pts1.push(new Array<double>(new double[] { 10, 5, 0 }));
+            pts1.push(new Array<double>(new double[] { 3, 10, 0 }));
+            pts1.push(new Array<double>(new double[] { 5, 12, 0 }));
+
+            var knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 });
+            var weights = new Array<double>(new double[] { 1, 1, 1, 1, 1 });
+
+            var curve0 = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts0, weights);
+            var curve1 = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts1, weights);
+
+            var intersections = verb.eval.Intersect.curves(curve0._data, curve1._data, verb.core.Constants.TOLERANCE);
+            
+            _testOutput.WriteLine(intersections.length.ToString());
+            for (int i = 0; i < intersections.length; i++)
+            {
+                verb.core.CurveCurveIntersection t = (verb.core.CurveCurveIntersection)intersections[i];
+                _testOutput.WriteLine(t.point0.ToString());
+                _testOutput.WriteLine(t.u0.ToString());
+            }
+        }
+
+        [Fact]
         public void rationalCurveAdaptiveSample()
         {
             var pts = new Array<object>();

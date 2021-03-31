@@ -1,6 +1,7 @@
 ﻿using GeometrySharp.Core;
 using System;
-using Vector3 = GeometrySharp.Geometry.Vector3;
+using System.Linq;
+using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Optimization
 {
@@ -39,6 +40,7 @@ namespace GeometrySharp.Optimization
             double f1 = 0.0;
             Vector3 x1 = null;
             Vector3 s = null;
+            string message = string.Empty;
 
             if (double.IsNaN(f0))
             {
@@ -52,15 +54,23 @@ namespace GeometrySharp.Optimization
 
             while (iteration < maxIteration)
             {
-                ValidateGradient(g0);
+                if (g0.Any(val => double.IsNaN(val) || double.IsInfinity(val)))
+                {
+                    message = "Gradient has Infinity or NaN.";
+                    break;
+                }
                 Vector3 step = Vector3.Reverse(g0 * H1);
-                ValidateGradient(step);
+                if (step.Any(val => double.IsNaN(val) || double.IsInfinity(val)))
+                {
+                    message = "Search direction has Infinity or NaN";
+                    break;
+                }
 
                 double lengthStep = step.Length();
                 if (lengthStep < gradientTolerance)
                 {
+                    message = "Newton step smaller than tolerance.";
                     break;
-                    throw new Exception("Newton step smaller than tolerance.");
                 }
 
                 double t = 1.0;
@@ -90,13 +100,13 @@ namespace GeometrySharp.Optimization
 
                 if (t * lengthStep < gradientTolerance)
                 {
+                    message = "Line search step size smaller than gradient tolerance.";
                     break;
-                    throw new Exception("Line search step size smaller than gradient tolerance.");
                 }
                 if (iteration > maxIteration)
                 {
+                    message = "Max iteration reached during line search.";
                     break;
-                    throw new Exception("Max iteration reached during line search.");
                 }
 
                 Vector3 g1 = _gradientFunc(x1);
@@ -115,19 +125,7 @@ namespace GeometrySharp.Optimization
                 iteration++;
             }
 
-            return new MinimizationResult(x0, f0, g0, H1, iteration);
-        }
-
-        private void ValidateGradient(Vector3 eval)
-        {
-            foreach (double val in eval)
-            {
-                if (double.IsNaN(val) || double.IsInfinity(val))
-                {
-                    break;
-                    throw new Exception("Non-finite gradient returned.");
-                }
-            }
+            return new MinimizationResult(x0, f0, g0, H1, iteration, message);
         }
 
         private Matrix Tensor(Vector3 vec0, Vector3 vec1)
