@@ -330,9 +330,15 @@ namespace GeometrySharp.Operation
             return intersectionResults;
         }
 
-        public static void CurvePlane(NurbsCurve crv, Plane p, double tolerance = 1e-6)
+        public static CurveIntersectionResult CurvePlane(NurbsCurve crv, Plane p, double tolerance = 1e-6)
         {
             List<NurbsCurve> bBoxRoot = BoundingBoxRoot(new LazyCurveBBT(crv), p);
+            //List<CurveIntersectionResult> intersectionResults = bBoxRoot.Select(
+            //    x => CurvesWithEstimation2(crv, p, x.Knots[0], x.Knots[0], tolerance)).ToList();
+
+            CurveIntersectionResult intersectionResults = CurvesWithEstimation2(crv, p, bBoxRoot[0].Knots[0], bBoxRoot[0].Knots[0], tolerance);
+
+            return intersectionResults;
         }
 
         /// <summary>
@@ -348,12 +354,25 @@ namespace GeometrySharp.Operation
         private static CurveIntersectionResult CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
             double firstGuess, double secondGuess, double tolerance)
         {
-            CurvesIntersectionObjectives functions = new CurvesIntersectionObjectives(crv0, crv1);
-            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
+            CurvesIntersectionObjectives objectiveFunctions = new CurvesIntersectionObjectives(crv0, crv1);
+            Minimizer min = new Minimizer(objectiveFunctions);
             MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
 
             Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
             Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
+
+            return new CurveIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
+        }
+
+        private static CurveIntersectionResult CurvesWithEstimation2(NurbsCurve crv0, Plane plane,
+            double firstGuess, double secondGuess, double tolerance)
+        {
+            IObjectiveFunction objectiveFunctions = new CurvePlaneIntersectionObjectives(crv0, plane);
+            Minimizer min = new Minimizer(objectiveFunctions);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
+
+            Vector3 pt1 = crv0.PointAt(solution.SolutionPoint[0]);
+            Vector3 pt2 = plane.ClosestPoint(pt1, out _);
 
             return new CurveIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
         }
@@ -378,30 +397,38 @@ namespace GeometrySharp.Operation
                 Vector3 pt1 = crv.ControlPoints[0];
                 Vector3 pt2 = crv.ControlPoints[^1];
                 double pt1pt2Length = pt1.DistanceTo(pt2);
-                Vector3 pt1ToPlane = p.ClosestPoint(pt1, out double h1);
-                Vector3 pt2ToPlane = p.ClosestPoint(pt2, out double h2);
+                double h1 = LengthFromPlane(p, pt1);
+                double h2 = LengthFromPlane(p, pt2);
 
                 if (Math.Abs(h1) < tolerance || Math.Abs(h2) < tolerance || h1 * h2 > 0.0)
                 {
-                    continue;
+                    if (crv.Length() < Math.Sqrt(4 * Math.Abs(h1) * Math.Abs(h2) + pt1pt2Length * pt1pt2Length) + tolerance)
+                    {
+                        continue;
+                    }
+                    aTrees.Add(aSplit.Item1);
+                    aTrees.Add(aSplit.Item2);
                 }
-
-                if (crv.Length() < Math.Sqrt(4 * Math.Abs(h1) * Math.Abs(h2) + pt1pt2Length * pt1pt2Length) + tolerance)
+                else
                 {
-                    continue;
+                    if (a.IsIndivisible(tolerance))
+                    {
+                        result.Add(crv);
+                        continue;
+                    }
+                    aTrees.Add(aSplit.Item1);
+                    aTrees.Add(aSplit.Item2);
                 }
-
-                if (a.IsIndivisible(tolerance))
-                {
-                    result.Add(crv);
-                    continue;
-                }
-
-                aTrees.Add(aSplit.Item1);
-                aTrees.Add(aSplit.Item2);
             }
 
             return result;
+        }
+
+        private static double LengthFromPlane(Plane p, Vector3 pt)
+        {
+            Vector3 ptToOrigin = p.Origin - pt;
+            Vector3 projection = p.Normal * (Vector3.Dot(ptToOrigin, p.Normal));
+            return projection[0];
         }
 
         /// <summary>

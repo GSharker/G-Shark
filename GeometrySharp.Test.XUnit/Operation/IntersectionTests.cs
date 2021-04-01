@@ -347,9 +347,31 @@ namespace GeometrySharp.Test.XUnit.Operation
             Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
             Line l = new Line(p1, p2);
 
-            Plane p = Plane.PlaneYZ.SetOrigin(new Vector3 {1.0, 0.0, 0.0});
+            int crvDegree0 = 2;
+            Knot crvKnots0 = new Knot { 0, 0, 0, 1, 1, 1 };
+            List<Vector3> crvCtrPts0 = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 2, 0, 0 } };
+            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
 
-            Intersect.CurvePlane(l.ToNurbsCurve(), p);
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts1 = new List<Vector3>
+            {
+                new Vector3 { 2.225594, 1.226218, 2.01283 }, new Vector3 { 8.681402, 4.789645, 5.010206 }, new Vector3 { 6.181402, 4.789645, 0.010206 },
+                new Vector3 { 1.181402, 7.289645, 5.010206 }, new Vector3 { 8.496731, 9.656647, 2.348212 }
+            };
+            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+
+            Plane p = Plane.PlaneYZ.SetOrigin(new Vector3 {6, 0.0, 0.0});
+
+            var t= Intersect.CurvePlane(crv1, p);
+
+            _testOutput.WriteLine(t.ToString());
+
+            //_testOutput.WriteLine(t.Count.ToString());
+            //foreach (var curveIntersectionResult in t)
+            //{
+            //    _testOutput.WriteLine(curveIntersectionResult.ToString());
+            //}
         }
     }
 }
