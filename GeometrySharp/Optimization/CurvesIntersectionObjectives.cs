@@ -8,8 +8,7 @@ using GeometrySharp.Operation;
 namespace GeometrySharp.Optimization
 {
     /// <summary>
-    /// Minimizer functions collects the basic functions used into the minimization process,
-    /// to define the intersection results between curves.
+    /// The basic functions used into the minimization process, to define the intersection results between curves.
     /// </summary>
     public class CurvesIntersectionObjectives : IObjectiveFunction
     {
@@ -27,9 +26,6 @@ namespace GeometrySharp.Optimization
             _curve1 = curve1;
         }
 
-        /// <summary>
-        /// Gets the objective function.
-        /// </summary>
         public double Value(Vector3 v)
         {
             Vector3 p0 = Evaluation.CurvePointAt(_curve0, v[0]);
@@ -40,9 +36,6 @@ namespace GeometrySharp.Optimization
             return Vector3.Dot(p0P1, p0P1);
         }
 
-        /// <summary>
-        /// Gets the gradient function.
-        /// </summary>
         public Vector3 Gradient(Vector3 v)
         {
             List<Vector3> deriveC0 = Evaluation.RationalCurveDerivatives(_curve0, v[0], 1);

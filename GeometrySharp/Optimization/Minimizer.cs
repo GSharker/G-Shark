@@ -14,10 +14,9 @@ namespace GeometrySharp.Optimization
         private readonly IObjectiveFunction _objectiveFunction;
 
         /// <summary>
-        /// Initializes the minimizer.
+        /// Minimizer initialization.
         /// </summary>
-        /// <param name="objectiveFunction">The objective function used into the minimization process.</param>
-        /// <param name="gradientFunc">The gradient function used into the minimization process.</param>
+        /// <param name="objectiveFunction">The objective functions used into the minimization process.</param>
         public Minimizer(IObjectiveFunction objectiveFunction)
         {
             _objectiveFunction = objectiveFunction;

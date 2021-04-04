@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
+using System.Collections.Generic;
+using GeometrySharp.Core.IntersectionResults;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -218,12 +219,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
 
             // Act
-            var intersection = Intersect.CurveCurve(crv0, crv1, GeoSharpMath.MAXTOLERANCE);
+            List<CurvesIntersectionResult> intersection = Intersect.CurveCurve(crv0, crv1, GeoSharpMath.MAXTOLERANCE);
 
             // Assert
             intersection.Count.Should().Be(1);
-            intersection[0].Parameter0.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
-            intersection[0].Parameter1.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].T0.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].T1.Should().BeApproximately(0.25, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -240,13 +241,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
 
             // Act
-            var intersection = Intersect.CurveLine(crv,l);
+            List<CurvesIntersectionResult> intersection = Intersect.CurveLine(crv,l);
 
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
             intersection.Count.Should().Be(1);
-            intersection[0].Parameter0.Should().BeApproximately(0.2964101616038012, GeoSharpMath.MAXTOLERANCE);
-            intersection[0].Parameter1.Should().BeApproximately(0.3660254038069307, GeoSharpMath.MAXTOLERANCE);
+            intersection[0].Pt0.DistanceTo(intersection[0].Pt1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -265,12 +265,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
 
             // Act
-            var intersection = Intersect.CurveCurve(crv0, crv1);
+            List<CurvesIntersectionResult> intersection = Intersect.CurveCurve(crv0, crv1);
 
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
             intersection.Count.Should().Be(1);
-            intersection[0].Point0.DistanceTo(intersection[0].Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            intersection[0].Pt0.DistanceTo(intersection[0].Pt1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -295,14 +295,14 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
 
             // Act
-            var intersections = Intersect.CurveCurve(crv0, crv1);
+            List<CurvesIntersectionResult> intersections = Intersect.CurveCurve(crv0, crv1);
 
             // Assert
             intersections.Count.Should().Be(3);
-            foreach (var intersection in intersections)
+            foreach (CurvesIntersectionResult intersection in intersections)
             {
                 _testOutput.WriteLine(intersection.ToString());
-                intersection.Point0.DistanceTo(intersection.Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+                intersection.Pt0.DistanceTo(intersection.Pt1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
             }
         }
 
@@ -328,50 +328,68 @@ namespace GeometrySharp.Test.XUnit.Operation
             NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
 
             // Act
-            var intersections = Intersect.CurveCurve(crv0, crv1);
+            List<CurvesIntersectionResult> intersections = Intersect.CurveCurve(crv0, crv1);
 
             // Assert
             intersections.Count.Should().Be(3);
-            foreach (var intersection in intersections)
+            foreach (CurvesIntersectionResult intersection in intersections)
             {
                 _testOutput.WriteLine(intersection.ToString());
-                intersection.Point0.DistanceTo(intersection.Point1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+                intersection.Pt0.DistanceTo(intersection.Pt1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
             }
         }
 
-        [Fact]
-        public void It_Returns_The_Intersections_Between_Curve_And_A_Plane()
+        [Theory]
+        [InlineData(0.25)]
+        [InlineData(0.75)]
+        [InlineData(1.0)]
+        [InlineData(1.75)]
+        public void It_Returns_The_Intersections_Between_A_Planar_Curve_And_A_Plane(double xValue)
         {
             // Arrange
-            Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
-            Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
-            Line l = new Line(p1, p2);
+            int crvDegree = 2;
+            Knot crvKnots = new Knot { 0, 0, 0, 1, 1, 1 };
+            List<Vector3> crvCtrPts = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 2, 0, 0 } };
+            NurbsCurve crv = new NurbsCurve(crvDegree, crvKnots, crvCtrPts);
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 {xValue, 0.0, 0.0});
 
-            int crvDegree0 = 2;
-            Knot crvKnots0 = new Knot { 0, 0, 0, 1, 1, 1 };
-            List<Vector3> crvCtrPts0 = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 2, 0, 0 } };
-            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
+            // Act
+            List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, pl);
+            Vector3 ptOnPlane = pl.PointAt(intersections[0].Uv[0], intersections[0].Uv[1]);
 
+            // Assert
+            _testOutput.WriteLine(intersections[0].ToString());
+            intersections.Count.Should().Be(1);
+            intersections[0].Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_Intersections_Between_A_Curve3D_And_A_Rotated_Plane()
+        {
+            // Arrange
             int degree = 3;
             Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
-            List<Vector3> crvCtrPts1 = new List<Vector3>
+            List<Vector3> crvCtrPts = new List<Vector3>
             {
                 new Vector3 { 2.225594, 1.226218, 2.01283 }, new Vector3 { 8.681402, 4.789645, 5.010206 }, new Vector3 { 6.181402, 4.789645, 0.010206 },
                 new Vector3 { 1.181402, 7.289645, 5.010206 }, new Vector3 { 8.496731, 9.656647, 2.348212 }
             };
-            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
 
-            Plane p = Plane.PlaneYZ.SetOrigin(new Vector3 {6, 0.0, 0.0});
+            Transform xForm = Transform.Rotation(0.15, new Vector3 { 0.0, 0.0, 0.0 });
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { 6, 0.0, 0.0 }).Transform(xForm);
 
-            var t= Intersect.CurvePlane(crv1, p);
+            // Act
+            List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, pl);
 
-            _testOutput.WriteLine(t.ToString());
-
-            //_testOutput.WriteLine(t.Count.ToString());
-            //foreach (var curveIntersectionResult in t)
-            //{
-            //    _testOutput.WriteLine(curveIntersectionResult.ToString());
-            //}
+            // Assert
+            intersections.Count.Should().Be(3);
+            foreach (CurvePlaneIntersectionResult curveIntersectionResult in intersections)
+            {
+                _testOutput.WriteLine(curveIntersectionResult.ToString());
+                Vector3 ptOnPlane = pl.PointAt(curveIntersectionResult.Uv[0], curveIntersectionResult.Uv[1]);
+                curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            }
         }
     }
 }
