@@ -346,5 +346,11 @@ namespace GeometrySharp.Operation
 
             return intersectionResults;
         }
+
+        public static void CurveSelf(NurbsCurve crv, double tolerance = 1e-6)
+        {
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxRoot = BoundingBoxOperations.BoundingBoxTreeSelf(new LazyCurveBBT(crv));
+            int t = bBoxRoot.Count;
+        }
     }
 }

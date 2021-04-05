@@ -152,5 +152,77 @@ namespace GeometrySharp.Core.BoundingBoxTree
 
             return result;
         }
+
+        internal static List<Tuple<T1, T1>> BoundingBoxTreeSelf<T1>(IBoundingBoxTree<T1> bbt1,
+            double tolerance = 1e-9)
+        {
+            List<IBoundingBoxTree<T1>> aTrees = new List<IBoundingBoxTree<T1>>();
+            List<IBoundingBoxTree<T1>> bTrees = new List<IBoundingBoxTree<T1>>();
+            Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> firstSplit = bbt1.Split();
+
+            aTrees.Add(firstSplit.Item1);
+            bTrees.Add(firstSplit.Item2);
+
+            List<Tuple<T1, T1>> result = new List<Tuple<T1, T1>>();
+
+            while (aTrees.Count > 0)
+            {
+                IBoundingBoxTree<T1> a = aTrees[^1];
+                aTrees.RemoveAt(aTrees.Count - 1);
+                IBoundingBoxTree<T1> b = bTrees[^1];
+                bTrees.RemoveAt(bTrees.Count - 1);
+
+                if (a.IsEmpty() || b.IsEmpty())
+                {
+                    continue;
+                }
+
+                if (BoundingBox.AreOverlapping(a.BoundingBox(), b.BoundingBox(), tolerance) == false)
+                {
+                    continue;
+                }
+
+                bool aIndivisible = a.IsIndivisible(tolerance);
+                bool bIndivisible = b.IsIndivisible(tolerance);
+                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> bSplit = b.Split();
+                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> aSplit = a.Split();
+
+                if (aIndivisible && bIndivisible)
+                {
+                    result.Add(new Tuple<T1, T1>(a.Yield(), b.Yield()));
+                    continue;
+                }
+                if (aIndivisible)
+                {
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item2);
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item1);
+                    continue;
+                }
+                if (bIndivisible)
+                {
+                    aTrees.Add(aSplit.Item2);
+                    bTrees.Add(b);
+                    aTrees.Add(aSplit.Item1);
+                    bTrees.Add(b);
+                    continue;
+                }
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item1);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item1);
+            }
+
+            return result;
+        }
     }
 }

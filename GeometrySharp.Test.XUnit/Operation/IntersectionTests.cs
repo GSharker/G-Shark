@@ -391,6 +391,23 @@ namespace GeometrySharp.Test.XUnit.Operation
                 curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
             }
         }
+
+        [Fact]
+        public void t()
+        {
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts = new List<Vector3>
+            {
+                new Vector3 { 10,10,0 }, new Vector3 { 0,0,0 }, new Vector3 { 5,0,0 },
+                new Vector3 { 10,0,0 }, new Vector3 { 0,10,0 }
+            };
+            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+
+            Intersect.CurveSelf(crv);
+
+        }
     }
 }
 
