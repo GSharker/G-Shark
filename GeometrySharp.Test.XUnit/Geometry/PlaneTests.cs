@@ -67,11 +67,12 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             Plane plane = BasePlane;
             Vector3 pt = new Vector3 {7, 7, 3};
+            double expectedDistance = 6.933752;
 
             Vector3 closestPt = plane.ClosestPoint(pt, out double distance);
 
             closestPt.IsEqualRoundingDecimal(new Vector3 {3.153846, 1.230769, 3}, 6).Should().BeTrue();
-            distance.Should().BeApproximately(6.933752, GeoSharpMath.MAXTOLERANCE);
+            System.Math.Abs(distance).Should().BeApproximately(expectedDistance, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]

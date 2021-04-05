@@ -105,6 +105,7 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Finds the closest point on a plane.
+        /// https://www.parametriczoo.com/index.php/2020/02/29/signed-distance-of-a-point-from-a-plane/
         /// </summary>
         /// <param name="pt">The point to get close to plane.</param>
         /// <param name="length">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
@@ -112,10 +113,12 @@ namespace GeometrySharp.Geometry
         public Vector3 ClosestPoint(Vector3 pt, out double length)
         {
             Vector3 ptToOrigin = Origin - pt;
-            Vector3 projection = Normal * (Vector3.Dot(ptToOrigin, Normal));
-            length = projection[0];
 
-            return pt + projection;
+            // signed distance.
+            length = Vector3.Dot(ptToOrigin, Normal);
+            Vector3 projection = pt + Normal * length;
+
+            return projection;
         }
 
         /// <summary>
