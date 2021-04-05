@@ -1,11 +1,12 @@
 ﻿using GeometrySharp.Core;
 using GeometrySharp.Core.BoundingBoxTree;
+using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Optimization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Core.IntersectionResults;
 
 namespace GeometrySharp.Operation
 {
@@ -305,8 +306,8 @@ namespace GeometrySharp.Operation
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>
         /// <param name="l">The line to intersect with.</param>
-        /// <returns>A collection of <see cref="CurveIntersectionResult"/>.</returns>
-        public static List<CurveIntersectionResult> CurveLine(NurbsCurve crv, Line l)
+        /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
+        public static List<CurvesIntersectionResult> CurveLine(NurbsCurve crv, Line l)
         {
             return CurveCurve(crv, l.ToNurbsCurve());
         }
@@ -317,119 +318,33 @@ namespace GeometrySharp.Operation
         /// <param name="crv1">First curve to intersect.</param>
         /// <param name="crv2">Second curve to intersect.</param>
         /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
-        /// <returns>A collection of <see cref="CurveIntersectionResult"/>.</returns>
-        public static List<CurveIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
+        /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
+        public static List<CurvesIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
-            var bBoxTreeIntersections = BoundingBoxTree(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
-
-            var intersectionResults = bBoxTreeIntersections
-                .Select(x => CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
-                .Where(crInRe => (crInRe.Point0 - crInRe.Point1).SquaredLength() < tolerance)
-                .Unique((a, b) => Math.Abs(a.Parameter0 - b.Parameter0) < tolerance * 5);
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
+            List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
+                .Select(x => IntersectionRefiner.CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
+                .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquaredLength() < tolerance)
+                .Unique((a, b) => Math.Abs(a.T0 - b.T0) < tolerance * 5);
 
             return intersectionResults;
         }
 
         /// <summary>
-        /// Refine an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
-        /// so the caller is responsible for providing a very good initial guess.
+        /// Computes the intersection between a curve and a plane.
+        /// https://www.parametriczoo.com/index.php/2020/03/31/plane-and-curve-intersection/
         /// </summary>
-        /// <param name="crv0">The first curve.</param>
-        /// <param name="crv1">The second curve.</param>
-        /// <param name="firstGuess">The first guess parameter.</param>
-        /// <param name="secondGuess">The second guess parameter.</param>
-        /// <param name="tolerance">The value tolerance for the intersection.</param>
-        /// <returns>The curves intersection, expressed as a tuple of two intersection points and the t parameters.</returns>
-        private static CurveIntersectionResult CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
-            double firstGuess, double secondGuess, double tolerance)
+        /// <param name="crv">The curve to intersect.</param>
+        /// <param name="pl">The plane to intersect with the curve.</param>
+        /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
+        /// <returns>If intersection found a collection of <see cref="CurvePlaneIntersectionResult"/> otherwise the result will be empty.</returns>
+        public static List<CurvePlaneIntersectionResult> CurvePlane(NurbsCurve crv, Plane pl, double tolerance = 1e-6)
         {
-            ObjectiveFunction functions = new ObjectiveFunction(crv0, crv1);
-            Minimizer min = new Minimizer(functions.Value, functions.Gradient);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
+            List<NurbsCurve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
+            List<CurvePlaneIntersectionResult> intersectionResults = bBoxRoot.Select(
+                x => IntersectionRefiner.CurvePlaneWithEstimation(crv, pl, x.Knots[0], x.Knots[0], tolerance)).ToList();
 
-            Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
-            Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
-
-            return new CurveIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
-        }
-
-        /// <summary>
-        /// The core algorithm for bounding box tree intersection, supporting both lazy and pre-computed bounding box trees
-        /// via the <see cref="IBoundingBoxTree{T}"/> interface.
-        /// </summary>
-        /// <param name="bbt1">The first Bounding box tree object.</param>
-        /// <param name="bbt2">The second Bounding box tree object.</param>
-        /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
-        /// <returns>A collection of tuples extracted from the Yield method of the BoundingBoxTree.</returns>
-        private static List<Tuple<T1, T2>> BoundingBoxTree<T1, T2>(IBoundingBoxTree<T1> bbt1, IBoundingBoxTree<T2> bbt2,
-            double tolerance = 1e-9)
-        {
-            List<IBoundingBoxTree<T1>> aTrees = new List<IBoundingBoxTree<T1>>();
-            List<IBoundingBoxTree<T2>> bTrees = new List<IBoundingBoxTree<T2>>();
-
-            aTrees.Add(bbt1);
-            bTrees.Add(bbt2);
-
-            List<Tuple<T1, T2>> result = new List<Tuple<T1, T2>>();
-
-            while (aTrees.Count > 0)
-            {
-                IBoundingBoxTree<T1> a = aTrees[^1];
-                aTrees.RemoveAt(aTrees.Count - 1);
-                IBoundingBoxTree<T2> b = bTrees[^1];
-                bTrees.RemoveAt(bTrees.Count - 1);
-
-                if (a.IsEmpty() || b.IsEmpty())
-                {
-                    continue;
-                }
-
-                if (BoundingBox.AreOverlapping(a.BoundingBox(), b.BoundingBox(), tolerance) == false)
-                {
-                    continue;
-                }
-
-                bool aIndivisible = a.IsIndivisible(tolerance);
-                bool bIndivisible = b.IsIndivisible(tolerance);
-                Tuple<IBoundingBoxTree<T2>, IBoundingBoxTree<T2>> bSplit = b.Split();
-                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> aSplit = a.Split();
-
-                if (aIndivisible && bIndivisible)
-                {
-                    result.Add(new Tuple<T1, T2>(a.Yield(), b.Yield()));
-                    continue;
-                }
-                if (aIndivisible)
-                {
-                    aTrees.Add(a);
-                    bTrees.Add(bSplit.Item2);
-                    aTrees.Add(a);
-                    bTrees.Add(bSplit.Item1);
-                    continue;
-                }
-                if (bIndivisible)
-                {
-                    aTrees.Add(aSplit.Item2);
-                    bTrees.Add(b);
-                    aTrees.Add(aSplit.Item1);
-                    bTrees.Add(b);
-                    continue;
-                }
-
-                aTrees.Add(aSplit.Item2);
-                bTrees.Add(bSplit.Item2);
-
-                aTrees.Add(aSplit.Item2);
-                bTrees.Add(bSplit.Item1);
-
-                aTrees.Add(aSplit.Item1);
-                bTrees.Add(bSplit.Item2);
-
-                aTrees.Add(aSplit.Item1);
-                bTrees.Add(bSplit.Item1);
-            }
-
-            return result;
+            return intersectionResults;
         }
     }
 }

@@ -26,7 +26,6 @@ namespace GeometrySharp.Optimization
         public Vector3 Gradient { get; private set; }
         public Matrix HessianMatrix { get; private set; }
         public int Iterations { get; private set; }
-
         public string Message { get; private set; }
     }
 }

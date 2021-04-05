@@ -11,18 +11,15 @@ namespace GeometrySharp.Optimization
     /// </summary>
     public class Minimizer
     {
-        private readonly Func<Vector3, double> _objectiveFunction;
-        private readonly Func<Vector3, Vector3> _gradientFunc;
+        private readonly IObjectiveFunction _objectiveFunction;
 
         /// <summary>
-        /// Initializes the minimizer.
+        /// Minimizer initialization.
         /// </summary>
-        /// <param name="objectiveFunction">The objective function used into the minimization process.</param>
-        /// <param name="gradientFunc">The gradient function used into the minimization process.</param>
-        public Minimizer(Func<Vector3, double> objectiveFunction, Func<Vector3, Vector3> gradientFunc)
+        /// <param name="objectiveFunction">The objective functions used into the minimization process.</param>
+        public Minimizer(IObjectiveFunction objectiveFunction)
         {
             _objectiveFunction = objectiveFunction;
-            _gradientFunc = gradientFunc;
         }
 
         /// <summary>
@@ -36,7 +33,7 @@ namespace GeometrySharp.Optimization
         {
             Vector3 x0 = new Vector3(initialGuess);
             int n = x0.Count;
-            double f0 = _objectiveFunction(x0);
+            double f0 = _objectiveFunction.Value(x0);
             double f1 = 0.0;
             Vector3 x1 = null;
             Vector3 s = null;
@@ -50,7 +47,7 @@ namespace GeometrySharp.Optimization
             gradientTolerance = Math.Max(gradientTolerance, GeoSharpMath.EPSILON);
             Matrix H1 = Matrix.Identity(n);
             int iteration = 0;
-            Vector3 g0 = _gradientFunc(x0);
+            Vector3 g0 = _objectiveFunction.Gradient(x0);
 
             while (iteration < maxIteration)
             {
@@ -86,7 +83,7 @@ namespace GeometrySharp.Optimization
 
                     s = step * t;
                     x1 = x0 + s;
-                    f1 = _objectiveFunction(x1);
+                    f1 = _objectiveFunction.Value(x1);
 
                     if (f1 - f0 >= 0.1 * t * df0 || double.IsNaN(f1))
                     {
@@ -109,7 +106,7 @@ namespace GeometrySharp.Optimization
                     break;
                 }
 
-                Vector3 g1 = _gradientFunc(x1);
+                Vector3 g1 = _objectiveFunction.Gradient(x1);
                 Vector3 y = g1 - g0;
                 double ys = Vector3.Dot(y, s);
                 Vector3 Hy = y * H1;
