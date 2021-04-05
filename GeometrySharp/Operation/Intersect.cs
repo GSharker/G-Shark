@@ -347,10 +347,21 @@ namespace GeometrySharp.Operation
             return intersectionResults;
         }
 
-        public static void CurveSelf(NurbsCurve crv, double tolerance = 1e-6)
+        /// <summary>
+        /// Computes the self intersections of a curve.
+        /// </summary>
+        /// <param name="crv">The curve for self-intersections.</param>
+        /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
+        /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
+        public static List<CurvesIntersectionResult> CurveSelf(NurbsCurve crv, double tolerance = 1e-6)
         {
-            List<Tuple<NurbsCurve, NurbsCurve>> bBoxRoot = BoundingBoxOperations.BoundingBoxTreeSelf(new LazyCurveBBT(crv));
-            int t = bBoxRoot.Count;
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
+            List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
+                .Select(x => IntersectionRefiner.CurvesWithEstimation(x.Item1, x.Item2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
+                .Where(crInRe => Math.Abs(crInRe.T0 - crInRe.T1) > tolerance)
+                .Unique((a, b) => Math.Abs(a.T0 - b.T0) < tolerance * 5);
+
+            return intersectionResults;
         }
     }
 }

@@ -23,8 +23,8 @@ namespace GeometrySharp.Operation
             Minimizer min = new Minimizer(objectiveFunctions);
             MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
 
-            Vector3 pt1 = Evaluation.CurvePointAt(crv0, solution.SolutionPoint[0]);
-            Vector3 pt2 = Evaluation.CurvePointAt(crv1, solution.SolutionPoint[1]);
+            Vector3 pt1 = crv0.PointAt(solution.SolutionPoint[0]);
+            Vector3 pt2 = crv1.PointAt(solution.SolutionPoint[1]);
 
             return new CurvesIntersectionResult(pt1, pt2, solution.SolutionPoint[0], solution.SolutionPoint[1]);
         }
