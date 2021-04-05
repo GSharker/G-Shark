@@ -332,6 +332,7 @@ namespace GeometrySharp.Operation
 
         /// <summary>
         /// Computes the intersection between a curve and a plane.
+        /// https://www.parametriczoo.com/index.php/2020/03/31/plane-and-curve-intersection/
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>
         /// <param name="pl">The plane to intersect with the curve.</param>
