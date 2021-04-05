@@ -391,6 +391,55 @@ namespace GeometrySharp.Test.XUnit.Operation
                 curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
             }
         }
+
+        [Fact]
+        public void It_Returns_The_SelfIntersections_Of_A_Curve3D()
+        {
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts = new List<Vector3>
+            {
+                new Vector3 { 0,5,5 }, new Vector3 { 2.5,0,0 }, new Vector3 { 5,5,2.5 },
+                new Vector3 { 2.5,5,5 }, new Vector3 { 0,0,0 }
+            };
+            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+
+            // Act
+            List<CurvesIntersectionResult> intersections = Intersect.CurveSelf(crv);
+            Vector3 ptAt = crv.PointAt(intersections[0].T1);
+
+            // Assert
+            _testOutput.WriteLine(intersections[0].ToString());
+            intersections.Count.Should().Be(1);
+            intersections[0].Pt0.DistanceTo(ptAt).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_SelfIntersections_Of_A_Planar_Curve()
+        {
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0 };
+            List<Vector3> crvCtrPts = new List<Vector3>
+            {
+                new Vector3 { 0,5,0 }, new Vector3 { 2.5,0,0 }, new Vector3 { 5,2.5,0 },
+                new Vector3 { 2.5,5,0 }, new Vector3 { 0,0,0 }, new Vector3 { 5,0,0 }, new Vector3 { 2.5,5,0 }
+            };
+            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+
+            // Act
+            List<CurvesIntersectionResult> intersections = Intersect.CurveSelf(crv);
+
+            // Assert
+            intersections.Count.Should().Be(3);
+            foreach (CurvesIntersectionResult curveIntersectionResult in intersections)
+            {
+                _testOutput.WriteLine(curveIntersectionResult.ToString());
+                Vector3 ptAt = crv.PointAt(curveIntersectionResult.T1);
+                curveIntersectionResult.Pt0.DistanceTo(ptAt).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            }
+        }
     }
 }
 

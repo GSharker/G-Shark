@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core.BoundingBoxTree
@@ -29,66 +26,27 @@ namespace GeometrySharp.Core.BoundingBoxTree
             aTrees.Add(bbt1);
             bTrees.Add(bbt2);
 
-            List<Tuple<T1, T2>> result = new List<Tuple<T1, T2>>();
+            return FindTheRoot(aTrees, bTrees, tolerance);
+        }
 
-            while (aTrees.Count > 0)
-            {
-                IBoundingBoxTree<T1> a = aTrees[^1];
-                aTrees.RemoveAt(aTrees.Count - 1);
-                IBoundingBoxTree<T2> b = bTrees[^1];
-                bTrees.RemoveAt(bTrees.Count - 1);
+        /// <summary>
+        /// The core algorithm for bounding box tree intersection, supporting both lazy and pre-computed bounding box trees
+        /// via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// </summary>
+        /// <param name="bbt1">The first Bounding box tree object.</param>
+        /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
+        /// <returns>A collection of tuples extracted from the Yield method of the BoundingBoxTree.</returns>
+        internal static List<Tuple<T1, T1>> BoundingBoxTreeIntersection<T1>(IBoundingBoxTree<T1> bbt1,
+            double tolerance = 1e-9)
+        {
+            List<IBoundingBoxTree<T1>> aTrees = new List<IBoundingBoxTree<T1>>();
+            List<IBoundingBoxTree<T1>> bTrees = new List<IBoundingBoxTree<T1>>();
+            Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> firstSplit = bbt1.Split();
 
-                if (a.IsEmpty() || b.IsEmpty())
-                {
-                    continue;
-                }
+            aTrees.Add(firstSplit.Item1);
+            bTrees.Add(firstSplit.Item2);
 
-                if (BoundingBox.AreOverlapping(a.BoundingBox(), b.BoundingBox(), tolerance) == false)
-                {
-                    continue;
-                }
-
-                bool aIndivisible = a.IsIndivisible(tolerance);
-                bool bIndivisible = b.IsIndivisible(tolerance);
-                Tuple<IBoundingBoxTree<T2>, IBoundingBoxTree<T2>> bSplit = b.Split();
-                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> aSplit = a.Split();
-
-                if (aIndivisible && bIndivisible)
-                {
-                    result.Add(new Tuple<T1, T2>(a.Yield(), b.Yield()));
-                    continue;
-                }
-                if (aIndivisible)
-                {
-                    aTrees.Add(a);
-                    bTrees.Add(bSplit.Item2);
-                    aTrees.Add(a);
-                    bTrees.Add(bSplit.Item1);
-                    continue;
-                }
-                if (bIndivisible)
-                {
-                    aTrees.Add(aSplit.Item2);
-                    bTrees.Add(b);
-                    aTrees.Add(aSplit.Item1);
-                    bTrees.Add(b);
-                    continue;
-                }
-
-                aTrees.Add(aSplit.Item2);
-                bTrees.Add(bSplit.Item2);
-
-                aTrees.Add(aSplit.Item2);
-                bTrees.Add(bSplit.Item1);
-
-                aTrees.Add(aSplit.Item1);
-                bTrees.Add(bSplit.Item2);
-
-                aTrees.Add(aSplit.Item1);
-                bTrees.Add(bSplit.Item1);
-            }
-
-            return result;
+            return FindTheRoot(aTrees, bTrees, tolerance);
         }
 
         /// <summary>
@@ -152,5 +110,78 @@ namespace GeometrySharp.Core.BoundingBoxTree
 
             return result;
         }
+
+        /// <summary>
+        /// The core algorithm for bounding box tree intersection, supporting both lazy and pre-computed bounding box trees
+        /// via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// </summary>
+        /// <param name="aTrees">The first Bounding box tree object.</param>
+        /// <param name="bTrees">The second Bounding box tree object.</param>
+        /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
+        /// <returns>A collection of tuples extracted from the Yield method of the BoundingBoxTree.</returns>
+        private static List<Tuple<T1, T2>> FindTheRoot<T1, T2>(List<IBoundingBoxTree<T1>> aTrees, List<IBoundingBoxTree<T2>> bTrees, double tolerance)
+        {
+            List<Tuple<T1, T2>> result = new List<Tuple<T1, T2>>();
+
+            while (aTrees.Count > 0)
+            {
+                IBoundingBoxTree<T1> a = aTrees[^1];
+                aTrees.RemoveAt(aTrees.Count - 1);
+                IBoundingBoxTree<T2> b = bTrees[^1];
+                bTrees.RemoveAt(bTrees.Count - 1);
+
+                if (a.IsEmpty() || b.IsEmpty())
+                {
+                    continue;
+                }
+
+                if (BoundingBox.AreOverlapping(a.BoundingBox(), b.BoundingBox(), tolerance) == false)
+                {
+                    continue;
+                }
+
+                bool aIndivisible = a.IsIndivisible(tolerance);
+                bool bIndivisible = b.IsIndivisible(tolerance);
+                Tuple<IBoundingBoxTree<T1>, IBoundingBoxTree<T1>> aSplit = a.Split();
+                Tuple<IBoundingBoxTree<T2>, IBoundingBoxTree<T2>> bSplit = b.Split();
+
+                if (aIndivisible && bIndivisible)
+                {
+                    result.Add(new Tuple<T1, T2>(a.Yield(), b.Yield()));
+                    continue;
+                }
+                if (aIndivisible)
+                {
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item2);
+                    aTrees.Add(a);
+                    bTrees.Add(bSplit.Item1);
+                    continue;
+                }
+                if (bIndivisible)
+                {
+                    aTrees.Add(aSplit.Item2);
+                    bTrees.Add(b);
+                    aTrees.Add(aSplit.Item1);
+                    bTrees.Add(b);
+                    continue;
+                }
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item2);
+                bTrees.Add(bSplit.Item1);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item2);
+
+                aTrees.Add(aSplit.Item1);
+                bTrees.Add(bSplit.Item1);
+            }
+
+            return result;
+        }
+
     }
 }
