@@ -19,10 +19,10 @@ namespace GeometrySharp.Core
         /// <returns> 1d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
         public static List<Vector3> Homogenize1d(List<Vector3> controlPoints, List<double> weights = null)
         {
-            List<double> neWeights = weights;
+            List<double> usedWeights = weights;
             if (weights == null || weights.Count == 0)
             {
-                neWeights = Sets.RepeatData(1.0, controlPoints.Count);
+                usedWeights = Sets.RepeatData(1.0, controlPoints.Count);
             }
             else
             {
@@ -35,7 +35,7 @@ namespace GeometrySharp.Core
                 {
                     int diff = controlPoints.Count - weights.Count;
                     List<double> dataFilled = Sets.RepeatData(1.0, diff);
-                    neWeights.AddRange(dataFilled);
+                    usedWeights.AddRange(dataFilled);
                 }
             }
 
@@ -48,10 +48,10 @@ namespace GeometrySharp.Core
                 Vector3 tempPt = new Vector3();
                 for (int j = 0; j < dim; j++)
                 {
-                    tempPt.Add(controlPoints[i][j] * neWeights[i]);
+                    tempPt.Add(controlPoints[i][j] * usedWeights[i]);
                 }
                 // Added the weight to the point.
-                tempPt.Add(neWeights[i]);
+                tempPt.Add(usedWeights[i]);
                 controlPtsHomogenized.Add(tempPt);
             }
 
@@ -65,27 +65,27 @@ namespace GeometrySharp.Core
         /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
         /// <returns> 2d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
-        public static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
+        public static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>> weights = null)
         {
             int rows = controlPoints.Count;
             List<List<Vector3>> controlPtsHomogenized = new List<List<Vector3>>();
-            List<List<double>> newWeights = weights;
+            List<List<double>> usedWeights = weights;
             if (weights == null || weights.Count == 0)
             {
-                newWeights = new List<List<double>>();
+                usedWeights = new List<List<double>>();
                 for (int i = 0; i < rows; i++)
                 {
-                    newWeights.Add(Sets.RepeatData(1.0, controlPoints[i].Count));
+                    usedWeights.Add(Sets.RepeatData(1.0, controlPoints[i].Count));
                 }
             }
-            if (controlPoints.Count < newWeights.Count)
+            if (controlPoints.Count < usedWeights.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(weights), "The weights set is bigger than the control points, it must be the same dimension");
             }
 
             for (int i = 0; i < rows; i++)
             {
-                controlPtsHomogenized.Add(Homogenize1d(controlPoints[i], newWeights[i]));
+                controlPtsHomogenized.Add(Homogenize1d(controlPoints[i], usedWeights[i]));
             }
 
             return controlPtsHomogenized;
@@ -179,8 +179,8 @@ namespace GeometrySharp.Core
         {
             Dictionary<string, double> values = new Dictionary<string, double>();
 
-            if ((transform[1][0] == 0.0 && transform[0][0] == 0.0) ||
-                (transform[2][1] == 0.0 && transform[2][2] == 0.0) ||
+            if ((Math.Abs(transform[1][0]) < GeoSharpMath.MINTOLERANCE && Math.Abs(transform[0][0]) < GeoSharpMath.MINTOLERANCE) ||
+                (Math.Abs(transform[2][1]) < GeoSharpMath.MINTOLERANCE && Math.Abs(transform[2][2]) < GeoSharpMath.MINTOLERANCE) ||
                 (Math.Abs(transform[2][0]) >= 1.0))
             {
                 values.Add("Pitch" , (transform[2][0] > 0) ? -Math.PI / 2.0 : Math.PI / 2.0);
@@ -297,9 +297,71 @@ namespace GeometrySharp.Core
         {
             double result = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
 
-            if (Math.Abs(result) < GeoSharpMath.EPSILON) return 0;
+            if (Math.Abs(result) < GeoSharpMath.EPSILON)
+            {
+                return 0;
+            }
 
             return (result > 0) ? 1 : 2;
+        }
+
+        /// <summary>
+        /// Computes the binomial coefficient (denoted by n choose k).
+        /// Please see the following website for details: http://mathworld.wolfram.com/BinomialCoefficient.html
+        /// </summary>
+        /// <param name="n">Size of the set of distinct elements.</param>
+        /// <param name="k">Size of the subsets.</param>
+        /// <returns>Combination of k and n</returns>
+        public static double GetBinomial(int n, int k)
+        {
+            (int n, int k, double val) storage = (0, 0, 0.0);
+
+            if (k == 0)
+            {
+                return 1.0;
+            }
+
+            if (n == 0 || k > n)
+            {
+                return 0.0;
+            }
+
+            if (k > n - k)
+            {
+                k = n - k;
+            }
+
+            if (storage.n == n && storage.k == k)
+            {
+                return storage.val;
+            }
+
+            double r = 1.0;
+            int n0 = n;
+
+            for (int d = 1; d < k + 1; d++)
+            {
+                if (storage.n == n0 && storage.k == d)
+                {
+                    n--;
+                    r = storage.val;
+                    continue;
+                }
+
+                r *= n--;
+                r /= d;
+
+                if (storage.n == n0)
+                {
+                    continue;
+                }
+
+                storage.n = n0;
+                storage.k = d;
+                storage.val = r;
+            }
+
+            return r;
         }
     }
 }

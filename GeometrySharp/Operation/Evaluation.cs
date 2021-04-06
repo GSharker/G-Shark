@@ -274,7 +274,7 @@ namespace GeometrySharp.Operation
 
                 for (int i = 1; i < k + 1; i++)
                 {
-                    var valToMultiply = Binomial.Get(k, i) * weightDers[i];
+                    var valToMultiply = LinearAlgebra.GetBinomial(k, i) * weightDers[i];
                     var pt = CK[k - i];
                     for (int j = 0; j < v.Count; j++)
                         v[j] = v[j] - valToMultiply * pt[j];
@@ -477,15 +477,15 @@ namespace GeometrySharp.Operation
                 {
                     var t1 = Aders[k][l];
                     for (int j =1; j < l+1; j++)
-                        Vector3.SubMulMutate(t1, Binomial.Get(l, j) * wders[0][j], SKL[k][l - j]);
+                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
 
                     for (int i = 1; i < k + 1; i++)
                     {
-                        Vector3.SubMulMutate(t1, Binomial.Get(k, i) * wders[i][0], SKL[k - i][l]);
+                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
                         var t2 = Vector3.Zero1d(dim);
                         for (int j = 1; j < l + 1; j++)
-                            Vector3.AddMulMutate(t2, Binomial.Get(l, j) * wders[i][j], SKL[k-i][l - j]);
-                        Vector3.SubMulMutate(t1, Binomial.Get(k, i), t2);
+                            Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k-i][l - j]);
+                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
                     }
                     var t = t1 * (1 / wders[0][0]);
                     SKL[k].Add(t); //demogenize
