@@ -118,7 +118,7 @@ namespace GeometrySharp.Test.XUnit.Core
         };
 
         [Fact]
-        public void Eval_Homogenized1d_Throws_An_Exception_If_The_Weight_Collection_Is_Bigger_Than_ControlPts()
+        public void PointsHomogeniser_Throws_An_Exception_If_The_Weight_Collection_Is_Bigger_Than_ControlPts()
         {
             // Arrange
             List<Vector3> controlPts = new List<Vector3>();
@@ -133,7 +133,7 @@ namespace GeometrySharp.Test.XUnit.Core
 
         [Theory]
         [MemberData(nameof(Homogenized1dData))]
-        public void It_Returns_A_New_Set_Of_ControlPoints_Homogenized1d(List<double> weights, List<Vector3> controlPtsExpected)
+        public void It_Returns_A_New_Set_Of_Homogenizer_Points(List<double> weights, List<Vector3> controlPtsExpected)
         {
             // Arrange
             List<Vector3> controlPts = new List<Vector3>
@@ -152,7 +152,7 @@ namespace GeometrySharp.Test.XUnit.Core
 
         [Theory]
         [MemberData(nameof(Homogenized2dData))]
-        public void It_Returns_A_New_Set_Of_ControlPoints_Homogenized2d(List<List<double>> weights, List<List<Vector3>> controlPtsExpected)
+        public void It_Returns_A_Set_Of_Homogenized_Control_Points(List<List<double>> weights, List<List<Vector3>> controlPtsExpected)
         {
             // Arrange
             List<List<Vector3>> controlPts = new List<List<Vector3>>()
@@ -179,7 +179,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void Weight1d_Throws_An_Exception_If_The_Set_Of_Points_Has_Not_The_Same_Dimension()
+        public void GetWeights_Throws_An_Exception_If_The_Set_Of_Points_Has_Not_The_Same_Dimension()
         {
             // Arrange
             List<Vector3> homogeneousPts = new List<Vector3>
@@ -197,7 +197,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Weighted1d_Set()
+        public void It_Returns_A_Set_Of_Weights()
         {
             // Arrange
             List<Vector3> homogeneousPts = new List<Vector3>
@@ -216,7 +216,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Weighted2d_Set()
+        public void It_Returns_A_Two_Dimensional_Set_Of_Weights()
         {
             // Arrange
             List<List<Vector3>> homogeneousPts = new List<List<Vector3>>
@@ -248,7 +248,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Set_Of_Points_Dehomogenized()
+        public void It_Returns_A_Dehomogenized_Point()
         {
             // Arrange
             Vector3 homogeneousPts = new Vector3 { 1.25, -1.25, 0.0, 0.5 };
@@ -262,7 +262,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Set_Of_Points_Dehomogenizer1d()
+        public void It_Returns_A_Set_Of_Dehomogenized_Points()
         {
             // Arrange
             List<Vector3> homogeneousPts = new List<Vector3>
@@ -287,7 +287,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Set_Of_Points_Dehomogenizer2d()
+        public void It_Returns_A_Two_Dimensional_Set_Of_Dehomogenized_Points()
         {
             // Arrange
             List<List<Vector3>> homogeneousPts = new List<List<Vector3>>
@@ -356,7 +356,7 @@ namespace GeometrySharp.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Rationalized_Set_Of_Sets_Points()
+        public void It_Returns_A_Rationalized_Two_Dimensioanl_Set_Of_Points()
         {
             // Arrange
             List<List<Vector3>> homoPts = new List<List<Vector3>>
