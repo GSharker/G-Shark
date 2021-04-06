@@ -99,7 +99,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             var curve = NurbsCurveCollection.NurbsCurveExample2();
             var ptHomogenized = Analyze.RationalCurveClosestPoint(curve, ptToCheck.ToVector(), out var t);
-            var pt = LinearAlgebra.Dehomogenize(ptHomogenized);
+            var pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
 
             _testOutput.WriteLine(pt.ToString());
             _testOutput.WriteLine(t.ToString());

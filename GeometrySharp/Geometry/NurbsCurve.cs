@@ -42,7 +42,7 @@ namespace GeometrySharp.Geometry
             Weights = weights ?? Sets.RepeatData(1.0, controlPoints.Count);
             Degree = degree;
             Knots = knots;
-            HomogenizedPoints = LinearAlgebra.Homogenize1d(controlPoints, Weights);
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPoints, Weights);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// 2d list of control points, where each control point is a list like (x,y,z) of length (dim).
         /// </summary>
-        public List<Vector3> ControlPoints => LinearAlgebra.Dehomogenize1d(HomogenizedPoints);
+        public List<Vector3> ControlPoints => LinearAlgebra.PointDehomogenizer1d(HomogenizedPoints);
 
         /// <summary>
         /// 2d list of points, where represented a set (wi*pi, wi) with length (dim+1).
@@ -126,7 +126,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 PointAt(double t) => LinearAlgebra.Dehomogenize(Evaluation.CurvePointAt(this, t));
+        public Vector3 PointAt(double t) => LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
 
         /// <summary>
         /// Obtain the curve tangent at the given parameter.
