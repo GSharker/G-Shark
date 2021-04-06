@@ -11,13 +11,13 @@ namespace GeometrySharp.Core
     public class LinearAlgebra
     {
         /// <summary>
-        /// Transform a 1d array of points into their homogeneous equivalents.
+        /// Transform a collection of points into their homogeneous equivalents.
         /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
-        /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
-        /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
-        /// <returns> 1d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
-        public static List<Vector3> Homogenize1d(List<Vector3> controlPoints, List<double> weights = null)
+        /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
+        /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
+        /// <returns>A set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, List<double> weights = null)
         {
             List<double> usedWeights = weights;
             if (weights == null || weights.Count == 0)
@@ -39,14 +39,12 @@ namespace GeometrySharp.Core
                 }
             }
 
-            int rows = controlPoints.Count;
-            int dim = controlPoints[0].Count;
             List<Vector3> controlPtsHomogenized = new List<Vector3>();
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < controlPoints.Count; i++)
             {
                 Vector3 tempPt = new Vector3();
-                for (int j = 0; j < dim; j++)
+                for (int j = 0; j < controlPoints[0].Count; j++)
                 {
                     tempPt.Add(controlPoints[i][j] * usedWeights[i]);
                 }
@@ -59,13 +57,13 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Transform a 2d array of points into their homogeneous equivalents.
+        /// Transform a two-dimension collection of points into their homogeneous equivalents.
         /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
-        /// <param name="controlPoints"> Control points, a 2d set of size (m x dim).</param>
-        /// <param name="weights">Control point weights, the same size as the set of control points (m x 1).</param>
-        /// <returns> 2d set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
-        public static List<List<Vector3>> Homogenize2d(List<List<Vector3>> controlPoints, List<List<double>> weights = null)
+        /// <param name="controlPoints">Control points, a two-dimensional set of size (points count x points dimension).</param>
+        /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
+        /// <returns>A two-dimensional set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<List<Vector3>> PointsHomogeniser2d(List<List<Vector3>> controlPoints, List<List<double>> weights = null)
         {
             int rows = controlPoints.Count;
             List<List<Vector3>> controlPtsHomogenized = new List<List<Vector3>>();
@@ -85,7 +83,7 @@ namespace GeometrySharp.Core
 
             for (int i = 0; i < rows; i++)
             {
-                controlPtsHomogenized.Add(Homogenize1d(controlPoints[i], usedWeights[i]));
+                controlPtsHomogenized.Add(PointsHomogeniser(controlPoints[i], usedWeights[i]));
             }
 
             return controlPtsHomogenized;
@@ -95,39 +93,39 @@ namespace GeometrySharp.Core
         /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
         /// <param name="homoPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
-        /// <returns>A set of numbers represented by an set pi with length (dim).</returns>
-        public static List<double> Weight1d(List<Vector3> homoPts)
+        /// <returns>A set of values, represented by a set pi with length (dim).</returns>
+        public static List<double> GetWeights(List<Vector3> homoPts)
         {
-            if (homoPts.Any(vec => vec.Count != homoPts[0].Count))
+            if (homoPts.Any(pt => pt.Count != homoPts[0].Count))
             {
                 throw new ArgumentOutOfRangeException(nameof(homoPts), "Homogeneous points must have the same dimension.");
             }
 
-            return homoPts.Select(vec => vec[^1]).ToList();
+            return homoPts.Select(pt => pt[^1]).ToList();
         }
 
         /// <summary>
-        /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension
+        /// Obtain the weight from a two-dimensional collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
-        /// <param name="homoPts">rray of arrays of of points represented by an array (wi*pi, wi) with length (dim+1)</param>
-        /// <returns>array of arrays of points, each represented by an array pi with length (dim)</returns>
-        public static List<List<double>> Weight2d(List<List<Vector3>> homoPts)
+        /// <param name="homoPts">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of values, each represented by an array pi with length (dim)</returns>
+        public static List<List<double>> GetWeights2d(List<List<Vector3>> homoPts)
         {
-            return homoPts.Select(vecs => Weight1d(vecs).ToList()).ToList();
+            return homoPts.Select(pts => GetWeights(pts).ToList()).ToList();
         }
 
         /// <summary>
-        /// Dehomogenize a point.
+        /// Gets a dehomogenized point.
         /// </summary>
         /// <param name="homoPt">A point represented by an array (wi*pi, wi) with length (dim+1).</param>
-        /// <returns>A point represented by an array pi with length (dim).</returns>
-        public static Vector3 Dehomogenize(Vector3 homoPt)
+        /// <returns>A dehomogenized point.</returns>
+        public static Vector3 PointDehomogenizer(Vector3 homoPt)
         {
-            int dim = homoPt.Count;
-            double weight = homoPt[dim - 1];
+            int dim = homoPt.Count - 1;
+            double weight = homoPt[dim];
             Vector3 point = new Vector3();
 
-            for (int i = 0; i < dim - 1; i++)
+            for (int i = 0; i < dim; i++)
             {
                 point.Add(homoPt[i] / weight);
             }
@@ -135,36 +133,45 @@ namespace GeometrySharp.Core
             return point;
         }
 
-
         /// <summary>
-        /// Dehomogenize an set of points.
+        /// Gets a set of dehomogenized points.
         /// </summary>
-        /// <param name="homoPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
-        /// <returns>Set of points, each of length dim.</returns>
-        public static List<Vector3> Dehomogenize1d(List<Vector3> homoPts)
+        /// <param name="homoPts">A collection of points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>Set of dehomogenized points.</returns>
+        public static List<Vector3> PointDehomogenizer1d(List<Vector3> homoPts)
         {
-            return homoPts.Select(Dehomogenize).ToList();
+            return homoPts.Select(PointDehomogenizer).ToList();
         }
 
         /// <summary>
-        /// Dehomogenize an 2d set of points.
+        /// Gets a two-dimensional set of dehomogenized points.
         /// </summary>
-        /// <param name="homoLstPts">List of list of points represented by an array (wi*pi, wi) with length (dim+1)</param>
-        /// <returns>Set of set of points, each of length dim.</returns>
-        public static List<List<Vector3>> Dehomogenize2d(List<List<Vector3>> homoLstPts)
+        /// <param name="homoPts">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of dehomogenized points.</returns>
+        public static List<List<Vector3>> PointDehomogenizer2d(List<List<Vector3>> homoPts)
         {
-            return homoLstPts.Select(Dehomogenize1d).ToList();
+            return homoPts.Select(PointDehomogenizer1d).ToList();
         }
 
         /// <summary>
-        /// Obtain the point from a point in homogeneous space without dehomogenization, assuming all are the same length.
+        /// Obtain the point from homogeneous point without dehomogenization, assuming all are the same length.
         /// </summary>
-        /// <param name="homoPoints">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
-        /// <returns> Set of points represented by an array (wi*pi) with length (dim).</returns>
-        public static List<Vector3> Rational1d(List<Vector3> homoPoints)
+        /// <param name="homoPts">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>Set of rational points.</returns>
+        public static List<Vector3> RationalPoints(List<Vector3> homoPts)
         {
-            int dim = homoPoints[0].Count - 1;
-            return homoPoints.Select(pt => new Vector3(pt.GetRange(0, dim))).ToList();
+            int dim = homoPts[0].Count - 1;
+            return homoPts.Select(pt => new Vector3(pt.GetRange(0, dim))).ToList();
+        }
+
+        /// <summary>
+        /// Obtain the point from a two-dimensional set of homogeneous points without dehomogenization, assuming all are the same length.
+        /// </summary>
+        /// <param name="homoPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of rational points.</returns>
+        public static List<List<Vector3>> Rational2d(List<List<Vector3>> homoLstPts)
+        {
+            return homoLstPts.Select(vecs => RationalPoints(vecs)).ToList();
         }
 
         /// <summary>
@@ -186,13 +193,12 @@ namespace GeometrySharp.Core
                 values.Add("Pitch" , (transform[2][0] > 0) ? -Math.PI / 2.0 : Math.PI / 2.0);
                 values.Add("Yaw", Math.Atan2(-transform[0][1], transform[1][1]));
                 values.Add("Roll", 0.0);
+                return values;
             }
-            else
-            {
-                values.Add("Pitch", Math.Atan2(transform[2][1], transform[2][2]));
-                values.Add("Yaw", Math.Atan2(transform[1][0], transform[0][0]));
-                values.Add("Roll", Math.Asin(-transform[2][0]));
-            }
+
+            values.Add("Pitch", Math.Atan2(transform[2][1], transform[2][2]));
+            values.Add("Yaw", Math.Atan2(transform[1][0], transform[0][0]));
+            values.Add("Roll", Math.Asin(-transform[2][0]));
 
             return values;
         }
@@ -201,22 +207,22 @@ namespace GeometrySharp.Core
         /// Find the rotation axis used in the transformation.
         /// https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
         /// </summary>
-        /// <param name="t">Transformation to check.</param>
+        /// <param name="transform">Transformation to check.</param>
         /// <returns>The rotation axis used for the transformation.</returns>
-        public static Vector3 GetRotationAxis(Transform t)
+        public static Vector3 GetRotationAxis(Transform transform)
         {
             Vector3 axis = Vector3.Unset;
 
-            if (Math.Abs(t[0][1] + t[1][0]) < GeoSharpMath.MINTOLERANCE || 
-                Math.Abs(t[0][2] + t[2][0]) < GeoSharpMath.MINTOLERANCE ||
-                Math.Abs(t[1][2] + t[2][1]) < GeoSharpMath.MINTOLERANCE)
+            if (Math.Abs(transform[0][1] + transform[1][0]) < GeoSharpMath.MINTOLERANCE || 
+                Math.Abs(transform[0][2] + transform[2][0]) < GeoSharpMath.MINTOLERANCE ||
+                Math.Abs(transform[1][2] + transform[2][1]) < GeoSharpMath.MINTOLERANCE)
             {
-                double xx = (t[0][0] + 1) / 2;
-                double yy = (t[1][1] + 1) / 2;
-                double zz = (t[2][2] + 1) / 2;
-                double xy = (t[0][1] + t[1][0]) / 4;
-                double xz = (t[0][2] + t[2][0]) / 4;
-                double yz = (t[1][2] + t[2][1]) / 4;
+                double xx = (transform[0][0] + 1) / 2;
+                double yy = (transform[1][1] + 1) / 2;
+                double zz = (transform[2][2] + 1) / 2;
+                double xy = (transform[0][1] + transform[1][0]) / 4;
+                double xz = (transform[0][2] + transform[2][0]) / 4;
+                double yz = (transform[1][2] + transform[2][1]) / 4;
                 if ((xx > yy) && (xx > zz))
                 { // m[0][0] is the largest diagonal term
                     if (xx < GeoSharpMath.MINTOLERANCE)
@@ -265,23 +271,13 @@ namespace GeometrySharp.Core
                 return axis; // return 180 deg rotation
             }
 
-            double v = Math.Sqrt(Math.Pow(t[2][1] - t[1][2], 2) + Math.Pow(t[0][2] - t[2][0], 2) + Math.Pow(t[1][0] - t[0][1], 2));
+            double v = Math.Sqrt(Math.Pow(transform[2][1] - transform[1][2], 2) + Math.Pow(transform[0][2] - transform[2][0], 2) + Math.Pow(transform[1][0] - transform[0][1], 2));
 
-            axis[0] = (t[2][1] - t[1][2]) / v;
-            axis[1] = (t[0][2] - t[2][0]) / v;
-            axis[2] = (t[1][0] - t[0][1]) / v;
+            axis[0] = (transform[2][1] - transform[1][2]) / v;
+            axis[1] = (transform[0][2] - transform[2][0]) / v;
+            axis[2] = (transform[1][0] - transform[0][1]) / v;
 
             return axis;
-        }
-
-        /// <summary>
-        /// Obtain the point from a 2d set of points in homogeneous space without dehomogenization, assuming all are the same length.
-        /// </summary>
-        /// <param name="homoPoints">Set of set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
-        /// <returns> Set of points represented by an array (wi*pi) with length (dim).</returns>
-        public static List<List<Vector3>> Rational2d(List<List<Vector3>> homoLstPts)
-        {
-            return homoLstPts.Select(vecs => Rational1d(vecs)).ToList();
         }
 
         /// <summary>

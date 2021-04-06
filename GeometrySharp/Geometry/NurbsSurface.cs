@@ -48,7 +48,7 @@ namespace GeometrySharp.Geometry
             KnotsU = knotsU;
             KnotsV = knotsV;
             Weights = weights == null ? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count) : weights;
-            HomogenizedPoints = LinearAlgebra.Homogenize2d(controlPoints, weights);
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser2d(controlPoints, weights);
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         }
@@ -173,7 +173,7 @@ namespace GeometrySharp.Geometry
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).
         /// </summary>
-        public List<List<Vector3>> ControlPoints => LinearAlgebra.Dehomogenize2d(HomogenizedPoints);
+        public List<List<Vector3>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
         /// <summary>
         ///Two dimensional array of weight values
         /// </summary>

@@ -125,7 +125,7 @@ namespace GeometrySharp.Test.XUnit.Core
             List<double> weights = new List<double> { 1.0, 1.5, 1.0 };
 
             // Act
-            Func<object> resultFunction = () => LinearAlgebra.Homogenize1d(controlPts, weights);
+            Func<object> resultFunction = () => LinearAlgebra.PointsHomogeniser(controlPts, weights);
 
             // Assert
             resultFunction.Should().Throw<ArgumentOutOfRangeException>();
@@ -144,7 +144,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<Vector3> newControlPts = LinearAlgebra.Homogenize1d(controlPts, weights);
+            List<Vector3> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, weights);
 
             // Assert
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
@@ -172,7 +172,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<List<Vector3>> newControlPts = LinearAlgebra.Homogenize2d(controlPts, weights);
+            List<List<Vector3>> newControlPts = LinearAlgebra.PointsHomogeniser2d(controlPts, weights);
             
             // Assert
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
@@ -190,7 +190,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            Func<object> resultFunc = () => LinearAlgebra.Weight1d(homogeneousPts);
+            Func<object> resultFunc = () => LinearAlgebra.GetWeights(homogeneousPts);
 
             // Assert
             resultFunc.Should().Throw<ArgumentOutOfRangeException>();
@@ -209,7 +209,7 @@ namespace GeometrySharp.Test.XUnit.Core
             List<double> expectedWeights = new List<double> {0.5, 0.5, 0.5};
 
             // Act
-            List<double> weight1d = LinearAlgebra.Weight1d(homogeneousPts);
+            List<double> weight1d = LinearAlgebra.GetWeights(homogeneousPts);
 
             // Assert
             weight1d.Should().BeEquivalentTo(expectedWeights);
@@ -241,7 +241,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<List<double>> weight2d = LinearAlgebra.Weight2d(homogeneousPts);
+            List<List<double>> weight2d = LinearAlgebra.GetWeights2d(homogeneousPts);
             
             // Assert
             weight2d.Should().BeEquivalentTo(expectedWeights);
@@ -255,7 +255,7 @@ namespace GeometrySharp.Test.XUnit.Core
             Vector3 dehomogenizeExpected = new Vector3 { 2.5, -2.5, 0 };
 
             // Act
-            Vector3 dehomogenizePts = LinearAlgebra.Dehomogenize(homogeneousPts);
+            Vector3 dehomogenizePts = LinearAlgebra.PointDehomogenizer(homogeneousPts);
 
             // Assert
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
@@ -280,7 +280,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<Vector3> dehomogenizePts = LinearAlgebra.Dehomogenize1d(homogeneousPts);
+            List<Vector3> dehomogenizePts = LinearAlgebra.PointDehomogenizer1d(homogeneousPts);
 
             // Assert
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
@@ -323,7 +323,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<List<Vector3>> dehomogenizePts = LinearAlgebra.Dehomogenize2d(homogeneousPts);
+            List<List<Vector3>> dehomogenizePts = LinearAlgebra.PointDehomogenizer2d(homogeneousPts);
 
             // Arrange
             dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
@@ -348,7 +348,7 @@ namespace GeometrySharp.Test.XUnit.Core
             };
 
             // Act
-            List<Vector3> ratioPts = LinearAlgebra.Rational1d(homoPts);
+            List<Vector3> ratioPts = LinearAlgebra.RationalPoints(homoPts);
 
             // Assert
             ratioPts.All(pt => pt.Count == 3).Should().BeTrue();

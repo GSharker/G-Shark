@@ -30,7 +30,7 @@ namespace GeometrySharp.Operation
             knots.Add(lsum);
             var weights = points.Select(x => 1.0).ToList();
             points.ForEach(x => weights.Add(1.0));
-            return new NurbsCurve(1, knots, LinearAlgebra.Homogenize1d(points, weights));
+            return new NurbsCurve(1, knots, LinearAlgebra.PointsHomogeniser(points, weights));
         }
 
         public static NurbsCurve RationalBezierCurve(List<Vector3> controlPoints, List<double> weights = null)
@@ -43,9 +43,9 @@ namespace GeometrySharp.Operation
                 knots.Add(1.0);
             if (weights == null)
                 weights = Sets.RepeatData(1.0, controlPoints.Count);
-            return new NurbsCurve(degree, knots, LinearAlgebra.Homogenize1d(controlPoints, weights));
+            return new NurbsCurve(degree, knots, LinearAlgebra.PointsHomogeniser(controlPoints, weights));
             //weights = Sets.RepeatData(1.0, controlPoints.Count);
-            //return new NurbsCurveData(degree, knots, Evaluation.Homogenize1d(controlPoints, weights));
+            //return new NurbsCurveData(degree, knots, Evaluation.PointsHomogeniser(controlPoints, weights));
             //return null;
         }
         

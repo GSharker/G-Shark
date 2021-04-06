@@ -263,9 +263,9 @@ namespace GeometrySharp.Operation
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            var vecDers = LinearAlgebra.Rational1d(derivatives);
+            var vecDers = LinearAlgebra.RationalPoints(derivatives);
             // Correspond in the book to wDers.
-            var weightDers = LinearAlgebra.Weight1d(derivatives);
+            var weightDers = LinearAlgebra.GetWeights(derivatives);
             var CK = new List<Vector3>();
 
             for (int k = 0; k < numberDerivs + 1; k++)
@@ -466,7 +466,7 @@ namespace GeometrySharp.Operation
         {
             List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
             List<List<Vector3>> Aders = LinearAlgebra.Rational2d(ders);
-            List<List<double>> wders = LinearAlgebra.Weight2d(ders);
+            List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
             List<List<Vector3>> SKL = new List<List<Vector3>>();
             int dim = Aders[0][0].Count;
 
