@@ -2,8 +2,6 @@
 
 namespace GeometrySharp.Core
 {
-    // ToDo: IsValid.
-    // ToDo: IEquatable.
     /// <summary>
     /// A simple parametric data representing an "interval" between two numbers.
     /// </summary>
@@ -33,13 +31,13 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Gets the average value.
         /// </summary>
-        public double Mid => Math.Abs(this.Min - this.Max) > GeoSharpMath.MAXTOLERANCE ? 0.5 * (this.Min + this.Max) : this.Min;
+        public double Mid => Math.Abs(Min - Max) > GeoSharpMath.MAXTOLERANCE ? 0.5 * (Min + Max) : Min;
 
         /// <summary>
         /// Gets the length of the interval range.
         /// If the interval is decreasing, negative number will be returned.
         /// </summary>
-        public double Length => this.Max - this.Min;
+        public double Length => Max - Min;
 
         /// <summary>
         /// Converts normalized parameter to interval value, or pair of values.
@@ -50,7 +48,7 @@ namespace GeometrySharp.Core
         {
             return !GeoSharpMath.IsValidDouble(normalizedParameter)
                 ? -1.23432101234321E+308
-                : (1.0 - normalizedParameter) * this.Min + normalizedParameter * this.Max;
+                : (1.0 - normalizedParameter) * Min + normalizedParameter * Max;
         }
     }
 }

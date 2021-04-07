@@ -1,19 +1,13 @@
-﻿using System;
-using System.ComponentModel;
-using GeometrySharp.Geometry;
+﻿using GeometrySharp.Geometry;
+using System;
 
 namespace GeometrySharp.Core
 {
     /// <summary>
-    /// GeoSharpMath contains a collection of default constants used throughout the library.
+    /// GeoSharpMath contains a collection of default constants methods used throughout the library.
     /// </summary>
     public class GeoSharpMath
     {
-        /// <summary>
-        /// The current version of GeometryLib.
-        /// </summary>
-        public static string VERSION => "1.0.0";
-
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
@@ -67,7 +61,7 @@ namespace GeometrySharp.Core
         /// <returns>Return if it is valid.</returns>
         public static bool IsValidDouble(double x)
         {
-            return x != -1.23432101234321E+308 && !double.IsInfinity(x) && !double.IsNaN(x);
+            return Math.Abs((double) x - (-1.23432101234321E+308)) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
         /// <summary>
@@ -105,10 +99,10 @@ namespace GeometrySharp.Core
 
             if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAXTOLERANCE)
             {
-                var vec = new Vector3 { cosAngle, sinAngle };
+                Vector3 vec = new Vector3 { cosAngle, sinAngle };
                 if (vec.Length() > 0.0)
                 {
-                    var vecUnitized = vec.Unitize();
+                    Vector3 vecUnitized = vec.Unitize();
                     cosAngle = vecUnitized[0];
                     sinAngle = vecUnitized[1];
                 }
