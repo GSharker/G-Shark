@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -20,8 +18,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_An_Instance_Of_Transform()
         {
-            var transform = new Transform();
+            // Act
+            Transform transform = new Transform();
 
+            // Assert
             transform.Should().NotBeNull();
             transform.Count.Should().Be(4);
             transform[0].Count.Should().Be(4);
@@ -30,22 +30,25 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Creates_A_Transform_By_Copying_Another_Transform()
         {
-            var transform = new Transform {[0] = {[0] = 2}, [1] = {[0] = 2}};
+            // Arrange
+            Transform transform = new Transform {[0] = {[0] = 2}, [1] = {[0] = 2}};
 
-            var copyTransform = Transform.Copy(transform);
+            // Act
+            Transform copyTransform = Transform.Copy(transform);
 
+            // Assert
             copyTransform.Should().BeEquivalentTo(transform);
-
             transform[0][2] = 3;
-
             copyTransform.Should().NotBeEquivalentTo(transform);
         }
 
         [Fact]
         public void It_Returns_A_Identity_Transform_Matrix()
         {
-            var transform = Transform.Identity();
+            // Act
+            Transform transform = Transform.Identity();
 
+            // Assert
             transform.Count.Should().Be(4);
             transform[0].Count.Should().Be(4);
             transform[0][0].Should().Be(1);
@@ -57,9 +60,13 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Translated_Transformed_Matrix()
         {
-            var translation = new Vector3{10,10,0};
-            var transform = Transform.Translation(translation);
+            // Arrange
+            Vector3 translation = new Vector3{10,10,0};
+            
+            // Act
+            Transform transform = Transform.Translation(translation);
 
+            // Assert
             transform[0][3].Should().Be(10);
             transform[1][3].Should().Be(10);
             transform[3][3].Should().Be(1);
@@ -68,16 +75,19 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Rotated_Transformed_Matrix()
         {
-            var center = new Vector3{5,5,0};
-            var radiance = GeoSharpMath.ToRadians(30);
+            // Arrange
+            Vector3 center = new Vector3{5,5,0};
+            double radiance = GeoSharpMath.ToRadians(30);
 
-            var transform = Transform.Rotation(radiance, center);
+            // Act
+            Transform transform = Transform.Rotation(radiance, center);
 
             // Getting the angles.
-            var angles = LinearAlgebra.GetYawPitchRoll(transform);
+            Dictionary<string, double> angles = LinearAlgebra.GetYawPitchRoll(transform);
             // Getting the direction.
-            var axis = LinearAlgebra.GetRotationAxis(transform);
+            Vector3 axis = LinearAlgebra.GetRotationAxis(transform);
 
+            // Assert
             GeoSharpMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharpMath.EPSILON);
             axis.Should().BeEquivalentTo(Vector3.ZAxis);
         }
@@ -85,9 +95,11 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Scaled_Transformation_Matrix()
         {
-            var scale1 = Transform.Scale(new Vector3 {0, 0, 0}, 0.5);
-            var scale2 = Transform.Scale(new Vector3 { 10, 10, 0 }, 0.5);
+            // Act
+            Transform scale1 = Transform.Scale(new Vector3 {0, 0, 0}, 0.5);
+            Transform scale2 = Transform.Scale(new Vector3 { 10, 10, 0 }, 0.5);
 
+            // Assert
             scale1[0][0].Should().Be(0.5); scale2[0][0].Should().Be(0.5);
             scale1[1][1].Should().Be(0.5); scale2[1][1].Should().Be(0.5);
             scale1[2][2].Should().Be(0.5); scale2[2][2].Should().Be(0.5);
@@ -100,11 +112,14 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Mirrored_Transformation_Matrix()
         {
-            var pt = new Vector3{10,10,0};
-            var plane = new Plane(pt, Vector3.XAxis);
+            // Arrange
+            Vector3 pt = new Vector3{10,10,0};
+            Plane plane = new Plane(pt, Vector3.XAxis);
 
-            var transform = Transform.Reflection(plane);
+            // Act
+            Transform transform = Transform.Reflection(plane);
 
+            // Assert
             transform[0][0].Should().Be(-1.0);
             transform[1][1].Should().Be(1.0); 
             transform[2][2].Should().Be(1.0); 
@@ -115,12 +130,15 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Transformation_Projection_By_A_Plane()
         {
+            // Arrange
             Vector3 origin = new Vector3 { 5, 0, 0 };
             Vector3 dir = new Vector3 { -10, -15, 0 };
             Plane plane = new Plane(origin, dir);
 
+            // Act
             Transform transform = Transform.PlanarProjection(plane);
 
+            // Assert
             transform[0][0].Should().BeApproximately(0.692308, GeoSharpMath.MAXTOLERANCE);
             transform[0][1].Should().BeApproximately(-0.461538, GeoSharpMath.MAXTOLERANCE);
             transform[0][3].Should().BeApproximately(1.538462, GeoSharpMath.MAXTOLERANCE);
@@ -133,12 +151,15 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
         {
+            // Arrange
             Vector3 origin = new Vector3 { 5, 0, 0 };
             Vector3 dir = new Vector3 { -10, -15, 0 };
             Plane plane = new Plane(origin, dir);
 
+            // Act
             Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, plane);
 
+            // Assert
             transform[0][0].Should().BeApproximately(-0.832050, GeoSharpMath.MAXTOLERANCE);
             transform[0][2].Should().BeApproximately(-0.554700, GeoSharpMath.MAXTOLERANCE);
             transform[0][3].Should().BeApproximately(5.0, GeoSharpMath.MAXTOLERANCE);
