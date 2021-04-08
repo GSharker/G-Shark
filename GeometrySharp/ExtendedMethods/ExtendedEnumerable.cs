@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GeometrySharp.ExtendedMethods
 {
@@ -29,7 +27,7 @@ namespace GeometrySharp.ExtendedMethods
         /// <returns>Collection of unique elements.</returns>
         public static List<T> Unique<T>(this IEnumerable<T> enumerable, Func<T, T, bool> comparisonFunc)
         {
-            var tempCollection = enumerable as List<T> ?? enumerable.ToList();
+            List<T> tempCollection = enumerable as List<T> ?? enumerable.ToList();
             if (tempCollection.Count == 0)
             {
                 throw new InvalidOperationException("Cannot compute unique for a empty set.");
@@ -41,12 +39,16 @@ namespace GeometrySharp.ExtendedMethods
             while (tempCollection.Count > 0)
             {
                 bool isUnique = true;
-                var element = tempCollection[^1];
+                T element = tempCollection[^1];
                 tempCollection.RemoveAt(tempCollection.Count - 1);
 
-                foreach (var unique in uniques)
+                foreach (T unique in uniques)
                 {
-                    if (!comparisonFunc(element, unique)) continue;
+                    if (!comparisonFunc(element, unique))
+                    {
+                        continue;
+                    }
+
                     isUnique = false;
                     break;
                 }

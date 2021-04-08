@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GeometrySharp.Geometry;
+using System;
 using System.Collections.Generic;
-using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core.BoundingBoxTree
 {

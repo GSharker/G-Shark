@@ -57,5 +57,46 @@ namespace GeometrySharp.Core
 
             return area < tol;
         }
+
+        /// <summary>
+        /// Finds the closest point on a segment.
+        /// The segment is deconstruct in two points and two t values.
+        /// </summary>
+        /// <param name="point">Point to project.</param>
+        /// <param name="segmentPt0">First point of the segment.</param>
+        /// <param name="segmentPt1">Second point of the segment.</param>
+        /// <param name="valueT0">First t value of the segment.</param>
+        /// <param name="valueT1">Second t value of the segment.</param>
+        /// <returns>Tuple with the point projected and its t value.</returns>
+        public static (double tValue, Vector3 pt) ClosestPointToSegment(Vector3 point, Vector3 segmentPt0,
+            Vector3 segmentPt1, double valueT0, double valueT1)
+        {
+            Vector3 direction = segmentPt1 - segmentPt0;
+            double length = direction.Length();
+
+            if (length < GeoSharpMath.EPSILON)
+            {
+                return (tValue: valueT0, pt: segmentPt0);
+            }
+
+            Vector3 vecUnitized = direction.Unitize();
+            Vector3 ptToSegPt0 = point - segmentPt0;
+            double dotResult = Vector3.Dot(ptToSegPt0, vecUnitized);
+
+            if (dotResult < 0.0)
+            {
+                return (tValue: valueT0, pt: segmentPt0);
+            }
+            else if (dotResult > length)
+            {
+                return (tValue: valueT1, pt: segmentPt1);
+            }
+            else
+            {
+                Vector3 pointResult = segmentPt0 + (vecUnitized * dotResult);
+                double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
+                return (tValue: tValueResult, pt: pointResult);
+            }
+        }
     }
 }

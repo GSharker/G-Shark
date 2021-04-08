@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using GeometrySharp.Core;
+using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using System.Collections.Generic;
 using Xunit;
@@ -44,6 +45,26 @@ namespace GeometrySharp.Test.XUnit.Core
 
             // Assert
             Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MINTOLERANCE).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(new double[] { 5, 7, 0 }, new double[] { 6, 6, 0 }, 0.2)]
+        [InlineData(new double[] { 7, 6, 0 }, new double[] { 6.5, 6.5, 0 }, 0.3)]
+        [InlineData(new double[] { 5, 9, 0 }, new double[] { 7, 7, 0 }, 0.4)]
+        public void It_Returns_The_Closest_Point_On_A_Segment(double[] ptToCheck, double[] ptExpected, double tValExpected)
+        {
+            // Arrange
+            // We are not passing a segment like a line or ray but the part that compose the segment,
+            // t values [0 and 1] and start and end point.
+            Vector3 pt0 = new Vector3 { 5, 5, 0 };
+            Vector3 pt1 = new Vector3 { 10, 10, 0 };
+
+            // Act
+            (double tValue, Vector3 pt) closestPt = Trigonometry.ClosestPointToSegment(ptToCheck.ToVector(), pt0, pt1, 0, 1);
+
+            // Assert
+            closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharpMath.MAXTOLERANCE);
+            closestPt.pt.Should().BeEquivalentTo(ptExpected.ToVector());
         }
     }
 }
