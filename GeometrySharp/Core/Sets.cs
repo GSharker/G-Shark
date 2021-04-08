@@ -5,33 +5,37 @@ using System.Linq;
 namespace GeometrySharp.Core
 {
     /// <summary>
-    /// Provide utility function for sets creation.
-    /// Example range, linear subdivisions and boolean operations.
+    /// Provide utility functions to create sets.
+    /// Example: range, numerical linear subdivisions and boolean operations.
     /// </summary>
     public static class Sets
     {
-        // https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// <summary>
-        /// The range of a set of number, or the distance between the smallest value to the biggest in the collection.
+        /// The range dimension of a set of number, or the distance between the smallest value to the biggest in the collection.
+        /// https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// </summary>
         /// <param name="a">Set of numbers.</param>
-        /// <returns>The range.</returns>
-        public static double Dimension(IList<double> a)
+        /// <returns>The range dimension.</returns>
+        public static double RangeDimension(IList<double> a)
         {
-            var sortedSet = a.OrderBy(x => x);
+            IOrderedEnumerable<double> sortedSet = a.OrderBy(x => x);
             return sortedSet.Last() - sortedSet.First();
         }
 
         /// <summary>
         /// Create a range of numbers. 
         /// </summary>
-        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="domain">Numeric domain.</param>
         /// <param name="step">Number of steps</param>
         /// <returns>A range of numbers.</returns>
         public static IList<double> Range(Interval domain, int step)
         {
-            if (step <= 0) return new List<double>() { domain.Min, domain.Max };
-            var l = new List<double>();
+            if (step <= 0)
+            {
+                return new List<double>() { domain.Min, domain.Max };
+            }
+
+            List<double> l = new List<double>();
             double f = 0.0;
 
             while (f <= step)
@@ -46,15 +50,19 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Returns a list of evenly spaced numbers over a specified interval.
+        /// Computes a collection of evenly spaced numbers over a specified domain.
         /// </summary>
-        /// <param name="domain">Domain of numeric range.</param>
+        /// <param name="domain">Numeric domain.</param>
         /// <param name="step">Number of steps.</param>
-        /// <returns>A list of equally spaced numbers.</returns>
+        /// <returns>A collection of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.Min - domain.Max) <= GeoSharpMath.EPSILON) return new List<double>(){ domain.Min };
-            var linearSpace = new List<double>();
+            if(Math.Abs(domain.Min - domain.Max) <= GeoSharpMath.EPSILON)
+            {
+                return new List<double>(){ domain.Min };
+            }
+
+            List<double> linearSpace = new List<double>();
 
             if (step <= 1)
             {
@@ -62,22 +70,29 @@ namespace GeometrySharp.Core
                 return linearSpace;
             }
 
-            var div = step - 1;
-            var delta = domain.Max - domain.Min;
+            int div = step - 1;
+            double delta = domain.Max - domain.Min;
             for (int i = 0; i < step; i++)
+            {
                 linearSpace.Add(domain.Min + (i * delta / div));
+            }
+
             return linearSpace;
         }
 
         /// <summary>
-        /// Create a range of positive numbers, incrementing of one step and starting from 0.
+        /// Creates a range of positive numbers, incrementing of one step and starting from 0.
         /// </summary>
         /// <param name="maxValue">The dimension of the range.</param>
-        /// <returns>A range of numbers.</returns>
+        /// <returns>A range of positive numbers.</returns>
         public static IList<double> Range(int maxValue)
         {
-            if (maxValue <= 0) throw new Exception("Max value range can not be negative or zero.");
-            var l = new List<double>();
+            if (maxValue <= 0)
+            {
+                throw new Exception("Max value range can not be negative or zero.");
+            }
+
+            List<double> l = new List<double>();
             double f = 0.0;
 
             while (f <= maxValue)
@@ -90,16 +105,20 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create a series of numbers. 
+        /// Creates a series of numbers. 
         /// </summary>
-        /// <param name="domain">First number in the series.</param>
+        /// <param name="start">First number in the series.</param>
         /// <param name="step">Step size for each successive number.</param>
         /// <param name="count">Number of values in the series.</param>
         /// <returns>Series of numbers.</returns>
         public static IList<double> Span(double start, double step, int count)
         {
-            if (count <= 0) throw new Exception("Count can not be negative or zero.");
-            var l = new List<double>();
+            if (count <= 0)
+            {
+                throw new Exception("Count can not be negative or zero.");
+            }
+
+            List<double> l = new List<double>();
             double counter = 0.0;
             double number1 = start;
 
@@ -113,7 +132,6 @@ namespace GeometrySharp.Core
             return l;
         }
 
-        // Note the original doesn't provide a set union, we have to keep an eye on this method.
         /// <summary>
         /// The set union of two sequences of numbers.
         /// </summary>
@@ -122,34 +140,49 @@ namespace GeometrySharp.Core
         /// <returns>The set union.</returns>
         public static List<double> SetUnion(IList<double> a, IList<double> b)
         {
-            if (a.Count == 0) return b.ToList();
+            if (a.Count == 0)
+            {
+                return b.ToList();
+            }
+
             return b.Count == 0 ? a.ToList() : a.Union(b).ToList();
         }
 
         /// <summary>
         /// The set difference from two sequences of numbers.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">First set.</param>
+        /// <param name="b">Second set.</param>
+        /// <returns>The set difference.</returns>
         public static List<double> SetDifference(IList<double> a, IList<double> b)
         {
-            if(a.Count == 0) throw new Exception("Set difference can't be computed, the first set is empty.");
+            if(a.Count == 0)
+            {
+                throw new Exception("Set difference can't be computed, the first set is empty.");
+            }
+
             return a.Except(b).ToList();
         }
 
         /// <summary>
-        /// Repeat data until it reaches the defined length.
+        /// Repeats data until it reaches the defined length.
         /// </summary>
         /// <param name="data">Data to repeat.</param>
         /// <param name="length">Length of the final set.</param>
         /// <returns>Set of repeated data.</returns>
         public static List<T> RepeatData<T>(T data, int length)
         {
-            if (length < 0) throw new Exception("Length can not be negative.");
+            if (length < 0)
+            {
+                throw new Exception("Length can not be negative.");
+            }
+
             List<T> list = new List<T>();
             for (int i = 0; i < length; i++)
+            {
                 list.Add(data);
+            }
+
             return list;
         }
     }

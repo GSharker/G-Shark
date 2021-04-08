@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using System;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -47,11 +47,13 @@ namespace GeometrySharp.Test.XUnit.Core
         [MemberData(nameof(RangesToBeDefined))]
         public void It_Returns_A_Range_Of_Numbers(Interval interval, int step)
         {
-            var range = Sets.Range(interval, step);
+            // Arrange
+            IList<double> range = Sets.Range(interval, step);
 
-            var st = string.Join(',', range);
-            _testOutput.WriteLine(st);
+            // Act
+            string st = string.Join(',', range);
 
+            // Assert
             range.Should().NotBeNull();
             range.Should().BeEquivalentTo(new List<double>(range));
         }
@@ -60,11 +62,13 @@ namespace GeometrySharp.Test.XUnit.Core
         [MemberData(nameof(RangesToBeDefined))]
         public void It_Returns_A_List_Of_Equally_Space_Numbers(Interval interval, int step)
         {
-            var linearSpace = Sets.LinearSpace(interval, step);
+            // Arrange
+            IList<double> linearSpace = Sets.LinearSpace(interval, step);
 
-            var st = string.Join(',', linearSpace);
-            _testOutput.WriteLine(st);
+            // Act
+            string st = string.Join(',', linearSpace);
 
+            // Assert
             linearSpace.Should().NotBeNull();
             linearSpace.Should().BeEquivalentTo(new List<double>(linearSpace));
         }
@@ -72,11 +76,13 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Range_Of_Positive_Number_Stepping_Of_One()
         {
-            var range = Sets.Range(12);
+            // Arrange
+            IList<double> range = Sets.Range(12);
 
-            var st = string.Join(',', range);
-            _testOutput.WriteLine(st);
+            // Act
+            string st = string.Join(',', range);
 
+            // Assert
             range.Should().NotBeNull();
             range.Should().BeEquivalentTo(new List<double>(range));
 
@@ -87,7 +93,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(-5)]
         public void Range_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero(int maxValue)
         {
+            // Act
             Func<object> resultFunction = () => Sets.Range(maxValue);
+            
+            // Assert
             resultFunction.Should().Throw<Exception>().WithMessage("Max value range can not be negative or zero.");
         }
 
@@ -97,11 +106,13 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(0, 1, 10)]
         public void It_Returns_A_Series_Of_Numbers_With_A_Define_Count_And_Step(double start, double step, int count)
         {
-            var series = Sets.Span(start, step, count);
+            // Arrange
+            IList<double> series = Sets.Span(start, step, count);
 
-            var st = string.Join(',', series);
-            _testOutput.WriteLine(st);
+            // Act
+            string st = string.Join(',', series);
 
+            // Assert
             series.Should().NotBeNull();
             series.Should().BeEquivalentTo(new List<double>(series));
         }
@@ -111,7 +122,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(0, 10, -1)]
         public void Series_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero(double start, double step, int count)
         {
+            // Act
             Func<object> resultFunction = () => Sets.Span(start, step, count);
+
+            // Assert
             resultFunction.Should().Throw<Exception>().WithMessage("Count can not be negative or zero.");
         }
 
@@ -119,18 +133,17 @@ namespace GeometrySharp.Test.XUnit.Core
         [MemberData(nameof(SetOfNumbersAndTheSetDimension))]
         public void It_Returns_The_Dimensions_Of_A_Set_Of_Numbers(IList<double> set, double expectedRange)
         {
-            Sets.Dimension(set).Should().Be(expectedRange);
+            Sets.RangeDimension(set).Should().Be(expectedRange);
         }
 
         [Theory]
         [MemberData(nameof(DataToRepeat))]
         public void It_Returns_A_Set_Of_Repeated_Data_Of_A_Specific_Length(object data, int length)
         {
-            var repeatedData = Sets.RepeatData(data, length);
+            // Act 
+            List<object> repeatedData = Sets.RepeatData(data, length);
 
-            var resultConcat = string.Join(",", repeatedData);
-            _testOutput.WriteLine(resultConcat);
-
+            // Assert
             repeatedData.Should().HaveCount(length);
             repeatedData.Should().BeEquivalentTo(new List<object>(repeatedData));
         }
@@ -138,7 +151,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [Fact]
         public void RepeatData_Throws_An_Exception_If_The_Value_Is_Negative_Or_Zero()
         {
+            // Act 
             Func<object> resultFunction = () => Sets.RepeatData(5, -1);
+
+            // Assert
             resultFunction.Should().Throw<Exception>().WithMessage("Length can not be negative.");
         }
 
@@ -148,10 +164,10 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { }, new double[] { 3, 5, 7, 9, 11 })]
         public void It_Returns_A_SetUnion_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
-            var setSub = Sets.SetUnion(set1, set2);
-            var resultConcat = string.Join(",", setSub);
-            _testOutput.WriteLine(resultConcat);
+            // Act
+            List<double> setSub = Sets.SetUnion(set1, set2);
 
+            // Assert
             setExpected.Should().BeEquivalentTo(setExpected);
         }
 
@@ -160,21 +176,24 @@ namespace GeometrySharp.Test.XUnit.Core
         [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] {}, new double[] { 3, 5, 7, 9, 11 })]
         public void It_Returns_A_SetDifference_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
-            var setSub = Sets.SetDifference(set1, set2);
-            var resultConcat = string.Join(",", setSub);
-            _testOutput.WriteLine(resultConcat);
+            // Act
+            List<double> setSub = Sets.SetDifference(set1, set2);
 
+            // Assert
             setExpected.Should().BeEquivalentTo(setExpected);
         }
 
         [Fact]
         public void SetDifference_Throws_An_Exception_If_The_First_Collection_Is_Empty()
         {
-            var set1 = new List<double>();
-            var set2 = new List<double>() { 3, 5, 7, 9, 11 };
+            // Arrange
+            List<double> set1 = new List<double>();
+            List<double> set2 = new List<double> { 3, 5, 7, 9, 11 };
 
+            // Act
             Func<object> resultFunction = () => Sets.SetDifference(set1, set2);
 
+            // Assert
             resultFunction.Should().Throw<Exception>("Set difference can't be computed, the first set is empty.");
         }
     }
