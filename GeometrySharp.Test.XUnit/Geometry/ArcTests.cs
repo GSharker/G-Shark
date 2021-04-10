@@ -27,12 +27,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
             }
         }
 
-            [Fact]
+        [Fact]
         public void Initializes_An_Arc()
         {
+            // Arrange
             double angle = GeoSharpMath.ToRadians(40);
             Arc arc = new Arc(Plane.PlaneXY, 15, angle);
 
+            // Assert
             arc.Should().NotBeNull();
             arc.Length.Should().BeApproximately(10.471976, GeoSharpMath.MAXTOLERANCE);
             arc.Center.Should().BeEquivalentTo(Plane.PlaneXY.Origin);
@@ -43,8 +45,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void Initializes_An_Arc_By_Three_Points()
         {
+            // Act
             Arc arc = ExampleArc3D;
 
+            // Arrange
             arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAXTOLERANCE);
             arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAXTOLERANCE);
             GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAXTOLERANCE);
@@ -53,13 +57,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
+            // Arrange
             double angle = GeoSharpMath.ToRadians(40);
             Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
             Arc arc3D = ExampleArc3D;
 
+            // Act
             BoundingBox bBox2D = arc2D.BoundingBox;
             BoundingBox bBox3D = arc3D.BoundingBox;
 
+            // Assert
             bBox2D.Min.IsEqualRoundingDecimal(new Vector3 {11.490667, 0, 0}, 6).Should().BeTrue();
             bBox2D.Max.IsEqualRoundingDecimal(new Vector3 { 15, 9.641814, 0 }, 6).Should().BeTrue();
 

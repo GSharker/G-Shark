@@ -1,8 +1,8 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Operation;
 
 namespace GeometrySharp.Geometry
 {
@@ -22,11 +22,16 @@ namespace GeometrySharp.Geometry
         /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
-            // ToDo: If interval isDecreasing interval 0 to -40 -> 360-40 to 0 use angular diff.
-            // ToDo: If angle length > 2.0*Pi use angular diff. 
+            if (angleDomain.Max < angleDomain.Min)
+            {
+                throw new Exception("Angle domain must never be decreasing.");
+            }
+
             Plane = plane;
             Radius = radius;
-            AngleDomain = angleDomain;
+            AngleDomain = (angleDomain.Length > Math.PI * 2.0)
+                ? new Interval(AngularDiff(angleDomain.Min, Math.PI * 2.0), AngularDiff(angleDomain.Max, Math.PI * 2.0))
+                : angleDomain;
         }
 
         /// <summary>
@@ -138,9 +143,15 @@ namespace GeometrySharp.Geometry
         {
             double dif = theta2 - theta1;
             while (dif >= 2 * Math.PI)
+            {
                 dif -= 2 * Math.PI;
+            }
+
             while (dif <= 0)
+            {
                 dif += 2 * Math.PI;
+            }
+
             return dif;
         }
 
@@ -171,7 +182,7 @@ namespace GeometrySharp.Geometry
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
-            return new Circle(this.Plane, this.Radius).TangentAt(tRemap, false);
+            return new Circle(Plane, Radius).TangentAt(tRemap, false);
         }
 
         /// <summary>
@@ -223,10 +234,10 @@ namespace GeometrySharp.Geometry
         /// <returns>A transformed arc.</returns>
         public Arc Transform(Transform transformation)
         {
-            Plane plane = this.Plane.Transform(transformation);
-            Interval angleDomain = new Interval(this.AngleDomain.Min, this.AngleDomain.Max);
+            Plane plane = Plane.Transform(transformation);
+            Interval angleDomain = new Interval(AngleDomain.Min, AngleDomain.Max);
 
-            return new Arc(plane, this.Radius, angleDomain);
+            return new Arc(plane, Radius, angleDomain);
         }
 
         /// <summary>
@@ -301,7 +312,11 @@ namespace GeometrySharp.Geometry
                 ctrPts[index + 1] = p1;
                 index += 2;
 
-                if (i >= numberOfArc) continue;
+                if (i >= numberOfArc)
+                {
+                    continue;
+                }
+
                 p0 = p2;
                 t0 = t2;
             }
@@ -340,9 +355,9 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the arc are equal, otherwise false.</returns>
         public bool Equals(Arc other)
         {
-            return Math.Abs(this.Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
-                   Math.Abs(this.Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
-                   this.Plane == other.Plane;
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
+                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
+                   Plane == other.Plane;
         }
 
         /// <summary>
@@ -351,7 +366,7 @@ namespace GeometrySharp.Geometry
         /// <returns>A unique hashCode of an arc.</returns>
         public override int GetHashCode()
         {
-            return this.Radius.GetHashCode() ^ this.Angle.GetHashCode() ^ this.Plane.GetHashCode();
+            return Radius.GetHashCode() ^ Angle.GetHashCode() ^ Plane.GetHashCode();
         }
 
         /// <summary>
