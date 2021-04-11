@@ -36,30 +36,13 @@ namespace GeometrySharp.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Circle(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
-            if(LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
-                throw new Exception("Points must not be collinear.");
-
-            Vector3 v1 = pt2 - pt1;
-            Vector3 v2 = pt3 - pt1;
-
-            double v1v1 = Vector3.Dot(v1, v1);
-            double v2v2 = Vector3.Dot(v2, v2);
-            double v1v2 = Vector3.Dot(v1, v2);
-
-            double a = 0.5 / (v1v1 * v2v2 - v1v2 * v1v2);
-            double k1 = a * v2v2 * (v1v1 - v1v2);
-            double k2 = a * v1v1 * (v2v2 - v1v2);
-
-            Vector3 center = pt1 + v1 * k1 + v2 * k2;
+            Vector3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3 xDir = pt1 - center;
-            Vector3 v3 = pt3 - center;
-            Vector3 v4 = Vector3.Cross(xDir, v3);
-            Vector3 yDir = Vector3.Cross(xDir, v4);
+            Vector3 yDir = Vector3.Cross(normal, xDir);
 
-            double radius = xDir.Length();
-
-            Plane = new Plane(center, pt1, center + yDir.Amplify(radius));
-            Radius = radius;
+            Plane = new Plane(center, xDir, yDir, normal);
+            Radius = xDir.Length();
         }
 
         /// <summary>
@@ -89,9 +72,9 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                double val1 = this.Radius * length(this.Plane.ZAxis[1], this.Plane.ZAxis[2]);
-                double val2 = this.Radius * length(this.Plane.ZAxis[2], this.Plane.ZAxis[0]);
-                double val3 = this.Radius * length(this.Plane.ZAxis[0], this.Plane.ZAxis[1]);
+                double val1 = this.Radius * Length(this.Plane.ZAxis[1], this.Plane.ZAxis[2]);
+                double val2 = this.Radius * Length(this.Plane.ZAxis[2], this.Plane.ZAxis[0]);
+                double val3 = this.Radius * Length(this.Plane.ZAxis[0], this.Plane.ZAxis[1]);
 
                 double minX = this.Plane.Origin[0] - val1;
                 double maxX = this.Plane.Origin[0] + val1;
@@ -107,7 +90,8 @@ namespace GeometrySharp.Geometry
             }
         }
 
-        private double length(double x, double y)
+        //ToDo: describe this better.
+        private double Length(double x, double y)
         {
             x = Math.Abs(x);
             y = Math.Abs(y);

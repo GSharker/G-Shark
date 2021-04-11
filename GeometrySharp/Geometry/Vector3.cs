@@ -239,7 +239,7 @@ namespace GeometrySharp.Geometry
         {
             if (isUnitize()) return this;
             var l = this.Length();
-            if (l <= Double.Epsilon)
+            if (l <= double.Epsilon)
                 throw new Exception("An invalid or zero length vector cannot be unitized.");
             return this * (1 / l);
         }
@@ -607,6 +607,52 @@ namespace GeometrySharp.Geometry
             tempVector[k] = 0.0;
 
             return tempVector.ToVector();
+        }
+
+        public Vector3 PerpendicularTo(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        {
+            Vector3 vec0 = pt3 - pt2;
+            Vector3 vec1 = pt1 - pt3;
+            Vector3 vec2 = pt2 - pt1;
+
+            Vector3 normal0 = Vector3.Cross(vec1, vec2);
+            if (normal0.Length() <= double.Epsilon)
+            {
+                return Vector3.Unset;
+            }
+            Vector3 normal1 = Vector3.Cross(vec2, vec0);
+            if (normal1.Length() <= double.Epsilon)
+            {
+                return Vector3.Unset;
+            }
+            Vector3 normal2 = Vector3.Cross(vec0, vec1);
+            if (normal2.Length() <= double.Epsilon)
+            {
+                return Vector3.Unset;
+            }
+
+            double s0 = 1.0 / vec0.Length();
+            double s1 = 1.0 / vec1.Length();
+            double s2 = 1.0 / vec2.Length();
+
+            // choose normal with smallest total error
+            double e0 = s0 * Math.Abs(Vector3.Dot(normal0, vec0)) + 
+                        s1 * Math.Abs(Vector3.Dot(normal0, vec1)) + 
+                        s2 * Math.Abs(Vector3.Dot(normal0, vec2));
+
+            double e1 = s0 * Math.Abs(Vector3.Dot(normal1, vec0)) + 
+                        s1 * Math.Abs(Vector3.Dot(normal1, vec1)) + 
+                        s2 * Math.Abs(Vector3.Dot(normal1, vec2));
+
+            double e2 = s0 * Math.Abs(Vector3.Dot(normal2, vec0)) + 
+                        s1 * Math.Abs(Vector3.Dot(normal2, vec1)) + 
+                        s2 * Math.Abs(Vector3.Dot(normal2, vec2));
+
+            if (e0 <= e1)
+            {
+                return e0 <= e2 ? normal0 : normal2;
+            }
+            return e1 <= e2 ? normal1 : normal2;
         }
 
         /// <summary>

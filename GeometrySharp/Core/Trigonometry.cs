@@ -98,5 +98,31 @@ namespace GeometrySharp.Core
                 return (tValue: tValueResult, pt: pointResult);
             }
         }
+
+        /// <summary>
+        /// Calculates the point at the equal distance from the three points, it can be also described as the center of a circle.
+        /// </summary>
+        /// <param name="pt1">First point.</param>
+        /// <param name="pt2">Second point.</param>
+        /// <param name="pt3">Third point.</param>
+        /// <returns>The point at the same distance from the three points.</returns>
+        public static Vector3 PointAtEqualDistanceFromThreePoints(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        {
+            if (LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
+                throw new Exception("Points must not be collinear.");
+
+            Vector3 v1 = pt2 - pt1;
+            Vector3 v2 = pt3 - pt1;
+
+            double v1V1 = Vector3.Dot(v1, v1);
+            double v2V2 = Vector3.Dot(v2, v2);
+            double v1V2 = Vector3.Dot(v1, v2);
+
+            double a = 0.5 / (v1V1 * v2V2 - v1V2 * v1V2);
+            double k1 = a * v2V2 * (v1V1 - v1V2);
+            double k2 = a * v1V1 * (v2V2 - v1V2);
+
+            return pt1 + v1 * k1 + v2 * k2;
+        }
     }
 }

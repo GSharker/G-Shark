@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
@@ -47,7 +46,6 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Initializes an arc from three points.
-        /// https://github.com/sergarrido/random/tree/master/circle3d
         /// </summary>
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
@@ -55,16 +53,15 @@ namespace GeometrySharp.Geometry
         public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
             Circle c = new Circle(pt1, pt2, pt3);
-            Plane p = c.Plane;
-            (double u, double v) = p.ClosestParameters(pt3);
-
+            (double u, double v) = c.Plane.ClosestParameters(pt3);
             double angle = Math.Atan2(v, u);
+
             if (angle < 0.0)
             {
-                angle += 2.0 * Math.PI;
+                angle += 2 * Math.PI;
             }
 
-            Plane = p;
+            Plane = c.Plane;
             Radius = c.Radius;
             AngleDomain = new Interval(0.0, angle);
         }
@@ -134,25 +131,25 @@ namespace GeometrySharp.Geometry
             }
         }
 
-        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        /// <summary>
+        /// Creates an arc defined by a start point, end point and a direction at the first point.
+        /// </summary>
+        /// <param name="ptStart">Start point arc.</param>
+        /// <param name="ptEnd">End point arc.</param>
+        /// <param name="dir">Tangent direction at start.</param>
+        /// <returns>An arc.</returns>
+        public static Arc ByStartEndDirection(Vector3 ptStart, Vector3 ptEnd, Vector3 dir)
         {
-            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
-        }
-
-        private double AngularDiff(double theta1, double theta2)
-        {
-            double dif = theta2 - theta1;
-            while (dif >= 2 * Math.PI)
+            Vector3 vec0 = dir.Unitize();
+            Vector3 vec1 = (ptEnd - ptStart).Unitize();
+            if (vec1.Length().Equals(0.0))
             {
-                dif -= 2 * Math.PI;
+                throw new Exception("Points must not be coincident.");
             }
 
-            while (dif <= 0)
-            {
-                dif += 2 * Math.PI;
-            }
-
-            return dif;
+            Vector3 vec2 = (vec0 + vec1).Unitize();
+            Vector3 vec3 = vec2 * ( 0.5 * ptStart.DistanceTo(ptEnd) / Vector3.Dot(vec2, vec0));
+            return new Arc(ptStart, ptStart + vec3, ptEnd);
         }
 
         /// <summary>
@@ -398,6 +395,28 @@ namespace GeometrySharp.Geometry
         public override string ToString()
         {
             return $"Arc(R:{Radius} - A:{GeoSharpMath.ToDegrees(Angle)})";
+        }
+
+
+        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        {
+            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
+        }
+
+        private double AngularDiff(double theta1, double theta2)
+        {
+            double dif = theta2 - theta1;
+            while (dif >= 2 * Math.PI)
+            {
+                dif -= 2 * Math.PI;
+            }
+
+            while (dif <= 0)
+            {
+                dif += 2 * Math.PI;
+            }
+
+            return dif;
         }
     }
 }
