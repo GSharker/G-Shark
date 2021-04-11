@@ -9,10 +9,8 @@ namespace GeometrySharp.Geometry
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
-    public class Arc : IEquatable<Arc>
+    public class Arc : Curve, IEquatable<Arc>, ITransformable<Arc>
     {
-        internal Interval AngleDomain;
-
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval.
         /// </summary>
@@ -88,6 +86,12 @@ namespace GeometrySharp.Geometry
         public double Angle => AngleDomain.Length;
 
         /// <summary>
+        /// Gets the angle domain of this arc.
+        /// The domain is in radians.
+        /// </summary>
+        public Interval AngleDomain { get; }
+
+        /// <summary>
         /// Calculates the length of the arc.
         /// </summary>
         public double Length => Math.Abs(Angle * Radius);
@@ -96,7 +100,7 @@ namespace GeometrySharp.Geometry
         /// Gets the BoundingBox of this arc.
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
-        public BoundingBox BoundingBox
+        public override BoundingBox BoundingBox
         {
             get
             {
@@ -136,7 +140,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="ptStart">Start point arc.</param>
         /// <param name="ptEnd">End point arc.</param>
-        /// <param name="dir">Tangent direction at start.</param>
+        /// <param name="dir">TangentAt direction at start.</param>
         /// <returns>An arc.</returns>
         public static Arc ByStartEndDirection(Vector3 ptStart, Vector3 ptEnd, Vector3 dir)
         {
@@ -158,9 +162,8 @@ namespace GeometrySharp.Geometry
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
         /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>Point on the arc.</returns>
-        public Vector3 PointAt(double t, bool parametrize = true)
+        public override Vector3 PointAt(double t, bool parametrize = true)
         {
-
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
             Vector3 xDir = Plane.XAxis * Math.Cos(tRemap) * Radius;
@@ -174,8 +177,8 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
         /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
-        /// <returns>Tangent at the t parameter.</returns>
-        public Vector3 TangentAt(double t, bool parametrize = true)
+        /// <returns>TangentAt at the t parameter.</returns>
+        public override Vector3 TangentAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
