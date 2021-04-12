@@ -52,8 +52,13 @@ namespace GeometrySharp.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
-            Circle c = new Circle(pt1, pt2, pt3);
-            (double u, double v) = c.Plane.ClosestParameters(pt3);
+            Vector3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
+            Vector3 xDir = pt1 - center;
+            Vector3 yDir = Vector3.Cross(normal, xDir);
+            Plane pl = new Plane(center, xDir, yDir, normal);
+
+            (double u, double v) = pl.ClosestParameters(pt3);
             double angle = Math.Atan2(v, u);
 
             if (angle < 0.0)
@@ -61,8 +66,8 @@ namespace GeometrySharp.Geometry
                 angle += 2 * Math.PI;
             }
 
-            Plane = c.Plane;
-            Radius = c.Radius;
+            Plane = pl;
+            Radius = xDir.Length();
             AngleDomain = new Interval(0.0, angle);
             ToNurbsCurve();
         }
@@ -363,6 +368,8 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the arc are equal, otherwise false.</returns>
         public bool Equals(Arc other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
                    Math.Abs(Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
                    Plane == other.Plane;
@@ -375,28 +382,6 @@ namespace GeometrySharp.Geometry
         public override int GetHashCode()
         {
             return Radius.GetHashCode() ^ Angle.GetHashCode() ^ Plane.GetHashCode();
-        }
-
-        /// <summary>
-        /// Determines whether two arcs have same values.
-        /// </summary>
-        /// <param name="a">The first arc.</param>
-        /// <param name="b">The second arc.</param>
-        /// <returns>True if all the value are equal, otherwise false.</returns>
-        public static bool operator ==(Arc a, Arc b)
-        {
-            return Equals(a, b);
-        }
-
-        /// <summary>
-        /// Determines whether two arcs have different values.
-        /// </summary>
-        /// <param name="a">The first arc.</param>
-        /// <param name="b">The second arc.</param>
-        /// <returns>True if all the value are different, otherwise false.</returns>
-        public static bool operator !=(Arc a, Arc b)
-        {
-            return !Equals(a, b);
         }
 
         /// <summary>

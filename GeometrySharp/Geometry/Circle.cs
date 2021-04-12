@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
-    public class Circle : Curve, ITransformable<Circle>
+    public class Circle : Curve, IEquatable<Circle>, ITransformable<Circle>
     {
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
@@ -74,9 +74,9 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                double val1 = Radius * Length(Plane.ZAxis[1], Plane.ZAxis[2]);
-                double val2 = Radius * Length(Plane.ZAxis[2], Plane.ZAxis[0]);
-                double val3 = Radius * Length(Plane.ZAxis[0], Plane.ZAxis[1]);
+                double val1 = Radius * SelectionLength(Plane.ZAxis[1], Plane.ZAxis[2]);
+                double val2 = Radius * SelectionLength(Plane.ZAxis[2], Plane.ZAxis[0]);
+                double val3 = Radius * SelectionLength(Plane.ZAxis[0], Plane.ZAxis[1]);
 
                 double minX = Plane.Origin[0] - val1;
                 double maxX = Plane.Origin[0] + val1;
@@ -92,8 +92,7 @@ namespace GeometrySharp.Geometry
             }
         }
 
-        //ToDo: describe this better.
-        private double Length(double x, double y)
+        private double SelectionLength(double x, double y)
         {
             x = Math.Abs(x);
             y = Math.Abs(y);
@@ -213,6 +212,37 @@ namespace GeometrySharp.Geometry
             Degree = 2;
             Knots = knots;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
+        }
+
+        /// <summary>
+        /// Determines whether the circle is equal to another circle.
+        /// The circles are equal if have the same plane and radius.
+        /// </summary>
+        /// <param name="other">The circle to compare to.</param>
+        /// <returns>True if the circle are equal, otherwise false.</returns>
+        public bool Equals(Circle other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE && Plane == other.Plane;
+        }
+
+        /// <summary>
+        /// Computes a hash code for the circle.
+        /// </summary>
+        /// <returns>A unique hashCode of an circle.</returns>
+        public override int GetHashCode()
+        {
+            return Radius.GetHashCode() ^ Plane.GetHashCode();
+        }
+
+        /// <summary>
+        /// Gets the text representation of an circle.
+        /// </summary>
+        /// <returns>Text value.</returns>
+        public override string ToString()
+        {
+            return $"Circle(R:{Radius})";
         }
     }
 }
