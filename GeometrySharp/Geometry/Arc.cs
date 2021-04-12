@@ -3,6 +3,7 @@ using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {

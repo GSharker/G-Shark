@@ -1,6 +1,6 @@
 ﻿using GeometrySharp.Core;
 
-namespace GeometrySharp.Geometry
+namespace GeometrySharp.Geometry.Interfaces
 {
     public interface ITransformable<T>
     {

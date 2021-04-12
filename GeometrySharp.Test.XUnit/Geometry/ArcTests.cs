@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 

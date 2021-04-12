@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GeometrySharp.Core;
 
-namespace GeometrySharp.Geometry
+namespace GeometrySharp.Geometry.Interfaces
 {
     public abstract class Curve
     {
