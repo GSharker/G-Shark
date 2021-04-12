@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,12 +28,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
             }
         }
 
-            [Fact]
+        [Fact]
         public void Initializes_An_Arc()
         {
+            // Arrange
             double angle = GeoSharpMath.ToRadians(40);
             Arc arc = new Arc(Plane.PlaneXY, 15, angle);
 
+            // Assert
             arc.Should().NotBeNull();
             arc.Length.Should().BeApproximately(10.471976, GeoSharpMath.MAXTOLERANCE);
             arc.Center.Should().BeEquivalentTo(Plane.PlaneXY.Origin);
@@ -43,8 +46,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void Initializes_An_Arc_By_Three_Points()
         {
+            // Act
             Arc arc = ExampleArc3D;
 
+            // Arrange
             arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAXTOLERANCE);
             arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAXTOLERANCE);
             GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAXTOLERANCE);
@@ -53,13 +58,16 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
+            // Arrange
             double angle = GeoSharpMath.ToRadians(40);
             Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
             Arc arc3D = ExampleArc3D;
 
+            // Act
             BoundingBox bBox2D = arc2D.BoundingBox;
             BoundingBox bBox3D = arc3D.BoundingBox;
 
+            // Assert
             bBox2D.Min.IsEqualRoundingDecimal(new Vector3 {11.490667, 0, 0}, 6).Should().BeTrue();
             bBox2D.Max.IsEqualRoundingDecimal(new Vector3 { 15, 9.641814, 0 }, 6).Should().BeTrue();
 
@@ -70,11 +78,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter()
         {
+            // Arrange
             Vector3 expectedPt = new Vector3 {69.81863, 29.435661, -0.021966};
-
             Arc arc = ExampleArc3D;
+
+            // Act
             Vector3 pt = arc.PointAt(0.12);
 
+            // Assert
             pt.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
         }
 
@@ -83,26 +94,31 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 74.264416, 36.39316, -1.884313 })]
         public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
         {
+            // Arrange
             Vector3 testPt = new Vector3(ptToTest);
             Vector3 expectedPt = new Vector3(result);
-
             Arc arc = ExampleArc3D;
+
+            // Act
             Vector3 pt = arc.ClosestPt(testPt);
 
-            _testOutput.WriteLine(pt.ToString());
+            // Assert
             pt.IsEqualRoundingDecimal(expectedPt, 5).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Transformed_Arc()
         {
+            // Arrange
             Arc arc = ExampleArc3D;
             Vector3 expectedStartPt = new Vector3 { 16.47719, 0, 0 };
             Vector3 expectedEndPt = new Vector3 { -6.160353, -15.282272, 0 };
             Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
 
+            // Act
             Arc arcTransformed = arc.Transform(transform);
 
+            // Assert
             arcTransformed.PointAt(0.0).IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
             arcTransformed.PointAt(1.0).IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
         }
@@ -112,52 +128,58 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(0.1, new double[] { -0.370785, -0.897553, 0.238573 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] expectedPt)
         {
+            // Assert
             Vector3 checkTangent = new Vector3(expectedPt);
             Arc arc = ExampleArc3D;
 
+            // Act
             Vector3 tangent = arc.TangentAt(t);
 
+            // Arrange
             tangent.IsEqualRoundingDecimal(checkTangent, 4).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Representation_Of_The_Arc_From_0_To_90_Deg()
+        public void It_Is_A_Curve_Representation_Of_The_Arc_From_0_To_90_Deg()
         {
-            Arc arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
+            // Arrange
             double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
             Vector3[] ptChecks = new[] {
                 new Vector3 { 0, 20, 0 },
                 new Vector3 { 0, 20, 9.661101312331581 },
                 new Vector3 { 0, 12.432199365413288, 15.666538192549668 },
                 new Vector3 { 0, 4.864398730826554, 21.671975072767786 },
-                new Vector3 { 0, -4.544041893861742, 19.476952617563903 }};
+                new Vector3 { 0, -4.544041893861742, 19.476952617563903 }
+            };
 
-            NurbsCurve curve = arc.ToNurbsCurve();
+            // Act
+            Curve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
 
-            curve.ControlPoints.Count.Should().Be(5);
-            curve.Degree.Should().Be(2);
+            // Assert
+            arc.ControlPoints.Count.Should().Be(5);
+            arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                curve.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                curve.Weights[i].Should().Be(weightChecks[i]);
+                arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
-                    curve.Knots[i].Should().Be(0);
-                    curve.Knots[i + 5].Should().Be(1);
+                    arc.Knots[i].Should().Be(0);
+                    arc.Knots[i + 5].Should().Be(1);
                 }
                 else
                 {
-                    curve.Knots[i].Should().Be(0.5);
+                    arc.Knots[i].Should().Be(0.5);
                 }
             }
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Representation_Of_ExampleArc3D()
+        public void It_Is_A_Curve_Representation_Of_ExampleArc3D()
         {
-            Arc arc = ExampleArc3D;
+            // Arrange
             double[] weightChecks = new[] { 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0 };
             Vector3[] ptChecks = new[] {
                 new Vector3 { 74.264416, 36.39316, -1.8843129999999997 },
@@ -169,30 +191,52 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 new Vector3 { 100.92443, 30.599893, -0.5851159999999997 }
             };
 
-            NurbsCurve curve = arc.ToNurbsCurve();
+            // Act
+            Curve arc = ExampleArc3D;
 
-            curve.ControlPoints.Count.Should().Be(7);
-            curve.Degree.Should().Be(2);
+            // Assert
+            arc.ControlPoints.Count.Should().Be(7);
+            arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                curve.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                curve.Weights[i].Should().Be(weightChecks[i]);
+                arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
-                    curve.Knots[i].Should().Be(0);
-                    curve.Knots[i + 7].Should().Be(1);
+                    arc.Knots[i].Should().Be(0);
+                    arc.Knots[i + 7].Should().Be(1);
                 }
                 else if(i<5)
                 {
-                    curve.Knots[i].Should().Be(0.3333333333333333);
+                    arc.Knots[i].Should().Be(0.3333333333333333);
                 }
                 else
                 {
-                    curve.Knots[i].Should().Be(0.6666666666666666);
+                    arc.Knots[i].Should().Be(0.6666666666666666);
                 }
             }
+        }
+
+        [Fact]
+        public void It_Returns_A_Arc_Based_On_A_Start_And_An_End_Point_And_A_Direction()
+        {
+            // Arrange
+            Vector3 startPt = new Vector3 {5, 5, 5};
+            Vector3 endPt = new Vector3 { 10, 15, 10 };
+            Vector3 dir = new Vector3 { 3, 3, 0 };
+            double radiusExpected = 12.247449;
+            double angleExpected = GeoSharpMath.ToRadians(60);
+            Vector3 centerExpected = new Vector3 { 0, 10, 15 };
+
+            // Act
+            Arc arc = Arc.ByStartEndDirection(startPt, endPt, dir);
+
+            // Assert
+            arc.Angle.Should().BeApproximately(angleExpected, 1e-6);
+            arc.Radius.Should().BeApproximately(radiusExpected, 1e-6);
+            arc.Plane.Origin.IsEqualRoundingDecimal(centerExpected, 6).Should().BeTrue();
         }
     }
 }

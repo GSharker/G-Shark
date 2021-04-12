@@ -134,7 +134,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
         /// ToDo implement the async method.
-        public Vector3 Tangent(double t) => Evaluation.RationalCurveTanget(this, t);
+        public Vector3 TangentAt(double t) => Evaluation.RationalCurveTanget(this, t);
 
         /// <summary>
         /// Determine the arc length of the curve.

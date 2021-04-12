@@ -27,23 +27,68 @@ namespace GeometrySharp.Test.XUnit.Geometry
             }
         }
 
+        public static Circle Circle3D
+        {
+            get
+            {
+                Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
+                Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
+                Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+
+                return new Circle(pt1, pt2, pt3);
+            }
+        }
+
         [Fact]
         public void Initializes_A_Circle_By_A_Radius()
         {
+            // Act
             Circle circle = new Circle(23);
 
+            // Assert
             circle.Should().NotBeNull();
             circle.Radius.Should().Be(23);
             circle.Center.Should().BeEquivalentTo(new Vector3 {0.0, 0.0, 0.0});
         }
 
         [Fact]
+        public void It_Returns_A_Circle3D_With_Its_Nurbs_Representation()
+        {
+            // Arrange
+            Circle circle = Circle3D;
+            Vector3[] ptsExpected = new []
+            {
+                new Vector3 {74.264416, 36.39316, -1.884313},
+                new Vector3 {62.298962, 25.460683, 1.083287},
+                new Vector3 {73.626287, 13.863582, 4.032316},
+                new Vector3 {84.953611, 2.266482, 6.981346},
+                new Vector3 {96.919065, 13.198959, 4.013746},
+                new Vector3 {108.884519, 24.131437, 1.046146},
+                new Vector3 {97.557194, 35.728537, -1.902883},
+                new Vector3 {86.22987, 47.325637, -4.851913},
+                new Vector3 {74.264416, 36.39316, -1.884313}
+            };
+
+            // Assert
+            System.Collections.Generic.List<Vector3> ctrPts = circle.ControlPoints;
+
+            ctrPts.Count.Should().Be(9);
+            for (int i = 0; i < ptsExpected.Length; i++)
+            {
+                ctrPts[i].IsEqualRoundingDecimal(ptsExpected[i], 6).Should().BeTrue();
+            }
+        }
+
+        [Fact]
         public void It_Returns_The_Circumference_Of_A_Plane()
         {
+            // Arrange
             Circle circle = BaseCircle;
 
+            // Act
             double circumference = circle.Circumference;
 
+            // Assert
             (circumference / Math.PI).Should().Be(46);
         }
 
@@ -52,11 +97,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(0.1, new double[] {62.982688, 28.922671, 0.169262})]
         public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] expectedPt)
         {
+            // Arrange
             Vector3 checkPt = new Vector3(expectedPt);
             Circle circle = BaseCircle;
 
+            // Act
             Vector3 pt = circle.PointAt(t);
 
+            // Assert
             pt.IsEqualRoundingDecimal(checkPt, 4).Should().BeTrue();
         }
 
@@ -65,23 +113,29 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(0.1, new double[] { -0.183418, -0.950475, 0.250907 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] expectedPt)
         {
+            // Arrange
             Vector3 checkTangent = new Vector3(expectedPt);
             Circle circle = BaseCircle;
 
+            // Act
             Vector3 tangent = circle.TangentAt(t);
 
+            // Assert
             tangent.IsEqualRoundingDecimal(checkTangent, 4).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_The_Bounding_Box_Of_The_Circle()
         {
+            // Arrange
             Circle circle = BaseCircle;
             Vector3 minCheck = new Vector3 { 62.592479, 2.549053, -4.7752 };
             Vector3 maxCheck = new Vector3 { 108.591003, 47.043067, 6.904634 };
 
+            // Act
             BoundingBox bBox = circle.BoundingBox;
 
+            // Assert
             bBox.Min.IsEqualRoundingDecimal(minCheck, 6).Should().BeTrue();
             bBox.Max.IsEqualRoundingDecimal(maxCheck, 6).Should().BeTrue();
         }
@@ -91,13 +145,15 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 69.780279, 40.984093, -3.051743 })]
         public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
         {
+            // Arrange
             Vector3 testPt = new Vector3(ptToTest);
             Vector3 expectedPt = new Vector3(result);
 
+            // Act
             Circle circle = BaseCircle;
             Vector3 pt = circle.ClosestPt(testPt);
 
-            _testOutput.WriteLine(pt.ToString());
+            // Assert
             pt.IsEqualRoundingDecimal(expectedPt, 4).Should().BeTrue();
         }
     }

@@ -1,19 +1,17 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Operation;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: ArcFromTangent
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
-    public class Arc : IEquatable<Arc>
+    public class Arc : Curve, IEquatable<Arc>, ITransformable<Arc>
     {
-        internal Interval AngleDomain;
-
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval.
         /// </summary>
@@ -22,11 +20,18 @@ namespace GeometrySharp.Geometry
         /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
-            // ToDo: If interval isDecreasing interval 0 to -40 -> 360-40 to 0 use angular diff.
-            // ToDo: If angle length > 2.0*Pi use angular diff. 
+            if (angleDomain.Max < angleDomain.Min)
+            {
+                throw new Exception("Angle domain must never be decreasing.");
+            }
+
             Plane = plane;
             Radius = radius;
-            AngleDomain = angleDomain;
+            AngleDomain = (angleDomain.Length > Math.PI * 2.0)
+                ? new Interval(AngularDiff(angleDomain.Min, Math.PI * 2.0), AngularDiff(angleDomain.Max, Math.PI * 2.0))
+                : angleDomain;
+
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -42,26 +47,30 @@ namespace GeometrySharp.Geometry
 
         /// <summary>
         /// Initializes an arc from three points.
-        /// https://github.com/sergarrido/random/tree/master/circle3d
         /// </summary>
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
         /// <param name="pt3">End point of the arc.</param>
         public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
-            Circle c = new Circle(pt1, pt2, pt3);
-            Plane p = c.Plane;
-            (double u, double v) = p.ClosestParameters(pt3);
+            Vector3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
+            Vector3 xDir = pt1 - center;
+            Vector3 yDir = Vector3.Cross(normal, xDir);
+            Plane pl = new Plane(center, xDir, yDir, normal);
 
+            (double u, double v) = pl.ClosestParameters(pt3);
             double angle = Math.Atan2(v, u);
+
             if (angle < 0.0)
             {
-                angle += 2.0 * Math.PI;
+                angle += 2 * Math.PI;
             }
 
-            Plane = p;
-            Radius = c.Radius;
+            Plane = pl;
+            Radius = xDir.Length();
             AngleDomain = new Interval(0.0, angle);
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -86,6 +95,12 @@ namespace GeometrySharp.Geometry
         public double Angle => AngleDomain.Length;
 
         /// <summary>
+        /// Gets the angle domain of this arc.
+        /// The domain is in radians.
+        /// </summary>
+        public Interval AngleDomain { get; }
+
+        /// <summary>
         /// Calculates the length of the arc.
         /// </summary>
         public double Length => Math.Abs(Angle * Radius);
@@ -94,7 +109,7 @@ namespace GeometrySharp.Geometry
         /// Gets the BoundingBox of this arc.
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
-        public BoundingBox BoundingBox
+        public override BoundingBox BoundingBox
         {
             get
             {
@@ -129,19 +144,25 @@ namespace GeometrySharp.Geometry
             }
         }
 
-        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        /// <summary>
+        /// Creates an arc defined by a start point, end point and a direction at the first point.
+        /// </summary>
+        /// <param name="ptStart">Start point arc.</param>
+        /// <param name="ptEnd">End point arc.</param>
+        /// <param name="dir">TangentAt direction at start.</param>
+        /// <returns>An arc.</returns>
+        public static Arc ByStartEndDirection(Vector3 ptStart, Vector3 ptEnd, Vector3 dir)
         {
-            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
-        }
+            Vector3 vec0 = dir.Unitize();
+            Vector3 vec1 = (ptEnd - ptStart).Unitize();
+            if (vec1.Length().Equals(0.0))
+            {
+                throw new Exception("Points must not be coincident.");
+            }
 
-        private double AngularDiff(double theta1, double theta2)
-        {
-            double dif = theta2 - theta1;
-            while (dif >= 2 * Math.PI)
-                dif -= 2 * Math.PI;
-            while (dif <= 0)
-                dif += 2 * Math.PI;
-            return dif;
+            Vector3 vec2 = (vec0 + vec1).Unitize();
+            Vector3 vec3 = vec2 * ( 0.5 * ptStart.DistanceTo(ptEnd) / Vector3.Dot(vec2, vec0));
+            return new Arc(ptStart, ptStart + vec3, ptEnd);
         }
 
         /// <summary>
@@ -150,9 +171,8 @@ namespace GeometrySharp.Geometry
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
         /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>Point on the arc.</returns>
-        public Vector3 PointAt(double t, bool parametrize = true)
+        public override Vector3 PointAt(double t, bool parametrize = true)
         {
-
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
             Vector3 xDir = Plane.XAxis * Math.Cos(tRemap) * Radius;
@@ -166,12 +186,17 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
         /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
-        /// <returns>Tangent at the t parameter.</returns>
-        public Vector3 TangentAt(double t, bool parametrize = true)
+        /// <returns>TangentAt at the t parameter.</returns>
+        public override Vector3 TangentAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
-            return new Circle(this.Plane, this.Radius).TangentAt(tRemap, false);
+            double r1 = Radius * (-Math.Sin(tRemap));
+            double r2 = Radius * (Math.Cos(tRemap));
+
+            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
+
+            return vector.Unitize();
         }
 
         /// <summary>
@@ -179,7 +204,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The test point. Point to get close to.</param>
         /// <returns>The point on the arc that is close to the test point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public override Vector3 ClosestPt(Vector3 pt)
         {
             double twoPi = 2.0 * Math.PI;
 
@@ -223,10 +248,10 @@ namespace GeometrySharp.Geometry
         /// <returns>A transformed arc.</returns>
         public Arc Transform(Transform transformation)
         {
-            Plane plane = this.Plane.Transform(transformation);
-            Interval angleDomain = new Interval(this.AngleDomain.Min, this.AngleDomain.Max);
+            Plane plane = Plane.Transform(transformation);
+            Interval angleDomain = new Interval(AngleDomain.Min, AngleDomain.Max);
 
-            return new Arc(plane, this.Radius, angleDomain);
+            return new Arc(plane, Radius, angleDomain);
         }
 
         /// <summary>
@@ -234,31 +259,29 @@ namespace GeometrySharp.Geometry
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this arc.</returns>
-        public NurbsCurve ToNurbsCurve()
+        private void ToNurbsCurve()
         {
-            double radius = Radius;
             Vector3 axisX = Plane.XAxis;
             Vector3 axisY = Plane.YAxis;
-            double theta = Angle;
             int numberOfArc;
             Vector3[] ctrPts;
             double[] weights;
 
             // Number of arcs.
             double piNum = 0.5 * Math.PI;
-            if (theta <= piNum)
+            if (Angle <= piNum)
             {
                 numberOfArc = 1;
                 ctrPts = new Vector3[3];
                 weights = new double[3];
             }
-            else if (theta <= piNum * 2)
+            else if (Angle <= piNum * 2)
             {
                 numberOfArc = 2;
                 ctrPts = new Vector3[5];
                 weights = new double[5];
             }
-            else if (theta <= piNum * 3)
+            else if (Angle <= piNum * 3)
             {
                 numberOfArc = 3;
                 ctrPts = new Vector3[7];
@@ -271,9 +294,9 @@ namespace GeometrySharp.Geometry
                 weights = new double[9];
             }
 
-            double detTheta = theta / numberOfArc;
+            double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (radius * Math.Cos(AngleDomain.Min)) + axisY * (radius * Math.Sin(AngleDomain.Min)));
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(AngleDomain.Min)) + axisY * (Radius * Math.Sin(AngleDomain.Min)));
             Vector3 t0 = axisY * Math.Cos(AngleDomain.Min) - axisX * Math.Sin(AngleDomain.Min);
 
             Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
@@ -286,7 +309,7 @@ namespace GeometrySharp.Geometry
             for (int i = 1; i < numberOfArc + 1; i++)
             {
                 angle += detTheta;
-                Vector3 p2 = Center + (axisX * (radius * Math.Cos(angle)) + axisY * (radius * Math.Sin(angle)));
+                Vector3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
                 
                 weights[index + 2] = 1;
                 ctrPts[index + 2] = p2;
@@ -301,7 +324,11 @@ namespace GeometrySharp.Geometry
                 ctrPts[index + 1] = p1;
                 index += 2;
 
-                if (i >= numberOfArc) continue;
+                if (i >= numberOfArc)
+                {
+                    continue;
+                }
+
                 p0 = p2;
                 t0 = t2;
             }
@@ -329,7 +356,9 @@ namespace GeometrySharp.Geometry
                     break;
             }
 
-            return new NurbsCurve(2, knots, ctrPts.ToList(), weights.ToList());
+            Degree = 2;
+            Knots = knots;
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>
@@ -340,9 +369,11 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the arc are equal, otherwise false.</returns>
         public bool Equals(Arc other)
         {
-            return Math.Abs(this.Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
-                   Math.Abs(this.Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
-                   this.Plane == other.Plane;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
+                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
+                   Plane == other.Plane;
         }
 
         /// <summary>
@@ -351,29 +382,7 @@ namespace GeometrySharp.Geometry
         /// <returns>A unique hashCode of an arc.</returns>
         public override int GetHashCode()
         {
-            return this.Radius.GetHashCode() ^ this.Angle.GetHashCode() ^ this.Plane.GetHashCode();
-        }
-
-        /// <summary>
-        /// Determines whether two arcs have same values.
-        /// </summary>
-        /// <param name="a">The first arc.</param>
-        /// <param name="b">The second arc.</param>
-        /// <returns>True if all the value are equal, otherwise false.</returns>
-        public static bool operator ==(Arc a, Arc b)
-        {
-            return Equals(a, b);
-        }
-
-        /// <summary>
-        /// Determines whether two arcs have different values.
-        /// </summary>
-        /// <param name="a">The first arc.</param>
-        /// <param name="b">The second arc.</param>
-        /// <returns>True if all the value are different, otherwise false.</returns>
-        public static bool operator !=(Arc a, Arc b)
-        {
-            return !Equals(a, b);
+            return Radius.GetHashCode() ^ Angle.GetHashCode() ^ Plane.GetHashCode();
         }
 
         /// <summary>
@@ -383,6 +392,28 @@ namespace GeometrySharp.Geometry
         public override string ToString()
         {
             return $"Arc(R:{Radius} - A:{GeoSharpMath.ToDegrees(Angle)})";
+        }
+
+
+        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        {
+            return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
+        }
+
+        private double AngularDiff(double theta1, double theta2)
+        {
+            double dif = theta2 - theta1;
+            while (dif >= 2 * Math.PI)
+            {
+                dif -= 2 * Math.PI;
+            }
+
+            while (dif <= 0)
+            {
+                dif += 2 * Math.PI;
+            }
+
+            return dif;
         }
     }
 }

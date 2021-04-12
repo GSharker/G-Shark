@@ -17,10 +17,10 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// A new identity transformation matrix. An identity matrix defines no transformation.
+        /// Gets a identity transformation matrix. An identity matrix defines no transformation.
         /// The diagonal is (1,1,1,1)
         /// </summary>
-        /// <returns>Gets the identity transformation matrix.</returns>
+        /// <returns>The identity transformation matrix.</returns>
         public static Transform Identity()
         {
             Transform transform = new Transform
@@ -34,7 +34,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Construct a new translation transformation.
+        /// Constructs a new translation transformation.
         /// </summary>
         /// <param name="v">Translation vector.</param>
         /// <returns>A transformation matrix which moves the geometry along the vector.</returns>
@@ -44,7 +44,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Construct a new translation transformation.
+        /// Constructs a new translation transformation.
         /// </summary>
         /// <param name="x">Transform the x value.</param>
         /// <param name="y">Transform the y value.</param>
@@ -91,7 +91,7 @@ namespace GeometrySharp.Core
         /// <param name="axis">Axis direction.</param>
         /// <param name="origin">Rotation center.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        internal static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Vector3 origin)
+        private static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Vector3 origin)
         {
             double sAngle = sinAngle;
             double cAngle = cosAngle;
@@ -127,7 +127,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create a uniform scale transformation matrix with the origin as the fixed point.
+        /// Creates a uniform scale transformation matrix with the origin as the fixed point.
         /// </summary>
         /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="scaleFactor">Scale factor.</param>
@@ -138,7 +138,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create non uniform scale transformation matrix with the origin as the fixed point.
+        /// Creates non uniform scale transformation matrix with the origin as the fixed point.
         /// </summary>
         /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="factorX">Scale factor x direction.</param>
@@ -162,7 +162,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create non uniform scale transformation matrix with the anchor point in the origin.
+        /// Creates non uniform scale transformation matrix with the anchor point in the origin.
         /// </summary>
         /// <param name="factorX">Scale factor x direction.</param>
         /// <param name="factorY">Scale factor y direction.</param>
@@ -180,7 +180,8 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Creates a transform matrix copying another transform.
         /// </summary>
-        /// <param name="other">The transform to copy</param>
+        /// <param name="other">The transform to copy.</param>
+        /// <returns>The copied transformation matrix.</returns>
         public static Transform Copy(Transform other)
         {
             Transform transformCopy = new Transform();
@@ -196,11 +197,11 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Multiply two transformation matrix.
+        /// Multiplies two transformation matrix.
         /// </summary>
         /// <param name="t0">First transformation.</param>
         /// <param name="t1">Second transformation.</param>
-        /// <returns>New transformation.</returns>
+        /// <returns>A new transformation.</returns>
         public static Transform operator *(Transform t0, Transform t1)
         {
             Transform t = new Transform
@@ -227,7 +228,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create a transformation matrix to reflect about a plane.
+        /// Creates a transformation matrix to reflect about a plane.
         /// </summary>
         /// <param name="plane">The plane used to reflect.</param>
         /// <returns>The mirror transformation matrix.</returns>
@@ -259,7 +260,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Get the transformation that project to a plane.
+        /// Gets the transformation that project to a plane.
         /// The transformation maps a point to the point closest to the plane.
         /// </summary>
         /// <param name="plane">Plane to project to.</param>
@@ -289,7 +290,7 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Create a transformation that orients a planeA to a planeB.
+        /// Creates a transformation that orients a planeA to a planeB.
         /// </summary>
         /// <param name="a">The plane to orient from.</param>
         /// <param name="b">The plane to orient to.</param>

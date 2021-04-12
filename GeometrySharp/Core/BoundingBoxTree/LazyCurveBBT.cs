@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Transactions;
-using GeometrySharp.Geometry;
+﻿using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
+using System;
+using System.Collections.Generic;
 
 namespace GeometrySharp.Core.BoundingBoxTree
 {
-    // ToDo: Make the test for the methods.
-    public class LazyCurveBBT : IBoundingBoxTree<NurbsCurve>
+    internal class LazyCurveBBT : IBoundingBoxTree<NurbsCurve>
     {
         private readonly NurbsCurve _curve;
         private readonly BoundingBox _boundingBox;
         private readonly double _knotTolerance;
 
-        public LazyCurveBBT(NurbsCurve curve, double knotTolerance = double.NaN)
+        /// <summary>
+        /// Initialize the lazy class.
+        /// </summary>
+        /// <param name="curve">The curve processed into this lazy class.</param>
+        /// <param name="knotTolerance">A value tolerance.</param>
+        internal LazyCurveBBT(NurbsCurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
             _boundingBox = new BoundingBox(curve.ControlPoints);
@@ -25,6 +28,7 @@ namespace GeometrySharp.Core.BoundingBoxTree
 
             _knotTolerance = knotTolerance;
         }
+
         public BoundingBox BoundingBox()
         {
             return _boundingBox;
@@ -54,11 +58,6 @@ namespace GeometrySharp.Core.BoundingBoxTree
         public bool IsEmpty()
         {
             return false;
-        }
-
-        public double Length()
-        {
-            return _curve.ControlPoints[0].DistanceTo(_curve.ControlPoints[^1]);
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace GeometrySharp.Core
 {
-    // ToDo: Checks that all the methods have are tested.
     /// <summary>
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
@@ -24,19 +23,20 @@ namespace GeometrySharp.Core
         /// Constructs a matrix by given number of rows and columns.
         /// All the parameters are set to zero.
         /// </summary>
-        /// <param name="row">A positive integer, for the number of rows.</param>
-        /// <param name="column">A positive integer, for the number of columns.</param>
-        public static Matrix Construct(int row, int column)
+        /// <param name="rows">A positive integer, for the number of rows.</param>
+        /// <param name="columns">A positive integer, for the number of columns.</param>
+        /// <returns>A matrix reflecting the number of rows and columns provided.</returns>
+        public static Matrix Construct(int rows, int columns)
         {
             Matrix tempMatrix = new Matrix();
-            if (row == 0 || column == 0)
+            if (rows == 0 || columns == 0)
             {
                 throw new Exception("Matrix must be at least one row or column");
             }
 
-            for (int i = 0; i < column; i++)
+            for (int i = 0; i < columns; i++)
             {
-                List<double> tempRow = Sets.RepeatData(0.0, row);
+                List<double> tempRow = Sets.RepeatData(0.0, rows);
                 tempMatrix.Add(tempRow);
             }
 
@@ -151,9 +151,9 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Adds two matrices.
         /// </summary>
-        /// <param name="a">First Matrix.</param>
-        /// <param name="b">Second Matrix.</param>
-        /// <returns>The sum matrix.</returns>
+        /// <param name="a">First matrix.</param>
+        /// <param name="b">Second matrix.</param>
+        /// <returns>The result sum matrix.</returns>
         public static Matrix operator +(Matrix a, Matrix b)
         {
             if (!a.IsValid() || !b.IsValid())
@@ -183,8 +183,8 @@ namespace GeometrySharp.Core
         /// <summary>
         /// Subtracts two matrices.
         /// </summary>
-        /// <param name="a">First Matrix.</param>
-        /// <param name="b">Second Matrix.</param>
+        /// <param name="a">First matrix.</param>
+        /// <param name="b">Second matrix.</param>
         /// <returns>The subtraction matrix.</returns>
         public static Matrix operator -(Matrix a, Matrix b)
         {
@@ -260,10 +260,10 @@ namespace GeometrySharp.Core
         }
 
         /// <summary>
-        /// Returns if the matrix is non-singular (i.e. invertible).
+        /// Checks if the matrix is non-singular (i.e. invertible).
         /// </summary>
         /// <param name="matrix">Matrix to check.</param>
-        /// <returns>True if is Nonsingular.</returns>
+        /// <returns>True if is non-singular.</returns>
         private static bool IsNonSingular(Matrix matrix)
         {
             for (int i = 0; i < matrix.Count; i++)
@@ -310,17 +310,6 @@ namespace GeometrySharp.Core
             int n = LuMatrix.Count;
             double[] bCopy = new double[n];
 
-            /*
-            verbNurbs.
-            var bCopy = new List<double>(b);
-            var i = n - 1;
-            while (i != -1)
-            {
-                bCopy[i] = b[i];
-                i--;
-            }
-            */
-
             for (int i = 0; i < b.Count; i++)
             {
                 bCopy[i] = b[permutation[i]];
@@ -330,17 +319,6 @@ namespace GeometrySharp.Core
             int t = 0;
             while (t < n)
             {
-                /*
-                verbNurbs.
-                int pAtt = permutation[t];
-                if (pAtt != t)
-                {
-                    var tempP = bCopy[t];
-                    bCopy[t] = bCopy[pAtt];
-                    bCopy[pAtt] = tempP;
-                }
-                */
-
                 int j = 0;
                 while (j < t)
                 {
@@ -380,7 +358,7 @@ namespace GeometrySharp.Core
         /// </summary>
         /// <param name="m">Matrix has to be decomposed.</param>
         /// <param name="permutation">The row pivot information is in one-dimensional array.</param>
-        /// <returns>The matrix representing the L matrix and U matrix together.</returns>
+        /// <returns>The matrix representing the lower matrix and upper matrix together.</returns>
         public static Matrix Decompose(Matrix m, out int[] permutation)
         {
             // http://www.mymathlib.com/c_source/matrices/linearsystems/doolittle_pivot.c
@@ -419,11 +397,6 @@ namespace GeometrySharp.Core
                     }
                     j++;
                 }
-
-                /*
-                 * verbNurbs.
-                 * tempPermutation[k] = permutationValueK;
-                 */
 
                 if (maxColumnValue < GeoSharpMath.EPSILON)
                 {
@@ -472,6 +445,11 @@ namespace GeometrySharp.Core
             return copyMatrix;
         }
 
+        /// <summary>
+        /// Computes the inverse of a Matrix.   
+        /// </summary>
+        /// <param name="matrix">The matrix to invert.</param>
+        /// <returns>The inverted matrix.</returns>
         public static Matrix Inverse(Matrix matrix)
         {
             Matrix matrixLu = Decompose(matrix, out int[] permutation);

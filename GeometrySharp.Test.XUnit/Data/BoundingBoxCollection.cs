@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using GeometrySharp.Geometry;
+﻿using GeometrySharp.Geometry;
+using System.Collections.Generic;
 using Xunit;
 
 namespace GeometrySharp.Test.XUnit.Data

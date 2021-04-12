@@ -17,26 +17,19 @@ namespace GeometrySharp.Core
         /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
         /// <returns>A set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
-        public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, List<double> weights = null)
+        public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, List<double> weights)
         {
-            List<double> usedWeights = weights;
-            if (weights == null || weights.Count == 0)
+            if (controlPoints.Count < weights.Count)
             {
-                usedWeights = Sets.RepeatData(1.0, controlPoints.Count);
+                throw new ArgumentOutOfRangeException(nameof(weights),
+                    "The weights set is bigger than the control points, it must be the same dimension");
             }
-            else
-            {
-                if (controlPoints.Count < weights.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(weights), "The weights set is bigger than the control points, it must be the same dimension");
-                }
 
-                if (controlPoints.Count > weights.Count)
-                {
-                    int diff = controlPoints.Count - weights.Count;
-                    List<double> dataFilled = Sets.RepeatData(1.0, diff);
-                    usedWeights.AddRange(dataFilled);
-                }
+            if (controlPoints.Count > weights.Count)
+            {
+                int diff = controlPoints.Count - weights.Count;
+                List<double> dataFilled = Sets.RepeatData(1.0, diff);
+                weights.AddRange(dataFilled);
             }
 
             List<Vector3> controlPtsHomogenized = new List<Vector3>();
@@ -46,10 +39,38 @@ namespace GeometrySharp.Core
                 Vector3 tempPt = new Vector3();
                 for (int j = 0; j < controlPoints[0].Count; j++)
                 {
-                    tempPt.Add(controlPoints[i][j] * usedWeights[i]);
+                    tempPt.Add(controlPoints[i][j] * weights[i]);
                 }
+
                 // Added the weight to the point.
-                tempPt.Add(usedWeights[i]);
+                tempPt.Add(weights[i]);
+                controlPtsHomogenized.Add(tempPt);
+            }
+
+            return controlPtsHomogenized;
+        }
+
+        /// <summary>
+        /// Transform a collection of points into their homogeneous equivalents, by a given weight value.
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
+        /// </summary>
+        /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
+        /// <param name="weight">Weight value for each point.</param>
+        /// <returns>A set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, double weight)
+        {
+            List<Vector3> controlPtsHomogenized = new List<Vector3>();
+
+            for (int i = 0; i < controlPoints.Count; i++)
+            {
+                Vector3 tempPt = new Vector3();
+                for (int j = 0; j < controlPoints[0].Count; j++)
+                {
+                    tempPt.Add(controlPoints[i][j] * weight);
+                }
+
+                // Added the weight to the point.
+                tempPt.Add(weight);
                 controlPtsHomogenized.Add(tempPt);
             }
 

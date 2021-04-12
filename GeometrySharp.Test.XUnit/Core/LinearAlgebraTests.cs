@@ -41,17 +41,6 @@ namespace GeometrySharp.Test.XUnit.Core
                     new Vector3 {5.0, 0.0, 0.0, 1.0}
                 }
             },
-
-            new object[]
-            {
-                null,
-                new List<Vector3>
-                {
-                    new Vector3 {0.0, 0.0, 0.0, 1.0},
-                    new Vector3 {2.5, -2.5, 0.0, 1.0},
-                    new Vector3 {5.0, 0.0, 0.0, 1.0}
-                }
-            }
         };
 
         public static IEnumerable<object[]> Homogenized2dData => new List<object[]>
@@ -145,6 +134,30 @@ namespace GeometrySharp.Test.XUnit.Core
 
             // Act
             List<Vector3> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, weights);
+
+            // Assert
+            newControlPts.Should().BeEquivalentTo(controlPtsExpected);
+        }
+
+        [Fact]
+        public void It_Returns_A_New_Set_Of_Homogenizer_Points_By_A_Given_Weight_Value()
+        {
+            // Arrange
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {0.0, 0.0, 0},
+                new Vector3 {2.5, -2.5, 0},
+                new Vector3 {5.0, 0.0, 0}
+            };
+            List<Vector3> controlPtsExpected = new List<Vector3>
+            {
+                new Vector3 {0.0, 0.0, 0.0, 1.0},
+                new Vector3 {2.5, -2.5, 0.0, 1.0},
+                new Vector3 { 5.0, 0.0, 0.0, 1.0 }
+            };
+
+            // Act
+            List<Vector3> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, 1.0);
 
             // Assert
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
