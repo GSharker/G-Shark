@@ -8,7 +8,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Integer degree of curve.
         /// </summary>
-        public virtual int Degree { get; }
+        public int Degree { get; internal set; }
 
         /// <summary>
         /// 2d list of control points, where each control point is a list like (x,y,z) of length (dim).
@@ -18,17 +18,19 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// 2d list of points, where represented a set (wi*pi, wi) with length (dim+1).
         /// </summary>
-        public virtual List<Vector3> HomogenizedPoints { get; }
+        public List<Vector3> HomogenizedPoints { get; internal set; }
 
         /// <summary>
         /// List of non-decreasing knot values.
         /// </summary>
-        public virtual Knot Knots { get; }
+        public Knot Knots { get; internal set; }
 
         public abstract BoundingBox BoundingBox { get; }
 
         public abstract Vector3 PointAt(double t, bool parametrize = true);
 
         public abstract Vector3 TangentAt(double t, bool parametrize = true);
+
+        public abstract Vector3 ClosestPt(Vector3 pt);
     }
 }

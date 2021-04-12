@@ -139,10 +139,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Representation_Of_The_Arc_From_0_To_90_Deg()
+        public void It_Is_A_Curve_Representation_Of_The_Arc_From_0_To_90_Deg()
         {
             // Arrange
-            Arc arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
             double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
             Vector3[] ptChecks = new[] {
                 new Vector3 { 0, 20, 0 },
@@ -153,34 +152,33 @@ namespace GeometrySharp.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve curve = arc.ToNurbsCurve();
+            Curve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
 
             // Assert
-            curve.ControlPoints.Count.Should().Be(5);
-            curve.Degree.Should().Be(2);
+            arc.ControlPoints.Count.Should().Be(5);
+            arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                curve.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                curve.Weights[i].Should().Be(weightChecks[i]);
+                arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
-                    curve.Knots[i].Should().Be(0);
-                    curve.Knots[i + 5].Should().Be(1);
+                    arc.Knots[i].Should().Be(0);
+                    arc.Knots[i + 5].Should().Be(1);
                 }
                 else
                 {
-                    curve.Knots[i].Should().Be(0.5);
+                    arc.Knots[i].Should().Be(0.5);
                 }
             }
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Representation_Of_ExampleArc3D()
+        public void It_Is_A_Curve_Representation_Of_ExampleArc3D()
         {
             // Arrange
-            Arc arc = ExampleArc3D;
             double[] weightChecks = new[] { 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0 };
             Vector3[] ptChecks = new[] {
                 new Vector3 { 74.264416, 36.39316, -1.8843129999999997 },
@@ -193,29 +191,29 @@ namespace GeometrySharp.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve curve = arc.ToNurbsCurve();
+            Curve arc = ExampleArc3D;
 
             // Assert
-            curve.ControlPoints.Count.Should().Be(7);
-            curve.Degree.Should().Be(2);
+            arc.ControlPoints.Count.Should().Be(7);
+            arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                curve.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                curve.Weights[i].Should().Be(weightChecks[i]);
+                arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
-                    curve.Knots[i].Should().Be(0);
-                    curve.Knots[i + 7].Should().Be(1);
+                    arc.Knots[i].Should().Be(0);
+                    arc.Knots[i + 7].Should().Be(1);
                 }
                 else if(i<5)
                 {
-                    curve.Knots[i].Should().Be(0.3333333333333333);
+                    arc.Knots[i].Should().Be(0.3333333333333333);
                 }
                 else
                 {
-                    curve.Knots[i].Should().Be(0.6666666666666666);
+                    arc.Knots[i].Should().Be(0.6666666666666666);
                 }
             }
         }

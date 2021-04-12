@@ -29,6 +29,8 @@ namespace GeometrySharp.Geometry
             AngleDomain = (angleDomain.Length > Math.PI * 2.0)
                 ? new Interval(AngularDiff(angleDomain.Min, Math.PI * 2.0), AngularDiff(angleDomain.Max, Math.PI * 2.0))
                 : angleDomain;
+
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -62,6 +64,7 @@ namespace GeometrySharp.Geometry
             Plane = c.Plane;
             Radius = c.Radius;
             AngleDomain = new Interval(0.0, angle);
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -190,7 +193,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The test point. Point to get close to.</param>
         /// <returns>The point on the arc that is close to the test point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public override Vector3 ClosestPt(Vector3 pt)
         {
             double twoPi = 2.0 * Math.PI;
 
@@ -245,31 +248,29 @@ namespace GeometrySharp.Geometry
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this arc.</returns>
-        public NurbsCurve ToNurbsCurve()
+        private void ToNurbsCurve()
         {
-            double radius = Radius;
             Vector3 axisX = Plane.XAxis;
             Vector3 axisY = Plane.YAxis;
-            double theta = Angle;
             int numberOfArc;
             Vector3[] ctrPts;
             double[] weights;
 
             // Number of arcs.
             double piNum = 0.5 * Math.PI;
-            if (theta <= piNum)
+            if (Angle <= piNum)
             {
                 numberOfArc = 1;
                 ctrPts = new Vector3[3];
                 weights = new double[3];
             }
-            else if (theta <= piNum * 2)
+            else if (Angle <= piNum * 2)
             {
                 numberOfArc = 2;
                 ctrPts = new Vector3[5];
                 weights = new double[5];
             }
-            else if (theta <= piNum * 3)
+            else if (Angle <= piNum * 3)
             {
                 numberOfArc = 3;
                 ctrPts = new Vector3[7];
@@ -282,9 +283,9 @@ namespace GeometrySharp.Geometry
                 weights = new double[9];
             }
 
-            double detTheta = theta / numberOfArc;
+            double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (radius * Math.Cos(AngleDomain.Min)) + axisY * (radius * Math.Sin(AngleDomain.Min)));
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(AngleDomain.Min)) + axisY * (Radius * Math.Sin(AngleDomain.Min)));
             Vector3 t0 = axisY * Math.Cos(AngleDomain.Min) - axisX * Math.Sin(AngleDomain.Min);
 
             Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
@@ -297,7 +298,7 @@ namespace GeometrySharp.Geometry
             for (int i = 1; i < numberOfArc + 1; i++)
             {
                 angle += detTheta;
-                Vector3 p2 = Center + (axisX * (radius * Math.Cos(angle)) + axisY * (radius * Math.Sin(angle)));
+                Vector3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
                 
                 weights[index + 2] = 1;
                 ctrPts[index + 2] = p2;
@@ -344,7 +345,9 @@ namespace GeometrySharp.Geometry
                     break;
             }
 
-            return new NurbsCurve(2, knots, ctrPts.ToList(), weights.ToList());
+            Degree = 2;
+            Knots = knots;
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>
