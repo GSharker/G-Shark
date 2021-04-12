@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
     // ToDo: ToNurbs.
     // ToDo: Transform.
-    public class Circle
+    public class Circle : Curve, ITransformable<Circle>
     {
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
@@ -68,7 +69,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Gets the BoundingBox of this Circle.
         /// </summary>
-        public BoundingBox BoundingBox
+        public override BoundingBox BoundingBox
         {
             get
             {
@@ -119,7 +120,7 @@ namespace GeometrySharp.Geometry
         /// <param name="t">Parameter of point to evaluate.</param>
         /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public Vector3 PointAt(double t, bool parametrize = true)
+        public override Vector3 PointAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
             return Plane.PointAt(Math.Cos(tRemap) * this.Radius, Math.Sin(tRemap) * this.Radius);
@@ -130,7 +131,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public Vector3 TangentAt(double t, bool parametrize = true)
+        public override Vector3 TangentAt(double t, bool parametrize = true)
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
             double r1 = this.Radius * (-Math.Sin(tRemap));
@@ -146,7 +147,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The test point to project onto the circle.</param>
         /// <returns>The point on the circle that is close to the test point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public override Vector3 ClosestPt(Vector3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
@@ -161,6 +162,39 @@ namespace GeometrySharp.Geometry
             }
 
             return PointAt(t, false);
+        }
+
+        public Circle Transform(Transform transform)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Constructs a nurbs curve representation of this circle.
+        /// </summary>
+        /// <returns>A nurbs curve shaped like this circle.</returns>
+        private void ToNurbsCurve()
+        {
+            Knot knot = new Knot
+            {
+                0, 0, 0.5 * Math.PI, 0.5 * Math.PI, Math.PI, Math.PI, 1.5 * Math.PI, 1.5 * Math.PI, 2.0 * Math.PI,
+                2.0 * Math.PI
+            };
+
+            Vector3[] pts = new Vector3[9];
+            pts[0] = Plane.PointAt(Radius, 0.0);
+            pts[1] = Plane.PointAt(Radius, Radius);
+            pts[2] = Plane.PointAt(0.0, Radius);
+            pts[3] = Plane.PointAt(-Radius, Radius);
+            pts[4] = Plane.PointAt(-Radius, 0.0);
+            pts[5] = Plane.PointAt(-Radius, -Radius);
+            pts[6] = Plane.PointAt(0.0, -Radius);
+            pts[7] = Plane.PointAt(Radius, -Radius);
+            pts[8] = pts[0];
+
+            
+
+            NurbsCurve n = new NurbsCurve(2, knot, pts.ToList());
         }
     }
 }
