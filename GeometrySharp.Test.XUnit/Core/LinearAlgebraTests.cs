@@ -139,6 +139,7 @@ namespace GeometrySharp.Test.XUnit.Core
             newControlPts.Should().BeEquivalentTo(controlPtsExpected);
         }
 
+        [Fact]
         public void It_Returns_A_New_Set_Of_Homogenizer_Points_By_A_Given_Weight_Value()
         {
             // Arrange

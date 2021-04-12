@@ -4,6 +4,6 @@ namespace GeometrySharp.Geometry
 {
     public interface ITransformable<T>
     {
-        public T Transform(Transform transform);
+        public T Transform(Transform transformation);
     }
 }

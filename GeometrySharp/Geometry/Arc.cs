@@ -185,7 +185,12 @@ namespace GeometrySharp.Geometry
         {
             double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), AngleDomain) : t;
 
-            return new Circle(Plane, Radius).TangentAt(tRemap, false);
+            double r1 = Radius * (-Math.Sin(tRemap));
+            double r2 = Radius * (Math.Cos(tRemap));
+
+            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
+
+            return vector.Unitize();
         }
 
         /// <summary>
