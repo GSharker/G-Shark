@@ -99,7 +99,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Vector3 pt = new Vector3{ 10, 20, 0 };
             Vector3 expectedPt = new Vector3{ 12.30769230769231, 18.461538461538463, 0 };
 
-            Vector3 closestPt = line.ClosestPoint(pt);
+            Vector3 closestPt = line.ClosestPt(pt);
 
             closestPt.Should().BeEquivalentTo(expectedPt);
         }
@@ -175,12 +175,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
             Line l = new Line(p1, p2);
 
-            NurbsCurve curve = l.ToNurbsCurve();
-
-            curve.ControlPoints.Count.Should().Be(2);
-            curve.Degree.Should().Be(1);
-            curve.ControlPoints[0].Should().BeEquivalentTo(p1);
-            curve.ControlPoints[1].Should().BeEquivalentTo(p2);
+            l.ControlPoints.Count.Should().Be(2);
+            l.Degree.Should().Be(1);
+            l.ControlPoints[0].Should().BeEquivalentTo(p1);
+            l.ControlPoints[1].Should().BeEquivalentTo(p2);
         }
     }
 }

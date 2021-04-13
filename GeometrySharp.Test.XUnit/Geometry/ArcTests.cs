@@ -56,6 +56,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Initializes_An_Arc_By_Two_Points_And_A_Direction()
+        {
+            // Arrange
+            Vector3 pt1 = new Vector3 { 5, 5, 5 };
+            Vector3 pt2 = new Vector3 { 10, 15, 10 };
+            Vector3 dir = new Vector3 { 3, 3, 0 };
+            // Act
+            Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
+
+            // Arrange
+            arc.StartPoint.IsEqualRoundingDecimal(pt1, 6).Should().BeTrue();
+            arc.EndPoint.IsEqualRoundingDecimal(pt2, 6).Should().BeTrue();
+            arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
             // Arrange
@@ -75,15 +91,17 @@ namespace GeometrySharp.Test.XUnit.Geometry
             bBox3D.Max.IsEqualRoundingDecimal(new Vector3 { 102.068402, 36.39316, 5.246477 }, 6).Should().BeTrue();
         }
 
-        [Fact]
-        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter()
+        [Theory]
+        [InlineData(1.2, new double[] { 70.334926, 18.808863, 2.762032 })]
+        [InlineData(2.5, new double[] { 87.505564, 8.962333, 5.203339 })]
+        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
         {
             // Arrange
-            Vector3 expectedPt = new Vector3 {69.81863, 29.435661, -0.021966};
+            Vector3 expectedPt = new Vector3(pts);
             Arc arc = ExampleArc3D;
 
             // Act
-            Vector3 pt = arc.PointAt(0.12);
+            Vector3 pt = arc.PointAt(t);
 
             // Assert
             pt.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
@@ -119,24 +137,24 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Arc arcTransformed = arc.Transform(transform);
 
             // Assert
-            arcTransformed.PointAt(0.0).IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
-            arcTransformed.PointAt(1.0).IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
+            arcTransformed.StartPoint.IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
+            arcTransformed.EndPoint.IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
         }
 
         [Theory]
         [InlineData(0.0, new double[] { -0.726183, -0.663492, 0.180104 })]
-        [InlineData(0.1, new double[] { -0.370785, -0.897553, 0.238573 })]
-        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] expectedPt)
+        [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
+        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Assert
-            Vector3 checkTangent = new Vector3(expectedPt);
+            Vector3 expectedTangent = new Vector3(pts);
             Arc arc = ExampleArc3D;
 
             // Act
             Vector3 tangent = arc.TangentAt(t);
 
             // Arrange
-            tangent.IsEqualRoundingDecimal(checkTangent, 4).Should().BeTrue();
+            tangent.IsEqualRoundingDecimal(expectedTangent, 6).Should().BeTrue();
         }
 
         [Fact]

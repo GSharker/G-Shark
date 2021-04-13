@@ -308,7 +308,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            var projectedPt = line.ClosestPoint(this);
+            var projectedPt = line.ClosestPt(this);
             var ptToProjectedPt = projectedPt - this;
             return ptToProjectedPt.Length();
         }

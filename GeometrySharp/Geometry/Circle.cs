@@ -122,12 +122,10 @@ namespace GeometrySharp.Geometry
         /// Calculates the point on a circle at the given parameter.
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
-        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public override Vector3 PointAt(double t, bool parametrize = true)
+        public override Vector3 PointAt(double t)
         {
-            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
-            return Plane.PointAt(Math.Cos(tRemap) * Radius, Math.Sin(tRemap) * Radius);
+            return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
         }
 
         /// <summary>
@@ -135,11 +133,10 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public override Vector3 TangentAt(double t, bool parametrize = true)
+        public Vector3 TangentAt(double t)
         {
-            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
-            double r1 = Radius * (-Math.Sin(tRemap));
-            double r2 = Radius * (Math.Cos(tRemap));
+            double r1 = Radius * (-Math.Sin(t));
+            double r2 = Radius * (Math.Cos(t));
 
             Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
@@ -165,7 +162,7 @@ namespace GeometrySharp.Geometry
                 t += 2.0 * Math.PI;
             }
 
-            return PointAt(t, false);
+            return PointAt(t);
         }
 
         /// <summary>

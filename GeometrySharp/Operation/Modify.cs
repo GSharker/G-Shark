@@ -4,6 +4,7 @@ using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
@@ -21,10 +22,10 @@ namespace GeometrySharp.Operation
 		/// <param name="curve">The NurbsCurve object.</param>
 		/// <param name="knotsToInsert">The set of Knots.</param>
 		/// <returns>A NurbsCurve with refined knots.</returns>
-		public static NurbsCurve CurveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
+		public static Curve CurveKnotRefine(Curve curve, List<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0)
-                return new NurbsCurve(curve);
+                return curve;
 
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.ControlPoints;
@@ -86,6 +87,7 @@ namespace GeometrySharp.Operation
                 --k;
                 --j;
             }
+
             return new NurbsCurve(degree, knotsPost.ToKnot(), controlPointsPost.ToList());
         }
 
@@ -205,7 +207,7 @@ namespace GeometrySharp.Operation
             }
 
             //Do knot refinement on every row
-            NurbsCurve crv = new NurbsCurve();
+            Curve crv = new NurbsCurve();
             foreach (var cptRow in ctrlPts)
             {
                 crv = CurveKnotRefine(new NurbsCurve(degree, knots, cptRow), knotsToInsert);
