@@ -1,8 +1,8 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
@@ -93,41 +93,14 @@ namespace GeometrySharp.Geometry
             }
         }
 
-        private double SelectionLength(double x, double y)
-        {
-            x = Math.Abs(x);
-            y = Math.Abs(y);
-            if (y > x)
-            {
-                double num = x;
-                x = y;
-                y = num;
-            }
-            double num1;
-            if (x > double.Epsilon)
-            {
-                double num2 = 1.0 / x;
-                y *= num2;
-                num1 = x * Math.Sqrt(1.0 + y * y);
-            }
-            else
-            {
-                num1 = x <= 0.0 || double.IsInfinity(x) ? 0.0 : x;
-            }
-
-            return num1;
-        }
-
         /// <summary>
         /// Calculates the point on a circle at the given parameter.
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
-        /// <param name="parametrize">True per default using parametrize value between 0.0 to 1.0.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public override Vector3 PointAt(double t, bool parametrize = true)
+        public override Vector3 PointAt(double t)
         {
-            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
-            return Plane.PointAt(Math.Cos(tRemap) * Radius, Math.Sin(tRemap) * Radius);
+            return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
         }
 
         /// <summary>
@@ -135,11 +108,10 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public override Vector3 TangentAt(double t, bool parametrize = true)
+        public Vector3 TangentAt(double t)
         {
-            double tRemap = (parametrize) ? GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, 2 * Math.PI)) : t;
-            double r1 = Radius * (-Math.Sin(tRemap));
-            double r2 = Radius * (Math.Cos(tRemap));
+            double r1 = Radius * (-Math.Sin(t));
+            double r2 = Radius * (Math.Cos(t));
 
             Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
@@ -165,7 +137,7 @@ namespace GeometrySharp.Geometry
                 t += 2.0 * Math.PI;
             }
 
-            return PointAt(t, false);
+            return PointAt(t);
         }
 
         /// <summary>
@@ -223,8 +195,16 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the circle are equal, otherwise false.</returns>
         public bool Equals(Circle other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE && Plane == other.Plane;
         }
 
@@ -244,6 +224,31 @@ namespace GeometrySharp.Geometry
         public override string ToString()
         {
             return $"Circle(R:{Radius})";
+        }
+
+        private static double SelectionLength(double x, double y)
+        {
+            x = Math.Abs(x);
+            y = Math.Abs(y);
+            if (y > x)
+            {
+                double num = x;
+                x = y;
+                y = num;
+            }
+            double num1;
+            if (x > double.Epsilon)
+            {
+                double num2 = 1.0 / x;
+                y *= num2;
+                num1 = x * Math.Sqrt(1.0 + y * y);
+            }
+            else
+            {
+                num1 = x <= 0.0 || double.IsInfinity(x) ? 0.0 : x;
+            }
+
+            return num1;
         }
     }
 }

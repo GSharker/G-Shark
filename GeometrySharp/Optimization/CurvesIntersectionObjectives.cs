@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 
 namespace GeometrySharp.Optimization
@@ -12,15 +13,15 @@ namespace GeometrySharp.Optimization
     /// </summary>
     public class CurvesIntersectionObjectives : IObjectiveFunction
     {
-        private readonly NurbsCurve _curve0;
-        private readonly NurbsCurve _curve1;
+        private readonly Curve _curve0;
+        private readonly Curve _curve1;
 
         /// <summary>
         /// Initialize the class, which collects the functions used for the minimization problem.
         /// </summary>
         /// <param name="curve0">First curve used in the intersection process.</param>
         /// <param name="curve1">First curve used in the intersection process.</param>
-        public CurvesIntersectionObjectives(NurbsCurve curve0, NurbsCurve curve1)
+        public CurvesIntersectionObjectives(Curve curve0, Curve curve1)
         {
             _curve0 = curve0;
             _curve1 = curve1;

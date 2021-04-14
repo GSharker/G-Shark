@@ -1,14 +1,14 @@
-﻿using System;
+﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
+using System;
 using System.Collections.Generic;
-using GeometrySharp.Core;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: Checks if all the methods have the associated test.
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
-    public class Line : IEquatable<Line>
+    public class Line : Curve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Line by start point and end point.
@@ -18,11 +18,15 @@ namespace GeometrySharp.Geometry
         public Line(Vector3 start, Vector3 end)
         {
             if(start == end || !start.IsValid() || !end.IsValid())
+            {
                 throw new Exception("Inputs are not valid, or are equal");
-            this.Start = start;
-            this.End = end;
-            this.Length = Start.DistanceTo(End);
-            this.Direction = (End - Start).Unitize();
+            }
+
+            Start = start;
+            End = end;
+            Length = Start.DistanceTo(End);
+            Direction = (End - Start).Unitize();
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -34,11 +38,15 @@ namespace GeometrySharp.Geometry
         public Line(Vector3 start, Vector3 direction, double length)
         {
             if(length >= -GeoSharpMath.EPSILON && length <= GeoSharpMath.EPSILON)
+            {
                 throw new Exception("Length must not be 0.0");
-            this.Start = start;
-            this.End = start + direction.Amplify(length);
-            this.Length = Math.Abs(length);
-            this.Direction = (End - Start).Unitize();
+            }
+
+            Start = start;
+            End = start + direction.Amplify(length);
+            Length = Math.Abs(length);
+            Direction = (End - Start).Unitize();
+            ToNurbsCurve();
         }
 
         /// <summary>
@@ -64,12 +72,12 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Gets the BoundingBox in ascending fashion.
         /// </summary>
-        public BoundingBox BoundingBox
+        public override BoundingBox BoundingBox
         {
             get
             {
-                var bBox = new BoundingBox(Start, End);
-                var validBBox = bBox.MakeItValid();
+                BoundingBox bBox = new BoundingBox(Start, End);
+                BoundingBox validBBox = bBox.MakeItValid();
                 return validBBox;
             }
         }
@@ -77,18 +85,18 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Get the closest point on the line from this point.
         /// </summary>
-        /// <param name="line">The line on which to find the closest point.</param>
+        /// <param name="pt">The closest point to find.</param>
         /// <returns>The closest point on the line from this point.</returns>
-        public Vector3 ClosestPoint(Vector3 vec)
+        public override Vector3 ClosestPt(Vector3 pt)
         {
-            var dir = this.Direction;
-            var v = vec - this.Start;
-            var d = Vector3.Dot(v, dir);
+            Vector3 dir = Direction;
+            Vector3 v = pt - Start;
+            double d = Vector3.Dot(v, dir);
 
-            d = Math.Min(this.Length, d);
+            d = Math.Min(Length, d);
             d = Math.Max(d, 0);
 
-            return this.Start + dir * d;
+            return Start + dir * d;
         }
 
         /// <summary>
@@ -96,12 +104,14 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
         /// <returns>The point at the specific parameter.</returns>
-        public Vector3 PointAt(double t)
+        public override Vector3 PointAt(double t)
         {
             if (t > 1.0 || t < 0.0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(t), "Parameter is outside the domain 0.0 to 1.0");
+            }
 
-            return this.Start + this.Direction * (this.Length * t);
+            return Start + Direction * (Length * t);
         }
 
         /// <summary>
@@ -110,7 +120,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The line flipped.</returns>
         public Line Flip()
         {
-            return new Line(this.End, this.Start);
+            return new Line(End, Start);
         }
 
         /// <summary>
@@ -121,13 +131,18 @@ namespace GeometrySharp.Geometry
         /// <returns>The extended line.</returns>
         public Line Extend(double startLength, double endLength)
         {
-            var start = this.Start;
-            var end = this.End;
+            Vector3 start = Start;
+            Vector3 end = End;
 
             if (startLength >= -GeoSharpMath.EPSILON || startLength <= GeoSharpMath.EPSILON)
-                start = this.Start - (this.Direction * startLength);
+            {
+                start = Start - (Direction * startLength);
+            }
+
             if (endLength >= -GeoSharpMath.EPSILON || endLength <= GeoSharpMath.EPSILON)
-                end = this.End + (this.Direction * endLength);
+            {
+                end = End + (Direction * endLength);
+            }
 
             return new Line(start, end);
         }
@@ -135,13 +150,15 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Constructs a nurbs curve representation of this line.
         /// </summary>
-        /// <returns>A Nurbs curve shaped like this line.</returns>
-        public NurbsCurve ToNurbsCurve()
+        /// <returns>A nurbs curve shaped like this line.</returns>
+        private void ToNurbsCurve()
         {
             List<Vector3> pts = new List<Vector3>{Start, End};
             Knot knots = new Knot{0,0,1,1};
 
-            return new NurbsCurve(degree: 1, knots, pts);
+            Degree = 1;
+            Knots = knots;
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(pts, 1.0);
         }
 
         /// <summary>
@@ -151,8 +168,8 @@ namespace GeometrySharp.Geometry
         /// <returns>A line transformed.</returns>
         public Line Transform(Transform xForm)
         {
-            var pt1 = Start * xForm;
-            var pt2 = End * xForm;
+            Vector3 pt1 = Start * xForm;
+            Vector3 pt2 = End * xForm;
             return new Line(pt1, pt2);
         }
 
@@ -173,7 +190,11 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the end points are equal, otherwise false.</returns>
         public bool Equals(Line other)
         {
-            if (other is null) return false;
+            if (other is null)
+            {
+                return false;
+            }
+
             return Start.Equals(other.Start) && End.Equals(other.End);
         }
 

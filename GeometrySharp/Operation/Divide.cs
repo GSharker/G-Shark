@@ -3,6 +3,7 @@ using System.Linq;
 using GeometrySharp.Geometry;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
@@ -11,20 +12,21 @@ namespace GeometrySharp.Operation
 	/// </summary>
 	public class Divide
 	{
+		// ToDo: see if can have back curves.
 		/// <summary>
 		/// Split a NurbsCurve into two parts at a given parameter.
 		/// </summary>
 		/// <param name="curve">NurbsCurve object representing the curve.</param>
 		/// <param name="u">The parameter where to split the curve.</param>
 		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
+		public static List<NurbsCurve> CurveSplit(Curve curve, double u)
 		{
 			int degree = curve.Degree;
             Knot knots = curve.Knots;
 
             var knotsToInsert = Sets.RepeatData(u, degree + 1);
 
-			NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            Curve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
 		 	int s = knots.Span(degree, u);
 

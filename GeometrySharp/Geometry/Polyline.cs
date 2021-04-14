@@ -81,7 +81,7 @@ namespace GeometrySharp.Geometry
                 for (int i = 0; i < this.Count - 1; i++)
                 {
                     Line tempLine = new Line(this[i], this[i + 1]);
-                    Vector3 tempPt = tempLine.ClosestPoint(pt);
+                    Vector3 tempPt = tempLine.ClosestPt(pt);
                     double tempDistance = tempPt.DistanceTo(pt);
 
                     if (!(tempDistance < distance)) continue;
@@ -119,7 +119,7 @@ namespace GeometrySharp.Geometry
 
             Line l = new Line(conquer [0], conquer [1]);
 
-            return l.ClosestPoint(pt);
+            return l.ClosestPt(pt);
         }
 
         /// <summary>

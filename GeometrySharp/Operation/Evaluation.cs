@@ -5,6 +5,7 @@ using System.Linq;
 using GeometrySharp.Geometry;
 using System;
 using System.Collections.Generic;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
@@ -77,7 +78,7 @@ namespace GeometrySharp.Operation
         /// <param name="curve">Object representing the curve.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        public static Vector3 CurvePointAt(NurbsCurve curve, double t)
+        public static Vector3 CurvePointAt(Curve curve, double t)
         {
             var degree = curve.Degree;
             var curveHomogenizedPoints = curve.HomogenizedPoints;
@@ -256,7 +257,7 @@ namespace GeometrySharp.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numberDerivs">Number of derivatives to evaluate</param>
         /// <returns>A point represented by an array of length (dim).</returns>
-        public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
+        public static List<Vector3> RationalCurveDerivatives(Curve curve, double parameter, int numberDerivs = 1)
         {
             var derivatives = CurveDerivatives(curve, parameter, numberDerivs);
             // Array of derivate of A(t).
@@ -298,7 +299,7 @@ namespace GeometrySharp.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>A point represented by an array of length (dim).</returns>
-        public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
+        public static List<Vector3> CurveDerivatives(Curve curve, double parameter, int numberDerivs)
         {
             var degree = curve.Degree;
             var controlPoints = curve.HomogenizedPoints;

@@ -93,35 +93,35 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.0, new double[] {69.780279, 40.984093, -3.051743})]
-        [InlineData(0.1, new double[] {62.982688, 28.922671, 0.169262})]
-        public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] expectedPt)
+        [InlineData(1.2, new double[] { 64.295230, 16.438716, 3.433960 })]
+        [InlineData(2.5, new double[] { 88.263188, 2.694245, 6.841687 })]
+        public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3 checkPt = new Vector3(expectedPt);
+            Vector3 expectedPt = new Vector3(pts);
             Circle circle = BaseCircle;
 
             // Act
             Vector3 pt = circle.PointAt(t);
 
             // Assert
-            pt.IsEqualRoundingDecimal(checkPt, 4).Should().BeTrue();
+            pt.IsEqualRoundingDecimal(expectedPt, 4).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(0.0, new double[] { -0.726183, -0.663492, 0.180104 })]
-        [InlineData(0.1, new double[] { -0.183418, -0.950475, 0.250907 })]
-        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] expectedPt)
+        [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
+        [InlineData(2.5, new double[] { 0.993199, 0.110331, -0.037176 })]
+        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3 checkTangent = new Vector3(expectedPt);
+            Vector3 expectedTangent = new Vector3(pts);
             Circle circle = BaseCircle;
 
             // Act
             Vector3 tangent = circle.TangentAt(t);
 
             // Assert
-            tangent.IsEqualRoundingDecimal(checkTangent, 4).Should().BeTrue();
+            tangent.IsEqualRoundingDecimal(expectedTangent, 4).Should().BeTrue();
         }
 
         [Fact]

@@ -27,9 +27,7 @@ namespace GeometrySharp.Geometry.Interfaces
 
         public abstract BoundingBox BoundingBox { get; }
 
-        public abstract Vector3 PointAt(double t, bool parametrize = true);
-
-        public abstract Vector3 TangentAt(double t, bool parametrize = true);
+        public abstract Vector3 PointAt(double t);
 
         public abstract Vector3 ClosestPt(Vector3 pt);
     }
