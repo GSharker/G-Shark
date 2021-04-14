@@ -1,10 +1,9 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
@@ -382,8 +381,16 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the arc are equal, otherwise false.</returns>
         public bool Equals(Arc other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
                    Math.Abs(Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
                    Plane == other.Plane;
@@ -408,12 +415,12 @@ namespace GeometrySharp.Geometry
         }
 
 
-        private bool AnglesSequence(double angle1, double angle2, double angle3)
+        private static bool AnglesSequence(double angle1, double angle2, double angle3)
         {
             return AngularDiff(angle1, angle2) + AngularDiff(angle2, angle3) < 2 * Math.PI;
         }
 
-        private double AngularDiff(double theta1, double theta2)
+        private static double AngularDiff(double theta1, double theta2)
         {
             double dif = theta2 - theta1;
             while (dif >= 2 * Math.PI)

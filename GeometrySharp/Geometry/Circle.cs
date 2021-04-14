@@ -1,8 +1,8 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
@@ -91,31 +91,6 @@ namespace GeometrySharp.Geometry
 
                 return new BoundingBox(min, max);
             }
-        }
-
-        private double SelectionLength(double x, double y)
-        {
-            x = Math.Abs(x);
-            y = Math.Abs(y);
-            if (y > x)
-            {
-                double num = x;
-                x = y;
-                y = num;
-            }
-            double num1;
-            if (x > double.Epsilon)
-            {
-                double num2 = 1.0 / x;
-                y *= num2;
-                num1 = x * Math.Sqrt(1.0 + y * y);
-            }
-            else
-            {
-                num1 = x <= 0.0 || double.IsInfinity(x) ? 0.0 : x;
-            }
-
-            return num1;
         }
 
         /// <summary>
@@ -220,8 +195,16 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the circle are equal, otherwise false.</returns>
         public bool Equals(Circle other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE && Plane == other.Plane;
         }
 
@@ -241,6 +224,31 @@ namespace GeometrySharp.Geometry
         public override string ToString()
         {
             return $"Circle(R:{Radius})";
+        }
+
+        private static double SelectionLength(double x, double y)
+        {
+            x = Math.Abs(x);
+            y = Math.Abs(y);
+            if (y > x)
+            {
+                double num = x;
+                x = y;
+                y = num;
+            }
+            double num1;
+            if (x > double.Epsilon)
+            {
+                double num2 = 1.0 / x;
+                y *= num2;
+                num1 = x * Math.Sqrt(1.0 + y * y);
+            }
+            else
+            {
+                num1 = x <= 0.0 || double.IsInfinity(x) ? 0.0 : x;
+            }
+
+            return num1;
         }
     }
 }
