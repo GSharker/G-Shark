@@ -4,6 +4,7 @@ using GeometrySharp.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -86,11 +87,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             Polyline polyline = new Polyline(ExamplePts);
 
-            Vector3 pt = polyline.PointAt(t, out Vector3 tangent);
+            Vector3 pt = polyline.PointAt(t);
 
             Vector3 tangToCheck = new Vector3(tangentExpected);
             Vector3 ptToCheck = new Vector3(ptExpected);
-            tangent.IsEqualRoundingDecimal(tangToCheck, 6).Should().BeTrue();
             pt.IsEqualRoundingDecimal(ptToCheck, 6).Should().BeTrue();
         }
 
@@ -101,7 +101,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         {
             Polyline polyline = new Polyline(ExamplePts);
 
-            Func<Vector3> func = () => polyline.PointAt(t, out _);
+            Func<Vector3> func = () => polyline.PointAt(t);
 
             func.Should().Throw<Exception>();
         }
@@ -162,23 +162,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Polyline_Transformed_In_NurbsCurve()
         {
-            Vector3[] pts = new[] {
-                new Vector3 { -1.673787, -0.235355, 14.436008 },
-                new Vector3 { 13.145523, 6.066452, 0 },
-                new Vector3 { 2.328185, 22.89864, 0 },
-                new Vector3 { 18.154088, 30.745098, 7.561387 },
-                new Vector3 { 18.154088, 12.309505, 7.561387 }};
-
-            Polyline poly = new Polyline(pts);
-
-            NurbsCurve curve = poly.ToNurbsCurve();
-            Knot knots = curve.Knots;
-
-            curve.Degree.Should().Be(1);
-            for (int i = 1; i < curve.Knots.Count - 1; i++)
+            Vector3[] pts = new[]
             {
-                Vector3 pt = curve.PointAt(knots[i]);
-                pts[i - 1].Equals(curve.PointAt(knots[i])).Should().BeTrue();
+                new Vector3 {-1.673787, -0.235355, 14.436008}, new Vector3 {13.145523, 6.066452, 0},
+                new Vector3 {2.328185, 22.89864, 0}, new Vector3 {18.154088, 30.745098, 7.561387},
+                new Vector3 {18.154088, 12.309505, 7.561387}
+            };
+
+            ICurve poly = new Polyline(pts);
+
+            Knot knots = poly.Knots;
+
+            poly.Degree.Should().Be(1);
+            for (int i = 1; i < poly.Knots.Count - 1; i++)
+            {
+                Vector3 pt = poly.PointAt(knots[i]);
+                pts[i - 1].Equals(poly.PointAt(knots[i])).Should().BeTrue();
             }
         }
     }

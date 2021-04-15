@@ -40,7 +40,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Gets the number of segments for this polyline;
         /// </summary>
-        public int NumberOfSegments => this.Count - 1;
+        public int SegmentsCount => this.Count - 1;
 
         /// <summary>
         /// Computes the bounding box of the list of points.
@@ -97,7 +97,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The line segment at the index.</returns>
         public Line SegmentAt(int index)
         {
-            if (index < 0 || index > this.Count - 1)
+            if (index < 0 || index > this.Count - 2)
             {
                 throw new Exception("Impossible to find the segment, index is to big or to small.");
             }
@@ -113,9 +113,13 @@ namespace GeometrySharp.Geometry
         public Vector3 TangentAt(double t)
         {
             int index = (int) Math.Truncate(t);
-            if (index < 0 || index > this.Count - 2)
+            if (index < 0)
             {
-                throw new Exception("Parameter t must be between the polyline's domain.");
+                index = 0;
+            }
+            if (index > this.Count - 2)
+            {
+                index = this.Count - 2;
             }
 
             return SegmentAt(index).Direction.Unitize();
@@ -146,12 +150,17 @@ namespace GeometrySharp.Geometry
         public Vector3 PointAt(double t)
         {
             int index = (int)Math.Truncate(t);
-            if (index < 0 || index > this.Count - 2)
+            if (index < 0 || index > this.Count - 1)
             {
                 throw new Exception("Parameter t must be between the polyline's domain.");
             }
 
-            double t2 = t - index;
+            if (index > this.Count - 2)
+            {
+                index = this.Count - 2;
+            }
+
+            double t2 = Math.Abs(t - index);
             Line segment = SegmentAt(index);
             return segment.PointAt(t2);
         }
@@ -197,8 +206,8 @@ namespace GeometrySharp.Geometry
                 Polyline leftPoly = new Polyline(leftSubCollection);
                 Polyline rightPoly = new Polyline(rightSubCollection);
 
-                Vector3 leftPt = leftPoly.PointAt(0.5, out _);
-                Vector3 rightPt = rightPoly.PointAt(0.5, out _);
+                Vector3 leftPt = leftPoly.PointAt(0.5);
+                Vector3 rightPt = rightPoly.PointAt(0.5);
 
                 double leftDistance = leftPt.DistanceTo(pt);
                 double rightDistance = rightPt.DistanceTo(pt);
@@ -222,42 +231,6 @@ namespace GeometrySharp.Geometry
             List<Vector3> copyVertices = new List<Vector3>(this);
             copyVertices.Reverse();
             return new Polyline(copyVertices);
-        }
-
-        /// <summary>
-        /// Computes the point on the polyline at the give parameter.
-        /// The parameter must be between 0.0 and 1.0.
-        /// </summary>
-        /// <param name="t">Parameter to evaluate at.</param>
-        /// <returns>The point on the polyline at t.</returns>
-        public Vector3 PointAt(double t, out Vector3 tangent)
-        {
-            if (t < 0.0 || t > 1.0)
-            {
-                throw new Exception($"The value of t ({t}) must be between 0.0 and 1.0.");
-            }
-
-            int verticesCount = Count;
-            if (t <= GeoSharpMath.EPSILON)
-            {
-                tangent = (this[1] - this[0]).Unitize();
-                return this[0];
-            }
-
-            if (Math.Abs(t - 1) <= GeoSharpMath.EPSILON)
-            {
-                tangent = (this[verticesCount - 1] - this[verticesCount - 2]).Unitize();
-                return this[verticesCount - 1];
-            }
-
-            double tRemapped = GeoSharpMath.RemapValue(t, new Interval(0.0, 1.0), new Interval(0.0, verticesCount - 1));
-
-            double floorValue = Math.Floor(tRemapped);
-            int segmentIndex = (int)floorValue;
-            tRemapped -= floorValue;
-
-            tangent = (this[segmentIndex + 1] - this[segmentIndex]).Unitize();
-            return this[segmentIndex] * (1 - tRemapped) + this[segmentIndex + 1] * tRemapped;
         }
 
         /// <summary>
@@ -290,7 +263,7 @@ namespace GeometrySharp.Geometry
             }
             knots.Add(lengthSum-1);
 
-            Knots = Knot.Normalize(knots);
+            Knots = knots;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(this, weights);
         }
 

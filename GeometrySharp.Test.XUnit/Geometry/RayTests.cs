@@ -62,7 +62,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_Point_At_The_T_Parameter()
         {
             // Arrange
-            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { -7, 10, -5 });
+            Ray ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { -7, 10, -5 });
 
             // Act
             Vector3 pt = ray.PointAt(1.25);

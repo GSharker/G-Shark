@@ -14,11 +14,8 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Polygon : Polyline
     {
-        public Polygon()
-        {
-        }
-
-        public Polygon(IList<Vector3> vertices)
+        public Polygon(IList<Vector3> vertices) 
+            : base(vertices)
         {
             if (vertices.Count < 3)
             {

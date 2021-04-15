@@ -8,6 +8,25 @@ namespace GeometrySharp.Geometry
     public class Ray : IEquatable<Ray>
     {
         /// <summary>
+        /// Constructs the ray.
+        /// </summary>
+        /// <param name="position">The vector describing the direction of the ray.</param>
+        /// <param name="direction">The point describing the origin of the ray.</param>
+        public Ray(Vector3 position, Vector3 direction)
+        {
+            if (!position.IsValid())
+            {
+                throw new Exception("Point value is not valid.");
+            }
+            if (!direction.IsValid())
+            {
+                throw new Exception("Direction value is not valid.");
+            }
+            Direction = direction;
+            Position = position;
+        }
+
+        /// <summary>
         /// Gets the vector, describing the ray direction.
         /// </summary>
         public Vector3 Direction { get; }
@@ -16,25 +35,6 @@ namespace GeometrySharp.Geometry
         /// Gets the position point of the ray.
         /// </summary>
         public Vector3 Position { get; }
-
-        /// <summary>
-        /// Constructs the ray.
-        /// </summary>
-        /// <param name="position">The vector describing the direction of the ray.</param>
-        /// <param name="direction">The point describing the origin of the ray.</param>
-        public Ray(Vector3 position, Vector3 direction)
-        {
-            if (!Position.IsValid())
-            {
-                throw new Exception("Point value is not valid.");
-            }
-            if (!Direction.IsValid())
-            {
-                throw new Exception("Direction value is not valid.");
-            }
-            Direction = direction;
-            Position = position;
-        }
 
         /// <summary>
         /// Calculates the point moved by a scalar value along a direction.
@@ -54,9 +54,9 @@ namespace GeometrySharp.Geometry
         public Vector3 ClosestPoint(Vector3 pt)
         {
             Vector3 rayDirNormalized = Direction!.Unitize();
-            Vector3 rayOriginToPt = pt - Position;
+            Vector3 rayOriginToPt = pt - Position!;
             double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
-            Vector3 projectedPt = Position + rayDirNormalized * dotResult;
+            Vector3 projectedPt = Position! + rayDirNormalized * dotResult;
 
             return projectedPt;
         }
@@ -80,7 +80,7 @@ namespace GeometrySharp.Geometry
         /// <returns>A point at (Direction*t + Position).</returns>
         public Vector3 PointAt(double t)
         {
-            return Position + Direction * t;
+            return Position + Direction! * t;
         }
 
         /// <summary>
