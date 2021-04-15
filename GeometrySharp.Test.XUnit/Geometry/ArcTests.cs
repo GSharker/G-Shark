@@ -171,7 +171,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             };
 
             // Act
-            Curve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
+            ICurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
 
             // Assert
             arc.ControlPoints.Count.Should().Be(5);
@@ -210,7 +210,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             };
 
             // Act
-            Curve arc = ExampleArc3D;
+            ICurve arc = ExampleArc3D;
 
             // Assert
             arc.ControlPoints.Count.Should().Be(7);

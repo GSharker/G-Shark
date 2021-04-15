@@ -10,7 +10,7 @@ namespace GeometrySharp.Geometry
     /// <summary>
     /// Represents the value of a plane, two angles (interval) and a radius (radiance).
     /// </summary>
-    public class Arc : Curve, IEquatable<Arc>, ITransformable<Arc>
+    public class Arc : ICurve, IEquatable<Arc>, ITransformable<Arc>
     {
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval.
@@ -120,11 +120,19 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 EndPoint => ControlPoints[^1];
 
+        public int Degree => 2;
+
+        public List<Vector3> ControlPoints { get; private set; }
+
+        public List<Vector3> HomogenizedPoints { get; private set; }
+
+        public Knot Knots { get; private set; }
+
         /// <summary>
         /// Gets the BoundingBox of this arc.
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
-        public override BoundingBox BoundingBox
+        public BoundingBox BoundingBox
         {
             get
             {
@@ -185,7 +193,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
         /// <returns>Point on the arc.</returns>
-        public override Vector3 PointAt(double t)
+        public Vector3 PointAt(double t)
         {
             Vector3 xDir = Plane.XAxis * Math.Cos(t) * Radius;
             Vector3 yDir = Plane.YAxis * Math.Sin(t) * Radius;
@@ -216,7 +224,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The test point. Point to get close to.</param>
         /// <returns>The point on the arc that is close to the test point.</returns>
-        public override Vector3 ClosestPt(Vector3 pt)
+        public Vector3 ClosestPt(Vector3 pt)
         {
             double twoPi = 2.0 * Math.PI;
 
@@ -368,8 +376,8 @@ namespace GeometrySharp.Geometry
                     break;
             }
 
-            Degree = 2;
             Knots = knots;
+            ControlPoints = ctrPts.ToList();
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 

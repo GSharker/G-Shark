@@ -2,22 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
+    // ToDo: Make test for PointAt - SegmentAt - TangentAt
+    // ToDo: GetParameter.
+    // ToDo: TrimUsingInterval.
     /// <summary>
     /// A simple data structure representing a polyline.
-    /// PolylineData is useful, for example, as the result of a curve tessellation.
     /// </summary>
-    public class Polyline : List<Vector3>
+    public class Polyline : List<Vector3>, ICurve
     {
-        /// <summary>
-        /// Initializes a new empty polyline.
-        /// </summary>
-        public Polyline()
-        {
-        }
-
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
@@ -30,10 +26,56 @@ namespace GeometrySharp.Geometry
             }
 
             AddRange(CleanVerticesForShortLength(vertices));
+            ToNurbsCurve();
+        }
+
+        public int Degree => 1;
+
+        public List<Vector3> ControlPoints => this;
+
+        public List<Vector3> HomogenizedPoints { get; private set; }
+
+        public Knot Knots { get; private set; }
+
+        /// <summary>
+        /// Gets the number of segments for this polyline;
+        /// </summary>
+        public int NumberOfSegments => this.Count - 1;
+
+        /// <summary>
+        /// Computes the bounding box of the list of points.
+        /// </summary>
+        /// <returns>The bounding box.</returns>
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                double minX = double.MaxValue;
+                double minY = double.MaxValue;
+                double minZ = double.MaxValue;
+                double maxX = double.MinValue;
+                double maxY = double.MinValue;
+                double maxZ = double.MinValue;
+
+                for (int i = 0; i < Count; i++)
+                {
+                    minX = Math.Min(minX, this[i][0]);
+                    maxX = Math.Max(maxX, this[i][0]);
+                    minY = Math.Min(minY, this[i][1]);
+                    maxY = Math.Max(maxY, this[i][1]);
+                    minZ = Math.Min(minZ, this[i][2]);
+                    maxZ = Math.Max(maxZ, this[i][2]);
+                }
+
+                Vector3 minPt = new Vector3 { minX, minY, minZ };
+                Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
+
+                return new BoundingBox(minPt, maxPt);
+            }
         }
 
         /// <summary>
-        /// Calculate the length of the polyline.
+        /// Calculates the length of the polyline.
         /// </summary>
         /// <returns>The total length of the polyline.</returns>
         public double Length()
@@ -46,6 +88,37 @@ namespace GeometrySharp.Geometry
             }
 
             return length;
+        }
+
+        /// <summary>
+        /// Gets the line segment at the given index.
+        /// </summary>
+        /// <param name="index">Index of the segment to find.</param>
+        /// <returns>The line segment at the index.</returns>
+        public Line SegmentAt(int index)
+        {
+            if (index < 0 || index > this.Count - 1)
+            {
+                throw new Exception("Impossible to find the segment, index is to big or to small.");
+            }
+
+            return new Line(this[index], this[index + 1]);
+        }
+
+        /// <summary>
+        /// Computes the unit tangent vector along the polyline at the given parameter.
+        /// </summary>
+        /// <param name="t">The polyline parameter.</param>
+        /// <returns>The unit tangent at the parameter t.</returns>
+        public Vector3 TangentAt(double t)
+        {
+            int index = (int) Math.Truncate(t);
+            if (index < 0 || index > this.Count - 2)
+            {
+                throw new Exception("Parameter t must be between the polyline's domain.");
+            }
+
+            return SegmentAt(index).Direction.Unitize();
         }
 
         /// <summary>
@@ -66,7 +139,25 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Gets the point which is the closest point to the given point.
+        /// Computes the point on the polyline at the given parameter.
+        /// </summary>
+        /// <param name="t">The polyline parameter.</param>
+        /// <returns>The point on the polyline at the parameter.</returns>
+        public Vector3 PointAt(double t)
+        {
+            int index = (int)Math.Truncate(t);
+            if (index < 0 || index > this.Count - 2)
+            {
+                throw new Exception("Parameter t must be between the polyline's domain.");
+            }
+
+            double t2 = t - index;
+            Line segment = SegmentAt(index);
+            return segment.PointAt(t2);
+        }
+
+        /// <summary>
+        /// Computes the point which is the closest point to the given point.
         /// </summary>
         /// <param name="pt">Point to test.</param>
         /// <returns>The point closest to the given point.</returns>
@@ -123,38 +214,6 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Calculates the bounding box of the list of points.
-        /// </summary>
-        /// <returns>The bounding box.</returns>
-        public BoundingBox BoundingBox
-        {
-            get
-            {
-                double minX = double.MaxValue;
-                double minY = double.MaxValue;
-                double minZ = double.MaxValue;
-                double maxX = double.MinValue;
-                double maxY = double.MinValue;
-                double maxZ = double.MinValue;
-
-                for (int i = 0; i < Count; i++)
-                {
-                    minX = Math.Min(minX, this[i][0]);
-                    maxX = Math.Max(maxX, this[i][0]);
-                    minY = Math.Min(minY, this[i][1]);
-                    maxY = Math.Max(maxY, this[i][1]);
-                    minZ = Math.Min(minZ, this[i][2]);
-                    maxZ = Math.Max(maxZ, this[i][2]);
-                }
-
-                Vector3 minPt = new Vector3 { minX, minY, minZ };
-                Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
-
-                return new BoundingBox(minPt, maxPt);
-            }
-        }
-
-        /// <summary>
         /// Reverses the order of the polyline.
         /// </summary>
         /// <returns>A polyline reversed.</returns>
@@ -166,7 +225,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Get the point on the polyline at the give parameter.
+        /// Computes the point on the polyline at the give parameter.
         /// The parameter must be between 0.0 and 1.0.
         /// </summary>
         /// <param name="t">Parameter to evaluate at.</param>
@@ -217,14 +276,13 @@ namespace GeometrySharp.Geometry
         /// Constructs a nurbs curve representation of this polyline.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this polyline.</returns>
-        public NurbsCurve ToNurbsCurve()
+        private void ToNurbsCurve()
         {
-            int ptsCount = this.Count;
             double lengthSum = 0;
-            Knot knots = new Knot(){0};
+            Knot knots = new Knot{0};
             List<double> weights = new List<double>();
 
-            for (int i = 0; i < ptsCount; i++)
+            for (int i = 0; i < this.Count; i++)
             {
                 lengthSum += 1;
                 knots.Add(i);
@@ -232,9 +290,8 @@ namespace GeometrySharp.Geometry
             }
             knots.Add(lengthSum-1);
 
-            Knot normalizedKnots = Knot.Normalize(knots);
-
-            return new NurbsCurve(1, normalizedKnots, this, weights);
+            Knots = Knot.Normalize(knots);
+            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(this, weights);
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace GeometrySharp.Operation
         /// <param name="secondGuess">The second guess parameter.</param>
         /// <param name="tolerance">The value tolerance for the intersection.</param>
         /// <returns>The results collected into the object <see cref="CurvesIntersectionResult"/>.</returns>
-        internal static CurvesIntersectionResult CurvesWithEstimation(Curve crv0, Curve crv1,
+        internal static CurvesIntersectionResult CurvesWithEstimation(ICurve crv0, ICurve crv1,
             double firstGuess, double secondGuess, double tolerance)
         {
             IObjectiveFunction objectiveFunctions = new CurvesIntersectionObjectives(crv0, crv1);

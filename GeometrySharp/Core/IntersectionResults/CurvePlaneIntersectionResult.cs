@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeometrySharp.Geometry;
+﻿using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core.IntersectionResults
 {
@@ -15,7 +10,7 @@ namespace GeometrySharp.Core.IntersectionResults
         /// <summary>
         /// Collects the result from an intersection.
         /// </summary>
-        /// <param name="point">Curve's intersection point.</param>
+        /// <param name="point">ICurve's intersection point.</param>
         /// <param name="t">Curve's parameter t on curve.</param>
         /// <param name="uv">Parameter uv on plane.</param>
         public CurvePlaneIntersectionResult(Vector3 point, double t, Vector3 uv)
