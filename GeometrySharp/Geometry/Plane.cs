@@ -302,7 +302,7 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (!ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
             {
                 return false;
             }
