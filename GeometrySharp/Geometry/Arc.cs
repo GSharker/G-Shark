@@ -197,7 +197,7 @@ namespace GeometrySharp.Geometry
         /// Returns the tangent at the parameter t on the arc.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
-        /// <returns>TangentAt at the t parameter.</returns>
+        /// <returns>Tangent vector at the t parameter.</returns>
         public Vector3 TangentAt(double t)
         {
             double r1 = Radius;
@@ -270,7 +270,7 @@ namespace GeometrySharp.Geometry
         /// Constructs a nurbs curve representation of this arc.
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
         /// </summary>
-        /// <returns>A Nurbs curve shaped like this arc.</returns>
+        /// <returns>A nurbs curve shaped like this arc.</returns>
         private void ToNurbsCurve()
         {
             Vector3 axisX = Plane.XAxis;
@@ -386,9 +386,9 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (ReferenceEquals(this, other))
+            if (!ReferenceEquals(this, other))
             {
-                return true;
+                return false;
             }
 
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&

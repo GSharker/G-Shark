@@ -200,9 +200,9 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (ReferenceEquals(this, other))
+            if (!ReferenceEquals(this, other))
             {
-                return true;
+                return false;
             }
 
             return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE && Plane == other.Plane;

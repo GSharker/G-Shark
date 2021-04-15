@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using GeometrySharp.Core;
-
-namespace GeometrySharp.Geometry
+﻿namespace GeometrySharp.Geometry
 {
     // ToDo this class need to be tested.
     // ToDo this class need to be commented.
@@ -18,8 +14,8 @@ namespace GeometrySharp.Geometry
         public Vector3 Position { get; set; }
         public Ray(Vector3 position, Vector3 direction)
         {
-            this.Direction = direction;
-            this.Position = position;
+            Direction = direction;
+            Position = position;
         }
 
         /// <summary>
@@ -29,8 +25,8 @@ namespace GeometrySharp.Geometry
         /// <returns>The point along the ray.</returns>
         public Vector3 OnRay(double amplitude)
         {
-            var vectorAmplified = this.Direction.Unitize() * amplitude;
-            return this.Position + vectorAmplified;
+            Vector3 vectorAmplified = Direction.Unitize() * amplitude;
+            return Position + vectorAmplified;
         }
 
         /// <summary>
@@ -40,10 +36,10 @@ namespace GeometrySharp.Geometry
         /// <returns>Get the closest point on a ray from a point.</returns>
         public Vector3 ClosestPoint(Vector3 pt)
         {
-            var rayDirNormalized = this.Direction.Unitize();
-            var rayOriginToPt = pt - this.Position;
-            var dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
-            var projectedPt = this.Position + rayDirNormalized * dotResult;
+            Vector3 rayDirNormalized = Direction.Unitize();
+            Vector3 rayOriginToPt = pt - Position;
+            double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
+            Vector3 projectedPt = Position + rayDirNormalized * dotResult;
 
             return projectedPt;
         }
@@ -55,8 +51,8 @@ namespace GeometrySharp.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Vector3 pt)
         {
-            var projectedPt = ClosestPoint(pt);
-            var ptToProjectedPt = projectedPt - pt;
+            Vector3 projectedPt = ClosestPoint(pt);
+            Vector3 ptToProjectedPt = projectedPt - pt;
             return ptToProjectedPt.Length();
         }
 
@@ -67,9 +63,9 @@ namespace GeometrySharp.Geometry
         /// <returns>A point at (Direction*t + Position).</returns>
         public Vector3 PointAt(double t)
         {
-            return !this.Position.IsValid() || !this.Direction.IsValid()
+            return !Position.IsValid() || !Direction.IsValid()
                 ? Vector3.Unset
-                : this.Position + this.Direction * t;
+                : Position + Direction * t;
         }
     }
 }

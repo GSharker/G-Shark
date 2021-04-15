@@ -1,4 +1,5 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 using System;
 using System.Collections.Generic;
@@ -6,14 +7,13 @@ using System.Text;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: PointAt commented, see if it can be useful.
     /// <summary>
     /// A Plane is simply an origin point and normal.
     /// </summary>
-    public class Plane : IEquatable<Plane>
+    public class Plane : IEquatable<Plane>, ITransformable<Plane>
     {
         /// <summary>
-        /// Construct a plane from a origin and a direction.
+        /// Constructs a plane from a origin and a direction.
         /// </summary>
         /// <param name="origin">The point describing the origin of the plane.</param>
         /// <param name="direction">The vector representing the normal of the plane.</param>
@@ -26,7 +26,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Construct a plane from three non-collinear points.
+        /// Constructs a plane from three non-collinear points.
         /// </summary>
         /// <param name="pt1">Firs point representing the origin.</param>
         /// <param name="pt2">Second point representing the x direction.</param>
@@ -49,7 +49,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Construct a plane from an point and two directions.
+        /// Constructs a plane from an point and two directions.
         /// </summary>
         /// <param name="origin">Point representing the origin.</param>
         /// <param name="xDirection">X direction.</param>
@@ -64,42 +64,42 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Get a XY plane.
+        /// Gets a XY plane.
         /// </summary>
         public static Plane PlaneXY => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.ZAxis);
 
         /// <summary>
-        /// Get a YZ plane.
+        /// Gets a YZ plane.
         /// </summary>
         public static Plane PlaneYZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.XAxis);
 
         /// <summary>
-        /// Get a XY plane.
+        /// Gets a XY plane.
         /// </summary>
         public static Plane PlaneXZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.YAxis);
 
         /// <summary>
-        /// The normal of the plan.
+        /// Gets the normal of the plan.
         /// </summary>
         public Vector3 Normal => ZAxis;
 
         /// <summary>
-        /// The origin of the plane.
+        /// Gets the origin of the plane.
         /// </summary>
         public Vector3 Origin { get; }
 
         /// <summary>
-        /// The XAxis of the plane.
+        /// Gets the XAxis of the plane.
         /// </summary>
         public Vector3 XAxis { get; }
 
         /// <summary>
-        /// The YAxis of the plane.
+        /// Gets the YAxis of the plane.
         /// </summary>
         public Vector3 YAxis { get; }
 
         /// <summary>
-        /// The ZAxis of the plane.
+        /// Gets the ZAxis of the plane.
         /// </summary>
         public Vector3 ZAxis { get; }
 
@@ -122,7 +122,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Perform the rotation to align the XAxis of a plane to a given guide vector.
+        /// Performs the rotation to align the XAxis of a plane to a given guide vector.
         /// </summary>
         /// <param name="direction">The guide vector.</param>
         /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
@@ -130,14 +130,14 @@ namespace GeometrySharp.Geometry
         {
             Vector3 tempPt = Origin + direction;
 
-            var (u, v) = ClosestParameters(tempPt);
+            (double u, double v) = ClosestParameters(tempPt);
             double angle = -(Math.Atan2(u, v)) + Math.PI / 2.0;
 
             return Rotate(angle);
         }
 
         /// <summary>
-        /// Gets the parameters of a point on the plane closest to the test point.
+        /// Calculates the parameters of a point on the plane closest to the test point.
         /// </summary>
         /// <param name="pt">Test point, the point to get close to.</param>
         /// <returns>The u parameter is along X-direction and v parameter is along the Y-direction.</returns>
@@ -273,76 +273,50 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">The transformation matrix to apply to the plane.</param>
         /// <returns>The transformed plane.</returns>
-        public Plane Transform(Transform t)
+        public Plane Transform(Transform transformation)
         {
-            Vector3 origin = Origin * t;
+            Vector3 origin = Origin * transformation;
 
-            bool check = (Math.Abs(t[3][0]) <= GeoSharpMath.MAXTOLERANCE &&
-                          Math.Abs(t[3][1]) <= GeoSharpMath.MAXTOLERANCE &&
-                          Math.Abs(t[3][2]) <= GeoSharpMath.MAXTOLERANCE &&
-                          Math.Abs(1.0 - t[3][3]) <= GeoSharpMath.MAXTOLERANCE);
+            bool check = (Math.Abs(transformation[3][0]) <= GeoSharpMath.MAXTOLERANCE &&
+                          Math.Abs(transformation[3][1]) <= GeoSharpMath.MAXTOLERANCE &&
+                          Math.Abs(transformation[3][2]) <= GeoSharpMath.MAXTOLERANCE &&
+                          Math.Abs(1.0 - transformation[3][3]) <= GeoSharpMath.MAXTOLERANCE);
 
-            Vector3 xDir = check ? ((Origin + XAxis) * t) - origin : XAxis * t;
-            Vector3 yDir = check ? ((Origin + YAxis) * t) - origin : YAxis * t;
-            Vector3 zDir = check ? ((Origin + ZAxis) * t) - origin : ZAxis * t;
+            Vector3 xDir = check ? ((Origin + XAxis) * transformation) - origin : XAxis * transformation;
+            Vector3 yDir = check ? ((Origin + YAxis) * transformation) - origin : YAxis * transformation;
+            Vector3 zDir = check ? ((Origin + ZAxis) * transformation) - origin : ZAxis * transformation;
 
             return new Plane(origin, xDir, yDir, zDir);
         }
 
         /// <summary>
-        /// Returns a boolean indicating whether the two given Planes are equal.
-        /// </summary>
-        /// <param name="plane1">The first Plane to compare.</param>
-        /// <param name="plane2">The second Plane to compare.</param>
-        /// <returns>True if the Planes are equal; False otherwise.</returns>
-        public static bool operator ==(Plane plane1, Plane plane2)
-        {
-            return Equals(plane1, plane2);
-        }
-
-        /// <summary>
-        /// Returns a boolean indicating whether the two given Planes are not equal.
-        /// </summary>
-        /// <param name="plane1">The first Plane to compare.</param>
-        /// <param name="plane2">The second Plane to compare.</param>
-        /// <returns>True if the Planes are not equal; False if they are equal.</returns>
-        public static bool operator !=(Plane plane1, Plane plane2)
-        {
-            return !Equals(plane1, plane2);
-        }
-
-        /// <summary>
         /// Returns a boolean indicating whether the given Plane is equal to this Plane instance.
+        /// The plane are equals if they have same origin and axises.
         /// </summary>
         /// <param name="other">The Plane to compare this instance to.</param>
         /// <returns>True if the other Plane is equal to this instance; False otherwise.</returns>
         public bool Equals(Plane other)
         {
-            return other != null && (Origin.Equals(other.Origin) &&
-                                     XAxis.Equals(other.XAxis) &&
-                                     YAxis.Equals(other.YAxis) &&
-                                     ZAxis.Equals(other.ZAxis));
-        }
-
-        /// <summary>
-        /// Returns a boolean indicating whether the given Object is equal to this Plane instance.
-        /// </summary>
-        /// <param name="obj">The Object to compare against.</param>
-        /// <returns>True if the Object is equal to this Plane; False otherwise.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is Plane plane)
+            if (ReferenceEquals(null, other))
             {
-                return Equals(plane);
+                return false;
             }
 
-            return false;
+            if (!ReferenceEquals(this, other))
+            {
+                return false;
+            }
+
+            return (Origin.Equals(other.Origin) &&
+                    XAxis.Equals(other.XAxis) &&
+                    YAxis.Equals(other.YAxis) &&
+                    ZAxis.Equals(other.ZAxis));
         }
 
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
-        /// <returns>The hash code.</returns>
+        /// <returns>The hash code of the plane.</returns>
         public override int GetHashCode()
         {
             return Origin.GetHashCode() + Normal.GetHashCode();

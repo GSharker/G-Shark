@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Geometry;
+using System.Collections.Generic;
 using Xunit;
 
 namespace GeometrySharp.Test.XUnit.Geometry
@@ -18,9 +18,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [MemberData(nameof(PointAlongTheRay))]
         public void It_Returns_An_Point_Along_The_Ray(Vector3 expected, double amplitude)
         {
-            var ray = new Ray(new Vector3{ -10, 5, 10 }, new Vector3{ 20, 10, -5 });
+            Ray ray = new Ray(new Vector3{ -10, 5, 10 }, new Vector3{ 20, 10, -5 });
 
-            var pointAlongTheRay = ray.OnRay(amplitude);
+            Vector3 pointAlongTheRay = ray.OnRay(amplitude);
 
             pointAlongTheRay.Should().BeEquivalentTo(expected);
         }
@@ -28,11 +28,11 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Closest_Point()
         {
-            var ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            var pt = new Vector3 { 10, 20, 0 };
-            var expectedPt = new Vector3 { 12.30769230769231, 18.461538461538463, 0 };
+            Ray ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
+            Vector3 pt = new Vector3 { 10, 20, 0 };
+            Vector3 expectedPt = new Vector3 { 12.30769230769231, 18.461538461538463, 0 };
 
-            var closestPt = ray.ClosestPoint(pt);
+            Vector3 closestPt = ray.ClosestPoint(pt);
 
             closestPt.Should().BeEquivalentTo(expectedPt);
         }
@@ -40,11 +40,11 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Distance_To_A_Point()
         {
-            var ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
-            var pt = new Vector3() { 10, 20, 0 };
+            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { 30, 45, 0 });
+            Vector3 pt = new Vector3() { 10, 20, 0 };
             const double distanceExpected = 2.7735009811261464;
 
-            var distance = ray.DistanceTo(pt);
+            double distance = ray.DistanceTo(pt);
 
             distance.Should().Be(distanceExpected);
         }
@@ -52,9 +52,9 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Point_At_The_T_Parameter()
         {
-            var ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { -7, 10, -5 });
+            Ray ray = new Ray(new Vector3() { 0, 0, 0 }, new Vector3() { -7, 10, -5 });
 
-            var pt = ray.PointAt(1.25);
+            Vector3 pt = ray.PointAt(1.25);
 
             pt.Should().BeEquivalentTo(new Vector3 { -8.75, 12.5, -6.25 });
         }
