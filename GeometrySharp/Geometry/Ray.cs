@@ -3,7 +3,7 @@
 namespace GeometrySharp.Geometry
 {
     /// <summary>
-    /// A Ray is simply an position point and normal.
+    /// A Ray is simply an position point and a direction.
     /// </summary>
     public class Ray : IEquatable<Ray>
     {
