@@ -162,24 +162,15 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Transform the line using the transformation matrix.
+        /// Transforms the line using the transformation matrix.
         /// </summary>
-        /// <param name="xForm">Transform matrix to apply.</param>
+        /// <param name="transformation">Transform matrix to apply.</param>
         /// <returns>A line transformed.</returns>
-        public Line Transform(Transform xForm)
+        public Line Transform(Transform transformation)
         {
-            Vector3 pt1 = Start * xForm;
-            Vector3 pt2 = End * xForm;
+            Vector3 pt1 = Start * transformation;
+            Vector3 pt2 = End * transformation;
             return new Line(pt1, pt2);
-        }
-
-        /// <summary>
-        /// Constructs the string representation of the line.
-        /// </summary>
-        /// <returns>A text string.</returns>
-        public override string ToString()
-        {
-            return $"{Start} - {End} - L:{Length}";
         }
 
         /// <summary>
@@ -190,7 +181,12 @@ namespace GeometrySharp.Geometry
         /// <returns>True if the end points are equal, otherwise false.</returns>
         public bool Equals(Line other)
         {
-            if (other is null)
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
             {
                 return false;
             }
@@ -199,12 +195,21 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Get the hash code for the line.
+        /// Gets the hash code for the line.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A unique hashCode of an line.</returns>
         public override int GetHashCode()
         {
             return new[] { Start, End }.GetHashCode();
+        }
+
+        /// <summary>
+        /// Constructs the string representation of the line.
+        /// </summary>
+        /// <returns>A text string.</returns>
+        public override string ToString()
+        {
+            return $"{Start} - {End} - L:{Length}";
         }
     }
 }
