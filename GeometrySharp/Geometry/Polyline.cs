@@ -6,8 +6,6 @@ using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: GetParameter.
-    // ToDo: TrimUsingInterval.
     /// <summary>
     /// A simple data structure representing a polyline.
     /// </summary>
@@ -35,6 +33,8 @@ namespace GeometrySharp.Geometry
         public List<Vector3> HomogenizedPoints { get; private set; }
 
         public Knot Knots { get; private set; }
+
+        public Interval Domain => new Interval(0, this.Count - 1);
 
         /// <summary>
         /// Gets the number of segments for this polyline;
@@ -90,6 +90,23 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Constructs a collections of lines, which make the polyline.
+        /// </summary>
+        /// <returns>A collection of lines.</returns>
+        public Line[] Segments()
+        {
+            int count = Count;
+            Line[] lines = new Line[count - 1];
+
+            for (int i = 0; i < count - 1; i++)
+            {
+                lines[i] = new Line(this[i], this[i + 1]);
+            }
+
+            return lines;
+        }
+
+        /// <summary>
         /// Gets the line segment at the given index.
         /// </summary>
         /// <param name="index">Index of the segment to find.</param>
@@ -125,23 +142,6 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Constructs a collections of lines, which make the polyline.
-        /// </summary>
-        /// <returns>A collection of lines.</returns>
-        public Line[] Segments()
-        {
-            int count = Count;
-            Line[] lines = new Line[count - 1];
-
-            for (int i = 0; i < count - 1; i++)
-            {
-                lines[i] = new Line(this[i], this[i+1]);
-            }
-
-            return lines;
-        }
-
-        /// <summary>
         /// Computes the point on the polyline at the given parameter.
         /// </summary>
         /// <param name="t">The polyline parameter.</param>
@@ -164,6 +164,18 @@ namespace GeometrySharp.Geometry
             Line segment = SegmentAt(index);
             return segment.PointAt(t2);
         }
+
+        //public double ClosestParameter(Vector3 pt)
+        //{
+        //    int index = 0;
+        //    double valueT = 0.0;
+        //    double checkValue = double.MaxValue;
+
+        //    for (int i = 0; i < this.Count - 1; i++)
+        //    {
+                
+        //    }
+        //}
 
         /// <summary>
         /// Computes the point which is the closest point to the given point.

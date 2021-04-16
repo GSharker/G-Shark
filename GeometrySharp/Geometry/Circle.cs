@@ -107,6 +107,8 @@ namespace GeometrySharp.Geometry
                 2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
             };
 
+        public Interval Domain => new Interval(0.0, 2.0 * Math.PI);
+
         /// <summary>
         /// Gets the BoundingBox of this Circle.
         /// </summary>

@@ -27,7 +27,7 @@ namespace GeometrySharp.Geometry
 
             Plane = plane;
             Radius = radius;
-            AngleDomain = (angleDomain.Length > Math.PI * 2.0)
+            Domain = (angleDomain.Length > Math.PI * 2.0)
                 ? new Interval(AngularDiff(angleDomain.Min, Math.PI * 2.0), AngularDiff(angleDomain.Max, Math.PI * 2.0))
                 : angleDomain;
 
@@ -69,7 +69,7 @@ namespace GeometrySharp.Geometry
 
             Plane = pl;
             Radius = xDir.Length();
-            AngleDomain = new Interval(0.0, angle);
+            Domain = new Interval(0.0, angle);
             ToNurbsCurve();
         }
 
@@ -92,13 +92,13 @@ namespace GeometrySharp.Geometry
         /// Gets the angle of this arc.
         /// Angle value in radians.
         /// </summary>
-        public double Angle => AngleDomain.Length;
+        public double Angle => Domain.Length;
 
         /// <summary>
         /// Gets the angle domain of this arc.
         /// The domain is in radians.
         /// </summary>
-        public Interval AngleDomain { get; }
+        public Interval Domain { get; }
 
         /// <summary>
         /// Calculates the length of the arc.
@@ -113,7 +113,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Gets the mid-point of the arc.
         /// </summary>
-        public Vector3 MidPoint => PointAt(AngleDomain.Mid);
+        public Vector3 MidPoint => PointAt(Domain.Mid);
 
         /// <summary>
         /// Gets the end point of the arc.
@@ -240,7 +240,7 @@ namespace GeometrySharp.Geometry
                 t += twoPi;
             }
 
-            t -= AngleDomain.Min;
+            t -= Domain.Min;
 
             while (t < 0.0)
             {
@@ -252,13 +252,13 @@ namespace GeometrySharp.Geometry
                 t -= twoPi;
             }
 
-            double t1 = AngleDomain.Length;
+            double t1 = Domain.Length;
             if (t > t1)
             {
                 t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
             }
 
-            return PointAt(AngleDomain.Min + t);
+            return PointAt(Domain.Min + t);
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace GeometrySharp.Geometry
         public Arc Transform(Transform transformation)
         {
             Plane plane = Plane.Transform(transformation);
-            Interval angleDomain = new Interval(AngleDomain.Min, AngleDomain.Max);
+            Interval angleDomain = new Interval(Domain.Min, Domain.Max);
 
             return new Arc(plane, Radius, angleDomain);
         }
@@ -316,12 +316,12 @@ namespace GeometrySharp.Geometry
 
             double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(AngleDomain.Min)) + axisY * (Radius * Math.Sin(AngleDomain.Min)));
-            Vector3 t0 = axisY * Math.Cos(AngleDomain.Min) - axisX * Math.Sin(AngleDomain.Min);
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.Min)) + axisY * (Radius * Math.Sin(Domain.Min)));
+            Vector3 t0 = axisY * Math.Cos(Domain.Min) - axisX * Math.Sin(Domain.Min);
 
             Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
-            double angle = AngleDomain.Min;
+            double angle = Domain.Min;
 
             ctrPts[0] = p0;
             weights[0] = 1.0;

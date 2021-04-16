@@ -101,15 +101,6 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Determine the valid domain of the curve.
-        /// </summary>
-        /// <returns>representing the high and end point of the domain of the curve.</returns>
-        public Interval Domain()
-        {
-            return new Interval(Knots.First(), Knots.Last());
-        }
-
-        /// <summary>
         /// Transform a curve with the given matrix.
         /// </summary>
         /// <param name="mat">4d set representing the transform.</param>
@@ -132,9 +123,15 @@ namespace GeometrySharp.Geometry
         }
 
         public int Degree { get; }
+
         public List<Vector3> ControlPoints { get; }
+
         public List<Vector3> HomogenizedPoints { get; }
+
         public Knot Knots { get; }
+
+        public Interval Domain => new Interval(Knots.First(), Knots.Last());
+
         public BoundingBox BoundingBox { get; }
 
         /// <summary>

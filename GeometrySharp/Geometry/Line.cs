@@ -10,11 +10,6 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
-        private int _degree;
-        private List<Vector3> _controlPoints;
-        private List<Vector3> _homogenizedPoints;
-        private Knot _knots;
-
         /// <summary>
         /// Line by start point and end point.
         /// </summary>
@@ -73,9 +68,14 @@ namespace GeometrySharp.Geometry
         public Vector3 Direction { get; }
 
         public int Degree => 1;
+
         public List<Vector3> ControlPoints => new List<Vector3> {Start, End};
+
         public List<Vector3> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
+
         public Knot Knots => new Knot {1, 1, 0, 0};
+
+        public Interval Domain => new Interval(0.0, 1.0);
 
         /// <summary>
         /// Gets the BoundingBox in ascending fashion.
@@ -105,6 +105,27 @@ namespace GeometrySharp.Geometry
             d = Math.Max(d, 0);
 
             return Start + dir * d;
+        }
+
+        /// <summary>
+        /// Computes the parameter on the line the is closest to a test point.
+        /// </summary>
+        /// <param name="pt">The test point.</param>
+        /// <returns>The parameter on the line closest to the test point.</returns>
+        public double ClosestParameter(Vector3 pt)
+        {
+            Vector3 dir = End - Start;
+            double dirLength = dir.SquaredLength();
+
+            if (!(dirLength > 0.0)) return 0.0;
+            Vector3 ptToStart = pt - Start;
+            Vector3 ptToEnd = pt - End;
+            if (ptToStart.SquaredLength() <= ptToEnd.SquaredLength())
+            {
+                return Vector3.Dot(ptToStart, dir) / dirLength;
+            }
+
+            return 1.0 + Vector3.Dot(ptToEnd, dir) / dirLength;
         }
 
         /// <summary>

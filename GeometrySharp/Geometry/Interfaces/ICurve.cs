@@ -6,24 +6,29 @@ namespace GeometrySharp.Geometry.Interfaces
     public interface ICurve
     {
         /// <summary>
-        /// Integer degree of curve.
+        /// Gets the degree of curve.
         /// </summary>
         public int Degree { get; }
 
         /// <summary>
-        /// 2d list of control points, where each control point is a list like (x,y,z) of length (dim).
+        /// Gets the control points, where each control point is a list like (x,y,z).
         /// </summary>
         public List<Vector3> ControlPoints { get; }
 
         /// <summary>
-        /// 2d list of points, where represented a set (wi*pi, wi) with length (dim+1).
+        /// Gets the homogenize points, where represented a set (wi*pi, wi).
         /// </summary>
         public List<Vector3> HomogenizedPoints { get; }
 
         /// <summary>
-        /// List of non-decreasing knot values.
+        /// Gets a the collection of non-decreasing knot values.
         /// </summary>
         public Knot Knots { get; }
+
+        /// <summary>
+        /// Gets the domain of the curve.
+        /// </summary>
+        public Interval Domain { get; }
 
         /// <summary>
         /// Gets the bounding box of the curve.

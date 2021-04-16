@@ -126,7 +126,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Domain_Of_The_Curve()
         {
-            var curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain();
+            var curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain;
 
             curveDomain.Min.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.First());
             curveDomain.Max.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.Last());
