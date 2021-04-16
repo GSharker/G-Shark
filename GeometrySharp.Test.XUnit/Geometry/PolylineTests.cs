@@ -126,6 +126,23 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Theory]
+        [InlineData(0.346154, new double[] { 5, 7.5, 0 })]
+        [InlineData(2.0, new double[] { 15, -3, 5 })]
+        [InlineData(2.48, new double[] { 22.5, 12, -3.0 })]
+        public void It_Returns_A_Parameter_Along_The_Polyline_At_The_Given_Point(double expextedParam, double[] pt)
+        {
+            // Arrange
+            Polyline polyline = new Polyline(ExamplePts);
+            Vector3 closestPt = new Vector3(pt);
+
+            // Act
+            double param = polyline.ClosestParameter(closestPt);
+
+            // Assert
+            param.Should().BeApproximately(expextedParam, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Theory]
         [InlineData(-0.1)]
         [InlineData(4.05)]
         public void PointAt_Throws_An_Exception_If_Parameter_Is_Smaller_Than_Zero_And_Bigger_Than_One(double t)

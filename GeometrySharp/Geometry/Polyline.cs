@@ -165,17 +165,41 @@ namespace GeometrySharp.Geometry
             return segment.PointAt(t2);
         }
 
-        //public double ClosestParameter(Vector3 pt)
-        //{
-        //    int index = 0;
-        //    double valueT = 0.0;
-        //    double checkValue = double.MaxValue;
+        /// <summary>
+        /// Gets the parameter along the polyline which is closest to the point.
+        /// </summary>
+        /// <param name="pt">The point to test.</param>
+        /// <returns>The parameter closest to the point.</returns>
+        public double ClosestParameter(Vector3 pt)
+        {
+            int index = 0;
+            double valueT = 0.0;
+            double smallestDistance = double.MaxValue;
 
-        //    for (int i = 0; i < this.Count - 1; i++)
-        //    {
-                
-        //    }
-        //}
+            for (int i = 0; i < this.Count - 1; i++)
+            {
+                Line line = new Line(this[i], this[i + 1]);
+                double tempT = line.ClosestParameter(pt);
+                if (tempT < 0.0)
+                {
+                    tempT = 0.0;
+                }
+                if (tempT > 1.0)
+                {
+                    tempT = 1.0;
+                }
+
+                double distFromPt = line.PointAt(tempT).DistanceTo(pt);
+                if (distFromPt < smallestDistance)
+                {
+                    smallestDistance = distFromPt;
+                    valueT = tempT;
+                    index = i;
+                }
+            }
+
+            return valueT + index;
+        }
 
         /// <summary>
         /// Computes the point which is the closest point to the given point.
