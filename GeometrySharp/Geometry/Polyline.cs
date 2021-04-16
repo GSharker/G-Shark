@@ -6,7 +6,6 @@ using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: Make test for PointAt - SegmentAt - TangentAt
     // ToDo: GetParameter.
     // ToDo: TrimUsingInterval.
     /// <summary>
@@ -149,11 +148,12 @@ namespace GeometrySharp.Geometry
         /// <returns>The point on the polyline at the parameter.</returns>
         public Vector3 PointAt(double t)
         {
-            int index = (int)Math.Truncate(t);
-            if (index < 0 || index > this.Count - 1)
+            if (t < 0 || t > this.Count - 1)
             {
                 throw new Exception("Parameter t must be between the polyline's domain.");
             }
+
+            int index = (int)Math.Truncate(t);
 
             if (index > this.Count - 2)
             {

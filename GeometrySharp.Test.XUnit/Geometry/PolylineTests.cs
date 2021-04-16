@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,8 +27,14 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Polyline()
         {
+            // Arrange
+            int numberOfExpectedSegments = 4;
+
+            // Act
             Polyline polyline = new Polyline(ExamplePts);
 
+            // Arrange
+            polyline.SegmentsCount.Should().Be(numberOfExpectedSegments);
             polyline.Count.Should().Be(ExamplePts.Length);
             polyline[0].Should().BeEquivalentTo(ExamplePts[0]);
         }
@@ -36,73 +42,149 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void Polyline_Throws_An_Exception_If_Vertex_Count_Is_Less_Than_Two()
         {
-            Vector3[] pts = new[] {new Vector3 {5, 0, 0}};
+            // Arrange
+            Vector3[] pts = new[] { new Vector3 { 5, 0, 0 } };
 
+            // Act
             Func<Polyline> func = () => new Polyline(pts);
 
+            // Assert
             func.Should().Throw<Exception>().WithMessage("Insufficient points for a polyline.");
         }
 
         [Fact]
         public void It_Returns_A_Polyline_Removing_Short_Segments()
         {
-            Vector3[] pts = new[] { new Vector3 { 5, 5, 0 }, new Vector3 { 5, 10, 0 }, new Vector3 { 5, 10, 0 }, 
-                new Vector3 { 15,12,0 }, new Vector3 { 20,-20,0 }, new Vector3 { 20, -20, 0 } };
+            // Arrange
+            Vector3[] pts = new[]
+            {
+                new Vector3 {5, 5, 0}, new Vector3 {5, 10, 0},
+                new Vector3 {5, 10, 0}, new Vector3 {15, 12, 0},
+                new Vector3 {20, -20, 0}, new Vector3 {20, -20, 0}
+            };
 
-            Vector3[] ptsExpected = new[] { new Vector3 { 5, 5, 0 }, new Vector3 { 5, 10, 0 }, new Vector3 { 15,12,0 }, new Vector3 { 20,-20,0 }};
+            Vector3[] ptsExpected = new[]
+            {
+                new Vector3 {5, 5, 0}, new Vector3 {5, 10, 0},
+                new Vector3 {15, 12, 0}, new Vector3 {20, -20, 0}
+            };
 
+            // Act
             Polyline polyline = new Polyline(pts);
 
+            // Assert
             polyline.Should().BeEquivalentTo(ptsExpected);
-            _testOutput.WriteLine(polyline.ToString());
         }
 
         [Fact]
         public void It_Returns_The_Length_Of_A_Polyline()
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
+            double expectedLength = 55.595342;
 
+            // Act
             double length = polyline.Length();
 
-            length.Should().BeApproximately(55.595342, GeoSharpMath.MAXTOLERANCE);
+            // Assert
+            length.Should().BeApproximately(expectedLength, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
         public void It_Returns_A_Collection_Of_Lines()
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
+            int expectedNumberOfSegments = 4;
+            double expectedSegmentLength = 11.18034;
 
+            // Act
             Line[] segments = polyline.Segments();
 
-            segments.Length.Should().Be(4);
-            segments[1].Length.Should().Be(segments[2].Length).And.BeApproximately(11.18034, GeoSharpMath.MAXTOLERANCE);
+            // Assert
+            segments.Length.Should().Be(expectedNumberOfSegments);
+            segments[1].Length.Should().Be(segments[2].Length)
+                .And.BeApproximately(expectedSegmentLength, GeoSharpMath.MAXTOLERANCE);
         }
 
         [Theory]
-        [InlineData(0.0, new double[]{ 5, 0, 0 }, new double[] { 0.5547, 0.83205, 0 })]
-        [InlineData(0.25, new double[] { 15, 15, 0 }, new double[] { 0.447214, -0.894427, 0 })]
-        [InlineData(0.55, new double[] { 22, 6, 0 }, new double[] { 0.894427, 0.447214, 0 })]
-        [InlineData(1.0, new double[] { 45, 12.5, 0 }, new double[] { 0.986394, 0.164399, 0 })]
-        public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] ptExpected, double[] tangentExpected)
+        [InlineData(0.0, new double[] { 5, 0, 0 })]
+        [InlineData(0.25, new double[] { 7.5, 3.75, 0 })]
+        [InlineData(2.5, new double[] { 25, 7.5, 0 })]
+        [InlineData(4.0, new double[] { 45, 12.5, 0 })]
+        public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] pt)
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
+            Vector3 expectedPt = new Vector3(pt);
 
-            Vector3 pt = polyline.PointAt(t);
+            // Act
+            Vector3 ptResult = polyline.PointAt(t);
 
-            Vector3 tangToCheck = new Vector3(tangentExpected);
-            Vector3 ptToCheck = new Vector3(ptExpected);
-            pt.IsEqualRoundingDecimal(ptToCheck, 6).Should().BeTrue();
+            // Assert
+            ptResult.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
         }
 
         [Theory]
         [InlineData(-0.1)]
-        [InlineData(1.05)]
+        [InlineData(4.05)]
         public void PointAt_Throws_An_Exception_If_Parameter_Is_Smaller_Than_Zero_And_Bigger_Than_One(double t)
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
 
+            // Act
             Func<Vector3> func = () => polyline.PointAt(t);
 
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Theory]
+        [InlineData(0.0, new double[] { 0.5547, 0.83205, 0 })]
+        [InlineData(0.25, new double[] { 0.5547, 0.83205, 0 })]
+        [InlineData(2.5, new double[] { 0.894427, 0.447214, 0 })]
+        [InlineData(4.0, new double[] { 0.986394, 0.164399, 0 })]
+        public void It_Returns_A_Tangent_Vector_At_The_Given_Parameter(double t, double[] tangent)
+        {
+            // Arrange
+            Polyline polyline = new Polyline(ExamplePts);
+            Vector3 expectedTangent = new Vector3(tangent);
+
+            // Act
+            Vector3 tanResult = polyline.TangentAt(t);
+
+            // Assert
+            tanResult.IsEqualRoundingDecimal(expectedTangent, 6).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0, 18.027756)]
+        [InlineData(2, 11.18034)]
+        public void It_Returns_A_Segment_At_The_Given_Index(int index, double segmentLength)
+        {
+            // Arrange
+            Polyline polyline = new Polyline(ExamplePts);
+
+            // Act
+            Line segment = polyline.SegmentAt(index);
+
+            // Assert
+            segment.Length.Should().BeApproximately(segmentLength, GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(5)]
+        public void SegmentAt_Throws_An_Exception_If_Index_Is_Smaller_Than_Zero_And_Bigger_Than_Polyline_Domain(int index)
+        {
+            // Arrange
+            Polyline polyline = new Polyline(ExamplePts);
+
+            // Act
+            Func<Line> func = () => polyline.SegmentAt(index);
+
+            // Assert
             func.Should().Throw<Exception>();
         }
 
@@ -112,7 +194,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
             Transform translation = Transform.Translation(new Vector3 { 10, 15, 0 });
             Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Vector3 { 0, 0, 0 });
             Transform combinedTransformations = translation.Combine(rotation);
-            double[] distanceToCheck = new[] {19.831825, 20.496248, 24.803072, 28.67703, 35.897724};
+            double[] distanceToCheck = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
             Polyline polyline = new Polyline(ExamplePts);
 
             Polyline transformedPoly = polyline.Transform(combinedTransformations);
@@ -125,7 +207,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point()
         {
             Polyline polyline = new Polyline(ExamplePts);
-            Vector3 testPt = new Vector3 {17.0, 8.0, 0.0};
+            Vector3 testPt = new Vector3 { 17.0, 8.0, 0.0 };
             Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
 
             Vector3 closestPt = polyline.ClosestPt(testPt);
