@@ -11,6 +11,9 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Polyline : List<Vector3>, ICurve
     {
+        protected Polyline()
+        {
+        }
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
@@ -285,7 +288,7 @@ namespace GeometrySharp.Geometry
         /// Constructs a nurbs curve representation of this polyline.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this polyline.</returns>
-        private void ToNurbsCurve()
+        protected void ToNurbsCurve()
         {
             double lengthSum = 0;
             Knot knots = new Knot{0};

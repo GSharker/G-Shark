@@ -238,9 +238,14 @@ namespace GeometrySharp.Operation
         /// <returns>Area calculated.</returns>
         public static double CalculateArea(IList<Vector3> pts)
         {
-            if(pts.Count < 3)
+            if (pts.Count < 3)
             {
                 throw new Exception("The collection must have minimum three points.");
+            }
+
+            if (pts[0] != pts[^1])
+            {
+                throw new Exception("The collection must represent a closed curve.");
             }
 
             double area = 0.0;
@@ -521,7 +526,7 @@ namespace GeometrySharp.Operation
                 for (int l = 0; l < numDerivs - k + 1; l++)
                 {
                     Vector3 t1 = Aders[k][l];
-                    for (int j =1; j < l+1; j++)
+                    for (int j = 1; j < l + 1; j++)
                     {
                         Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
                     }
@@ -532,7 +537,7 @@ namespace GeometrySharp.Operation
                         Vector3 t2 = Vector3.Zero1d(dim);
                         for (int j = 1; j < l + 1; j++)
                         {
-                            Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k-i][l - j]);
+                            Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
                         }
 
                         Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);

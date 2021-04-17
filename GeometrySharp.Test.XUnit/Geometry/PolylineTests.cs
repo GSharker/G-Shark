@@ -208,39 +208,48 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Transformed_Polyline()
         {
+            // Arrange
             Transform translation = Transform.Translation(new Vector3 { 10, 15, 0 });
             Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Vector3 { 0, 0, 0 });
             Transform combinedTransformations = translation.Combine(rotation);
-            double[] distanceToCheck = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
+            double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
             Polyline polyline = new Polyline(ExamplePts);
 
+            // Act
             Polyline transformedPoly = polyline.Transform(combinedTransformations);
 
+            // Assert
             double[] lengths = polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
-            lengths.Select((val, i) => val.Should().BeApproximately(distanceToCheck[i], GeoSharpMath.MAXTOLERANCE));
+            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MAXTOLERANCE));
         }
 
         [Fact]
         public void It_Returns_The_Closest_Point()
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
             Vector3 testPt = new Vector3 { 17.0, 8.0, 0.0 };
             Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
 
+            // Act
             Vector3 closestPt = polyline.ClosestPt(testPt);
 
+            // Assert
             closestPt.IsEqualRoundingDecimal(expectedPt, 2).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_The_Bounding_Box_Of_The_Polyline()
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
             Vector3 minExpected = new Vector3 { 5.0, 0.0, 0.0 };
             Vector3 maxExpected = new Vector3 { 45.0, 15.0, 0.0 };
 
+            // Act
             BoundingBox bBox = polyline.BoundingBox;
 
+            // Assert
             bBox.Min.Should().BeEquivalentTo(minExpected);
             bBox.Max.Should().BeEquivalentTo(maxExpected);
         }
@@ -248,12 +257,15 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Reversed_Polyline()
         {
+            // Arrange
             Polyline polyline = new Polyline(ExamplePts);
             List<Vector3> reversedPts = new List<Vector3>(ExamplePts);
             reversedPts.Reverse();
 
+            // Act
             Polyline reversedPolyline = polyline.Reverse();
 
+            // Assert
             reversedPolyline.Should().NotBeSameAs(polyline);
             reversedPolyline.Should().BeEquivalentTo(reversedPts);
         }
@@ -261,6 +273,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Polyline_Transformed_In_NurbsCurve()
         {
+            // Arrange
             Vector3[] pts = new[]
             {
                 new Vector3 {-1.673787, -0.235355, 14.436008}, new Vector3 {13.145523, 6.066452, 0},
@@ -268,10 +281,11 @@ namespace GeometrySharp.Test.XUnit.Geometry
                 new Vector3 {18.154088, 12.309505, 7.561387}
             };
 
+            // Act
             ICurve poly = new Polyline(pts);
-
             Knot knots = poly.Knots;
 
+            // Assert
             poly.Degree.Should().Be(1);
             for (int i = 1; i < poly.Knots.Count - 1; i++)
             {

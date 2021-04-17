@@ -7,15 +7,14 @@ using GeometrySharp.Operation;
 namespace GeometrySharp.Geometry
 {
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
-    // ToDo: Centroid by area.
+    // ToDo: Centroid by area from evaluation.
     // ToDo: throw exception if the polyline self intersect.
     /// <summary>
     /// A closed planar Polyline.
     /// </summary>
     public class Polygon : Polyline
     {
-        public Polygon(IList<Vector3> vertices) 
-            : base(vertices)
+        public Polygon(IList<Vector3> vertices)
         {
             if (vertices.Count < 3)
             {
@@ -36,6 +35,7 @@ namespace GeometrySharp.Geometry
             }
 
             AddRange(cleanedVertices);
+            ToNurbsCurve();
         }
 
         /// <summary>
