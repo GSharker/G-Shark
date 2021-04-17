@@ -22,7 +22,7 @@ namespace GeometrySharp.Operation
 		/// <param name="curve">The NurbsCurve object.</param>
 		/// <param name="knotsToInsert">The set of Knots.</param>
 		/// <returns>A NurbsCurve with refined knots.</returns>
-		public static Curve CurveKnotRefine(Curve curve, List<double> knotsToInsert)
+		public static ICurve CurveKnotRefine(ICurve curve, List<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0)
                 return curve;
@@ -207,7 +207,7 @@ namespace GeometrySharp.Operation
             }
 
             //Do knot refinement on every row
-            Curve crv = new NurbsCurve();
+            ICurve crv = new NurbsCurve();
             foreach (var cptRow in ctrlPts)
             {
                 crv = CurveKnotRefine(new NurbsCurve(degree, knots, cptRow), knotsToInsert);

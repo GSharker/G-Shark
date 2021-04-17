@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
-    public class Circle : Curve, IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
@@ -17,7 +17,6 @@ namespace GeometrySharp.Geometry
         {
             Plane = plane;
             Radius = Math.Abs(radius);
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -45,7 +44,6 @@ namespace GeometrySharp.Geometry
 
             Plane = new Plane(center, xDir, yDir, normal);
             Radius = xDir.Length();
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -68,10 +66,53 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public double Circumference => Math.Abs(2.0 * Math.PI * Radius);
 
+        public int Degree => 2;
+
+        public List<Vector3> ControlPoints
+        {
+            get
+            {
+                Vector3[] ctrPts = new Vector3[9];
+                ctrPts[0] = Plane.PointAt(Radius, 0.0);
+                ctrPts[1] = Plane.PointAt(Radius, Radius);
+                ctrPts[2] = Plane.PointAt(0.0, Radius);
+                ctrPts[3] = Plane.PointAt(-Radius, Radius);
+                ctrPts[4] = Plane.PointAt(-Radius, 0.0);
+                ctrPts[5] = Plane.PointAt(-Radius, -Radius);
+                ctrPts[6] = Plane.PointAt(0.0, -Radius);
+                ctrPts[7] = Plane.PointAt(Radius, -Radius);
+                ctrPts[8] = ctrPts[0];
+                return ctrPts.ToList();
+            }
+        }
+
+        public List<Vector3> HomogenizedPoints
+        {
+            get
+            {
+                List<double> weights = Sets.RepeatData(1.0, 9);
+                weights[1] = weights[3] = weights[5] = weights[7] = 1.0 / Math.Sqrt(2.0);
+
+                return LinearAlgebra.PointsHomogeniser(ControlPoints, weights.ToList());
+            }
+        }
+
+        public Knot Knots =>
+            new Knot
+            {
+                0, 0, 0,
+                0.5 * Math.PI, 0.5 * Math.PI,
+                Math.PI, Math.PI,
+                1.5 * Math.PI, 1.5 * Math.PI,
+                2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
+            };
+
+        public Interval Domain => new Interval(0.0, 2.0 * Math.PI);
+
         /// <summary>
         /// Gets the BoundingBox of this Circle.
         /// </summary>
-        public override BoundingBox BoundingBox
+        public BoundingBox BoundingBox
         {
             get
             {
@@ -98,7 +139,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public override Vector3 PointAt(double t)
+        public Vector3 PointAt(double t)
         {
             return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
         }
@@ -123,7 +164,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The test point to project onto the circle.</param>
         /// <returns>The point on the circle that is close to the test point.</returns>
-        public override Vector3 ClosestPt(Vector3 pt)
+        public Vector3 ClosestPt(Vector3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
@@ -149,42 +190,6 @@ namespace GeometrySharp.Geometry
         {
             Plane plane = Plane.Transform(transformation);
             return new Circle(plane, Radius);
-        }
-
-        /// <summary>
-        /// Constructs a nurbs curve representation of this circle.
-        /// </summary>
-        /// <returns>A nurbs curve shaped like this circle.</returns>
-        private void ToNurbsCurve()
-        {
-            Knot knots = new Knot
-            {
-                0, 0, 0, 
-                0.5 * Math.PI, 0.5 * Math.PI, 
-                Math.PI, Math.PI, 
-                1.5 * Math.PI, 1.5 * Math.PI, 
-                2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
-            };
-
-            Vector3[] ctrPts = new Vector3[9];
-            ctrPts[0] = Plane.PointAt(Radius, 0.0);
-            ctrPts[1] = Plane.PointAt(Radius, Radius);
-            ctrPts[2] = Plane.PointAt(0.0, Radius);
-            ctrPts[3] = Plane.PointAt(-Radius, Radius);
-            ctrPts[4] = Plane.PointAt(-Radius, 0.0);
-            ctrPts[5] = Plane.PointAt(-Radius, -Radius);
-            ctrPts[6] = Plane.PointAt(0.0, -Radius);
-            ctrPts[7] = Plane.PointAt(Radius, -Radius);
-            ctrPts[8] = ctrPts[0];
-
-            List<double> weights = Sets.RepeatData(1.0, ctrPts.Length);
-            weights[1] = weights[3] = weights[5] = weights[7] = 1.0 / Math.Sqrt(2.0);
-
-            NurbsCurve n = new NurbsCurve(2, knots, ctrPts.ToList(), weights);
-
-            Degree = 2;
-            Knots = knots;
-            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>

@@ -13,15 +13,15 @@ namespace GeometrySharp.Optimization
     /// </summary>
     public class CurvesIntersectionObjectives : IObjectiveFunction
     {
-        private readonly Curve _curve0;
-        private readonly Curve _curve1;
+        private readonly ICurve _curve0;
+        private readonly ICurve _curve1;
 
         /// <summary>
         /// Initialize the class, which collects the functions used for the minimization problem.
         /// </summary>
         /// <param name="curve0">First curve used in the intersection process.</param>
         /// <param name="curve1">First curve used in the intersection process.</param>
-        public CurvesIntersectionObjectives(Curve curve0, Curve curve1)
+        public CurvesIntersectionObjectives(ICurve curve0, ICurve curve1)
         {
             _curve0 = curve0;
             _curve1 = curve1;

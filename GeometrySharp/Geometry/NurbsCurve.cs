@@ -13,7 +13,7 @@ namespace GeometrySharp.Geometry
     /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
     /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
     /// /// </summary>
-    public class NurbsCurve : Curve, IEquatable<NurbsCurve>
+    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>
     {
         /// <summary>
         /// Basic constructor.
@@ -25,7 +25,7 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Creates a Nurbs curve object.
         /// </summary>
-        /// <param name="degree">Curve degree.</param>
+        /// <param name="degree">ICurve degree.</param>
         /// <param name="knots">Knot defining the curve.</param>
         /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
         /// <param name="weights">Weight values, as a collection of doubles.</param>
@@ -59,6 +59,7 @@ namespace GeometrySharp.Geometry
             Weights = weights ?? Sets.RepeatData(1.0, controlPoints.Count);
             Degree = degree;
             Knots = knots;
+            ControlPoints = controlPoints;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPoints, Weights);
         }
 
@@ -66,7 +67,7 @@ namespace GeometrySharp.Geometry
         /// Creates a Nurbs curve object.
         /// </summary>
         /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
-        /// <param name="degree">Curve degree.</param>
+        /// <param name="degree">ICurve degree.</param>
         public NurbsCurve(List<Vector3> controlPoints, int degree)
             : this(degree, new Knot(degree, controlPoints.Count), controlPoints)
         {
@@ -79,6 +80,7 @@ namespace GeometrySharp.Geometry
         public NurbsCurve(NurbsCurve curve)
         {
             Degree = curve.Degree;
+            ControlPoints = new List<Vector3>(curve.ControlPoints);
             HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
             Knots = new Knot(curve.Knots);
             Weights = new List<double>(curve.Weights!);
@@ -96,15 +98,6 @@ namespace GeometrySharp.Geometry
         public NurbsCurve Clone()
         {
             return new NurbsCurve(this);
-        }
-
-        /// <summary>
-        /// Determine the valid domain of the curve.
-        /// </summary>
-        /// <returns>representing the high and end point of the domain of the curve.</returns>
-        public Interval Domain()
-        {
-            return new Interval(Knots.First(), Knots.Last());
         }
 
         /// <summary>
@@ -129,7 +122,17 @@ namespace GeometrySharp.Geometry
             return Divide.CurveSplit(this, t);
         }
 
-        public override BoundingBox BoundingBox { get; }
+        public int Degree { get; }
+
+        public List<Vector3> ControlPoints { get; }
+
+        public List<Vector3> HomogenizedPoints { get; }
+
+        public Knot Knots { get; }
+
+        public Interval Domain => new Interval(Knots.First(), Knots.Last());
+
+        public BoundingBox BoundingBox { get; }
 
         /// <summary>
         /// Sample a point at the given parameter.
@@ -137,12 +140,12 @@ namespace GeometrySharp.Geometry
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
         /// ToDo implement the async method.
-        public override Vector3 PointAt(double t)
+        public Vector3 PointAt(double t)
         {
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
         }
 
-        public override Vector3 ClosestPt(Vector3 pt)
+        public Vector3 ClosestPt(Vector3 pt)
         {
             throw new NotImplementedException();
         }

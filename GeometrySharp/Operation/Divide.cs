@@ -19,14 +19,14 @@ namespace GeometrySharp.Operation
 		/// <param name="curve">NurbsCurve object representing the curve.</param>
 		/// <param name="u">The parameter where to split the curve.</param>
 		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<NurbsCurve> CurveSplit(Curve curve, double u)
+		public static List<NurbsCurve> CurveSplit(ICurve curve, double u)
 		{
 			int degree = curve.Degree;
             Knot knots = curve.Knots;
 
             var knotsToInsert = Sets.RepeatData(u, degree + 1);
 
-            Curve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
 		 	int s = knots.Span(degree, u);
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 
 namespace GeometrySharp.Optimization
@@ -9,15 +10,15 @@ namespace GeometrySharp.Optimization
     /// </summary>
     public class CurvePlaneIntersectionObjectives : IObjectiveFunction
     {
-        private readonly NurbsCurve _curve;
+        private readonly ICurve _curve;
         private readonly Plane _plane;
 
         /// <summary>
         /// Initialize the class, which collects the functions used for the minimization problem.
         /// </summary>
-        /// <param name="crv">Curve used in the intersection process.</param>
+        /// <param name="crv">ICurve used in the intersection process.</param>
         /// <param name="plane">Plane used in the intersection process.</param>
-        public CurvePlaneIntersectionObjectives(NurbsCurve crv, Plane plane)
+        public CurvePlaneIntersectionObjectives(ICurve crv, Plane plane)
         {
             _curve = crv;
             _plane = plane;

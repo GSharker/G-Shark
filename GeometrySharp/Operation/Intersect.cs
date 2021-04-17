@@ -16,9 +16,9 @@ namespace GeometrySharp.Operation
     /// </summary>
     public class Intersect
     {
-        // ToDo: Curve-Plane
-        // ToDo: Curve-Self
-        // ToDo: Curve-Surface
+        // ToDo: ICurve-Plane
+        // ToDo: ICurve-Self
+        // ToDo: ICurve-Surface
         // ToDo: Surface-Surface
 
         /// <summary>
@@ -320,9 +320,9 @@ namespace GeometrySharp.Operation
         /// <param name="crv2">Second curve to intersect.</param>
         /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
         /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
-        public static List<CurvesIntersectionResult> CurveCurve(Curve crv1, Curve crv2, double tolerance = 1e-6)
+        public static List<CurvesIntersectionResult> CurveCurve(ICurve crv1, ICurve crv2, double tolerance = 1e-6)
         {
-            List<Tuple<Curve, Curve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
+            List<Tuple<ICurve, ICurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
                 .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquaredLength() < tolerance)
@@ -341,7 +341,7 @@ namespace GeometrySharp.Operation
         /// <returns>If intersection found a collection of <see cref="CurvePlaneIntersectionResult"/> otherwise the result will be empty.</returns>
         public static List<CurvePlaneIntersectionResult> CurvePlane(NurbsCurve crv, Plane pl, double tolerance = 1e-6)
         {
-            List<Curve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
+            List<ICurve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
             List<CurvePlaneIntersectionResult> intersectionResults = bBoxRoot.Select(
                 x => IntersectionRefiner.CurvePlaneWithEstimation(crv, pl, x.Knots[0], x.Knots[0], tolerance)).ToList();
 
@@ -356,7 +356,7 @@ namespace GeometrySharp.Operation
         /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
         public static List<CurvesIntersectionResult> CurveSelf(NurbsCurve crv, double tolerance = 1e-6)
         {
-            List<Tuple<Curve, Curve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
+            List<Tuple<ICurve, ICurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(x.Item1, x.Item2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
                 .Where(crInRe => Math.Abs(crInRe.T0 - crInRe.T1) > tolerance)

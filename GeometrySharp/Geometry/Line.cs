@@ -8,7 +8,7 @@ namespace GeometrySharp.Geometry
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
-    public class Line : Curve, IEquatable<Line>, ITransformable<Line>
+    public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Line by start point and end point.
@@ -26,7 +26,6 @@ namespace GeometrySharp.Geometry
             End = end;
             Length = Start.DistanceTo(End);
             Direction = (End - Start).Unitize();
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -46,7 +45,6 @@ namespace GeometrySharp.Geometry
             End = start + direction.Amplify(length);
             Length = Math.Abs(length);
             Direction = (End - Start).Unitize();
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -69,10 +67,20 @@ namespace GeometrySharp.Geometry
         /// </summary>
         public Vector3 Direction { get; }
 
+        public int Degree => 1;
+
+        public List<Vector3> ControlPoints => new List<Vector3> {Start, End};
+
+        public List<Vector3> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
+
+        public Knot Knots => new Knot {1, 1, 0, 0};
+
+        public Interval Domain => new Interval(0.0, 1.0);
+
         /// <summary>
         /// Gets the BoundingBox in ascending fashion.
         /// </summary>
-        public override BoundingBox BoundingBox
+        public BoundingBox BoundingBox
         {
             get
             {
@@ -87,7 +95,7 @@ namespace GeometrySharp.Geometry
         /// </summary>
         /// <param name="pt">The closest point to find.</param>
         /// <returns>The closest point on the line from this point.</returns>
-        public override Vector3 ClosestPt(Vector3 pt)
+        public Vector3 ClosestPt(Vector3 pt)
         {
             Vector3 dir = Direction;
             Vector3 v = pt - Start;
@@ -100,11 +108,32 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
+        /// Computes the parameter on the line the is closest to a test point.
+        /// </summary>
+        /// <param name="pt">The test point.</param>
+        /// <returns>The parameter on the line closest to the test point.</returns>
+        public double ClosestParameter(Vector3 pt)
+        {
+            Vector3 dir = End - Start;
+            double dirLength = dir.SquaredLength();
+
+            if (!(dirLength > 0.0)) return 0.0;
+            Vector3 ptToStart = pt - Start;
+            Vector3 ptToEnd = pt - End;
+            if (ptToStart.SquaredLength() <= ptToEnd.SquaredLength())
+            {
+                return Vector3.Dot(ptToStart, dir) / dirLength;
+            }
+
+            return 1.0 + Vector3.Dot(ptToEnd, dir) / dirLength;
+        }
+
+        /// <summary>
         /// Evaluate the line at the specified parameter.
         /// </summary>
         /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
         /// <returns>The point at the specific parameter.</returns>
-        public override Vector3 PointAt(double t)
+        public Vector3 PointAt(double t)
         {
             if (t > 1.0 || t < 0.0)
             {
@@ -147,19 +176,6 @@ namespace GeometrySharp.Geometry
             return new Line(start, end);
         }
 
-        /// <summary>
-        /// Constructs a nurbs curve representation of this line.
-        /// </summary>
-        /// <returns>A nurbs curve shaped like this line.</returns>
-        private void ToNurbsCurve()
-        {
-            List<Vector3> pts = new List<Vector3>{Start, End};
-            Knot knots = new Knot{0,0,1,1};
-
-            Degree = 1;
-            Knots = knots;
-            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(pts, 1.0);
-        }
 
         /// <summary>
         /// Transforms the line using the transformation matrix.
