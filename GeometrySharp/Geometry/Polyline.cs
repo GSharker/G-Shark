@@ -45,6 +45,12 @@ namespace GeometrySharp.Geometry
         public int SegmentsCount => this.Count - 1;
 
         /// <summary>
+        /// Gets true if the polyline is closed.
+        /// A polyline is considered closed, if its start and end point are identical.
+        /// </summary>
+        public bool IsClosed => this[0] == this[^1];
+
+        /// <summary>
         /// Computes the bounding box of the list of points.
         /// </summary>
         /// <returns>The bounding box.</returns>

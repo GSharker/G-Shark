@@ -29,7 +29,7 @@ namespace GeometrySharp.Geometry
             }
 
             IList<Vector3> cleanedVertices = CleanVerticesForShortLength(vertices);
-            if (!vertices[0].Equals(vertices[^1]))
+            if (!IsClosed)
             {
                 cleanedVertices.Add(cleanedVertices[0]);
             }
@@ -44,9 +44,84 @@ namespace GeometrySharp.Geometry
         public Vector3 CentroidByVertices => Evaluation.CentroidByVertices(this);
 
         /// <summary>
-        /// Gets the area of the polyline.
+        /// Gets the centroid of mass of the polygon.
+        /// https://stackoverflow.com/questions/9815699/how-to-calculate-centroid
+        /// http://csharphelper.com/blog/2014/07/find-the-centroid-of-a-polygon-in-c/
         /// </summary>
-        public double Area => Evaluation.CalculateArea(this);
+        public Vector3 CentroidByArea
+        {
+            get
+            {
+                bool isOnPlaneXY = false;
+                Transform transformBack = new Transform();
+                List<Vector3> copiedPts = new List<Vector3>(this);
+                if (this[0][2] > GeoSharpMath.MAXTOLERANCE)
+                {
+                    isOnPlaneXY = true;
+                    Plane polygonPlane = new Plane(this[0], this[1], this[2]);
+                    Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+                    transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
+                    copiedPts = this.Transform(toOrigin);
+                }
+
+                double signedArea = 0.0;
+                double valueX = 0.0;
+                double valueY = 0.0;
+
+                for (int i = 0; i < this.Count; i++)
+                {
+                    double x0 = this[i][0];
+                    double y0 = this[i][1];
+
+                    double x1 = this[(i + 1) % this.Count][0];
+                    double y1 = this[(i + 1) % this.Count][1];
+
+                    double a = x0 * y1 - x1 * y0;
+                    signedArea += a;
+                    valueX += (x0 + x1) * a;
+                    valueY += (y0 + y1) * a;
+                }
+
+                signedArea *= 0.5;
+                valueX /= (6.0 * signedArea);
+                valueY /= (6.0 * signedArea);
+
+                Vector3 centroid = new Vector3 { valueX, valueY, 0.0 };
+
+                if (!isOnPlaneXY)
+                {
+                    return centroid * transformBack;
+                }
+
+                return centroid;
+            }
+        }
+
+        /// <summary>
+        /// Gets the area from a list of points.
+        /// The list should represent a closed curve and planar.
+        /// https://stackoverflow.com/questions/25340106/boostgeometry-find-area-of-2d-polygon-in-3d-space
+        /// http://geomalgorithms.com/a01-_area.html
+        /// </summary>
+        /// <param name="pts">Set of points.</param>
+        /// <returns>Area calculated.</returns>
+        public double Area
+        {
+            get
+            {
+                double area = 0.0;
+                Vector3 normal = Vector3.Cross(this[1] - this[0], this[2] - this[0]).Unitize();
+
+                for (int i = 0; i < this.Count - 1; i++)
+                {
+                    Vector3 product = Vector3.Cross(this[i] - this[0], this[i + 1] - this[0]);
+                    area += Vector3.Dot(product, normal);
+                }
+
+                area *= 0.5;
+                return Math.Abs(area);
+            }
+        }
 
         /// <summary>
         /// Applies a transformation to all the points.
