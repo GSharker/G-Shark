@@ -7,14 +7,13 @@ using GeometrySharp.Operation;
 namespace GeometrySharp.Geometry
 {
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
-    // ToDo: Centroid by area from evaluation.
     // ToDo: throw exception if the polyline self intersect.
     /// <summary>
     /// A closed planar Polyline.
     /// </summary>
     public class Polygon : Polyline
     {
-        public Polygon(IList<Vector3> vertices)
+        public Polygon(IList<Vector3> vertices) : base(vertices)
         {
             if (vertices.Count < 3)
             {
@@ -28,13 +27,8 @@ namespace GeometrySharp.Geometry
                 throw new Exception("The points must be co-planar.");
             }
 
-            IList<Vector3> cleanedVertices = CleanVerticesForShortLength(vertices);
-            if (!IsClosed)
-            {
-                cleanedVertices.Add(cleanedVertices[0]);
-            }
-
-            AddRange(cleanedVertices);
+            if (IsClosed) return;
+            Add(vertices[0]);
             ToNurbsCurve();
         }
 
@@ -52,12 +46,12 @@ namespace GeometrySharp.Geometry
         {
             get
             {
-                bool isOnPlaneXY = false;
+                bool isOnPlaneXY = true;
                 Transform transformBack = new Transform();
                 List<Vector3> copiedPts = new List<Vector3>(this);
-                if (this[0][2] > GeoSharpMath.MAXTOLERANCE)
+                if (Math.Abs(this[0][2]) > GeoSharpMath.MAXTOLERANCE)
                 {
-                    isOnPlaneXY = true;
+                    isOnPlaneXY = false;
                     Plane polygonPlane = new Plane(this[0], this[1], this[2]);
                     Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
                     transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
@@ -68,13 +62,13 @@ namespace GeometrySharp.Geometry
                 double valueX = 0.0;
                 double valueY = 0.0;
 
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < copiedPts.Count-1; i++)
                 {
-                    double x0 = this[i][0];
-                    double y0 = this[i][1];
+                    double x0 = copiedPts[i][0];
+                    double y0 = copiedPts[i][1];
 
-                    double x1 = this[(i + 1) % this.Count][0];
-                    double y1 = this[(i + 1) % this.Count][1];
+                    double x1 = copiedPts[(i + 1) % copiedPts.Count][0];
+                    double y1 = copiedPts[(i + 1) % copiedPts.Count][1];
 
                     double a = x0 * y1 - x1 * y0;
                     signedArea += a;

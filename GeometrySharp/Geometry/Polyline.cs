@@ -11,9 +11,6 @@ namespace GeometrySharp.Geometry
     /// </summary>
     public class Polyline : List<Vector3>, ICurve
     {
-        protected Polyline()
-        {
-        }
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
