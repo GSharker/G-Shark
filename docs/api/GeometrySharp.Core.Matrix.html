@@ -1,0 +1,1122 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Matrix
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Matrix
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="GeometrySharp.Core.Matrix">
+  
+  
+  <h1 id="GeometrySharp_Core_Matrix" data-uid="GeometrySharp.Core.Matrix" class="text-break">Class Matrix
+  </h1>
+  <div class="markdown level0 summary"><p>A Matrix is represented by a nested list of double point numbers.
+So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div class="level2"><span class="xref">Matrix</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.IList</span></div>
+    <div><span class="xref">System.Collections.ICollection</span></div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.get_Item(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.set_Item(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Add(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.AddRange(System.Collections.Generic.IEnumerable&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.AsReadOnly()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.BinarySearch(System.Int32, System.Int32, System.Collections.Generic.IList&lt;System.Double&gt;, System.Collections.Generic.IComparer&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.BinarySearch(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.BinarySearch(System.Collections.Generic.IList&lt;System.Double&gt;, System.Collections.Generic.IComparer&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Clear()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Contains(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.ConvertAll&lt;TOutput&gt;(System.Converter&lt;System.Collections.Generic.IList&lt;System.Double&gt;, TOutput&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.CopyTo(System.Int32, System.Collections.Generic.IList&lt;System.Double&gt;[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.CopyTo(System.Collections.Generic.IList&lt;System.Double&gt;[])</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.CopyTo(System.Collections.Generic.IList&lt;System.Double&gt;[], System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Exists(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Find(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindAll(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindIndex(System.Int32, System.Int32, System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindIndex(System.Int32, System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindIndex(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindLast(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindLastIndex(System.Int32, System.Int32, System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindLastIndex(System.Int32, System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.FindLastIndex(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.ForEach(System.Action&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.GetRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.IndexOf(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.IndexOf(System.Collections.Generic.IList&lt;System.Double&gt;, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.IndexOf(System.Collections.Generic.IList&lt;System.Double&gt;, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Insert(System.Int32, System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.InsertRange(System.Int32, System.Collections.Generic.IEnumerable&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.LastIndexOf(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.LastIndexOf(System.Collections.Generic.IList&lt;System.Double&gt;, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.LastIndexOf(System.Collections.Generic.IList&lt;System.Double&gt;, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Remove(System.Collections.Generic.IList&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.RemoveAll(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.RemoveAt(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.RemoveRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Reverse()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Reverse(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Sort()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Sort(System.Collections.Generic.IComparer&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Sort(System.Comparison&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Sort(System.Int32, System.Int32, System.Collections.Generic.IComparer&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.Generic.IEnumerable&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.ICollection.CopyTo(System.Array, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IEnumerable.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.Add(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.Contains(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.IndexOf(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.Insert(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.Remove(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.ToArray()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.TrimExcess()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.TrueForAll(System.Predicate&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Capacity</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Count</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.Generic.ICollection&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.ICollection.IsSynchronized</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.ICollection.SyncRoot</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.IsFixedSize</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Collections.Generic.IList&lt;System.Double&gt;&gt;.System.Collections.IList.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="GeometrySharp.Core.html">GeometrySharp.Core</a></h6>
+  <h6><strong>Assembly</strong>: GeometrySharp.dll</h6>
+  <h5 id="GeometrySharp_Core_Matrix_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Matrix : List&lt;IList&lt;double&gt;&gt;, IList&lt;IList&lt;double&gt;&gt;, ICollection&lt;IList&lt;double&gt;&gt;, IReadOnlyList&lt;IList&lt;double&gt;&gt;, IReadOnlyCollection&lt;IList&lt;double&gt;&gt;, IEnumerable&lt;IList&lt;double&gt;&gt;, IList, ICollection, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix__ctor.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L19">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix__ctor_" data-uid="GeometrySharp.Core.Matrix.#ctor*"></a>
+  <h4 id="GeometrySharp_Core_Matrix__ctor" data-uid="GeometrySharp.Core.Matrix.#ctor">Matrix()</h4>
+  <div class="markdown level1 summary"><p>Initialize an empty matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Matrix()</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Construct_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Construct(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L29">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Construct_" data-uid="GeometrySharp.Core.Matrix.Construct*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Construct_System_Int32_System_Int32_" data-uid="GeometrySharp.Core.Matrix.Construct(System.Int32,System.Int32)">Construct(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a matrix by given number of rows and columns.
+All the parameters are set to zero.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix Construct(int row, int column)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row</span></td>
+        <td><p>A positive integer, for the number of rows.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column</span></td>
+        <td><p>A positive integer, for the number of columns.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Decompose_GeometrySharp_Core_Matrix_System_Int32____.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Decompose(GeometrySharp.Core.Matrix%2CSystem.Int32%5B%5D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L384">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Decompose_" data-uid="GeometrySharp.Core.Matrix.Decompose*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Decompose_GeometrySharp_Core_Matrix_System_Int32____" data-uid="GeometrySharp.Core.Matrix.Decompose(GeometrySharp.Core.Matrix,System.Int32[]@)">Decompose(Matrix, out Int32[])</h4>
+  <div class="markdown level1 summary"><p>This routine uses Doolittle's method with partial pivoting to decompose the n x n matrix A,
+into a unit lower triangular matrix L and an upper triangular matrix U and P is a permutation array
+such that PA = LU. With this method you can always have a LU decomposition, rather than LU factorization.
+The LU decomposition with pivoting always exists, even if the matrix is singular, so the constructor will never fail.
+The primary use of the LU decomposition is in the solution of square systems of simultaneous linear equations.
+The LUP decomposition provides a more robust method of solving linear systems than LU decomposition without pivoting, and it is approximately the same cost.
+This will fail if non singular.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix Decompose(Matrix m, out int[] permutation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">m</span></td>
+        <td><p>Matrix has to be decomposed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">permutation</span></td>
+        <td><p>The row pivot information is in one-dimensional array.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>The matrix representing the L matrix and U matrix together.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Duplicate_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Duplicate(GeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L247">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Duplicate_" data-uid="GeometrySharp.Core.Matrix.Duplicate*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Duplicate_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Core.Matrix.Duplicate(GeometrySharp.Core.Matrix)">Duplicate(Matrix)</h4>
+  <div class="markdown level1 summary"><p>Creates a copy.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix Duplicate(Matrix matrix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">matrix</span></td>
+        <td><p>Matrix has to be duplicated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>Copied matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Identity_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Identity(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L51">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Identity_" data-uid="GeometrySharp.Core.Matrix.Identity*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Identity_System_Int32_" data-uid="GeometrySharp.Core.Matrix.Identity(System.Int32)">Identity(Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates an identity matrix of a given size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix Identity(int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td><p>The size of the matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>Identity matrix of the given size.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Inverse_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Inverse(GeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L475">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Inverse_" data-uid="GeometrySharp.Core.Matrix.Inverse*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Inverse_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Core.Matrix.Inverse(GeometrySharp.Core.Matrix)">Inverse(Matrix)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix Inverse(Matrix matrix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">matrix</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_IsValid.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.IsValid%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L68">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_IsValid_" data-uid="GeometrySharp.Core.Matrix.IsValid*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_IsValid" data-uid="GeometrySharp.Core.Matrix.IsValid">IsValid()</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this matrix is valid.
+Matrix is valid when has at least one column and one row and rows have at least 2 elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsValid()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if it is a valid matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Solve_GeometrySharp_Core_Matrix_System_Int32___GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Solve(GeometrySharp.Core.Matrix%2CSystem.Int32%5B%5D%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L290">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Solve_" data-uid="GeometrySharp.Core.Matrix.Solve*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Solve_GeometrySharp_Core_Matrix_System_Int32___GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Core.Matrix.Solve(GeometrySharp.Core.Matrix,System.Int32[],GeometrySharp.Geometry.Vector3)">Solve(Matrix, Int32[], Vector3)</h4>
+  <div class="markdown level1 summary"><p>This routine uses Doolittle's method to solve the linear equation Ax = B.
+This routine is called after the matrix A has been decomposed.
+The solution proceeds by solving the linear equation Ly = B for y and,
+subsequently solving the linear equation Ux = y for x.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Solve(Matrix LuMatrix, int[] permutation, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">LuMatrix</span></td>
+        <td><p>Decomposed matrix in lower and upper triangle.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">permutation</span></td>
+        <td><p>The permutation row, or pivot row interchanged with row i.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Column vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>The solution of the equation Ax = B is a vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_ToString.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L530">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_ToString_" data-uid="GeometrySharp.Core.Matrix.ToString*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_ToString" data-uid="GeometrySharp.Core.Matrix.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Constructs the string representation the matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>Text string.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_Transpose.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.Transpose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L220">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_Transpose_" data-uid="GeometrySharp.Core.Matrix.Transpose*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_Transpose" data-uid="GeometrySharp.Core.Matrix.Transpose">Transpose()</h4>
+  <div class="markdown level1 summary"><p>Transpose a matrix.
+This is like swapping rows with columns.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Matrix Transpose()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>The matrix transposed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_op_Addition_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.op_Addition(GeometrySharp.Core.Matrix%2CGeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L157">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_op_Addition_" data-uid="GeometrySharp.Core.Matrix.op_Addition*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_op_Addition_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Core.Matrix.op_Addition(GeometrySharp.Core.Matrix,GeometrySharp.Core.Matrix)">Addition(Matrix, Matrix)</h4>
+  <div class="markdown level1 summary"><p>Adds two matrices.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix operator +(Matrix a, Matrix b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First Matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second Matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>The sum matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_op_Division_GeometrySharp_Core_Matrix_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.op_Division(GeometrySharp.Core.Matrix%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L96">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_op_Division_" data-uid="GeometrySharp.Core.Matrix.op_Division*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_op_Division_GeometrySharp_Core_Matrix_System_Double_" data-uid="GeometrySharp.Core.Matrix.op_Division(GeometrySharp.Core.Matrix,System.Double)">Division(Matrix, Double)</h4>
+  <div class="markdown level1 summary"><p>Divides a matrix by a constant.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix operator /(Matrix m, double a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">m</span></td>
+        <td><p>Matrix has to be multiply.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>Value to operate the division.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>Matrix divided by a constant.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_op_Multiply_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.op_Multiply(GeometrySharp.Core.Matrix%2CGeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L113">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_op_Multiply_" data-uid="GeometrySharp.Core.Matrix.op_Multiply*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_op_Multiply_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Core.Matrix.op_Multiply(GeometrySharp.Core.Matrix,GeometrySharp.Core.Matrix)">Multiply(Matrix, Matrix)</h4>
+  <div class="markdown level1 summary"><p>Multiply two matrices assuming they are of compatible dimensions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix operator *(Matrix a, Matrix b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>The product matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_op_Multiply_GeometrySharp_Core_Matrix_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.op_Multiply(GeometrySharp.Core.Matrix%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L79">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_op_Multiply_" data-uid="GeometrySharp.Core.Matrix.op_Multiply*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_op_Multiply_GeometrySharp_Core_Matrix_System_Double_" data-uid="GeometrySharp.Core.Matrix.op_Multiply(GeometrySharp.Core.Matrix,System.Double)">Multiply(Matrix, Double)</h4>
+  <div class="markdown level1 summary"><p>Multiply a matrix by a constant.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix operator *(Matrix m, double a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">m</span></td>
+        <td><p>Matrix has to be multiply.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>Value to operate the multiplication.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>Matrix multiply by a constant.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix_op_Subtraction_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix.op_Subtraction(GeometrySharp.Core.Matrix%2CGeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L189">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Matrix_op_Subtraction_" data-uid="GeometrySharp.Core.Matrix.op_Subtraction*"></a>
+  <h4 id="GeometrySharp_Core_Matrix_op_Subtraction_GeometrySharp_Core_Matrix_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Core.Matrix.op_Subtraction(GeometrySharp.Core.Matrix,GeometrySharp.Core.Matrix)">Subtraction(Matrix, Matrix)</h4>
+  <div class="markdown level1 summary"><p>Subtracts two matrices.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Matrix operator -(Matrix a, Matrix b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First Matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second Matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><p>The subtraction matrix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IList</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.ICollection</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="GeometrySharp.ExtendedMethods.ExtendedEnumerable.html#GeometrySharp_ExtendedMethods_ExtendedEnumerable_Unique__1_System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">ExtendedEnumerable.Unique&lt;T&gt;(IEnumerable&lt;T&gt;, Func&lt;T, T, Boolean&gt;)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Matrix.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Matrix%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Matrix.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
