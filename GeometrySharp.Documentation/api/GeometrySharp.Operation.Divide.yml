@@ -1,0 +1,710 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Operation.Divide
+  commentId: T:GeometrySharp.Operation.Divide
+  id: Divide
+  parent: GeometrySharp.Operation
+  children:
+  - GeometrySharp.Operation.Divide.CurveSplit(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  - GeometrySharp.Operation.Divide.RationalCurveByDivisions(GeometrySharp.Geometry.NurbsCurve,System.Int32)
+  - GeometrySharp.Operation.Divide.RationalCurveByEqualLength(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  langs:
+  - csharp
+  - vb
+  name: Divide
+  nameWithType: Divide
+  fullName: GeometrySharp.Operation.Divide
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Operation/Divide.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Divide
+    path: ../GeometrySharp/Operation/Divide.cs
+    startLine: 11
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nDivide provides various tools for dividing and splitting NURBS geometry.\n"
+  example: []
+  syntax:
+    content: public class Divide
+    content.vb: Public Class Divide
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Operation.Divide.CurveSplit(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  commentId: M:GeometrySharp.Operation.Divide.CurveSplit(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  id: CurveSplit(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  parent: GeometrySharp.Operation.Divide
+  langs:
+  - csharp
+  - vb
+  name: CurveSplit(NurbsCurve, Double)
+  nameWithType: Divide.CurveSplit(NurbsCurve, Double)
+  fullName: GeometrySharp.Operation.Divide.CurveSplit(GeometrySharp.Geometry.NurbsCurve, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Divide.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CurveSplit
+    path: ../GeometrySharp/Operation/Divide.cs
+    startLine: 19
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nSplit a NurbsCurve into two parts at a given parameter.\n"
+  example: []
+  syntax:
+    content: public static List<NurbsCurve> CurveSplit(NurbsCurve curve, double u)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object representing the curve.
+    - id: u
+      type: System.Double
+      description: The parameter where to split the curve.
+    return:
+      type: System.Collections.Generic.List{GeometrySharp.Geometry.NurbsCurve}
+      description: Two new curves, defined by degree, knots, and control points.
+    content.vb: Public Shared Function CurveSplit(curve As NurbsCurve, u As Double) As List(Of NurbsCurve)
+  overload: GeometrySharp.Operation.Divide.CurveSplit*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Divide.RationalCurveByDivisions(GeometrySharp.Geometry.NurbsCurve,System.Int32)
+  commentId: M:GeometrySharp.Operation.Divide.RationalCurveByDivisions(GeometrySharp.Geometry.NurbsCurve,System.Int32)
+  id: RationalCurveByDivisions(GeometrySharp.Geometry.NurbsCurve,System.Int32)
+  parent: GeometrySharp.Operation.Divide
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveByDivisions(NurbsCurve, Int32)
+  nameWithType: Divide.RationalCurveByDivisions(NurbsCurve, Int32)
+  fullName: GeometrySharp.Operation.Divide.RationalCurveByDivisions(GeometrySharp.Geometry.NurbsCurve, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Divide.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveByDivisions
+    path: ../GeometrySharp/Operation/Divide.cs
+    startLine: 47
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nDivide a NurbsCurve for a given number of time, including the end points.\nThe result is not split curves but a collection of t values and lengths that can be used for splitting.\nAs with all arc length methods, the result is an approximation.\n"
+  example: []
+  syntax:
+    content: public static (List<double> tValues, List<double> lengths) RationalCurveByDivisions(NurbsCurve curve, int divisions)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object to divide.
+    - id: divisions
+      type: System.Int32
+      description: The number of parts to split the curve into.
+    return:
+      type: System.ValueTuple{System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double}}
+      description: A tuple define the t values where the curve is divided and the lengths between each division.
+    content.vb: Public Shared Function RationalCurveByDivisions(curve As NurbsCurve, divisions As Integer) As(tValues As List(Of Double), lengths As List(Of Double))
+  overload: GeometrySharp.Operation.Divide.RationalCurveByDivisions*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Divide.RationalCurveByEqualLength(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  commentId: M:GeometrySharp.Operation.Divide.RationalCurveByEqualLength(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  id: RationalCurveByEqualLength(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  parent: GeometrySharp.Operation.Divide
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveByEqualLength(NurbsCurve, Double)
+  nameWithType: Divide.RationalCurveByEqualLength(NurbsCurve, Double)
+  fullName: GeometrySharp.Operation.Divide.RationalCurveByEqualLength(GeometrySharp.Geometry.NurbsCurve, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Divide.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveByEqualLength
+    path: ../GeometrySharp/Operation/Divide.cs
+    startLine: 63
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nDivide a NurbsCurve for a given length, including the end points.\nThe result is not split curves but a collection of t values and lengths that can be used for splitting.\nAs with all arc length methods, the result is an approximation.\n"
+  example: []
+  syntax:
+    content: public static (List<double> tValues, List<double> lengths) RationalCurveByEqualLength(NurbsCurve curve, double length)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object to divide.
+    - id: length
+      type: System.Double
+      description: The length separating the resultant samples.
+    return:
+      type: System.ValueTuple{System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double}}
+      description: A tuple define the t values where the curve is divided and the lengths between each division.
+    content.vb: Public Shared Function RationalCurveByEqualLength(curve As NurbsCurve, length As Double) As(tValues As List(Of Double), lengths As List(Of Double))
+  overload: GeometrySharp.Operation.Divide.RationalCurveByEqualLength*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+references:
+- uid: GeometrySharp.Operation
+  commentId: N:GeometrySharp.Operation
+  name: GeometrySharp.Operation
+  nameWithType: GeometrySharp.Operation
+  fullName: GeometrySharp.Operation
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Operation.Divide.CurveSplit*
+  commentId: Overload:GeometrySharp.Operation.Divide.CurveSplit
+  name: CurveSplit
+  nameWithType: Divide.CurveSplit
+  fullName: GeometrySharp.Operation.Divide.CurveSplit
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: System.Collections.Generic.List{GeometrySharp.Geometry.NurbsCurve}
+  commentId: T:System.Collections.Generic.List{GeometrySharp.Geometry.NurbsCurve}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<NurbsCurve>
+  nameWithType: List<NurbsCurve>
+  fullName: System.Collections.Generic.List<GeometrySharp.Geometry.NurbsCurve>
+  nameWithType.vb: List(Of NurbsCurve)
+  fullName.vb: System.Collections.Generic.List(Of GeometrySharp.Geometry.NurbsCurve)
+  name.vb: List(Of NurbsCurve)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.NurbsCurve
+    name: NurbsCurve
+    nameWithType: NurbsCurve
+    fullName: GeometrySharp.Geometry.NurbsCurve
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.NurbsCurve
+    name: NurbsCurve
+    nameWithType: NurbsCurve
+    fullName: GeometrySharp.Geometry.NurbsCurve
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: GeometrySharp.Operation.Divide.RationalCurveByDivisions*
+  commentId: Overload:GeometrySharp.Operation.Divide.RationalCurveByDivisions
+  name: RationalCurveByDivisions
+  nameWithType: Divide.RationalCurveByDivisions
+  fullName: GeometrySharp.Operation.Divide.RationalCurveByDivisions
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.ValueTuple{System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double}}
+  commentId: T:System.ValueTuple{System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double}}
+  parent: System
+  isExternal: true
+  name: ValueTuple<List<Double>, List<Double>>
+  nameWithType: ValueTuple<List<Double>, List<Double>>
+  fullName: System.ValueTuple<System.Collections.Generic.List<System.Double>, System.Collections.Generic.List<System.Double>>
+  nameWithType.vb: ValueTuple(Of List(Of Double), List(Of Double))
+  fullName.vb: System.ValueTuple(Of System.Collections.Generic.List(Of System.Double), System.Collections.Generic.List(Of System.Double))
+  name.vb: ValueTuple(Of List(Of Double), List(Of Double))
+  spec.csharp:
+  - uid: System.ValueTuple`2
+    name: ValueTuple
+    nameWithType: ValueTuple
+    fullName: System.ValueTuple
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ValueTuple`2
+    name: ValueTuple
+    nameWithType: ValueTuple
+    fullName: System.ValueTuple
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Operation.Divide.RationalCurveByEqualLength*
+  commentId: Overload:GeometrySharp.Operation.Divide.RationalCurveByEqualLength
+  name: RationalCurveByEqualLength
+  nameWithType: Divide.RationalCurveByEqualLength
+  fullName: GeometrySharp.Operation.Divide.RationalCurveByEqualLength

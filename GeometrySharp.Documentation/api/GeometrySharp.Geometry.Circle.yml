@@ -1,0 +1,854 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Geometry.Circle
+  commentId: T:GeometrySharp.Geometry.Circle
+  id: Circle
+  parent: GeometrySharp.Geometry
+  children:
+  - GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Plane,System.Double)
+  - GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Circle.#ctor(System.Double)
+  - GeometrySharp.Geometry.Circle.BoundingBox
+  - GeometrySharp.Geometry.Circle.Center
+  - GeometrySharp.Geometry.Circle.Circumference
+  - GeometrySharp.Geometry.Circle.ClosestPt(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Circle.Plane
+  - GeometrySharp.Geometry.Circle.PointAt(System.Double,System.Boolean)
+  - GeometrySharp.Geometry.Circle.Radius
+  - GeometrySharp.Geometry.Circle.TangentAt(System.Double,System.Boolean)
+  langs:
+  - csharp
+  - vb
+  name: Circle
+  nameWithType: Circle
+  fullName: GeometrySharp.Geometry.Circle
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Circle
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 7
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  syntax:
+    content: public class Circle
+    content.vb: Public Class Circle
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Plane,System.Double)
+  commentId: M:GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Plane,System.Double)
+  id: '#ctor(GeometrySharp.Geometry.Plane,System.Double)'
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Circle(Plane, Double)
+  nameWithType: Circle.Circle(Plane, Double)
+  fullName: GeometrySharp.Geometry.Circle.Circle(GeometrySharp.Geometry.Plane, System.Double)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 14
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes a circle on a plane with a given radius.\n"
+  example: []
+  syntax:
+    content: public Circle(Plane plane, double radius)
+    parameters:
+    - id: plane
+      type: GeometrySharp.Geometry.Plane
+      description: Plane of the circle. Plane origin defines the center of the circle.
+    - id: radius
+      type: System.Double
+      description: Radius of the circle.
+    content.vb: Public Sub New(plane As Plane, radius As Double)
+  overload: GeometrySharp.Geometry.Circle.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Circle.#ctor(System.Double)
+  commentId: M:GeometrySharp.Geometry.Circle.#ctor(System.Double)
+  id: '#ctor(System.Double)'
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Circle(Double)
+  nameWithType: Circle.Circle(Double)
+  fullName: GeometrySharp.Geometry.Circle.Circle(System.Double)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 24
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes a circle on planeXY with center in 0,0,0 by a given radius.\n"
+  example: []
+  syntax:
+    content: public Circle(double radius)
+    parameters:
+    - id: radius
+      type: System.Double
+      description: Radius of the circle.
+    content.vb: Public Sub New(radius As Double)
+  overload: GeometrySharp.Geometry.Circle.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Circle.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Circle(Vector3, Vector3, Vector3)
+  nameWithType: Circle.Circle(Vector3, Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Circle.Circle(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 36
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes an circle from three points.\nhttps://github.com/sergarrido/random/tree/master/circle3d\n"
+  example: []
+  syntax:
+    content: public Circle(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+    parameters:
+    - id: pt1
+      type: GeometrySharp.Geometry.Vector3
+      description: Start point of the arc.
+    - id: pt2
+      type: GeometrySharp.Geometry.Vector3
+      description: Interior point on arc.
+    - id: pt3
+      type: GeometrySharp.Geometry.Vector3
+      description: End point of the arc.
+    content.vb: Public Sub New(pt1 As Vector3, pt2 As Vector3, pt3 As Vector3)
+  overload: GeometrySharp.Geometry.Circle.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Circle.Plane
+  commentId: P:GeometrySharp.Geometry.Circle.Plane
+  id: Plane
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Plane
+  nameWithType: Circle.Plane
+  fullName: GeometrySharp.Geometry.Circle.Plane
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Plane
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 67
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the plane where the circle lays.\n"
+  example: []
+  syntax:
+    content: public Plane Plane { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Plane
+    content.vb: Public ReadOnly Property Plane As Plane
+  overload: GeometrySharp.Geometry.Circle.Plane*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Circle.Radius
+  commentId: P:GeometrySharp.Geometry.Circle.Radius
+  id: Radius
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Radius
+  nameWithType: Circle.Radius
+  fullName: GeometrySharp.Geometry.Circle.Radius
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Radius
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 72
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the radius of the circle.\n"
+  example: []
+  syntax:
+    content: public double Radius { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Radius As Double
+  overload: GeometrySharp.Geometry.Circle.Radius*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Circle.Center
+  commentId: P:GeometrySharp.Geometry.Circle.Center
+  id: Center
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Center
+  nameWithType: Circle.Center
+  fullName: GeometrySharp.Geometry.Circle.Center
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Center
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 77
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the center of the circle.\n"
+  example: []
+  syntax:
+    content: public Vector3 Center { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Center As Vector3
+  overload: GeometrySharp.Geometry.Circle.Center*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Circle.Circumference
+  commentId: P:GeometrySharp.Geometry.Circle.Circumference
+  id: Circumference
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: Circumference
+  nameWithType: Circle.Circumference
+  fullName: GeometrySharp.Geometry.Circle.Circumference
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Circumference
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 82
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the circumference of the circle.\n"
+  example: []
+  syntax:
+    content: public double Circumference { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Circumference As Double
+  overload: GeometrySharp.Geometry.Circle.Circumference*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Circle.BoundingBox
+  commentId: P:GeometrySharp.Geometry.Circle.BoundingBox
+  id: BoundingBox
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: BoundingBox
+  nameWithType: Circle.BoundingBox
+  fullName: GeometrySharp.Geometry.Circle.BoundingBox
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: BoundingBox
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 87
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the BoundingBox of this Circle.\n"
+  example: []
+  syntax:
+    content: public BoundingBox BoundingBox { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.BoundingBox
+    content.vb: Public ReadOnly Property BoundingBox As BoundingBox
+  overload: GeometrySharp.Geometry.Circle.BoundingBox*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Circle.PointAt(System.Double,System.Boolean)
+  commentId: M:GeometrySharp.Geometry.Circle.PointAt(System.Double,System.Boolean)
+  id: PointAt(System.Double,System.Boolean)
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: PointAt(Double, Boolean)
+  nameWithType: Circle.PointAt(Double, Boolean)
+  fullName: GeometrySharp.Geometry.Circle.PointAt(System.Double, System.Boolean)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PointAt
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 137
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nCalculates the point on a circle at the given parameter.\n"
+  example: []
+  syntax:
+    content: public Vector3 PointAt(double t, bool parametrize = true)
+    parameters:
+    - id: t
+      type: System.Double
+      description: Parameter of point to evaluate.
+    - id: parametrize
+      type: System.Boolean
+      description: True per default using parametrize value between 0.0 to 1.0.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The point on the circle at the given parameter.
+    content.vb: Public Function PointAt(t As Double, parametrize As Boolean = True) As Vector3
+  overload: GeometrySharp.Geometry.Circle.PointAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Circle.TangentAt(System.Double,System.Boolean)
+  commentId: M:GeometrySharp.Geometry.Circle.TangentAt(System.Double,System.Boolean)
+  id: TangentAt(System.Double,System.Boolean)
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: TangentAt(Double, Boolean)
+  nameWithType: Circle.TangentAt(Double, Boolean)
+  fullName: GeometrySharp.Geometry.Circle.TangentAt(System.Double, System.Boolean)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: TangentAt
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 148
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nCalculates the vector tangent of a circle at the given parameter.\n"
+  example: []
+  syntax:
+    content: public Vector3 TangentAt(double t, bool parametrize = true)
+    parameters:
+    - id: t
+      type: System.Double
+      description: Parameter of tangent ot evaluate.
+    - id: parametrize
+      type: System.Boolean
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: ''
+    content.vb: Public Function TangentAt(t As Double, parametrize As Boolean = True) As Vector3
+  overload: GeometrySharp.Geometry.Circle.TangentAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Circle.ClosestPt(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Circle.ClosestPt(GeometrySharp.Geometry.Vector3)
+  id: ClosestPt(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Circle
+  langs:
+  - csharp
+  - vb
+  name: ClosestPt(Vector3)
+  nameWithType: Circle.ClosestPt(Vector3)
+  fullName: GeometrySharp.Geometry.Circle.ClosestPt(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Circle.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ClosestPt
+    path: ../GeometrySharp/Geometry/Circle.cs
+    startLine: 164
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the point on the circle which is closest to the test point.\n"
+  example: []
+  syntax:
+    content: public Vector3 ClosestPt(Vector3 pt)
+    parameters:
+    - id: pt
+      type: GeometrySharp.Geometry.Vector3
+      description: The test point to project onto the circle.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The point on the circle that is close to the test point.
+    content.vb: Public Function ClosestPt(pt As Vector3) As Vector3
+  overload: GeometrySharp.Geometry.Circle.ClosestPt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+references:
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Geometry.Circle.#ctor*
+  commentId: Overload:GeometrySharp.Geometry.Circle.#ctor
+  name: Circle
+  nameWithType: Circle.Circle
+  fullName: GeometrySharp.Geometry.Circle.Circle
+- uid: GeometrySharp.Geometry.Plane
+  commentId: T:GeometrySharp.Geometry.Plane
+  parent: GeometrySharp.Geometry
+  name: Plane
+  nameWithType: Plane
+  fullName: GeometrySharp.Geometry.Plane
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: GeometrySharp.Geometry.Circle.Plane*
+  commentId: Overload:GeometrySharp.Geometry.Circle.Plane
+  name: Plane
+  nameWithType: Circle.Plane
+  fullName: GeometrySharp.Geometry.Circle.Plane
+- uid: GeometrySharp.Geometry.Circle.Radius*
+  commentId: Overload:GeometrySharp.Geometry.Circle.Radius
+  name: Radius
+  nameWithType: Circle.Radius
+  fullName: GeometrySharp.Geometry.Circle.Radius
+- uid: GeometrySharp.Geometry.Circle.Center*
+  commentId: Overload:GeometrySharp.Geometry.Circle.Center
+  name: Center
+  nameWithType: Circle.Center
+  fullName: GeometrySharp.Geometry.Circle.Center
+- uid: GeometrySharp.Geometry.Circle.Circumference*
+  commentId: Overload:GeometrySharp.Geometry.Circle.Circumference
+  name: Circumference
+  nameWithType: Circle.Circumference
+  fullName: GeometrySharp.Geometry.Circle.Circumference
+- uid: GeometrySharp.Geometry.Circle.BoundingBox*
+  commentId: Overload:GeometrySharp.Geometry.Circle.BoundingBox
+  name: BoundingBox
+  nameWithType: Circle.BoundingBox
+  fullName: GeometrySharp.Geometry.Circle.BoundingBox
+- uid: GeometrySharp.Geometry.BoundingBox
+  commentId: T:GeometrySharp.Geometry.BoundingBox
+  parent: GeometrySharp.Geometry
+  name: BoundingBox
+  nameWithType: BoundingBox
+  fullName: GeometrySharp.Geometry.BoundingBox
+- uid: GeometrySharp.Geometry.Circle.PointAt*
+  commentId: Overload:GeometrySharp.Geometry.Circle.PointAt
+  name: PointAt
+  nameWithType: Circle.PointAt
+  fullName: GeometrySharp.Geometry.Circle.PointAt
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: GeometrySharp.Geometry.Circle.TangentAt*
+  commentId: Overload:GeometrySharp.Geometry.Circle.TangentAt
+  name: TangentAt
+  nameWithType: Circle.TangentAt
+  fullName: GeometrySharp.Geometry.Circle.TangentAt
+- uid: GeometrySharp.Geometry.Circle.ClosestPt*
+  commentId: Overload:GeometrySharp.Geometry.Circle.ClosestPt
+  name: ClosestPt
+  nameWithType: Circle.ClosestPt
+  fullName: GeometrySharp.Geometry.Circle.ClosestPt

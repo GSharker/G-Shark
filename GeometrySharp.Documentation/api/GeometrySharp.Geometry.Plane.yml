@@ -1,0 +1,1884 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Geometry.Plane
+  commentId: T:GeometrySharp.Geometry.Plane
+  id: Plane
+  parent: GeometrySharp.Geometry
+  children:
+  - GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.Align(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.ClosestParameters(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.ClosestPoint(GeometrySharp.Geometry.Vector3,System.Double@)
+  - GeometrySharp.Geometry.Plane.Equals(GeometrySharp.Geometry.Plane)
+  - GeometrySharp.Geometry.Plane.Equals(System.Object)
+  - GeometrySharp.Geometry.Plane.FitPlane(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3},System.Double@)
+  - GeometrySharp.Geometry.Plane.Flip
+  - GeometrySharp.Geometry.Plane.GetHashCode
+  - GeometrySharp.Geometry.Plane.Normal
+  - GeometrySharp.Geometry.Plane.op_Equality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  - GeometrySharp.Geometry.Plane.op_Inequality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  - GeometrySharp.Geometry.Plane.Origin
+  - GeometrySharp.Geometry.Plane.PlaneXY
+  - GeometrySharp.Geometry.Plane.PlaneXZ
+  - GeometrySharp.Geometry.Plane.PlaneYZ
+  - GeometrySharp.Geometry.Plane.PointAt(System.Double,System.Double)
+  - GeometrySharp.Geometry.Plane.Rotate(System.Double)
+  - GeometrySharp.Geometry.Plane.SetOrigin(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Plane.ToString
+  - GeometrySharp.Geometry.Plane.Transform(GeometrySharp.Core.Transform)
+  - GeometrySharp.Geometry.Plane.XAxis
+  - GeometrySharp.Geometry.Plane.YAxis
+  - GeometrySharp.Geometry.Plane.ZAxis
+  langs:
+  - csharp
+  - vb
+  name: Plane
+  nameWithType: Plane
+  fullName: GeometrySharp.Geometry.Plane
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Plane
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 12
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nA Plane is simply an origin point and normal.\n"
+  example: []
+  syntax:
+    content: 'public class Plane : IEquatable<Plane>'
+    content.vb: >-
+      Public Class Plane
+
+          Implements IEquatable(Of Plane)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Plane}
+  inheritedMembers:
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Plane(Vector3, Vector3)
+  nameWithType: Plane.Plane(Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Plane.Plane(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 19
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nConstruct a plane from a origin and a direction.\n"
+  example: []
+  syntax:
+    content: public Plane(Vector3 origin, Vector3 direction)
+    parameters:
+    - id: origin
+      type: GeometrySharp.Geometry.Vector3
+      description: The point describing the origin of the plane.
+    - id: direction
+      type: GeometrySharp.Geometry.Vector3
+      description: The vector representing the normal of the plane.
+    content.vb: Public Sub New(origin As Vector3, direction As Vector3)
+  overload: GeometrySharp.Geometry.Plane.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Plane(Vector3, Vector3, Vector3)
+  nameWithType: Plane.Plane(Vector3, Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Plane.Plane(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 33
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nConstruct a plane from three non-collinear points.\n"
+  example: []
+  syntax:
+    content: public Plane(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+    parameters:
+    - id: pt1
+      type: GeometrySharp.Geometry.Vector3
+      description: Firs point representing the origin.
+    - id: pt2
+      type: GeometrySharp.Geometry.Vector3
+      description: Second point representing the x direction.
+    - id: pt3
+      type: GeometrySharp.Geometry.Vector3
+      description: Third point representing the y direction.
+    content.vb: Public Sub New(pt1 As Vector3, pt2 As Vector3, pt3 As Vector3)
+  overload: GeometrySharp.Geometry.Plane.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Plane(Vector3, Vector3, Vector3, Vector3)
+  nameWithType: Plane.Plane(Vector3, Vector3, Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Plane.Plane(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 57
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nConstruct a plane from an point and two directions.\n"
+  example: []
+  syntax:
+    content: public Plane(Vector3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
+    parameters:
+    - id: origin
+      type: GeometrySharp.Geometry.Vector3
+      description: Point representing the origin.
+    - id: xDirection
+      type: GeometrySharp.Geometry.Vector3
+      description: X direction.
+    - id: yDirection
+      type: GeometrySharp.Geometry.Vector3
+      description: Y direction.
+    - id: zDirection
+      type: GeometrySharp.Geometry.Vector3
+      description: Z direction.
+    content.vb: Public Sub New(origin As Vector3, xDirection As Vector3, yDirection As Vector3, zDirection As Vector3)
+  overload: GeometrySharp.Geometry.Plane.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.PlaneXY
+  commentId: P:GeometrySharp.Geometry.Plane.PlaneXY
+  id: PlaneXY
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: PlaneXY
+  nameWithType: Plane.PlaneXY
+  fullName: GeometrySharp.Geometry.Plane.PlaneXY
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PlaneXY
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 68
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGet a XY plane.\n"
+  example: []
+  syntax:
+    content: public static Plane PlaneXY { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Plane
+    content.vb: Public Shared ReadOnly Property PlaneXY As Plane
+  overload: GeometrySharp.Geometry.Plane.PlaneXY*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.PlaneYZ
+  commentId: P:GeometrySharp.Geometry.Plane.PlaneYZ
+  id: PlaneYZ
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: PlaneYZ
+  nameWithType: Plane.PlaneYZ
+  fullName: GeometrySharp.Geometry.Plane.PlaneYZ
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PlaneYZ
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 73
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGet a YZ plane.\n"
+  example: []
+  syntax:
+    content: public static Plane PlaneYZ { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Plane
+    content.vb: Public Shared ReadOnly Property PlaneYZ As Plane
+  overload: GeometrySharp.Geometry.Plane.PlaneYZ*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.PlaneXZ
+  commentId: P:GeometrySharp.Geometry.Plane.PlaneXZ
+  id: PlaneXZ
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: PlaneXZ
+  nameWithType: Plane.PlaneXZ
+  fullName: GeometrySharp.Geometry.Plane.PlaneXZ
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PlaneXZ
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 78
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGet a XY plane.\n"
+  example: []
+  syntax:
+    content: public static Plane PlaneXZ { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Plane
+    content.vb: Public Shared ReadOnly Property PlaneXZ As Plane
+  overload: GeometrySharp.Geometry.Plane.PlaneXZ*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.Normal
+  commentId: P:GeometrySharp.Geometry.Plane.Normal
+  id: Normal
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Normal
+  nameWithType: Plane.Normal
+  fullName: GeometrySharp.Geometry.Plane.Normal
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Normal
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 83
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nThe normal of the plan.\n"
+  example: []
+  syntax:
+    content: public Vector3 Normal { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Normal As Vector3
+  overload: GeometrySharp.Geometry.Plane.Normal*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.Origin
+  commentId: P:GeometrySharp.Geometry.Plane.Origin
+  id: Origin
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Origin
+  nameWithType: Plane.Origin
+  fullName: GeometrySharp.Geometry.Plane.Origin
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Origin
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 88
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nThe origin of the plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 Origin { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Origin As Vector3
+  overload: GeometrySharp.Geometry.Plane.Origin*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.XAxis
+  commentId: P:GeometrySharp.Geometry.Plane.XAxis
+  id: XAxis
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: XAxis
+  nameWithType: Plane.XAxis
+  fullName: GeometrySharp.Geometry.Plane.XAxis
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: XAxis
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 93
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nThe XAxis of the plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 XAxis { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property XAxis As Vector3
+  overload: GeometrySharp.Geometry.Plane.XAxis*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.YAxis
+  commentId: P:GeometrySharp.Geometry.Plane.YAxis
+  id: YAxis
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: YAxis
+  nameWithType: Plane.YAxis
+  fullName: GeometrySharp.Geometry.Plane.YAxis
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: YAxis
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 98
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nThe YAxis of the plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 YAxis { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property YAxis As Vector3
+  overload: GeometrySharp.Geometry.Plane.YAxis*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.ZAxis
+  commentId: P:GeometrySharp.Geometry.Plane.ZAxis
+  id: ZAxis
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: ZAxis
+  nameWithType: Plane.ZAxis
+  fullName: GeometrySharp.Geometry.Plane.ZAxis
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ZAxis
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 103
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nThe ZAxis of the plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 ZAxis { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property ZAxis As Vector3
+  overload: GeometrySharp.Geometry.Plane.ZAxis*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Plane.ClosestPoint(GeometrySharp.Geometry.Vector3,System.Double@)
+  commentId: M:GeometrySharp.Geometry.Plane.ClosestPoint(GeometrySharp.Geometry.Vector3,System.Double@)
+  id: ClosestPoint(GeometrySharp.Geometry.Vector3,System.Double@)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: ClosestPoint(Vector3, out Double)
+  nameWithType: Plane.ClosestPoint(Vector3, out Double)
+  fullName: GeometrySharp.Geometry.Plane.ClosestPoint(GeometrySharp.Geometry.Vector3, out System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ClosestPoint
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 112
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nFinds the closest point on a plane.\nhttps://www.parametriczoo.com/index.php/2020/02/29/signed-distance-of-a-point-from-a-plane/\n"
+  example: []
+  syntax:
+    content: public Vector3 ClosestPoint(Vector3 pt, out double length)
+    parameters:
+    - id: pt
+      type: GeometrySharp.Geometry.Vector3
+      description: The point to get close to plane.
+    - id: length
+      type: System.Double
+      description: The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The point on the plane that is closest to the sample point.
+    content.vb: Public Function ClosestPoint(pt As Vector3, ByRef length As Double) As Vector3
+  overload: GeometrySharp.Geometry.Plane.ClosestPoint*
+  nameWithType.vb: Plane.ClosestPoint(Vector3, ByRef Double)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+  fullName.vb: GeometrySharp.Geometry.Plane.ClosestPoint(GeometrySharp.Geometry.Vector3, ByRef System.Double)
+  name.vb: ClosestPoint(Vector3, ByRef Double)
+- uid: GeometrySharp.Geometry.Plane.Align(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.Align(GeometrySharp.Geometry.Vector3)
+  id: Align(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Align(Vector3)
+  nameWithType: Plane.Align(Vector3)
+  fullName: GeometrySharp.Geometry.Plane.Align(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Align
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 128
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nPerform the rotation to align the XAxis of a plane to a given guide vector.\n"
+  example: []
+  syntax:
+    content: public Plane Align(Vector3 direction)
+    parameters:
+    - id: direction
+      type: GeometrySharp.Geometry.Vector3
+      description: The guide vector.
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The rotated plane with XAxis align to the guide vector.
+    content.vb: Public Function Align(direction As Vector3) As Plane
+  overload: GeometrySharp.Geometry.Plane.Align*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.ClosestParameters(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.ClosestParameters(GeometrySharp.Geometry.Vector3)
+  id: ClosestParameters(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: ClosestParameters(Vector3)
+  nameWithType: Plane.ClosestParameters(Vector3)
+  fullName: GeometrySharp.Geometry.Plane.ClosestParameters(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ClosestParameters
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 143
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the parameters of a point on the plane closest to the test point.\n"
+  example: []
+  syntax:
+    content: public (double u, double v) ClosestParameters(Vector3 pt)
+    parameters:
+    - id: pt
+      type: GeometrySharp.Geometry.Vector3
+      description: Test point, the point to get close to.
+    return:
+      type: System.ValueTuple{System.Double,System.Double}
+      description: The u parameter is along X-direction and v parameter is along the Y-direction.
+    content.vb: Public Function ClosestParameters(pt As Vector3) As(u As Double, v As Double)
+  overload: GeometrySharp.Geometry.Plane.ClosestParameters*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.PointAt(System.Double,System.Double)
+  commentId: M:GeometrySharp.Geometry.Plane.PointAt(System.Double,System.Double)
+  id: PointAt(System.Double,System.Double)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: PointAt(Double, Double)
+  nameWithType: Plane.PointAt(Double, Double)
+  fullName: GeometrySharp.Geometry.Plane.PointAt(System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PointAt
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 157
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nEvaluates a point on the plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 PointAt(double u, double v)
+    parameters:
+    - id: u
+      type: System.Double
+      description: Evaluation parameter.
+    - id: v
+      type: System.Double
+      description: Evaluation parameter.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The evaluated point.
+    content.vb: Public Function PointAt(u As Double, v As Double) As Vector3
+  overload: GeometrySharp.Geometry.Plane.PointAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.Flip
+  commentId: M:GeometrySharp.Geometry.Plane.Flip
+  id: Flip
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Flip()
+  nameWithType: Plane.Flip()
+  fullName: GeometrySharp.Geometry.Plane.Flip()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Flip
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 166
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nSwapping out the X and Y axes and inverting the Z axis.\n"
+  example: []
+  syntax:
+    content: public Plane Flip()
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The flipped plane.
+    content.vb: Public Function Flip As Plane
+  overload: GeometrySharp.Geometry.Plane.Flip*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.SetOrigin(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Plane.SetOrigin(GeometrySharp.Geometry.Vector3)
+  id: SetOrigin(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: SetOrigin(Vector3)
+  nameWithType: Plane.SetOrigin(Vector3)
+  fullName: GeometrySharp.Geometry.Plane.SetOrigin(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: SetOrigin
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 177
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nChanges the origin of a plane.\n"
+  example: []
+  syntax:
+    content: public Plane SetOrigin(Vector3 origin)
+    parameters:
+    - id: origin
+      type: GeometrySharp.Geometry.Vector3
+      description: The new origin point of a plane.
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The plane with the new origin.
+    content.vb: Public Function SetOrigin(origin As Vector3) As Plane
+  overload: GeometrySharp.Geometry.Plane.SetOrigin*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.FitPlane(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3},System.Double@)
+  commentId: M:GeometrySharp.Geometry.Plane.FitPlane(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3},System.Double@)
+  id: FitPlane(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3},System.Double@)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: FitPlane(IList<Vector3>, out Double)
+  nameWithType: Plane.FitPlane(IList<Vector3>, out Double)
+  fullName: GeometrySharp.Geometry.Plane.FitPlane(System.Collections.Generic.IList<GeometrySharp.Geometry.Vector3>, out System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: FitPlane
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 189
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nFits a plane through a set of points.\nhttp://www.ilikebigbits.com/2015_03_04_plane_from_points.html\n"
+  example: []
+  syntax:
+    content: public static Plane FitPlane(IList<Vector3> pts, out double deviation)
+    parameters:
+    - id: pts
+      type: System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+      description: Points to fit.
+    - id: deviation
+      type: System.Double
+      description: Maximum deviation between the points and the plane.
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The defined plane generated.
+    content.vb: Public Shared Function FitPlane(pts As IList(Of Vector3), ByRef deviation As Double) As Plane
+  overload: GeometrySharp.Geometry.Plane.FitPlane*
+  nameWithType.vb: Plane.FitPlane(IList(Of Vector3), ByRef Double)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: GeometrySharp.Geometry.Plane.FitPlane(System.Collections.Generic.IList(Of GeometrySharp.Geometry.Vector3), ByRef System.Double)
+  name.vb: FitPlane(IList(Of Vector3), ByRef Double)
+- uid: GeometrySharp.Geometry.Plane.Rotate(System.Double)
+  commentId: M:GeometrySharp.Geometry.Plane.Rotate(System.Double)
+  id: Rotate(System.Double)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Rotate(Double)
+  nameWithType: Plane.Rotate(Double)
+  fullName: GeometrySharp.Geometry.Plane.Rotate(System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Rotate
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 262
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nRotates the plane around is own Z-axis.\n"
+  example: []
+  syntax:
+    content: public Plane Rotate(double angle)
+    parameters:
+    - id: angle
+      type: System.Double
+      description: Angle to rotate the plane, expressed in radians.
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The plan rotated.
+    content.vb: Public Function Rotate(angle As Double) As Plane
+  overload: GeometrySharp.Geometry.Plane.Rotate*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.Transform(GeometrySharp.Core.Transform)
+  commentId: M:GeometrySharp.Geometry.Plane.Transform(GeometrySharp.Core.Transform)
+  id: Transform(GeometrySharp.Core.Transform)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Transform(Transform)
+  nameWithType: Plane.Transform(Transform)
+  fullName: GeometrySharp.Geometry.Plane.Transform(GeometrySharp.Core.Transform)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Transform
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 275
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nTransforms the plane by a transformation matrix.\n"
+  example: []
+  syntax:
+    content: public Plane Transform(Transform t)
+    parameters:
+    - id: t
+      type: GeometrySharp.Core.Transform
+      description: The transformation matrix to apply to the plane.
+    return:
+      type: GeometrySharp.Geometry.Plane
+      description: The transformed plane.
+    content.vb: Public Function Transform(t As Transform) As Plane
+  overload: GeometrySharp.Geometry.Plane.Transform*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.op_Equality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  commentId: M:GeometrySharp.Geometry.Plane.op_Equality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  id: op_Equality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Equality(Plane, Plane)
+  nameWithType: Plane.Equality(Plane, Plane)
+  fullName: GeometrySharp.Geometry.Plane.Equality(GeometrySharp.Geometry.Plane, GeometrySharp.Geometry.Plane)
+  type: Operator
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: op_Equality
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 297
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns a boolean indicating whether the two given Planes are equal.\n"
+  example: []
+  syntax:
+    content: public static bool operator ==(Plane plane1, Plane plane2)
+    parameters:
+    - id: plane1
+      type: GeometrySharp.Geometry.Plane
+      description: The first Plane to compare.
+    - id: plane2
+      type: GeometrySharp.Geometry.Plane
+      description: The second Plane to compare.
+    return:
+      type: System.Boolean
+      description: True if the Planes are equal; False otherwise.
+    content.vb: Public Shared Operator =(plane1 As Plane, plane2 As Plane) As Boolean
+  overload: GeometrySharp.Geometry.Plane.op_Equality*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Geometry.Plane.op_Inequality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  commentId: M:GeometrySharp.Geometry.Plane.op_Inequality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  id: op_Inequality(GeometrySharp.Geometry.Plane,GeometrySharp.Geometry.Plane)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Inequality(Plane, Plane)
+  nameWithType: Plane.Inequality(Plane, Plane)
+  fullName: GeometrySharp.Geometry.Plane.Inequality(GeometrySharp.Geometry.Plane, GeometrySharp.Geometry.Plane)
+  type: Operator
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: op_Inequality
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 308
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns a boolean indicating whether the two given Planes are not equal.\n"
+  example: []
+  syntax:
+    content: public static bool operator !=(Plane plane1, Plane plane2)
+    parameters:
+    - id: plane1
+      type: GeometrySharp.Geometry.Plane
+      description: The first Plane to compare.
+    - id: plane2
+      type: GeometrySharp.Geometry.Plane
+      description: The second Plane to compare.
+    return:
+      type: System.Boolean
+      description: True if the Planes are not equal; False if they are equal.
+    content.vb: Public Shared Operator <>(plane1 As Plane, plane2 As Plane) As Boolean
+  overload: GeometrySharp.Geometry.Plane.op_Inequality*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Geometry.Plane.Equals(GeometrySharp.Geometry.Plane)
+  commentId: M:GeometrySharp.Geometry.Plane.Equals(GeometrySharp.Geometry.Plane)
+  id: Equals(GeometrySharp.Geometry.Plane)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Equals(Plane)
+  nameWithType: Plane.Equals(Plane)
+  fullName: GeometrySharp.Geometry.Plane.Equals(GeometrySharp.Geometry.Plane)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Equals
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 318
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns a boolean indicating whether the given Plane is equal to this Plane instance.\n"
+  example: []
+  syntax:
+    content: public bool Equals(Plane other)
+    parameters:
+    - id: other
+      type: GeometrySharp.Geometry.Plane
+      description: The Plane to compare this instance to.
+    return:
+      type: System.Boolean
+      description: True if the other Plane is equal to this instance; False otherwise.
+    content.vb: Public Function Equals(other As Plane) As Boolean
+  overload: GeometrySharp.Geometry.Plane.Equals*
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Plane}.Equals(GeometrySharp.Geometry.Plane)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Plane.Equals(System.Object)
+  commentId: M:GeometrySharp.Geometry.Plane.Equals(System.Object)
+  id: Equals(System.Object)
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: Equals(Object)
+  nameWithType: Plane.Equals(Object)
+  fullName: GeometrySharp.Geometry.Plane.Equals(System.Object)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Equals
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 331
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns a boolean indicating whether the given Object is equal to this Plane instance.\n"
+  example: []
+  syntax:
+    content: public override bool Equals(object obj)
+    parameters:
+    - id: obj
+      type: System.Object
+      description: The Object to compare against.
+    return:
+      type: System.Boolean
+      description: True if the Object is equal to this Plane; False otherwise.
+    content.vb: Public Overrides Function Equals(obj As Object) As Boolean
+  overridden: System.Object.Equals(System.Object)
+  overload: GeometrySharp.Geometry.Plane.Equals*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: GeometrySharp.Geometry.Plane.GetHashCode
+  commentId: M:GeometrySharp.Geometry.Plane.GetHashCode
+  id: GetHashCode
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: Plane.GetHashCode()
+  fullName: GeometrySharp.Geometry.Plane.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: GetHashCode
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 345
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns the hash code for this instance.\n"
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+      description: The hash code.
+    content.vb: Public Overrides Function GetHashCode As Integer
+  overridden: System.Object.GetHashCode
+  overload: GeometrySharp.Geometry.Plane.GetHashCode*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: GeometrySharp.Geometry.Plane.ToString
+  commentId: M:GeometrySharp.Geometry.Plane.ToString
+  id: ToString
+  parent: GeometrySharp.Geometry.Plane
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Plane.ToString()
+  fullName: GeometrySharp.Geometry.Plane.ToString()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Plane.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToString
+    path: ../GeometrySharp/Geometry/Plane.cs
+    startLine: 354
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nTranslate a plane into a readable format.\n"
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: The text format of a plane.
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: GeometrySharp.Geometry.Plane.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.IEquatable{GeometrySharp.Geometry.Plane}
+  commentId: T:System.IEquatable{GeometrySharp.Geometry.Plane}
+  parent: System
+  definition: System.IEquatable`1
+  name: IEquatable<Plane>
+  nameWithType: IEquatable<Plane>
+  fullName: System.IEquatable<GeometrySharp.Geometry.Plane>
+  nameWithType.vb: IEquatable(Of Plane)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Plane)
+  name.vb: IEquatable(Of Plane)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Plane
+    name: Plane
+    nameWithType: Plane
+    fullName: GeometrySharp.Geometry.Plane
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Plane
+    name: Plane
+    nameWithType: Plane
+    fullName: GeometrySharp.Geometry.Plane
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Plane.#ctor*
+  commentId: Overload:GeometrySharp.Geometry.Plane.#ctor
+  name: Plane
+  nameWithType: Plane.Plane
+  fullName: GeometrySharp.Geometry.Plane.Plane
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: GeometrySharp.Geometry.Plane.PlaneXY*
+  commentId: Overload:GeometrySharp.Geometry.Plane.PlaneXY
+  name: PlaneXY
+  nameWithType: Plane.PlaneXY
+  fullName: GeometrySharp.Geometry.Plane.PlaneXY
+- uid: GeometrySharp.Geometry.Plane
+  commentId: T:GeometrySharp.Geometry.Plane
+  parent: GeometrySharp.Geometry
+  name: Plane
+  nameWithType: Plane
+  fullName: GeometrySharp.Geometry.Plane
+- uid: GeometrySharp.Geometry.Plane.PlaneYZ*
+  commentId: Overload:GeometrySharp.Geometry.Plane.PlaneYZ
+  name: PlaneYZ
+  nameWithType: Plane.PlaneYZ
+  fullName: GeometrySharp.Geometry.Plane.PlaneYZ
+- uid: GeometrySharp.Geometry.Plane.PlaneXZ*
+  commentId: Overload:GeometrySharp.Geometry.Plane.PlaneXZ
+  name: PlaneXZ
+  nameWithType: Plane.PlaneXZ
+  fullName: GeometrySharp.Geometry.Plane.PlaneXZ
+- uid: GeometrySharp.Geometry.Plane.Normal*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Normal
+  name: Normal
+  nameWithType: Plane.Normal
+  fullName: GeometrySharp.Geometry.Plane.Normal
+- uid: GeometrySharp.Geometry.Plane.Origin*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Origin
+  name: Origin
+  nameWithType: Plane.Origin
+  fullName: GeometrySharp.Geometry.Plane.Origin
+- uid: GeometrySharp.Geometry.Plane.XAxis*
+  commentId: Overload:GeometrySharp.Geometry.Plane.XAxis
+  name: XAxis
+  nameWithType: Plane.XAxis
+  fullName: GeometrySharp.Geometry.Plane.XAxis
+- uid: GeometrySharp.Geometry.Plane.YAxis*
+  commentId: Overload:GeometrySharp.Geometry.Plane.YAxis
+  name: YAxis
+  nameWithType: Plane.YAxis
+  fullName: GeometrySharp.Geometry.Plane.YAxis
+- uid: GeometrySharp.Geometry.Plane.ZAxis*
+  commentId: Overload:GeometrySharp.Geometry.Plane.ZAxis
+  name: ZAxis
+  nameWithType: Plane.ZAxis
+  fullName: GeometrySharp.Geometry.Plane.ZAxis
+- uid: GeometrySharp.Geometry.Plane.ClosestPoint*
+  commentId: Overload:GeometrySharp.Geometry.Plane.ClosestPoint
+  name: ClosestPoint
+  nameWithType: Plane.ClosestPoint
+  fullName: GeometrySharp.Geometry.Plane.ClosestPoint
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Geometry.Plane.Align*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Align
+  name: Align
+  nameWithType: Plane.Align
+  fullName: GeometrySharp.Geometry.Plane.Align
+- uid: GeometrySharp.Geometry.Plane.ClosestParameters*
+  commentId: Overload:GeometrySharp.Geometry.Plane.ClosestParameters
+  name: ClosestParameters
+  nameWithType: Plane.ClosestParameters
+  fullName: GeometrySharp.Geometry.Plane.ClosestParameters
+- uid: System.ValueTuple{System.Double,System.Double}
+  commentId: T:System.ValueTuple{System.Double,System.Double}
+  parent: System
+  isExternal: true
+  name: ValueTuple<Double, Double>
+  nameWithType: ValueTuple<Double, Double>
+  fullName: System.ValueTuple<System.Double, System.Double>
+  nameWithType.vb: ValueTuple(Of Double, Double)
+  fullName.vb: System.ValueTuple(Of System.Double, System.Double)
+  name.vb: ValueTuple(Of Double, Double)
+  spec.csharp:
+  - uid: System.ValueTuple`2
+    name: ValueTuple
+    nameWithType: ValueTuple
+    fullName: System.ValueTuple
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ValueTuple`2
+    name: ValueTuple
+    nameWithType: ValueTuple
+    fullName: System.ValueTuple
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Plane.PointAt*
+  commentId: Overload:GeometrySharp.Geometry.Plane.PointAt
+  name: PointAt
+  nameWithType: Plane.PointAt
+  fullName: GeometrySharp.Geometry.Plane.PointAt
+- uid: GeometrySharp.Geometry.Plane.Flip*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Flip
+  name: Flip
+  nameWithType: Plane.Flip
+  fullName: GeometrySharp.Geometry.Plane.Flip
+- uid: GeometrySharp.Geometry.Plane.SetOrigin*
+  commentId: Overload:GeometrySharp.Geometry.Plane.SetOrigin
+  name: SetOrigin
+  nameWithType: Plane.SetOrigin
+  fullName: GeometrySharp.Geometry.Plane.SetOrigin
+- uid: GeometrySharp.Geometry.Plane.FitPlane*
+  commentId: Overload:GeometrySharp.Geometry.Plane.FitPlane
+  name: FitPlane
+  nameWithType: Plane.FitPlane
+  fullName: GeometrySharp.Geometry.Plane.FitPlane
+- uid: System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+  commentId: T:System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IList`1
+  name: IList<Vector3>
+  nameWithType: IList<Vector3>
+  fullName: System.Collections.Generic.IList<GeometrySharp.Geometry.Vector3>
+  nameWithType.vb: IList(Of Vector3)
+  fullName.vb: System.Collections.Generic.IList(Of GeometrySharp.Geometry.Vector3)
+  name.vb: IList(Of Vector3)
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic.IList`1
+  commentId: T:System.Collections.Generic.IList`1
+  isExternal: true
+  name: IList<T>
+  nameWithType: IList<T>
+  fullName: System.Collections.Generic.IList<T>
+  nameWithType.vb: IList(Of T)
+  fullName.vb: System.Collections.Generic.IList(Of T)
+  name.vb: IList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: GeometrySharp.Geometry.Plane.Rotate*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Rotate
+  name: Rotate
+  nameWithType: Plane.Rotate
+  fullName: GeometrySharp.Geometry.Plane.Rotate
+- uid: GeometrySharp.Geometry.Plane.Transform*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Transform
+  name: Transform
+  nameWithType: Plane.Transform
+  fullName: GeometrySharp.Geometry.Plane.Transform
+- uid: GeometrySharp.Core.Transform
+  commentId: T:GeometrySharp.Core.Transform
+  parent: GeometrySharp.Core
+  name: Transform
+  nameWithType: Transform
+  fullName: GeometrySharp.Core.Transform
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: GeometrySharp.Geometry.Plane.op_Equality*
+  commentId: Overload:GeometrySharp.Geometry.Plane.op_Equality
+  name: Equality
+  nameWithType: Plane.Equality
+  fullName: GeometrySharp.Geometry.Plane.Equality
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: GeometrySharp.Geometry.Plane.op_Inequality*
+  commentId: Overload:GeometrySharp.Geometry.Plane.op_Inequality
+  name: Inequality
+  nameWithType: Plane.Inequality
+  fullName: GeometrySharp.Geometry.Plane.Inequality
+- uid: GeometrySharp.Geometry.Plane.Equals*
+  commentId: Overload:GeometrySharp.Geometry.Plane.Equals
+  name: Equals
+  nameWithType: Plane.Equals
+  fullName: GeometrySharp.Geometry.Plane.Equals
+- uid: System.IEquatable{GeometrySharp.Geometry.Plane}.Equals(GeometrySharp.Geometry.Plane)
+  commentId: M:System.IEquatable{GeometrySharp.Geometry.Plane}.Equals(GeometrySharp.Geometry.Plane)
+  parent: System.IEquatable{GeometrySharp.Geometry.Plane}
+  definition: System.IEquatable`1.Equals(`0)
+  name: Equals(Plane)
+  nameWithType: IEquatable<Plane>.Equals(Plane)
+  fullName: System.IEquatable<GeometrySharp.Geometry.Plane>.Equals(GeometrySharp.Geometry.Plane)
+  nameWithType.vb: IEquatable(Of Plane).Equals(Plane)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Plane).Equals(GeometrySharp.Geometry.Plane)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<Plane>.Equals
+    fullName: System.IEquatable<GeometrySharp.Geometry.Plane>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Plane
+    name: Plane
+    nameWithType: Plane
+    fullName: GeometrySharp.Geometry.Plane
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of Plane).Equals
+    fullName: System.IEquatable(Of GeometrySharp.Geometry.Plane).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Plane
+    name: Plane
+    nameWithType: Plane
+    fullName: GeometrySharp.Geometry.Plane
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.IEquatable`1.Equals(`0)
+  commentId: M:System.IEquatable`1.Equals(`0)
+  isExternal: true
+  name: Equals(T)
+  nameWithType: IEquatable<T>.Equals(T)
+  fullName: System.IEquatable<T>.Equals(T)
+  nameWithType.vb: IEquatable(Of T).Equals(T)
+  fullName.vb: System.IEquatable(Of T).Equals(T)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<T>.Equals
+    fullName: System.IEquatable<T>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of T).Equals
+    fullName: System.IEquatable(Of T).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Plane.GetHashCode*
+  commentId: Overload:GeometrySharp.Geometry.Plane.GetHashCode
+  name: GetHashCode
+  nameWithType: Plane.GetHashCode
+  fullName: GeometrySharp.Geometry.Plane.GetHashCode
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Plane.ToString*
+  commentId: Overload:GeometrySharp.Geometry.Plane.ToString
+  name: ToString
+  nameWithType: Plane.ToString
+  fullName: GeometrySharp.Geometry.Plane.ToString
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String

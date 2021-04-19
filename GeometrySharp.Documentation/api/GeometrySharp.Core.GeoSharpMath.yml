@@ -1,0 +1,835 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Core.GeoSharpMath
+  commentId: T:GeometrySharp.Core.GeoSharpMath
+  id: GeoSharpMath
+  parent: GeometrySharp.Core
+  children:
+  - GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+  - GeometrySharp.Core.GeoSharpMath.EPSILON
+  - GeometrySharp.Core.GeoSharpMath.IsValidDouble(System.Double)
+  - GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+  - GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+  - GeometrySharp.Core.GeoSharpMath.RemapValue(System.Double,GeometrySharp.Core.Interval,GeometrySharp.Core.Interval)
+  - GeometrySharp.Core.GeoSharpMath.ToDegrees(System.Double)
+  - GeometrySharp.Core.GeoSharpMath.ToRadians(System.Double)
+  - GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+  - GeometrySharp.Core.GeoSharpMath.VERSION
+  langs:
+  - csharp
+  - vb
+  name: GeoSharpMath
+  nameWithType: GeoSharpMath
+  fullName: GeometrySharp.Core.GeoSharpMath
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: GeoSharpMath
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 9
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nGeoSharpMath contains a collection of default constants used throughout the library.\n"
+  example: []
+  syntax:
+    content: public class GeoSharpMath
+    content.vb: Public Class GeoSharpMath
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Core.GeoSharpMath.VERSION
+  commentId: P:GeometrySharp.Core.GeoSharpMath.VERSION
+  id: VERSION
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: VERSION
+  nameWithType: GeoSharpMath.VERSION
+  fullName: GeometrySharp.Core.GeoSharpMath.VERSION
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: VERSION
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 14
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nThe current version of GeometryLib.\n"
+  example: []
+  syntax:
+    content: public static string VERSION { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Shared ReadOnly Property VERSION As String
+  overload: GeometrySharp.Core.GeoSharpMath.VERSION*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+  commentId: P:GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+  id: MINTOLERANCE
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: MINTOLERANCE
+  nameWithType: GeoSharpMath.MINTOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: MINTOLERANCE
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 19
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nThe default euclidean distance that identifies whether two points are coincident.\n"
+  example: []
+  syntax:
+    content: public static double MINTOLERANCE { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public Shared ReadOnly Property MINTOLERANCE As Double
+  overload: GeometrySharp.Core.GeoSharpMath.MINTOLERANCE*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+  commentId: P:GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+  id: MAXTOLERANCE
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: MAXTOLERANCE
+  nameWithType: GeoSharpMath.MAXTOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: MAXTOLERANCE
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 24
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nThe default euclidean distance that identifies whether two points are coincident.\n"
+  example: []
+  syntax:
+    content: public static double MAXTOLERANCE { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public Shared ReadOnly Property MAXTOLERANCE As Double
+  overload: GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.EPSILON
+  commentId: P:GeometrySharp.Core.GeoSharpMath.EPSILON
+  id: EPSILON
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: EPSILON
+  nameWithType: GeoSharpMath.EPSILON
+  fullName: GeometrySharp.Core.GeoSharpMath.EPSILON
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: EPSILON
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 29
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nThe minimum value to determine whether two floating point numbers are the same.\n"
+  example: []
+  syntax:
+    content: public static double EPSILON { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public Shared ReadOnly Property EPSILON As Double
+  overload: GeometrySharp.Core.GeoSharpMath.EPSILON*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+  commentId: P:GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+  id: UNSETVALUE
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: UNSETVALUE
+  nameWithType: GeoSharpMath.UNSETVALUE
+  fullName: GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: UNSETVALUE
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 34
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nThe value of an unset object.\n"
+  example: []
+  syntax:
+    content: public static double UNSETVALUE { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public Shared ReadOnly Property UNSETVALUE As Double
+  overload: GeometrySharp.Core.GeoSharpMath.UNSETVALUE*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+  commentId: P:GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+  id: ANGLETOLERANCE
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: ANGLETOLERANCE
+  nameWithType: GeoSharpMath.ANGLETOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ANGLETOLERANCE
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 40
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nRepresents the default angle tolerance, used when no other values are provided.\nThis is one degree, expressed in radians.\n"
+  example: []
+  syntax:
+    content: public static double ANGLETOLERANCE { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public Shared ReadOnly Property ANGLETOLERANCE As Double
+  overload: GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: GeometrySharp.Core.GeoSharpMath.ToRadians(System.Double)
+  commentId: M:GeometrySharp.Core.GeoSharpMath.ToRadians(System.Double)
+  id: ToRadians(System.Double)
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: ToRadians(Double)
+  nameWithType: GeoSharpMath.ToRadians(Double)
+  fullName: GeometrySharp.Core.GeoSharpMath.ToRadians(System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToRadians
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 47
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nConvert degrees to radians.\n"
+  example: []
+  syntax:
+    content: public static double ToRadians(double degrees)
+    parameters:
+    - id: degrees
+      type: System.Double
+      description: Value degrees.
+    return:
+      type: System.Double
+      description: Get the radians value.
+    content.vb: Public Shared Function ToRadians(degrees As Double) As Double
+  overload: GeometrySharp.Core.GeoSharpMath.ToRadians*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Core.GeoSharpMath.ToDegrees(System.Double)
+  commentId: M:GeometrySharp.Core.GeoSharpMath.ToDegrees(System.Double)
+  id: ToDegrees(System.Double)
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: ToDegrees(Double)
+  nameWithType: GeoSharpMath.ToDegrees(Double)
+  fullName: GeometrySharp.Core.GeoSharpMath.ToDegrees(System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToDegrees
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 57
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nConvert radians to degrees.\n"
+  example: []
+  syntax:
+    content: public static double ToDegrees(double radians)
+    parameters:
+    - id: radians
+      type: System.Double
+      description: Value radians.
+    return:
+      type: System.Double
+      description: Get the degree value.
+    content.vb: Public Shared Function ToDegrees(radians As Double) As Double
+  overload: GeometrySharp.Core.GeoSharpMath.ToDegrees*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Core.GeoSharpMath.IsValidDouble(System.Double)
+  commentId: M:GeometrySharp.Core.GeoSharpMath.IsValidDouble(System.Double)
+  id: IsValidDouble(System.Double)
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: IsValidDouble(Double)
+  nameWithType: GeoSharpMath.IsValidDouble(Double)
+  fullName: GeometrySharp.Core.GeoSharpMath.IsValidDouble(System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: IsValidDouble
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 67
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nCheck if it is a value double.\n"
+  example: []
+  syntax:
+    content: public static bool IsValidDouble(double x)
+    parameters:
+    - id: x
+      type: System.Double
+      description: Double value.
+    return:
+      type: System.Boolean
+      description: Return if it is valid.
+    content.vb: Public Shared Function IsValidDouble(x As Double) As Boolean
+  overload: GeometrySharp.Core.GeoSharpMath.IsValidDouble*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Core.GeoSharpMath.RemapValue(System.Double,GeometrySharp.Core.Interval,GeometrySharp.Core.Interval)
+  commentId: M:GeometrySharp.Core.GeoSharpMath.RemapValue(System.Double,GeometrySharp.Core.Interval,GeometrySharp.Core.Interval)
+  id: RemapValue(System.Double,GeometrySharp.Core.Interval,GeometrySharp.Core.Interval)
+  parent: GeometrySharp.Core.GeoSharpMath
+  langs:
+  - csharp
+  - vb
+  name: RemapValue(Double, Interval, Interval)
+  nameWithType: GeoSharpMath.RemapValue(Double, Interval, Interval)
+  fullName: GeometrySharp.Core.GeoSharpMath.RemapValue(System.Double, GeometrySharp.Core.Interval, GeometrySharp.Core.Interval)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/GeoSharpMath.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RemapValue
+    path: ../GeometrySharp/Core/GeoSharpMath.cs
+    startLine: 79
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  summary: "\nRemap a value into a new numerical range.\n"
+  example: []
+  syntax:
+    content: public static double RemapValue(double value, Interval source, Interval target)
+    parameters:
+    - id: value
+      type: System.Double
+      description: Value to remap.
+    - id: source
+      type: GeometrySharp.Core.Interval
+      description: Numerical interval of the value.
+    - id: target
+      type: GeometrySharp.Core.Interval
+      description: Numerical interval into the value will be remapped.
+    return:
+      type: System.Double
+      description: Remapped value.
+    content.vb: Public Shared Function RemapValue(value As Double, source As Interval, target As Interval) As Double
+  overload: GeometrySharp.Core.GeoSharpMath.RemapValue*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+references:
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Core.GeoSharpMath.VERSION*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.VERSION
+  name: VERSION
+  nameWithType: GeoSharpMath.VERSION
+  fullName: GeometrySharp.Core.GeoSharpMath.VERSION
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: GeometrySharp.Core.GeoSharpMath.MINTOLERANCE*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+  name: MINTOLERANCE
+  nameWithType: GeoSharpMath.MINTOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.MINTOLERANCE
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+  name: MAXTOLERANCE
+  nameWithType: GeoSharpMath.MAXTOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.MAXTOLERANCE
+- uid: GeometrySharp.Core.GeoSharpMath.EPSILON*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.EPSILON
+  name: EPSILON
+  nameWithType: GeoSharpMath.EPSILON
+  fullName: GeometrySharp.Core.GeoSharpMath.EPSILON
+- uid: GeometrySharp.Core.GeoSharpMath.UNSETVALUE*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+  name: UNSETVALUE
+  nameWithType: GeoSharpMath.UNSETVALUE
+  fullName: GeometrySharp.Core.GeoSharpMath.UNSETVALUE
+- uid: GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+  name: ANGLETOLERANCE
+  nameWithType: GeoSharpMath.ANGLETOLERANCE
+  fullName: GeometrySharp.Core.GeoSharpMath.ANGLETOLERANCE
+- uid: GeometrySharp.Core.GeoSharpMath.ToRadians*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.ToRadians
+  name: ToRadians
+  nameWithType: GeoSharpMath.ToRadians
+  fullName: GeometrySharp.Core.GeoSharpMath.ToRadians
+- uid: GeometrySharp.Core.GeoSharpMath.ToDegrees*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.ToDegrees
+  name: ToDegrees
+  nameWithType: GeoSharpMath.ToDegrees
+  fullName: GeometrySharp.Core.GeoSharpMath.ToDegrees
+- uid: GeometrySharp.Core.GeoSharpMath.IsValidDouble*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.IsValidDouble
+  name: IsValidDouble
+  nameWithType: GeoSharpMath.IsValidDouble
+  fullName: GeometrySharp.Core.GeoSharpMath.IsValidDouble
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: GeometrySharp.Core.GeoSharpMath.RemapValue*
+  commentId: Overload:GeometrySharp.Core.GeoSharpMath.RemapValue
+  name: RemapValue
+  nameWithType: GeoSharpMath.RemapValue
+  fullName: GeometrySharp.Core.GeoSharpMath.RemapValue
+- uid: GeometrySharp.Core.Interval
+  commentId: T:GeometrySharp.Core.Interval
+  parent: GeometrySharp.Core
+  name: Interval
+  nameWithType: Interval
+  fullName: GeometrySharp.Core.Interval

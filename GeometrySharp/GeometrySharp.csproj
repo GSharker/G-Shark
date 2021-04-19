@@ -25,6 +25,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
     </PackageReference>
   </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('netcore'))">
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
     </PackageReference>

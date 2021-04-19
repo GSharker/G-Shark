@@ -1,0 +1,1421 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Operation.Evaluation
+  commentId: T:GeometrySharp.Operation.Evaluation
+  id: Evaluation
+  parent: GeometrySharp.Operation
+  children:
+  - GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Double)
+  - GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Int32,System.Double)
+  - GeometrySharp.Operation.Evaluation.CalculateArea(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  - GeometrySharp.Operation.Evaluation.CentroidByVertices(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  - GeometrySharp.Operation.Evaluation.CurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  - GeometrySharp.Operation.Evaluation.CurvePointAt(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  - GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI(System.Int32,System.Double,System.Int32,System.Int32,GeometrySharp.Core.Knot)
+  - GeometrySharp.Operation.Evaluation.RationalCurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  - GeometrySharp.Operation.Evaluation.RationalCurveTanget(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  - GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  - GeometrySharp.Operation.Evaluation.RationalSurfaceNormal(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  - GeometrySharp.Operation.Evaluation.SurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  - GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM(GeometrySharp.Geometry.NurbsSurface,System.Int32,System.Int32,System.Double,System.Double,System.Int32)
+  - GeometrySharp.Operation.Evaluation.SurfaceIsoCurve(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Boolean)
+  - GeometrySharp.Operation.Evaluation.SurfacePointAt(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  langs:
+  - csharp
+  - vb
+  name: Evaluation
+  nameWithType: Evaluation
+  fullName: GeometrySharp.Operation.Evaluation
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Evaluation
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 18
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public class Evaluation
+    content.vb: Public Class Evaluation
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Double)
+  id: BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: BasicFunction(Int32, Knot, Double)
+  nameWithType: Evaluation.BasicFunction(Int32, Knot, Double)
+  fullName: GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32, GeometrySharp.Core.Knot, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: BasicFunction
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 29
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<double> BasicFunction(int degree, Knot knots, double parameter)
+    parameters:
+    - id: degree
+      type: System.Int32
+    - id: knots
+      type: GeometrySharp.Core.Knot
+    - id: parameter
+      type: System.Double
+    return:
+      type: System.Collections.Generic.List{System.Double}
+    content.vb: Public Shared Function BasicFunction(degree As Integer, knots As Knot, parameter As Double) As List(Of Double)
+  overload: GeometrySharp.Operation.Evaluation.BasicFunction*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Int32,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Int32,System.Double)
+  id: BasicFunction(System.Int32,GeometrySharp.Core.Knot,System.Int32,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: BasicFunction(Int32, Knot, Int32, Double)
+  nameWithType: Evaluation.BasicFunction(Int32, Knot, Int32, Double)
+  fullName: GeometrySharp.Operation.Evaluation.BasicFunction(System.Int32, GeometrySharp.Core.Knot, System.Int32, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: BasicFunction
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 45
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<double> BasicFunction(int degree, Knot knots, int span, double parameter)
+    parameters:
+    - id: degree
+      type: System.Int32
+    - id: knots
+      type: GeometrySharp.Core.Knot
+    - id: span
+      type: System.Int32
+    - id: parameter
+      type: System.Double
+    return:
+      type: System.Collections.Generic.List{System.Double}
+    content.vb: Public Shared Function BasicFunction(degree As Integer, knots As Knot, span As Integer, parameter As Double) As List(Of Double)
+  overload: GeometrySharp.Operation.Evaluation.BasicFunction*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.CurvePointAt(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.CurvePointAt(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  id: CurvePointAt(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: CurvePointAt(NurbsCurve, Double)
+  nameWithType: Evaluation.CurvePointAt(NurbsCurve, Double)
+  fullName: GeometrySharp.Operation.Evaluation.CurvePointAt(GeometrySharp.Geometry.NurbsCurve, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CurvePointAt
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 79
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static Vector3 CurvePointAt(NurbsCurve curve, double t)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+    - id: t
+      type: System.Double
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public Shared Function CurvePointAt(curve As NurbsCurve, t As Double) As Vector3
+  overload: GeometrySharp.Operation.Evaluation.CurvePointAt*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.SurfacePointAt(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.SurfacePointAt(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  id: SurfacePointAt(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: SurfacePointAt(NurbsSurface, Double, Double)
+  nameWithType: Evaluation.SurfacePointAt(NurbsSurface, Double, Double)
+  fullName: GeometrySharp.Operation.Evaluation.SurfacePointAt(GeometrySharp.Geometry.NurbsSurface, System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: SurfacePointAt
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 113
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static Vector3 SurfacePointAt(NurbsSurface surface, double u, double v)
+    parameters:
+    - id: surface
+      type: GeometrySharp.Geometry.NurbsSurface
+    - id: u
+      type: System.Double
+    - id: v
+      type: System.Double
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public Shared Function SurfacePointAt(surface As NurbsSurface, u As Double, v As Double) As Vector3
+  overload: GeometrySharp.Operation.Evaluation.SurfacePointAt*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.SurfaceIsoCurve(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Boolean)
+  commentId: M:GeometrySharp.Operation.Evaluation.SurfaceIsoCurve(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Boolean)
+  id: SurfaceIsoCurve(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Boolean)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: SurfaceIsoCurve(NurbsSurface, Double, Boolean)
+  nameWithType: Evaluation.SurfaceIsoCurve(NurbsSurface, Double, Boolean)
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceIsoCurve(GeometrySharp.Geometry.NurbsSurface, System.Double, System.Boolean)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: SurfaceIsoCurve
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 156
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nExtracts the isocurve in u or v direction at a specified parameter.\n"
+  example: []
+  syntax:
+    content: public static NurbsCurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
+    parameters:
+    - id: nurbsSurface
+      type: GeometrySharp.Geometry.NurbsSurface
+      description: urbs surface to be evaluated
+    - id: t
+      type: System.Double
+      description: The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction
+    - id: useU
+      type: System.Boolean
+      description: Direction of the surface to be evaluated. Default value will consider the u direction.
+    return:
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: ''
+    content.vb: Public Shared Function SurfaceIsoCurve(nurbsSurface As NurbsSurface, t As Double = 0, useU As Boolean = True) As NurbsCurve
+  overload: GeometrySharp.Operation.Evaluation.SurfaceIsoCurve*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.RationalCurveTanget(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.RationalCurveTanget(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  id: RationalCurveTanget(GeometrySharp.Geometry.NurbsCurve,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveTanget(NurbsCurve, Double)
+  nameWithType: Evaluation.RationalCurveTanget(NurbsCurve, Double)
+  fullName: GeometrySharp.Operation.Evaluation.RationalCurveTanget(GeometrySharp.Geometry.NurbsCurve, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveTanget
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 201
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCompute the tangent at a point on a NURBS curve.\n"
+  example: []
+  syntax:
+    content: public static Vector3 RationalCurveTanget(NurbsCurve curve, double t)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object representing the curve.
+    - id: t
+      type: System.Double
+      description: Parameter.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: A Vector represented by an array of length (dim).
+    content.vb: Public Shared Function RationalCurveTanget(curve As NurbsCurve, t As Double) As Vector3
+  overload: GeometrySharp.Operation.Evaluation.RationalCurveTanget*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.CalculateArea(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  commentId: M:GeometrySharp.Operation.Evaluation.CalculateArea(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  id: CalculateArea(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: CalculateArea(IList<Vector3>)
+  nameWithType: Evaluation.CalculateArea(IList<Vector3>)
+  fullName: GeometrySharp.Operation.Evaluation.CalculateArea(System.Collections.Generic.IList<GeometrySharp.Geometry.Vector3>)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CalculateArea
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 215
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nGets the area from a list o points.\nThe list should represent a closed curve and planar.\nhttps://stackoverflow.com/questions/25340106/boostgeometry-find-area-of-2d-polygon-in-3d-space\nhttp://geomalgorithms.com/a01-_area.html\n"
+  example: []
+  syntax:
+    content: public static double CalculateArea(IList<Vector3> pts)
+    parameters:
+    - id: pts
+      type: System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+      description: Set of points.
+    return:
+      type: System.Double
+      description: Area calculated.
+    content.vb: Public Shared Function CalculateArea(pts As IList(Of Vector3)) As Double
+  overload: GeometrySharp.Operation.Evaluation.CalculateArea*
+  nameWithType.vb: Evaluation.CalculateArea(IList(Of Vector3))
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: GeometrySharp.Operation.Evaluation.CalculateArea(System.Collections.Generic.IList(Of GeometrySharp.Geometry.Vector3))
+  name.vb: CalculateArea(IList(Of Vector3))
+- uid: GeometrySharp.Operation.Evaluation.CentroidByVertices(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  commentId: M:GeometrySharp.Operation.Evaluation.CentroidByVertices(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  id: CentroidByVertices(System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3})
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: CentroidByVertices(IList<Vector3>)
+  nameWithType: Evaluation.CentroidByVertices(IList<Vector3>)
+  fullName: GeometrySharp.Operation.Evaluation.CentroidByVertices(System.Collections.Generic.IList<GeometrySharp.Geometry.Vector3>)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CentroidByVertices
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 238
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCalculates the centroid averaging the points collection.  \n"
+  example: []
+  syntax:
+    content: public static Vector3 CentroidByVertices(IList<Vector3> pts)
+    parameters:
+    - id: pts
+      type: System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+      description: The points collection to evaluate.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: ''
+    content.vb: Public Shared Function CentroidByVertices(pts As IList(Of Vector3)) As Vector3
+  overload: GeometrySharp.Operation.Evaluation.CentroidByVertices*
+  nameWithType.vb: Evaluation.CentroidByVertices(IList(Of Vector3))
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: GeometrySharp.Operation.Evaluation.CentroidByVertices(System.Collections.Generic.IList(Of GeometrySharp.Geometry.Vector3))
+  name.vb: CentroidByVertices(IList(Of Vector3))
+- uid: GeometrySharp.Operation.Evaluation.RationalCurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Evaluation.RationalCurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  id: RationalCurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveDerivatives(NurbsCurve, Double, Int32)
+  nameWithType: Evaluation.RationalCurveDerivatives(NurbsCurve, Double, Int32)
+  fullName: GeometrySharp.Operation.Evaluation.RationalCurveDerivatives(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveDerivatives
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 258
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs = 1)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+    - id: parameter
+      type: System.Double
+    - id: numberDerivs
+      type: System.Int32
+    return:
+      type: System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}
+    content.vb: Public Shared Function RationalCurveDerivatives(curve As NurbsCurve, parameter As Double, numberDerivs As Integer = 1) As List(Of Vector3)
+  overload: GeometrySharp.Operation.Evaluation.RationalCurveDerivatives*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.CurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Evaluation.CurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  id: CurveDerivatives(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: CurveDerivatives(NurbsCurve, Double, Int32)
+  nameWithType: Evaluation.CurveDerivatives(NurbsCurve, Double, Int32)
+  fullName: GeometrySharp.Operation.Evaluation.CurveDerivatives(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CurveDerivatives
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 300
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<Vector3> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+    - id: parameter
+      type: System.Double
+    - id: numberDerivs
+      type: System.Int32
+    return:
+      type: System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}
+    content.vb: Public Shared Function CurveDerivatives(curve As NurbsCurve, parameter As Double, numberDerivs As Integer) As List(Of Vector3)
+  overload: GeometrySharp.Operation.Evaluation.CurveDerivatives*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI(System.Int32,System.Double,System.Int32,System.Int32,GeometrySharp.Core.Knot)
+  commentId: M:GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI(System.Int32,System.Double,System.Int32,System.Int32,GeometrySharp.Core.Knot)
+  id: DerivativeBasisFunctionsGivenNI(System.Int32,System.Double,System.Int32,System.Int32,GeometrySharp.Core.Knot)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: DerivativeBasisFunctionsGivenNI(Int32, Double, Int32, Int32, Knot)
+  nameWithType: Evaluation.DerivativeBasisFunctionsGivenNI(Int32, Double, Int32, Int32, Knot)
+  fullName: GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI(System.Int32, System.Double, System.Int32, System.Int32, GeometrySharp.Core.Knot)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: DerivativeBasisFunctionsGivenNI
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 340
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree, int order, Knot knots)
+    parameters:
+    - id: span
+      type: System.Int32
+    - id: parameter
+      type: System.Double
+    - id: degree
+      type: System.Int32
+    - id: order
+      type: System.Int32
+    - id: knots
+      type: GeometrySharp.Core.Knot
+    return:
+      type: System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}
+    content.vb: Public Shared Function DerivativeBasisFunctionsGivenNI(span As Integer, parameter As Double, degree As Integer, order As Integer, knots As Knot) As List(Of Vector3)
+  overload: GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.RationalSurfaceNormal(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  commentId: M:GeometrySharp.Operation.Evaluation.RationalSurfaceNormal(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  id: RationalSurfaceNormal(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: RationalSurfaceNormal(NurbsSurface, Double, Double)
+  nameWithType: Evaluation.RationalSurfaceNormal(NurbsSurface, Double, Double)
+  fullName: GeometrySharp.Operation.Evaluation.RationalSurfaceNormal(GeometrySharp.Geometry.NurbsSurface, System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalSurfaceNormal
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 449
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCompute the normal vector at uv parameter on a NURBS surface\n"
+  example: []
+  syntax:
+    content: public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
+    parameters:
+    - id: nurbsSurface
+      type: GeometrySharp.Geometry.NurbsSurface
+      description: Object representing the surface
+    - id: u
+      type: System.Double
+      description: u parameter
+    - id: v
+      type: System.Double
+      description: v parameter
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: ''
+    content.vb: Public Shared Function RationalSurfaceNormal(nurbsSurface As NurbsSurface, u As Double, v As Double) As Vector3
+  overload: GeometrySharp.Operation.Evaluation.RationalSurfaceNormal*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  id: RationalSurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: RationalSurfaceDerivatives(NurbsSurface, Double, Double, Int32)
+  nameWithType: Evaluation.RationalSurfaceDerivatives(NurbsSurface, Double, Double, Int32)
+  fullName: GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface, System.Double, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalSurfaceDerivatives
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 464
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCompute the derivatives at a point on a NURBS surface\n"
+  example: []
+  syntax:
+    content: public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
+    parameters:
+    - id: nurbsSurface
+      type: GeometrySharp.Geometry.NurbsSurface
+      description: Object representing the surface
+    - id: u
+      type: System.Double
+      description: u parameter at which to evaluate the derivatives
+    - id: v
+      type: System.Double
+      description: v parameter at which to evaluate the derivatives
+    - id: numDerivs
+      type: System.Int32
+      description: Number of derivatives to evaluate (default is 1)
+    return:
+      type: System.Collections.Generic.List{System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}}
+      description: ''
+    content.vb: Public Shared Function RationalSurfaceDerivatives(nurbsSurface As NurbsSurface, u As Double, v As Double, numDerivs As Integer = 1) As List(Of List(Of Vector3))
+  overload: GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.SurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Evaluation.SurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  id: SurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface,System.Double,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: SurfaceDerivatives(NurbsSurface, Double, Double, Int32)
+  nameWithType: Evaluation.SurfaceDerivatives(NurbsSurface, Double, Double, Int32)
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceDerivatives(GeometrySharp.Geometry.NurbsSurface, System.Double, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: SurfaceDerivatives
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 504
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCompute the derivatives on a non-uniform, non-rational B spline surface\n"
+  example: []
+  syntax:
+    content: public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
+    parameters:
+    - id: nurbsSurface
+      type: GeometrySharp.Geometry.NurbsSurface
+      description: Object representing the surface
+    - id: u
+      type: System.Double
+      description: u parameter at which to evaluate the derivatives
+    - id: v
+      type: System.Double
+      description: v parameter at which to evaluate the derivatives
+    - id: numDerivs
+      type: System.Int32
+      description: Number of derivatives to evaluate
+    return:
+      type: System.Collections.Generic.List{System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}}
+    content.vb: Public Shared Function SurfaceDerivatives(nurbsSurface As NurbsSurface, u As Double, v As Double, numDerivs As Integer) As List(Of List(Of Vector3))
+  overload: GeometrySharp.Operation.Evaluation.SurfaceDerivatives*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM(GeometrySharp.Geometry.NurbsSurface,System.Int32,System.Int32,System.Double,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM(GeometrySharp.Geometry.NurbsSurface,System.Int32,System.Int32,System.Double,System.Double,System.Int32)
+  id: SurfaceDerivativesGivenNM(GeometrySharp.Geometry.NurbsSurface,System.Int32,System.Int32,System.Double,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Evaluation
+  langs:
+  - csharp
+  - vb
+  name: SurfaceDerivativesGivenNM(NurbsSurface, Int32, Int32, Double, Double, Int32)
+  nameWithType: Evaluation.SurfaceDerivativesGivenNM(NurbsSurface, Int32, Int32, Double, Double, Int32)
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM(GeometrySharp.Geometry.NurbsSurface, System.Int32, System.Int32, System.Double, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Evaluation.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: SurfaceDerivativesGivenNM
+    path: ../GeometrySharp/Operation/Evaluation.cs
+    startLine: 525
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
+    parameters:
+    - id: nurbsSurface
+      type: GeometrySharp.Geometry.NurbsSurface
+    - id: n
+      type: System.Int32
+    - id: m
+      type: System.Int32
+    - id: u
+      type: System.Double
+    - id: v
+      type: System.Double
+    - id: numDerivs
+      type: System.Int32
+    return:
+      type: System.Collections.Generic.List{System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}}
+    content.vb: Public Shared Function SurfaceDerivativesGivenNM(nurbsSurface As NurbsSurface, n As Integer, m As Integer, u As Double, v As Double, numDerivs As Integer) As List(Of List(Of Vector3))
+  overload: GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+references:
+- uid: GeometrySharp.Operation
+  commentId: N:GeometrySharp.Operation
+  name: GeometrySharp.Operation
+  nameWithType: GeometrySharp.Operation
+  fullName: GeometrySharp.Operation
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Operation.Evaluation.BasicFunction*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.BasicFunction
+  name: BasicFunction
+  nameWithType: Evaluation.BasicFunction
+  fullName: GeometrySharp.Operation.Evaluation.BasicFunction
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: GeometrySharp.Core.Knot
+  commentId: T:GeometrySharp.Core.Knot
+  parent: GeometrySharp.Core
+  name: Knot
+  nameWithType: Knot
+  fullName: GeometrySharp.Core.Knot
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: System.Collections.Generic.List{System.Double}
+  commentId: T:System.Collections.Generic.List{System.Double}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<Double>
+  nameWithType: List<Double>
+  fullName: System.Collections.Generic.List<System.Double>
+  nameWithType.vb: List(Of Double)
+  fullName.vb: System.Collections.Generic.List(Of System.Double)
+  name.vb: List(Of Double)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Double
+    name: Double
+    nameWithType: Double
+    fullName: System.Double
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+- uid: GeometrySharp.Operation.Evaluation.CurvePointAt*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.CurvePointAt
+  name: CurvePointAt
+  nameWithType: Evaluation.CurvePointAt
+  fullName: GeometrySharp.Operation.Evaluation.CurvePointAt
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: GeometrySharp.Operation.Evaluation.SurfacePointAt*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.SurfacePointAt
+  name: SurfacePointAt
+  nameWithType: Evaluation.SurfacePointAt
+  fullName: GeometrySharp.Operation.Evaluation.SurfacePointAt
+- uid: GeometrySharp.Geometry.NurbsSurface
+  commentId: T:GeometrySharp.Geometry.NurbsSurface
+  parent: GeometrySharp.Geometry
+  name: NurbsSurface
+  nameWithType: NurbsSurface
+  fullName: GeometrySharp.Geometry.NurbsSurface
+- uid: GeometrySharp.Operation.Evaluation.SurfaceIsoCurve*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.SurfaceIsoCurve
+  name: SurfaceIsoCurve
+  nameWithType: Evaluation.SurfaceIsoCurve
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceIsoCurve
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: GeometrySharp.Operation.Evaluation.RationalCurveTanget*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.RationalCurveTanget
+  name: RationalCurveTanget
+  nameWithType: Evaluation.RationalCurveTanget
+  fullName: GeometrySharp.Operation.Evaluation.RationalCurveTanget
+- uid: GeometrySharp.Operation.Evaluation.CalculateArea*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.CalculateArea
+  name: CalculateArea
+  nameWithType: Evaluation.CalculateArea
+  fullName: GeometrySharp.Operation.Evaluation.CalculateArea
+- uid: System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+  commentId: T:System.Collections.Generic.IList{GeometrySharp.Geometry.Vector3}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IList`1
+  name: IList<Vector3>
+  nameWithType: IList<Vector3>
+  fullName: System.Collections.Generic.IList<GeometrySharp.Geometry.Vector3>
+  nameWithType.vb: IList(Of Vector3)
+  fullName.vb: System.Collections.Generic.IList(Of GeometrySharp.Geometry.Vector3)
+  name.vb: IList(Of Vector3)
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Collections.Generic.IList`1
+  commentId: T:System.Collections.Generic.IList`1
+  isExternal: true
+  name: IList<T>
+  nameWithType: IList<T>
+  fullName: System.Collections.Generic.IList<T>
+  nameWithType.vb: IList(Of T)
+  fullName.vb: System.Collections.Generic.IList(Of T)
+  name.vb: IList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IList`1
+    name: IList
+    nameWithType: IList
+    fullName: System.Collections.Generic.IList
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Operation.Evaluation.CentroidByVertices*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.CentroidByVertices
+  name: CentroidByVertices
+  nameWithType: Evaluation.CentroidByVertices
+  fullName: GeometrySharp.Operation.Evaluation.CentroidByVertices
+- uid: GeometrySharp.Operation.Evaluation.RationalCurveDerivatives*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.RationalCurveDerivatives
+  name: RationalCurveDerivatives
+  nameWithType: Evaluation.RationalCurveDerivatives
+  fullName: GeometrySharp.Operation.Evaluation.RationalCurveDerivatives
+- uid: System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}
+  commentId: T:System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<Vector3>
+  nameWithType: List<Vector3>
+  fullName: System.Collections.Generic.List<GeometrySharp.Geometry.Vector3>
+  nameWithType.vb: List(Of Vector3)
+  fullName.vb: System.Collections.Generic.List(Of GeometrySharp.Geometry.Vector3)
+  name.vb: List(Of Vector3)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Operation.Evaluation.CurveDerivatives*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.CurveDerivatives
+  name: CurveDerivatives
+  nameWithType: Evaluation.CurveDerivatives
+  fullName: GeometrySharp.Operation.Evaluation.CurveDerivatives
+- uid: GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI
+  name: DerivativeBasisFunctionsGivenNI
+  nameWithType: Evaluation.DerivativeBasisFunctionsGivenNI
+  fullName: GeometrySharp.Operation.Evaluation.DerivativeBasisFunctionsGivenNI
+- uid: GeometrySharp.Operation.Evaluation.RationalSurfaceNormal*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.RationalSurfaceNormal
+  name: RationalSurfaceNormal
+  nameWithType: Evaluation.RationalSurfaceNormal
+  fullName: GeometrySharp.Operation.Evaluation.RationalSurfaceNormal
+- uid: GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives
+  name: RationalSurfaceDerivatives
+  nameWithType: Evaluation.RationalSurfaceDerivatives
+  fullName: GeometrySharp.Operation.Evaluation.RationalSurfaceDerivatives
+- uid: System.Collections.Generic.List{System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}}
+  commentId: T:System.Collections.Generic.List{System.Collections.Generic.List{GeometrySharp.Geometry.Vector3}}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<List<Vector3>>
+  nameWithType: List<List<Vector3>>
+  fullName: System.Collections.Generic.List<System.Collections.Generic.List<GeometrySharp.Geometry.Vector3>>
+  nameWithType.vb: List(Of List(Of Vector3))
+  fullName.vb: System.Collections.Generic.List(Of System.Collections.Generic.List(Of GeometrySharp.Geometry.Vector3))
+  name.vb: List(Of List(Of Vector3))
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.Collections.Generic.List`1
+    name: List
+    nameWithType: List
+    fullName: System.Collections.Generic.List
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Operation.Evaluation.SurfaceDerivatives*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.SurfaceDerivatives
+  name: SurfaceDerivatives
+  nameWithType: Evaluation.SurfaceDerivatives
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceDerivatives
+- uid: GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM*
+  commentId: Overload:GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM
+  name: SurfaceDerivativesGivenNM
+  nameWithType: Evaluation.SurfaceDerivativesGivenNM
+  fullName: GeometrySharp.Operation.Evaluation.SurfaceDerivativesGivenNM

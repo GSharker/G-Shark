@@ -1,0 +1,1272 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Geometry.Line
+  commentId: T:GeometrySharp.Geometry.Line
+  id: Line
+  parent: GeometrySharp.Geometry
+  children:
+  - GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,System.Double)
+  - GeometrySharp.Geometry.Line.BoundingBox
+  - GeometrySharp.Geometry.Line.ClosestPoint(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Line.Direction
+  - GeometrySharp.Geometry.Line.End
+  - GeometrySharp.Geometry.Line.Equals(GeometrySharp.Geometry.Line)
+  - GeometrySharp.Geometry.Line.Extend(System.Double,System.Double)
+  - GeometrySharp.Geometry.Line.Flip
+  - GeometrySharp.Geometry.Line.GetHashCode
+  - GeometrySharp.Geometry.Line.Length
+  - GeometrySharp.Geometry.Line.PointAt(System.Double)
+  - GeometrySharp.Geometry.Line.Start
+  - GeometrySharp.Geometry.Line.ToNurbsCurve
+  - GeometrySharp.Geometry.Line.ToString
+  - GeometrySharp.Geometry.Line.Transform(GeometrySharp.Core.Transform)
+  langs:
+  - csharp
+  - vb
+  name: Line
+  nameWithType: Line
+  fullName: GeometrySharp.Geometry.Line
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Line
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 10
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nA curve representing a straight line.\n"
+  example: []
+  syntax:
+    content: 'public class Line : IEquatable<Line>'
+    content.vb: >-
+      Public Class Line
+
+          Implements IEquatable(Of Line)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Line}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Line(Vector3, Vector3)
+  nameWithType: Line.Line(Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Line.Line(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 17
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nLine by start point and end point.\n"
+  example: []
+  syntax:
+    content: public Line(Vector3 start, Vector3 end)
+    parameters:
+    - id: start
+      type: GeometrySharp.Geometry.Vector3
+      description: Start point.
+    - id: end
+      type: GeometrySharp.Geometry.Vector3
+      description: End point.
+    content.vb: Public Sub New(start As Vector3, end As Vector3)
+  overload: GeometrySharp.Geometry.Line.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,System.Double)
+  commentId: M:GeometrySharp.Geometry.Line.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,System.Double)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,System.Double)'
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Line(Vector3, Vector3, Double)
+  nameWithType: Line.Line(Vector3, Vector3, Double)
+  fullName: GeometrySharp.Geometry.Line.Line(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, System.Double)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 33
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nLine from a starting point, direction and length.\n"
+  example: []
+  syntax:
+    content: public Line(Vector3 start, Vector3 direction, double length)
+    parameters:
+    - id: start
+      type: GeometrySharp.Geometry.Vector3
+      description: Starting point of the line.
+    - id: direction
+      type: GeometrySharp.Geometry.Vector3
+      description: Direction of the line.
+    - id: length
+      type: System.Double
+      description: Length of the line.
+    content.vb: Public Sub New(start As Vector3, direction As Vector3, length As Double)
+  overload: GeometrySharp.Geometry.Line.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.Start
+  commentId: P:GeometrySharp.Geometry.Line.Start
+  id: Start
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Start
+  nameWithType: Line.Start
+  fullName: GeometrySharp.Geometry.Line.Start
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Start
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 46
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nStart point of the line.\n"
+  example: []
+  syntax:
+    content: public Vector3 Start { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Start As Vector3
+  overload: GeometrySharp.Geometry.Line.Start*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Line.End
+  commentId: P:GeometrySharp.Geometry.Line.End
+  id: End
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: End
+  nameWithType: Line.End
+  fullName: GeometrySharp.Geometry.Line.End
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: End
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 51
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nEnd point of the line.\n"
+  example: []
+  syntax:
+    content: public Vector3 End { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property End As Vector3
+  overload: GeometrySharp.Geometry.Line.End*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Line.Length
+  commentId: P:GeometrySharp.Geometry.Line.Length
+  id: Length
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Length
+  nameWithType: Line.Length
+  fullName: GeometrySharp.Geometry.Line.Length
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Length
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 56
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nLength of the line.\n"
+  example: []
+  syntax:
+    content: public double Length { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Length As Double
+  overload: GeometrySharp.Geometry.Line.Length*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Line.Direction
+  commentId: P:GeometrySharp.Geometry.Line.Direction
+  id: Direction
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Direction
+  nameWithType: Line.Direction
+  fullName: GeometrySharp.Geometry.Line.Direction
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Direction
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 61
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nDirection of the line.\n"
+  example: []
+  syntax:
+    content: public Vector3 Direction { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Direction As Vector3
+  overload: GeometrySharp.Geometry.Line.Direction*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Line.BoundingBox
+  commentId: P:GeometrySharp.Geometry.Line.BoundingBox
+  id: BoundingBox
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: BoundingBox
+  nameWithType: Line.BoundingBox
+  fullName: GeometrySharp.Geometry.Line.BoundingBox
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: BoundingBox
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 66
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the BoundingBox in ascending fashion.\n"
+  example: []
+  syntax:
+    content: public BoundingBox BoundingBox { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.BoundingBox
+    content.vb: Public ReadOnly Property BoundingBox As BoundingBox
+  overload: GeometrySharp.Geometry.Line.BoundingBox*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Line.ClosestPoint(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Line.ClosestPoint(GeometrySharp.Geometry.Vector3)
+  id: ClosestPoint(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: ClosestPoint(Vector3)
+  nameWithType: Line.ClosestPoint(Vector3)
+  fullName: GeometrySharp.Geometry.Line.ClosestPoint(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ClosestPoint
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 81
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGet the closest point on the line from this point.\n"
+  example: []
+  syntax:
+    content: public Vector3 ClosestPoint(Vector3 vec)
+    parameters:
+    - id: vec
+      type: GeometrySharp.Geometry.Vector3
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The closest point on the line from this point.
+    content.vb: Public Function ClosestPoint(vec As Vector3) As Vector3
+  overload: GeometrySharp.Geometry.Line.ClosestPoint*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.PointAt(System.Double)
+  commentId: M:GeometrySharp.Geometry.Line.PointAt(System.Double)
+  id: PointAt(System.Double)
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: PointAt(Double)
+  nameWithType: Line.PointAt(Double)
+  fullName: GeometrySharp.Geometry.Line.PointAt(System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PointAt
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 98
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nEvaluate the line at the specified parameter.\n"
+  example: []
+  syntax:
+    content: public Vector3 PointAt(double t)
+    parameters:
+    - id: t
+      type: System.Double
+      description: Parameter to evaluate the line. Parameter should be between 0.0 and 1.0
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The point at the specific parameter.
+    content.vb: Public Function PointAt(t As Double) As Vector3
+  overload: GeometrySharp.Geometry.Line.PointAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.Flip
+  commentId: M:GeometrySharp.Geometry.Line.Flip
+  id: Flip
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Flip()
+  nameWithType: Line.Flip()
+  fullName: GeometrySharp.Geometry.Line.Flip()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Flip
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 110
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nFlip the endpoint of the line.\n"
+  example: []
+  syntax:
+    content: public Line Flip()
+    return:
+      type: GeometrySharp.Geometry.Line
+      description: The line flipped.
+    content.vb: Public Function Flip As Line
+  overload: GeometrySharp.Geometry.Line.Flip*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.Extend(System.Double,System.Double)
+  commentId: M:GeometrySharp.Geometry.Line.Extend(System.Double,System.Double)
+  id: Extend(System.Double,System.Double)
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Extend(Double, Double)
+  nameWithType: Line.Extend(Double, Double)
+  fullName: GeometrySharp.Geometry.Line.Extend(System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Extend
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 121
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nExtends the line by lengths on both side.\n"
+  example: []
+  syntax:
+    content: public Line Extend(double startLength, double endLength)
+    parameters:
+    - id: startLength
+      type: System.Double
+      description: Length to extend the line at the start point.
+    - id: endLength
+      type: System.Double
+      description: Length to extend the line at the end point.
+    return:
+      type: GeometrySharp.Geometry.Line
+      description: The extended line.
+    content.vb: Public Function Extend(startLength As Double, endLength As Double) As Line
+  overload: GeometrySharp.Geometry.Line.Extend*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.ToNurbsCurve
+  commentId: M:GeometrySharp.Geometry.Line.ToNurbsCurve
+  id: ToNurbsCurve
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: ToNurbsCurve()
+  nameWithType: Line.ToNurbsCurve()
+  fullName: GeometrySharp.Geometry.Line.ToNurbsCurve()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToNurbsCurve
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 138
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nConstructs a nurbs curve representation of this line.\n"
+  example: []
+  syntax:
+    content: public NurbsCurve ToNurbsCurve()
+    return:
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: A Nurbs curve shaped like this line.
+    content.vb: Public Function ToNurbsCurve As NurbsCurve
+  overload: GeometrySharp.Geometry.Line.ToNurbsCurve*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.Transform(GeometrySharp.Core.Transform)
+  commentId: M:GeometrySharp.Geometry.Line.Transform(GeometrySharp.Core.Transform)
+  id: Transform(GeometrySharp.Core.Transform)
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Transform(Transform)
+  nameWithType: Line.Transform(Transform)
+  fullName: GeometrySharp.Geometry.Line.Transform(GeometrySharp.Core.Transform)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Transform
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 151
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nTransform the line using the transformation matrix.\n"
+  example: []
+  syntax:
+    content: public Line Transform(Transform xForm)
+    parameters:
+    - id: xForm
+      type: GeometrySharp.Core.Transform
+      description: Transform matrix to apply.
+    return:
+      type: GeometrySharp.Geometry.Line
+      description: A line transformed.
+    content.vb: Public Function Transform(xForm As Transform) As Line
+  overload: GeometrySharp.Geometry.Line.Transform*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.ToString
+  commentId: M:GeometrySharp.Geometry.Line.ToString
+  id: ToString
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Line.ToString()
+  fullName: GeometrySharp.Geometry.Line.ToString()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToString
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 162
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nConstructs the string representation of the line.\n"
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: A text string.
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: GeometrySharp.Geometry.Line.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: GeometrySharp.Geometry.Line.Equals(GeometrySharp.Geometry.Line)
+  commentId: M:GeometrySharp.Geometry.Line.Equals(GeometrySharp.Geometry.Line)
+  id: Equals(GeometrySharp.Geometry.Line)
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: Equals(Line)
+  nameWithType: Line.Equals(Line)
+  fullName: GeometrySharp.Geometry.Line.Equals(GeometrySharp.Geometry.Line)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Equals
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 173
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nCheck if the line is equal to the provided line.\nTwo lines are equal if the end points are the same.\n"
+  example: []
+  syntax:
+    content: public bool Equals(Line other)
+    parameters:
+    - id: other
+      type: GeometrySharp.Geometry.Line
+      description: The line to compare.
+    return:
+      type: System.Boolean
+      description: True if the end points are equal, otherwise false.
+    content.vb: Public Function Equals(other As Line) As Boolean
+  overload: GeometrySharp.Geometry.Line.Equals*
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Line}.Equals(GeometrySharp.Geometry.Line)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Line.GetHashCode
+  commentId: M:GeometrySharp.Geometry.Line.GetHashCode
+  id: GetHashCode
+  parent: GeometrySharp.Geometry.Line
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: Line.GetHashCode()
+  fullName: GeometrySharp.Geometry.Line.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Line.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: GetHashCode
+    path: ../GeometrySharp/Geometry/Line.cs
+    startLine: 183
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGet the hash code for the line.\n"
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+      description: ''
+    content.vb: Public Overrides Function GetHashCode As Integer
+  overridden: System.Object.GetHashCode
+  overload: GeometrySharp.Geometry.Line.GetHashCode*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.IEquatable{GeometrySharp.Geometry.Line}
+  commentId: T:System.IEquatable{GeometrySharp.Geometry.Line}
+  parent: System
+  definition: System.IEquatable`1
+  name: IEquatable<Line>
+  nameWithType: IEquatable<Line>
+  fullName: System.IEquatable<GeometrySharp.Geometry.Line>
+  nameWithType.vb: IEquatable(Of Line)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Line)
+  name.vb: IEquatable(Of Line)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Line
+    name: Line
+    nameWithType: Line
+    fullName: GeometrySharp.Geometry.Line
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Line
+    name: Line
+    nameWithType: Line
+    fullName: GeometrySharp.Geometry.Line
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Line.#ctor*
+  commentId: Overload:GeometrySharp.Geometry.Line.#ctor
+  name: Line
+  nameWithType: Line.Line
+  fullName: GeometrySharp.Geometry.Line.Line
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Geometry.Line.Start*
+  commentId: Overload:GeometrySharp.Geometry.Line.Start
+  name: Start
+  nameWithType: Line.Start
+  fullName: GeometrySharp.Geometry.Line.Start
+- uid: GeometrySharp.Geometry.Line.End*
+  commentId: Overload:GeometrySharp.Geometry.Line.End
+  name: End
+  nameWithType: Line.End
+  fullName: GeometrySharp.Geometry.Line.End
+- uid: GeometrySharp.Geometry.Line.Length*
+  commentId: Overload:GeometrySharp.Geometry.Line.Length
+  name: Length
+  nameWithType: Line.Length
+  fullName: GeometrySharp.Geometry.Line.Length
+- uid: GeometrySharp.Geometry.Line.Direction*
+  commentId: Overload:GeometrySharp.Geometry.Line.Direction
+  name: Direction
+  nameWithType: Line.Direction
+  fullName: GeometrySharp.Geometry.Line.Direction
+- uid: GeometrySharp.Geometry.Line.BoundingBox*
+  commentId: Overload:GeometrySharp.Geometry.Line.BoundingBox
+  name: BoundingBox
+  nameWithType: Line.BoundingBox
+  fullName: GeometrySharp.Geometry.Line.BoundingBox
+- uid: GeometrySharp.Geometry.BoundingBox
+  commentId: T:GeometrySharp.Geometry.BoundingBox
+  parent: GeometrySharp.Geometry
+  name: BoundingBox
+  nameWithType: BoundingBox
+  fullName: GeometrySharp.Geometry.BoundingBox
+- uid: GeometrySharp.Geometry.Line.ClosestPoint*
+  commentId: Overload:GeometrySharp.Geometry.Line.ClosestPoint
+  name: ClosestPoint
+  nameWithType: Line.ClosestPoint
+  fullName: GeometrySharp.Geometry.Line.ClosestPoint
+- uid: GeometrySharp.Geometry.Line.PointAt*
+  commentId: Overload:GeometrySharp.Geometry.Line.PointAt
+  name: PointAt
+  nameWithType: Line.PointAt
+  fullName: GeometrySharp.Geometry.Line.PointAt
+- uid: GeometrySharp.Geometry.Line.Flip*
+  commentId: Overload:GeometrySharp.Geometry.Line.Flip
+  name: Flip
+  nameWithType: Line.Flip
+  fullName: GeometrySharp.Geometry.Line.Flip
+- uid: GeometrySharp.Geometry.Line
+  commentId: T:GeometrySharp.Geometry.Line
+  parent: GeometrySharp.Geometry
+  name: Line
+  nameWithType: Line
+  fullName: GeometrySharp.Geometry.Line
+- uid: GeometrySharp.Geometry.Line.Extend*
+  commentId: Overload:GeometrySharp.Geometry.Line.Extend
+  name: Extend
+  nameWithType: Line.Extend
+  fullName: GeometrySharp.Geometry.Line.Extend
+- uid: GeometrySharp.Geometry.Line.ToNurbsCurve*
+  commentId: Overload:GeometrySharp.Geometry.Line.ToNurbsCurve
+  name: ToNurbsCurve
+  nameWithType: Line.ToNurbsCurve
+  fullName: GeometrySharp.Geometry.Line.ToNurbsCurve
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: GeometrySharp.Geometry.Line.Transform*
+  commentId: Overload:GeometrySharp.Geometry.Line.Transform
+  name: Transform
+  nameWithType: Line.Transform
+  fullName: GeometrySharp.Geometry.Line.Transform
+- uid: GeometrySharp.Core.Transform
+  commentId: T:GeometrySharp.Core.Transform
+  parent: GeometrySharp.Core
+  name: Transform
+  nameWithType: Transform
+  fullName: GeometrySharp.Core.Transform
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Line.ToString*
+  commentId: Overload:GeometrySharp.Geometry.Line.ToString
+  name: ToString
+  nameWithType: Line.ToString
+  fullName: GeometrySharp.Geometry.Line.ToString
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: GeometrySharp.Geometry.Line.Equals*
+  commentId: Overload:GeometrySharp.Geometry.Line.Equals
+  name: Equals
+  nameWithType: Line.Equals
+  fullName: GeometrySharp.Geometry.Line.Equals
+- uid: System.IEquatable{GeometrySharp.Geometry.Line}.Equals(GeometrySharp.Geometry.Line)
+  commentId: M:System.IEquatable{GeometrySharp.Geometry.Line}.Equals(GeometrySharp.Geometry.Line)
+  parent: System.IEquatable{GeometrySharp.Geometry.Line}
+  definition: System.IEquatable`1.Equals(`0)
+  name: Equals(Line)
+  nameWithType: IEquatable<Line>.Equals(Line)
+  fullName: System.IEquatable<GeometrySharp.Geometry.Line>.Equals(GeometrySharp.Geometry.Line)
+  nameWithType.vb: IEquatable(Of Line).Equals(Line)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Line).Equals(GeometrySharp.Geometry.Line)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<Line>.Equals
+    fullName: System.IEquatable<GeometrySharp.Geometry.Line>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Line
+    name: Line
+    nameWithType: Line
+    fullName: GeometrySharp.Geometry.Line
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of Line).Equals
+    fullName: System.IEquatable(Of GeometrySharp.Geometry.Line).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Line
+    name: Line
+    nameWithType: Line
+    fullName: GeometrySharp.Geometry.Line
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.IEquatable`1.Equals(`0)
+  commentId: M:System.IEquatable`1.Equals(`0)
+  isExternal: true
+  name: Equals(T)
+  nameWithType: IEquatable<T>.Equals(T)
+  fullName: System.IEquatable<T>.Equals(T)
+  nameWithType.vb: IEquatable(Of T).Equals(T)
+  fullName.vb: System.IEquatable(Of T).Equals(T)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<T>.Equals
+    fullName: System.IEquatable<T>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of T).Equals
+    fullName: System.IEquatable(Of T).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Line.GetHashCode*
+  commentId: Overload:GeometrySharp.Geometry.Line.GetHashCode
+  name: GetHashCode
+  nameWithType: Line.GetHashCode
+  fullName: GeometrySharp.Geometry.Line.GetHashCode
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32

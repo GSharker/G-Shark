@@ -1,0 +1,589 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  commentId: T:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  id: CurvePlaneIntersectionResult
+  parent: GeometrySharp.Core.IntersectionResults
+  children:
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+  langs:
+  - csharp
+  - vb
+  name: CurvePlaneIntersectionResult
+  nameWithType: CurvePlaneIntersectionResult
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CurvePlaneIntersectionResult
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 12
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nThis is a POC class used to collect the result from curve-plane intersections.\n"
+  example: []
+  syntax:
+    content: public class CurvePlaneIntersectionResult
+    content.vb: Public Class CurvePlaneIntersectionResult
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: CurvePlaneIntersectionResult(Vector3, Double, Vector3)
+  nameWithType: CurvePlaneIntersectionResult.CurvePlaneIntersectionResult(Vector3, Double, Vector3)
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.CurvePlaneIntersectionResult(GeometrySharp.Geometry.Vector3, System.Double, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 20
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nCollects the result from an intersection.\n"
+  example: []
+  syntax:
+    content: public CurvePlaneIntersectionResult(Vector3 point, double t, Vector3 uv)
+    parameters:
+    - id: point
+      type: GeometrySharp.Geometry.Vector3
+      description: Curve&apos;s intersection point.
+    - id: t
+      type: System.Double
+      description: Curve&apos;s parameter t on curve.
+    - id: uv
+      type: GeometrySharp.Geometry.Vector3
+      description: Parameter uv on plane.
+    content.vb: Public Sub New(point As Vector3, t As Double, uv As Vector3)
+  overload: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+  commentId: P:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+  id: Point
+  parent: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: Point
+  nameWithType: CurvePlaneIntersectionResult.Point
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Point
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 30
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nGets the curve&apos;s intersection point.\n"
+  example: []
+  syntax:
+    content: public Vector3 Point { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Point As Vector3
+  overload: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+  commentId: P:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+  id: T
+  parent: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: T
+  nameWithType: CurvePlaneIntersectionResult.T
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: T
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 35
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nGets the curve&apos;s parameter t.\n"
+  example: []
+  syntax:
+    content: public double T { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property T As Double
+  overload: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+  commentId: P:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+  id: Uv
+  parent: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: Uv
+  nameWithType: CurvePlaneIntersectionResult.Uv
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Uv
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 40
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nGets the parameter uv on plane.\n"
+  example: []
+  syntax:
+    content: public Vector3 Uv { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Uv As Vector3
+  overload: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString
+  commentId: M:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString
+  id: ToString
+  parent: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: CurvePlaneIntersectionResult.ToString()
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToString
+    path: ../GeometrySharp/Core/IntersectionResults/CurvePlaneIntersectionResult.cs
+    startLine: 46
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core.IntersectionResults
+  summary: "\nCompose the curve intersection result as a text.\n"
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: The text format of the intersection.
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: GeometrySharp.Core.IntersectionResults
+  commentId: N:GeometrySharp.Core.IntersectionResults
+  name: GeometrySharp.Core.IntersectionResults
+  nameWithType: GeometrySharp.Core.IntersectionResults
+  fullName: GeometrySharp.Core.IntersectionResults
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor*
+  commentId: Overload:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.#ctor
+  name: CurvePlaneIntersectionResult
+  nameWithType: CurvePlaneIntersectionResult.CurvePlaneIntersectionResult
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.CurvePlaneIntersectionResult
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point*
+  commentId: Overload:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+  name: Point
+  nameWithType: CurvePlaneIntersectionResult.Point
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Point
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T*
+  commentId: Overload:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+  name: T
+  nameWithType: CurvePlaneIntersectionResult.T
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.T
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv*
+  commentId: Overload:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+  name: Uv
+  nameWithType: CurvePlaneIntersectionResult.Uv
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.Uv
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString*
+  commentId: Overload:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString
+  name: ToString
+  nameWithType: CurvePlaneIntersectionResult.ToString
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult.ToString
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
