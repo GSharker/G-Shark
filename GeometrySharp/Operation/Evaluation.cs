@@ -219,10 +219,10 @@ namespace GeometrySharp.Operation
         /// <param name="curve">NurbsCurve object representing the curve.</param>
         /// <param name="t">Parameter.</param>
         /// <returns>A Vector represented by an array of length (dim).</returns>
-        public static Vector3 RationalCurveTanget(NurbsCurve curve, double t)
+        public static Vector3 RationalCurveTangent(ICurve curve, double t)
         {
-            List<Vector3> derivs = RationalCurveDerivatives(curve, t, 1);
-            return derivs[1];
+            List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
+            return derivatives[1];
         }
 
         /// <summary>
@@ -245,10 +245,10 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Determine the derivatives of a NURBS curve at a given parameter.
+        /// Determine the derivatives of a curve at a given parameter.
         /// Corresponds to algorithm 4.2 from The NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
-        /// <param name="curve">ICurve object representing the curve - the control points are in homogeneous coordinates.</param>
+        /// <param name="curve">Curve object representing the curve - the control points are in homogeneous coordinates.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numberDerivs">Number of derivatives to evaluate</param>
         /// <returns>A point represented by an array of length (dim).</returns>
@@ -288,7 +288,6 @@ namespace GeometrySharp.Operation
             // Return C(t) derivatives.
             return CK;
         }
-
 
         /// <summary>
         /// Determine the derivatives of a non-uniform, non-rational B-spline curve at a given parameter.

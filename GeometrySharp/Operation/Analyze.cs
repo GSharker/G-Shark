@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
@@ -14,12 +15,12 @@ namespace GeometrySharp.Operation
         /// <summary>
         /// Approximate the length of a rational curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
-        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
-        /// <param name="gaussDegIncrease">the degree of gaussian quadrature to perform.
+        /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform.
         /// A higher number yields a more exact result, default set to 16.</param>
         /// <returns>Return the approximate length.</returns>
-        public static double RationalCurveArcLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
             var uSet = u < 0.0 ? curve.Knots.Last() : u;
 
@@ -32,7 +33,7 @@ namespace GeometrySharp.Operation
             {
                 tempCrv = crvs[i];
                 var param = Math.Min(tempCrv.Knots.Last(), uSet);
-                sum += RationalBezierCurveLength(tempCrv, param, gaussDegIncrease);
+                sum += BezierCurveLength(tempCrv, param, gaussDegIncrease);
                 i += 1;
             }
 
@@ -42,12 +43,12 @@ namespace GeometrySharp.Operation
         /// <summary>
         /// Approximate the length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
-        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">the degree of gaussian quadrature to perform.
         /// A higher number yields a more exact result, default set to 16.</param>
         /// <returns>Return the approximate length.</returns>
-        public static double RationalBezierCurveLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
             var uSet = u < 0.0 ? curve.Knots.Last() : u;
             var z = (uSet - curve.Knots[0]) / 2;
@@ -68,17 +69,17 @@ namespace GeometrySharp.Operation
         /// <summary>
         /// Get the curve parameter t at a given length.
         /// </summary>
-        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The length to find the parameter.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <param name="curveLength">The length of curve if computer, if not will be computed.</param>
         /// <returns>The parameter t at the given length.</returns>
-        public static double RationalBezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance, double curveLength = -1)
+        public static double BezierCurveParamAtLength(ICurve curve, double segmentLength, double tolerance, double curveLength = -1)
         {
             if (segmentLength < 0) return curve.Knots[0];
 
             // We compute the whole length, if the curve lengths is not provided.
-            var setCurveLength = (curveLength < 0) ? RationalBezierCurveLength(curve) : curveLength;
+            var setCurveLength = (curveLength < 0) ? BezierCurveLength(curve) : curveLength;
 
             if (segmentLength > setCurveLength) return curve.Knots[^1];
 
@@ -94,7 +95,7 @@ namespace GeometrySharp.Operation
             while ((endLength - startLength) > setTolerance)
             {
                 var midT = (startT + endT) / 2;
-                var midLength = RationalBezierCurveLength(curve, midT);
+                var midLength = BezierCurveLength(curve, midT);
 
                 if (midLength > segmentLength)
                 {
@@ -112,25 +113,25 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the closest point on a NurbsCurve to a given point.
+        /// Compute the closest point on a curve to a given point.
         /// </summary>
-        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Vector3 RationalCurveClosestPoint(NurbsCurve curve, Vector3 point, out double t)
+        public static Vector3 CurveClosestPoint(ICurve curve, Vector3 point, out double t)
         {
-            t = RationalCurveClosestParameter(curve, point);
+            t = CurveClosestParameter(curve, point);
             return Evaluation.CurvePointAt(curve, t);
         }
 
         /// <summary>
-        /// Compute the closest parameters on a NurbsCurve to a given point.
+        /// Computes the closest parameters on a curve to a given point.
         /// (Piegl & Tiller suggest) page 244 chapter six.
-        /// <param name="curve">The NurbsCurve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
-        public static double RationalCurveClosestParameter(NurbsCurve curve, Vector3 point)
+        public static double CurveClosestParameter(ICurve curve, Vector3 point)
         {
             var minimumDistance = double.PositiveInfinity;
             var tParameter = default(double);
@@ -228,13 +229,13 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Approximate the parameter at a given arc length on a NurbsCurve.
+        /// Approximate the parameter at a given arc length on a Curve.
         /// </summary>
-        /// <param name="curve">NurbsCurve object.</param>
+        /// <param name="curve">Curve object.</param>
         /// <param name="segmentLength">The arc length for which to do the procedure.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
-        /// <returns>The t parameter.</returns>
-        public static double RationalCurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
+        /// <returns>The t parameter on the curve.</returns>
+        public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
         {
             if (segmentLength < GeoSharpMath.EPSILON) return curve.Knots[0];
             if (Math.Abs(curve.Length() - segmentLength) < GeoSharpMath.EPSILON) return curve.Knots[^1];
@@ -245,11 +246,11 @@ namespace GeometrySharp.Operation
 
             while (curveLength < segmentLength && i < curves.Count)
             {
-                var bezierLength = RationalBezierCurveLength(curve);
+                var bezierLength = BezierCurveLength(curve);
                 curveLength += bezierLength;
 
                 if (segmentLength < curveLength + GeoSharpMath.EPSILON)
-                    return RationalBezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
+                    return BezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
                 i++;
             }
 

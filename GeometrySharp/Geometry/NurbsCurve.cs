@@ -6,22 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
+    //ToDo: BoundingBox has to be implemented properly.
     /// <summary>
     /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
     /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
     /// /// </summary>
-    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>
+    public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
-        /// <summary>
-        /// Basic constructor.
-        /// </summary>
-        public NurbsCurve()
-        {
-        }
-
         /// <summary>
         /// Creates a Nurbs curve object.
         /// </summary>
@@ -61,13 +56,14 @@ namespace GeometrySharp.Geometry
             Knots = knots;
             ControlPoints = controlPoints;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPoints, Weights);
+            BoundingBox = new BoundingBox(controlPoints);
         }
 
         /// <summary>
-        /// Creates a Nurbs curve object.
+        /// Creates a nurbs curve object.
         /// </summary>
         /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
-        /// <param name="degree">ICurve degree.</param>
+        /// <param name="degree">Curve degree.</param>
         public NurbsCurve(List<Vector3> controlPoints, int degree)
             : this(degree, new Knot(degree, controlPoints.Count), controlPoints)
         {
@@ -77,50 +73,20 @@ namespace GeometrySharp.Geometry
         /// Construct a NurbsCurve by a NurbsCurve object.
         /// </summary>
         /// <param name="curve">The curve object</param>
-        public NurbsCurve(NurbsCurve curve)
+        private NurbsCurve(NurbsCurve curve)
         {
             Degree = curve.Degree;
             ControlPoints = new List<Vector3>(curve.ControlPoints);
             HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
             Knots = new Knot(curve.Knots);
             Weights = new List<double>(curve.Weights!);
+            BoundingBox = new BoundingBox(ControlPoints);
         }
 
         /// <summary>
         /// List of weight values.
         /// </summary>
         public List<double> Weights { get; }
-
-        /// <summary>
-        /// Obtain a copy of the NurbsCurve.
-        /// </summary>
-        /// <returns>The copied curve.</returns>
-        public NurbsCurve Clone()
-        {
-            return new NurbsCurve(this);
-        }
-
-        /// <summary>
-        /// Transform a curve with the given matrix.
-        /// </summary>
-        /// <param name="mat">4d set representing the transform.</param>
-        /// <returns>A new NurbsCurve transformed.</returns>
-        /// ToDo implement the async method.
-        public NurbsCurve Transform(Matrix mat)
-        {
-            return new NurbsCurve(Modify.RationalCurveTransform(this, mat));
-        }
-
-        /// <summary>
-        /// Split the curve at the give parameter.
-        /// </summary>
-        /// <param name="t">The parameter at which to split the curve</param>
-        /// <returns>Two curves - one at the lower end of the parameter range and one at the higher end.</returns>
-        /// ToDo implement the async method.
-        public List<NurbsCurve> Split(double t)
-        {
-            return Divide.CurveSplit(this, t);
-        }
 
         public int Degree { get; }
 
@@ -135,19 +101,43 @@ namespace GeometrySharp.Geometry
         public BoundingBox BoundingBox { get; }
 
         /// <summary>
+        /// Obtain a copy of the NurbsCurve.
+        /// </summary>
+        /// <returns>The copied curve.</returns>
+        public NurbsCurve Clone()
+        {
+            return new NurbsCurve(this);
+        }
+
+        /// ToDo implement the async method.
+        /// <summary>
+        /// Transform a curve with the given matrix.
+        /// </summary>
+        /// <param name="transformation">The transformation matrix.</param>
+        /// <returns>A new curve transformed.</returns>
+        public NurbsCurve Transform(Transform transformation)
+        {
+            var pts = new List<Vector3>(ControlPoints);
+
+            for (int i = 0; i < pts.Count; i++)
+            {
+                var pt = pts[i];
+                pt.Add(1.0);
+                pts[i] = (pt * transformation).Take(pt.Count - 1).ToVector();
+            }
+
+            return new NurbsCurve(Degree, Knots, pts, Weights!);
+        }
+
+        /// ToDo implement the async method.
+        /// <summary>
         /// Sample a point at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
-        /// ToDo implement the async method.
         public Vector3 PointAt(double t)
         {
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
-        }
-
-        public Vector3 ClosestPt(Vector3 pt)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -158,62 +148,27 @@ namespace GeometrySharp.Geometry
         /// ToDo implement the async method.
         public Vector3 TangentAt(double t)
         {
-            return Evaluation.RationalCurveTanget(this, t);
+            return Evaluation.RationalCurveTangent(this, t);
         }
 
+        /// ToDo implement the async method.
         /// <summary>
         /// Determine the arc length of the curve.
         /// </summary>
         /// <returns>The length of the curve.</returns>
-        /// ToDo implement the async method.
         public double Length()
         {
-            return Analyze.RationalCurveArcLength(this);
+            return Analyze.CurveLength(this);
         }
 
-        /// <summary>
-        /// Get the derivatives at a given parameter.
-        /// </summary>
-        /// <param name="parameter">The parameter to sample the curve.</param>
-        /// <param name="numberDerivs">The number of derivatives to obtain.</param>
-        /// <returns>A point represented by an array of length (dim).</returns>
         /// ToDo implement the async method.
-        /// Note this method doesn't see necessary here in this class.
-        public List<Vector3> Derivatives(double parameter, int numberDerivs = 1)
-        {
-            return Evaluation.RationalCurveDerivatives(this, parameter, numberDerivs);
-        }
-
         /// <summary>
         /// Reverse the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
-        /// ToDo implement the async method.
         public NurbsCurve Reverse()
         {
-            return Modify.ReverseCurve(this);
-        }
-
-        /// <summary>
-        /// Divide a curve into equal length segments.
-        /// </summary>
-        /// <param name="divisions">Number of divisions of the curve.</param>
-        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        /// ToDo implement the async method.
-        public (List<double> tValues, List<double> lengths) DividedByCount(int divisions)
-        {
-            return Divide.RationalCurveByDivisions(this, divisions);
-        }
-
-        /// <summary>
-        /// Divide a curve into segments with a preset length.
-        /// </summary>
-        /// <param name="divisions">Length of each segment.</param>
-        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        /// ToDo implement the async method.
-        public (List<double> tValues, List<double> lengths) DividedByLength(double length)
-        {
-            return Divide.RationalCurveByEqualLength(this, length);
+            return (NurbsCurve) Modify.ReverseCurve(this);
         }
 
         /// <summary>
@@ -223,9 +178,9 @@ namespace GeometrySharp.Geometry
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
         /// ToDo implement the async method.
-        public Vector3 ClosestPoint(Vector3 point, out double t)
+        public Vector3 ClosestPt(Vector3 point)
         {
-            return Analyze.RationalCurveClosestPoint(this, point, out t);
+            return Analyze.CurveClosestPoint(this, point, out _);
         }
 
         /// <summary>
@@ -236,7 +191,7 @@ namespace GeometrySharp.Geometry
         /// <returns></returns>
         public double ParameterAtLength(double segmentLength, double tolerance = -1.0)
         {
-            return Analyze.RationalCurveParameterAtLength(this, segmentLength, tolerance);
+            return Analyze.CurveParameterAtLength(this, segmentLength, tolerance);
         }
 
         /// <summary>
@@ -246,7 +201,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The length of the curve at the give parameter t.</returns>
         public double LengthParameter(double t)
         {
-            return Analyze.RationalCurveArcLength(this, t);
+            return Analyze.CurveLength(this, t);
         }
 
         /// <summary>
@@ -289,11 +244,11 @@ namespace GeometrySharp.Geometry
         /// <returns>The representation of a NurbsCurve in string.</returns>
         public override string ToString()
         {
-            StringBuilder? stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            string? controlPts = string.Join("\n", ControlPoints.Select(first => $"({string.Join(",", first)})"));
-            string? knots = $"Knots = ({string.Join(",", Knots)})";
-            string? degree = $"CurveDegree = {Degree}";
+            string controlPts = string.Join("\n", ControlPoints.Select(first => $"({string.Join(",", first)})"));
+            string knots = $"Knots = ({string.Join(",", Knots)})";
+            string degree = $"CurveDegree = {Degree}";
 
             stringBuilder.AppendLine(controlPts);
             stringBuilder.AppendLine(knots);

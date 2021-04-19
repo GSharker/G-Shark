@@ -37,8 +37,8 @@ namespace GeometrySharp.Test.XUnit.Operation
             var curve1 = new NurbsCurve(degree, knots1, controlPts);
             var curve2 = new NurbsCurve(degree, knots2, controlPts);
 
-            var curveLength1 = Analyze.RationalBezierCurveLength(curve1, 1);
-            var curveLength2 = Analyze.RationalBezierCurveLength(curve2, 4);
+            var curveLength1 = Analyze.BezierCurveLength(curve1, 1);
+            var curveLength2 = Analyze.BezierCurveLength(curve2, 4);
 
             curveLength1.Should().BeApproximately(3.0, GeoSharpMath.MAXTOLERANCE);
             curveLength2.Should().BeApproximately(3.0, GeoSharpMath.MAXTOLERANCE);
@@ -57,9 +57,9 @@ namespace GeometrySharp.Test.XUnit.Operation
 
             for (int i = 0; i < steps + 1; i++)
             {
-                var t = Analyze.RationalBezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MAXTOLERANCE);
+                var t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MAXTOLERANCE);
 
-                var segmentLength = Analyze.RationalBezierCurveLength(curve, t);
+                var segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 t.Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MINTOLERANCE);
                 segmentLength.Should().BeApproximately(sumLengths, GeoSharpMath.MINTOLERANCE);
@@ -74,7 +74,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             var curve = NurbsCurveCollection.NurbsCurveExample2();
 
-            var crvLength = Analyze.RationalCurveArcLength(curve);
+            var crvLength = Analyze.CurveLength(curve);
             var samples = Tessellation.RegularSample(curve, 10000);
 
             var length = 0.0;
@@ -98,7 +98,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Returns_The_Closest_Point_And_The_Parameter_t(double[] ptToCheck, double[] ptExpected, double tValExpected)
         {
             var curve = NurbsCurveCollection.NurbsCurveExample2();
-            var ptHomogenized = Analyze.RationalCurveClosestPoint(curve, ptToCheck.ToVector(), out var t);
+            var ptHomogenized = Analyze.CurveClosestPoint(curve, ptToCheck.ToVector(), out var t);
             var pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
 
             _testOutput.WriteLine(pt.ToString());
@@ -122,7 +122,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         {
             var curve = NurbsCurveCollection.NurbsCurveExample2();
 
-            var t = Analyze.RationalCurveParameterAtLength(curve, segmentLength);
+            var t = Analyze.CurveParameterAtLength(curve, segmentLength);
 
             t.Should().BeApproximately(tValueExpected, 1e-5);
         }

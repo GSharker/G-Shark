@@ -10,7 +10,7 @@ namespace GeometrySharp.Operation
 {
     /// <summary>
     /// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
-    /// knot insertion, knot refinement, degree elevation, reparameterization.
+    /// knot insertion, knot refinement, degree elevation, re-parametrization.
     /// Many of these algorithms owe their implementation to Piegl & Tiller's, "The NURBS Book".
     /// </summary>
     public class Modify
@@ -19,9 +19,9 @@ namespace GeometrySharp.Operation
 		/// Insert a collection of knots on a curve.
 		/// Implementation of Algorithm A5.4 of The NURBS Book by Piegl & Tiller, 2nd Edition.
 		/// </summary>
-		/// <param name="curve">The NurbsCurve object.</param>
-		/// <param name="knotsToInsert">The set of Knots.</param>
-		/// <returns>A NurbsCurve with refined knots.</returns>
+		/// <param name="curve">The curve object.</param>
+		/// <param name="knotsToInsert">The set of knots.</param>
+		/// <returns>A curve with refined knots.</returns>
 		public static ICurve CurveKnotRefine(ICurve curve, List<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0)
@@ -92,13 +92,13 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Decompose a NurbsCurve into a collection of bezier's.  Useful
-        /// as each bezier fits into it's convex hull.  This is a useful starting
-        /// point for intersection, closest point, divide & conquer algorithms
+        /// Decompose a curve into a collection of bezier's.
+        /// Useful as each Bezier curve fits into it's convex hull.
+        /// This is a useful starting point for intersection, closest point, divide & conquer algorithms.
         /// </summary>
-        /// <param name="curve">NurbsCurve object representing the curve</param>
-        /// <returns>List of NurbsCurve objects, defined by degree, knots, and control points</returns>
-        public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve)
+        /// <param name="curve">Curve object representing the curve.</param>
+        /// <returns>List of curve objects, defined by degree, knots, and control points.</returns>
+        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve)
         {
             var degree = curve.Degree;
             var controlPoints = curve.ControlPoints;
@@ -123,7 +123,7 @@ namespace GeometrySharp.Operation
             }
 
             var crvKnotLength = reqMultiplicity * 2;
-            var curves = new List<NurbsCurve>();
+            var curves = new List<ICurve>();
             var i = 0;
 
             while (i < controlPoints.Count)
@@ -140,35 +140,17 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Transform a NurbsCurve using a matrix.
+        /// Reverses the parametrization of a curve.
+        /// The domain is unaffected.
         /// </summary>
-        /// <param name="curve">The curve to transform.</param>
-        /// <param name="mat">The matrix to use for the transform - the dimensions should be the dimension of the curve + 1 in both directions.</param>
-        /// <returns>A new NurbsCurve after transformation.</returns>
-        public static NurbsCurve RationalCurveTransform(NurbsCurve curve, Matrix mat)
-        {
-            var pts = curve.ControlPoints;
-            for (int i = 0; i < pts.Count; i++)
-            {
-                var pt = pts[i];
-                pt.Add(1.0);
-                pts[i] = (pt * mat).Take(pt.Count - 1).ToVector();
-            }
-
-            return new NurbsCurve(curve.Degree, curve.Knots, pts, curve.Weights!);
-        }
-
-        /// <summary>
-        /// Reverses the parametrization of a NurbsCurve. The domain is unaffected.
-        /// </summary>
-        /// <param name="curve">The NurbsCurve has to be reversed.</param>
-        /// <returns>A NurbsCurve with a reversed parametrization.</returns>
-        public static NurbsCurve ReverseCurve(NurbsCurve curve)
+        /// <param name="curve">The curve has to be reversed.</param>
+        /// <returns>A curve with a reversed parametrization.</returns>
+        public static ICurve ReverseCurve(ICurve curve)
         {
             var pts = curve.ControlPoints;
             pts.Reverse();
 
-            var weights = curve.Weights;
+            var weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
             weights.Reverse();
 
             var knots = Knot.Reverse(curve.Knots);

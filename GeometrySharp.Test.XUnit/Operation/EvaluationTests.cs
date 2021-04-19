@@ -464,12 +464,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             };
             List<double> weights = new List<double>() { 1, 1, 1, 1, 1 };
             NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
-            Vector3 tangent = Evaluation.RationalCurveTanget(curve, 0.5);
+            Vector3 tangent = Evaluation.RationalCurveTangent(curve, 0.5);
 
             tangent.Should().BeEquivalentTo(new Vector3() { 3, 0, 0 });
 
             // Custom test
-            Vector3 tangentToCheck = Evaluation.RationalCurveTanget(NurbsCurveCollection.NurbsCurveExample2(), t);
+            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurveExample2(), t);
             Vector3 tangentNormalized = tangentToCheck.Unitize();
             Vector3 tangentExpected = new Vector3(tangentData);
 

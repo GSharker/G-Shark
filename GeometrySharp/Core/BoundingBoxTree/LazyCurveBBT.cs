@@ -40,7 +40,7 @@ namespace GeometrySharp.Core.BoundingBoxTree
             Random r = new Random();
             double t = (_curve.Knots[^1] + _curve.Knots[0]) / 2.0 +
                        (_curve.Knots[^1] - _curve.Knots[0]) * 0.1 * r.NextDouble();
-            List<NurbsCurve> curves = Divide.CurveSplit(_curve, t);
+            List<ICurve> curves = Divide.SplitCurve(_curve, t);
 
             return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>
                 ( new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));

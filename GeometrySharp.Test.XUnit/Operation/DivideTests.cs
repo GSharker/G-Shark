@@ -35,7 +35,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             var knots = new Knot(degree, controlPts.Count);
 
             var curve = new NurbsCurve(degree, knots, controlPts);
-            var curves = Divide.CurveSplit(curve, parameter);
+            var curves = Divide.SplitCurve(curve, parameter);
 
             for (int i = 0; i < degree + 1; i++)
             {
@@ -63,7 +63,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             var tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
             var steps = 7;
 
-            var divisions = Divide.RationalCurveByDivisions(curve, steps);
+            var divisions = Divide.CurveByCount(curve, steps);
 
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)
@@ -80,7 +80,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             var steps = 7;
             var length = curve.Length() / steps;
 
-            var divisions = Divide.RationalCurveByEqualLength(curve, length);
+            var divisions = Divide.CurveByLength(curve, length);
 
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)

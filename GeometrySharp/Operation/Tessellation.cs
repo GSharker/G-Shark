@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
@@ -23,7 +24,7 @@ namespace GeometrySharp.Operation
         /// <param name="curve">NurbsCurve object.</param>
         /// <param name="numSamples">Number of samples.</param>
         /// <returns>Return a tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tvalues, List<Vector3> pts) RegularSample(NurbsCurve curve, int numSamples)
+        public static (List<double> tvalues, List<Vector3> pts) RegularSample(ICurve curve, int numSamples)
         {
             if (numSamples < 1)
                 throw new Exception("Number of sample must be at least 1 and not negative.");
@@ -54,7 +55,7 @@ namespace GeometrySharp.Operation
         /// <param name="curve">NurbsCurve object.</param>
         /// <param name="tolerance">Tolerance for the adaptive scheme.</param>
         /// <returns>Return a tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSample(NurbsCurve curve, double tolerance)
+        public static (List<double> tValues, List<Vector3> pts) AdaptiveSample(ICurve curve, double tolerance)
         {
             var tValues = new List<double>();
             var pts = new List<Vector3>();
@@ -84,7 +85,7 @@ namespace GeometrySharp.Operation
         /// <param name="tolerance">Tolerance for the adaptive scheme.
         /// If tolerance is <=0.0, the tolerance used is set as MAXTOLERANCE (1e-6).</param>
         /// <returns>Return a tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance)
+        public static (List<double> tValues, List<Vector3> pts) AdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
         {
             var setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAXTOLERANCE : tolerance;
 
