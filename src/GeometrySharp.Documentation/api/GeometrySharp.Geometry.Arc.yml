@@ -1,0 +1,1433 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Geometry.Arc
+  commentId: T:GeometrySharp.Geometry.Arc
+  id: Arc
+  parent: GeometrySharp.Geometry
+  children:
+  - GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,GeometrySharp.Core.Interval)
+  - GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,System.Double)
+  - GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Arc.Angle
+  - GeometrySharp.Geometry.Arc.BoundingBox
+  - GeometrySharp.Geometry.Arc.Center
+  - GeometrySharp.Geometry.Arc.ClosestPt(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Geometry.Arc.Equals(GeometrySharp.Geometry.Arc)
+  - GeometrySharp.Geometry.Arc.GetHashCode
+  - GeometrySharp.Geometry.Arc.Length
+  - GeometrySharp.Geometry.Arc.op_Equality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  - GeometrySharp.Geometry.Arc.op_Inequality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  - GeometrySharp.Geometry.Arc.Plane
+  - GeometrySharp.Geometry.Arc.PointAt(System.Double,System.Boolean)
+  - GeometrySharp.Geometry.Arc.Radius
+  - GeometrySharp.Geometry.Arc.TangentAt(System.Double,System.Boolean)
+  - GeometrySharp.Geometry.Arc.ToNurbsCurve
+  - GeometrySharp.Geometry.Arc.ToString
+  - GeometrySharp.Geometry.Arc.Transform(GeometrySharp.Core.Transform)
+  langs:
+  - csharp
+  - vb
+  name: Arc
+  nameWithType: Arc
+  fullName: GeometrySharp.Geometry.Arc
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Arc
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 12
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nRepresents the value of a plane, two angles (interval) and a radius (radiance).\n"
+  example: []
+  syntax:
+    content: 'public class Arc : IEquatable<Arc>'
+    content.vb: >-
+      Public Class Arc
+
+          Implements IEquatable(Of Arc)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Arc}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,GeometrySharp.Core.Interval)
+  commentId: M:GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,GeometrySharp.Core.Interval)
+  id: '#ctor(GeometrySharp.Geometry.Plane,System.Double,GeometrySharp.Core.Interval)'
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Arc(Plane, Double, Interval)
+  nameWithType: Arc.Arc(Plane, Double, Interval)
+  fullName: GeometrySharp.Geometry.Arc.Arc(GeometrySharp.Geometry.Plane, System.Double, GeometrySharp.Core.Interval)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 22
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes an arc from a plane, a radius and an angle domain expressed as an interval.\n"
+  example: []
+  syntax:
+    content: public Arc(Plane plane, double radius, Interval angleDomain)
+    parameters:
+    - id: plane
+      type: GeometrySharp.Geometry.Plane
+      description: Base plane.
+    - id: radius
+      type: System.Double
+      description: Radius value.
+    - id: angleDomain
+      type: GeometrySharp.Core.Interval
+      description: Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi
+    content.vb: Public Sub New(plane As Plane, radius As Double, angleDomain As Interval)
+  overload: GeometrySharp.Geometry.Arc.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,System.Double)
+  commentId: M:GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Plane,System.Double,System.Double)
+  id: '#ctor(GeometrySharp.Geometry.Plane,System.Double,System.Double)'
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Arc(Plane, Double, Double)
+  nameWithType: Arc.Arc(Plane, Double, Double)
+  fullName: GeometrySharp.Geometry.Arc.Arc(GeometrySharp.Geometry.Plane, System.Double, System.Double)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 37
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes an arc from a plane, a radius and an angle.\n"
+  example: []
+  syntax:
+    content: public Arc(Plane plane, double radius, double angle)
+    parameters:
+    - id: plane
+      type: GeometrySharp.Geometry.Plane
+      description: Base plane.
+    - id: radius
+      type: System.Double
+      description: Radius value.
+    - id: angle
+      type: System.Double
+      description: Angle of the arc.
+    content.vb: Public Sub New(plane As Plane, radius As Double, angle As Double)
+  overload: GeometrySharp.Geometry.Arc.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Arc.#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)
+  id: '#ctor(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)'
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Arc(Vector3, Vector3, Vector3)
+  nameWithType: Arc.Arc(Vector3, Vector3, Vector3)
+  fullName: GeometrySharp.Geometry.Arc.Arc(GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3, GeometrySharp.Geometry.Vector3)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 49
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nInitializes an arc from three points.\nhttps://github.com/sergarrido/random/tree/master/circle3d\n"
+  example: []
+  syntax:
+    content: public Arc(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+    parameters:
+    - id: pt1
+      type: GeometrySharp.Geometry.Vector3
+      description: Start point of the arc.
+    - id: pt2
+      type: GeometrySharp.Geometry.Vector3
+      description: Interior point on arc.
+    - id: pt3
+      type: GeometrySharp.Geometry.Vector3
+      description: End point of the arc.
+    content.vb: Public Sub New(pt1 As Vector3, pt2 As Vector3, pt3 As Vector3)
+  overload: GeometrySharp.Geometry.Arc.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.Plane
+  commentId: P:GeometrySharp.Geometry.Arc.Plane
+  id: Plane
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Plane
+  nameWithType: Arc.Plane
+  fullName: GeometrySharp.Geometry.Arc.Plane
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Plane
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 69
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the plane on which the arc lies.\n"
+  example: []
+  syntax:
+    content: public Plane Plane { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Plane
+    content.vb: Public ReadOnly Property Plane As Plane
+  overload: GeometrySharp.Geometry.Arc.Plane*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.Radius
+  commentId: P:GeometrySharp.Geometry.Arc.Radius
+  id: Radius
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Radius
+  nameWithType: Arc.Radius
+  fullName: GeometrySharp.Geometry.Arc.Radius
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Radius
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 74
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the radius of the arc.\n"
+  example: []
+  syntax:
+    content: public double Radius { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Radius As Double
+  overload: GeometrySharp.Geometry.Arc.Radius*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.Center
+  commentId: P:GeometrySharp.Geometry.Arc.Center
+  id: Center
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Center
+  nameWithType: Arc.Center
+  fullName: GeometrySharp.Geometry.Arc.Center
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Center
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 79
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the center point of this arc.\n"
+  example: []
+  syntax:
+    content: public Vector3 Center { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public ReadOnly Property Center As Vector3
+  overload: GeometrySharp.Geometry.Arc.Center*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.Angle
+  commentId: P:GeometrySharp.Geometry.Arc.Angle
+  id: Angle
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Angle
+  nameWithType: Arc.Angle
+  fullName: GeometrySharp.Geometry.Arc.Angle
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Angle
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 85
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the angle of this arc.\nAngle value in radians.\n"
+  example: []
+  syntax:
+    content: public double Angle { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Angle As Double
+  overload: GeometrySharp.Geometry.Arc.Angle*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.Length
+  commentId: P:GeometrySharp.Geometry.Arc.Length
+  id: Length
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Length
+  nameWithType: Arc.Length
+  fullName: GeometrySharp.Geometry.Arc.Length
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Length
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 90
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nCalculates the length of the arc.\n"
+  example: []
+  syntax:
+    content: public double Length { get; }
+    parameters: []
+    return:
+      type: System.Double
+    content.vb: Public ReadOnly Property Length As Double
+  overload: GeometrySharp.Geometry.Arc.Length*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.BoundingBox
+  commentId: P:GeometrySharp.Geometry.Arc.BoundingBox
+  id: BoundingBox
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: BoundingBox
+  nameWithType: Arc.BoundingBox
+  fullName: GeometrySharp.Geometry.Arc.BoundingBox
+  type: Property
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: BoundingBox
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 96
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the BoundingBox of this arc.\nhttps://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector\n"
+  example: []
+  syntax:
+    content: public BoundingBox BoundingBox { get; }
+    parameters: []
+    return:
+      type: GeometrySharp.Geometry.BoundingBox
+    content.vb: Public ReadOnly Property BoundingBox As BoundingBox
+  overload: GeometrySharp.Geometry.Arc.BoundingBox*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: GeometrySharp.Geometry.Arc.PointAt(System.Double,System.Boolean)
+  commentId: M:GeometrySharp.Geometry.Arc.PointAt(System.Double,System.Boolean)
+  id: PointAt(System.Double,System.Boolean)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: PointAt(Double, Boolean)
+  nameWithType: Arc.PointAt(Double, Boolean)
+  fullName: GeometrySharp.Geometry.Arc.PointAt(System.Double, System.Boolean)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: PointAt
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 152
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns the point at the parameter t on the arc.\n"
+  example: []
+  syntax:
+    content: public Vector3 PointAt(double t, bool parametrize = true)
+    parameters:
+    - id: t
+      type: System.Double
+      description: A parameter between 0.0 to 1.0 or between the angle domain.>
+    - id: parametrize
+      type: System.Boolean
+      description: True per default using parametrize value between 0.0 to 1.0.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: Point on the arc.
+    content.vb: Public Function PointAt(t As Double, parametrize As Boolean = True) As Vector3
+  overload: GeometrySharp.Geometry.Arc.PointAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.TangentAt(System.Double,System.Boolean)
+  commentId: M:GeometrySharp.Geometry.Arc.TangentAt(System.Double,System.Boolean)
+  id: TangentAt(System.Double,System.Boolean)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: TangentAt(Double, Boolean)
+  nameWithType: Arc.TangentAt(Double, Boolean)
+  fullName: GeometrySharp.Geometry.Arc.TangentAt(System.Double, System.Boolean)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: TangentAt
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 169
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nReturns the tangent at the parameter t on the arc.\n"
+  example: []
+  syntax:
+    content: public Vector3 TangentAt(double t, bool parametrize = true)
+    parameters:
+    - id: t
+      type: System.Double
+      description: A parameter between 0.0 to 1.0 or between the angle domain.
+    - id: parametrize
+      type: System.Boolean
+      description: True per default using parametrize value between 0.0 to 1.0.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: Tangent at the t parameter.
+    content.vb: Public Function TangentAt(t As Double, parametrize As Boolean = True) As Vector3
+  overload: GeometrySharp.Geometry.Arc.TangentAt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.ClosestPt(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Geometry.Arc.ClosestPt(GeometrySharp.Geometry.Vector3)
+  id: ClosestPt(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: ClosestPt(Vector3)
+  nameWithType: Arc.ClosestPt(Vector3)
+  fullName: GeometrySharp.Geometry.Arc.ClosestPt(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ClosestPt
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 181
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nCalculates the point on an arc that is close to a test point.\n"
+  example: []
+  syntax:
+    content: public Vector3 ClosestPt(Vector3 pt)
+    parameters:
+    - id: pt
+      type: GeometrySharp.Geometry.Vector3
+      description: The test point. Point to get close to.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The point on the arc that is close to the test point.
+    content.vb: Public Function ClosestPt(pt As Vector3) As Vector3
+  overload: GeometrySharp.Geometry.Arc.ClosestPt*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.Transform(GeometrySharp.Core.Transform)
+  commentId: M:GeometrySharp.Geometry.Arc.Transform(GeometrySharp.Core.Transform)
+  id: Transform(GeometrySharp.Core.Transform)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Transform(Transform)
+  nameWithType: Arc.Transform(Transform)
+  fullName: GeometrySharp.Geometry.Arc.Transform(GeometrySharp.Core.Transform)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Transform
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 223
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nApplies a transformation to the plane where the arc is on.\n"
+  example: []
+  syntax:
+    content: public Arc Transform(Transform transformation)
+    parameters:
+    - id: transformation
+      type: GeometrySharp.Core.Transform
+      description: Transformation matrix to apply.
+    return:
+      type: GeometrySharp.Geometry.Arc
+      description: A transformed arc.
+    content.vb: Public Function Transform(transformation As Transform) As Arc
+  overload: GeometrySharp.Geometry.Arc.Transform*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.ToNurbsCurve
+  commentId: M:GeometrySharp.Geometry.Arc.ToNurbsCurve
+  id: ToNurbsCurve
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: ToNurbsCurve()
+  nameWithType: Arc.ToNurbsCurve()
+  fullName: GeometrySharp.Geometry.Arc.ToNurbsCurve()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToNurbsCurve
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 236
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  syntax:
+    content: public NurbsCurve ToNurbsCurve()
+    return:
+      type: GeometrySharp.Geometry.NurbsCurve
+    content.vb: Public Function ToNurbsCurve As NurbsCurve
+  overload: GeometrySharp.Geometry.Arc.ToNurbsCurve*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.Equals(GeometrySharp.Geometry.Arc)
+  commentId: M:GeometrySharp.Geometry.Arc.Equals(GeometrySharp.Geometry.Arc)
+  id: Equals(GeometrySharp.Geometry.Arc)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Equals(Arc)
+  nameWithType: Arc.Equals(Arc)
+  fullName: GeometrySharp.Geometry.Arc.Equals(GeometrySharp.Geometry.Arc)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Equals
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 340
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nDetermines whether the arc is equal to another arc.\nThe arcs are equal if have the same plane, radius and angle.\n"
+  example: []
+  syntax:
+    content: public bool Equals(Arc other)
+    parameters:
+    - id: other
+      type: GeometrySharp.Geometry.Arc
+      description: The arc to compare to.
+    return:
+      type: System.Boolean
+      description: True if the arc are equal, otherwise false.
+    content.vb: Public Function Equals(other As Arc) As Boolean
+  overload: GeometrySharp.Geometry.Arc.Equals*
+  implements:
+  - System.IEquatable{GeometrySharp.Geometry.Arc}.Equals(GeometrySharp.Geometry.Arc)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Geometry.Arc.GetHashCode
+  commentId: M:GeometrySharp.Geometry.Arc.GetHashCode
+  id: GetHashCode
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: GetHashCode()
+  nameWithType: Arc.GetHashCode()
+  fullName: GeometrySharp.Geometry.Arc.GetHashCode()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: GetHashCode
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 351
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nComputes a hash code for the arc.\n"
+  example: []
+  syntax:
+    content: public override int GetHashCode()
+    return:
+      type: System.Int32
+      description: A unique hashCode of an arc.
+    content.vb: Public Overrides Function GetHashCode As Integer
+  overridden: System.Object.GetHashCode
+  overload: GeometrySharp.Geometry.Arc.GetHashCode*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: GeometrySharp.Geometry.Arc.op_Equality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  commentId: M:GeometrySharp.Geometry.Arc.op_Equality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  id: op_Equality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Equality(Arc, Arc)
+  nameWithType: Arc.Equality(Arc, Arc)
+  fullName: GeometrySharp.Geometry.Arc.Equality(GeometrySharp.Geometry.Arc, GeometrySharp.Geometry.Arc)
+  type: Operator
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: op_Equality
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 362
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nDetermines whether two arcs have same values.\n"
+  example: []
+  syntax:
+    content: public static bool operator ==(Arc a, Arc b)
+    parameters:
+    - id: a
+      type: GeometrySharp.Geometry.Arc
+      description: The first arc.
+    - id: b
+      type: GeometrySharp.Geometry.Arc
+      description: The second arc.
+    return:
+      type: System.Boolean
+      description: True if all the value are equal, otherwise false.
+    content.vb: Public Shared Operator =(a As Arc, b As Arc) As Boolean
+  overload: GeometrySharp.Geometry.Arc.op_Equality*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Geometry.Arc.op_Inequality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  commentId: M:GeometrySharp.Geometry.Arc.op_Inequality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  id: op_Inequality(GeometrySharp.Geometry.Arc,GeometrySharp.Geometry.Arc)
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: Inequality(Arc, Arc)
+  nameWithType: Arc.Inequality(Arc, Arc)
+  fullName: GeometrySharp.Geometry.Arc.Inequality(GeometrySharp.Geometry.Arc, GeometrySharp.Geometry.Arc)
+  type: Operator
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: op_Inequality
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 373
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nDetermines whether two arcs have different values.\n"
+  example: []
+  syntax:
+    content: public static bool operator !=(Arc a, Arc b)
+    parameters:
+    - id: a
+      type: GeometrySharp.Geometry.Arc
+      description: The first arc.
+    - id: b
+      type: GeometrySharp.Geometry.Arc
+      description: The second arc.
+    return:
+      type: System.Boolean
+      description: True if all the value are different, otherwise false.
+    content.vb: Public Shared Operator <>(a As Arc, b As Arc) As Boolean
+  overload: GeometrySharp.Geometry.Arc.op_Inequality*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Geometry.Arc.ToString
+  commentId: M:GeometrySharp.Geometry.Arc.ToString
+  id: ToString
+  parent: GeometrySharp.Geometry.Arc
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Arc.ToString()
+  fullName: GeometrySharp.Geometry.Arc.ToString()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Geometry/Arc.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToString
+    path: ../GeometrySharp/Geometry/Arc.cs
+    startLine: 382
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Geometry
+  summary: "\nGets the text representation of an arc.\n"
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: Text value.
+    content.vb: Public Overrides Function ToString As String
+  overridden: System.Object.ToString
+  overload: GeometrySharp.Geometry.Arc.ToString*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+references:
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.IEquatable{GeometrySharp.Geometry.Arc}
+  commentId: T:System.IEquatable{GeometrySharp.Geometry.Arc}
+  parent: System
+  definition: System.IEquatable`1
+  name: IEquatable<Arc>
+  nameWithType: IEquatable<Arc>
+  fullName: System.IEquatable<GeometrySharp.Geometry.Arc>
+  nameWithType.vb: IEquatable(Of Arc)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Arc)
+  name.vb: IEquatable(Of Arc)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: GeometrySharp.Geometry.Arc
+    name: Arc
+    nameWithType: Arc
+    fullName: GeometrySharp.Geometry.Arc
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: GeometrySharp.Geometry.Arc
+    name: Arc
+    nameWithType: Arc
+    fullName: GeometrySharp.Geometry.Arc
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    nameWithType: IEquatable
+    fullName: System.IEquatable
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Arc.#ctor*
+  commentId: Overload:GeometrySharp.Geometry.Arc.#ctor
+  name: Arc
+  nameWithType: Arc.Arc
+  fullName: GeometrySharp.Geometry.Arc.Arc
+- uid: GeometrySharp.Geometry.Plane
+  commentId: T:GeometrySharp.Geometry.Plane
+  parent: GeometrySharp.Geometry
+  name: Plane
+  nameWithType: Plane
+  fullName: GeometrySharp.Geometry.Plane
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Core.Interval
+  commentId: T:GeometrySharp.Core.Interval
+  parent: GeometrySharp.Core
+  name: Interval
+  nameWithType: Interval
+  fullName: GeometrySharp.Core.Interval
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: GeometrySharp.Geometry.Arc.Plane*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Plane
+  name: Plane
+  nameWithType: Arc.Plane
+  fullName: GeometrySharp.Geometry.Arc.Plane
+- uid: GeometrySharp.Geometry.Arc.Radius*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Radius
+  name: Radius
+  nameWithType: Arc.Radius
+  fullName: GeometrySharp.Geometry.Arc.Radius
+- uid: GeometrySharp.Geometry.Arc.Center*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Center
+  name: Center
+  nameWithType: Arc.Center
+  fullName: GeometrySharp.Geometry.Arc.Center
+- uid: GeometrySharp.Geometry.Arc.Angle*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Angle
+  name: Angle
+  nameWithType: Arc.Angle
+  fullName: GeometrySharp.Geometry.Arc.Angle
+- uid: GeometrySharp.Geometry.Arc.Length*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Length
+  name: Length
+  nameWithType: Arc.Length
+  fullName: GeometrySharp.Geometry.Arc.Length
+- uid: GeometrySharp.Geometry.Arc.BoundingBox*
+  commentId: Overload:GeometrySharp.Geometry.Arc.BoundingBox
+  name: BoundingBox
+  nameWithType: Arc.BoundingBox
+  fullName: GeometrySharp.Geometry.Arc.BoundingBox
+- uid: GeometrySharp.Geometry.BoundingBox
+  commentId: T:GeometrySharp.Geometry.BoundingBox
+  parent: GeometrySharp.Geometry
+  name: BoundingBox
+  nameWithType: BoundingBox
+  fullName: GeometrySharp.Geometry.BoundingBox
+- uid: GeometrySharp.Geometry.Arc.PointAt*
+  commentId: Overload:GeometrySharp.Geometry.Arc.PointAt
+  name: PointAt
+  nameWithType: Arc.PointAt
+  fullName: GeometrySharp.Geometry.Arc.PointAt
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: GeometrySharp.Geometry.Arc.TangentAt*
+  commentId: Overload:GeometrySharp.Geometry.Arc.TangentAt
+  name: TangentAt
+  nameWithType: Arc.TangentAt
+  fullName: GeometrySharp.Geometry.Arc.TangentAt
+- uid: GeometrySharp.Geometry.Arc.ClosestPt*
+  commentId: Overload:GeometrySharp.Geometry.Arc.ClosestPt
+  name: ClosestPt
+  nameWithType: Arc.ClosestPt
+  fullName: GeometrySharp.Geometry.Arc.ClosestPt
+- uid: GeometrySharp.Geometry.Arc.Transform*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Transform
+  name: Transform
+  nameWithType: Arc.Transform
+  fullName: GeometrySharp.Geometry.Arc.Transform
+- uid: GeometrySharp.Core.Transform
+  commentId: T:GeometrySharp.Core.Transform
+  parent: GeometrySharp.Core
+  name: Transform
+  nameWithType: Transform
+  fullName: GeometrySharp.Core.Transform
+- uid: GeometrySharp.Geometry.Arc
+  commentId: T:GeometrySharp.Geometry.Arc
+  parent: GeometrySharp.Geometry
+  name: Arc
+  nameWithType: Arc
+  fullName: GeometrySharp.Geometry.Arc
+- uid: GeometrySharp.Geometry.Arc.ToNurbsCurve*
+  commentId: Overload:GeometrySharp.Geometry.Arc.ToNurbsCurve
+  name: ToNurbsCurve
+  nameWithType: Arc.ToNurbsCurve
+  fullName: GeometrySharp.Geometry.Arc.ToNurbsCurve
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: GeometrySharp.Geometry.Arc.Equals*
+  commentId: Overload:GeometrySharp.Geometry.Arc.Equals
+  name: Equals
+  nameWithType: Arc.Equals
+  fullName: GeometrySharp.Geometry.Arc.Equals
+- uid: System.IEquatable{GeometrySharp.Geometry.Arc}.Equals(GeometrySharp.Geometry.Arc)
+  commentId: M:System.IEquatable{GeometrySharp.Geometry.Arc}.Equals(GeometrySharp.Geometry.Arc)
+  parent: System.IEquatable{GeometrySharp.Geometry.Arc}
+  definition: System.IEquatable`1.Equals(`0)
+  name: Equals(Arc)
+  nameWithType: IEquatable<Arc>.Equals(Arc)
+  fullName: System.IEquatable<GeometrySharp.Geometry.Arc>.Equals(GeometrySharp.Geometry.Arc)
+  nameWithType.vb: IEquatable(Of Arc).Equals(Arc)
+  fullName.vb: System.IEquatable(Of GeometrySharp.Geometry.Arc).Equals(GeometrySharp.Geometry.Arc)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<Arc>.Equals
+    fullName: System.IEquatable<GeometrySharp.Geometry.Arc>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Arc
+    name: Arc
+    nameWithType: Arc
+    fullName: GeometrySharp.Geometry.Arc
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of Arc).Equals
+    fullName: System.IEquatable(Of GeometrySharp.Geometry.Arc).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Arc
+    name: Arc
+    nameWithType: Arc
+    fullName: GeometrySharp.Geometry.Arc
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.IEquatable`1.Equals(`0)
+  commentId: M:System.IEquatable`1.Equals(`0)
+  isExternal: true
+  name: Equals(T)
+  nameWithType: IEquatable<T>.Equals(T)
+  fullName: System.IEquatable<T>.Equals(T)
+  nameWithType.vb: IEquatable(Of T).Equals(T)
+  fullName.vb: System.IEquatable(Of T).Equals(T)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable<T>.Equals
+    fullName: System.IEquatable<T>.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    nameWithType: IEquatable(Of T).Equals
+    fullName: System.IEquatable(Of T).Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Arc.GetHashCode*
+  commentId: Overload:GeometrySharp.Geometry.Arc.GetHashCode
+  name: GetHashCode
+  nameWithType: Arc.GetHashCode
+  fullName: GeometrySharp.Geometry.Arc.GetHashCode
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: GeometrySharp.Geometry.Arc.op_Equality*
+  commentId: Overload:GeometrySharp.Geometry.Arc.op_Equality
+  name: Equality
+  nameWithType: Arc.Equality
+  fullName: GeometrySharp.Geometry.Arc.Equality
+- uid: GeometrySharp.Geometry.Arc.op_Inequality*
+  commentId: Overload:GeometrySharp.Geometry.Arc.op_Inequality
+  name: Inequality
+  nameWithType: Arc.Inequality
+  fullName: GeometrySharp.Geometry.Arc.Inequality
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Arc.ToString*
+  commentId: Overload:GeometrySharp.Geometry.Arc.ToString
+  name: ToString
+  nameWithType: Arc.ToString
+  fullName: GeometrySharp.Geometry.Arc.ToString
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String

@@ -1,0 +1,28 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Core.IntersectionResults
+  commentId: N:GeometrySharp.Core.IntersectionResults
+  id: GeometrySharp.Core.IntersectionResults
+  children:
+  - GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  - GeometrySharp.Core.IntersectionResults.CurvesIntersectionResult
+  langs:
+  - csharp
+  - vb
+  name: GeometrySharp.Core.IntersectionResults
+  nameWithType: GeometrySharp.Core.IntersectionResults
+  fullName: GeometrySharp.Core.IntersectionResults
+  type: Namespace
+  assemblies:
+  - GeometrySharp
+references:
+- uid: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  commentId: T:GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+  name: CurvePlaneIntersectionResult
+  nameWithType: CurvePlaneIntersectionResult
+  fullName: GeometrySharp.Core.IntersectionResults.CurvePlaneIntersectionResult
+- uid: GeometrySharp.Core.IntersectionResults.CurvesIntersectionResult
+  commentId: T:GeometrySharp.Core.IntersectionResults.CurvesIntersectionResult
+  name: CurvesIntersectionResult
+  nameWithType: CurvesIntersectionResult
+  fullName: GeometrySharp.Core.IntersectionResults.CurvesIntersectionResult

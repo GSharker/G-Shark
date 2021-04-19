@@ -1,0 +1,2381 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Vector3
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Vector3
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="GeometrySharp.Geometry.Vector3">
+  
+  
+  <h1 id="GeometrySharp_Geometry_Vector3" data-uid="GeometrySharp.Geometry.Vector3" class="text-break">Class Vector3
+  </h1>
+  <div class="markdown level0 summary"><p>Vector3 is represented simply by an list of double point numbers.
+So, you would write simply [1,0,0] to create a Vector3 in the X direction.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div class="level2"><span class="xref">Vector3</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.IList</span></div>
+    <div><span class="xref">System.Collections.ICollection</span></div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.get_Item(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.set_Item(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Add(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.AddRange(System.Collections.Generic.IEnumerable&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.AsReadOnly()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.BinarySearch(System.Int32, System.Int32, System.Double, System.Collections.Generic.IComparer&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.BinarySearch(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.BinarySearch(System.Double, System.Collections.Generic.IComparer&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Clear()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Contains(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.ConvertAll&lt;TOutput&gt;(System.Converter&lt;System.Double, TOutput&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.CopyTo(System.Int32, System.Double[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.CopyTo(System.Double[])</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.CopyTo(System.Double[], System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Exists(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Find(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindAll(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindIndex(System.Int32, System.Int32, System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindIndex(System.Int32, System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindIndex(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindLast(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindLastIndex(System.Int32, System.Int32, System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindLastIndex(System.Int32, System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.FindLastIndex(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.ForEach(System.Action&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.GetRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.IndexOf(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.IndexOf(System.Double, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.IndexOf(System.Double, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Insert(System.Int32, System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.InsertRange(System.Int32, System.Collections.Generic.IEnumerable&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.LastIndexOf(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.LastIndexOf(System.Double, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.LastIndexOf(System.Double, System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Remove(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.RemoveAll(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.RemoveAt(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.RemoveRange(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Reverse()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Reverse(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Sort()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Sort(System.Collections.Generic.IComparer&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Sort(System.Comparison&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Sort(System.Int32, System.Int32, System.Collections.Generic.IComparer&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.Generic.IEnumerable&lt;System.Double&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.ICollection.CopyTo(System.Array, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IEnumerable.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.Add(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.Contains(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.IndexOf(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.Insert(System.Int32, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.Remove(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.ToArray()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.TrimExcess()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.TrueForAll(System.Predicate&lt;System.Double&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Capacity</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Count</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.Generic.ICollection&lt;System.Double&gt;.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.ICollection.IsSynchronized</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.ICollection.SyncRoot</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.IsFixedSize</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.IsReadOnly</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.Generic.List&lt;System.Double&gt;.System.Collections.IList.Item[System.Int32]</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="GeometrySharp.Geometry.html">GeometrySharp.Geometry</a></h6>
+  <h6><strong>Assembly</strong>: GeometrySharp.dll</h6>
+  <h5 id="GeometrySharp_Geometry_Vector3_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Vector3 : List&lt;double&gt;, IList&lt;double&gt;, ICollection&lt;double&gt;, IReadOnlyList&lt;double&gt;, IReadOnlyCollection&lt;double&gt;, IEnumerable&lt;double&gt;, IList, ICollection, IEnumerable, IEquatable&lt;Vector3&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3__ctor.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L20">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3__ctor_" data-uid="GeometrySharp.Geometry.Vector3.#ctor*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3__ctor" data-uid="GeometrySharp.Geometry.Vector3.#ctor">Vector3()</h4>
+  <div class="markdown level1 summary"><p>Default constructor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3__ctor_System_Collections_Generic_IEnumerable_System_Double__.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.%23ctor(System.Collections.Generic.IEnumerable%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L28">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3__ctor_" data-uid="GeometrySharp.Geometry.Vector3.#ctor*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3__ctor_System_Collections_Generic_IEnumerable_System_Double__" data-uid="GeometrySharp.Geometry.Vector3.#ctor(System.Collections.Generic.IEnumerable{System.Double})">Vector3(IEnumerable&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Vector3 initialized by a list of values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3(IEnumerable&lt;double&gt; values)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">values</span></td>
+        <td><p>List of values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Unset.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Unset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L36">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Unset_" data-uid="GeometrySharp.Geometry.Vector3.Unset*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Unset" data-uid="GeometrySharp.Geometry.Vector3.Unset">Unset</h4>
+  <div class="markdown level1 summary"><p>Gets the value of a point at location GeoSharpMath.UNSETVALUE,GeoSharpMath.UNSETVALUE,GeoSharpMath.UNSETVALUE.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Unset { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_XAxis.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.XAxis%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L42">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_XAxis_" data-uid="GeometrySharp.Geometry.Vector3.XAxis*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_XAxis" data-uid="GeometrySharp.Geometry.Vector3.XAxis">XAxis</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the vector with components 1,0,0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 XAxis { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_YAxis.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.YAxis%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L47">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_YAxis_" data-uid="GeometrySharp.Geometry.Vector3.YAxis*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_YAxis" data-uid="GeometrySharp.Geometry.Vector3.YAxis">YAxis</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the vector with components 0,1,0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 YAxis { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_ZAxis.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.ZAxis%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L52">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_ZAxis_" data-uid="GeometrySharp.Geometry.Vector3.ZAxis*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_ZAxis" data-uid="GeometrySharp.Geometry.Vector3.ZAxis">ZAxis</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the vector with components 0,0,1.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 ZAxis { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_AddMulMutate_GeometrySharp_Geometry_Vector3_System_Double_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.AddMulMutate(GeometrySharp.Geometry.Vector3%2CSystem.Double%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L334">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_AddMulMutate_" data-uid="GeometrySharp.Geometry.Vector3.AddMulMutate*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_AddMulMutate_GeometrySharp_Geometry_Vector3_System_Double_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.AddMulMutate(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)">AddMulMutate(Vector3, Double, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Add to each component of the first vector the respective component of the second vector multiplied by a scalar</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddMulMutate(Vector3 a, double s, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First vector</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">s</span></td>
+        <td><p>Scalar</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second Vector</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Amplify_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Amplify(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L112">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Amplify_" data-uid="GeometrySharp.Geometry.Vector3.Amplify*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Amplify_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.Amplify(System.Double)">Amplify(Double)</h4>
+  <div class="markdown level1 summary"><p>Gets the vector amplified by a scalar value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3 Amplify(double amplitude)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">amplitude</span></td>
+        <td><p>The scalar value to amplify the vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>The vector amplified.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_AngleBetween_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.AngleBetween(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L60">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_AngleBetween_" data-uid="GeometrySharp.Geometry.Vector3.AngleBetween*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_AngleBetween_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.AngleBetween(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">AngleBetween(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>The angle in radians between two vectors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double AngleBetween(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The first vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>The second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The angle in radians</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Cross_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Cross(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L213">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Cross_" data-uid="GeometrySharp.Geometry.Vector3.Cross*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Cross_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.Cross(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Cross(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Cross product.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Cross(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The first vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>The second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>Compute the cross product.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_DistanceTo_GeometrySharp_Geometry_Line_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.DistanceTo(GeometrySharp.Geometry.Line)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L309">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_DistanceTo_" data-uid="GeometrySharp.Geometry.Vector3.DistanceTo*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_DistanceTo_GeometrySharp_Geometry_Line_" data-uid="GeometrySharp.Geometry.Vector3.DistanceTo(GeometrySharp.Geometry.Line)">DistanceTo(Line)</h4>
+  <div class="markdown level1 summary"><p>Get the distance of a point to a line.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double DistanceTo(Line line)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Line.html">Line</a></td>
+        <td><span class="parametername">line</span></td>
+        <td><p>The line from which to calculate the distance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The distance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_DistanceTo_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.DistanceTo(GeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L297">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_DistanceTo_" data-uid="GeometrySharp.Geometry.Vector3.DistanceTo*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_DistanceTo_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.DistanceTo(GeometrySharp.Geometry.Vector3)">DistanceTo(Vector3)</h4>
+  <div class="markdown level1 summary"><p>The distance from this point to b.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double DistanceTo(Vector3 v)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>The target vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The distance between this vector and the provided vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Dot_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Dot(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L229">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Dot_" data-uid="GeometrySharp.Geometry.Vector3.Dot*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Dot_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.Dot(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Dot(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Compute the dot product between two vectors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double Dot(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The first vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>The second vector with which compute the dot product.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The dot product.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Equals_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Equals(GeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L508">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Equals_" data-uid="GeometrySharp.Geometry.Vector3.Equals*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Equals_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.Equals(GeometrySharp.Geometry.Vector3)">Equals(Vector3)</h4>
+  <div class="markdown level1 summary"><p>Is the vector equal to the provided vector?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(Vector3 other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>Returns true if all components of the two vectors are within Epsilon, otherwise false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Equals_System_Object_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L494">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Equals_" data-uid="GeometrySharp.Geometry.Vector3.Equals*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Equals_System_Object_" data-uid="GeometrySharp.Geometry.Vector3.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Is the vector equal to the provided vector?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>The vector to test.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>Returns true if all components of the two vectors are within Epsilon, otherwise false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsEqualRoundingDecimal_GeometrySharp_Geometry_Vector3_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsEqualRoundingDecimal(GeometrySharp.Geometry.Vector3%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L521">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsEqualRoundingDecimal_" data-uid="GeometrySharp.Geometry.Vector3.IsEqualRoundingDecimal*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsEqualRoundingDecimal_GeometrySharp_Geometry_Vector3_System_Int32_" data-uid="GeometrySharp.Geometry.Vector3.IsEqualRoundingDecimal(GeometrySharp.Geometry.Vector3,System.Int32)">IsEqualRoundingDecimal(Vector3, Int32)</h4>
+  <div class="markdown level1 summary"><p>Determine whether this vector's components are equal to those of v, within tolerance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsEqualRoundingDecimal(Vector3 v, int numberOfDecimal = 0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>The vector to compare.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numberOfDecimal</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise
+false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsParallelTo_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsParallelTo(GeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L173">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsParallelTo_" data-uid="GeometrySharp.Geometry.Vector3.IsParallelTo*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsParallelTo_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.IsParallelTo(GeometrySharp.Geometry.Vector3,System.Double)">IsParallelTo(Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Determines whether this vector is parallel to another vector, within a provided tolerance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int IsParallelTo(Vector3 other, double tolerance = -1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>Vector to compare to.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">tolerance</span></td>
+        <td><p>Angle tolerance (in radians), if not set used default one degree, expressed in radians.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>A parallel indicator:
+1 vectors are parallel,
+0 vectors are not parallel,
+-1 vectors are parallel but with opposite directions</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsPerpendicularTo_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsPerpendicularTo(GeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L154">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsPerpendicularTo_" data-uid="GeometrySharp.Geometry.Vector3.IsPerpendicularTo*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsPerpendicularTo_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.IsPerpendicularTo(GeometrySharp.Geometry.Vector3,System.Double)">IsPerpendicularTo(Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Determines if this vector is perpendicular to within one degree of another one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsPerpendicularTo(Vector3 other, double tolerance = -1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>Vector to compare to.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">tolerance</span></td>
+        <td><p>Angle tolerance (in radians), if not set used default one degree, expressed in radians.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if both vectors are perpendicular.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsPointOnPlane_GeometrySharp_Geometry_Plane_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsPointOnPlane(GeometrySharp.Geometry.Plane%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L322">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsPointOnPlane_" data-uid="GeometrySharp.Geometry.Vector3.IsPointOnPlane*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsPointOnPlane_GeometrySharp_Geometry_Plane_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.IsPointOnPlane(GeometrySharp.Geometry.Plane,System.Double)">IsPointOnPlane(Plane, Double)</h4>
+  <div class="markdown level1 summary"><p>Determinate if the provided point lies on the plane.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsPointOnPlane(Plane plane, double tol = 1E-06)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Plane.html">Plane</a></td>
+        <td><span class="parametername">plane</span></td>
+        <td><p>The plane on which to find if the point lies on.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">tol</span></td>
+        <td><p>If the tolerance is not set, as per default is use 1e-6</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>Whether the point is on the plane.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_isUnitize.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.isUnitize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L90">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_isUnitize_" data-uid="GeometrySharp.Geometry.Vector3.isUnitize*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_isUnitize" data-uid="GeometrySharp.Geometry.Vector3.isUnitize">isUnitize()</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether or not this is a unit vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool isUnitize()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsValid.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsValid%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L81">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsValid_" data-uid="GeometrySharp.Geometry.Vector3.IsValid*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsValid" data-uid="GeometrySharp.Geometry.Vector3.IsValid">IsValid()</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this vector is valid.
+A valid vector must be formed of finite numbers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsValid()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the vector is valid.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_IsZero.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.IsZero%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L102">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_IsZero_" data-uid="GeometrySharp.Geometry.Vector3.IsZero*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_IsZero" data-uid="GeometrySharp.Geometry.Vector3.IsZero">IsZero()</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsZero()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if all the component are less than Epsilon.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Length.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L122">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Length_" data-uid="GeometrySharp.Geometry.Vector3.Length*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Length" data-uid="GeometrySharp.Geometry.Vector3.Length">Length()</h4>
+  <div class="markdown level1 summary"><p>Computes the length (or magnitude, or size) of this vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Length()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The magnitude of the vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Lerp_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Lerp(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L136">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Lerp_" data-uid="GeometrySharp.Geometry.Vector3.Lerp*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Lerp_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.Lerp(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3,System.Double)">Lerp(Vector3, Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Linearly interpolates between two vectors based on the given weighting.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Lerp(Vector3 u, Vector3 v, double amount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">u</span></td>
+        <td><p>The first source vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>The second source vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">amount</span></td>
+        <td><p>Value between 0 and 1 indicating the weight of the second source vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>The interpolated vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_PerpendicularTo_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.PerpendicularTo(GeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L541">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_PerpendicularTo_" data-uid="GeometrySharp.Geometry.Vector3.PerpendicularTo*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_PerpendicularTo_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.PerpendicularTo(GeometrySharp.Geometry.Vector3)">PerpendicularTo(Vector3)</h4>
+  <div class="markdown level1 summary"><p>Compute the perpendicular to another vector. Result is not unitized.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3 PerpendicularTo(Vector3 other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>Vector to use as guide.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>Return the perpendicular vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Reverse_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Reverse(GeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L70">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Reverse_" data-uid="GeometrySharp.Geometry.Vector3.Reverse*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Reverse_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.Reverse(GeometrySharp.Geometry.Vector3)">Reverse(Vector3)</h4>
+  <div class="markdown level1 summary"><p>Reverses this vector in place (reverses the direction).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Reverse(Vector3 a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The vector to reverse.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>The reversed vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Rotate_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Rotate(GeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L193">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Rotate_" data-uid="GeometrySharp.Geometry.Vector3.Rotate*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Rotate_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.Rotate(GeometrySharp.Geometry.Vector3,System.Double)">Rotate(Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Rotates this vector around a given axis.
+The rotation is computed using Rodrigues Rotation formula.
+<a href="https://handwiki.org/wiki/Rodrigues%27_rotation_formula">https://handwiki.org/wiki/Rodrigues%27_rotation_formula</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3 Rotate(Vector3 axis, double angle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">axis</span></td>
+        <td><p>Axis of rotation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">angle</span></td>
+        <td><p>Angle of rotation (in radians).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>Rotated vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_SquaredLength.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.SquaredLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L143">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_SquaredLength_" data-uid="GeometrySharp.Geometry.Vector3.SquaredLength*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_SquaredLength" data-uid="GeometrySharp.Geometry.Vector3.SquaredLength">SquaredLength()</h4>
+  <div class="markdown level1 summary"><p>Computes the squared length (or magnitude, or size) of this vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double SquaredLength()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The sum of each value squared.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_SubMulMutate_GeometrySharp_Geometry_Vector3_System_Double_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.SubMulMutate(GeometrySharp.Geometry.Vector3%2CSystem.Double%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L347">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_SubMulMutate_" data-uid="GeometrySharp.Geometry.Vector3.SubMulMutate*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_SubMulMutate_GeometrySharp_Geometry_Vector3_System_Double_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.SubMulMutate(GeometrySharp.Geometry.Vector3,System.Double,GeometrySharp.Geometry.Vector3)">SubMulMutate(Vector3, Double, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Subtract to each component of the first vector the respective component of the second vector multiplied by a scalar</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SubMulMutate(Vector3 a, double s, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First vector</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">s</span></td>
+        <td><p>Scalar</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second Vector</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_ToString.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L616">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_ToString_" data-uid="GeometrySharp.Geometry.Vector3.ToString*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_ToString" data-uid="GeometrySharp.Geometry.Vector3.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Constructs the string representation of the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The vector in string format</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Unitize.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Unitize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L238">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Unitize_" data-uid="GeometrySharp.Geometry.Vector3.Unitize*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Unitize" data-uid="GeometrySharp.Geometry.Vector3.Unitize">Unitize()</h4>
+  <div class="markdown level1 summary"><p>Unitizes the vector. A unit vector has length 1 unit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3 Unitize()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>A new vector unitized.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Zero1d_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Zero1d(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L252">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Zero1d_" data-uid="GeometrySharp.Geometry.Vector3.Zero1d*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Zero1d_System_Int32_" data-uid="GeometrySharp.Geometry.Vector3.Zero1d(System.Int32)">Zero1d(Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a list of zero values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Zero1d(int rows)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">rows</span></td>
+        <td><p>Rows dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>Get a vector of r dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Zero2d_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Zero2d(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L267">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Zero2d_" data-uid="GeometrySharp.Geometry.Vector3.Zero2d*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Zero2d_System_Int32_System_Int32_" data-uid="GeometrySharp.Geometry.Vector3.Zero2d(System.Int32,System.Int32)">Zero2d(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a 2 dimensional list of zero values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;Vector3&gt; Zero2d(int rows, int cols)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">rows</span></td>
+        <td><p>Rows dimension.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">cols</span></td>
+        <td><p>Columns dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a>&gt;</td>
+        <td><p>Get a vector of r*c dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_Zero3d_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.Zero3d(System.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L283">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_Zero3d_" data-uid="GeometrySharp.Geometry.Vector3.Zero3d*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_Zero3d_System_Int32_System_Int32_System_Int32_" data-uid="GeometrySharp.Geometry.Vector3.Zero3d(System.Int32,System.Int32,System.Int32)">Zero3d(Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a 3 dimensional list of zero values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;List&lt;Vector3&gt;&gt; Zero3d(int rows, int cols, int depth)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">rows</span></td>
+        <td><p>Rows dimension.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">cols</span></td>
+        <td><p>Columns dimension.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">depth</span></td>
+        <td><p>Depth dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a>&gt;&gt;</td>
+        <td><p>Get a vector of r<em>c</em>d dimension.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Addition_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Addition(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L462">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Addition_" data-uid="GeometrySharp.Geometry.Vector3.op_Addition*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Addition_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.op_Addition(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Addition(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Add two vectors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator +(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The first vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>The second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>A vector which is the sum of a and b.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Division_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Division(GeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L440">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Division_" data-uid="GeometrySharp.Geometry.Vector3.op_Division*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Division_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.op_Division(GeometrySharp.Geometry.Vector3,System.Double)">Division(Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Divide a vector by a scalar.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator /(Vector3 v, double a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>The vector to divide.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The scalar divisor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>A vector whose magnitude is multiplied by a.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Equality_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Equality(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L473">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Equality_" data-uid="GeometrySharp.Geometry.Vector3.op_Equality*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Equality_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.op_Equality(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Equality(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Are the two vectors the same within Epsilon?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>Returns true if all components of the two vectors are within Epsilon, otherwise false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Inequality_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Inequality(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L484">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Inequality_" data-uid="GeometrySharp.Geometry.Vector3.op_Inequality*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Inequality_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.op_Inequality(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Inequality(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Are the two vectors the same within Epsilon?</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>Returns true if all components of the two vectors are within Epsilon, otherwise false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_GeometrySharp_Core_Matrix_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Core.Matrix)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L371">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Multiply_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_GeometrySharp_Core_Matrix_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3,GeometrySharp.Core.Matrix)">Multiply(Vector3, Matrix)</h4>
+  <div class="markdown level1 summary"><p>Multiplying an n x m matrix by a m x 1.
+Transform the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator *(Vector3 v, Matrix m)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>Vector to transform.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Matrix.html">Matrix</a></td>
+        <td><span class="parametername">m</span></td>
+        <td><p>Matrix to multiply.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>Vector resulting of multiplying an n x m matrix by a m x 1.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_GeometrySharp_Core_Transform_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Core.Transform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L401">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Multiply_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_GeometrySharp_Core_Transform_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3,GeometrySharp.Core.Transform)">Multiply(Vector3, Transform)</h4>
+  <div class="markdown level1 summary"><p>Multiplies a 4x4 transformation matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator *(Vector3 v, Transform t)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>A vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Transform.html">Transform</a></td>
+        <td><span class="parametername">t</span></td>
+        <td><p>A transformation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>The transformed vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_System_Double_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L359">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Multiply_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Multiply_GeometrySharp_Geometry_Vector3_System_Double_" data-uid="GeometrySharp.Geometry.Vector3.op_Multiply(GeometrySharp.Geometry.Vector3,System.Double)">Multiply(Vector3, Double)</h4>
+  <div class="markdown level1 summary"><p>Multiply a vector and a scalar.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator *(Vector3 v, double a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>The vector to multiply.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The scalar value to multiply.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>A vector whose magnitude is multiplied by a.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3_op_Subtraction_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3.op_Subtraction(GeometrySharp.Geometry.Vector3%2CGeometrySharp.Geometry.Vector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L451">View Source</a>
+  </span>
+  <a id="GeometrySharp_Geometry_Vector3_op_Subtraction_" data-uid="GeometrySharp.Geometry.Vector3.op_Subtraction*"></a>
+  <h4 id="GeometrySharp_Geometry_Vector3_op_Subtraction_GeometrySharp_Geometry_Vector3_GeometrySharp_Geometry_Vector3_" data-uid="GeometrySharp.Geometry.Vector3.op_Subtraction(GeometrySharp.Geometry.Vector3,GeometrySharp.Geometry.Vector3)">Subtraction(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"><p>Subtract two vectors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 operator -(Vector3 a, Vector3 b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The first vector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><span class="parametername">b</span></td>
+        <td><p>The second vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Geometry.Vector3.html">Vector3</a></td>
+        <td><p>A vector which is the difference between a and b.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyList&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IList</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.ICollection</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="GeometrySharp.ExtendedMethods.ExtendedEnumerable.html#GeometrySharp_ExtendedMethods_ExtendedEnumerable_ToVector_System_Collections_Generic_IEnumerable_System_Double__">ExtendedEnumerable.ToVector(IEnumerable&lt;Double&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="GeometrySharp.ExtendedMethods.ExtendedEnumerable.html#GeometrySharp_ExtendedMethods_ExtendedEnumerable_ToKnot_System_Collections_Generic_IEnumerable_System_Double__">ExtendedEnumerable.ToKnot(IEnumerable&lt;Double&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="GeometrySharp.ExtendedMethods.ExtendedEnumerable.html#GeometrySharp_ExtendedMethods_ExtendedEnumerable_Unique__1_System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__">ExtendedEnumerable.Unique&lt;T&gt;(IEnumerable&lt;T&gt;, Func&lt;T, T, Boolean&gt;)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Geometry_Vector3.md&amp;value=---%0Auid%3A%20GeometrySharp.Geometry.Vector3%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Geometry/Vector3.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,460 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Core.Serializable`1
+  commentId: T:GeometrySharp.Core.Serializable`1
+  id: Serializable`1
+  parent: GeometrySharp.Core
+  children:
+  - GeometrySharp.Core.Serializable`1.FromJson(System.String)
+  - GeometrySharp.Core.Serializable`1.ToJson
+  langs:
+  - csharp
+  - vb
+  name: Serializable<T>
+  nameWithType: Serializable<T>
+  fullName: GeometrySharp.Core.Serializable<T>
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Core/Serializable.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Serializable
+    path: ../GeometrySharp/Core/Serializable.cs
+    startLine: 12
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  syntax:
+    content: public abstract class Serializable<T>
+    typeParameters:
+    - id: T
+    content.vb: Public MustInherit Class Serializable(Of T)
+  inheritance:
+  - System.Object
+  derivedClasses:
+  - GeometrySharp.Geometry.NurbsSurface
+  - GeometrySharp.Geometry.Volume
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  nameWithType.vb: Serializable(Of T)
+  modifiers.csharp:
+  - public
+  - abstract
+  - class
+  modifiers.vb:
+  - Public
+  - MustInherit
+  - Class
+  fullName.vb: GeometrySharp.Core.Serializable(Of T)
+  name.vb: Serializable(Of T)
+- uid: GeometrySharp.Core.Serializable`1.FromJson(System.String)
+  commentId: M:GeometrySharp.Core.Serializable`1.FromJson(System.String)
+  id: FromJson(System.String)
+  parent: GeometrySharp.Core.Serializable`1
+  langs:
+  - csharp
+  - vb
+  name: FromJson(String)
+  nameWithType: Serializable<T>.FromJson(String)
+  fullName: GeometrySharp.Core.Serializable<T>.FromJson(System.String)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/Serializable.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: FromJson
+    path: ../GeometrySharp/Core/Serializable.cs
+    startLine: 14
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  syntax:
+    content: public abstract T FromJson(string s)
+    parameters:
+    - id: s
+      type: System.String
+    return:
+      type: '{T}'
+    content.vb: Public MustOverride Function FromJson(s As String) As T
+  overload: GeometrySharp.Core.Serializable`1.FromJson*
+  nameWithType.vb: Serializable(Of T).FromJson(String)
+  modifiers.csharp:
+  - public
+  - abstract
+  modifiers.vb:
+  - Public
+  - MustOverride
+  fullName.vb: GeometrySharp.Core.Serializable(Of T).FromJson(System.String)
+- uid: GeometrySharp.Core.Serializable`1.ToJson
+  commentId: M:GeometrySharp.Core.Serializable`1.ToJson
+  id: ToJson
+  parent: GeometrySharp.Core.Serializable`1
+  langs:
+  - csharp
+  - vb
+  name: ToJson()
+  nameWithType: Serializable<T>.ToJson()
+  fullName: GeometrySharp.Core.Serializable<T>.ToJson()
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Core/Serializable.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: ToJson
+    path: ../GeometrySharp/Core/Serializable.cs
+    startLine: 15
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Core
+  syntax:
+    content: public abstract string ToJson()
+    return:
+      type: System.String
+    content.vb: Public MustOverride Function ToJson As String
+  overload: GeometrySharp.Core.Serializable`1.ToJson*
+  nameWithType.vb: Serializable(Of T).ToJson()
+  modifiers.csharp:
+  - public
+  - abstract
+  modifiers.vb:
+  - Public
+  - MustOverride
+  fullName.vb: GeometrySharp.Core.Serializable(Of T).ToJson()
+references:
+- uid: GeometrySharp.Core
+  commentId: N:GeometrySharp.Core
+  name: GeometrySharp.Core
+  nameWithType: GeometrySharp.Core
+  fullName: GeometrySharp.Core
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Core.Serializable`1.FromJson*
+  commentId: Overload:GeometrySharp.Core.Serializable`1.FromJson
+  name: FromJson
+  nameWithType: Serializable<T>.FromJson
+  fullName: GeometrySharp.Core.Serializable<T>.FromJson
+  nameWithType.vb: Serializable(Of T).FromJson
+  fullName.vb: GeometrySharp.Core.Serializable(Of T).FromJson
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: '{T}'
+  commentId: '!:T'
+  definition: T
+  name: T
+  nameWithType: T
+  fullName: T
+- uid: T
+  name: T
+  nameWithType: T
+  fullName: T
+- uid: GeometrySharp.Core.Serializable`1.ToJson*
+  commentId: Overload:GeometrySharp.Core.Serializable`1.ToJson
+  name: ToJson
+  nameWithType: Serializable<T>.ToJson
+  fullName: GeometrySharp.Core.Serializable<T>.ToJson
+  nameWithType.vb: Serializable(Of T).ToJson
+  fullName.vb: GeometrySharp.Core.Serializable(Of T).ToJson

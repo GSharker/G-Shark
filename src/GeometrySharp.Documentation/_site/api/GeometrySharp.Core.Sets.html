@@ -1,0 +1,612 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Sets
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Sets
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="GeometrySharp.Core.Sets">
+  
+  
+  <h1 id="GeometrySharp_Core_Sets" data-uid="GeometrySharp.Core.Sets" class="text-break">Class Sets
+  </h1>
+  <div class="markdown level0 summary"><p>Provide utility function for sets creation.
+Example range, linear subdivisions and boolean operations.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Sets</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="GeometrySharp.Core.html">GeometrySharp.Core</a></h6>
+  <h6><strong>Assembly</strong>: GeometrySharp.dll</h6>
+  <h5 id="GeometrySharp_Core_Sets_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class Sets</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_Dimension_System_Collections_Generic_IList_System_Double__.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.Dimension(System.Collections.Generic.IList%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L19">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_Dimension_" data-uid="GeometrySharp.Core.Sets.Dimension*"></a>
+  <h4 id="GeometrySharp_Core_Sets_Dimension_System_Collections_Generic_IList_System_Double__" data-uid="GeometrySharp.Core.Sets.Dimension(System.Collections.Generic.IList{System.Double})">Dimension(IList&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>The range of a set of number, or the distance between the smallest value to the biggest in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double Dimension(IList&lt;double&gt; a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">a</span></td>
+        <td><p>Set of numbers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The range.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_LinearSpace_GeometrySharp_Core_Interval_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.LinearSpace(GeometrySharp.Core.Interval%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L54">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_LinearSpace_" data-uid="GeometrySharp.Core.Sets.LinearSpace*"></a>
+  <h4 id="GeometrySharp_Core_Sets_LinearSpace_GeometrySharp_Core_Interval_System_Int32_" data-uid="GeometrySharp.Core.Sets.LinearSpace(GeometrySharp.Core.Interval,System.Int32)">LinearSpace(Interval, Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns a list of evenly spaced numbers over a specified interval.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IList&lt;double&gt; LinearSpace(Interval domain, int step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Interval.html">Interval</a></td>
+        <td><span class="parametername">domain</span></td>
+        <td><p>Domain of numeric range.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">step</span></td>
+        <td><p>Number of steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>A list of equally spaced numbers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_Range_GeometrySharp_Core_Interval_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.Range(GeometrySharp.Core.Interval%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L31">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_Range_" data-uid="GeometrySharp.Core.Sets.Range*"></a>
+  <h4 id="GeometrySharp_Core_Sets_Range_GeometrySharp_Core_Interval_System_Int32_" data-uid="GeometrySharp.Core.Sets.Range(GeometrySharp.Core.Interval,System.Int32)">Range(Interval, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a range of numbers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IList&lt;double&gt; Range(Interval domain, int step)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GeometrySharp.Core.Interval.html">Interval</a></td>
+        <td><span class="parametername">domain</span></td>
+        <td><p>Domain of numeric range.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">step</span></td>
+        <td><p>Number of steps</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>A range of numbers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_Range_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.Range(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L77">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_Range_" data-uid="GeometrySharp.Core.Sets.Range*"></a>
+  <h4 id="GeometrySharp_Core_Sets_Range_System_Int32_" data-uid="GeometrySharp.Core.Sets.Range(System.Int32)">Range(Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a range of positive numbers, incrementing of one step and starting from 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IList&lt;double&gt; Range(int maxValue)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxValue</span></td>
+        <td><p>The dimension of the range.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>A range of numbers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_RepeatData__1___0_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.RepeatData%60%601(%60%600%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L147">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_RepeatData_" data-uid="GeometrySharp.Core.Sets.RepeatData*"></a>
+  <h4 id="GeometrySharp_Core_Sets_RepeatData__1___0_System_Int32_" data-uid="GeometrySharp.Core.Sets.RepeatData``1(``0,System.Int32)">RepeatData&lt;T&gt;(T, Int32)</h4>
+  <div class="markdown level1 summary"><p>Repeat data until it reaches the defined length.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;T&gt; RepeatData&lt;T&gt;(T data, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">data</span></td>
+        <td><p>Data to repeat.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td><p>Length of the final set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;T&gt;</td>
+        <td><p>Set of repeated data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_SetDifference_System_Collections_Generic_IList_System_Double__System_Collections_Generic_IList_System_Double__.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.SetDifference(System.Collections.Generic.IList%7BSystem.Double%7D%2CSystem.Collections.Generic.IList%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L135">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_SetDifference_" data-uid="GeometrySharp.Core.Sets.SetDifference*"></a>
+  <h4 id="GeometrySharp_Core_Sets_SetDifference_System_Collections_Generic_IList_System_Double__System_Collections_Generic_IList_System_Double__" data-uid="GeometrySharp.Core.Sets.SetDifference(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">SetDifference(IList&lt;Double&gt;, IList&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>The set difference from two sequences of numbers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;double&gt; SetDifference(IList&lt;double&gt; a, IList&lt;double&gt; b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_SetUnion_System_Collections_Generic_IList_System_Double__System_Collections_Generic_IList_System_Double__.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.SetUnion(System.Collections.Generic.IList%7BSystem.Double%7D%2CSystem.Collections.Generic.IList%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L123">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_SetUnion_" data-uid="GeometrySharp.Core.Sets.SetUnion*"></a>
+  <h4 id="GeometrySharp_Core_Sets_SetUnion_System_Collections_Generic_IList_System_Double__System_Collections_Generic_IList_System_Double__" data-uid="GeometrySharp.Core.Sets.SetUnion(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{System.Double})">SetUnion(IList&lt;Double&gt;, IList&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>The set union of two sequences of numbers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;double&gt; SetUnion(IList&lt;double&gt; a, IList&lt;double&gt; b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">a</span></td>
+        <td><p>First set.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">b</span></td>
+        <td><p>Second set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>The set union.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets_Span_System_Double_System_Double_System_Int32_.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets.Span(System.Double%2CSystem.Double%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L99">View Source</a>
+  </span>
+  <a id="GeometrySharp_Core_Sets_Span_" data-uid="GeometrySharp.Core.Sets.Span*"></a>
+  <h4 id="GeometrySharp_Core_Sets_Span_System_Double_System_Double_System_Int32_" data-uid="GeometrySharp.Core.Sets.Span(System.Double,System.Double,System.Int32)">Span(Double, Double, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a series of numbers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IList&lt;double&gt; Span(double start, double step, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">start</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">step</span></td>
+        <td><p>Step size for each successive number.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td><p>Number of values in the series.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>Series of numbers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/new/dev/ceca/docfx/apiSpec/new?filename=GeometrySharp_Core_Sets.md&amp;value=---%0Auid%3A%20GeometrySharp.Core.Sets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/cesarecaoduro/GeometrySharp/blob/dev/ceca/docfx/GeometrySharp/Core/Sets.cs/#L11" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

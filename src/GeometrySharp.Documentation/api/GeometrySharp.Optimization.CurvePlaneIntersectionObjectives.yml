@@ -1,0 +1,588 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  commentId: T:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  id: CurvePlaneIntersectionObjectives
+  parent: GeometrySharp.Optimization
+  children:
+  - GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Plane)
+  - GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient(GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value(GeometrySharp.Geometry.Vector3)
+  langs:
+  - csharp
+  - vb
+  name: CurvePlaneIntersectionObjectives
+  nameWithType: CurvePlaneIntersectionObjectives
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: CurvePlaneIntersectionObjectives
+    path: ../GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+    startLine: 9
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Optimization
+  summary: "\nThe basic functions used into the minimization process, to define the intersection results between a curve and a plane.\n"
+  example: []
+  syntax:
+    content: 'public class CurvePlaneIntersectionObjectives : IObjectiveFunction'
+    content.vb: >-
+      Public Class CurvePlaneIntersectionObjectives
+
+          Implements IObjectiveFunction
+  inheritance:
+  - System.Object
+  implements:
+  - GeometrySharp.Optimization.IObjectiveFunction
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Plane)
+  commentId: M:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Plane)
+  id: '#ctor(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Plane)'
+  parent: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  langs:
+  - csharp
+  - vb
+  name: CurvePlaneIntersectionObjectives(NurbsCurve, Plane)
+  nameWithType: CurvePlaneIntersectionObjectives.CurvePlaneIntersectionObjectives(NurbsCurve, Plane)
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.CurvePlaneIntersectionObjectives(GeometrySharp.Geometry.NurbsCurve, GeometrySharp.Geometry.Plane)
+  type: Constructor
+  source:
+    remote:
+      path: GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: .ctor
+    path: ../GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+    startLine: 19
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Optimization
+  summary: "\nInitialize the class, which collects the functions used for the minimization problem.\n"
+  example: []
+  syntax:
+    content: public CurvePlaneIntersectionObjectives(NurbsCurve crv, Plane plane)
+    parameters:
+    - id: crv
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: Curve used in the intersection process.
+    - id: plane
+      type: GeometrySharp.Geometry.Plane
+      description: Plane used in the intersection process.
+    content.vb: Public Sub New(crv As NurbsCurve, plane As Plane)
+  overload: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value(GeometrySharp.Geometry.Vector3)
+  id: Value(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  langs:
+  - csharp
+  - vb
+  name: Value(Vector3)
+  nameWithType: CurvePlaneIntersectionObjectives.Value(Vector3)
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Value
+    path: ../GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+    startLine: 25
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Optimization
+  syntax:
+    content: public double Value(Vector3 v)
+    parameters:
+    - id: v
+      type: GeometrySharp.Geometry.Vector3
+    return:
+      type: System.Double
+    content.vb: Public Function Value(v As Vector3) As Double
+  overload: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value*
+  implements:
+  - GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient(GeometrySharp.Geometry.Vector3)
+  id: Gradient(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives
+  langs:
+  - csharp
+  - vb
+  name: Gradient(Vector3)
+  nameWithType: CurvePlaneIntersectionObjectives.Gradient(Vector3)
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient(GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Gradient
+    path: ../GeometrySharp/Optimization/CurvePlaneIntersectionObjectives.cs
+    startLine: 35
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Optimization
+  syntax:
+    content: public Vector3 Gradient(Vector3 v)
+    parameters:
+    - id: v
+      type: GeometrySharp.Geometry.Vector3
+    return:
+      type: GeometrySharp.Geometry.Vector3
+    content.vb: Public Function Gradient(v As Vector3) As Vector3
+  overload: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient*
+  implements:
+  - GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+references:
+- uid: GeometrySharp.Optimization
+  commentId: N:GeometrySharp.Optimization
+  name: GeometrySharp.Optimization
+  nameWithType: GeometrySharp.Optimization
+  fullName: GeometrySharp.Optimization
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: GeometrySharp.Optimization.IObjectiveFunction
+  commentId: T:GeometrySharp.Optimization.IObjectiveFunction
+  parent: GeometrySharp.Optimization
+  name: IObjectiveFunction
+  nameWithType: IObjectiveFunction
+  fullName: GeometrySharp.Optimization.IObjectiveFunction
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor*
+  commentId: Overload:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.#ctor
+  name: CurvePlaneIntersectionObjectives
+  nameWithType: CurvePlaneIntersectionObjectives.CurvePlaneIntersectionObjectives
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.CurvePlaneIntersectionObjectives
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: GeometrySharp.Geometry.Plane
+  commentId: T:GeometrySharp.Geometry.Plane
+  parent: GeometrySharp.Geometry
+  name: Plane
+  nameWithType: Plane
+  fullName: GeometrySharp.Geometry.Plane
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value*
+  commentId: Overload:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value
+  name: Value
+  nameWithType: CurvePlaneIntersectionObjectives.Value
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Value
+- uid: GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Optimization.IObjectiveFunction
+  name: Value(Vector3)
+  nameWithType: IObjectiveFunction.Value(Vector3)
+  fullName: GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+  spec.csharp:
+  - uid: GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+    name: Value
+    nameWithType: IObjectiveFunction.Value
+    fullName: GeometrySharp.Optimization.IObjectiveFunction.Value
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: GeometrySharp.Optimization.IObjectiveFunction.Value(GeometrySharp.Geometry.Vector3)
+    name: Value
+    nameWithType: IObjectiveFunction.Value
+    fullName: GeometrySharp.Optimization.IObjectiveFunction.Value
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient*
+  commentId: Overload:GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient
+  name: Gradient
+  nameWithType: CurvePlaneIntersectionObjectives.Gradient
+  fullName: GeometrySharp.Optimization.CurvePlaneIntersectionObjectives.Gradient
+- uid: GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Optimization.IObjectiveFunction
+  name: Gradient(Vector3)
+  nameWithType: IObjectiveFunction.Gradient(Vector3)
+  fullName: GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+  spec.csharp:
+  - uid: GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+    name: Gradient
+    nameWithType: IObjectiveFunction.Gradient
+    fullName: GeometrySharp.Optimization.IObjectiveFunction.Gradient
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: GeometrySharp.Optimization.IObjectiveFunction.Gradient(GeometrySharp.Geometry.Vector3)
+    name: Gradient
+    nameWithType: IObjectiveFunction.Gradient
+    fullName: GeometrySharp.Optimization.IObjectiveFunction.Gradient
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: GeometrySharp.Geometry.Vector3
+    name: Vector3
+    nameWithType: Vector3
+    fullName: GeometrySharp.Geometry.Vector3
+  - name: )
+    nameWithType: )
+    fullName: )

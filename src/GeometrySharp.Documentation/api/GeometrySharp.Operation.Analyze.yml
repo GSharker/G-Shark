@@ -1,0 +1,697 @@
+### YamlMime:ManagedReference
+items:
+- uid: GeometrySharp.Operation.Analyze
+  commentId: T:GeometrySharp.Operation.Analyze
+  id: Analyze
+  parent: GeometrySharp.Operation
+  children:
+  - GeometrySharp.Operation.Analyze.RationalBezierCurveLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  - GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double,System.Double)
+  - GeometrySharp.Operation.Analyze.RationalCurveArcLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  - GeometrySharp.Operation.Analyze.RationalCurveClosestParameter(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3)
+  - GeometrySharp.Operation.Analyze.RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3,System.Double@)
+  - GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double)
+  langs:
+  - csharp
+  - vb
+  name: Analyze
+  nameWithType: Analyze
+  fullName: GeometrySharp.Operation.Analyze
+  type: Class
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: Analyze
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 11
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nAnalyze contains methods for analyzing NURBS geometry.\n"
+  example: []
+  syntax:
+    content: public class Analyze
+    content.vb: Public Class Analyze
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: GeometrySharp.Operation.Analyze.RationalCurveArcLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalCurveArcLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  id: RationalCurveArcLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveArcLength(NurbsCurve, Double, Int32)
+  nameWithType: Analyze.RationalCurveArcLength(NurbsCurve, Double, Int32)
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveArcLength(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveArcLength
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 21
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nApproximate the length of a rational curve by gaussian quadrature - assumes a smooth curve.\n"
+  example: []
+  syntax:
+    content: public static double RationalCurveArcLength(NurbsCurve curve, double u = -1, int gaussDegIncrease = 16)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object.
+    - id: u
+      type: System.Double
+      description: The parameter at which to approximate the length.
+    - id: gaussDegIncrease
+      type: System.Int32
+      description: >-
+        the degree of gaussian quadrature to perform.
+
+        A higher number yields a more exact result, default set to 16.
+    return:
+      type: System.Double
+      description: Return the approximate length.
+    content.vb: Public Shared Function RationalCurveArcLength(curve As NurbsCurve, u As Double = -1, gaussDegIncrease As Integer = 16) As Double
+  overload: GeometrySharp.Operation.Analyze.RationalCurveArcLength*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Analyze.RationalBezierCurveLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalBezierCurveLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  id: RationalBezierCurveLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Int32)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalBezierCurveLength(NurbsCurve, Double, Int32)
+  nameWithType: Analyze.RationalBezierCurveLength(NurbsCurve, Double, Int32)
+  fullName: GeometrySharp.Operation.Analyze.RationalBezierCurveLength(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Int32)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalBezierCurveLength
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 49
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nApproximate the length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.\n"
+  example: []
+  syntax:
+    content: public static double RationalBezierCurveLength(NurbsCurve curve, double u = -1, int gaussDegIncrease = 16)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object.
+    - id: u
+      type: System.Double
+      description: The parameter at which to approximate the length.
+    - id: gaussDegIncrease
+      type: System.Int32
+      description: >-
+        the degree of gaussian quadrature to perform.
+
+        A higher number yields a more exact result, default set to 16.
+    return:
+      type: System.Double
+      description: Return the approximate length.
+    content.vb: Public Shared Function RationalBezierCurveLength(curve As NurbsCurve, u As Double = -1, gaussDegIncrease As Integer = 16) As Double
+  overload: GeometrySharp.Operation.Analyze.RationalBezierCurveLength*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double,System.Double)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double,System.Double)
+  id: RationalBezierCurveParamAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double,System.Double)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalBezierCurveParamAtLength(NurbsCurve, Double, Double, Double)
+  nameWithType: Analyze.RationalBezierCurveParamAtLength(NurbsCurve, Double, Double, Double)
+  fullName: GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalBezierCurveParamAtLength
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 75
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nGet the curve parameter t at a given length.\n"
+  example: []
+  syntax:
+    content: public static double RationalBezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance, double curveLength = -1)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object.
+    - id: segmentLength
+      type: System.Double
+      description: The length to find the parameter.
+    - id: tolerance
+      type: System.Double
+      description: If set less or equal 0.0, the tolerance used is 1e-10.
+    - id: curveLength
+      type: System.Double
+      description: The length of curve if computer, if not will be computed.
+    return:
+      type: System.Double
+      description: The parameter t at the given length.
+    content.vb: Public Shared Function RationalBezierCurveParamAtLength(curve As NurbsCurve, segmentLength As Double, tolerance As Double, curveLength As Double = -1) As Double
+  overload: GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3,System.Double@)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3,System.Double@)
+  id: RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3,System.Double@)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveClosestPoint(NurbsCurve, Vector3, out Double)
+  nameWithType: Analyze.RationalCurveClosestPoint(NurbsCurve, Vector3, out Double)
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve, GeometrySharp.Geometry.Vector3, out System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveClosestPoint
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 120
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nCompute the closest point on a NurbsCurve to a given point.\n"
+  example: []
+  syntax:
+    content: public static Vector3 RationalCurveClosestPoint(NurbsCurve curve, Vector3 point, out double t)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: The NurbsCurve object.
+    - id: point
+      type: GeometrySharp.Geometry.Vector3
+      description: Point to search from.
+    - id: t
+      type: System.Double
+      description: Parameter of local closest point.
+    return:
+      type: GeometrySharp.Geometry.Vector3
+      description: The closest point on the curve.
+    content.vb: Public Shared Function RationalCurveClosestPoint(curve As NurbsCurve, point As Vector3, ByRef t As Double) As Vector3
+  overload: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint*
+  nameWithType.vb: Analyze.RationalCurveClosestPoint(NurbsCurve, Vector3, ByRef Double)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+  fullName.vb: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint(GeometrySharp.Geometry.NurbsCurve, GeometrySharp.Geometry.Vector3, ByRef System.Double)
+  name.vb: RationalCurveClosestPoint(NurbsCurve, Vector3, ByRef Double)
+- uid: GeometrySharp.Operation.Analyze.RationalCurveClosestParameter(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalCurveClosestParameter(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3)
+  id: RationalCurveClosestParameter(GeometrySharp.Geometry.NurbsCurve,GeometrySharp.Geometry.Vector3)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveClosestParameter(NurbsCurve, Vector3)
+  nameWithType: Analyze.RationalCurveClosestParameter(NurbsCurve, Vector3)
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveClosestParameter(GeometrySharp.Geometry.NurbsCurve, GeometrySharp.Geometry.Vector3)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveClosestParameter
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 132
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  syntax:
+    content: public static double RationalCurveClosestParameter(NurbsCurve curve, Vector3 point)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+    - id: point
+      type: GeometrySharp.Geometry.Vector3
+    return:
+      type: System.Double
+    content.vb: Public Shared Function RationalCurveClosestParameter(curve As NurbsCurve, point As Vector3) As Double
+  overload: GeometrySharp.Operation.Analyze.RationalCurveClosestParameter*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double)
+  commentId: M:GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double)
+  id: RationalCurveParameterAtLength(GeometrySharp.Geometry.NurbsCurve,System.Double,System.Double)
+  parent: GeometrySharp.Operation.Analyze
+  langs:
+  - csharp
+  - vb
+  name: RationalCurveParameterAtLength(NurbsCurve, Double, Double)
+  nameWithType: Analyze.RationalCurveParameterAtLength(NurbsCurve, Double, Double)
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength(GeometrySharp.Geometry.NurbsCurve, System.Double, System.Double)
+  type: Method
+  source:
+    remote:
+      path: GeometrySharp/Operation/Analyze.cs
+      branch: dev/ceca/docfx
+      repo: https://github.com/cesarecaoduro/GeometrySharp
+    id: RationalCurveParameterAtLength
+    path: ../GeometrySharp/Operation/Analyze.cs
+    startLine: 236
+  assemblies:
+  - GeometrySharp
+  namespace: GeometrySharp.Operation
+  summary: "\nApproximate the parameter at a given arc length on a NurbsCurve.\n"
+  example: []
+  syntax:
+    content: public static double RationalCurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
+    parameters:
+    - id: curve
+      type: GeometrySharp.Geometry.NurbsCurve
+      description: NurbsCurve object.
+    - id: segmentLength
+      type: System.Double
+      description: The arc length for which to do the procedure.
+    - id: tolerance
+      type: System.Double
+      description: If set less or equal 0.0, the tolerance used is 1e-10.
+    return:
+      type: System.Double
+      description: The t parameter.
+    content.vb: Public Shared Function RationalCurveParameterAtLength(curve As NurbsCurve, segmentLength As Double, tolerance As Double = -1) As Double
+  overload: GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength*
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+references:
+- uid: GeometrySharp.Operation
+  commentId: N:GeometrySharp.Operation
+  name: GeometrySharp.Operation
+  nameWithType: GeometrySharp.Operation
+  fullName: GeometrySharp.Operation
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: GeometrySharp.Operation.Analyze.RationalCurveArcLength*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalCurveArcLength
+  name: RationalCurveArcLength
+  nameWithType: Analyze.RationalCurveArcLength
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveArcLength
+- uid: GeometrySharp.Geometry.NurbsCurve
+  commentId: T:GeometrySharp.Geometry.NurbsCurve
+  parent: GeometrySharp.Geometry
+  name: NurbsCurve
+  nameWithType: NurbsCurve
+  fullName: GeometrySharp.Geometry.NurbsCurve
+- uid: System.Double
+  commentId: T:System.Double
+  parent: System
+  isExternal: true
+  name: Double
+  nameWithType: Double
+  fullName: System.Double
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: Int32
+  nameWithType: Int32
+  fullName: System.Int32
+- uid: GeometrySharp.Geometry
+  commentId: N:GeometrySharp.Geometry
+  name: GeometrySharp.Geometry
+  nameWithType: GeometrySharp.Geometry
+  fullName: GeometrySharp.Geometry
+- uid: GeometrySharp.Operation.Analyze.RationalBezierCurveLength*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalBezierCurveLength
+  name: RationalBezierCurveLength
+  nameWithType: Analyze.RationalBezierCurveLength
+  fullName: GeometrySharp.Operation.Analyze.RationalBezierCurveLength
+- uid: GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength
+  name: RationalBezierCurveParamAtLength
+  nameWithType: Analyze.RationalBezierCurveParamAtLength
+  fullName: GeometrySharp.Operation.Analyze.RationalBezierCurveParamAtLength
+- uid: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalCurveClosestPoint
+  name: RationalCurveClosestPoint
+  nameWithType: Analyze.RationalCurveClosestPoint
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveClosestPoint
+- uid: GeometrySharp.Geometry.Vector3
+  commentId: T:GeometrySharp.Geometry.Vector3
+  parent: GeometrySharp.Geometry
+  name: Vector3
+  nameWithType: Vector3
+  fullName: GeometrySharp.Geometry.Vector3
+- uid: GeometrySharp.Operation.Analyze.RationalCurveClosestParameter*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalCurveClosestParameter
+  name: RationalCurveClosestParameter
+  nameWithType: Analyze.RationalCurveClosestParameter
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveClosestParameter
+- uid: GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength*
+  commentId: Overload:GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength
+  name: RationalCurveParameterAtLength
+  nameWithType: Analyze.RationalCurveParameterAtLength
+  fullName: GeometrySharp.Operation.Analyze.RationalCurveParameterAtLength
