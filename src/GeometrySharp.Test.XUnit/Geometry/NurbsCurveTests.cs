@@ -23,21 +23,23 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public static (int degree, List<Vector3> pts, Knot knots, List<double> weights) CurveData =>
         (
             2,
-            new List<Vector3>()
+            new List<Vector3>
             {
-                new Vector3(){-10,15,5},
-                new Vector3(){10,5,5},
-                new Vector3(){20,0,0}
+                new Vector3 {-10,15,5},
+                new Vector3 {10,5,5},
+                new Vector3 {20,0,0}
             },
-            new Knot() { 1, 1, 1, 1, 1, 1 },
-            new List<double>() { 0.5, 0.5, 0.5 }
+            new Knot { 1, 1, 1, 1, 1, 1 },
+            new List<double> { 0.5, 0.5, 0.5 }
         );
 
         [Fact]
         public void It_Returns_A_NurbsCurve()
         {
+            // Act
             var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
 
+            // Assert
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(3);
             nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, 6));
@@ -46,18 +48,22 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_NurbsCurve_Evaluated_With_A_List_Of_Weights()
         {
+            // Act
             var nurbsCurve = NurbsCurveCollection.NurbsCurvePtsAndWeightsExample();
 
+            // Assert
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3() { 10, 0, 0, 0.5 });
-            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3() { 20, 0, 0 });
+            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3 { 10, 0, 0, 0.5 });
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3 { 20, 0, 0 });
         }
 
         [Fact]
         public void It_Returns_A_NurbsCurve_From_ControlPoints_And_Degree()
         {
+            // Act
             var nurbsCurve = new NurbsCurve(CurveData.pts, CurveData.degree);
 
+            // Assert
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(2);
             nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, CurveData.pts.Count));
@@ -67,24 +73,30 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_ControlPoints_Are_Null()
         {
+            // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, CurveData.knots, null, CurveData.weights);
 
+            // Assert
             curve.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Null()
         {
+            // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, null, CurveData.pts, CurveData.weights);
 
+            // Assert
             curve.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_Degree_is_Less_Than_1()
         {
+            // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(0, CurveData.knots, CurveData.pts, CurveData.weights);
 
+            // Assert
             curve.Should().Throw<ArgumentException>()
                 .WithMessage("Degree must be greater than 1!");
         }
@@ -94,8 +106,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_Is_Not_Valid_The_Relation_Between_Pts_Degree_Knots()
         {
+            // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(1, CurveData.knots, CurveData.pts, CurveData.weights);
 
+            // Assert
             curve.Should().Throw<ArgumentException>()
                 .WithMessage("Number of points + degree + 1 must equal knots length!");
         }
@@ -103,9 +117,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
         {
-            var knots = new Knot() { 0, 0, 1, 1, 2, 2 };
+            // Arrange
+            var knots = new Knot { 0, 0, 1, 1, 2, 2 };
+
+            // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);
 
+            // Assert
             curve.Should().Throw<ArgumentException>()
                 .WithMessage("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
         }
@@ -113,9 +131,13 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Copied_NurbsCurve()
         {
+            // Arrange
             var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
+            
+            // Act
             var copiedNurbs = nurbsCurve.Clone();
 
+            // Assert
             copiedNurbs.Should().NotBeNull();
             copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
             copiedNurbs.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
@@ -126,8 +148,10 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Domain_Of_The_Curve()
         {
+            // Act
             var curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain;
 
+            // Assert
             curveDomain.Min.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.First());
             curveDomain.Max.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.Last());
         }
@@ -135,17 +159,18 @@ namespace GeometrySharp.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
+            // Arrange
             var curve = NurbsCurveCollection.NurbsCurveExample2();
-            var matrix = MatrixTests.TransformationMatrixExample;
+            var transform = Transform.Translation(new Vector3 { -10, 20, 0 });
 
-            var transformedCurve = curve.Transform(matrix);
-
+            // Act
+            var transformedCurve = curve.Transform(transform);
             var pt1 = curve.PointAt(0.5);
             var pt2 = transformedCurve.PointAt(0.5);
-
             var distanceBetweenPts = System.Math.Round((pt2 - pt1).Length(), 6);
 
-            distanceBetweenPts.Should().Be(22.383029);
+            // Assert
+            distanceBetweenPts.Should().Be(22.36068);
         }
     }
 }

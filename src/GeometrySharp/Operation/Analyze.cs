@@ -1,38 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Geometry.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GeometrySharp.Operation
 {
     /// <summary>
-    /// Analyze contains methods for analyzing NURBS geometry.
+    ///     Analyze contains methods for analyzing nurbs geometry.
     /// </summary>
     public class Analyze
     {
         /// <summary>
-        /// Approximate the length of a rational curve by gaussian quadrature - assumes a smooth curve.
+        ///     Computes the approximate length of a rational curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
-        /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform.
-        /// A higher number yields a more exact result, default set to 16.</param>
-        /// <returns>Return the approximate length.</returns>
+        /// <param name="gaussDegIncrease">
+        ///     The degree of gaussian quadrature to perform.
+        ///     A higher number yields a more exact result, default set to 16.
+        /// </param>
+        /// <returns>The approximate length.</returns>
         public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
-            var uSet = u < 0.0 ? curve.Knots.Last() : u;
+            double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
-            var crvs = Modify.DecomposeCurveIntoBeziers(curve);
-            var i = 0;
-            var sum = 0.0;
-            var tempCrv = crvs[0];
+            List<ICurve> crvs = Modify.DecomposeCurveIntoBeziers(curve);
+            int i = 0;
+            double sum = 0.0;
+            ICurve tempCrv = crvs[0];
 
             while (i < crvs.Count && tempCrv.Knots[0] + GeoSharpMath.EPSILON < uSet)
             {
                 tempCrv = crvs[i];
-                var param = Math.Min(tempCrv.Knots.Last(), uSet);
+                double param = Math.Min(tempCrv.Knots.Last(), uSet);
                 sum += BezierCurveLength(tempCrv, param, gaussDegIncrease);
                 i += 1;
             }
@@ -41,24 +43,26 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Approximate the length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
+        ///     Computes the approximate length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
-        /// <param name="gaussDegIncrease">the degree of gaussian quadrature to perform.
-        /// A higher number yields a more exact result, default set to 16.</param>
-        /// <returns>Return the approximate length.</returns>
+        /// <param name="gaussDegIncrease">
+        ///     the degree of gaussian quadrature to perform.
+        ///     A higher number yields a more exact result, default set to 16.
+        /// </param>
+        /// <returns>The approximate length of a bezier.</returns>
         public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
-            var uSet = u < 0.0 ? curve.Knots.Last() : u;
-            var z = (uSet - curve.Knots[0]) / 2;
-            var sum = 0.0;
-            var gaussDegree = curve.Degree + gaussDegIncrease;
+            double uSet = u < 0.0 ? curve.Knots.Last() : u;
+            double z = (uSet - curve.Knots[0]) / 2;
+            double sum = 0.0;
+            int gaussDegree = curve.Degree + gaussDegIncrease;
 
             for (int i = 0; i < gaussDegree; i++)
             {
-                var cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
-                var tan = Evaluation.RationalCurveDerivatives(curve, cu, 1);
+                double cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
+                List<Vector3> tan = Evaluation.RationalCurveDerivatives(curve, cu);
 
                 sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length();
             }
@@ -67,35 +71,36 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Get the curve parameter t at a given length.
+        ///     Computes the curve parameter at a given length.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The length to find the parameter.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <param name="curveLength">The length of curve if computer, if not will be computed.</param>
-        /// <returns>The parameter t at the given length.</returns>
-        public static double BezierCurveParamAtLength(ICurve curve, double segmentLength, double tolerance, double curveLength = -1)
+        /// <returns>The parameter at the given length.</returns>
+        public static double BezierCurveParamAtLength(ICurve curve, double segmentLength, double tolerance,
+            double curveLength = -1)
         {
             if (segmentLength < 0) return curve.Knots[0];
 
             // We compute the whole length, if the curve lengths is not provided.
-            var setCurveLength = (curveLength < 0) ? BezierCurveLength(curve) : curveLength;
+            double setCurveLength = curveLength < 0 ? BezierCurveLength(curve) : curveLength;
 
             if (segmentLength > setCurveLength) return curve.Knots[^1];
 
             // Divide and conquer.
-            var setTolerance = (tolerance <= 0.0) ? GeoSharpMath.EPSILON : tolerance;
+            double setTolerance = tolerance <= 0.0 ? GeoSharpMath.EPSILON : tolerance;
 
-            var startT = curve.Knots[0];
-            var startLength = 0.0;
+            double startT = curve.Knots[0];
+            double startLength = 0.0;
 
-            var endT = curve.Knots[^1];
-            var endLength = setCurveLength;
+            double endT = curve.Knots[^1];
+            double endLength = setCurveLength;
 
-            while ((endLength - startLength) > setTolerance)
+            while (endLength - startLength > setTolerance)
             {
-                var midT = (startT + endT) / 2;
-                var midLength = BezierCurveLength(curve, midT);
+                double midT = (startT + endT) / 2;
+                double midLength = BezierCurveLength(curve, midT);
 
                 if (midLength > segmentLength)
                 {
@@ -113,7 +118,7 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the closest point on a curve to a given point.
+        ///     Computes the closest point on a curve to a given point.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
@@ -126,77 +131,77 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Computes the closest parameters on a curve to a given point.
-        /// (Piegl & Tiller suggest) page 244 chapter six.
-        /// <param name="curve">The curve object.</param>
-        /// <param name="point">Point to search from.</param>
-        /// <returns>The closest parameter on the curve.</returns>
+        ///     Computes the closest parameters on a curve to a given point.
+        ///     (Piegl & Tiller suggest) page 244 chapter six.
+        ///     <param name="curve">The curve object.</param>
+        ///     <param name="point">Point to search from.</param>
+        ///     <returns>The closest parameter on the curve.</returns>
         public static double CurveClosestParameter(ICurve curve, Vector3 point)
         {
-            var minimumDistance = double.PositiveInfinity;
-            var tParameter = default(double);
-            var ctrlPts = curve.ControlPoints;
+            double minimumDistance = double.PositiveInfinity;
+            double tParameter = default(double);
+            List<Vector3> ctrlPts = curve.ControlPoints;
 
-            var (tValues, pts) = Tessellation.RegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Vector3> pts) = Tessellation.RegularSample(curve, ctrlPts.Count * curve.Degree);
 
-            for (int i = 0; i < pts.Count - 1 ; i++)
+            for (int i = 0; i < pts.Count - 1; i++)
             {
-                var t0 = tValues[i];
-                var t1 = tValues[i + 1];
+                double t0 = tValues[i];
+                double t1 = tValues[i + 1];
 
-                var pt0 = pts[i];
-                var pt1 = pts[i + 1];
+                Vector3 pt0 = pts[i];
+                Vector3 pt1 = pts[i + 1];
 
-                var projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
-                var distance = (point - projection.pt).Length();
+                (double tValue, Vector3 pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                double distance = (point - projection.pt).Length();
 
                 if (!(distance < minimumDistance)) continue;
                 minimumDistance = distance;
                 tParameter = projection.tValue;
             }
 
-            var maxInteraction = 5;
-            var j = 0;
+            int maxInteraction = 5;
+            int j = 0;
             // Two zero tolerances can be used to indicate convergence:
-            var tol1 = GeoSharpMath.MAXTOLERANCE; // a measure of Euclidean distance;
-            var tol2 = 0.0005; // a zero cosine measure.
-            var tVal0 = curve.Knots[0];
-            var tVal1 = curve.Knots[^1];
-            var isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquaredLength() < GeoSharpMath.EPSILON;
-            var Cu = tParameter;
+            double tol1 = GeoSharpMath.MAXTOLERANCE; // a measure of Euclidean distance;
+            double tol2 = 0.0005; // a zero cosine measure.
+            double tVal0 = curve.Knots[0];
+            double tVal1 = curve.Knots[^1];
+            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquaredLength() < GeoSharpMath.EPSILON;
+            double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
             while (j < maxInteraction)
             {
-                var e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                var diff = e[0] - point; // C(u) - P
+                List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
+                Vector3 diff = e[0] - point; // C(u) - P
 
                 // First condition, point coincidence:
                 // |C(u) - p| < e1
-                var c1v = diff.Length();
-                var c1 = c1v <= tol1;
+                double c1v = diff.Length();
+                bool c1 = c1v <= tol1;
 
                 // Second condition, zero cosine:
                 // C'(u) * (C(u) - P)
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
-                var c2n = Vector3.Dot(e[1], diff);
-                var c2d = (e[1] * c1v).Length();
-                var c2v = c2n / c2d;
-                var c2 = Math.Abs(c2v) <= tol2;
+                double c2n = Vector3.Dot(e[1], diff);
+                double c2d = (e[1] * c1v).Length();
+                double c2v = c2n / c2d;
+                bool c2 = Math.Abs(c2v) <= tol2;
 
                 // If at least one of these conditions is not satisfied,
                 // a new value, ui+l> is computed using the NewtonIteration.
                 // Then two more conditions are checked.
                 if (c1 && c2) return Cu;
-                var ct = NewtonIteration(Cu, e, diff);
+                double ct = NewtonIteration(Cu, e, diff);
 
                 // Ensure that the parameter stays within the boundary of the curve.
                 if (ct < tVal0) ct = isCurveClosed ? tVal1 - (ct - tVal0) : tVal0;
                 if (ct > tVal1) ct = isCurveClosed ? tVal0 + (ct - tVal1) : tVal1;
 
                 // the parameter does not change significantly, the point is off the end of the curve.
-                var c3v = (e[1] * (ct - Cu)).Length();
+                double c3v = (e[1] * (ct - Cu)).Length();
                 if (c3v < tol1) return Cu;
 
                 Cu = ct;
@@ -207,46 +212,46 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Newton iteration to minimize the distance between a point and a curve.
+        ///     Newton iteration to minimize the distance between a point and a curve.
         /// </summary>
         /// <param name="u">The parameter obtained at the ith Newton iteration.</param>
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
-        /// <returns></returns>
+        /// <returns>The minimized parameter.</returns>
         private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
             // C(u) is the curve, p is the point, * is a dot product
-            var f = Vector3.Dot(derivativePts[1], difference);
+            double f = Vector3.Dot(derivativePts[1], difference);
 
             //	f' = C"(u) * ( C(u) - p ) + C'(u) * C'(u)
-            var s0 = Vector3.Dot(derivativePts[2], difference);
-            var s1 = Vector3.Dot(derivativePts[1], derivativePts[1]);
-            var df = s0 + s1;
+            double s0 = Vector3.Dot(derivativePts[2], difference);
+            double s1 = Vector3.Dot(derivativePts[1], derivativePts[1]);
+            double df = s0 + s1;
 
             return u - f / df;
         }
 
         /// <summary>
-        /// Approximate the parameter at a given arc length on a Curve.
+        ///     Approximates the parameter at a given length on a curve.
         /// </summary>
-        /// <param name="curve">Curve object.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The arc length for which to do the procedure.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
-        /// <returns>The t parameter on the curve.</returns>
+        /// <returns>The parameter on the curve.</returns>
         public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
         {
             if (segmentLength < GeoSharpMath.EPSILON) return curve.Knots[0];
             if (Math.Abs(curve.Length() - segmentLength) < GeoSharpMath.EPSILON) return curve.Knots[^1];
 
-            var curves = Modify.DecomposeCurveIntoBeziers(curve);
-            var i = 0;
-            var curveLength = - GeoSharpMath.EPSILON;
+            List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            int i = 0;
+            double curveLength = -GeoSharpMath.EPSILON;
 
             while (curveLength < segmentLength && i < curves.Count)
             {
-                var bezierLength = BezierCurveLength(curve);
+                double bezierLength = BezierCurveLength(curve);
                 curveLength += bezierLength;
 
                 if (segmentLength < curveLength + GeoSharpMath.EPSILON)

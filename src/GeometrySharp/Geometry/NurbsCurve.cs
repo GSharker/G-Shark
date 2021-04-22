@@ -12,18 +12,18 @@ namespace GeometrySharp.Geometry
 {
     //ToDo: BoundingBox has to be implemented properly.
     /// <summary>
-    /// A NURBS curve - this class represents the base class of many curve types and provides tools for analysis and evaluation.
-    /// This object is deliberately constrained to be immutable. The methods deliberately return copies.
+    /// This class represents the class of a nurbs curve type.
     /// /// </summary>
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
+        public NurbsCurve(){}
         /// <summary>
-        /// Creates a Nurbs curve object.
+        /// Creates a nurbs curve.
         /// </summary>
-        /// <param name="degree">ICurve degree.</param>
-        /// <param name="knots">Knot defining the curve.</param>
-        /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
-        /// <param name="weights">Weight values, as a collection of doubles.</param>
+        /// <param name="degree">The curve degree.</param>
+        /// <param name="knots">The knots defining the curve.</param>
+        /// <param name="controlPoints">The control points.</param>
+        /// <param name="weights">The weight values.</param>
         public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double>? weights = null)
         {
             if (controlPoints is null)
@@ -60,17 +60,17 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Creates a nurbs curve object.
+        /// Creates a nurbs curve.
         /// </summary>
-        /// <param name="controlPoints">Control points, as a collection of Vector3.</param>
-        /// <param name="degree">Curve degree.</param>
+        /// <param name="controlPoints">The control points.</param>
+        /// <param name="degree">The curve degree.</param>
         public NurbsCurve(List<Vector3> controlPoints, int degree)
             : this(degree, new Knot(degree, controlPoints.Count), controlPoints)
         {
         }
 
         /// <summary>
-        /// Construct a NurbsCurve by a NurbsCurve object.
+        /// Copy constructor.
         /// </summary>
         /// <param name="curve">The curve object</param>
         private NurbsCurve(NurbsCurve curve)
@@ -101,7 +101,7 @@ namespace GeometrySharp.Geometry
         public BoundingBox BoundingBox { get; }
 
         /// <summary>
-        /// Obtain a copy of the NurbsCurve.
+        /// Gets a copy of the curve.
         /// </summary>
         /// <returns>The copied curve.</returns>
         public NurbsCurve Clone()
@@ -111,7 +111,7 @@ namespace GeometrySharp.Geometry
 
         /// ToDo implement the async method.
         /// <summary>
-        /// Transform a curve with the given matrix.
+        /// Transforms a curve with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new curve transformed.</returns>
@@ -131,7 +131,7 @@ namespace GeometrySharp.Geometry
 
         /// ToDo implement the async method.
         /// <summary>
-        /// Sample a point at the given parameter.
+        /// Computes a point at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
@@ -141,7 +141,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Obtain the curve tangent at the given parameter.
+        /// Computes the curve tangent at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
@@ -153,7 +153,7 @@ namespace GeometrySharp.Geometry
 
         /// ToDo implement the async method.
         /// <summary>
-        /// Determine the arc length of the curve.
+        /// Calculates the length of the curve.
         /// </summary>
         /// <returns>The length of the curve.</returns>
         public double Length()
@@ -163,7 +163,7 @@ namespace GeometrySharp.Geometry
 
         /// ToDo implement the async method.
         /// <summary>
-        /// Reverse the parametrization of the curve.
+        /// Reverses the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
         public NurbsCurve Reverse()
@@ -172,10 +172,9 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Compute the closest point on the curve to the given point.
+        /// Computes the closest point on the curve to the given point.
         /// </summary>
         /// <param name="point">Point to analyze.</param>
-        /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
         /// ToDo implement the async method.
         public Vector3 ClosestPt(Vector3 point)
@@ -184,7 +183,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Gets the parameter along the curve which coincides with a given length along the curve.
+        /// Computes the parameter along the curve which coincides with a given length.
         /// </summary>
         /// <param name="segmentLength">Length of segment to measure. Must be less than or equal to the length of the curve.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
@@ -195,21 +194,21 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Get the length curve which coincides with a given parameter t.
+        /// Computes the length curve which coincides with a given parameter t.
         /// </summary>
         /// <param name="t">The parameter at which to evaluate.</param>
-        /// <returns>The length of the curve at the give parameter t.</returns>
+        /// <returns>The length of the curve at the give parameter.</returns>
         public double LengthParameter(double t)
         {
             return Analyze.CurveLength(this, t);
         }
 
         /// <summary>
-        /// Compare if two NurbsCurves are the same.
-        /// Two NurbsCurve are equal when the have same degree, same control points order and dimension, and same knots.
+        /// Compares if two nurbs curves are the same.
+        /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
         /// <param name="other"></param>
-        /// <returns>Return true if the NurbsCurves are equal.</returns>
+        /// <returns>Return true if the nurbs curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
             List<Vector3>? pts = ControlPoints;
@@ -239,9 +238,9 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Implement the override method to string.
+        /// Implements the override method to string.
         /// </summary>
-        /// <returns>The representation of a NurbsCurve in string.</returns>
+        /// <returns>The representation of a nurbs curve in string.</returns>
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();

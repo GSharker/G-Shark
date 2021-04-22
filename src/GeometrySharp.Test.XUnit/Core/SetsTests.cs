@@ -196,5 +196,39 @@ namespace GeometrySharp.Test.XUnit.Core
             // Assert
             resultFunction.Should().Throw<Exception>("Set difference can't be computed, the first set is empty.");
         }
+
+        [Fact]
+        public void It_Returns_A_Reversed_BiDimensional_Collection_Of_Points()
+        {
+            // Arrange
+            List<List<Vector3>> pts = new List<List<Vector3>>
+            {
+                new List<Vector3>
+                {
+                    new Vector3 { 0d, -10d, 0d },
+                    new Vector3 { 10d, -10d, 10d }
+                },
+                new List<Vector3>
+                {                
+                    new Vector3 { 0d, -30d, 0d },
+                    new Vector3 { 10d, -30d, 0d }
+
+                },
+                new List<Vector3>
+                {
+                    new Vector3 { 0d, 0d, 50d },
+                    new Vector3 { 10d, 0d, 0d }
+                }
+            };
+
+            // Act
+            List<List<Vector3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
+
+            // Assert
+            reversedPts.Count.Should().Be(2);
+            reversedPts[0].Count.Should().Be(3);
+            reversedPts[0][2].Should().BeEquivalentTo(pts[2][0]);
+            reversedPts[1][2].Should().BeEquivalentTo(pts[2][1]);
+        }
     }
 }

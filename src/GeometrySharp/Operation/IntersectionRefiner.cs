@@ -8,7 +8,7 @@ namespace GeometrySharp.Operation
     internal static class IntersectionRefiner
     {
         /// <summary>
-        /// Refine an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
+        /// Refines an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
         /// so the caller is responsible for providing a very good initial guess.
         /// </summary>
         /// <param name="crv0">The first curve.</param>
@@ -31,7 +31,7 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Refine an intersection between a curve and a plane given an initial guess. This is an unconstrained minimization,
+        /// Refines an intersection between a curve and a plane given an initial guess. This is an unconstrained minimization,
         /// so the caller is responsible for providing a very good initial guess.
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>
@@ -49,7 +49,7 @@ namespace GeometrySharp.Operation
 
             Vector3 pt = crv.PointAt(solution.SolutionPoint[0]);
             (double u, double v) parameters = plane.ClosestParameters(pt);
-            Vector3 uv = new Vector3{ parameters.u, parameters.v, 0.0};
+            Vector3 uv = new Vector3 { parameters.u, parameters.v, 0.0 };
 
             return new CurvePlaneIntersectionResult(pt, solution.SolutionPoint[0], uv);
         }

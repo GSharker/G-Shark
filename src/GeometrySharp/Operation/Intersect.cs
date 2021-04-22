@@ -1,23 +1,20 @@
 ﻿using GeometrySharp.Core;
 using GeometrySharp.Core.BoundingBoxTree;
+using GeometrySharp.Core.IntersectionResults;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
-using GeometrySharp.Optimization;
+using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Core.IntersectionResults;
-using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Operation
 {
     /// <summary>
-    /// Intersection provides various tools for all kinds of intersection
+    /// Intersection provides various tools for all kinds of intersection between nurbs and primitive.
     /// </summary>
     public class Intersect
     {
-        // ToDo: ICurve-Plane
-        // ToDo: ICurve-Self
         // ToDo: ICurve-Surface
         // ToDo: Surface-Surface
 
@@ -34,7 +31,7 @@ namespace GeometrySharp.Operation
         {
             Vector3 plNormal1 = p1.Normal;
             Vector3 plNormal2 = p2.Normal;
-            line = new Line(new Vector3{0,0,0}, new Vector3{0,0,1});
+            line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 0, 1 });
 
             Vector3 directionVec = Vector3.Cross(plNormal1, plNormal2);
             if (Vector3.Dot(directionVec, directionVec) < GeoSharpMath.EPSILON)
@@ -247,14 +244,14 @@ namespace GeometrySharp.Operation
 
             if ((a <= GeoSharpMath.MAXTOLERANCE) || (det < 0))
             {
-                pts = new Vector3[]{};
+                pts = new Vector3[] { };
                 return false;
             }
             else if (Math.Abs(det) < GeoSharpMath.MAXTOLERANCE)
             {
                 t = -b / (2 * a);
                 Vector3 intersection = pt0 + lnDir * t;
-                pts = new Vector3[] { intersection};
+                pts = new Vector3[] { intersection };
                 return true;
             }
             else
@@ -295,7 +292,7 @@ namespace GeometrySharp.Operation
             if (Math.Abs(distance) < GeoSharpMath.EPSILON)
             {
                 Vector3 pt = cl.ClosestPt(closestPt);
-                pts = new[] {pt};
+                pts = new[] { pt };
                 return true;
             }
 
@@ -306,11 +303,11 @@ namespace GeometrySharp.Operation
         /// Computes the intersection between a curve and a line.
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>
-        /// <param name="l">The line to intersect with.</param>
+        /// <param name="ln">The line to intersect with.</param>
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
-        public static List<CurvesIntersectionResult> CurveLine(NurbsCurve crv, Line l)
+        public static List<CurvesIntersectionResult> CurveLine(NurbsCurve crv, Line ln)
         {
-            return CurveCurve(crv, l);
+            return CurveCurve(crv, ln);
         }
 
         /// <summary>

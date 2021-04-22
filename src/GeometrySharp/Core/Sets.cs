@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.Geometry;
 
 namespace GeometrySharp.Core
 {
     /// <summary>
-    /// Provide utility functions to create sets.
+    /// Provide utility functions to create and manipulate sets of numbers or points.
     /// Example: range, numerical linear subdivisions and boolean operations.
     /// </summary>
     public static class Sets
@@ -184,6 +185,36 @@ namespace GeometrySharp.Core
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Reverses a bi-dimensional collection of control points.
+        /// A control point has a dimension of three.
+        /// </summary>
+        /// <param name="pts">The bi-dimensional collection of points.</param>
+        /// <returns>The bi-dimensional collection reversed.</returns>
+        public static List<List<Vector3>> Reverse2DMatrixPoints(List<List<Vector3>> pts)
+        {
+            List<List<Vector3>> reversedPts = new List<List<Vector3>>();
+            //Reverse the points matrix
+            if (pts.Count == 0)
+            {
+                return null;
+            }
+
+            int rows = pts.Count;
+            int columns = pts[0].Count;
+            for (int c = 0; c < columns; c++)
+            {
+                List<Vector3> rr = new List<Vector3>();
+                for (int r = 0; r < rows; r++)
+                {
+                    rr.Add(pts[r][c]);
+                }
+                reversedPts.Add(rr);
+            }
+
+            return reversedPts;
         }
     }
 }

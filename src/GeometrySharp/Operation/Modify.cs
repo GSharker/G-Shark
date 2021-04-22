@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Geometry.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GeometrySharp.Operation
 {
@@ -16,7 +16,7 @@ namespace GeometrySharp.Operation
     public class Modify
     {
         /// <summary>
-		/// Insert a collection of knots on a curve.
+		/// Inserts a collection of knots on a curve.
 		/// Implementation of Algorithm A5.4 of The NURBS Book by Piegl & Tiller, 2nd Edition.
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
@@ -96,42 +96,42 @@ namespace GeometrySharp.Operation
         /// Useful as each Bezier curve fits into it's convex hull.
         /// This is a useful starting point for intersection, closest point, divide & conquer algorithms.
         /// </summary>
-        /// <param name="curve">Curve object representing the curve.</param>
-        /// <returns>List of curve objects, defined by degree, knots, and control points.</returns>
+        /// <param name="curve">The curve object.</param>
+        /// <returns>Collection of curve objects, defined by degree, knots, and control points.</returns>
         public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve)
         {
-            var degree = curve.Degree;
-            var controlPoints = curve.ControlPoints;
-            var knots = curve.Knots;
+            int degree = curve.Degree;
+            List<Vector3> controlPoints = curve.ControlPoints;
+            Knot knots = curve.Knots;
 
             // Find all of the unique knot values and their multiplicity.
             // For each, increase their multiplicity to degree + 1.
-            var knotMultiplicities = knots.Multiplicities();
-            var reqMultiplicity = degree + 1;
+            Dictionary<double, int> knotMultiplicities = knots.Multiplicities();
+            int reqMultiplicity = degree + 1;
 
             // Insert the knots.
-            foreach (var (key, value) in knotMultiplicities)
+            foreach ((double key, int value) in knotMultiplicities)
             {
                 if (value < reqMultiplicity)
                 {
-                    var knotsToInsert = Sets.RepeatData(key, reqMultiplicity - value);
-                    var curveTemp = new NurbsCurve(degree, knots, controlPoints);
-                    var curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                    List<double> knotsToInsert = Sets.RepeatData(key, reqMultiplicity - value);
+                    NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
+                    ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
                     knots = curveResult.Knots;
                     controlPoints = curveResult.ControlPoints;
                 }
             }
 
-            var crvKnotLength = reqMultiplicity * 2;
-            var curves = new List<ICurve>();
-            var i = 0;
+            int crvKnotLength = reqMultiplicity * 2;
+            List<ICurve> curves = new List<ICurve>();
+            int i = 0;
 
             while (i < controlPoints.Count)
             {
-                var knotsRange = knots.GetRange(i, crvKnotLength).ToKnot();
-                var ptsRange = controlPoints.GetRange(i, reqMultiplicity);
+                Knot knotsRange = knots.GetRange(i, crvKnotLength).ToKnot();
+                List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
-                var tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
+                NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
                 curves.Add(tempCrv);
                 i += reqMultiplicity;
             }
@@ -147,24 +147,24 @@ namespace GeometrySharp.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            var pts = curve.ControlPoints;
+            List<Vector3> pts = curve.ControlPoints;
             pts.Reverse();
 
-            var weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
+            List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
             weights.Reverse();
 
-            var knots = Knot.Reverse(curve.Knots);
+            Knot knots = Knot.Reverse(curve.Knots);
 
             return new NurbsCurve(curve.Degree, knots, pts, weights);
         }
 
         /// <summary>
-        /// Perform knot refinement on a NURBS surface by inserting knots at various parameters
+        /// Performs knot refinement on a nurbs surface by inserting knots at various parameters.
         /// </summary>
-        /// <param name="nurbsSurface">The surface to insert the knots into</param>
-        /// <param name="knots">The knots to insert - an array of parameter positions within the surface domain</param>
-        /// <param name="useU">Whether to insert in the U direction or V direction of the surface. U is default</param>
-        /// <returns></returns>
+        /// <param name="nurbsSurface">The surface to insert the knots into.</param>
+        /// <param name="knots">The knots to insert - an array of parameter positions within the surface domain.</param>
+        /// <param name="useU">Whether to insert in the U direction or V direction of the surface. U is default.</param>
+        /// <returns>A nurbs surface with the knot refined.</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, Knot knotsToInsert, bool useU = true)
         {
             List<List<Vector3>> ctrlPts = new List<List<Vector3>>();
@@ -183,14 +183,14 @@ namespace GeometrySharp.Operation
             else
             {
                 //Reverse the points matrix
-                ctrlPts = ReverseControlPoints2dMatrix(nurbsSurface.ControlPoints);
+                ctrlPts = Sets.Reverse2DMatrixPoints(nurbsSurface.ControlPoints);
                 degree = nurbsSurface.DegreeV;
                 knots = nurbsSurface.KnotsV;
             }
 
             //Do knot refinement on every row
             ICurve crv = new NurbsCurve();
-            foreach (var cptRow in ctrlPts)
+            foreach (List<Vector3> cptRow in ctrlPts)
             {
                 crv = CurveKnotRefine(new NurbsCurve(degree, knots, cptRow), knotsToInsert);
                 refinedPts.Add(crv.ControlPoints);
@@ -198,39 +198,10 @@ namespace GeometrySharp.Operation
 
             Knot newKnots = crv.Knots;
             if (useU)
-                return new NurbsSurface(nurbsSurface.DegreeU, nurbsSurface.DegreeV, newKnots, nurbsSurface.KnotsV, ReverseControlPoints2dMatrix(refinedPts));
+                return new NurbsSurface(nurbsSurface.DegreeU, nurbsSurface.DegreeV, newKnots, nurbsSurface.KnotsV, Sets.Reverse2DMatrixPoints(refinedPts));
             else
                 return new NurbsSurface(nurbsSurface.DegreeU, nurbsSurface.DegreeV, nurbsSurface.KnotsU, newKnots, refinedPts);
 
-        }
-
-        /// <summary>
-        /// Reverse a 2D matrix composed by control points
-        /// </summary>
-        /// <param name="ctrlPts"></param>
-        /// <returns></returns>
-        private static List<List<Vector3>> ReverseControlPoints2dMatrix(List<List<Vector3>> ctrlPts)
-        {
-            List<List<Vector3>> reversedPts = new List<List<Vector3>>();
-            //Reverse the points matrix
-            if (ctrlPts.Count == 0)
-            {
-                return null;
-            }
-
-            int rows = ctrlPts.Count;
-            int columns = ctrlPts[0].Count;
-            for (int c = 0; c < columns; c++)
-            {
-                List<Vector3> rr = new List<Vector3>();
-                for (int r = 0; r < rows; r++)
-                {
-                    rr.Add(ctrlPts[r][c]);
-                }
-                reversedPts.Add(rr);
-            }
-
-            return reversedPts;
         }
     }
 }
