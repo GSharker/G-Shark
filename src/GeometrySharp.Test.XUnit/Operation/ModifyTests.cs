@@ -1,48 +1,26 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace GeometrySharp.Test.XUnit.Operation
 {
     public class ModifyTests
-	{
-		private readonly ITestOutputHelper _testOutput;
+    {
+        private readonly ITestOutputHelper _testOutput;
 
-		public ModifyTests(ITestOutputHelper testOutput)
-		{
-			_testOutput = testOutput;
-		}
-
-        [Fact]
-        public void It_Returns_A_Transformed_NurbsCurve_Using_A_Matrix()
+        public ModifyTests(ITestOutputHelper testOutput)
         {
-            var curve = NurbsCurveCollection.NurbsCurveExample();
-            var mat = new Matrix() {
-                new List<double>{1.0, 0.0, 0.0, -10.0 },
-                new List<double>{0.0, 1.0, 0.0, 20.0 },
-                new List<double>{0.0, 0.0, 1.0, 1.0 },
-                new List<double>{0.0, 0.0, 0.0, 1.0 }
-            };
-
-			var expectedControlPts = new List<Vector3>()
-            {
-                new Vector3(){-20.0, 35.0, 6.0, 1.0 },
-                new Vector3(){0.0, 25.0, 6.0, 1.0 },
-                new Vector3(){10.0, 20.0, 1.0, 1.0 },
-			};
-
-            var resultedCurve = Modify.RationalCurveTransform(curve, mat);
-
-            resultedCurve.HomogenizedPoints.Should().BeEquivalentTo(expectedControlPts);
+            _testOutput = testOutput;
         }
 
         [Theory]
-        [InlineData(2.5 ,1)]
+        [InlineData(2.5, 1)]
         [InlineData(2.5, 2)]
         [InlineData(2.5, 3)]
         [InlineData(2.5, 4)]
@@ -54,25 +32,29 @@ namespace GeometrySharp.Test.XUnit.Operation
         [InlineData(3.0, 2)]
         public void It_Refines_The_Curve_Knot(double val, int insertion)
         {
-            var degree = 3;
-            var knots = new Knot(){ 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5};
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
-            var newKnots = new List<double>();
+            List<double> newKnots = new List<double>();
             for (int i = 0; i < insertion; i++)
                 newKnots.Add(val);
 
-            var controlPts = new List<Vector3>();
+            List<Vector3> controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Vector3(){i,0.0,0.0});
+                controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            var curve = new NurbsCurve(degree, knots, controlPts);
-            var curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
+            // Act
+            ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
+
+            // Assert
             (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
             (controlPts.Count + insertion).Should().Be(curveAfterRefine.ControlPoints.Count);
 
-            var p0 = curve.PointAt(2.5);
-            var p1 = curveAfterRefine.PointAt(2.5);
+            Vector3 p0 = curve.PointAt(2.5);
+            Vector3 p1 = curveAfterRefine.PointAt(2.5);
 
             p0[0].Should().BeApproximately(p1[0], GeoSharpMath.MAXTOLERANCE);
             p0[1].Should().BeApproximately(p1[1], GeoSharpMath.MAXTOLERANCE);
@@ -82,25 +64,28 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Decomposes_The_Curve_Into_Bezier_Curve_Segments()
         {
-            var degree = 3;
-            var knots = new Knot() { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+            // Arrange
+            int degree = 3;
+            Knot knots = new Knot { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
-            var controlPts = new List<Vector3>();
+            List<Vector3> controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Vector3() { i, 0.0, 0.0 });
+                controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            var curve = new NurbsCurve(degree, knots, controlPts);
-            var curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
+            // Act
+            List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+
+            // Assert
             curvesAfterDecompose.Count.Should().Be(5);
-
-            foreach (var bezierCurve in curvesAfterDecompose)
+            foreach (ICurve bezierCurve in curvesAfterDecompose)
             {
-                var t = bezierCurve.Knots[0];
-                var pt0 = bezierCurve.PointAt(t);
-                var pt1 = curve.PointAt(t);
+                double t = bezierCurve.Knots[0];
+                Vector3 pt0 = bezierCurve.PointAt(t);
+                Vector3 pt1 = curve.PointAt(t);
 
-                var pt0_pt1 = (pt0 - pt1).Length();
+                double pt0_pt1 = (pt0 - pt1).Length();
 
                 pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
             }
@@ -109,14 +94,17 @@ namespace GeometrySharp.Test.XUnit.Operation
         [Fact]
         public void It_Reverses_The_Curve()
         {
-            var curve = NurbsCurveCollection.NurbsCurveExample3();
+            // Arrange
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample3();
 
-            var crvRev1 = Modify.ReverseCurve(curve);
-            var crvRev2 = Modify.ReverseCurve(crvRev1);
+            // Act
+            ICurve crvRev1 = Modify.ReverseCurve(curve);
+            ICurve crvRev2 = Modify.ReverseCurve(crvRev1);
 
-            var pt0 = curve.PointAt(0.0);
-            var pt1 = crvRev1.PointAt(1.0);
+            Vector3 pt0 = curve.PointAt(0.0);
+            Vector3 pt1 = crvRev1.PointAt(1.0);
 
+            // Assert
             pt0.Should().BeEquivalentTo(pt1);
             curve.Equals(crvRev2).Should().BeTrue();
             // Checks at reference level are different.

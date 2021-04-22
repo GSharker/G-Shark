@@ -7,14 +7,13 @@ using System.Collections.Generic;
 namespace GeometrySharp.Operation
 {
     /// <summary>
-    /// Evaluation provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.
-    /// Evaluation also provides experimental tools for evaluating points in NURBS volumes.
+    /// Evaluation provides all of the core algorithms for evaluating points and derivatives on nurbs curves and surfaces.
     /// Many of these algorithms owe their implementation to Piegl & Tiller's "The NURBS Book".
     /// </summary>
     public class Evaluation
     {
         /// <summary>
-        /// Compute the non-vanishing basis functions.
+        /// Computes the non-vanishing basis functions.
         /// Implementation of Algorithm A2.2 from The NURBS Book by Piegl & Tiller.
         /// Uses recurrence to compute the basis functions, also known as Cox - deBoor recursion formula.
         /// </summary>
@@ -29,7 +28,7 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the non-vanishing basis functions.
+        /// Computes the non-vanishing basis functions.
         /// Implementation of Algorithm A2.2 from The NURBS Book by Piegl & Tiller.
         /// Uses recurrence to compute the basis functions, also known as Cox - deBoor recursion formula.
         /// </summary>
@@ -66,10 +65,10 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute a point on a non-uniform, non-rational b-spline curve.
+        /// Computes a point on a non-uniform, non-rational b-spline curve.
         /// Corresponds to algorithm 3.1 from The NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
-        /// <param name="curve">Object representing the curve.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
         public static Vector3 CurvePointAt(ICurve curve, double t)
@@ -103,10 +102,10 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute a point on a non-uniform, non-rational B spline surface
+        /// Computes a point on a non-uniform, non-rational B spline surface
         /// (corresponds to algorithm 3.5 from The NURBS book, Piegl & Tiller 2nd edition)
         /// </summary>
-        /// <param name="surface">Object representing the surface.</param>
+        /// <param name="surface">The surface.</param>
         /// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
         /// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
@@ -158,13 +157,13 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Extracts the isocurve in u or v direction at a specified parameter.
+        /// Extracts the iso-curve in u or v direction at a specified parameter.
         /// </summary>
-        /// <param name="nurbsSurface">urbs surface to be evaluated</param>
+        /// <param name="nurbsSurface">The surface to be evaluated</param>
         /// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
         /// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
-        /// <returns></returns>
-        public static NurbsCurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
+        /// <returns>Curve representing the iso-curve of the surface.</returns>
+        public static ICurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
         {
             Knot knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
             int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
@@ -214,22 +213,22 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the tangent at a point on a NURBS curve.
+        /// Computes the tangent at a point on a curve.
         /// </summary>
-        /// <param name="curve">NurbsCurve object representing the curve.</param>
-        /// <param name="t">Parameter.</param>
-        /// <returns>A Vector represented by an array of length (dim).</returns>
-        public static Vector3 RationalCurveTanget(NurbsCurve curve, double t)
+        /// <param name="curve">The curve object.</param>
+        /// <param name="t">The parameter on the curve.</param>
+        /// <returns>The tangent vector at the given parameter.</returns>
+        public static Vector3 RationalCurveTangent(ICurve curve, double t)
         {
-            List<Vector3> derivs = RationalCurveDerivatives(curve, t, 1);
-            return derivs[1];
+            List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
+            return derivatives[1];
         }
 
         /// <summary>
-        /// Calculates the centroid averaging the points collection.  
+        /// Calculates the centroid averaging the points.  
         /// </summary>
         /// <param name="pts">The points collection to evaluate.</param>
-        /// <returns></returns>
+        /// <returns>The centroid point.</returns>
         public static Vector3 CentroidByVertices(IList<Vector3> pts)
         {
             Vector3 centroid = new Vector3 { 0.0, 0.0, 0.0 };
@@ -245,13 +244,13 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Determine the derivatives of a NURBS curve at a given parameter.
+        /// Determines the derivatives of a curve at a given parameter.
         /// Corresponds to algorithm 4.2 from The NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
-        /// <param name="curve">ICurve object representing the curve - the control points are in homogeneous coordinates.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numberDerivs">Number of derivatives to evaluate</param>
-        /// <returns>A point represented by an array of length (dim).</returns>
+        /// <returns>The derivatives.</returns>
         public static List<Vector3> RationalCurveDerivatives(ICurve curve, double parameter, int numberDerivs = 1)
         {
             List<Vector3> derivatives = CurveDerivatives(curve, parameter, numberDerivs);
@@ -289,15 +288,14 @@ namespace GeometrySharp.Operation
             return CK;
         }
 
-
         /// <summary>
-        /// Determine the derivatives of a non-uniform, non-rational B-spline curve at a given parameter.
+        /// Determines the derivatives of a non-uniform, non-rational B-spline curve at a given parameter.
         /// Corresponds to algorithm 3.2 from The NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
-        /// <param name="curve">NurbsCurve object representing the curve.</param>
+        /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
-        /// <returns>A point represented by an array of length (dim).</returns>
+        /// <returns>The derivatives.</returns>
         public static List<Vector3> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
             int degree = curve.Degree;
@@ -333,15 +331,15 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the non-vanishing basis functions and their derivatives.
+        /// Computes the non-vanishing basis functions and their derivatives.
         /// (corresponds to algorithm 2.3 from The NURBS book, Piegl & Tiller 2nd edition).
         /// </summary>
         /// <param name="span">Span index.</param>
         /// <param name="parameter">Parameter.</param>
-        /// <param name="degree">ICurve degree.</param>
+        /// <param name="degree">Curve degree.</param>
         /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="knots">Sets of non-decreasing knot values.</param>
-        /// <returns></returns>
+        /// <returns>The derivatives at the given parameter.</returns>
         public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
             int order, Knot knots)
         {
@@ -455,12 +453,12 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the normal vector at uv parameter on a NURBS surface
+        /// Computes the normal vector at uv parameter on a nurbs surface.
         /// </summary>
-        /// <param name="nurbsSurface">Object representing the surface</param>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
+        /// <param name="nurbsSurface">The surface.</param>
+        /// <param name="u">The u parameter.</param>
+        /// <param name="v">the v parameter.</param>
+        /// <returns>The normal vector at the given uv of the surface.</returns>
         public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
         {
             List<List<Vector3>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
@@ -469,13 +467,13 @@ namespace GeometrySharp.Operation
 
 
         /// <summary>
-        /// Compute the derivatives at a point on a NURBS surface
+        /// Computes the derivatives at a point on a nurbs surface.
         /// </summary>
-        /// <param name="nurbsSurface">Object representing the surface</param>
-        /// <param name="u">u parameter at which to evaluate the derivatives</param>
-        /// <param name="v">v parameter at which to evaluate the derivatives</param>
+        /// <param name="nurbsSurface">The surface.</param>
+        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
         /// <param name="numDerivs">Number of derivatives to evaluate (default is 1)</param>
-        /// <returns></returns>
+        /// <returns>The derivatives.</returns>
         public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
         {
             List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
@@ -515,12 +513,13 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the derivatives on a non-uniform, non-rational B spline surface
+        /// Computes the derivatives on a non-uniform, non-rational B spline surface.
         /// </summary>
-        /// <param name="nurbsSurface">Object representing the surface</param>
-        /// <param name="u">u parameter at which to evaluate the derivatives</param>
-        /// <param name="v">v parameter at which to evaluate the derivatives</param>
-        /// <param name="numDerivs">Number of derivatives to evaluate</param>
+        /// <param name="nurbsSurface">Object representing the surface.</param>
+        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        /// <param name="numDerivs">Number of derivatives to evaluate.</param>
+        /// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
         public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
         {
             int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
@@ -529,19 +528,17 @@ namespace GeometrySharp.Operation
         }
 
         /// <summary>
-        /// Compute the derivatives on a non-uniform, non-rational B spline surface
-        /// Corresponds to algorithm 3.6 from The NURBS book, Piegl & Tiller 2nd edition
-        /// 
-        /// SKL is the derivative S(u,v) with respect to u K-times and v L-times
-        /// 
+        /// Computes the derivatives on a non-uniform, non-rational B spline surface.
+        /// Corresponds to algorithm 3.6 from The NURBS book, Piegl & Tiller 2nd edition.
+        /// SKL is the derivative S(u,v) with respect to u K-times and v L-times.
         /// </summary>
-        /// <param name="nurbsSurface">Object representing the surface</param>
-        /// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2</param>
-        /// <param name="m">Integer number of basis functions in v dir - 1 = knotsU.length - degreeU - 2</param>
-        /// <param name="u">u parameter at which to evaluate the derivatives</param>
-        /// <param name="v">v parameter at which to evaluate the derivatives</param>
-        /// <param name="numDerivs">Number of derivatives to evaluate</param>
-        /// <returns> 2d list representing the derivatives - u derivatives increase by row, v by column</returns>
+        /// <param name="nurbsSurface">The surface.</param>
+        /// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2.</param>
+        /// <param name="m">Integer number of basis functions in v dir - 1 = knotsU.length - degreeU - 2.</param>
+        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        /// <param name="numDerivs">The number of derivatives to evaluate.</param>
+        /// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
         public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
         {
             int degreeU = nurbsSurface.DegreeU;

@@ -1,8 +1,8 @@
 ﻿using GeometrySharp.Core;
+using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Geometry.Interfaces;
 
 namespace GeometrySharp.Geometry
 {
@@ -17,7 +17,7 @@ namespace GeometrySharp.Geometry
         /// <param name="vertices">Points used to create the polyline.</param>
         public Polyline(IList<Vector3> vertices)
         {
-            if(vertices.Count < 2)
+            if (vertices.Count < 2)
             {
                 throw new Exception("Insufficient points for a polyline.");
             }
@@ -101,10 +101,9 @@ namespace GeometrySharp.Geometry
         /// <returns>A collection of lines.</returns>
         public Line[] Segments()
         {
-            int count = Count;
-            Line[] lines = new Line[count - 1];
+            Line[] lines = new Line[Count - 1];
 
-            for (int i = 0; i < count - 1; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
                 lines[i] = new Line(this[i], this[i + 1]);
             }
@@ -119,7 +118,7 @@ namespace GeometrySharp.Geometry
         /// <returns>The line segment at the index.</returns>
         public Line SegmentAt(int index)
         {
-            if (index < 0 || index > this.Count - 2)
+            if (index < 0 || index > Count - 2)
             {
                 throw new Exception("Impossible to find the segment, index is to big or to small.");
             }
@@ -134,14 +133,14 @@ namespace GeometrySharp.Geometry
         /// <returns>The unit tangent at the parameter t.</returns>
         public Vector3 TangentAt(double t)
         {
-            int index = (int) Math.Truncate(t);
+            int index = (int)Math.Truncate(t);
             if (index < 0)
             {
                 index = 0;
             }
-            if (index > this.Count - 2)
+            if (index > Count - 2)
             {
-                index = this.Count - 2;
+                index = Count - 2;
             }
 
             return SegmentAt(index).Direction.Unitize();
@@ -154,16 +153,16 @@ namespace GeometrySharp.Geometry
         /// <returns>The point on the polyline at the parameter.</returns>
         public Vector3 PointAt(double t)
         {
-            if (t < 0 || t > this.Count - 1)
+            if (t < 0 || t > Count - 1)
             {
                 throw new Exception("Parameter t must be between the polyline's domain.");
             }
 
             int index = (int)Math.Truncate(t);
 
-            if (index > this.Count - 2)
+            if (index > Count - 2)
             {
-                index = this.Count - 2;
+                index = Count - 2;
             }
 
             double t2 = Math.Abs(t - index);
@@ -182,7 +181,7 @@ namespace GeometrySharp.Geometry
             double valueT = 0.0;
             double smallestDistance = double.MaxValue;
 
-            for (int i = 0; i < this.Count - 1; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
                 Line line = new Line(this[i], this[i + 1]);
                 double tempT = line.ClosestParameter(pt);
@@ -215,12 +214,12 @@ namespace GeometrySharp.Geometry
         public Vector3 ClosestPt(Vector3 pt)
         {
             // Brute force
-            if (this.Count <= 4)
+            if (Count <= 4)
             {
                 double distance = double.MaxValue;
                 Vector3 closestPt = Vector3.Unset;
 
-                for (int i = 0; i < this.Count - 1; i++)
+                for (int i = 0; i < Count - 1; i++)
                 {
                     Line tempLine = new Line(this[i], this[i + 1]);
                     Vector3 tempPt = tempLine.ClosestPt(pt);
@@ -241,8 +240,8 @@ namespace GeometrySharp.Geometry
 
             while (leftSubCollection.Count != 2 || rightSubCollection.Count != 2)
             {
-                int mid = (int) ((double) conquer.Count / 2);
-                leftSubCollection = conquer.Take(mid+1).ToList();
+                int mid = (int)((double)conquer.Count / 2);
+                leftSubCollection = conquer.Take(mid + 1).ToList();
                 rightSubCollection = conquer.Skip(mid).ToList();
 
                 Polyline leftPoly = new Polyline(leftSubCollection);
@@ -254,21 +253,21 @@ namespace GeometrySharp.Geometry
                 double leftDistance = leftPt.DistanceTo(pt);
                 double rightDistance = rightPt.DistanceTo(pt);
 
-                conquer  = leftDistance > rightDistance 
-                    ? new List<Vector3>(rightSubCollection) 
+                conquer = leftDistance > rightDistance
+                    ? new List<Vector3>(rightSubCollection)
                     : new List<Vector3>(leftSubCollection);
             }
 
-            Line l = new Line(conquer [0], conquer [1]);
+            Line line = new Line(conquer[0], conquer[1]);
 
-            return l.ClosestPt(pt);
+            return line.ClosestPt(pt);
         }
 
         /// <summary>
         /// Reverses the order of the polyline.
         /// </summary>
         /// <returns>A polyline reversed.</returns>
-        public Polyline Reverse()
+        public new Polyline Reverse()
         {
             List<Vector3> copyVertices = new List<Vector3>(this);
             copyVertices.Reverse();
@@ -294,7 +293,7 @@ namespace GeometrySharp.Geometry
         protected void ToNurbsCurve()
         {
             double lengthSum = 0;
-            Knot knots = new Knot{0};
+            Knot knots = new Knot { 0 };
             List<double> weights = new List<double>();
 
             for (int i = 0; i < this.Count; i++)
@@ -303,7 +302,7 @@ namespace GeometrySharp.Geometry
                 knots.Add(i);
                 weights.Add(1.0);
             }
-            knots.Add(lengthSum-1);
+            knots.Add(lengthSum - 1);
 
             Knots = knots;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(this, weights);
@@ -316,32 +315,30 @@ namespace GeometrySharp.Geometry
         /// <returns>A cleaned collections of points if necessary otherwise the same collection of points.</returns>
         protected static IList<Vector3> CleanVerticesForShortLength(IList<Vector3> vertices)
         {
-            int verticesCount = vertices.Count;
+            int[] coincidenceFlag = new int[vertices.Count];
+            coincidenceFlag[0] = 0;
 
-            int[] flag = new int[verticesCount];
-            flag[0] = 0;
-
-            for (int i = 1; i < verticesCount; i++)
+            for (int i = 1; i < vertices.Count; i++)
             {
-                flag[i] = 0;
+                coincidenceFlag[i] = 0;
                 if (vertices[i - 1].DistanceTo(vertices[i]) <= GeoSharpMath.MAXTOLERANCE)
                 {
-                    flag[i] = 1;
+                    coincidenceFlag[i] = 1;
                 }
             }
 
-            int numberOfCoincidence = flag.Sum();
+            int numberOfCoincidence = coincidenceFlag.Sum();
             if (numberOfCoincidence == 0)
             {
                 return vertices;
             }
 
-            Vector3[] cleanedList = new Vector3[verticesCount - numberOfCoincidence];
+            Vector3[] cleanedList = new Vector3[vertices.Count - numberOfCoincidence];
 
             int counter = 0;
             for (int i = 0; i < vertices.Count; i++)
             {
-                if (flag[i] != 0)
+                if (coincidenceFlag[i] != 0)
                 {
                     continue;
                 }
