@@ -4,6 +4,7 @@ using GeometrySharp.Core.IntersectionResults;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
 using System.Collections.Generic;
+using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -274,15 +275,15 @@ namespace GeometrySharp.Test.XUnit.Operation
             // Arrange
             Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
             Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
-            Line l = new Line(p1, p2);
+            Line ln = new Line(p1, p2);
 
             int crvDegree1 = 2;
             Knot crvKnots1 = new Knot { 0, 0, 0, 1, 1, 1 };
             List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.7, 0, 0 }, new Vector3 { 0.5, -1.5, 0 } };
-            NurbsCurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
-
+            ICurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+            
             // Act
-            List<CurvesIntersectionResult> intersection = Intersect.CurveLine(crv, l);
+            List<CurvesIntersectionResult> intersection = Intersect.CurveLine(crv, ln);
 
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());

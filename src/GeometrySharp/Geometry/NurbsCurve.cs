@@ -207,11 +207,10 @@ namespace GeometrySharp.Geometry
         /// Compares if two nurbs curves are the same.
         /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">The nurbs curve.</param>
         /// <returns>Return true if the nurbs curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
-            List<Vector3>? pts = ControlPoints;
             List<Vector3>? otherPts = other?.ControlPoints;
 
             if (other == null)
@@ -219,7 +218,7 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (pts.Count != otherPts.Count)
+            if (ControlPoints.Count != otherPts?.Count)
             {
                 return false;
             }
@@ -229,12 +228,25 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (pts.Where((t, i) => !t.Equals(otherPts[i])).Any())
+            if (ControlPoints.Where((t, i) => !t.Equals(otherPts[i])).Any())
             {
                 return false;
             }
 
             return Degree == other.Degree && Knots.All(other.Knots.Contains) && Weights.All(other.Weights.Contains);
+        }
+
+        /// <summary>
+        /// Compares if two nurbs curves are the same.
+        /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// </summary>
+        /// <param name="obj">The curve object.</param>
+        /// <returns>Return true if the nurbs curves are equal.</returns>
+        public override bool Equals(object? obj)
+        {
+            if(obj is NurbsCurve curve)
+                return Equals(curve);
+            return false;
         }
 
         /// <summary>

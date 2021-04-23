@@ -73,7 +73,7 @@ namespace GeometrySharp.Geometry
 
         public List<Vector3> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
 
-        public Knot Knots => new Knot {1, 1, 0, 0};
+        public Knot Knots => new Knot {0, 0, 1, 1};
 
         public Interval Domain => new Interval(0.0, 1.0);
 
@@ -208,6 +208,19 @@ namespace GeometrySharp.Geometry
             }
 
             return Start.Equals(other.Start) && End.Equals(other.End);
+        }
+
+        /// <summary>
+        /// Check if the line is equal to the provided line.
+        /// Two lines are equal if the end points are the same.
+        /// </summary>
+        /// <param name="obj">The curve object.</param>
+        /// <returns>Return true if the nurbs curves are equal.</returns>
+        public override bool Equals(object? obj)
+        {
+            if (obj is Line curve)
+                return Equals(curve);
+            return false;
         }
 
         /// <summary>

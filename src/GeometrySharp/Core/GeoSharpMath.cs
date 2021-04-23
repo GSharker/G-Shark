@@ -126,5 +126,13 @@ namespace GeometrySharp.Core
                 sinAngle = 0.0;
             }
         }
+
+        /// <summary>
+        /// Delegated function, used to sort a list of numerical value.
+        /// </summary>
+        internal static int NumberSort(double a, double b)
+        {
+            return Math.Sign(a - b);
+        }
     }
 }

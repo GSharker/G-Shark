@@ -44,7 +44,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             for (int i = 0; i <= knots.Count - degree - 2; i++)
                 controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
             ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
@@ -72,7 +72,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             for (int i = 0; i <= knots.Count - degree - 2; i++)
                 controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
             List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);

@@ -147,7 +147,7 @@ namespace GeometrySharp.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            List<Vector3> pts = curve.ControlPoints;
+            List<Vector3> pts = new List<Vector3>(curve.ControlPoints);
             pts.Reverse();
 
             List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
