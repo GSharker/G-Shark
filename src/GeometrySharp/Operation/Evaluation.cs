@@ -256,7 +256,7 @@ namespace GeometrySharp.Operation
         public static Extrema ComputeExtrema(ICurve curve)
         {
             var derivPts = DerivativeCoordinates(curve.ControlPoints);
-            List<List<double>> extremas = new List<List<double>>();
+            Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Count;
 
@@ -285,16 +285,11 @@ namespace GeometrySharp.Operation
 
                 result = result.Where((t) => t >= 0 && t <= 1).ToList();
                 result.Sort(GeoSharpMath.NumberSort);
-                extremas.Add(result);
+                extrema[j] = result;
             }
 
-            return new Extrema
-            {
-                Xvalue = extremas[0],
-                Yvalue = extremas[1],
-                Zvalue = extremas[2],
-                Values = extremas[0].Union(extremas[1]).Union(extremas[2]).OrderBy(x => x).ToList()
-            };
+            extrema.Values = extrema[0].Union(extrema[1]).Union(extrema[2]).OrderBy(x => x).ToList();
+            return extrema;
         }
 
         /// <summary>

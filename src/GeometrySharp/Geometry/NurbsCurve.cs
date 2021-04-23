@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Operation.Utilities;
 
 namespace GeometrySharp.Geometry
 {
@@ -56,7 +57,6 @@ namespace GeometrySharp.Geometry
             Knots = knots;
             ControlPoints = controlPoints;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPoints, Weights);
-            BoundingBox = new BoundingBox(controlPoints);
         }
 
         /// <summary>
@@ -80,7 +80,6 @@ namespace GeometrySharp.Geometry
             HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
             Knots = new Knot(curve.Knots);
             Weights = new List<double>(curve.Weights!);
-            BoundingBox = new BoundingBox(ControlPoints);
         }
 
         /// <summary>
@@ -98,7 +97,25 @@ namespace GeometrySharp.Geometry
 
         public Interval Domain => new Interval(Knots.First(), Knots.Last());
 
-        public BoundingBox BoundingBox { get; }
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                List<Vector3> pts = new List<Vector3> {ControlPoints[0]};
+                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this);
+                foreach (ICurve crv in beziers)
+                {
+                    Extrema e = Evaluation.ComputeExtrema(crv);
+                    foreach (double eValue in e.Values)
+                    {
+                        if(eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MAXTOLERANCE) continue;
+                        pts.Add(crv.PointAt(eValue));
+                    }
+                }
+                pts.Add(ControlPoints[^1]);
+                return new BoundingBox(pts);
+            }
+        }
 
         /// <summary>
         /// Gets a copy of the curve.

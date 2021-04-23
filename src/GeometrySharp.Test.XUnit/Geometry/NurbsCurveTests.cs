@@ -6,6 +6,7 @@ using GeometrySharp.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeometrySharp.Operation;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -88,6 +89,28 @@ namespace GeometrySharp.Test.XUnit.Geometry
 
             // Assert
             curve.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void It_Returns_The_Bounding_Box_Boundary_Of_The_Curve()
+        {
+            // Arrange
+            List<Vector3> pts = new List<Vector3>
+            {
+                new Vector3 {100, 25, 0},
+                new Vector3 {10, 90, 0},
+                new Vector3 {110, 100, 0},
+                new Vector3 {150, 195, 0}
+            };
+            NurbsCurve curve = new NurbsCurve(pts, 3);
+
+            // Act
+            var e = Evaluation.ComputeExtrema(curve);
+            BoundingBox bBox = curve.BoundingBox;
+
+            // Assert
+            _testOutput.WriteLine(bBox.ToString());
+
         }
 
         [Fact]

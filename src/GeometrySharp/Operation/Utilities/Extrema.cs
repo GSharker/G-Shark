@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace GeometrySharp.Operation.Utilities
 {
@@ -13,5 +15,40 @@ namespace GeometrySharp.Operation.Utilities
         public IList<double> Yvalue { get; set; }
         public IList<double> Zvalue { get; set; }
         public IList<double> Values { get; set; }
+
+        public IList<double> this[int index]
+        {
+            get
+            {
+                return index switch
+                {
+                    0 => Xvalue,
+                    1 => Yvalue,
+                    2 => Zvalue,
+                    3 => Values,
+                    _ => throw new IndexOutOfRangeException()
+                };
+            }
+            set
+            {
+                switch (index)
+                {
+                    case 0:
+                        Xvalue = new List<double>(value);
+                        break;
+                    case 1:
+                        Yvalue = new List<double>(value);
+                        break;
+                    case 2:
+                        Zvalue = new List<double>(value);
+                        break;
+                    case 3:
+                        Values = new List<double>(value);
+                        break;
+                    default:
+                        throw new IndexOutOfRangeException();
+                }
+            }
+        }
     }
 }
