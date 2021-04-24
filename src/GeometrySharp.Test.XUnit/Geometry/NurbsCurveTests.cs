@@ -38,7 +38,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_NurbsCurve()
         {
             // Act
-            var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
+            var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Assert
             nurbsCurve.Should().NotBeNull();
@@ -92,25 +92,53 @@ namespace GeometrySharp.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Bounding_Box_Boundary_Of_The_Curve()
+        public void It_Returns_The_Bounding_Box_Of_A_Planar_Curve()
         {
             // Arrange
-            List<Vector3> pts = new List<Vector3>
-            {
-                new Vector3 {100, 25, 0},
-                new Vector3 {10, 90, 0},
-                new Vector3 {110, 100, 0},
-                new Vector3 {150, 195, 0}
-            };
-            NurbsCurve curve = new NurbsCurve(pts, 3);
+            NurbsCurve crv0 = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
+            NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadraticBezierPlanar();
+
+            Vector3 expectedPtMin0 = new Vector3 { 0, 0, 0 };
+            Vector3 expectedPtMax0 = new Vector3 { 2, 0.444444, 0 };
+
+            Vector3 expectedPtMin1 = new Vector3 { -10, 0, 0 };
+            Vector3 expectedPtMax1 = new Vector3 { 20, 15, 5 };
 
             // Act
-            var e = Evaluation.ComputeExtrema(curve);
-            BoundingBox bBox = curve.BoundingBox;
+            BoundingBox bBox0 = crv0.BoundingBox;
+            BoundingBox bBox1 = crv1.BoundingBox;
 
             // Assert
-            _testOutput.WriteLine(bBox.ToString());
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
 
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void It_Returns_The_Bounding_Box_Of_A_3D_Nurbs_Curve()
+        {
+            // Arrange
+            NurbsCurve crv0 = NurbsCurveCollection.NurbsCurve3DExample();
+            NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
+
+            Vector3 expectedPtMin0 = new Vector3 { 0, 0.5555556, 0 };
+            Vector3 expectedPtMax0 = new Vector3 { 4.089468, 5, 5 };
+
+            Vector3 expectedPtMin1 = new Vector3 { 0, 2.5, 0 };
+            Vector3 expectedPtMax1 = new Vector3 { 4.545455, 5, 3.333333 };
+
+            // Act
+            BoundingBox bBox0 = crv0.BoundingBox;
+            BoundingBox bBox1 = crv1.BoundingBox;
+
+            // Assert
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
         }
 
         [Fact]
@@ -155,7 +183,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_Copied_NurbsCurve()
         {
             // Arrange
-            var nurbsCurve = NurbsCurveCollection.NurbsCurveExample2();
+            var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
             
             // Act
             var copiedNurbs = nurbsCurve.Clone();
@@ -183,7 +211,7 @@ namespace GeometrySharp.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
             // Arrange
-            var curve = NurbsCurveCollection.NurbsCurveExample2();
+            var curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             var transform = Transform.Translation(new Vector3 { -10, 20, 0 });
 
             // Act

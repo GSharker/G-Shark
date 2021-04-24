@@ -35,13 +35,13 @@ namespace GeometrySharp.Test.XUnit.Data
             return new NurbsCurve(degree, knots, pts, weights);
         }
 
-        public static NurbsCurve NurbsCurveExample2()
+        public static NurbsCurve NurbsCurvePlanarExample()
         {
             Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
-                new Vector3 {5,5,0},
+                new Vector3 {5, 5, 0},
                 new Vector3 {10, 10, 0},
                 new Vector3 {20, 15, 0},
                 new Vector3 {35, 15, 0},
@@ -51,10 +51,24 @@ namespace GeometrySharp.Test.XUnit.Data
             return new NurbsCurve(degree, knots, controlPts);
         }
 
-        public static NurbsCurve NurbsCurveExample3()
+        public static NurbsCurve NurbsCurve3DExample()
         {
-            Knot knots = new Knot { 0, 0, 0, 0.24, 1, 1, 1 };
-            int degree = 2;
+            int degree = 3;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {0, 5, 5},
+                new Vector3 {0, 0, 0},
+                new Vector3 {4, 0, 0},
+                new Vector3 {5, 5, 5},
+                new Vector3 {0, 5, 0},
+            };
+            return new NurbsCurve(controlPts, degree);
+        }
+
+        public static NurbsCurve NurbsCurveCubicBezierPlanar()
+        {
+            Knot knots = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
+            int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
                 new Vector3 {0, 0, 0},
@@ -63,6 +77,30 @@ namespace GeometrySharp.Test.XUnit.Data
                 new Vector3 {2, 0, 0}
             };
             return new NurbsCurve(degree, knots, controlPts);
+        }
+
+        public static NurbsCurve NurbsCurveQuadraticBezierPlanar()
+        {
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {-10,15,5},
+                new Vector3 {10,5,5},
+                new Vector3 {20,0,0}
+            };
+            return new NurbsCurve(controlPts, degree);
+        }
+
+        public static NurbsCurve NurbsCurveQuadratic3DBezier()
+        {
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {4.5,2.5,2.5},
+                new Vector3 {5,5,5},
+                new Vector3 {0,5,0}
+            };
+            return new NurbsCurve(controlPts, degree);
         }
     }
 }

@@ -95,7 +95,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Reverses_The_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample3();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
 
             // Act
             ICurve crvRev1 = Modify.ReverseCurve(curve);

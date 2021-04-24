@@ -60,7 +60,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void RationalCurveByDivisions_Returns_The_Curve_Divided_By_A_Count()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
             int steps = 7;
 
@@ -77,7 +77,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void RationalCurveByEqualLength_Returns_The_Curve_Divided_By_A_Length()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;

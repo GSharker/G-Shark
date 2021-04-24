@@ -271,7 +271,7 @@ namespace GeometrySharp.Operation
 
                 List<double> result = new List<double>(DerivRoots(p0));
 
-                if (curve.Degree != 3) continue;
+                if (curve.Degree == 3)
                 {
                     IList<double> p1 = new List<double>();
 

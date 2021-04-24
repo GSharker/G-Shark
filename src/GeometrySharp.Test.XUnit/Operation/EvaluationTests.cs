@@ -449,7 +449,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             // Assert
             tangent.Should().BeEquivalentTo(new Vector3 { 3, 0, 0 });
 
-            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurveExample2(), t);
+            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
             Vector3 tangentNormalized = tangentToCheck.Unitize();
             Vector3 tangentExpected = new Vector3(tangentData);
 

@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace GeometrySharp.Operation
 {
+    // ToDo: CurveElevateDegree
+    // ToDo: CurveKnotInsert
     /// <summary>
     /// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
     /// knot insertion, knot refinement, degree elevation, re-parametrization.
@@ -128,7 +130,7 @@ namespace GeometrySharp.Operation
 
             while (i < controlPoints.Count)
             {
-                Knot knotsRange = knots.GetRange(i, crvKnotLength).ToKnot();
+                Knot knotsRange = Knot.Normalize(knots.GetRange(i, crvKnotLength).ToKnot());
                 List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
