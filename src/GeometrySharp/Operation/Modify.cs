@@ -99,8 +99,9 @@ namespace GeometrySharp.Operation
         /// This is a useful starting point for intersection, closest point, divide & conquer algorithms.
         /// </summary>
         /// <param name="curve">The curve object.</param>
+        /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
         /// <returns>Collection of curve objects, defined by degree, knots, and control points.</returns>
-        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve)
+        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.ControlPoints;
@@ -130,7 +131,10 @@ namespace GeometrySharp.Operation
 
             while (i < controlPoints.Count)
             {
-                Knot knotsRange = Knot.Normalize(knots.GetRange(i, crvKnotLength).ToKnot());
+
+                Knot knotsRange = (normalize)
+                    ? Knot.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
+                    : knots.GetRange(i, crvKnotLength).ToKnot();
                 List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);

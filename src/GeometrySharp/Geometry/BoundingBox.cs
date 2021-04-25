@@ -1,10 +1,10 @@
 ﻿using GeometrySharp.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: BoundingBox align to a plane.
     // ToDo: Minimum BoundingBox.
     /// <summary>
     /// Represents the value of two points in a bounding box
@@ -27,12 +27,20 @@ namespace GeometrySharp.Geometry
         /// Constructs a BoundingBox from a list of points.
         /// </summary>
         /// <param name="pts">Collection of points will be contained in the BoundingBox.</param>
-        public BoundingBox(IList<Vector3> pts)
+        /// <param name="orientation">Orientation plane.</param>
+        public BoundingBox(IList<Vector3> pts, Plane orientation = null)
         {
+            List<Vector3> copyPt = new List<Vector3>(pts);
+            if (orientation != null)
+            {
+                Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, orientation);
+                copyPt = pts.Select(pt => pt * transform).ToList();
+            }
+
             Vector3 min = new Vector3 { double.MaxValue, double.MaxValue, double.MaxValue };
             Vector3 max = new Vector3 { double.MinValue, double.MinValue, double.MinValue };
 
-            foreach (Vector3 pt in pts)
+            foreach (Vector3 pt in copyPt)
             {
                 if (pt[0] < min[0])
                 {

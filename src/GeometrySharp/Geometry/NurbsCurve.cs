@@ -102,7 +102,7 @@ namespace GeometrySharp.Geometry
             get
             {
                 List<Vector3> pts = new List<Vector3> {ControlPoints[0]};
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this);
+                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
                 foreach (ICurve crv in beziers)
                 {
                     Extrema e = Evaluation.ComputeExtrema(crv);
