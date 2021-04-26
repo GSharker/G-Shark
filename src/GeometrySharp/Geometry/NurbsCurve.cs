@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Operation.Utilities;
 
 namespace GeometrySharp.Geometry
 {
@@ -56,7 +57,6 @@ namespace GeometrySharp.Geometry
             Knots = knots;
             ControlPoints = controlPoints;
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPoints, Weights);
-            BoundingBox = new BoundingBox(controlPoints);
         }
 
         /// <summary>
@@ -80,7 +80,6 @@ namespace GeometrySharp.Geometry
             HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
             Knots = new Knot(curve.Knots);
             Weights = new List<double>(curve.Weights!);
-            BoundingBox = new BoundingBox(ControlPoints);
         }
 
         /// <summary>
@@ -98,7 +97,25 @@ namespace GeometrySharp.Geometry
 
         public Interval Domain => new Interval(Knots.First(), Knots.Last());
 
-        public BoundingBox BoundingBox { get; }
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                List<Vector3> pts = new List<Vector3> {ControlPoints[0]};
+                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
+                foreach (ICurve crv in beziers)
+                {
+                    Extrema e = Evaluation.ComputeExtrema(crv);
+                    foreach (double eValue in e.Values)
+                    {
+                        if(eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MAXTOLERANCE) continue;
+                        pts.Add(crv.PointAt(eValue));
+                    }
+                }
+                pts.Add(ControlPoints[^1]);
+                return new BoundingBox(pts);
+            }
+        }
 
         /// <summary>
         /// Gets a copy of the curve.
@@ -207,11 +224,10 @@ namespace GeometrySharp.Geometry
         /// Compares if two nurbs curves are the same.
         /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">The nurbs curve.</param>
         /// <returns>Return true if the nurbs curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
-            List<Vector3>? pts = ControlPoints;
             List<Vector3>? otherPts = other?.ControlPoints;
 
             if (other == null)
@@ -219,7 +235,7 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (pts.Count != otherPts.Count)
+            if (ControlPoints.Count != otherPts?.Count)
             {
                 return false;
             }
@@ -229,12 +245,25 @@ namespace GeometrySharp.Geometry
                 return false;
             }
 
-            if (pts.Where((t, i) => !t.Equals(otherPts[i])).Any())
+            if (ControlPoints.Where((t, i) => !t.Equals(otherPts[i])).Any())
             {
                 return false;
             }
 
             return Degree == other.Degree && Knots.All(other.Knots.Contains) && Weights.All(other.Weights.Contains);
+        }
+
+        /// <summary>
+        /// Compares if two nurbs curves are the same.
+        /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// </summary>
+        /// <param name="obj">The curve object.</param>
+        /// <returns>Return true if the nurbs curves are equal.</returns>
+        public override bool Equals(object? obj)
+        {
+            if(obj is NurbsCurve curve)
+                return Equals(curve);
+            return false;
         }
 
         /// <summary>

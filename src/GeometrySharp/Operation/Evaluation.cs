@@ -3,6 +3,8 @@ using GeometrySharp.Geometry;
 using GeometrySharp.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GeometrySharp.Operation.Utilities;
 
 namespace GeometrySharp.Operation
 {
@@ -241,6 +243,128 @@ namespace GeometrySharp.Operation
             }
 
             return !isClosed ? centroid / count : centroid / (count - 1);
+        }
+
+        /// <summary>
+        /// Calculates all the extrema on a curve. Extrema are calculated for each dimension,
+        /// rather than for the full curve, so that the result is not the number of convex/concave transitions,
+        /// but the number of those transitions for each separate dimension.
+        /// </summary>
+        /// <param name="derivPts">A collection of derivative coordinates.</param>
+        /// <param name="order">Order of the curve.</param>
+        /// <returns>The extrema </returns>
+        public static Extrema ComputeExtrema(ICurve curve)
+        {
+            var derivPts = DerivativeCoordinates(curve.ControlPoints);
+            Extrema extrema = new Extrema();
+
+            int dim = derivPts[0][0].Count;
+
+            for (int j = 0; j < dim; j++)
+            {
+                List<double> p0 = new List<double>();
+
+                for (int i = 0; i < derivPts[0].Count; i++)
+                {
+                    p0.Add(derivPts[0][i][j]);
+                }
+
+                List<double> result = new List<double>(DerivRoots(p0));
+
+                if (curve.Degree == 3)
+                {
+                    IList<double> p1 = new List<double>();
+
+                    for (int i = 0; i < derivPts[1].Count; i++)
+                    {
+                        p1.Add(derivPts[1][i][j]);
+                    }
+
+                    result = result.Concat(DerivRoots(p1).ToList()).ToList();
+                }
+
+                result = result.Where((t) => t >= 0 && t <= 1).ToList();
+                result.Sort(GeoSharpMath.NumberSort);
+                extrema[j] = result;
+            }
+
+            extrema.Values = extrema[0].Union(extrema[1]).Union(extrema[2]).OrderBy(x => x).ToList();
+            return extrema;
+        }
+
+        /// <summary>
+        /// Computes the derivative from the coordinate points.
+        /// </summary>
+        /// <param name="pts">The collection of coordinate points.</param>
+        /// <returns>The derivative coordinates.</returns>
+        internal static List<List<Vector3>> DerivativeCoordinates(List<Vector3> pts)
+        {
+            List<List<Vector3>> derivPts = new List<List<Vector3>>();
+
+            List<Vector3> p = new List<Vector3>(pts);
+            int d = p.Count;
+            int c = d - 1;
+
+            for (; d > 1; d--, c--)
+            {
+                List<Vector3> list = new List<Vector3>();
+                for (int j = 0; j < c; j++)
+                {
+                    var dpt = (p[j + 1] - p[j]) * c;
+
+                    list.Add(dpt);
+                }
+
+                derivPts.Add(list);
+                p = list;
+            }
+
+            return derivPts;
+        }
+
+        /// <summary>
+        /// Find all roots (derivative=0) for both derivatives.
+        /// https://pomax.github.io/bezierinfo/#extremities
+        /// </summary>
+        /// <param name="derivs">The derivatives.</param>
+        /// <returns>The roots values.</returns>
+        internal static IList<double> DerivRoots(IList<double> derivs)
+        {
+            // quadratic roots
+            if (derivs.Count == 3)
+            {
+                var a = derivs[0];
+                var b = derivs[1];
+                var c = derivs[2];
+                var d = a - 2 * b + c;
+                if (d != 0)
+                {
+                    var m1 = -Math.Sqrt(b * b - a * c);
+                    var m2 = -a + b;
+                    var v1 = -(m1 + m2) / d;
+                    var v2 = -(-m1 + m2) / d;
+                    return new[] { v1, v2 };
+                }
+                else if (b != c && d == 0)
+                {
+                    return new[] { (2 * b - c) / (2 * (b - c)) };
+                }
+                return new double[0];
+            }
+
+            // linear roots
+            if (derivs.Count == 2)
+            {
+                var a = derivs[0];
+                var b = derivs[1];
+                if (a != b)
+                {
+                    return new[] { a / (a - b) };
+                }
+                return new double[0];
+            }
+
+            return new double[0];
         }
 
         /// <summary>

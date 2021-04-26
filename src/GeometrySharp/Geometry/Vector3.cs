@@ -1,15 +1,13 @@
-﻿using System;
+﻿using GeometrySharp.Core;
+using GeometrySharp.ExtendedMethods;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeometrySharp.Core;
-using GeometrySharp.ExtendedMethods;
 
 namespace GeometrySharp.Geometry
 {
-    // ToDo: Review the xml documentation.
-    // ToDo: Review all the methods have a test.
     /// <summary>
-    /// Vector3 is represented simply by an list of double point numbers.
+    /// Vector3 is represented simply by an list of double numbers, Vector3 is also used to represent point.
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
     /// </summary>
     public class Vector3 : List<double>, IEquatable<Vector3>
@@ -52,7 +50,7 @@ namespace GeometrySharp.Geometry
         public static Vector3 ZAxis => new Vector3 { 0.0, 0.0, 1.0 };
 
         /// <summary>
-        /// The angle in radians between two vectors.
+        /// Calculate the angle in radians between two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
@@ -87,9 +85,9 @@ namespace GeometrySharp.Geometry
         /// Gets a value indicating whether or not this is a unit vector.
         /// </summary>
         /// <returns>True if </returns>
-        public bool isUnitize()
+        public bool IsUnitize()
         {
-            return (GeoSharpMath.IsValidDouble(this[0]) && 
+            return (GeoSharpMath.IsValidDouble(this[0]) &&
                     GeoSharpMath.IsValidDouble(this[1]) &&
                     (Math.Abs(Length() - 1.0) <= GeoSharpMath.EPSILON));
         }
@@ -138,7 +136,6 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
-        /// <param name="a">The vector.</param>
         /// <returns>The sum of each value squared.</returns>
         public double SquaredLength()
         {
@@ -153,10 +150,10 @@ namespace GeometrySharp.Geometry
         /// <returns>True if both vectors are perpendicular.</returns>
         public bool IsPerpendicularTo(Vector3 other, double tolerance = -1)
         {
-            var result = false;
-            var toleranceSet = (tolerance < 0) ? GeoSharpMath.ANGLETOLERANCE : tolerance;
-            var length = this.Length() * other.Length();
-            var dotUnitize = Vector3.Dot(this, other) / length;
+            bool result = false;
+            double toleranceSet = (tolerance < 0) ? GeoSharpMath.ANGLETOLERANCE : tolerance;
+            double length = this.Length() * other.Length();
+            double dotUnitize = Vector3.Dot(this, other) / length;
             if (length > 0 && dotUnitize <= Math.Sin(toleranceSet)) result = true;
             return result;
         }
@@ -172,10 +169,10 @@ namespace GeometrySharp.Geometry
         /// -1 vectors are parallel but with opposite directions </returns>
         public int IsParallelTo(Vector3 other, double tolerance = -1)
         {
-            var result = 0;
-            var toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.ANGLETOLERANCE) : Math.Cos(tolerance);
-            var length = this.Length() * other.Length();
-            var dotUnitize = Vector3.Dot(this, other) / length;
+            int result = 0;
+            double toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.ANGLETOLERANCE) : Math.Cos(tolerance);
+            double length = this.Length() * other.Length();
+            double dotUnitize = Vector3.Dot(this, other) / length;
             if (!(length > 0)) return result;
             if (dotUnitize >= toleranceSet) result = 1;
             if (dotUnitize <= -toleranceSet) result = -1;
@@ -192,24 +189,24 @@ namespace GeometrySharp.Geometry
         /// <returns>Rotated vector.</returns>
         public Vector3 Rotate(Vector3 axis, double angle)
         {
-            var cosAngle = Math.Cos(angle);
-            var sinAngle = Math.Sin(angle);
+            double cosAngle = Math.Cos(angle);
+            double sinAngle = Math.Sin(angle);
 
             GeoSharpMath.KillNoise(ref sinAngle, ref cosAngle);
 
-            var unitizedAxis = axis.Unitize();
-            var cross = Vector3.Cross(unitizedAxis, this);
-            var dot = Vector3.Dot(unitizedAxis, this);
+            Vector3 unitizedAxis = axis.Unitize();
+            Vector3 cross = Vector3.Cross(unitizedAxis, this);
+            double dot = Vector3.Dot(unitizedAxis, this);
 
             return (this * cosAngle) + (cross * sinAngle) + (unitizedAxis * dot * (1 - cosAngle));
         }
 
         /// <summary>
-        /// Cross product.
+        /// Calculates the cross product.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
-        /// <returns>Compute the cross product.</returns>
+        /// <returns>The computed cross product.</returns>
         public static Vector3 Cross(Vector3 a, Vector3 b)
         {
             return new Vector3
@@ -221,7 +218,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Compute the dot product between two vectors.
+        /// Computes the dot product between two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
@@ -237,44 +234,44 @@ namespace GeometrySharp.Geometry
         /// <returns>A new vector unitized.</returns>
         public Vector3 Unitize()
         {
-            if (isUnitize()) return this;
-            var l = this.Length();
+            if (IsUnitize()) return this;
+            double l = this.Length();
             if (l <= double.Epsilon)
                 throw new Exception("An invalid or zero length vector cannot be unitized.");
             return this * (1 / l);
         }
 
         /// <summary>
-        /// Create a list of zero values.
+        /// Creates a list of zero values.
         /// </summary>
         /// <param name="rows">Rows dimension.</param>
         /// <returns>Get a vector of r dimension.</returns>
         public static Vector3 Zero1d(int rows)
         {
-            var v = new Vector3();
-            for (var i = 0; i < rows; i++)
+            Vector3 v = new Vector3();
+            for (int i = 0; i < rows; i++)
                 v.Add(0.0);
 
             return v;
         }
 
         /// <summary>
-        /// Create a 2 dimensional list of zero values.
+        /// Creates a 2 dimensional list of zero values.
         /// </summary>
         /// <param name="rows">Rows dimension.</param>
         /// <param name="cols">Columns dimension.</param>
         /// <returns>Get a vector of r*c dimension.</returns>
         public static List<Vector3> Zero2d(int rows, int cols)
         {
-            var lv = new List<Vector3>();
-            for (var i = 0; i < rows; i++) 
+            List<Vector3> lv = new List<Vector3>();
+            for (int i = 0; i < rows; i++)
                 lv.Add(Zero1d(cols));
 
             return lv;
         }
 
         /// <summary>
-        /// Create a 3 dimensional list of zero values.
+        /// Creates a 3 dimensional list of zero values.
         /// </summary>
         /// <param name="rows">Rows dimension.</param>
         /// <param name="cols">Columns dimension.</param>
@@ -282,15 +279,15 @@ namespace GeometrySharp.Geometry
         /// <returns>Get a vector of r*c*d dimension.</returns>
         public static List<List<Vector3>> Zero3d(int rows, int cols, int depth)
         {
-            var llv = new List<List<Vector3>>();
-            for (var i = 0; i < rows; i++) 
+            List<List<Vector3>> llv = new List<List<Vector3>>();
+            for (int i = 0; i < rows; i++)
                 llv.Add(Zero2d(cols, depth));
 
             return llv;
         }
 
         /// <summary>
-        /// The distance from this point to b.
+        /// Calculates the distance from this point to b.
         /// </summary>
         /// <param name="v">The target vector.</param>
         /// <returns>The distance between this vector and the provided vector.</returns>
@@ -301,15 +298,14 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Get the distance of a point to a line.
+        /// Calculates the distance of a point to a line.
         /// </summary>
-        /// <param name="pt">The point to project.</param>
         /// <param name="line">The line from which to calculate the distance.</param>
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            var projectedPt = line.ClosestPt(this);
-            var ptToProjectedPt = projectedPt - this;
+            Vector3 projectedPt = line.ClosestPt(this);
+            Vector3 ptToProjectedPt = projectedPt - this;
             return ptToProjectedPt.Length();
         }
 
@@ -319,31 +315,33 @@ namespace GeometrySharp.Geometry
         /// <param name="plane">The plane on which to find if the point lies on.</param>
         /// <param name="tol">If the tolerance is not set, as per default is use 1e-6</param>
         /// <returns>Whether the point is on the plane.</returns>
-        public bool IsPointOnPlane(Plane plane, double tol = 1e-6)
+        public bool IsOnPlane(Plane plane, double tol = 1e-6)
         {
             return Math.Abs(Dot(this - plane.Origin, plane.Normal)) < tol;
         }
 
+        // ToDo: make this immutable.
         /// <summary>
-        /// Add to each component of the first vector the respective component of the second vector multiplied by a scalar
+        /// Adds to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
-        /// <param name="a">First vector</param>
-        /// <param name="s">Scalar</param>
-        /// <param name="b">Second Vector</param>
-        /// <returns></returns>
+        /// <param name="a">First vector.</param>
+        /// <param name="s">Scalar value.</param>
+        /// <param name="b">Second vector.</param>
+        /// <returns>A mutated vector.</returns>
         public static void AddMulMutate(Vector3 a, double s, Vector3 b)
         {
             for (int i = 0; i < a.Count; i++)
                 a[i] = a[i] + s * b[i];
         }
 
+        // ToDo: make this immutable.
         /// <summary>
-        /// Subtract to each component of the first vector the respective component of the second vector multiplied by a scalar
+        /// Subtracts to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
-        /// <param name="a">First vector</param>
-        /// <param name="s">Scalar</param>
-        /// <param name="b">Second Vector</param>
-        /// <returns></returns>
+        /// <param name="a">First vector.</param>
+        /// <param name="s">Scalar value.</param>
+        /// <param name="b">Second vector.</param>
+        /// <returns>A mutated vector.</returns>
         public static void SubMulMutate(Vector3 a, double s, Vector3 b)
         {
             for (int i = 0; i < a.Count; i++)
@@ -370,17 +368,17 @@ namespace GeometrySharp.Geometry
         /// <returns>Vector resulting of multiplying an n x m matrix by a m x 1.</returns>
         public static Vector3 operator *(Vector3 v, Matrix m)
         {
-            var mRows = m.Count;
-            var mCols = m[0].Count;
+            int mRows = m.Count;
+            int mCols = m[0].Count;
 
-            if(mCols != v.Count)
+            if (mCols != v.Count)
                 throw new Exception("Non-conformable matrix and vector");
 
-            var resultVector = Vector3.Zero1d(mRows);
+            Vector3 resultVector = Vector3.Zero1d(mRows);
 
             for (int i = 0; i < mRows; i++)
             {
-                var tempValue = 0.0;
+                double tempValue = 0.0;
                 for (int j = 0; j < mCols; j++)
                 {
                     tempValue += m[i][j] * v[j];
@@ -400,10 +398,10 @@ namespace GeometrySharp.Geometry
         /// <returns>The transformed vector.</returns>
         public static Vector3 operator *(Vector3 v, Transform t)
         {
-            var x = 0.0;
-            var y = 0.0;
-            var z = 0.0;
-            var w = 0.0;
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+            double w = 0.0;
 
             if (v.Count == 4)
             {
@@ -412,7 +410,7 @@ namespace GeometrySharp.Geometry
                 z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3] * v[3];
                 w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3] * v[3];
 
-                return new Vector3 { x, y, z, w};
+                return new Vector3 { x, y, z, w };
             }
 
             x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
@@ -422,17 +420,17 @@ namespace GeometrySharp.Geometry
 
             if (w > 0.0)
             {
-                var w2 = 1.0 / w;
+                double w2 = 1.0 / w;
                 x *= w2;
                 y *= w2;
                 z *= w2;
             }
 
-            return new Vector3 {x, y, z};
+            return new Vector3 { x, y, z };
         }
 
         /// <summary>
-        /// Divide a vector by a scalar.
+        /// Divides a vector by a scalar.
         /// </summary>
         /// <param name="a">The scalar divisor.</param>
         /// <param name="v">The vector to divide.</param>
@@ -443,7 +441,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Subtract two vectors.
+        /// Subtracts two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
@@ -454,7 +452,7 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Add two vectors.
+        /// Adds two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
@@ -465,59 +463,60 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Are the two vectors the same within Epsilon?
+        /// Checks if the two vectors are the same.
+        /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
-        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        /// <returns>True if are the same, otherwise false.</returns>
         public static bool operator ==(Vector3 a, Vector3 b)
         {
             return Equals(a, b);
         }
 
         /// <summary>
-        /// Are the two vectors the same within Epsilon?
+        /// Checks if the two vectors are the same.
+        /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
-        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        /// <returns>True if are the same, otherwise false.</returns>
         public static bool operator !=(Vector3 a, Vector3 b)
         {
             return !Equals(a, b);
         }
 
         /// <summary>
-        /// Is the vector equal to the provided vector?
+        /// Checks if the two vectors are the same.
+        /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="obj">The vector to test.</param>
-        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        /// <returns>True if are the same, otherwise false.</returns>
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            if (!(obj is Vector3)) return false;
+            if (!(obj is Vector3 vec)) return false;
 
-            var vec = (Vector3)obj;
             return IsEqualRoundingDecimal(vec);
         }
 
         /// <summary>
-        /// Is the vector equal to the provided vector?
+        /// Checks if the two vectors are the same.
+        /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
-        /// <param name="obj">The vector to test.</param>
-        /// <returns>Returns true if all components of the two vectors are within Epsilon, otherwise false.</returns>
+        /// <param name="other">The vector to test.</param>
+        /// <returns>True if are the same, otherwise false.</returns>
         public bool Equals(Vector3 other)
         {
             return IsEqualRoundingDecimal(other);
         }
 
         /// <summary>
-        /// Determine whether this vector's components are equal to those of v, within tolerance.
+        /// Determine whether the vector's components are equal to the one to test, rounding the value.
         /// </summary>
         /// <param name="v">The vector to compare.</param>
-        /// <returns>
-        /// True if the difference of this vector and the supplied vector's components are all within Tolerance, otherwise
-        /// false.
-        /// </returns>
+        /// <param name="numberOfDecimal">The number of rounding.</param>
+        /// <returns>True if are the same, otherwise false.</returns>
         public bool IsEqualRoundingDecimal(Vector3 v, int numberOfDecimal = 0)
         {
             Vector3 v1 = this;
@@ -533,14 +532,15 @@ namespace GeometrySharp.Geometry
         }
 
         /// <summary>
-        /// Compute the perpendicular to another vector. Result is not unitized.
+        /// Computes the perpendicular to another vector.
+        /// Result is not unitized.
         /// </summary>
         /// <param name="other">Vector to use as guide.</param>
-        /// <returns>Return the perpendicular vector.</returns>
+        /// <returns>The perpendicular vector.</returns>
         /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector
         public Vector3 PerpendicularTo(Vector3 other)
         {
-            var tempVector = new double[3]; 
+            double[] tempVector = new double[3];
             int i, j, k;
             double a, b;
             k = 2;
@@ -609,6 +609,15 @@ namespace GeometrySharp.Geometry
             return tempVector.ToVector();
         }
 
+        // ToDo: make a test.
+        /// <summary>
+        /// Computes the perpendicular to three points.
+        /// Result is not unitized.
+        /// </summary>
+        /// <param name="pt1">First point.</param>
+        /// <param name="pt2">Second point.</param>
+        /// <param name="pt3">Third point.</param>
+        /// <returns>The perpendicular vector.</returns>
         public Vector3 PerpendicularTo(Vector3 pt1, Vector3 pt2, Vector3 pt3)
         {
             Vector3 vec0 = pt3 - pt2;
@@ -636,16 +645,16 @@ namespace GeometrySharp.Geometry
             double s2 = 1.0 / vec2.Length();
 
             // choose normal with smallest total error
-            double e0 = s0 * Math.Abs(Vector3.Dot(normal0, vec0)) + 
-                        s1 * Math.Abs(Vector3.Dot(normal0, vec1)) + 
+            double e0 = s0 * Math.Abs(Vector3.Dot(normal0, vec0)) +
+                        s1 * Math.Abs(Vector3.Dot(normal0, vec1)) +
                         s2 * Math.Abs(Vector3.Dot(normal0, vec2));
 
-            double e1 = s0 * Math.Abs(Vector3.Dot(normal1, vec0)) + 
-                        s1 * Math.Abs(Vector3.Dot(normal1, vec1)) + 
+            double e1 = s0 * Math.Abs(Vector3.Dot(normal1, vec0)) +
+                        s1 * Math.Abs(Vector3.Dot(normal1, vec1)) +
                         s2 * Math.Abs(Vector3.Dot(normal1, vec2));
 
-            double e2 = s0 * Math.Abs(Vector3.Dot(normal2, vec0)) + 
-                        s1 * Math.Abs(Vector3.Dot(normal2, vec1)) + 
+            double e2 = s0 * Math.Abs(Vector3.Dot(normal2, vec0)) +
+                        s1 * Math.Abs(Vector3.Dot(normal2, vec1)) +
                         s2 * Math.Abs(Vector3.Dot(normal2, vec2));
 
             if (e0 <= e1)
@@ -658,11 +667,11 @@ namespace GeometrySharp.Geometry
         /// <summary>
         /// Constructs the string representation of the vector.
         /// </summary>
-        /// <returns>The vector in string format</returns>
+        /// <returns>The vector in string format.</returns>
         public override string ToString()
         {
-            return this.Count == 4 
-                ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}" 
+            return this.Count == 4
+                ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}"
                 : $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
         }
     }

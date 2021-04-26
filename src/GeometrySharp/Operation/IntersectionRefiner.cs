@@ -40,7 +40,7 @@ namespace GeometrySharp.Operation
         /// <param name="secondGuess">The second guess parameter.</param>
         /// <param name="tolerance">The value tolerance for the intersection.</param>
         /// <returns>The results collected into the object <see cref="CurvePlaneIntersectionResult"/>.</returns>
-        internal static CurvePlaneIntersectionResult CurvePlaneWithEstimation(NurbsCurve crv, Plane plane,
+        internal static CurvePlaneIntersectionResult CurvePlaneWithEstimation(ICurve crv, Plane plane,
             double firstGuess, double secondGuess, double tolerance)
         {
             IObjectiveFunction objectiveFunctions = new CurvePlaneIntersectionObjectives(crv, plane);

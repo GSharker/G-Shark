@@ -57,7 +57,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void AdaptiveSample_Returns_Points_Sampling_The_Domain_With_Respect_Local_Curvature()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Act
             (List<double> tValues, List<Vector3> pts) adaptiveSample = Tessellation.AdaptiveSample(curve, 0.1);
@@ -79,7 +79,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Vector3> controlPts = NurbsCurveCollection.NurbsCurveExample2().ControlPoints;
+            List<Vector3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPoints;
             NurbsCurve curve = new NurbsCurve(controlPts, 1);
 
             // Act
@@ -94,7 +94,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
         {
             // Act
-            (List<double> tValues, List<Vector3> pts) = Tessellation.AdaptiveSample(NurbsCurveCollection.NurbsCurveExample2(), 0.0);
+            (List<double> tValues, List<Vector3> pts) = Tessellation.AdaptiveSample(NurbsCurveCollection.NurbsCurvePlanarExample(), 0.0);
 
             // Assert
             tValues.Should().NotBeEmpty();

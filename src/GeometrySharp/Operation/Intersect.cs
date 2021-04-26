@@ -305,7 +305,7 @@ namespace GeometrySharp.Operation
         /// <param name="crv">The curve to intersect.</param>
         /// <param name="ln">The line to intersect with.</param>
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
-        public static List<CurvesIntersectionResult> CurveLine(NurbsCurve crv, Line ln)
+        public static List<CurvesIntersectionResult> CurveLine(ICurve crv, Line ln)
         {
             return CurveCurve(crv, ln);
         }
@@ -336,7 +336,7 @@ namespace GeometrySharp.Operation
         /// <param name="pl">The plane to intersect with the curve.</param>
         /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
         /// <returns>If intersection found a collection of <see cref="CurvePlaneIntersectionResult"/> otherwise the result will be empty.</returns>
-        public static List<CurvePlaneIntersectionResult> CurvePlane(NurbsCurve crv, Plane pl, double tolerance = 1e-6)
+        public static List<CurvePlaneIntersectionResult> CurvePlane(ICurve crv, Plane pl, double tolerance = 1e-6)
         {
             List<ICurve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
             List<CurvePlaneIntersectionResult> intersectionResults = bBoxRoot.Select(

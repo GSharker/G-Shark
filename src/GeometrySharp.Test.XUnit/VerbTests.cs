@@ -188,5 +188,26 @@ namespace GeometrySharp.Test.XUnit
             }
             _testOutput.WriteLine($"Solved - {solved}");
         }
+
+        [Fact]
+        public void DecomposeNurbsIntoBeziers()
+        {
+            Array<object> pts = new Array<object>();
+
+            pts.push(new Array<double>(new double[] { 0, 5, 5 }));
+            pts.push(new Array<double>(new double[] { 0, 0, 0 }));
+            pts.push(new Array<double>(new double[] { 4, 0, 0 }));
+            pts.push(new Array<double>(new double[] { 5, 5, 5 }));
+            pts.push(new Array<double>(new double[] { 0, 5, 0 }));
+
+            verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byPoints(pts, 3);
+
+            var res = verb.eval.Modify.decomposeCurveIntoBeziers(curve._data);
+
+            for (int i = 0; i < res.length; i++)
+            {
+                _testOutput.WriteLine($"{res[i]}");
+            }
+        }
     }
 }

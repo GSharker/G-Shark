@@ -51,7 +51,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void RationalBezierCurveParamAtLength_Returns_Parameters_At_Passed_Lengths()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;
@@ -77,7 +77,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Returns_The_Length_Of_The_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
@@ -101,7 +101,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void It_Returns_The_Closest_Point_And_The_Parameter_t(double[] ptToCheck, double[] ptExpected, double tValExpected)
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             
             // Act
             Vector3 ptHomogenized = Analyze.CurveClosestPoint(curve, ptToCheck.ToVector(), out double t);
@@ -124,7 +124,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void RationalCurveParameterAtLength_Returns_Parameter_t_At_The_Given_Length(double segmentLength, double tValueExpected)
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample2();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Act
             double t = Analyze.CurveParameterAtLength(curve, segmentLength);

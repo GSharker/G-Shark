@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace GeometrySharp.Operation
 {
+    // ToDo: CurveElevateDegree
+    // ToDo: CurveKnotInsert
     /// <summary>
     /// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
     /// knot insertion, knot refinement, degree elevation, re-parametrization.
@@ -97,8 +99,9 @@ namespace GeometrySharp.Operation
         /// This is a useful starting point for intersection, closest point, divide & conquer algorithms.
         /// </summary>
         /// <param name="curve">The curve object.</param>
+        /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
         /// <returns>Collection of curve objects, defined by degree, knots, and control points.</returns>
-        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve)
+        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.ControlPoints;
@@ -128,7 +131,10 @@ namespace GeometrySharp.Operation
 
             while (i < controlPoints.Count)
             {
-                Knot knotsRange = knots.GetRange(i, crvKnotLength).ToKnot();
+
+                Knot knotsRange = (normalize)
+                    ? Knot.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
+                    : knots.GetRange(i, crvKnotLength).ToKnot();
                 List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
@@ -147,7 +153,7 @@ namespace GeometrySharp.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            List<Vector3> pts = curve.ControlPoints;
+            List<Vector3> pts = new List<Vector3>(curve.ControlPoints);
             pts.Reverse();
 
             List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);

@@ -51,33 +51,7 @@ namespace GeometrySharp.Geometry
         /// Computes the bounding box of the list of points.
         /// </summary>
         /// <returns>The bounding box.</returns>
-        public BoundingBox BoundingBox
-        {
-            get
-            {
-                double minX = double.MaxValue;
-                double minY = double.MaxValue;
-                double minZ = double.MaxValue;
-                double maxX = double.MinValue;
-                double maxY = double.MinValue;
-                double maxZ = double.MinValue;
-
-                for (int i = 0; i < Count; i++)
-                {
-                    minX = Math.Min(minX, this[i][0]);
-                    maxX = Math.Max(maxX, this[i][0]);
-                    minY = Math.Min(minY, this[i][1]);
-                    maxY = Math.Max(maxY, this[i][1]);
-                    minZ = Math.Min(minZ, this[i][2]);
-                    maxZ = Math.Max(maxZ, this[i][2]);
-                }
-
-                Vector3 minPt = new Vector3 { minX, minY, minZ };
-                Vector3 maxPt = new Vector3 { maxX, maxY, maxZ };
-
-                return new BoundingBox(minPt, maxPt);
-            }
-        }
+        public BoundingBox BoundingBox => new BoundingBox(this);
 
         /// <summary>
         /// Calculates the length of the polyline.

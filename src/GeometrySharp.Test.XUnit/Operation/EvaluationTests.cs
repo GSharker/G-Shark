@@ -5,6 +5,7 @@ using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
 using System.Collections.Generic;
+using GeometrySharp.Operation.Utilities;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -132,6 +133,29 @@ namespace GeometrySharp.Test.XUnit.Operation
             pt[0].Should().BeApproximately(-1.27675, 0.00001);
             pt[1].Should().BeApproximately(0.216, 0.00001);
             pt[2].Should().BeApproximately(2.342, 0.00001);
+        }
+
+        [Fact]
+        public void It_Returns_Extrema_Values()
+        {
+            // Arrange
+            List<Vector3> pts = new List<Vector3>
+            {
+                new Vector3 {330, 592, 0},
+                new Vector3 {330, 557, 0},
+                new Vector3 {315, 522, 0},
+                new Vector3 {315, 485, 0}
+            };
+            NurbsCurve curve = new NurbsCurve(pts, 3);
+
+            // Act
+            Extrema e = Evaluation.ComputeExtrema(curve);
+
+            // Assert
+            e.Values.Count.Should().Be(3);
+            e.Values[0].Should().Be(0);
+            e.Values[1].Should().Be(0.5);
+            e.Values[2].Should().Be(1);
         }
 
         [Fact]
@@ -425,7 +449,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             // Assert
             tangent.Should().BeEquivalentTo(new Vector3 { 3, 0, 0 });
 
-            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurveExample2(), t);
+            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
             Vector3 tangentNormalized = tangentToCheck.Unitize();
             Vector3 tangentExpected = new Vector3(tangentData);
 

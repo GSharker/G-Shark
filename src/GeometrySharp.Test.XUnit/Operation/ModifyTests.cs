@@ -44,7 +44,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             for (int i = 0; i <= knots.Count - degree - 2; i++)
                 controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
             ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
@@ -62,7 +62,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void It_Decomposes_The_Curve_Into_Bezier_Curve_Segments()
+        public void It_Decomposes_The_Curve_Of_Degree_Three_Into_Bezier_Curve_Segments()
         {
             // Arrange
             int degree = 3;
@@ -72,7 +72,7 @@ namespace GeometrySharp.Test.XUnit.Operation
             for (int i = 0; i <= knots.Count - degree - 2; i++)
                 controlPts.Add(new Vector3 { i, 0.0, 0.0 });
 
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
             List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
@@ -92,10 +92,42 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
+        public void It_Decomposes_The_Curve_Of_Degree_Two_Into_Bezier_Curve_Segments()
+        {
+            // Arrange
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {0, 5, 5},
+                new Vector3 {0, 0, 0},
+                new Vector3 {4, 0, 0},
+                new Vector3 {5, 5, 5},
+                new Vector3 {0, 5, 0},
+            };
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
+
+            // Act
+            List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+
+            // Assert
+            curvesAfterDecompose.Count.Should().Be(3);
+            foreach (ICurve bezierCurve in curvesAfterDecompose)
+            {
+                double t = bezierCurve.Knots[0];
+                Vector3 pt0 = bezierCurve.PointAt(t);
+                Vector3 pt1 = curve.PointAt(t);
+
+                double pt0_pt1 = (pt0 - pt1).Length();
+
+                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
+            }
+        }
+
+        [Fact]
         public void It_Reverses_The_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveExample3();
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
 
             // Act
             ICurve crvRev1 = Modify.ReverseCurve(curve);
