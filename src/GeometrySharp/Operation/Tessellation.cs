@@ -24,7 +24,7 @@ namespace GeometrySharp.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="numSamples">Number of samples.</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tvalues, List<Vector3> pts) RegularSample(ICurve curve, int numSamples)
+        public static (List<double> tvalues, List<Vector3> pts) CurveRegularSample(ICurve curve, int numSamples)
         {
             if (numSamples < 1)
                 throw new Exception("Number of sample must be at least 1 and not negative.");
@@ -52,26 +52,16 @@ namespace GeometrySharp.Operation
         /// Samples a curve in an adaptive way.
         /// Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
         /// </summary>
-        /// <param name="curve">The curve object.</param>
-        /// <param name="tolerance">Tolerance for the adaptive scheme.</param>
-        /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSample(ICurve curve, double tolerance)
+        /// <param name="curve">The curve to sampling.</param>
+        /// <param name="tolerance">The tolerance for the adaptive division.</param>
+        /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
+        public static (List<double> tValues, List<Vector3> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
         {
-            List<double> tValues = new List<double>();
-            List<Vector3> pts = new List<Vector3>();
-            double start = curve.Knots[0];
-            double end = curve.Knots[^1];
-
-            if (curve.Degree != 1) return AdaptiveSampleRange(curve, start, end, tolerance);
-
-            List<Vector3> controlPoints = curve.ControlPoints;
-            for (int i = 0; i < controlPoints.Count; i++)
-            {
-                tValues.Add(curve.Knots[i + 1]);
-                pts.Add(controlPoints[i]);
-            }
-
-            return (tValues, pts);
+            if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[^1], tolerance);
+            Knot copyKnot = new Knot(curve.Knots);
+            copyKnot.RemoveAt(0);
+            copyKnot.RemoveAt(copyKnot.Count - 1);
+            return (copyKnot, curve.ControlPoints);
         }
 
         /// <summary>
@@ -79,18 +69,15 @@ namespace GeometrySharp.Operation
         /// Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
         /// https://www.modelical.com/en/grasshopper-scripting-107/
         /// </summary>
-        /// <param name="curve">The curve object.</param>
-        /// <param name="start">Parameter for sampling.</param>
-        /// <param name="end">Parameter for sampling.</param>
+        /// <param name="curve">The curve to sampling.</param>
+        /// <param name="start">The start parameter for sampling.</param>
+        /// <param name="end">The end parameter for sampling.</param>
         /// <param name="tolerance">Tolerance for the adaptive scheme.
         /// If tolerance is <= 0.0, the tolerance used is set as MAXTOLERANCE (1e-6).</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Vector3> pts) AdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
+        public static (List<double> tValues, List<Vector3> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
         {
             double setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAXTOLERANCE : tolerance;
-
-            List<double> tValues = new List<double>();
-            List<Vector3> pts = new List<Vector3>();
 
             // Sample curve at three pts.
             Random random = new Random();
@@ -107,20 +94,17 @@ namespace GeometrySharp.Operation
             if ((Vector3.Dot(diff, diff) < setTolerance && Vector3.Dot(diff2, diff2) > setTolerance)
                 || !Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, setTolerance))
             {
-                // Get the exact middle value.
-                double midValue = start + (end - start) * 0.5;
+                // Get the exact middle value or a random value start + (end - start) * (0.45 + 0.1 * random.NextDouble());
+                double tMiddle = start + (end - start) * 0.5;
 
                 // Recurse the two halves.
-                (List<double> leftValuesT, List<Vector3> leftPts) = AdaptiveSampleRange(curve, start, midValue, setTolerance);
-                (List<double> rightValuesT, List<Vector3> rightPts) = AdaptiveSampleRange(curve, midValue, end, setTolerance);
+                (List<double> tValues, List<Vector3> pts) leftHalves = CurveAdaptiveSampleRange(curve, start, tMiddle, tolerance);
+                (List<double> tValues, List<Vector3> pts) rightHalves = CurveAdaptiveSampleRange(curve, tMiddle, end, tolerance);
 
-                tValues.AddRange(leftValuesT.SkipLast(1).ToList());
-                tValues.AddRange(rightValuesT);
+                List<double> tMerged = leftHalves.tValues.SkipLast(1).Concat(rightHalves.tValues).ToList();
+                List<Vector3> ptsMerged = leftHalves.pts.SkipLast(1).Concat(rightHalves.pts).ToList();
 
-                pts.AddRange(leftPts.SkipLast(1).ToList());
-                pts.AddRange(rightPts);
-
-                return (tValues, pts);
+                return (tMerged, ptsMerged);
             }
             else
             {
