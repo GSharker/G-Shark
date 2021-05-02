@@ -10,7 +10,7 @@ namespace GeometrySharp.Core
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
-    public class Matrix : List<IList<double>>
+    public class Matrix : List<List<double>>
     {
         /// <summary>
         /// Initialize an empty matrix.
@@ -407,7 +407,7 @@ namespace GeometrySharp.Core
                 // interchange the two rows.
                 if (permutationValueK != k)
                 {
-                    IList<double> copyRow = copyMatrix[permutationValueK];
+                    List<double> copyRow = copyMatrix[permutationValueK];
                     copyMatrix[permutationValueK] = copyMatrix[k];
                     copyMatrix[k] = copyRow;
 
