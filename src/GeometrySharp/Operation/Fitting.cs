@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
-using Microsoft.VisualBasic;
 
 namespace GeometrySharp.Operation
 {
@@ -17,6 +13,13 @@ namespace GeometrySharp.Operation
     /// </summary>
     public static class Fitting
     {
+        public static NurbsCurve ApproximateCurve(List<Vector3> pts, int degree)
+        {
+            return new NurbsCurve();
+        }
+
+        //public static List<NurbsCurve> BezierInterpolation
+
         public static NurbsCurve InterpolatedCurve(List<Vector3> pts, int degree, Vector3 startTangent = null,
             Vector3 endTangent = null, bool centripetal = false)
         {
@@ -70,13 +73,15 @@ namespace GeometrySharp.Operation
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
 
+            // Equations 9.11
             double mult0 = knots[degree + 1] / degree;
+            // Equations 9.12
             double mult1 = (1 - knots[knots.Count - degree - 2]) / degree;
 
             // Solve for each dimension.
             for (int i = 0; i < pts[0].Count; i++)
             {
-                Vector3 b = Vector3.Unset;
+                Vector3 b = new Vector3();
                 if (!hasTangents)
                 {
                     b = pts.Select(pt => pt[i]).ToVector();
@@ -85,8 +90,10 @@ namespace GeometrySharp.Operation
                 {
                     // Insert the tangents at the second and second to last index.
                     b.Add(pts[0][i]);
+                    // Equations 9.11
                     b.Add(startTangent[i] * mult0);
                     b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
+                    // Equations 9.12
                     b.Add(endTangent[i] * mult1);
                     b.Add(pts.Last()[i]);
                 }
@@ -96,12 +103,6 @@ namespace GeometrySharp.Operation
             }
 
             return ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
-        }
-
-
-        public static NurbsCurve ApproximateCurve(List<Vector3> pts, int degree)
-        {
-            return new NurbsCurve();
         }
 
         /// <summary>
