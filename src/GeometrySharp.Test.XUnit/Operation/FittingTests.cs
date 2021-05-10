@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
 using GeometrySharp.Operation;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,7 +35,7 @@ namespace GeometrySharp.Test.XUnit.Operation
         public void Interpolates_A_Collection_Of_Points(int degree)
         {
             // Act
-            var crv = Fitting.InterpolatedCurve(pts, degree);
+            NurbsCurve crv = Fitting.InterpolatedCurve(pts, degree);
 
             // Assert
             crv.Degree.Should().Be(degree);
@@ -49,6 +46,22 @@ namespace GeometrySharp.Test.XUnit.Operation
             {
                 Vector3 closedPt = crv.ClosestPt(pt);
                 closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            }
+        }
+
+        [Fact]
+        public void Returns_A_Sets_Of_Interpolated_Beziers_From_A_Collection_Of_Points()
+        {
+            // Act
+            List<NurbsCurve> crvs = Fitting.BezierInterpolation(pts);
+
+            // Assert
+            crvs.Count.Should().Be(4);
+            for (int i = 0; i < crvs.Count - 1; i++)
+            {
+               bool areCollinear = Trigonometry.AreThreePointsCollinear(crvs[i].ControlPoints[2], crvs[i].ControlPoints[3],
+                    crvs[i + 1].ControlPoints[1]);
+               areCollinear.Should().BeTrue();
             }
         }
 
@@ -86,12 +99,12 @@ namespace GeometrySharp.Test.XUnit.Operation
             {
                 Vector3 b = new Vector3();
                 b = p.Select(pt => pt[i]).ToVector();
-                
+
                 Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
 
-            var result = ptsSolved.Transpose();
+            Matrix result = ptsSolved.Transpose();
             _testOutput.WriteLine(ptsSolved.ToString());
         }
     }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.ExtendedMethods;
 using GeometrySharp.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GeometrySharp.Operation
 {
@@ -18,8 +18,40 @@ namespace GeometrySharp.Operation
             return new NurbsCurve();
         }
 
-        //public static List<NurbsCurve> BezierInterpolation
+        /// <summary>
+        /// Creates a set of interpolated cubic beziers through a set of points.
+        /// </summary>
+        /// <param name="pts">Set of points to interpolate.</param>
+        /// <returns>A set of cubic beziers.</returns>
+        public static List<NurbsCurve> BezierInterpolation(List<Vector3> pts)
+        {
+            if (pts.Count == 0)
+            {
+                throw new Exception("Collection of points is empty.");
+            }
 
+            List<NurbsCurve> beziers = new List<NurbsCurve>();
+            (List<Vector3> ptsA, List<Vector3> ptsB) ctrlPts = SolveBezierCtrlPts(pts);
+
+            for (int i = 0; i < pts.Count - 1; i++)
+            {
+                beziers.Add(new NurbsCurve(new List<Vector3> {pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1]},
+                    3));
+            }
+
+            return beziers;
+        }
+
+        /// <summary>
+        /// Creates a interpolated curve through a set of points.
+        /// Please refer to Algorithm A9.1 on The NURBS Book (2nd Edition), pp.369-370 for details.
+        /// </summary>
+        /// <param name="pts">The set of points to interpolate.</param>
+        /// <param name="degree">The Curve degree.</param>
+        /// <param name="startTangent">The tangent vector for the first point.</param>
+        /// <param name="endTangent">The tangent vector for the last point.</param>
+        /// <param name="centripetal">True use the chord as per knot spacing, false use the squared chord.</param>
+        /// <returns>A the interpolated curve.</returns>
         public static NurbsCurve InterpolatedCurve(List<Vector3> pts, int degree, Vector3 startTangent = null,
             Vector3 endTangent = null, bool centripetal = false)
         {
@@ -115,7 +147,7 @@ namespace GeometrySharp.Operation
 
             int dimEnd = (hasTangents) ? pts.Count - (degree - 1) : pts.Count - (degree + 1);
 
-            foreach (var u in uk)
+            foreach (double u in uk)
             {
                 int span = knots.Span(dim, degree, u);
                 List<double> basicFunction = Evaluation.BasicFunction(degree, knots, span, u);
@@ -144,7 +176,7 @@ namespace GeometrySharp.Operation
         /// </summary>
         internal static List<double> ParametersCurve(List<Vector3> pts, bool centripetal = false)
         {
-            List<double> chords = new List<double> {0.0};
+            List<double> chords = new List<double> { 0.0 };
             for (int i = 1; i < pts.Count; i++)
             {
                 double chord = (centripetal) ? Math.Sqrt((pts[i] - pts[i - 1]).Length()) : (pts[i] - pts[i - 1]).Length();
@@ -160,6 +192,52 @@ namespace GeometrySharp.Operation
             }
 
             return uk;
+        }
+
+        internal static (List<Vector3> ptsA, List<Vector3> ptsB) SolveBezierCtrlPts(List<Vector3> pts)
+        {
+            int n = pts.Count - 1;
+
+            // Build the coefficient matrix.
+            Matrix m = Matrix.Identity(n, 4);
+            Matrix coeffMatrix = m.FillDiagonal(0, 1, 1).FillDiagonal(1, 0, 1);
+            coeffMatrix[0][0] = 2;
+            coeffMatrix[n - 1][n - 1] = 7;
+            coeffMatrix[n - 1][n - 2] = 2;
+
+            // Build the vector points.
+            List<Vector3> vecPts = Vector3.Zero2d(n, pts[0].Count);
+            for (int i = 1; i < n-1; i++)
+            {
+                vecPts[i] = (pts[i] * 2 + pts[i + 1]) * 2;
+            }
+
+            vecPts[0] = pts[0] + pts[1] * 2;
+            vecPts[n - 1] = pts[n - 1] * 8 + pts[n];
+
+            Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
+            Matrix ptsSolved = new Matrix();
+
+            // Solve for each dimension.
+            for (int i = 0; i < vecPts[0].Count; i++)
+            {
+                Vector3 b = new Vector3();
+                b = vecPts.Select(pt => pt[i]).ToVector();
+
+                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
+                ptsSolved.Add(solution);
+            }
+
+            List<Vector3> ctrlPtsA = ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
+            List<Vector3> ctrlPtsB = Vector3.Zero2d(n, pts[0].Count);
+            for (int i = 0; i < n - 1; i++)
+            {
+                ctrlPtsB[i] = pts[i + 1] * 2 - ctrlPtsA[i + 1];
+            }
+
+            ctrlPtsB[n - 1] = (ctrlPtsA[n - 1] + pts[n]) / 2;
+
+            return (ctrlPtsA, ctrlPtsB);
         }
     }
 }

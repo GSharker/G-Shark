@@ -57,7 +57,7 @@ namespace GeometrySharp.Core
             List<Vector3> zeros = Vector3.Zero2d(size, size);
             for (int i = 0; i < size; i++)
             {
-                zeros[i][i] = 1.0;
+                zeros[i][i] = diagonalValue;
                 m.Add(zeros[i]);
             }
             return m;
