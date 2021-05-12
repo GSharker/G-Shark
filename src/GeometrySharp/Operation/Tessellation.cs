@@ -84,9 +84,9 @@ namespace GeometrySharp.Operation
             double t = 0.5 + 0.2 * random.NextDouble();
             double mid = start + (end - start) * t;
 
-            Vector3 pt1 = Evaluation.CurvePointAt(curve, start);
-            Vector3 pt2 = Evaluation.CurvePointAt(curve, mid);
-            Vector3 pt3 = Evaluation.CurvePointAt(curve, end);
+            Vector3 pt1 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
+            Vector3 pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
+            Vector3 pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
 
             Vector3 diff = pt1 - pt3;
             Vector3 diff2 = pt1 - pt2;

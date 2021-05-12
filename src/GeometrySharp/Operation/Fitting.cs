@@ -127,7 +127,7 @@ namespace GeometrySharp.Operation
                     b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
                     // Equations 9.12
                     b.Add(endTangent[i] * mult1);
-                    b.Add(pts.Last()[i]);
+                    b.Add(pts[^1][i]);
                 }
 
                 Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
@@ -194,7 +194,7 @@ namespace GeometrySharp.Operation
             return uk;
         }
 
-        internal static (List<Vector3> ptsA, List<Vector3> ptsB) SolveBezierCtrlPts(List<Vector3> pts)
+        internal static (List<Vector3> ptsA, List<Vector3> ptsB) SolveBezierCtrlPts(List<Vector3> pts, bool getsEndDerivatives = false)
         {
             int n = pts.Count - 1;
 
@@ -206,10 +206,16 @@ namespace GeometrySharp.Operation
             coeffMatrix[n - 1][n - 2] = 2;
 
             // Build the vector points.
-            List<Vector3> vecPts = Vector3.Zero2d(n, pts[0].Count);
-            for (int i = 1; i < n-1; i++)
+            List<Vector3> vecPts = (getsEndDerivatives) 
+                ? Vector3.Zero2d(2, pts[0].Count)
+                : Vector3.Zero2d(n, pts[0].Count);
+
+            if (!getsEndDerivatives)
             {
-                vecPts[i] = (pts[i] * 2 + pts[i + 1]) * 2;
+                for (int i = 1; i < n - 1; i++)
+                {
+                    vecPts[i] = (pts[i] * 2 + pts[i + 1]) * 2;
+                }
             }
 
             vecPts[0] = pts[0] + pts[1] * 2;
@@ -229,7 +235,9 @@ namespace GeometrySharp.Operation
             }
 
             List<Vector3> ctrlPtsA = ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
-            List<Vector3> ctrlPtsB = Vector3.Zero2d(n, pts[0].Count);
+            List<Vector3> ctrlPtsB = (getsEndDerivatives)
+                ? Vector3.Zero2d(2, pts[0].Count)
+                : Vector3.Zero2d(n, pts[0].Count);
             for (int i = 0; i < n - 1; i++)
             {
                 ctrlPtsB[i] = pts[i + 1] * 2 - ctrlPtsA[i + 1];
