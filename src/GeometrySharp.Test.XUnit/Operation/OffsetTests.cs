@@ -53,16 +53,35 @@ namespace GeometrySharp.Test.XUnit.Operation
         }
 
         [Fact]
-        public void Returns_The_Offset_Of_A_Polyline()
+        public void Returns_The_Offset_Of_A_Open_Polyline()
         {
             // Arrange
             Polyline pl = new Polyline(PolylineTests.ExamplePts);
-            double offset = -5;
+            double offset = 5;
 
             // Act
             Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
 
             // Assert
+            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            (offsetResult[^1].DistanceTo(pl[^1]) - offset).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+        }
+
+        [Fact]
+        public void Returns_The_Offset_Of_A_Open_Polygon()
+        {
+            // Arrange
+            Polygon pl = new Polygon(PolygonTests.Planar2D);
+            double offset = 5;
+
+            // Act
+            Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
+
+            // Assert
+            offsetResult[0].DistanceTo(offsetResult[^1]).Should().Be(0.0);
+            Vector3 pt = offsetResult.PointAt(0.5);
+            Vector3 closestPt = pl.ClosestPt(pt);
+            pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharpMath.MINTOLERANCE);
         }
 
         [Fact]
