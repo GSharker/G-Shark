@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using GeometrySharp.Core;
+﻿using GeometrySharp.Core;
 using GeometrySharp.Geometry;
 using GeometrySharp.Geometry.Interfaces;
+using System.Collections.Generic;
 
 namespace GeometrySharp.Operation
 {
@@ -53,7 +48,7 @@ namespace GeometrySharp.Operation
         {
             if (distance == 0.0) return crv;
 
-            var subdivision = Tessellation.CurveAdaptiveSample(crv);
+            (List<double> tValues, List<Vector3> pts) subdivision = Tessellation.CurveAdaptiveSample(crv);
 
             List<Vector3> offsetPts = new List<Vector3>();
             for (int i = 0; i < subdivision.pts.Count; i++)
@@ -75,6 +70,8 @@ namespace GeometrySharp.Operation
         /// <returns>The offset polyline.</returns>
         public static Polyline Polyline(Polyline poly, double distance, Plane pln)
         {
+            if (distance == 0.0) return poly;
+
             int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
 
             Vector3[] offsetPts = new Vector3[poly.Count];
@@ -110,7 +107,7 @@ namespace GeometrySharp.Operation
 
                 if (i == iteration - 1)
                 {
-                    offsetPts[(poly.IsClosed) ? i : i +1] = (poly.IsClosed) ? offsetPts[0] : offsetSegments[k].End;
+                    offsetPts[(poly.IsClosed) ? i : i + 1] = (poly.IsClosed) ? offsetPts[0] : offsetSegments[k].End;
                 }
             }
 
