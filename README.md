@@ -1,4 +1,4 @@
-![](media/gshark-banner.jpg "Geometry Shark")
+![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
 **GShark** is the nickname for **Geometry Shark**. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GeometrySharp).
