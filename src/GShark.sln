@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShark", "G-Shark\GShark.csproj", "{3249FF54-061F-4A9B-8DFE-F69A2E5CFCBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShark", "GShark\GShark.csproj", "{3249FF54-061F-4A9B-8DFE-F69A2E5CFCBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShark.Test.XUnit", "G-Shark.Test.XUnit\GShark.Test.XUnit.csproj", "{312114FB-CE7D-48E8-90B3-42821580039D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShark.Test.XUnit", "GShark.Test.XUnit\GShark.Test.XUnit.csproj", "{312114FB-CE7D-48E8-90B3-42821580039D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
