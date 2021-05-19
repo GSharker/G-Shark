@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using GeometrySharp.Core;
 using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
 using GeometrySharp.Operation;
 using GeometrySharp.Test.XUnit.Data;
 using System.Collections.Generic;
-using GeometrySharp.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 

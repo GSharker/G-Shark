@@ -142,7 +142,7 @@ namespace GeometrySharp.Operation
             double tParameter = default(double);
             List<Vector3> ctrlPts = curve.ControlPoints;
 
-            (List<double> tValues, List<Vector3> pts) = Tessellation.RegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Vector3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
