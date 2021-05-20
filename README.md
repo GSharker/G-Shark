@@ -1,6 +1,12 @@
-# [GeometrySharp](https://github.com/cesarecaoduro/GeometrySharp/tree/master/GeometrySharp "GeometrySharp")
-This repository is inspired by the library **Verb** --> [https://github.com/pboyer/verb](https://github.com/pboyer/verb). 
-The initial library uses Haxe to build for different languages including C# with some limitation and bugs. This repository is a porting of the library in native C# and is based on NET5 framework.
-Still in the very early stages but we are planning to include few examples, including a ConsoleApp and a SPA based on Blazor WebAssembly.
-# [GeometrySharp.Test.XUnit](https://github.com/cesarecaoduro/GeometrySharp/tree/master/GeometrySharp.Test.XUnit "GeometrySharp.Test.XUnit")
-This projects implements unit tests using XUnit and Fluent Assertion.
+![](./media/gshark-banner.jpg "Geometry Shark")
+
+# The project
+**GShark** is the nickname for **Geometry Shark**. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GShark).
+There are plenty of libraries written in C++, Python and some of them also in C# but we couldn't find a library to rule them all and, most important, free and open source.
+For this reason we have started this crazy project going back to books, learning from other libraries (which we thank for) and finally provinding our own touch to it.
+
+We are very far from beeing super performant and, in fact, we are still writing code and committing every day something new. The idea is to have something that is software agnostic, hopefully well documented and easy to use.
+
+## The library
+work in progres...
+
