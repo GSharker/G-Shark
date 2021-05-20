@@ -156,7 +156,7 @@ namespace GShark.Optimization
                     j--;
                 }
 
-                A[i] = Ai;
+                A[i] = Ai.ToList();
                 i--;
             }
 

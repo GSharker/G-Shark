@@ -2,7 +2,9 @@
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace GShark.Core
 {
@@ -10,7 +12,7 @@ namespace GShark.Core
     /// A Matrix is represented by a nested list of double point numbers.
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
-    public class Matrix : List<IList<double>>
+    public class Matrix : List<List<double>>
     {
         /// <summary>
         /// Initialize an empty matrix.
@@ -47,17 +49,52 @@ namespace GShark.Core
         /// Creates an identity matrix of a given size.
         /// </summary>
         /// <param name="size">The size of the matrix.</param>
+        /// <param name="diagonalValue">The value which will be filled the diagonal.</param>
         /// <returns>Identity matrix of the given size.</returns>
-        public static Matrix Identity(int size)
+        public static Matrix Identity(int size, double diagonalValue = 1.0)
         {
             Matrix m = new Matrix();
             List<Vector3> zeros = Vector3.Zero2d(size, size);
             for (int i = 0; i < size; i++)
             {
-                zeros[i][i] = 1.0;
+                zeros[i][i] = diagonalValue;
                 m.Add(zeros[i]);
             }
             return m;
+        }
+
+        /// <summary>
+        /// Fills the diagonal determined by the row and column position of a matrix.
+        /// </summary>
+        /// <param name="row">The value row where the diagonal begin.</param>
+        /// <param name="column">The column value where the diagonal begin.</param>
+        /// <param name="valueToFill">The value to fill on the diagonal.</param>
+        /// <returns>A matrix with the identified diagonal filled.</returns>
+        public Matrix FillDiagonal(int row, int column, double valueToFill)
+        {
+            if (this[0].Count < 2 && this.Count < 2)
+            {
+                throw new Exception("Matrix must be at least 2-d");
+            }
+            if (row < 0 || row > this.Count - 1)
+            {
+                throw new Exception($"Check the row value, must be not negative or bigger than {this.Count - 1}");
+            }
+            if (column < 0 || column > this[0].Count - 1)
+            {
+                throw new Exception($"Check the column value, must be not negative or bigger than {this[0].Count - 1}");
+            }
+
+            Matrix copyMatrix = Duplicate(this);
+            int j = column;
+            for (int i = row; i < this.Count; i++)
+            {
+                if(j > this[0].Count-1) break;
+                copyMatrix[i][j] = valueToFill;
+                j++;
+            }
+
+            return copyMatrix;
         }
 
         /// <summary>
@@ -407,7 +444,7 @@ namespace GShark.Core
                 // interchange the two rows.
                 if (permutationValueK != k)
                 {
-                    IList<double> copyRow = copyMatrix[permutationValueK];
+                    List<double> copyRow = copyMatrix[permutationValueK];
                     copyMatrix[permutationValueK] = copyMatrix[k];
                     copyMatrix[k] = copyRow;
 

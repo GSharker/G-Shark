@@ -81,7 +81,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
-            (List<double> tvalues, List<Vector3> pts) samples = Tessellation.RegularSample(curve, 10000);
+            (List<double> tvalues, List<Vector3> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
 
             double length = 0.0;
             for (int j = 0; j < samples.pts.Count - 1; j++)

@@ -196,7 +196,7 @@ namespace GShark.Geometry
         /// ToDo implement the async method.
         public Vector3 ClosestPt(Vector3 point)
         {
-            return Analyze.CurveClosestPoint(this, point, out _);
+            return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
 
         /// <summary>

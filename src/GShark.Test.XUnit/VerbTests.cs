@@ -1,4 +1,9 @@
-﻿using verb.core;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using verb.core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -207,6 +212,32 @@ namespace GShark.Test.XUnit
             for (int i = 0; i < res.length; i++)
             {
                 _testOutput.WriteLine($"{res[i]}");
+            }
+        }
+
+        [Fact]
+        public void AdaptiveSubdivision()
+        {
+            Array<object> pts = new Array<object>();
+
+            //pts.push(new Array<double>(new double[] { 100, 25, 0 }));
+            //pts.push(new Array<double>(new double[] { 10, 90, 0 }));
+            //pts.push(new Array<double>(new double[] { 110, 100, 0 }));
+            //pts.push(new Array<double>(new double[] { 150, 195, 0 }));
+
+            pts.push(new Array<double>(new double[] { 4.5, 2.5, 2.5 }));
+            pts.push(new Array<double>(new double[] { 5, 5, 5 }));
+            pts.push(new Array<double>(new double[] { 0, 5, 0 }));
+
+            verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byPoints(pts, 2);
+
+            var res = verb.eval.Tess.rationalCurveAdaptiveSample(curve._data, 1, true);
+
+            _testOutput.WriteLine(res.length.ToString());
+            for (int i = 0; i < res.length; i++)
+            {
+                var r = res[i];
+                _testOutput.WriteLine($"{{{r}}}");
             }
         }
     }

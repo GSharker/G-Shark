@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using GShark.Core;
-using GShark.Geometry;
-using GShark.Operation;
-using GShark.Test.XUnit.Data;
+using GeometrySharp.Core;
+using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
+using GeometrySharp.Operation;
+using GeometrySharp.Test.XUnit.Data;
 using System.Collections.Generic;
-using GShark.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GShark.Test.XUnit.Operation
+namespace GeometrySharp.Test.XUnit.Operation
 {
     public class DivideTests
     {

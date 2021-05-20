@@ -4,6 +4,7 @@ using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -257,7 +258,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_An_Exception_If_The_Matrix_Is_Singular()
+        public void Solve_Returns_An_Exception_If_The_Matrix_Is_Singular()
         {
             // Arrange
             Matrix matrix = new Matrix { new List<double> { 2,4,6 }, new List<double> { 2,0,2 }, new List<double> { 6,8,14 } };
@@ -272,7 +273,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_An_Exception_If_The_Decomposition_Value_Dimension_Is_Different_Of_Matrix_Row_Dimension()
+        public void Solve_Returns_An_Exception_If_The_Decomposition_Value_Dimension_Is_Different_Of_Matrix_Row_Dimension()
         {
             // Arrange
             Matrix matrix = new Matrix {new List<double> {1, 2, 4}, new List<double> {3, 8, 14}, new List<double> {2, 6, 13}};
@@ -283,7 +284,8 @@ namespace GShark.Test.XUnit.Core
             Func<object> func = () => Matrix.Solve(matrix, pivot, vector);
 
             // Assert
-            func.Should().Throw<Exception>().WithMessage("The matrix should have the same number of rows as the decomposition b parameter.");
+            func.Should().Throw<Exception>()
+                .WithMessage("The matrix should have the same number of rows as the decomposition b parameter.");
         }
 
         [Fact]
@@ -303,6 +305,49 @@ namespace GShark.Test.XUnit.Core
 
             // Assert
             invertedMatrix.Should().BeEquivalentTo(matrixExpected);
+        }
+
+        [Fact]
+        public void Fill_Diagonal_Throw_An_Exception_If_The_Matrix_Is_Less_Than_2D()
+        {
+            // Arrange
+            Matrix matrix0 = new Matrix { new List<double> { 1}, new List<double> { 3, 8}, new List<double> { 2 } };
+            Matrix matrix1 = new Matrix { new List<double> { 1}, new List<double> { 3, 8}};
+
+            // Act
+            Func<object> func0 = () => matrix0.FillDiagonal(0, 0, 0);
+            Func<object> func1 = () => matrix1.FillDiagonal(0, 0, 0);
+            List<Func<object>> funcs = new List<Func<object>> { func0, func1 };
+
+            // Assert
+            funcs.Select(f => f.Should().Throw<Exception>());
+        }
+
+        [Theory]
+        [InlineData(3, 0)]
+        [InlineData(1, -1)]
+        [InlineData(1, 3)]
+        public void Fill_Diagonal_Throw_An_Exception_If_The_Row_Or_Diagonal_Value_Are_Not_In_The_Matrix(int row, int column)
+        {
+            // Act
+            Func<object> func = () => IdentityMatrix.FillDiagonal(row, column, 0);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void Returns_A_Matrix_With_The_Filled_Diagonal_Defined()
+        {
+            // Act
+            Matrix m = IdentityMatrix.FillDiagonal(0, 1, 5);
+            Matrix m2 = m.FillDiagonal(1, 0, 5);
+
+            // Assert
+            m2[0][1].Should().Be(5);
+            m2[1][2].Should().Be(5);
+            m2[1][0].Should().Be(5);
+            m2[2][1].Should().Be(5);
         }
     }
 }

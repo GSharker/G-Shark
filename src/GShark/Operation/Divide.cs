@@ -1,11 +1,12 @@
-﻿using GShark.Core;
-using GShark.ExtendedMethods;
-using GShark.Geometry;
-using GShark.Geometry.Interfaces;
+﻿using GeometrySharp.Core;
+using GeometrySharp.ExtendedMethods;
+using GeometrySharp.Geometry;
+using GeometrySharp.Geometry.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GShark.Operation
+namespace GeometrySharp.Operation
 {
     /// <summary>
     /// Divide provides various tools for dividing and splitting NURBS geometry.
