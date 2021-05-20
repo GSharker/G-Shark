@@ -1,9 +1,9 @@
-﻿using GeometrySharp.Core;
-using GeometrySharp.Geometry;
-using GeometrySharp.Geometry.Interfaces;
+﻿using GShark.Core;
+using GShark.Geometry;
+using GShark.Geometry.Interfaces;
 using System.Collections.Generic;
 
-namespace GeometrySharp.Operation
+namespace GShark.Operation
 {
     // ToDo: Add cap to the offset.
     /// <summary>

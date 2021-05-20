@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
-using GeometrySharp.Core;
-using GeometrySharp.Geometry;
-using GeometrySharp.Geometry.Interfaces;
-using GeometrySharp.Operation;
-using GeometrySharp.Test.XUnit.Geometry;
+using GShark.Core;
+using GShark.Geometry;
+using GShark.Geometry.Interfaces;
+using GShark.Operation;
+using GShark.Test.XUnit.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Operation
 {
     public class OffsetTests
     {

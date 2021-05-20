@@ -1,11 +1,11 @@
-﻿using GeometrySharp.Core;
-using GeometrySharp.ExtendedMethods;
-using GeometrySharp.Geometry;
+﻿using GShark.Core;
+using GShark.ExtendedMethods;
+using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GeometrySharp.Operation
+namespace GShark.Operation
 {
     /// <summary>
     /// Fitting provides functions for interpolating and approximating nurbs curves and surfaces from points.

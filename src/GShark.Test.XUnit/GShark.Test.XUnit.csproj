@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\G-Shark\GShark.csproj" />
+    <ProjectReference Include="..\GShark\GShark.csproj" />
   </ItemGroup>
 
   <ItemGroup>

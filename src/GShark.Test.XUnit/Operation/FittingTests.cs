@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
-using GeometrySharp.Core;
-using GeometrySharp.Geometry;
-using GeometrySharp.Operation;
+using GShark.Core;
+using GShark.Geometry;
+using GShark.Operation;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GeometrySharp.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Operation
 {
     public class FittingTests
     {
