@@ -26,16 +26,11 @@
     "content": [
       {
         "files": [
-          "api/**.yml",
-          "api/index.md"
-        ]
-      },
-      {
-        "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
+          "index.md",
           "toc.yml",
-          "*.md"
+          "*.md",
+          "api/**",
+          "examples/**"
         ]
       }
     ],
@@ -60,14 +55,20 @@
     "dest": "_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
-    "template": [
-      "default", "templates/discordfx"
-    ],
+    "template": ["default","templates/discordfx"],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
     "keepFileLink": false,
     "cleanupCacheHistory": false,
-    "disableGitFeatures": false
+    "disableGitFeatures": false,
+    "globalMetadata": {
+      "_appTitle": "G-Shark",
+      "_appLogoPath": "images/G-Shark-logo.svg",
+      "_gitContribute": {
+        "repo": "https://github.com/cesarecaoduro/G-Shark",
+        "branch": "master"
+      }
+    }
   }
 }
