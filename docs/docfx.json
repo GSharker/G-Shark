@@ -5,7 +5,7 @@
         {
           "src": "..",
           "files": [
-            "**/src/GShark/**.csproj"
+            "src/GShark/**.csproj"
           ],
           "exclude": [
             "**/bin/**",
@@ -16,7 +16,10 @@
       ],
       "dest": "api",
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+      "properties": {
+        "TargetFramework": "netstandard2.1"
+      }
     }
   ],
   "build": {
@@ -58,7 +61,7 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default", "templates/discordfx"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
