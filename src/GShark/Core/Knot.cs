@@ -113,11 +113,11 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Find the span on the knot list of the given parameter,
-        /// (corresponds to algorithm 2.1 from the NURBS book, piegl & Tiller 2nd edition).
+        /// Find the span on the knot list of the given parameter.
+        /// Corresponds to algorithm 2.1 from the NURBS book, Piegl & Tiller 2nd edition.
         /// </summary>
-        /// <param name="n">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
-        /// <param name="degree">Integer degree of function.</param>
+        /// <param name="n">Number of basis functions.</param>
+        /// <param name="degree">Degree of function.</param>
         /// <param name="parameter">Parameter.</param>
         /// <returns>The index of the knot span.</returns>
         public int Span(int n, int degree, double parameter)

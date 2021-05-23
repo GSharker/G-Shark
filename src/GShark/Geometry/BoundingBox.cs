@@ -78,12 +78,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// The minimum point of the BoundingBox - the coordinates of this point are always <= max.
+        /// The minimum point of the BoundingBox. The coordinates of this point are always smaller than max.
         /// </summary>
         public Vector3 Min { get; }
 
         /// <summary>
-        /// The maximum point of the BoundingBox. The coordinates of this point are always >= min.
+        /// The maximum point of the BoundingBox. The coordinates of this point are always bigger than min.
         /// </summary>
         public Vector3 Max { get; }
 
