@@ -11,8 +11,8 @@ namespace GShark.Operation
     /// Tessellation contains static, immutable algorithms for tessellation of nurbs curves and sufaces.Tessellation is the decomposition
     /// of the analytical nurbs representation into discrete meshes or polylines that are useful for drawing.
     /// Some of these algorithms are "adaptive" - using certain heuristics to sample geometry where such samples make sense - while
-    /// others are "regular" in that they sample regularly throughout a parametric domain.There are tradeoffs here.While
-    /// adaptive algorithms can sometimes yield "better" results that are smaller or more economical, this can sometimes come at
+    /// others are "regular" in that they sample regularly throughout a parametric domain.There are tradeoffs here.
+    /// While adaptive algorithms can sometimes yield "better" results that are smaller or more economical, this can sometimes come at
     /// increased computational cost.For example, it is sometimes necessarily to compute higher order derivatives in order to
     /// obtain these more economical results.Your usage of these algorithms should consider these tradeoffs.
     /// </summary>
@@ -50,7 +50,7 @@ namespace GShark.Operation
 
         /// <summary>
         /// Samples a curve in an adaptive way.
-        /// Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+        /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf </em>
         /// </summary>
         /// <param name="curve">The curve to sampling.</param>
         /// <param name="tolerance">The tolerance for the adaptive division.</param>
@@ -66,8 +66,8 @@ namespace GShark.Operation
 
         /// <summary>
         /// Samples a curve in an adaptive way.
-        /// Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
-        /// https://www.modelical.com/en/grasshopper-scripting-107/
+        /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+        /// https://www.modelical.com/en/grasshopper-scripting-107/ </em>
         /// </summary>
         /// <param name="curve">The curve to sampling.</param>
         /// <param name="start">The start parameter for sampling.</param>

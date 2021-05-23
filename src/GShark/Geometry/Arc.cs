@@ -276,7 +276,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Constructs a nurbs curve representation of this arc.
-        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
+        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
         private void ToNurbsCurve()

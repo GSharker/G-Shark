@@ -8,18 +8,18 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    ///     Analyze contains methods for analyzing nurbs geometry.
+    /// Analyze contains methods for analyzing nurbs geometry.
     /// </summary>
     public class Analyze
     {
         /// <summary>
-        ///     Computes the approximate length of a rational curve by gaussian quadrature - assumes a smooth curve.
+        /// Computes the approximate length of a rational curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">
-        ///     The degree of gaussian quadrature to perform.
-        ///     A higher number yields a more exact result, default set to 16.
+        /// The degree of gaussian quadrature to perform.
+        /// A higher number yields a more exact result, default set to 16.
         /// </param>
         /// <returns>The approximate length.</returns>
         public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
@@ -43,13 +43,13 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Computes the approximate length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
+        /// Computes the approximate length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">
-        ///     the degree of gaussian quadrature to perform.
-        ///     A higher number yields a more exact result, default set to 16.
+        /// the degree of gaussian quadrature to perform.
+        /// A higher number yields a more exact result, default set to 16.
         /// </param>
         /// <returns>The approximate length of a bezier.</returns>
         public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
@@ -71,7 +71,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Computes the curve parameter at a given length.
+        /// Computes the curve parameter at a given length.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The length to find the parameter.</param>
@@ -118,7 +118,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Computes the closest point on a curve to a given point.
+        /// Computes the closest point on a curve to a given point.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
@@ -131,11 +131,11 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Computes the closest parameters on a curve to a given point.
-        ///     (Piegl & Tiller suggest) page 244 chapter six.
-        ///     <param name="curve">The curve object.</param>
-        ///     <param name="point">Point to search from.</param>
-        ///     <returns>The closest parameter on the curve.</returns>
+        /// Computes the closest parameters on a curve to a given point.
+        /// <em>Corresponds to page 244 chapter six from The NURBS Book by Piegl and Tiller.</em>
+        /// <param name="curve">The curve object.</param>
+        /// <param name="point">Point to search from.</param>
+        /// <returns>The closest parameter on the curve.</returns>
         public static double CurveClosestParameter(ICurve curve, Vector3 point)
         {
             double minimumDistance = double.PositiveInfinity;
@@ -212,7 +212,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Newton iteration to minimize the distance between a point and a curve.
+        /// Newton iteration to minimize the distance between a point and a curve.
         /// </summary>
         /// <param name="u">The parameter obtained at the ith Newton iteration.</param>
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
@@ -234,7 +234,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        ///     Approximates the parameter at a given length on a curve.
+        /// Approximates the parameter at a given length on a curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The arc length for which to do the procedure.</param>

@@ -114,7 +114,7 @@ namespace GShark.Core
 
         /// <summary>
         /// Find the span on the knot list of the given parameter.
-        /// Corresponds to algorithm 2.1 from the NURBS book, Piegl & Tiller 2nd edition.
+        /// <em>Corresponds to algorithm 2.1 from the NURBS book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="n">Number of basis functions.</param>
         /// <param name="degree">Degree of function.</param>
