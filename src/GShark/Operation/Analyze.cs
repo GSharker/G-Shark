@@ -133,6 +133,7 @@ namespace GShark.Operation
         /// <summary>
         /// Computes the closest parameters on a curve to a given point.
         /// <em>Corresponds to page 244 chapter six from The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
