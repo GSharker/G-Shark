@@ -173,10 +173,10 @@ namespace GShark.Operation
         /// <returns>A nurbs surface with the knot refined.</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, Knot knotsToInsert, bool useU = true)
         {
-            List<List<Vector3>> ctrlPts = new List<List<Vector3>>();
+            List<List<Vector3>> ctrlPts;
             List<List<Vector3>> refinedPts = new List<List<Vector3>>();
-            Knot knots = new Knot();
-            int degree = -1;
+            Knot knots;
+            int degree;
 
             //u dir
             if (useU)

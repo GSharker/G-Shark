@@ -29,12 +29,12 @@ namespace GShark.Geometry
         {
             if (controlPoints is null)
             {
-                throw new ArgumentNullException(nameof(ControlPoints));
+                throw new ArgumentNullException(nameof(controlPoints));
             }
 
             if (knots is null)
             {
-                throw new ArgumentNullException(nameof(Knots));
+                throw new ArgumentNullException(nameof(knots));
             }
 
             if (degree < 1)

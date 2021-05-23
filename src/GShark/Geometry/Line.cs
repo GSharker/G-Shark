@@ -197,7 +197,7 @@ namespace GShark.Geometry
         /// <returns>True if the end points are equal, otherwise false.</returns>
         public bool Equals(Line other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }

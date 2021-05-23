@@ -134,13 +134,11 @@ namespace GShark.Operation
             List<double> basisUValue = BasicFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
             List<double> basisVValue = BasicFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             int uIndex = knotSpanU - surface.DegreeU;
-            int vIndex = knotSpanV;
             Vector3 position = Vector3.Zero1d(dim);
-            Vector3 temp = Vector3.Zero1d(dim);
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                temp = Vector3.Zero1d(dim);
-                vIndex = knotSpanV - surface.DegreeV + l;
+                var temp = Vector3.Zero1d(dim);
+                var vIndex = knotSpanV - surface.DegreeV + l;
                 for (int x = 0; x < surface.DegreeU + 1; x++)
                 {
                     for (int j = 0; j < temp.Count; j++)
@@ -184,7 +182,7 @@ namespace GShark.Operation
             int numKnotsToInsert = degree + 1;
             if (reqKnotIndex >= 0)
             {
-                numKnotsToInsert = numKnotsToInsert - knotMults.GetValueOrDefault(reqKnotIndex);
+                numKnotsToInsert -= knotMults.GetValueOrDefault(reqKnotIndex);
             }
 
             //Insert the knots
@@ -349,7 +347,7 @@ namespace GShark.Operation
                 {
                     return new[] { (2 * b - c) / (2 * (b - c)) };
                 }
-                return new double[0];
+                return Array.Empty<double>();
             }
 
             // linear roots
@@ -361,10 +359,10 @@ namespace GShark.Operation
                 {
                     return new[] { a / (a - b) };
                 }
-                return new double[0];
+                return Array.Empty<double>();
             }
 
-            return new double[0];
+            return Array.Empty<double>();
         }
 
         /// <summary>
@@ -689,7 +687,6 @@ namespace GShark.Operation
             List<Vector3> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
 
             List<Vector3> temp = Vector3.Zero2d(degreeV + 1, dim);
-            int dd = 0;
 
             for (int k = 0; k < du + 1; k++)
             {
@@ -702,7 +699,7 @@ namespace GShark.Operation
                     }
                 }
                 int nk = numDerivs - k;
-                dd = nk < dv ? nk : dv;
+                var dd = nk < dv ? nk : dv;
 
                 for (int l = 0; l < dd + 1; l++)
                 {
