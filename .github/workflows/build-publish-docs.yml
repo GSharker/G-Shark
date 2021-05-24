@@ -10,7 +10,7 @@ on:
 
 jobs:
   # This workflow contains a single job called "build"
-  build-docs:
+  build:
     # The type of runner that the job will run on
     runs-on: windows-last
 
@@ -23,20 +23,3 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-      - name: Setup docfx
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install docfx
-      - name: Install dependencies
-        run: dotnet restore
-      - name: DocFX Build
-        working-directory: docs
-        run: docfx docfx.json
-        continue-on-error: false
-      - name: Publish
-        if: github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_site
-          force_orphan: true
