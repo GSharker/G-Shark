@@ -10,30 +10,31 @@ namespace GShark.Test.XUnit.Geometry
     public class ArcTests
     {
         private readonly ITestOutputHelper _testOutput;
+        private readonly Arc _exampleArc3D;
+        private readonly Arc _exampleArc2D;
 
         public ArcTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-        }
 
-        public static Arc ExampleArc3D
-        {
-            get
-            {
-                Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
-                Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
-                Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+            #region example
+            // Initializes an arc by plane, radius and angle.
+            double angle = GeoSharpMath.ToRadians(40);
+            _exampleArc2D = new Arc(Plane.PlaneXY, 15, angle);
 
-                return new Arc(pt1, pt2, pt3);
-            }
+            // Initializes an arc by 3 points.
+            Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
+            Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
+            Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+            _exampleArc3D = new Arc(pt1, pt2, pt3);
+            #endregion
         }
 
         [Fact]
         public void Initializes_An_Arc()
         {
             // Arrange
-            double angle = GeoSharpMath.ToRadians(40);
-            Arc arc = new Arc(Plane.PlaneXY, 15, angle);
+            Arc arc = _exampleArc2D;
 
             // Assert
             arc.Should().NotBeNull();
@@ -46,10 +47,10 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void Initializes_An_Arc_By_Three_Points()
         {
-            // Act
-            Arc arc = ExampleArc3D;
-
             // Arrange
+            Arc arc = _exampleArc3D;
+
+            // Assert
             arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAXTOLERANCE);
             arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAXTOLERANCE);
             GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAXTOLERANCE);
@@ -62,10 +63,11 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 pt1 = new Vector3 { 5, 5, 5 };
             Vector3 pt2 = new Vector3 { 10, 15, 10 };
             Vector3 dir = new Vector3 { 3, 3, 0 };
+
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
 
-            // Arrange
+            // Assert
             arc.StartPoint.IsEqualRoundingDecimal(pt1, 6).Should().BeTrue();
             arc.EndPoint.IsEqualRoundingDecimal(pt2, 6).Should().BeTrue();
             arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MAXTOLERANCE);
@@ -77,7 +79,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             double angle = GeoSharpMath.ToRadians(40);
             Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
-            Arc arc3D = ExampleArc3D;
+            Arc arc3D = _exampleArc3D;
 
             // Act
             BoundingBox bBox2D = arc2D.BoundingBox;
@@ -98,7 +100,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 expectedPt = new Vector3(pts);
-            Arc arc = ExampleArc3D;
+            Arc arc = _exampleArc3D;
 
             // Act
             Vector3 pt = arc.PointAt(t);
@@ -115,7 +117,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             Vector3 testPt = new Vector3(ptToTest);
             Vector3 expectedPt = new Vector3(result);
-            Arc arc = ExampleArc3D;
+            Arc arc = _exampleArc3D;
 
             // Act
             Vector3 pt = arc.ClosestPt(testPt);
@@ -128,7 +130,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_Arc()
         {
             // Arrange
-            Arc arc = ExampleArc3D;
+            Arc arc = _exampleArc3D;
             Vector3 expectedStartPt = new Vector3 { 16.47719, 0, 0 };
             Vector3 expectedEndPt = new Vector3 { -6.160353, -15.282272, 0 };
             Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
@@ -146,14 +148,14 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
-            // Assert
+            // Arrange
             Vector3 expectedTangent = new Vector3(pts);
-            Arc arc = ExampleArc3D;
+            Arc arc = _exampleArc3D;
 
             // Act
             Vector3 tangent = arc.TangentAt(t);
 
-            // Arrange
+            // Assert
             tangent.IsEqualRoundingDecimal(expectedTangent, 6).Should().BeTrue();
         }
 
@@ -210,7 +212,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            ICurve arc = ExampleArc3D;
+            ICurve arc = _exampleArc3D;
 
             // Assert
             arc.ControlPoints.Count.Should().Be(7);

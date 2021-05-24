@@ -8,8 +8,12 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// Represents the value of a plane, two angles (interval) and a radius (radiance).
+    /// Represents the value of a plane, two angles (interval) and a radius (radiance).<br/>
+    /// The arc run ccw rotation where Xaxis and Yaxis form a orthonormal frame.
     /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/ArcTests.cs?name=example)]
+    /// </example>
     public class Arc : ICurve, IEquatable<Arc>, ITransformable<Arc>
     {
         /// <summary>
@@ -20,6 +24,10 @@ namespace GShark.Geometry
         /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
+            #region example
+            double t = 0.0;
+            #endregion
+
             if (angleDomain.Max < angleDomain.Min)
             {
                 throw new Exception("Angle domain must never be decreasing.");
@@ -276,7 +284,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Constructs a nurbs curve representation of this arc.
-        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl & Tiller.
+        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
         private void ToNurbsCurve()

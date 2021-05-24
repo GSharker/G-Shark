@@ -13,7 +13,6 @@ namespace GShark.Geometry
 
     /// <summary>
     /// A simple data structure representing a NURBS surface.
-    /// NurbsSurfaceData does no checks for legality. You can use <see cref="GShark.Evaluation.Check"/> for that.
     /// </summary>
     public class NurbsSurface : Serializable<NurbsSurface>, IEquatable<NurbsSurface>
     {
@@ -47,7 +46,7 @@ namespace GShark.Geometry
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
-            Weights = weights == null ? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count) : weights;
+            Weights = weights ?? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count);
             HomogenizedPoints = LinearAlgebra.PointsHomogeniser2d(controlPoints, weights);
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());

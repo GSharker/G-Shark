@@ -1,0 +1,7 @@
+- name: GitHub
+  href: https://github.com/cesarecaoduro/G-Shark
+- name: Examples
+  href: examples/
+- name: Documentation
+  href: api/
+  homepage: api/index.md

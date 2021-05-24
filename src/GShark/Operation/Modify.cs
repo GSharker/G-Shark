@@ -13,13 +13,13 @@ namespace GShark.Operation
     /// <summary>
     /// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
     /// knot insertion, knot refinement, degree elevation, re-parametrization.
-    /// Many of these algorithms owe their implementation to Piegl & Tiller's, "The NURBS Book".
+    /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
     /// </summary>
     public class Modify
     {
         /// <summary>
 		/// Inserts a collection of knots on a curve.
-		/// Implementation of Algorithm A5.4 of The NURBS Book by Piegl & Tiller, 2nd Edition.
+		/// <em>Implementation of Algorithm A5.4 of The NURBS Book by Piegl and Tiller.</em>
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
 		/// <param name="knotsToInsert">The set of knots.</param>
@@ -96,7 +96,7 @@ namespace GShark.Operation
         /// <summary>
         /// Decompose a curve into a collection of bezier's.
         /// Useful as each Bezier curve fits into it's convex hull.
-        /// This is a useful starting point for intersection, closest point, divide & conquer algorithms.
+        /// This is a useful starting point for intersection, closest point, divide and conquer algorithms.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
@@ -173,10 +173,10 @@ namespace GShark.Operation
         /// <returns>A nurbs surface with the knot refined.</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, Knot knotsToInsert, bool useU = true)
         {
-            List<List<Vector3>> ctrlPts = new List<List<Vector3>>();
+            List<List<Vector3>> ctrlPts;
             List<List<Vector3>> refinedPts = new List<List<Vector3>>();
-            Knot knots = new Knot();
-            int degree = -1;
+            Knot knots;
+            int degree;
 
             //u dir
             if (useU)
