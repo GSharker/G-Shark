@@ -1,0 +1,40 @@
+name: Build docs
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull_request only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build-docs:
+    # The type of runner that the job will run on
+    runs-on: windows-last
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Chekout
+        uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: Setup docfx
+        run: choco install docfx -y
+      - name: Install dependencies
+        run: dotnet restore
+      - name: DocFX Build
+        working-directory: docs
+        run: docfx docfx.json
+        continue-on-error: false
+      - name: Publish
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_site
+          force_orphan: true
