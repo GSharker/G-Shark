@@ -25,8 +25,6 @@ jobs:
           dotnet-version: 5.0.x
       - name: Setup docfx
         run: choco install docfx -y
-      - name: Install dependencies
-        run: dotnet restore
       - name: DocFX Build
         working-directory: docs
         run: docfx docfx.json
