@@ -6,6 +6,13 @@ using System.Linq;
 
 namespace GShark.Geometry
 {
+    /// <summary>
+    /// Represents a circle.<br/>
+    /// The base values of the circle are the radius and a plane, with origin at the center of the circle.
+    /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
+    /// </example>
     public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
         /// <summary>

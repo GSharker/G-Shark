@@ -8,35 +8,27 @@ namespace GShark.Test.XUnit.Geometry
     public class CircleTests
     {
         private readonly ITestOutputHelper _testOutput;
-        public CircleTests(ITestOutputHelper testOutput)
+        private readonly Circle _circle2D;
+        private readonly Circle _circle3D;
+        internal CircleTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-        }
 
-        public static Circle BaseCircle
-        {
-            get
-            {
-                Vector3 center = new Vector3 { 85.591741, 24.79606, 1.064717 };
-                Vector3 xDir = new Vector3 { -0.687455, 0.703828, -0.178976 };
-                Vector3 yDir = new Vector3 { -0.726183, -0.663492, 0.180104 };
-                Vector3 normal = new Vector3 { 0.008012, 0.253783, 0.967228 };
-                Plane plane = new Plane(center, xDir, yDir, normal);
+            #region example
+            // Initializes a circle from a plane and a radius.
+            Vector3 center = new Vector3 { 85.591741, 24.79606, 1.064717 };
+            Vector3 xDir = new Vector3 { -0.687455, 0.703828, -0.178976 };
+            Vector3 yDir = new Vector3 { -0.726183, -0.663492, 0.180104 };
+            Vector3 normal = new Vector3 { 0.008012, 0.253783, 0.967228 };
+            Plane plane = new Plane(center, xDir, yDir, normal);
+            _circle2D = new Circle(plane, 23);
 
-                return new Circle(plane, 23);
-            }
-        }
-
-        public static Circle Circle3D
-        {
-            get
-            {
-                Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
-                Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
-                Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
-
-                return new Circle(pt1, pt2, pt3);
-            }
+            // Initializes a circle from 3 points.
+            Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
+            Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
+            Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+            _circle3D = new Circle(pt1, pt2, pt3);
+            #endregion
         }
 
         [Fact]
@@ -55,7 +47,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Circle3D_With_Its_Nurbs_Representation()
         {
             // Arrange
-            Circle circle = Circle3D;
+            Circle circle = _circle3D;
             Vector3[] ptsExpected = new []
             {
                 new Vector3 {74.264416, 36.39316, -1.884313},
@@ -83,7 +75,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Circumference_Of_A_Plane()
         {
             // Arrange
-            Circle circle = BaseCircle;
+            Circle circle = _circle2D;
 
             // Act
             double circumference = circle.Circumference;
@@ -99,7 +91,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 expectedPt = new Vector3(pts);
-            Circle circle = BaseCircle;
+            Circle circle = _circle2D;
 
             // Act
             Vector3 pt = circle.PointAt(t);
@@ -115,7 +107,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 expectedTangent = new Vector3(pts);
-            Circle circle = BaseCircle;
+            Circle circle = _circle2D;
 
             // Act
             Vector3 tangent = circle.TangentAt(t);
@@ -128,7 +120,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_The_Circle()
         {
             // Arrange
-            Circle circle = BaseCircle;
+            Circle circle = _circle2D;
             Vector3 minCheck = new Vector3 { 62.592479, 2.549053, -4.7752 };
             Vector3 maxCheck = new Vector3 { 108.591003, 47.043067, 6.904634 };
 
@@ -150,7 +142,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedPt = new Vector3(result);
 
             // Act
-            Circle circle = BaseCircle;
+            Circle circle = _circle2D;
             Vector3 pt = circle.ClosestPt(testPt);
 
             // Assert
