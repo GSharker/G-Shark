@@ -9,7 +9,7 @@ namespace GShark.Geometry
     // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
     // ToDo: throw exception if the polyline self intersect.
     /// <summary>
-    /// A closed planar Polyline.
+    /// A closed planar <see cref="Polyline"/>.
     /// </summary>
     public class Polygon : Polyline
     {
@@ -38,8 +38,8 @@ namespace GShark.Geometry
         public Vector3 CentroidByVertices => Evaluation.CentroidByVertices(this);
 
         /// <summary>
-        /// Gets the centroid of mass of the polygon.
-        /// https://stackoverflow.com/questions/9815699/how-to-calculate-centroid
+        /// Gets the centroid of mass of the polygon.<br/>
+        /// https://stackoverflow.com/questions/9815699/how-to-calculate-centroid <br/>
         /// http://csharphelper.com/blog/2014/07/find-the-centroid-of-a-polygon-in-c/
         /// </summary>
         public Vector3 CentroidByArea
@@ -92,9 +92,9 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the area from a list of points.
-        /// The list should represent a closed curve and planar.
-        /// https://stackoverflow.com/questions/25340106/boostgeometry-find-area-of-2d-polygon-in-3d-space
+        /// Gets the area from a list of points.<br/>
+        /// The list should represent a closed curve and planar.<br/>
+        /// https://stackoverflow.com/questions/25340106/boostgeometry-find-area-of-2d-polygon-in-3d-space <br/>
         /// http://geomalgorithms.com/a01-_area.html
         /// </summary>
         /// <param name="pts">Set of points.</param>

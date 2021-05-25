@@ -8,7 +8,7 @@ using System.Text;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// A Plane is simply an origin point and normal.
+    /// A plane is simply an origin point and normal.
     /// </summary>
     public class Plane : IEquatable<Plane>, ITransformable<Plane>
     {
@@ -290,7 +290,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns a boolean indicating whether the given Plane is equal to this Plane instance.
+        /// Returns a boolean indicating whether the given Plane is equal to this Plane instance.<br/>
         /// The plane are equals if they have same origin and axises.
         /// </summary>
         /// <param name="other">The Plane to compare this instance to.</param>

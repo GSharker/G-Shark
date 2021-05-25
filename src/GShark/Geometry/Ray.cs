@@ -3,7 +3,7 @@
 namespace GShark.Geometry
 {
     /// <summary>
-    /// A Ray is simply an position point and a direction.
+    /// A ray is simply a position point and a direction.
     /// </summary>
     public class Ray : IEquatable<Ray>
     {
@@ -84,7 +84,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Check if the ray is equal to the provided ray.
+        /// Check if the ray is equal to the provided ray.<br/>
         /// Two ray are equal if position and direction are the same.
         /// </summary>
         /// <param name="other">The ray to compare.</param>
