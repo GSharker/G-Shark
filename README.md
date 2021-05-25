@@ -1,3 +1,4 @@
+[![Publish to Nuget](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
