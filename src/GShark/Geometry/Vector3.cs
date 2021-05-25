@@ -89,6 +89,7 @@ namespace GShark.Geometry
         {
             return (GeoSharpMath.IsValidDouble(this[0]) &&
                     GeoSharpMath.IsValidDouble(this[1]) &&
+                    GeoSharpMath.IsValidDouble(this[2]) &&
                     (Math.Abs(Length() - 1.0) <= GeoSharpMath.EPSILON));
         }
 
