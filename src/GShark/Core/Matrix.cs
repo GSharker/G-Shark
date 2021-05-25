@@ -9,20 +9,20 @@ using System.Runtime.CompilerServices;
 namespace GShark.Core
 {
     /// <summary>
-    /// A Matrix is represented by a nested list of double point numbers.
+    /// A matrix is represented by a nested list of double point numbers.<br/>
     /// So, you would write simply [[1,0],[0,1]] to create a 2x2 identity matrix.
     /// </summary>
     public class Matrix : List<List<double>>
     {
         /// <summary>
-        /// Initialize an empty matrix.
+        /// Initializes an empty matrix.
         /// </summary>
         public Matrix()
         {
         }
 
         /// <summary>
-        /// Constructs a matrix by given number of rows and columns.
+        /// Constructs a matrix by given number of rows and columns.<br/>
         /// All the parameters are set to zero.
         /// </summary>
         /// <param name="rows">A positive integer, for the number of rows.</param>
@@ -98,7 +98,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets a value indicating whether this matrix is valid.
+        /// Gets a value indicating whether this matrix is valid.<br/>
         /// Matrix is valid when has at least one column and one row and rows have at least 2 elements.
         /// </summary>
         /// <returns>True if it is a valid matrix.</returns>
@@ -108,7 +108,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Multiply a matrix by a constant.
+        /// Multiplies a matrix by a constant.
         /// </summary>
         /// <param name="m">Matrix has to be multiply.</param>
         /// <param name="a">Value to operate the multiplication.</param>
@@ -142,7 +142,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Multiply two matrices assuming they are of compatible dimensions.
+        /// Multiplies two matrices assuming they are of compatible dimensions.
         /// </summary>
         /// <param name="a">First matrix.</param>
         /// <param name="b">Second matrix.</param>
@@ -250,7 +250,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Transpose a matrix.
+        /// Transposes a matrix.<br/>
         /// This is like swapping rows with columns.
         /// </summary>
         /// <returns>The matrix transposed.</returns>
@@ -283,7 +283,6 @@ namespace GShark.Core
         /// <returns>Copied matrix.</returns>
         public static Matrix Duplicate(Matrix matrix)
         {
-
             Matrix copy = Matrix.Construct(matrix[0].Count, matrix.Count);
 
             for (int i = 0; i < matrix.Count; ++i)
@@ -315,9 +314,9 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// This routine uses Doolittle's method to solve the linear equation Ax = B.
-        /// This routine is called after the matrix A has been decomposed.
-        /// The solution proceeds by solving the linear equation Ly = B for y and,
+        /// This routine uses Doolittle's method to solve the linear equation Ax = B.<br/>
+        /// This routine is called after the matrix A has been decomposed.<br/>
+        /// The solution proceeds by solving the linear equation Ly = B for y and,<br/>
         /// subsequently solving the linear equation Ux = y for x.
         /// </summary>
         /// <param name="LuMatrix">Decomposed matrix in lower and upper triangle.</param>
@@ -385,12 +384,12 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// This routine uses Doolittle's method with partial pivoting to decompose the n x n matrix A,
-        /// into a unit lower triangular matrix L and an upper triangular matrix U and P is a permutation array
-        /// such that PA = LU. With this method you can always have a LU decomposition, rather than LU factorization.
-        /// The LU decomposition with pivoting always exists, even if the matrix is singular, so the constructor will never fail.
-        /// The primary use of the LU decomposition is in the solution of square systems of simultaneous linear equations.
-        /// The LUP decomposition provides a more robust method of solving linear systems than LU decomposition without pivoting, and it is approximately the same cost.
+        /// This routine uses Doolittle's method with partial pivoting to decompose the n x n matrix A,<br/>
+        /// into a unit lower triangular matrix L and an upper triangular matrix U and P is a permutation array<br/>
+        /// such that PA = LU. With this method you can always have a LU decomposition, rather than LU factorization.<br/>
+        /// The LU decomposition with pivoting always exists, even if the matrix is singular, so the constructor will never fail.<br/>
+        /// The primary use of the LU decomposition is in the solution of square systems of simultaneous linear equations.<br/>
+        /// The LUP decomposition provides a more robust method of solving linear systems than LU decomposition without pivoting, and it is approximately the same cost.<br/>
         /// This will fail if non singular.
         /// </summary>
         /// <param name="m">Matrix has to be decomposed.</param>

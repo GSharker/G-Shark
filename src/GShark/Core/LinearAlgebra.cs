@@ -11,12 +11,13 @@ namespace GShark.Core
     public class LinearAlgebra
     {
         /// <summary>
-        /// Transform a collection of points into their homogeneous equivalents.
+        /// Transforms a collection of points into their homogeneous equivalents.<br/>
         /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
         /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
-        /// <returns>A set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        /// <returns>A set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
         public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, List<double> weights)
         {
             if (controlPoints.Count < weights.Count)
@@ -51,12 +52,13 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Transform a collection of points into their homogeneous equivalents, by a given weight value.
+        /// Transforms a collection of points into their homogeneous equivalents, by a given weight value.<br/>
         /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
         /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
         /// <param name="weight">Weight value for each point.</param>
-        /// <returns>A set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        /// <returns>A set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
         public static List<Vector3> PointsHomogeniser(List<Vector3> controlPoints, double weight)
         {
             List<Vector3> controlPtsHomogenized = new List<Vector3>();
@@ -78,12 +80,13 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Transform a two-dimension collection of points into their homogeneous equivalents.
+        /// Transforms a two-dimension collection of points into their homogeneous equivalents.<br/>
         /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
         /// </summary>
         /// <param name="controlPoints">Control points, a two-dimensional set of size (points count x points dimension).</param>
         /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
-        /// <returns>A two-dimensional set of control points where each point is (wi*pi, wi) where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        /// <returns>A two-dimensional set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
         public static List<List<Vector3>> PointsHomogeniser2d(List<List<Vector3>> controlPoints, List<List<double>> weights = null)
         {
             int rows = controlPoints.Count;
@@ -111,7 +114,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Obtain the weight from a collection of points in homogeneous space, assuming all are the same dimension.
+        /// Obtains the weight from a collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
         /// <param name="homoPts">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>A set of values, represented by a set pi with length (dim).</returns>
@@ -126,7 +129,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Obtain the weight from a two-dimensional collection of points in homogeneous space, assuming all are the same dimension.
+        /// Obtains the weight from a two-dimensional collection of points in homogeneous space, assuming all are the same dimension.
         /// </summary>
         /// <param name="homoPts">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
         /// <returns>Two-dimensional set of values, each represented by an array pi with length (dim)</returns>
@@ -175,7 +178,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Obtain the point from homogeneous point without dehomogenization, assuming all are the same length.
+        /// Obtains the point from homogeneous point without dehomogenization, assuming all are the same length.
         /// </summary>
         /// <param name="homoPts">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of rational points.</returns>
@@ -186,7 +189,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Obtain the point from a two-dimensional set of homogeneous points without dehomogenization, assuming all are the same length.
+        /// Obtains the point from a two-dimensional set of homogeneous points without dehomogenization, assuming all are the same length.
         /// </summary>
         /// <param name="homoPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
         /// <returns>Two-dimensional set of rational points.</returns>
@@ -196,9 +199,9 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Find the Tait-Byran angles (also loosely called Euler angles) for a rotation transformation.
-        /// yaw - angle (in radians) to rotate about the Z axis.
-        /// pitch -  angle(in radians) to rotate about the Y axis.
+        /// Finds the Tait-Byran angles (also loosely called Euler angles) for a rotation transformation.<br/>
+        /// yaw - angle (in radians) to rotate about the Z axis.<br/>
+        /// pitch -  angle(in radians) to rotate about the Y axis.<br/>
         /// roll - angle(in radians) to rotate about the X axis.
         /// </summary>
         /// <param name="transform">Transformation to check.</param>
@@ -225,7 +228,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Find the rotation axis used in the transformation.
+        /// Finds the rotation axis used in the transformation.<br/>
         /// https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
         /// </summary>
         /// <param name="transform">Transformation to check.</param>
@@ -302,8 +305,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Get the orientation between tree points in the plane.
-        /// The order can be: collinear (result 0), clockwise (result 1), counterclockwise (result 2)
+        /// Gets the orientation between tree points in the plane.<br/>
+        /// The order can be: collinear (result 0), clockwise (result 1), counterclockwise (result 2)<br/>
         /// https://www.geeksforgeeks.org/orientation-3-ordered-points/
         /// </summary>
         /// <param name="pt1">First point.</param>
@@ -323,7 +326,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Computes the binomial coefficient (denoted by n choose k).
+        /// Computes the binomial coefficient (denoted by n choose k).<br/>
         /// Please see the following website for details: http://mathworld.wolfram.com/BinomialCoefficient.html
         /// </summary>
         /// <param name="n">Size of the set of distinct elements.</param>

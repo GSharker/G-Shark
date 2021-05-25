@@ -12,11 +12,6 @@ namespace GShark.Core.BoundingBoxTree
         private readonly BoundingBox _boundingBox;
         private readonly double _knotTolerance;
 
-        /// <summary>
-        /// Initialize the lazy class.
-        /// </summary>
-        /// <param name="curve">The curve processed into this lazy class.</param>
-        /// <param name="knotTolerance">A value tolerance.</param>
         internal LazyCurveBBT(ICurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;

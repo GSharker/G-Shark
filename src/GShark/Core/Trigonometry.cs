@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace GShark.Core
 {
     /// <summary>
-    /// Trigonometry provides basic trigonometry methods.
+    /// Provides basic trigonometry methods.
     /// </summary>
     public class Trigonometry
     {
@@ -59,7 +59,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Finds the closest point on a segment.
+        /// Finds the closest point on a segment.<br/>
         /// The segment is deconstruct in two points and two t values.
         /// </summary>
         /// <param name="point">Point to project.</param>

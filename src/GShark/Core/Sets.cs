@@ -6,13 +6,13 @@ using GShark.Geometry;
 namespace GShark.Core
 {
     /// <summary>
-    /// Provide utility functions to create and manipulate sets of numbers or points.
+    /// Provides utility functions to create and manipulate sets of numbers or points.<br/>
     /// Example: range, numerical linear subdivisions and boolean operations.
     /// </summary>
     public static class Sets
     {
         /// <summary>
-        /// The range dimension of a set of number, or the distance between the smallest value to the biggest in the collection.
+        /// The range dimension of a set of number, or the distance between the smallest value to the biggest in the collection.<br/>
         /// https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/range-statistics/
         /// </summary>
         /// <param name="a">Set of numbers.</param>
@@ -24,7 +24,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Create a range of numbers. 
+        /// Creates a range of numbers. 
         /// </summary>
         /// <param name="domain">Numeric domain.</param>
         /// <param name="step">Number of steps</param>
@@ -188,7 +188,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Reverses a bi-dimensional collection of control points.
+        /// Reverses a bi-dimensional collection of control points.<br/>
         /// A control point has a dimension of three.
         /// </summary>
         /// <param name="pts">The bi-dimensional collection of points.</param>

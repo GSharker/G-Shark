@@ -8,7 +8,7 @@ namespace GShark.Core
     public class Interval
     {
         /// <summary>
-        /// Create an instance of an interval by the values.
+        /// Creates an instance of an interval by the values.
         /// </summary>
         /// <param name="min">The minimum value of the interval.</param>
         /// <param name="max">The maximum value of the interval.</param>
@@ -34,7 +34,7 @@ namespace GShark.Core
         public double Mid => Math.Abs(Min - Max) > GeoSharpMath.MAXTOLERANCE ? 0.5 * (Min + Max) : Min;
 
         /// <summary>
-        /// Gets the length of the interval range.
+        /// Gets the length of the interval range.<br/>
         /// If the interval is decreasing, negative number will be returned.
         /// </summary>
         public double Length => Max - Min;
