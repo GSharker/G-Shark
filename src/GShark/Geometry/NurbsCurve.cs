@@ -11,15 +11,17 @@ using GShark.Operation.Utilities;
 
 namespace GShark.Geometry
 {
-    //ToDo: BoundingBox has to be implemented properly.
     /// <summary>
-    /// This class represents the class of a nurbs curve type.
-    /// /// </summary>
+    /// This class represents a Non Uniform Rational B-Splines (NURBS) curve.
+    /// </summary>
+    /// <example>
+    /// [!code-sharp[Example](../../src/GShark.Test.XUnit/Data/NurbsCurveCollection.cs?name=example)]
+    /// </example>
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
         public NurbsCurve(){}
         /// <summary>
-        /// Creates a nurbs curve.
+        /// Creates a NURBS curve.
         /// </summary>
         /// <param name="degree">The curve degree.</param>
         /// <param name="knots">The knots defining the curve.</param>
@@ -60,7 +62,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Creates a nurbs curve.
+        /// Creates a NURBS curve.
         /// </summary>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="degree">The curve degree.</param>
@@ -72,7 +74,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Copy constructor.
         /// </summary>
-        /// <param name="curve">The curve object</param>
+        /// <param name="curve">The curve object.</param>
         private NurbsCurve(NurbsCurve curve)
         {
             Degree = curve.Degree;
@@ -126,7 +128,6 @@ namespace GShark.Geometry
             return new NurbsCurve(this);
         }
 
-        /// ToDo implement the async method.
         /// <summary>
         /// Transforms a curve with the given transformation matrix.
         /// </summary>
@@ -146,7 +147,6 @@ namespace GShark.Geometry
             return new NurbsCurve(Degree, Knots, pts, Weights!);
         }
 
-        /// ToDo implement the async method.
         /// <summary>
         /// Computes a point at the given parameter.
         /// </summary>
@@ -162,13 +162,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
-        /// ToDo implement the async method.
         public Vector3 TangentAt(double t)
         {
             return Evaluation.RationalCurveTangent(this, t);
         }
 
-        /// ToDo implement the async method.
         /// <summary>
         /// Calculates the length of the curve.
         /// </summary>
@@ -178,7 +176,6 @@ namespace GShark.Geometry
             return Analyze.CurveLength(this);
         }
 
-        /// ToDo implement the async method.
         /// <summary>
         /// Reverses the parametrization of the curve.
         /// </summary>
@@ -193,7 +190,6 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Point to analyze.</param>
         /// <returns>The closest point on the curve.</returns>
-        /// ToDo implement the async method.
         public Vector3 ClosestPt(Vector3 point)
         {
             return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
@@ -221,11 +217,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares if two nurbs curves are the same.
-        /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// Compares if two NURBS curves are the same.<br/>
+        /// Two NURBS curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
-        /// <param name="other">The nurbs curve.</param>
-        /// <returns>Return true if the nurbs curves are equal.</returns>
+        /// <param name="other">The NURBS curve.</param>
+        /// <returns>Return true if the NURBS curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
             List<Vector3>? otherPts = other?.ControlPoints;
@@ -254,11 +250,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares if two nurbs curves are the same.
-        /// Two nurbs curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// Compares if two NURBS curves are the same.<br/>
+        /// Two NURBS curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
         /// <param name="obj">The curve object.</param>
-        /// <returns>Return true if the nurbs curves are equal.</returns>
+        /// <returns>Return true if the NURBS curves are equal.</returns>
         public override bool Equals(object? obj)
         {
             if(obj is NurbsCurve curve)
@@ -269,7 +265,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Implements the override method to string.
         /// </summary>
-        /// <returns>The representation of a nurbs curve in string.</returns>
+        /// <returns>The representation of a NURBS curve in string.</returns>
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
