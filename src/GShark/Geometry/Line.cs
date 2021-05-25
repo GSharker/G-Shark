@@ -8,10 +8,13 @@ namespace GShark.Geometry
     /// <summary>
     /// A curve representing a straight line.
     /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
+    /// </example>
     public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
-        /// Line by start point and end point.
+        /// Initializes a line by start point and end point.
         /// </summary>
         /// <param name="start">Start point.</param>
         /// <param name="end">End point.</param>
@@ -29,7 +32,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Line from a starting point, direction and length.
+        /// Initializes a line from a starting point, direction and length.
         /// </summary>
         /// <param name="start">Starting point of the line.</param>
         /// <param name="direction">Direction of the line.</param>
@@ -91,7 +94,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Get the closest point on the line from this point.
+        /// Gets the closest point on the line from this point.
         /// </summary>
         /// <param name="pt">The closest point to find.</param>
         /// <returns>The closest point on the line from this point.</returns>
@@ -129,7 +132,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Evaluate the line at the specified parameter.
+        /// Evaluates the line at the specified parameter.
         /// </summary>
         /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
         /// <returns>The point at the specific parameter.</returns>
@@ -190,7 +193,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Check if the line is equal to the provided line.
+        /// Checks if the line is equal to the provided line.<br/>
         /// Two lines are equal if the end points are the same.
         /// </summary>
         /// <param name="other">The line to compare.</param>
@@ -211,7 +214,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Check if the line is equal to the provided line.
+        /// Checks if the line is equal to the provided line.<br/>
         /// Two lines are equal if the end points are the same.
         /// </summary>
         /// <param name="obj">The curve object.</param>

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using GShark.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,7 +11,7 @@ namespace GShark.Test.XUnit.Geometry
         private readonly ITestOutputHelper _testOutput;
         private readonly Circle _circle2D;
         private readonly Circle _circle3D;
-        internal CircleTests(ITestOutputHelper testOutput)
+        public CircleTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
 
@@ -34,13 +35,17 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void Initializes_A_Circle_By_A_Radius()
         {
+            // Assert
+            int radius = 23;
+            Vector3 expectedCenter = new Vector3 {0.0, 0.0, 0.0};
+
             // Act
-            Circle circle = new Circle(23);
+            Circle circle = new Circle(radius);
 
             // Assert
             circle.Should().NotBeNull();
-            circle.Radius.Should().Be(23);
-            circle.Center.Should().BeEquivalentTo(new Vector3 {0.0, 0.0, 0.0});
+            circle.Radius.Should().Be(radius);
+            circle.Center.Should().BeEquivalentTo(expectedCenter);
         }
 
         [Fact]
@@ -61,9 +66,10 @@ namespace GShark.Test.XUnit.Geometry
                 new Vector3 {74.264416, 36.39316, -1.884313}
             };
 
-            // Assert
-            System.Collections.Generic.List<Vector3> ctrPts = circle.ControlPoints;
+            // Act
+            List<Vector3> ctrPts = circle.ControlPoints;
 
+            // Assert
             ctrPts.Count.Should().Be(9);
             for (int i = 0; i < ptsExpected.Length; i++)
             {
@@ -76,12 +82,13 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle2D;
+            int expectedCircumference = 46;
 
             // Act
             double circumference = circle.Circumference;
 
             // Assert
-            (circumference / Math.PI).Should().Be(46);
+            (circumference / Math.PI).Should().Be(expectedCircumference);
         }
 
         [Theory]
