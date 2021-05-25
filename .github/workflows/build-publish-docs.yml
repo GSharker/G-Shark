@@ -34,5 +34,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gShark-docs # default: gh-pages
           publish_dir: docs/_site
           force_orphan: true
