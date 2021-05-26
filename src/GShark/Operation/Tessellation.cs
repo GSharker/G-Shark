@@ -8,18 +8,18 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Tessellation contains static, immutable algorithms for tessellation of nurbs curves and sufaces.<br/>
-    /// Tessellation is the decomposition of the analytical nurbs representation into discrete meshes or polylines that are useful for drawing.<br/>
-    /// Some of these algorithms are "adaptive" - using certain heuristics to sample geometry where such samples make sense - while
+    /// Contains static, immutable algorithms for tessellation of NURBS curves and sufaces.<br/>
+    /// Tessellation is the decomposition of the analytical NURBS representation into discrete meshes or polylines that are useful for drawing.<br/>
+    /// Some of these algorithms are "adaptive" - using certain heuristics to sample geometry where such samples make sense - while<br/>
     /// others are "regular" in that they sample regularly throughout a parametric domain.There are tradeoffs here.<br/>
-    /// While adaptive algorithms can sometimes yield "better" results that are smaller or more economical, this can sometimes come at
-    /// increased computational cost.For example, it is sometimes necessarily to compute higher order derivatives in order to
+    /// While adaptive algorithms can sometimes yield "better" results that are smaller or more economical, this can sometimes come at<br/>
+    /// increased computational cost.For example, it is sometimes necessarily to compute higher order derivatives in order to<br/>
     /// obtain these more economical results.Your usage of these algorithms should consider these tradeoffs.
     /// </summary>
     public class Tessellation
     {
         /// <summary>
-        /// Samples a nurbs curve at equally spaced parametric intervals.
+        /// Samples a NURBS curve at equally spaced parametric intervals.
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="numSamples">Number of samples.</param>

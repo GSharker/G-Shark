@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GShark.ExtendedMethods;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
+using System.Collections.Generic;
 
 namespace GShark.Optimization
 {
@@ -48,7 +45,7 @@ namespace GShark.Optimization
             double value0 = 2.0 * Vector3.Dot(deriveC0[1], r);
             double value1 = 2.0 * Vector3.Dot(drDt, r);
 
-            return new Vector3{value0, value1};
+            return new Vector3 { value0, value1 };
         }
     }
 }

@@ -8,8 +8,8 @@ namespace GShark.Operation
     internal static class IntersectionRefiner
     {
         /// <summary>
-        /// Refines an intersection pair for two curves given an initial guess. This is an unconstrained minimization,
-        /// so the caller is responsible for providing a very good initial guess.
+        /// Refines an intersection pair for two curves given an initial guess.<br/>
+        /// This is an unconstrained minimization, so the caller is responsible for providing a very good initial guess.
         /// </summary>
         /// <param name="crv0">The first curve.</param>
         /// <param name="crv1">The second curve.</param>
@@ -31,8 +31,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Refines an intersection between a curve and a plane given an initial guess. This is an unconstrained minimization,
-        /// so the caller is responsible for providing a very good initial guess.
+        /// Refines an intersection between a curve and a plane given an initial guess.<br/>
+        /// This is an unconstrained minimization, so the caller is responsible for providing a very good initial guess.
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>
         /// <param name="plane">The plane to intersect with the curve.</param>

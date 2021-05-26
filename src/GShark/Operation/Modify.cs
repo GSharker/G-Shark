@@ -11,14 +11,15 @@ namespace GShark.Operation
     // ToDo: CurveElevateDegree
     // ToDo: CurveKnotInsert
     /// <summary>
-    /// Modify contains many fundamental algorithms for working with NURBS. These include algorithms for:
-    /// knot insertion, knot refinement, degree elevation, re-parametrization.
+    /// Contains many fundamental algorithms for working with NURBS.<br/>
+    /// These include algorithms for:<br/>
+    /// knot insertion, knot refinement, degree elevation, re-parametrization.<br/>
     /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
     /// </summary>
     public class Modify
     {
         /// <summary>
-		/// Inserts a collection of knots on a curve.
+		/// Inserts a collection of knots on a curve.<br/>
 		/// <em>Implementation of Algorithm A5.4 of The NURBS Book by Piegl and Tiller.</em>
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
@@ -94,8 +95,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Decompose a curve into a collection of bezier's.
-        /// Useful as each Bezier curve fits into it's convex hull.
+        /// Decompose a curve into a collection of bezier's.<br/>
+        /// Useful as each Bezier curve fits into it's convex hull.<br/>
         /// This is a useful starting point for intersection, closest point, divide and conquer algorithms.
         /// </summary>
         /// <param name="curve">The curve object.</param>
@@ -146,7 +147,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Reverses the parametrization of a curve.
+        /// Reverses the parametrization of a curve.<br/>
         /// The domain is unaffected.
         /// </summary>
         /// <param name="curve">The curve has to be reversed.</param>
@@ -165,12 +166,12 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Performs knot refinement on a nurbs surface by inserting knots at various parameters.
+        /// Performs knot refinement on a NURBS surface by inserting knots at various parameters.
         /// </summary>
         /// <param name="nurbsSurface">The surface to insert the knots into.</param>
         /// <param name="knots">The knots to insert - an array of parameter positions within the surface domain.</param>
         /// <param name="useU">Whether to insert in the U direction or V direction of the surface. U is default.</param>
-        /// <returns>A nurbs surface with the knot refined.</returns>
+        /// <returns>A NURBS surface with the knot refined.</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, Knot knotsToInsert, bool useU = true)
         {
             List<List<Vector3>> ctrlPts;

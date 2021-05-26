@@ -11,7 +11,7 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Intersection provides various tools for all kinds of intersection between nurbs and primitive.
+    /// Provides various tools for all kinds of intersection between NURBS and primitive.
     /// </summary>
     public class Intersect
     {
@@ -19,9 +19,8 @@ namespace GShark.Operation
         // ToDo: Surface-Surface
 
         /// <summary>
-        /// Solves the intersection between two planes.
-        /// This method returns true if intersection is found, false if the
-        /// planes are parallel.
+        /// Solves the intersection between two planes.<br/>
+        /// This method returns true if intersection is found, false if the planes are parallel.
         /// </summary>
         /// <param name="p1">The first plane.</param>
         /// <param name="p2">The second plane.</param>
@@ -108,9 +107,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Finds the unique point intersection of a line and a plane.
-        /// This method returns true if intersection return the unique point, it returns
-        /// false if the segment is parallel to the plane or lies in plane.
+        /// Finds the unique point intersection of a line and a plane.<br/>
+        /// This method returns true if intersection return the unique point,<br/>
+        /// it returns false if the segment is parallel to the plane or lies in plane.<br/>
         /// http://geomalgorithms.com/a05-_intersect-1.html
         /// </summary>
         /// <param name="line">The segment to intersect. Assumed as infinite.</param>
@@ -143,9 +142,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Solves the intersection between two lines, assumed as infinite.
-        /// Returns as outputs two points describing the minimum distance between the two lines.
-        /// Returns false if the segments are parallel.
+        /// Solves the intersection between two lines, assumed as infinite.<br/>
+        /// Returns as outputs two points describing the minimum distance between the two lines.<br/>
+        /// Returns false if the segments are parallel.<br/>
         /// http://geomalgorithms.com/a07-_distance.html
         /// </summary>
         /// <param name="ln0">The first line.</param>
@@ -190,9 +189,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the intersection between a polyline and a plane.
-        /// Under the hood, is intersecting each segment with the plane and storing the intersection point into a collection.
-        /// If no intersections are found a empty collection is returned.
+        /// Computes the intersection between a polyline and a plane.<br/>
+        /// Under the hood, is intersecting each segment with the plane and storing the intersection point into a collection.<br/>
+        /// If no intersections are found a empty collection is returned.<br/>
         /// </summary>
         /// <param name="poly">The polyline to intersect with.</param>
         /// <param name="pl">The section plane.</param>
@@ -219,9 +218,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the intersection between a circle and a line.
-        /// If the intersection is computed the result points can be 1 or 2 depending on whether the line touches the circle tangentially or cuts through it.
-        /// The intersection result false if the line misses the circle entirely.
+        /// Computes the intersection between a circle and a line.<br/>
+        /// If the intersection is computed the result points can be 1 or 2 depending on whether the line touches the circle tangentially or cuts through it.<br/>
+        /// The intersection result false if the line misses the circle entirely.<br/>
         /// http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
         /// </summary>
         /// <param name="cl">The circle for intersection.</param>
@@ -266,8 +265,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the intersection between a plane and a circle.
-        /// If the intersection is computed the result points can be 1 or 2 depending on whether the plane touches the circle tangentially or cuts through it.
+        /// Computes the intersection between a plane and a circle.<br/>
+        /// If the intersection is computed the result points can be 1 or 2 depending on whether the plane touches the circle tangentially or cuts through it.<br/>
         /// The intersection result false if the plane is parallel to the circle or misses the circle entirely.
         /// </summary>
         /// <param name="pl">The plane for intersection.</param>
@@ -329,7 +328,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the intersection between a curve and a plane.
+        /// Computes the intersection between a curve and a plane.<br/>
         /// https://www.parametriczoo.com/index.php/2020/03/31/plane-and-curve-intersection/
         /// </summary>
         /// <param name="crv">The curve to intersect.</param>

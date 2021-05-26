@@ -8,18 +8,28 @@ namespace GShark.ExtendedMethods
 {
     public static class ExtendedEnumerable
     {
+        /// <summary>
+        /// Transforms a set of double into a <see cref="Vector3"/>.
+        /// </summary>
+        /// <param name="enumerable">Sets of values.</param>
+        /// <returns>A <see cref="Vector3"/></returns>
         public static Vector3 ToVector(this IEnumerable<double> enumerable)
         {
             return new Vector3(enumerable.ToList());
         }
 
+        /// <summary>
+        /// Transforms a set of double into a <see cref="Knot"/>.
+        /// </summary>
+        /// <param name="enumerable">Sets of values.</param>
+        /// <returns>A <see cref="Knot"/></returns>
         public static Knot ToKnot(this IEnumerable<double> enumerable)
         {
             return new Knot(enumerable.ToList());
         }
 
         /// <summary>
-        /// Obtains the unique set of elements in an array.
+        /// Obtains the unique set of elements in an array.<br/>
         /// https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-add-custom-methods-for-linq-queries
         /// </summary>
         /// <param name="enumerable">A collection of things.</param>

@@ -1,8 +1,8 @@
 ﻿namespace GShark.Operation
 {
     /// <summary>
-    /// This class contains the value of Gaussian Quadrature Weights and Abscissae.
-    /// The values are from n = 2 to n = 25. They can be expanded following this link.
+    /// Contains the value of Gaussian Quadrature Weights and Abscissae.<br/>
+    /// The values are from n = 2 to n = 25. They can be expanded following this link.<br/>
     /// https://pomax.github.io/bezierinfo/legendre-gauss.html#n15
     /// </summary>
     internal static class LegendreGaussData

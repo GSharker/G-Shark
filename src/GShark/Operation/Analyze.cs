@@ -8,7 +8,7 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Analyze contains methods for analyzing nurbs geometry.
+    /// Contains methods for analyzing NURBS geometry.
     /// </summary>
     public class Analyze
     {
@@ -131,7 +131,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the closest parameters on a curve to a given point.
+        /// Computes the closest parameters on a curve to a given point.<br/>
         /// <em>Corresponds to page 244 chapter six from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The curve object.</param>

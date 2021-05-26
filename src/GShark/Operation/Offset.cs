@@ -7,7 +7,7 @@ namespace GShark.Operation
 {
     // ToDo: Add cap to the offset.
     /// <summary>
-    /// The offset class collects a set of method for offsetting primitives and nurbs geometries.
+    /// Collects a set of method for offsetting primitives and NURBS geometries.
     /// </summary>
     public static class Offset
     {
