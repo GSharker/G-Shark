@@ -12,10 +12,10 @@ using GShark.Operation.Utilities;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// This class represents a Non Uniform Rational B-Splines (NURBS) curve.
+    /// This class represents a NURBS curve.
     /// </summary>
     /// <example>
-    /// [!code-sharp[Example](../../src/GShark.Test.XUnit/Data/NurbsCurveCollection.cs?name=example)]
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsCurveCollection.cs?name=example)]
     /// </example>
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
