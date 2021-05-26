@@ -2,10 +2,8 @@ name: Build docs
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull_request only for the master branch
+  # Triggers the workflow on push only for the master branch
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
