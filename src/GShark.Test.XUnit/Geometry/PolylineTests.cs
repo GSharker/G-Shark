@@ -13,16 +13,21 @@ namespace GShark.Test.XUnit.Geometry
     public class PolylineTests
     {
         private readonly ITestOutputHelper _testOutput;
+        private readonly Vector3[] _examplePts;
         public PolylineTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-        }
 
-        public static Vector3[] ExamplePts => new[]
-        {
-            new Vector3 {5, 0, 0}, new Vector3 {15, 15, 0},
-            new Vector3 {20, 5, 0}, new Vector3 {30, 10, 0}, new Vector3 {45, 12.5, 0}
-        };
+            #region example
+            _examplePts = new[]
+            {
+                new Vector3 {5, 0, 0}, new Vector3 {15, 15, 0},
+                new Vector3 {20, 5, 0}, new Vector3 {30, 10, 0}, new Vector3 {45, 12.5, 0}
+            };
+
+            Polyline poly = new Polyline(_examplePts);
+            #endregion
+        }
 
         [Fact]
         public void It_Returns_A_Polyline()
@@ -31,12 +36,12 @@ namespace GShark.Test.XUnit.Geometry
             int numberOfExpectedSegments = 4;
 
             // Act
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
 
             // Arrange
             polyline.SegmentsCount.Should().Be(numberOfExpectedSegments);
-            polyline.Count.Should().Be(ExamplePts.Length);
-            polyline[0].Should().BeEquivalentTo(ExamplePts[0]);
+            polyline.Count.Should().Be(_examplePts.Length);
+            polyline[0].Should().BeEquivalentTo(_examplePts[0]);
         }
 
         [Fact]
@@ -80,7 +85,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Length_Of_A_Polyline()
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             double expectedLength = 55.595342;
 
             // Act
@@ -94,7 +99,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Collection_Of_Lines()
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             int expectedNumberOfSegments = 4;
             double expectedSegmentLength = 11.18034;
 
@@ -115,7 +120,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] pt)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             Vector3 expectedPt = new Vector3(pt);
 
             // Act
@@ -132,7 +137,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Parameter_Along_The_Polyline_At_The_Given_Point(double expextedParam, double[] pt)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             Vector3 closestPt = new Vector3(pt);
 
             // Act
@@ -148,7 +153,7 @@ namespace GShark.Test.XUnit.Geometry
         public void PointAt_Throws_An_Exception_If_Parameter_Is_Smaller_Than_Zero_And_Bigger_Than_One(double t)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
 
             // Act
             Func<Vector3> func = () => polyline.PointAt(t);
@@ -165,7 +170,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Tangent_Vector_At_The_Given_Parameter(double t, double[] tangent)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             Vector3 expectedTangent = new Vector3(tangent);
 
             // Act
@@ -181,7 +186,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Segment_At_The_Given_Index(int index, double segmentLength)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
 
             // Act
             Line segment = polyline.SegmentAt(index);
@@ -196,7 +201,7 @@ namespace GShark.Test.XUnit.Geometry
         public void SegmentAt_Throws_An_Exception_If_Index_Is_Smaller_Than_Zero_And_Bigger_Than_Polyline_Domain(int index)
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
 
             // Act
             Func<Line> func = () => polyline.SegmentAt(index);
@@ -213,7 +218,7 @@ namespace GShark.Test.XUnit.Geometry
             Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Vector3 { 0, 0, 0 });
             Transform combinedTransformations = translation.Combine(rotation);
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
 
             // Act
             Polyline transformedPoly = polyline.Transform(combinedTransformations);
@@ -227,7 +232,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point()
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             Vector3 testPt = new Vector3 { 17.0, 8.0, 0.0 };
             Vector3 expectedPt = new Vector3 { 18.2, 8.6, 0.0 };
 
@@ -242,7 +247,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_The_Polyline()
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
             Vector3 minExpected = new Vector3 { 5.0, 0.0, 0.0 };
             Vector3 maxExpected = new Vector3 { 45.0, 15.0, 0.0 };
 
@@ -258,8 +263,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Reversed_Polyline()
         {
             // Arrange
-            Polyline polyline = new Polyline(ExamplePts);
-            List<Vector3> reversedPts = new List<Vector3>(ExamplePts);
+            Polyline polyline = new Polyline(_examplePts);
+            List<Vector3> reversedPts = new List<Vector3>(_examplePts);
             reversedPts.Reverse();
 
             // Act

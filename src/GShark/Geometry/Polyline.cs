@@ -9,6 +9,9 @@ namespace GShark.Geometry
     /// <summary>
     /// A simple data structure representing a polyline.
     /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
+    /// </example>
     public class Polyline : List<Vector3>, ICurve
     {
         /// <summary>
