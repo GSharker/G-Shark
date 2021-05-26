@@ -5,10 +5,13 @@ using System.Text;
 
 namespace GShark.Core
 {
+    /// <summary>
+    /// Represents the values in a 4 x 4 transformation matrix.
+    /// </summary>
     public class Transform : List<IList<double>>
     {
         /// <summary>
-        /// Initializes a 4 x 4 transformation matrix.
+        /// Initializes a 4 x 4 transformation matrix.<br/>
         /// All the values are set to zero.
         /// </summary>
         public Transform()
@@ -17,8 +20,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets a identity transformation matrix. An identity matrix defines no transformation.
-        /// The diagonal is (1,1,1,1)
+        /// Gets a identity transformation matrix. An identity matrix defines no transformation.<br/>
+        /// The diagonal is (1,1,1,1).
         /// </summary>
         /// <returns>The identity transformation matrix.</returns>
         public static Transform Identity()
@@ -260,7 +263,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets the transformation that project to a plane.
+        /// Gets the transformation that project to a plane.<br/>
         /// The transformation maps a point to the point closest to the plane.
         /// </summary>
         /// <param name="plane">Plane to project to.</param>
@@ -330,7 +333,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Combines two transformations.
+        /// Combines two transformations.<br/>
         /// This is the same as the * operator.
         /// </summary>
         /// <param name="t">Transformation to combine.</param>

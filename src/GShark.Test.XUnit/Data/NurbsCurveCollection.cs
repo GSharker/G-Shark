@@ -53,6 +53,7 @@ namespace GShark.Test.XUnit.Data
 
         public static NurbsCurve NurbsCurve3DExample()
         {
+            #region example
             int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
@@ -62,7 +63,10 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {5, 5, 5},
                 new Vector3 {0, 5, 0},
             };
-            return new NurbsCurve(controlPts, degree);
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
+            #endregion
+
+            return curve;
         }
 
         public static NurbsCurve NurbsCurveCubicBezierPlanar()

@@ -3,6 +3,9 @@ using System;
 
 namespace GShark.Core.BoundingBoxTree
 {
+    /// <summary>
+    /// Interface defining the requirements used by <see cref="BoundingBoxOperations"/>.
+    /// </summary>
     internal interface IBoundingBoxTree<T>
     {
         /// <summary>
@@ -27,7 +30,6 @@ namespace GShark.Core.BoundingBoxTree
         /// <param name="tolerance">A tolerance value used for the comparison.</param>
         /// <returns>True whether the object is not more divisible.</returns>
         public bool IsIndivisible(double tolerance);
-
 
         /// <summary>
         /// Gets if the bounding box tree is empty.

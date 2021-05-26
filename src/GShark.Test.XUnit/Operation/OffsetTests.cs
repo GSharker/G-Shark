@@ -72,7 +72,7 @@ namespace GShark.Test.XUnit.Operation
             Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
 
             // Assert
-            //offsetResult[0].DistanceTo(offsetResult[^1]).Should().Be(0.0);
+            offsetResult[0].DistanceTo(offsetResult[^1]).Should().Be(0.0);
             Vector3 pt = offsetResult.PointAt(0.5);
             Vector3 closestPt = pl.ClosestPt(pt);
             pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharpMath.MINTOLERANCE);

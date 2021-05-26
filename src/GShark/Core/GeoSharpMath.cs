@@ -4,7 +4,7 @@ using System;
 namespace GShark.Core
 {
     /// <summary>
-    /// GeoSharpMath contains a collection of default constants methods used throughout the library.
+    /// A collection of default constants and methods used throughout the library.
     /// </summary>
     public class GeoSharpMath
     {
@@ -35,37 +35,37 @@ namespace GShark.Core
         public static double ANGLETOLERANCE => 0.0174532925199433;
 
         /// <summary>
-        /// Convert degrees to radians.
+        /// Converts degrees to radians.
         /// </summary>
         /// <param name="degrees">Value degrees.</param>
-        /// <returns>Get the radians value.</returns>
+        /// <returns>The radians value.</returns>
         public static double ToRadians(double degrees)
         {
             return degrees * (Math.PI / 180.0);
         }
 
         /// <summary>
-        /// Convert radians to degrees.
+        /// Converts radians to degrees.
         /// </summary>
         /// <param name="radians">Value radians.</param>
-        /// <returns>Get the degree value.</returns>
+        /// <returns>The degree value.</returns>
         public static double ToDegrees(double radians)
         {
             return radians * (180.0 / Math.PI);
         }
 
         /// <summary>
-        /// Check if it is a value double.
+        /// Checks if it is a valid double.
         /// </summary>
         /// <param name="x">Double value.</param>
-        /// <returns>Return if it is valid.</returns>
+        /// <returns>True if it is valid.</returns>
         public static bool IsValidDouble(double x)
         {
             return Math.Abs((double) x - (-1.23432101234321E+308)) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
         /// <summary>
-        /// Remap a value into a new numerical range.
+        /// Remaps a value into a new numerical range.
         /// </summary>
         /// <param name="value">Value to remap.</param>
         /// <param name="source">Numerical interval of the value.</param>
@@ -77,7 +77,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Reduce the nice from the input.
+        /// Reduces the noise from the input.
         /// </summary>
         /// <param name="sinAngle">Sin angle value.</param>
         /// <param name="cosAngle">Cos angle value.</param>

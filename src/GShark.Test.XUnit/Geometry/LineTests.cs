@@ -13,22 +13,30 @@ namespace GShark.Test.XUnit.Geometry
     public class LineTests
     {
         private readonly ITestOutputHelper _testOutput;
+        private readonly Line _exampleLine;
         public LineTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-        }
 
-        public static Line ExampleLine => new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 15, 15, 0 });
+            #region example
+            // Initializes a line by start and end point.
+            Vector3 pt1 = new Vector3 { 5, 0, 0 };
+            Vector3 pt2 = new Vector3 { 15, 15, 0 };
+            _exampleLine = new Line(pt1, pt2);
+
+            // Initializes a line by a starting point a direction and a length.
+            Line line = new Line(pt1, Vector3.XAxis, 15);
+            #endregion
+        }
 
         [Fact]
         public void It_Returns_A_Line()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { -0.913, 1.0, 4.68 };
-            Vector3 pt2 = new Vector3 { 6.363, 10.0, 7.971 };
+            Vector3 pt1 = new Vector3 { 5, 0, 0 };
 
             // Act
-            Line line = new Line(pt1, pt2);
+            Line line = _exampleLine;
 
             // Assert
             line.Should().NotBeNull();
@@ -55,20 +63,23 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 startingPoint = new Vector3 { 0, 0, 0 };
+            int lineLength = 15;
+            Vector3 expectedDirection = new Vector3 {1, 0, 0};
+            Vector3 expectedStartPt = new Vector3 { lineLength, 0, 0 };
 
             // Act
-            Line line1 = new Line(startingPoint, Vector3.XAxis, 15);
-            Line line2 = new Line(startingPoint, Vector3.XAxis, -15);
+            Line line1 = new Line(startingPoint, Vector3.XAxis, lineLength);
+            Line line2 = new Line(startingPoint, Vector3.XAxis, -lineLength);
 
             // Assert
-            line1.Length.Should().Be(line2.Length).And.Be(15);
+            line1.Length.Should().Be(line2.Length).And.Be(lineLength);
             line1.Start.Should().BeEquivalentTo(line2.Start).And.BeEquivalentTo(startingPoint);
 
-            line1.Direction.Should().BeEquivalentTo(new Vector3 { 1, 0, 0 });
-            line1.End.Should().BeEquivalentTo(new Vector3 { 15, 0, 0 });
+            line1.Direction.Should().BeEquivalentTo(expectedDirection);
+            line1.End.Should().BeEquivalentTo(expectedStartPt);
 
-            line2.Direction.Should().BeEquivalentTo(new Vector3 { -1, 0, 0 });
-            line2.End.Should().BeEquivalentTo(new Vector3 { -15, 0, 0 });
+            line2.Direction.Should().BeEquivalentTo(Vector3.Reverse(expectedDirection));
+            line2.End.Should().BeEquivalentTo(Vector3.Reverse(expectedStartPt));
         }
 
         [Fact]
@@ -88,12 +99,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Length_Of_The_Line()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { -0.913, 1.0, 4.68 };
-            Vector3 pt2 = new Vector3 { 6.363, 10.0, 7.971 };
-            double expectedLength = 12.03207;
+            double expectedLength = 18.027756;
 
             // Act
-            Line line = new Line(pt1, pt2);
+            Line line = _exampleLine;
 
             // Assert
             line.Length.Should().BeApproximately(expectedLength, 5);
@@ -103,27 +112,24 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Line_Direction()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { 0, 0, 0 };
-            Vector3 pt2 = new Vector3 { 5, 0, 0 };
-            Vector3 expectedDirection = new Vector3 { 1, 0, 0 };
+            Vector3 expectedDirection = new Vector3 { 0.5547, 0.83205, 0};
 
             // Act
-            Line line = new Line(pt1, pt2);
+            Vector3 dir = _exampleLine.Direction;
 
             // Assert
-            line.Direction.Should().BeEquivalentTo(expectedDirection);
+            dir.IsEqualRoundingDecimal(expectedDirection, 5).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_The_ClosestPoint()
         {
             // Arrange
-            Line line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3 { 12.307692, 18.4615384, 0 };
+            Vector3 pt = new Vector3 { 5, 8, 0 };
+            Vector3 expectedPt = new Vector3 { 8.692308, 5.538462, 0 };
 
             // Act
-            Vector3 closestPt = line.ClosestPt(pt);
+            Vector3 closestPt = _exampleLine.ClosestPt(pt);
 
             // Assert
             closestPt.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
@@ -133,7 +139,7 @@ namespace GShark.Test.XUnit.Geometry
         public void PointAt_Throw_An_Exception_If_Parameter_Outside_The_Curve_Domain()
         {
             // Act
-            Func<Vector3> func = () => ExampleLine.PointAt(2);
+            Func<Vector3> func = () => _exampleLine.PointAt(2);
 
             // Assert
             func.Should().Throw<ArgumentOutOfRangeException>()
@@ -149,7 +155,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Evaluated_Point_At_The_Given_Parameter(double t, double[] ptExpected)
         {
             // Act
-            Vector3 ptEvaluated = ExampleLine.PointAt(t);
+            Vector3 ptEvaluated = _exampleLine.PointAt(t);
 
             // Assert
             ptEvaluated.Equals(ptExpected.ToVector()).Should().BeTrue();
@@ -165,7 +171,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 pt = new Vector3(pts);
 
             // Act
-            double parameter = ExampleLine.ClosestParameter(pt);
+            double parameter = _exampleLine.ClosestParameter(pt);
 
             // Assert
             parameter.Should().BeApproximately(expectedParam, GeoSharpMath.MAXTOLERANCE);
@@ -175,34 +181,34 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Flipped_Line()
         {
             // Act
-            Line flippedLine = ExampleLine.Flip();
+            Line flippedLine = _exampleLine.Flip();
 
             // Assert
-            flippedLine.Start.Equals(ExampleLine.End).Should().BeTrue();
-            flippedLine.End.Equals(ExampleLine.Start).Should().BeTrue();
+            flippedLine.Start.Equals(_exampleLine.End).Should().BeTrue();
+            flippedLine.End.Equals(_exampleLine.Start).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_An_Extend_Line()
         {
             // Act
-            Line extendedLine = ExampleLine.Extend(0, -5);
+            Line extendedLine = _exampleLine.Extend(0, -5);
 
             // Assert
             extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MAXTOLERANCE);
-            extendedLine.Start.Should().BeEquivalentTo(ExampleLine.Start);
+            extendedLine.Start.Should().BeEquivalentTo(_exampleLine.Start);
         }
 
         [Fact]
         public void It_Checks_If_Two_Lines_Are_Equals()
         {
             // Act
-            Line lineFlip = ExampleLine.Flip();
+            Line lineFlip = _exampleLine.Flip();
             Line lineFlippedBack = lineFlip.Flip();
 
             // Assert
             lineFlip.Equals(lineFlippedBack).Should().BeFalse();
-            lineFlippedBack.Equals(ExampleLine).Should().BeTrue();
+            lineFlippedBack.Equals(_exampleLine).Should().BeTrue();
         }
 
         [Fact]
@@ -213,7 +219,7 @@ namespace GShark.Test.XUnit.Geometry
             Transform transform = Transform.Translation(translatedVec);
 
             // Act
-            Line transformedLine = ExampleLine.Transform(transform);
+            Line transformedLine = _exampleLine.Transform(transform);
 
             // Assert
             transformedLine.Start.Should().BeEquivalentTo(new Vector3 { 15, 10, 0 });
@@ -223,14 +229,12 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_NurbsCurve_Data_From_The_Line()
         {
-            Vector3 p1 = new Vector3 { 0.0, 0.0, 0.0 };
-            Vector3 p2 = new Vector3 { 2.0, 0.0, 0.0 };
-            ICurve line = new Line(p1, p2);
+            // Arrange
+            ICurve line = _exampleLine;
 
+            // Assert
             line.ControlPoints.Count.Should().Be(2);
             line.Degree.Should().Be(1);
-            line.ControlPoints[0].Should().BeEquivalentTo(p1);
-            line.ControlPoints[1].Should().BeEquivalentTo(p2);
         }
     }
 }

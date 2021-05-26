@@ -6,7 +6,7 @@ using GShark.Geometry;
 namespace GShark.Optimization
 {
     /// <summary>
-    /// The Minimizer solves for unconstrained problems, using a gradient descendent.
+    /// Solves for unconstrained problems, using a gradient descendent.<br/>
     /// This class is at the base of some intersection methods.
     /// </summary>
     public class Minimizer
@@ -23,7 +23,7 @@ namespace GShark.Optimization
         }
 
         /// <summary>
-        /// The Minimizer solves for unconstrained problems, using a gradient descendent.
+        /// Solves for unconstrained problems, using a gradient descendent.
         /// </summary>
         /// <param name="initialGuess">The vector initial guess.</param>
         /// <param name="gradientTolerance">The gradient tolerance set per default to 1e-8.</param>

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 // ToDo: this class has to be implemented and used.
 namespace GShark.Core
 {
-
     public abstract class Serializable<T>
     {
         public abstract T FromJson(string s);

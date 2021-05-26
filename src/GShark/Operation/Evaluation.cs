@@ -9,14 +9,14 @@ using GShark.Operation.Utilities;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Evaluation provides all of the core algorithms for evaluating points and derivatives on nurbs curves and surfaces.
+    /// Provides all of the core algorithms for evaluating points and derivatives on nurbs curves and surfaces.<br/>
     /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
     /// </summary>
     public class Evaluation
     {
         /// <summary>
-        /// Computes the non-vanishing basis functions.
-        /// <em>Implementation of Algorithm A2.2 from The NURBS Book by Piegl and Tiller.
+        /// Computes the non-vanishing basis functions.<br/>
+        /// <em>Implementation of Algorithm A2.2 from The NURBS Book by Piegl and Tiller.<br/>
         /// Uses recurrence to compute the basis functions, also known as Cox - deBoor recursion formula.</em>
         /// </summary>
         /// <param name="degree">Degree of a curve.</param>
@@ -30,8 +30,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the non-vanishing basis functions.
-        /// <em>Implementation of Algorithm A2.2 from The NURBS Book by Piegl and Tiller.
+        /// Computes the non-vanishing basis functions.<br/>
+        /// <em>Implementation of Algorithm A2.2 from The NURBS Book by Piegl and Tiller.<br/>
         /// Uses recurrence to compute the basis functions, also known as Cox - deBoor recursion formula.</em>
         /// </summary>
         /// <param name="degree">Degree of a curve.</param>
@@ -67,7 +67,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes a point on a non-uniform, non-rational b-spline curve.
+        /// Computes a point on a non-uniform, non-rational b-spline curve.<br/>
         /// <em>Corresponds to algorithm 3.1 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The curve object.</param>
@@ -104,7 +104,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes a point on a non-uniform, non-rational B spline surface.
+        /// Computes a point on a non-uniform, non-rational B spline surface.<br/>
         /// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="surface">The surface.</param>
@@ -244,9 +244,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Calculates all the extrema on a curve. Extrema are calculated for each dimension,
-        /// rather than for the full curve, so that the result is not the number of convex/concave transitions,
-        /// but the number of those transitions for each separate dimension.
+        /// Calculates all the extrema on a curve.<br/>
+        /// Extrema are calculated for each dimension, rather than for the full curve, <br/>
+        /// so that the result is not the number of convex/concave transitions, but the number of those transitions for each separate dimension.
         /// </summary>
         /// <param name="derivPts">A collection of derivative coordinates.</param>
         /// <param name="order">Order of the curve.</param>
@@ -321,7 +321,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Find all roots (derivative=0) for both derivatives.
+        /// Find all roots (derivative=0) for both derivatives.<br/>
         /// https://pomax.github.io/bezierinfo/#extremities
         /// </summary>
         /// <param name="derivs">The derivatives.</param>
@@ -366,8 +366,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Determines the derivatives of a curve at a given parameter.
-        /// Corresponds to algorithm 4.2 from The NURBS Book by Piegl and Tiller.
+        /// Determines the derivatives of a curve at a given parameter.<br/>
+        /// <em>Corresponds to algorithm 4.2 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
@@ -411,8 +411,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Determines the derivatives of a non-uniform, non-rational B-spline curve at a given parameter.
-        /// Corresponds to algorithm 3.2 from The NURBS Book by Piegl and Tiller.
+        /// Determines the derivatives of a NURBS curve at a given parameter.<br/>
+        /// <em>Corresponds to algorithm 3.2 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
@@ -453,8 +453,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the non-vanishing basis functions and their derivatives.
-        /// Corresponds to algorithm 2.3 from The NURBS Book by Piegl and Tiller.
+        /// Computes the non-vanishing basis functions and their derivatives.<br/>
+        /// <em>Corresponds to algorithm 2.3 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="span">Span index.</param>
         /// <param name="parameter">Parameter.</param>
@@ -575,7 +575,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the normal vector at uv parameter on a nurbs surface.
+        /// Computes the normal vector at uv parameter on a NURBS surface.
         /// </summary>
         /// <param name="nurbsSurface">The surface.</param>
         /// <param name="u">The u parameter.</param>
@@ -589,7 +589,7 @@ namespace GShark.Operation
 
 
         /// <summary>
-        /// Computes the derivatives at a point on a nurbs surface.
+        /// Computes the derivatives at a point on a NURBS surface.
         /// </summary>
         /// <param name="nurbsSurface">The surface.</param>
         /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
@@ -635,7 +635,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the derivatives on a non-uniform, non-rational B spline surface.
+        /// Computes the derivatives on a NURBS surface.
         /// </summary>
         /// <param name="nurbsSurface">Object representing the surface.</param>
         /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
@@ -650,9 +650,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the derivatives on a non-uniform, non-rational B spline surface.
-        /// Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.
-        /// SKL is the derivative S(u,v) with respect to u K-times and v L-times.
+        /// Computes the derivatives on a non-uniform, non-rational B spline surface.<br/>
+        /// SKL is the derivative S(u,v) with respect to u K-times and v L-times.<br/>
+        /// <em>Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="nurbsSurface">The surface.</param>
         /// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2.</param>

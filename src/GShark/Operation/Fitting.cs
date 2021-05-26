@@ -8,7 +8,7 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Fitting provides functions for interpolating and approximating nurbs curves and surfaces from points.
+    /// Provides functions for interpolating and approximating NURBS curves and surfaces from points.<br/>
     /// Approximation uses least squares algorithm.
     /// </summary>
     public static class Fitting
@@ -44,8 +44,8 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Creates a interpolated curve through a set of points.
-        /// Please refer to Algorithm A9.1 on The NURBS Book (2nd Edition), pp.369-370 for details.
+        /// Creates a interpolated curve through a set of points.<br/>
+        /// <em>Refer to Algorithm A9.1 on The NURBS Book, pp.369-370 for details.</em>
         /// </summary>
         /// <param name="pts">The set of points to interpolate.</param>
         /// <param name="degree">The Curve degree.</param>
@@ -98,7 +98,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Define the control points.
+        /// Defines the control points.
         /// </summary>
         internal static List<Vector3> SolveCtrlPts(List<Vector3> pts, int degree, Vector3 startTangent, Vector3 endTangent, Matrix coeffMatrix,
             Knot knots, bool hasTangents)
@@ -172,7 +172,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Please refer to the Equations 9.4 and 9.5 for chord length parametrization, and Equation 9.6 for centripetal method
+        /// Refer to the Equations 9.4 and 9.5 for chord length parametrization, and Equation 9.6 for centripetal method
         /// on The NURBS Book(2nd Edition), pp.364-365.
         /// </summary>
         internal static List<double> ParametersCurve(List<Vector3> pts, bool centripetal = false)

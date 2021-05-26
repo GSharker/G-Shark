@@ -14,7 +14,7 @@ namespace GShark.Optimization
         private readonly Plane _plane;
 
         /// <summary>
-        /// Initialize the class, which collects the functions used for the minimization problem.
+        /// Initializes the class, which collects the functions used for the minimization problem.
         /// </summary>
         /// <param name="crv">ICurve used in the intersection process.</param>
         /// <param name="plane">Plane used in the intersection process.</param>

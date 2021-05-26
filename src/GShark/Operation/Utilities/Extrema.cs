@@ -5,8 +5,8 @@ using System.Runtime.InteropServices.ComTypes;
 namespace GShark.Operation.Utilities
 {
     /// <summary>
-    /// This object describing the extrema of a curve.
-    /// Where each dimension lists the array of t values at which an extremum occurs,
+    /// This object describing the extrema of a curve.<br/>
+    /// Where each dimension lists the array of t values at which an extremum occurs,<br/>
     /// and the values property is the aggregate of the t values across all dimensions.
     /// </summary>
     public class Extrema

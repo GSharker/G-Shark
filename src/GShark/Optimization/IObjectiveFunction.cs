@@ -3,7 +3,7 @@
 namespace GShark.Optimization
 {
     /// <summary>
-    /// Interface defines the minimum implementation for an objective function used by the <see cref="Minimizer"/>.
+    /// Defines the minimum implementation for an objective function used by the <see cref="Minimizer"/>.
     /// </summary>
     public interface IObjectiveFunction
     {

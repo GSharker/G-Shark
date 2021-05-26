@@ -233,8 +233,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Subtraction_Between_Two_Vectors()
         {
             // Arrange
+            #region example
             var vec1 = new Vector3 { 20, 0, 0 };
             var vec2 = new Vector3 { -10, 15, 5 };
+            #endregion
             var expectedVec = new Vector3 { 30, -15, -5 };
 
             // Assert

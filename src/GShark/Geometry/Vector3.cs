@@ -7,9 +7,12 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// Vector3 is represented simply by an list of double numbers, Vector3 is also used to represent point.
+    /// Vector3 is represented simply by an list of double numbers, Vector3 is also used to represent point.<br/>
     /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
     /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/VectorTests.cs?name=example)]
+    /// </example>
     public class Vector3 : List<double>, IEquatable<Vector3>
     {
         /// <summary>
@@ -89,6 +92,7 @@ namespace GShark.Geometry
         {
             return (GeoSharpMath.IsValidDouble(this[0]) &&
                     GeoSharpMath.IsValidDouble(this[1]) &&
+                    GeoSharpMath.IsValidDouble(this[2]) &&
                     (Math.Abs(Length() - 1.0) <= GeoSharpMath.EPSILON));
         }
 

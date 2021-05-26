@@ -6,7 +6,7 @@ using System.Linq;
 namespace GShark.Core
 {
     /// <summary>
-    /// A Knot is a non-decreasing sequence of doubles.
+    /// A knot is a non-decreasing sequence of doubles.
     /// </summary>
     public class Knot : List<double>
     {
@@ -18,7 +18,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Create an instance of the class knot.
+        /// Creates an instance of the class knot.
         /// </summary>
         /// <param name="degree">Degree of the curve.</param>
         /// <param name="numberOfControlPts">Number of control points of the curve.</param>
@@ -29,7 +29,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Create an instance of the class from a list of values.
+        /// Creates an instance of the class from a list of values.
         /// </summary>
         /// <param name="values">Set of knots.</param>
         public Knot(IEnumerable<double> values)
@@ -38,12 +38,12 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Check the validity of the input knots.
-        /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
-        /// Refer to The NURBS Book (2nd Edition), p.50 for details.
-        /// 
-        /// More specifically, this method checks if the knot knots is of the following structure:
-        /// The knot knots must be non-decreasing and of length (degree + 1) * 2 or greater
+        /// Checks the validity of the input knots.<br/>
+        /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).<br/>
+        /// Refer to The NURBS Book (2nd Edition), p.50 for details.<br/>
+        /// <br/>
+        /// More specifically, this method checks if the knot knots is of the following structure:<br/>
+        /// The knot knots must be non-decreasing and of length (degree + 1) * 2 or greater<br/>
         /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
         /// <param name="degree">The degree of the curve.</param>
@@ -102,7 +102,7 @@ namespace GShark.Core
         public double Domain => this[^1] - this[0];
 
         /// <summary>
-        /// Find the span on the knots without supplying a number of control points.
+        /// Finds the span on the knots without supplying a number of control points.
         /// </summary>
         /// <param name="degree">Integer degree of function.</param>
         /// <param name="u">Parameter.</param>
@@ -113,7 +113,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Find the span on the knot list of the given parameter.
+        /// Finds the span on the knot list of the given parameter.<br/>
         /// <em>Corresponds to algorithm 2.1 from the NURBS book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="n">Number of basis functions.</param>
@@ -155,7 +155,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Calculate the multiplicity of the knot.
+        /// Calculates the multiplicity of the knot.
         /// </summary>
         /// <param name="knotIndex">The index of the knot to determine multiplicity.</param>
         /// <returns>The multiplicity of the knot.</returns>
@@ -184,7 +184,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Determine the multiplicity values of the knots.
+        /// Determines the multiplicity values of the knots.
         /// </summary>
         /// <returns>Dictionary where the key is the knot and the value the multiplicity.</returns>
         public Dictionary<double, int> Multiplicities()

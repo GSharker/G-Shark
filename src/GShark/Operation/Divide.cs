@@ -2,20 +2,18 @@
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace GShark.Operation
 {
     /// <summary>
-    /// Divide provides various tools for dividing and splitting NURBS geometry.
+    /// Provides various tools for dividing and splitting NURBS geometry.
     /// </summary>
     public class Divide
     {
-        /// ToDo implement the async method.
-		/// <summary>
-		/// Split a curve into two parts at a given parameter.
+        /// <summary>
+		/// Splits a curve into two parts at a given parameter.
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
 		/// <param name="u">The parameter where to split the curve.</param>
@@ -39,16 +37,15 @@ namespace GShark.Operation
             return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
         }
 
-        /// ToDo implement the async method.
-		/// <summary>
-		/// Divides a curve for a given number of time, including the end points.
-		/// The result is not split curves but a collection of t values and lengths that can be used for splitting.
-		/// As with all arc length methods, the result is an approximation.
-		/// </summary>
-		/// <param name="curve">The curve object to divide.</param>
-		/// <param name="divisions">The number of parts to split the curve into.</param>
-		/// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-		public static (List<double> tValues, List<double> lengths) CurveByCount(ICurve curve, int divisions)
+        /// <summary>
+        /// Divides a curve for a given number of time, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="divisions">The number of parts to split the curve into.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        public static (List<double> tValues, List<double> lengths) CurveByCount(ICurve curve, int divisions)
         {
             double approximatedLength = Analyze.CurveLength(curve);
             double arcLengthSeparation = approximatedLength / divisions;
@@ -56,16 +53,15 @@ namespace GShark.Operation
             return CurveByLength(curve, arcLengthSeparation);
         }
 
-        /// ToDo implement the async method.
-		/// <summary>
-		/// Divides a curve for a given length, including the end points.
-		/// The result is not split curves but a collection of t values and lengths that can be used for splitting.
-		/// As with all arc length methods, the result is an approximation.
-		/// </summary>
-		/// <param name="curve">The curve object to divide.</param>
-		/// <param name="length">The length separating the resultant samples.</param>
-		/// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-		public static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
+        /// <summary>
+        /// Divides a curve for a given length, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="length">The length separating the resultant samples.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        public static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
         {
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
