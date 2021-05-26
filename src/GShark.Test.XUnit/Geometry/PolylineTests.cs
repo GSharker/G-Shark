@@ -21,8 +21,11 @@ namespace GShark.Test.XUnit.Geometry
             #region example
             _examplePts = new[]
             {
-                new Vector3 {5, 0, 0}, new Vector3 {15, 15, 0},
-                new Vector3 {20, 5, 0}, new Vector3 {30, 10, 0}, new Vector3 {45, 12.5, 0}
+                new Vector3 {5, 0, 0}, 
+                new Vector3 {15, 15, 0},
+                new Vector3 {20, 5, 0}, 
+                new Vector3 {30, 10, 0}, 
+                new Vector3 {45, 12.5, 0}
             };
 
             Polyline poly = new Polyline(_examplePts);
