@@ -1,2 +1,1 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+**GShark** has the goal to democratize complex geometry computation, is open source, under the MIT license, written from the ground up in csharp.
