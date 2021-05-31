@@ -15,9 +15,6 @@ namespace GShark.Operation
     /// </summary>
     public class Intersect
     {
-        // ToDo: ICurve-Surface
-        // ToDo: Surface-Surface
-
         /// <summary>
         /// Solves the intersection between two planes.<br/>
         /// This method returns true if intersection is found, false if the planes are parallel.

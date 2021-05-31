@@ -379,12 +379,29 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Perpendicular_Vector()
         {
             // Arrange
-            var vector = new Vector3 { -7, 10, -5 };
-            var tempVec = new Vector3 { 0, 1, 0 };
+            var vectorGuide = new Vector3 { -7, 10, -5 };
+            var vector = new Vector3 { 0, 1, 0 };
             var vectorExpected = new Vector3 { 10, 7, 0 };
 
             // Act
-            var perVector = tempVec.PerpendicularTo(vector);
+            var perVector = vector.PerpendicularTo(vectorGuide);
+
+            // Assert
+            perVector.Equals(vectorExpected).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Perpendicular_Vector_Given_Three_Points()
+        {
+            // Arrange
+            var vector = new Vector3 { -7, 10, -5 };
+            var pt1 = new Vector3 { 3,-1, 2 };
+            var pt2 = new Vector3 { 1, -1, -3 };
+            var pt3 = new Vector3 { 4, -3, 1 };
+            var vectorExpected = new Vector3 { -10, -7, 4 };
+
+            // Act
+            var perVector = vector.PerpendicularTo(pt1, pt2, pt3);
 
             // Assert
             perVector.Equals(vectorExpected).Should().BeTrue();

@@ -13,7 +13,6 @@ namespace GShark.Operation
     /// </summary>
     public static class Fitting
     {
-        // ToDo: this has to be implemented.
         public static NurbsCurve ApproximateCurve(List<Vector3> pts, int degree)
         {
             return new NurbsCurve();

@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace GShark.Geometry
 {
-    // ToDo: Minimum BoundingBox.
     /// <summary>
     /// Represents the value of two points in a bounding box
     /// defined by the two extreme corner points.
