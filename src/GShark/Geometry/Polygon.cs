@@ -6,8 +6,6 @@ using GShark.Operation;
 
 namespace GShark.Geometry
 {
-    // ToDo: Contains a point https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
-    // ToDo: throw exception if the polyline self intersect.
     /// <summary>
     /// A closed planar <see cref="Polyline"/>.
     /// </summary>

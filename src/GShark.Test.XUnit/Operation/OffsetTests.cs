@@ -51,7 +51,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_The_Offset_Of_A_Open_Polyline()
         {
             // Arrange
-            Polyline pl = new Polyline(PolylineTests.ExamplePts);
+            Polyline pl = new Polyline(new PolylineTests().ExamplePts);
             double offset = 5;
 
             // Act

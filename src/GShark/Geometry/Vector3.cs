@@ -74,7 +74,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets a value indicating whether this vector is valid.
+        /// Gets a value indicating whether this vector is valid.<br/>
         /// A valid vector must be formed of finite numbers.
         /// </summary>
         /// <param name="a">The vector to be valued.</param>
@@ -168,8 +168,8 @@ namespace GShark.Geometry
         /// <param name="other">Vector to compare to.</param>
         /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
         /// <returns>A parallel indicator:
-        /// 1 vectors are parallel,
-        /// 0 vectors are not parallel,
+        /// 1 vectors are parallel,<br/>
+        /// 0 vectors are not parallel,<br/>
         /// -1 vectors are parallel but with opposite directions </returns>
         public int IsParallelTo(Vector3 other, double tolerance = -1)
         {
@@ -184,8 +184,8 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Rotates this vector around a given axis.
-        /// The rotation is computed using Rodrigues Rotation formula.
+        /// Rotates this vector around a given axis.<br/>
+        /// The rotation is computed using Rodrigues Rotation formula.<br/>
         /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
         /// </summary>
         /// <param name="axis">Axis of rotation.</param>
@@ -324,7 +324,7 @@ namespace GShark.Geometry
             return Math.Abs(Dot(this - plane.Origin, plane.Normal)) < tol;
         }
 
-        // ToDo: make this immutable.
+        // Note: this is mutable.
         /// <summary>
         /// Adds to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -338,7 +338,7 @@ namespace GShark.Geometry
                 a[i] = a[i] + s * b[i];
         }
 
-        // ToDo: make this immutable.
+        // Note: this is mutable.
         /// <summary>
         /// Subtracts to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -467,7 +467,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if the two vectors are the same.
+        /// Checks if the two vectors are the same.<br/>
         /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="a">First vector.</param>
@@ -479,7 +479,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if the two vectors are the same.
+        /// Checks if the two vectors are the same.<br/>
         /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="a">First vector.</param>
@@ -491,7 +491,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if the two vectors are the same.
+        /// Checks if the two vectors are the same.<br/>
         /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="obj">The vector to test.</param>
@@ -505,7 +505,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if the two vectors are the same.
+        /// Checks if the two vectors are the same.<br/>
         /// Two vectors are the same, if all components of the two vectors are within Epsilon.
         /// </summary>
         /// <param name="other">The vector to test.</param>
@@ -536,12 +536,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the perpendicular to another vector.
+        /// Computes the perpendicular to another vector.<br/>
+        /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector <br/>
         /// Result is not unitized.
         /// </summary>
         /// <param name="other">Vector to use as guide.</param>
         /// <returns>The perpendicular vector.</returns>
-        /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector
         public Vector3 PerpendicularTo(Vector3 other)
         {
             double[] tempVector = new double[3];
@@ -613,9 +613,8 @@ namespace GShark.Geometry
             return tempVector.ToVector();
         }
 
-        // ToDo: make a test.
         /// <summary>
-        /// Computes the perpendicular to three points.
+        /// Computes the perpendicular of a vector given three points.<br/>
         /// Result is not unitized.
         /// </summary>
         /// <param name="pt1">First point.</param>

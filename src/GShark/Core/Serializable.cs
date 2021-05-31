@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// ToDo: this class has to be implemented and used.
 namespace GShark.Core
 {
     public abstract class Serializable<T>
