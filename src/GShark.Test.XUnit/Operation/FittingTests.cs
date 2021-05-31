@@ -90,5 +90,14 @@ namespace GShark.Test.XUnit.Operation
                areCollinear.Should().BeTrue();
             }
         }
+
+        [Fact]
+        public void Returns_An_Approximated_Curve()
+        {
+            // Act
+            NurbsCurve crvs = Fitting.ApproximateCurve(pts, 3);
+
+            // Assert
+        }
     }
 }
