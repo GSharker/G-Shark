@@ -325,17 +325,17 @@ namespace GShark.Test.XUnit.Operation
             List<Vector3> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
-            resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[0][1].Should().BeApproximately(expectedResult[0, 1], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[0][2].Should().BeApproximately(expectedResult[0, 2], GeoSharpMath.MAXTOLERANCE);
+            resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[0][1].Should().BeApproximately(expectedResult[0, 1], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[0][2].Should().BeApproximately(expectedResult[0, 2], GeoSharpMath.MAX_TOLERANCE);
 
-            resultToCheck[1][0].Should().BeApproximately(expectedResult[1, 0], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[1][1].Should().BeApproximately(expectedResult[1, 1], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[1][2].Should().BeApproximately(expectedResult[1, 2], GeoSharpMath.MAXTOLERANCE);
+            resultToCheck[1][0].Should().BeApproximately(expectedResult[1, 0], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[1][1].Should().BeApproximately(expectedResult[1, 1], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[1][2].Should().BeApproximately(expectedResult[1, 2], GeoSharpMath.MAX_TOLERANCE);
 
-            resultToCheck[2][0].Should().BeApproximately(expectedResult[2, 0], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[2][1].Should().BeApproximately(expectedResult[2, 1], GeoSharpMath.MAXTOLERANCE);
-            resultToCheck[2][2].Should().BeApproximately(expectedResult[2, 2], GeoSharpMath.MAXTOLERANCE);
+            resultToCheck[2][0].Should().BeApproximately(expectedResult[2, 0], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[2][1].Should().BeApproximately(expectedResult[2, 1], GeoSharpMath.MAX_TOLERANCE);
+            resultToCheck[2][2].Should().BeApproximately(expectedResult[2, 2], GeoSharpMath.MAX_TOLERANCE);
 
             resultToCheck.Count.Should().Be(order + 1);
             resultToCheck[0].Count.Should().Be(degree + 1);

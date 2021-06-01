@@ -73,11 +73,11 @@ namespace GShark.Operation
         /// <param name="start">The start parameter for sampling.</param>
         /// <param name="end">The end parameter for sampling.</param>
         /// <param name="tolerance">Tolerance for the adaptive scheme.
-        /// If tolerance is smaller or equal 0.0, the tolerance used is set as MAXTOLERANCE (1e-6).</param>
+        /// If tolerance is smaller or equal 0.0, the tolerance used is set as MAX_TOLERANCE (1e-6).</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
         public static (List<double> tValues, List<Vector3> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
         {
-            double setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAXTOLERANCE : tolerance;
+            double setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAX_TOLERANCE : tolerance;
 
             // Sample curve at three pts.
             Random random = new Random();

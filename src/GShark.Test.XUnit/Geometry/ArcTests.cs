@@ -38,10 +38,10 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             arc.Should().NotBeNull();
-            arc.Length.Should().BeApproximately(10.471976, GeoSharpMath.MAXTOLERANCE);
+            arc.Length.Should().BeApproximately(10.471976, GeoSharpMath.MAX_TOLERANCE);
             arc.Center.Should().BeEquivalentTo(Plane.PlaneXY.Origin);
             arc.Radius.Should().Be(15);
-            arc.Angle.Should().BeApproximately(0.698132, GeoSharpMath.MAXTOLERANCE);
+            arc.Angle.Should().BeApproximately(0.698132, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -51,9 +51,9 @@ namespace GShark.Test.XUnit.Geometry
             Arc arc = _exampleArc3D;
 
             // Assert
-            arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAXTOLERANCE);
-            arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAXTOLERANCE);
-            GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAXTOLERANCE);
+            arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MAX_TOLERANCE);
+            arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MAX_TOLERANCE);
+            GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             arc.StartPoint.IsEqualRoundingDecimal(pt1, 6).Should().BeTrue();
             arc.EndPoint.IsEqualRoundingDecimal(pt2, 6).Should().BeTrue();
-            arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MAXTOLERANCE);
+            arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]

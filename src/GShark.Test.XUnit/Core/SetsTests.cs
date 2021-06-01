@@ -97,7 +97,7 @@ namespace GShark.Test.XUnit.Core
             Func<object> resultFunction = () => Sets.Range(maxValue);
             
             // Assert
-            resultFunction.Should().Throw<Exception>().WithMessage("Max value range can not be negative or zero.");
+            resultFunction.Should().Throw<Exception>().WithMessage("T1 value range can not be negative or zero.");
         }
 
         [Theory]

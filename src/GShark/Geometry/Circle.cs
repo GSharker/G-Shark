@@ -174,7 +174,7 @@ namespace GShark.Geometry
         public Vector3 ClosestPt(Vector3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
+            if (Math.Abs(u) < GeoSharpMath.MAX_TOLERANCE && Math.Abs(v) < GeoSharpMath.MAX_TOLERANCE)
             {
                 return PointAt(0.0);
             }
@@ -217,7 +217,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE && Plane == other.Plane;
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAX_TOLERANCE && Plane == other.Plane;
         }
 
         /// <summary>

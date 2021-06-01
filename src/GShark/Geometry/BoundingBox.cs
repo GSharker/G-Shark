@@ -88,7 +88,7 @@ namespace GShark.Geometry
         public Vector3 Max { get; }
 
         /// <summary>
-        /// Gets a BoundingBox that has Unset coordinates for Min and Max.
+        /// Gets a BoundingBox that has Unset coordinates for T0 and T1.
         /// </summary>
         public static BoundingBox Unset { get; } = new BoundingBox(Vector3.Unset, Vector3.Unset);
 
@@ -152,7 +152,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            tol = tol < -0.5 ? GeoSharpMath.MAXTOLERANCE : tol;
+            tol = tol < -0.5 ? GeoSharpMath.MAX_TOLERANCE : tol;
             int count = 0;
             for (int i = 0; i < 3; i++)
             {
@@ -295,7 +295,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Ensures that the box is defined in an increasing fashion.
-        /// If the Min or Max points are unset, this function will return a BoundingBox unset.
+        /// If the T0 or T1 points are unset, this function will return a BoundingBox unset.
         /// </summary>
         /// <returns>A BoundingBox made valid.</returns>
         public BoundingBox MakeItValid()

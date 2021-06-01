@@ -85,7 +85,7 @@ namespace GShark.Operation
                 while (segmentLength < sum + GeoSharpMath.EPSILON)
                 {
                     double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GeoSharpMath.MAXTOLERANCE, curveLengths[i]);
+                        GeoSharpMath.MAX_TOLERANCE, curveLengths[i]);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);

@@ -32,7 +32,7 @@ namespace GShark.Test.XUnit.Core
             Vector3 pt3 = new Vector3 { 51.299, 37.950, 0.0 };
 
             // Assert
-            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MINTOLERANCE).Should().BeTrue();
+            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MIN_TOLERANCE).Should().BeTrue();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace GShark.Test.XUnit.Core
             Vector3 pt3 = new Vector3 { 51.299, 37.950, 0.0 };
 
             // Assert
-            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MINTOLERANCE).Should().BeFalse();
+            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MIN_TOLERANCE).Should().BeFalse();
         }
 
         [Theory]
@@ -63,7 +63,7 @@ namespace GShark.Test.XUnit.Core
             (double tValue, Vector3 pt) closestPt = Trigonometry.ClosestPointToSegment(ptToCheck.ToVector(), pt0, pt1, 0, 1);
 
             // Assert
-            closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharpMath.MAXTOLERANCE);
+            closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharpMath.MAX_TOLERANCE);
             closestPt.pt.Should().BeEquivalentTo(ptExpected.ToVector());
         }
     }

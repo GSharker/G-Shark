@@ -43,8 +43,8 @@ namespace GShark.Test.XUnit.Operation
             double curveLength2 = Analyze.BezierCurveLength(curve2, 4);
 
             // Assert
-            curveLength1.Should().BeApproximately(expectedLength, GeoSharpMath.MAXTOLERANCE);
-            curveLength2.Should().BeApproximately(expectedLength, GeoSharpMath.MAXTOLERANCE);
+            curveLength1.Should().BeApproximately(expectedLength, GeoSharpMath.MAX_TOLERANCE);
+            curveLength2.Should().BeApproximately(expectedLength, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -61,13 +61,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < steps + 1; i++)
             {
                 // Act
-                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MAXTOLERANCE);
+                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MAX_TOLERANCE);
 
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MINTOLERANCE);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharpMath.MINTOLERANCE);
+                t.Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
+                segmentLength.Should().BeApproximately(sumLengths, GeoSharpMath.MIN_TOLERANCE);
 
                 sumLengths += length;
             }
@@ -108,10 +108,10 @@ namespace GShark.Test.XUnit.Operation
             Vector3 pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
 
             // Assert
-            t.Should().BeApproximately(tValExpected, GeoSharpMath.MAXTOLERANCE);
+            t.Should().BeApproximately(tValExpected, GeoSharpMath.MAX_TOLERANCE);
             // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
             pt.Should().BeEquivalentTo(ptExpected.ToVector(), options => options
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MAXTOLERANCE))
+                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MAX_TOLERANCE))
                 .WhenTypeIs<double>());
         }
 

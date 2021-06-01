@@ -17,18 +17,19 @@ namespace GShark.Geometry
     public class Arc : ICurve, IEquatable<Arc>, ITransformable<Arc>
     {
         /// <summary>
-        /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval.
+        /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.
         /// </summary>
         /// <param name="plane">Base plane.</param>
         /// <param name="radius">Radius value.</param>
         /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
+        //ToDo consider providing overloads for degrees, or make it standard across codebase.
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
             #region example
             double t = 0.0;
             #endregion
 
-            if (angleDomain.Max < angleDomain.Min)
+            if (angleDomain.T1 < angleDomain.T0)
             {
                 throw new Exception("Angle domain must never be decreasing.");
             }
@@ -36,7 +37,7 @@ namespace GShark.Geometry
             Plane = plane;
             Radius = radius;
             Domain = (angleDomain.Length > Math.PI * 2.0)
-                ? new Interval(AngularDiff(angleDomain.Min, Math.PI * 2.0), AngularDiff(angleDomain.Max, Math.PI * 2.0))
+                ? new Interval(AngularDiff(angleDomain.T0, Math.PI * 2.0), AngularDiff(angleDomain.T1, Math.PI * 2.0))
                 : angleDomain;
 
             ToNurbsCurve();
@@ -237,7 +238,7 @@ namespace GShark.Geometry
             double twoPi = 2.0 * Math.PI;
 
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharpMath.MAXTOLERANCE && Math.Abs(v) < GeoSharpMath.MAXTOLERANCE)
+            if (Math.Abs(u) < GeoSharpMath.MAX_TOLERANCE && Math.Abs(v) < GeoSharpMath.MAX_TOLERANCE)
             {
                 return PointAt(0.0);
             }
@@ -248,7 +249,7 @@ namespace GShark.Geometry
                 t += twoPi;
             }
 
-            t -= Domain.Min;
+            t -= Domain.T0;
 
             while (t < 0.0)
             {
@@ -266,7 +267,7 @@ namespace GShark.Geometry
                 t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
             }
 
-            return PointAt(Domain.Min + t);
+            return PointAt(Domain.T0 + t);
         }
 
         /// <summary>
@@ -277,7 +278,7 @@ namespace GShark.Geometry
         public Arc Transform(Transform transformation)
         {
             Plane plane = Plane.Transform(transformation);
-            Interval angleDomain = new Interval(Domain.Min, Domain.Max);
+            Interval angleDomain = new Interval(Domain.T0, Domain.T1);
 
             return new Arc(plane, Radius, angleDomain);
         }
@@ -324,12 +325,12 @@ namespace GShark.Geometry
 
             double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.Min)) + axisY * (Radius * Math.Sin(Domain.Min)));
-            Vector3 t0 = axisY * Math.Cos(Domain.Min) - axisX * Math.Sin(Domain.Min);
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
             Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
-            double angle = Domain.Min;
+            double angle = Domain.T0;
 
             ctrPts[0] = p0;
             weights[0] = 1.0;
@@ -407,8 +408,8 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAXTOLERANCE &&
-                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MAXTOLERANCE &&
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAX_TOLERANCE &&
+                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MAX_TOLERANCE &&
                    Plane == other.Plane;
         }
 

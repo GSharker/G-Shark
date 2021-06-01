@@ -85,7 +85,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             poly2DArea.Should().Be(45);
-            poly3DArea.Should().BeApproximately(480.580633, GeoSharpMath.MINTOLERANCE);
+            poly3DArea.Should().BeApproximately(480.580633, GeoSharpMath.MIN_TOLERANCE);
         }
 
         [Fact]
@@ -122,8 +122,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 poly3DCentroid = poly3D.CentroidByArea;
 
             // Assert
-            poly2DCentroid.DistanceTo(centroid2DExpected).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
-            poly3DCentroid.DistanceTo(centroid3DExpected).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            poly2DCentroid.DistanceTo(centroid2DExpected).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            poly3DCentroid.DistanceTo(centroid3DExpected).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]

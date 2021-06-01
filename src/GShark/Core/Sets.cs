@@ -33,7 +33,7 @@ namespace GShark.Core
         {
             if (step <= 0)
             {
-                return new List<double>() { domain.Min, domain.Max };
+                return new List<double>() { domain.T0, domain.T1 };
             }
 
             List<double> l = new List<double>();
@@ -58,24 +58,24 @@ namespace GShark.Core
         /// <returns>A collection of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.Min - domain.Max) <= GeoSharpMath.EPSILON)
+            if(Math.Abs(domain.T0 - domain.T1) <= GeoSharpMath.EPSILON)
             {
-                return new List<double>(){ domain.Min };
+                return new List<double>(){ domain.T0 };
             }
 
             List<double> linearSpace = new List<double>();
 
             if (step <= 1)
             {
-                linearSpace.Add(domain.Min);
+                linearSpace.Add(domain.T0);
                 return linearSpace;
             }
 
             int div = step - 1;
-            double delta = domain.Max - domain.Min;
+            double delta = domain.T1 - domain.T0;
             for (int i = 0; i < step; i++)
             {
-                linearSpace.Add(domain.Min + (i * delta / div));
+                linearSpace.Add(domain.T0 + (i * delta / div));
             }
 
             return linearSpace;
@@ -90,7 +90,7 @@ namespace GShark.Core
         {
             if (maxValue <= 0)
             {
-                throw new Exception("Max value range can not be negative or zero.");
+                throw new Exception("T1 value range can not be negative or zero.");
             }
 
             List<double> l = new List<double>();
