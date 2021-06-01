@@ -102,7 +102,7 @@ namespace GShark.Optimization
                 }
                 if (iteration > maxIteration)
                 {
-                    message = "Max iteration reached during line search.";
+                    message = "T1 iteration reached during line search.";
                     break;
                 }
 

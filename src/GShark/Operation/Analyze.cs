@@ -164,7 +164,7 @@ namespace GShark.Operation
             int maxInteraction = 5;
             int j = 0;
             // Two zero tolerances can be used to indicate convergence:
-            double tol1 = GeoSharpMath.MAXTOLERANCE; // a measure of Euclidean distance;
+            double tol1 = GeoSharpMath.MAX_TOLERANCE; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
             double tVal1 = curve.Knots[^1];

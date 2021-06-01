@@ -56,9 +56,9 @@ namespace GShark.Test.XUnit.Operation
             Vector3 p0 = curve.PointAt(2.5);
             Vector3 p1 = curveAfterRefine.PointAt(2.5);
 
-            p0[0].Should().BeApproximately(p1[0], GeoSharpMath.MAXTOLERANCE);
-            p0[1].Should().BeApproximately(p1[1], GeoSharpMath.MAXTOLERANCE);
-            p0[2].Should().BeApproximately(p1[2], GeoSharpMath.MAXTOLERANCE);
+            p0[0].Should().BeApproximately(p1[0], GeoSharpMath.MAX_TOLERANCE);
+            p0[1].Should().BeApproximately(p1[1], GeoSharpMath.MAX_TOLERANCE);
+            p0[2].Should().BeApproximately(p1[2], GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace GShark.Test.XUnit.Operation
 
                 double pt0_pt1 = (pt0 - pt1).Length();
 
-                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
+                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAX_TOLERANCE);
             }
         }
 
@@ -119,7 +119,7 @@ namespace GShark.Test.XUnit.Operation
 
                 double pt0_pt1 = (pt0 - pt1).Length();
 
-                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAXTOLERANCE);
+                pt0_pt1.Should().BeApproximately(0.0, GeoSharpMath.MAX_TOLERANCE);
             }
         }
 

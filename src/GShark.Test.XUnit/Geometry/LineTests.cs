@@ -174,7 +174,7 @@ namespace GShark.Test.XUnit.Geometry
             double parameter = _exampleLine.ClosestParameter(pt);
 
             // Assert
-            parameter.Should().BeApproximately(expectedParam, GeoSharpMath.MAXTOLERANCE);
+            parameter.Should().BeApproximately(expectedParam, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -195,7 +195,7 @@ namespace GShark.Test.XUnit.Geometry
             Line extendedLine = _exampleLine.Extend(0, -5);
 
             // Assert
-            extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MAXTOLERANCE);
+            extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MAX_TOLERANCE);
             extendedLine.Start.Should().BeEquivalentTo(_exampleLine.Start);
         }
 

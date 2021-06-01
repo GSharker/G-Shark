@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 
 namespace GShark.Core
 {
@@ -8,47 +9,72 @@ namespace GShark.Core
     public class Interval
     {
         /// <summary>
-        /// Creates an instance of an interval by the values.
+        /// Creates an instance of an interval given a minimum and a maximum value.
         /// </summary>
-        /// <param name="min">The minimum value of the interval.</param>
-        /// <param name="max">The maximum value of the interval.</param>
-        public Interval(double min, double max)
+        /// <param name="t0"></param>
+        /// <param name="t1"></param>
+        public Interval(double t0, double t1)
         {
-            Min = min;
-            Max = max;
+            T0 = t0;
+            T1 = t1;
         }
 
         /// <summary>
-        /// The minimum value of the interval.
+        /// Gets the minimum value of the interval.
         /// </summary>
-        public double Min { get; }
+        public double T0 { get; }
 
         /// <summary>
-        /// The maximum value of the interval.
+        /// Gets the maximum value of the interval.
         /// </summary>
-        public double Max { get; }
+        public double T1 { get; }
 
         /// <summary>
-        /// Gets the average value.
+        /// Gets the value between the interval's min and max values.
         /// </summary>
-        public double Mid => Math.Abs(Min - Max) > GeoSharpMath.MAXTOLERANCE ? 0.5 * (Min + Max) : Min;
+        public double Mid => Math.Abs(T0 - T1) > GeoSharpMath.MAX_TOLERANCE ? 0.5 * (T0 + T1) : T0;
 
         /// <summary>
-        /// Gets the length of the interval range.<br/>
+        /// Gets the length of the interval.<br/>
         /// If the interval is decreasing, negative number will be returned.
         /// </summary>
-        public double Length => Max - Min;
+        public double Length => Math.Abs(T1 - T0);
+
+        /// <summary>
+        /// True if t0 is less than t1.
+        /// </summary>
+        public bool IsDecreasing => T0 - T1 > 0;
+
+        /// <summary>
+        /// True if t1 is greater than t0.
+        /// </summary>
+        public bool IsIncreasing => T1 - T0 > 0;
+
+        /// <summary>
+        /// True if t0 == t1.
+        /// </summary>
+        public bool IsSingleton => Math.Abs(T1 - T0) >= GeoSharpMath.EPSILON;
+
+        /// <summary>
+        /// Returns the largest value in the interval.
+        /// </summary>
+        public double Max => Math.Max(T1, T0);
+
+        /// <summary>
+        /// Returns the smallest value in the interval.
+        /// </summary>
+        public double Min => Math.Min(T1, T0);
 
         /// <summary>
         /// Converts normalized parameter to interval value, or pair of values.
         /// </summary>
-        /// <param name="normalizedParameter">The normalized parameter between 0-1.</param>
-        /// <returns>Interval parameter min*(1.0-normalizedParameter) + max*normalizedParameter.</returns>
+        /// <param name="normalizedParameter">The normalized parameter between 0 and 1.</param>
+        /// <returns>Interval parameter t0*(1.0-normalizedParameter) + t1*normalizedParameter.</returns>
         public double ParameterAt(double normalizedParameter)
         {
             return !GeoSharpMath.IsValidDouble(normalizedParameter)
-                ? -1.23432101234321E+308
-                : (1.0 - normalizedParameter) * Min + normalizedParameter * Max;
+                ? GeoSharpMath.UNSET_VALUE
+                : (1.0 - normalizedParameter) * T0 + normalizedParameter * T1;
         }
     }
 }

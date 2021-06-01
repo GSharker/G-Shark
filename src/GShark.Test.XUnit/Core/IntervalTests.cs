@@ -7,13 +7,13 @@ namespace GShark.Test.XUnit.Core
     public class IntervalTests
     {
         [Fact]
-        public void It_Returns_A_Interval()
+        public void It_Returns_An_Interval()
         {
             Interval interval = new Interval(-10, 20);
 
             interval.Should().NotBeNull();
-            interval.Max.Should().Be(20);
-            interval.Min.Should().Be(-10);
+            interval.T1.Should().Be(20);
+            interval.T0.Should().Be(-10);
         }
 
         [Theory]
@@ -22,7 +22,7 @@ namespace GShark.Test.XUnit.Core
         [InlineData(0.5, 5)]
         [InlineData(0.75, 12.5)]
         [InlineData(1, 20)]
-        public void It_Returns_The_Value_At_The_Give_Normalized_Parameter(double normalizeParam, double valueExpected)
+        public void It_Returns_The_Value_At_The_Given_Normalized_Parameter(double normalizeParam, double valueExpected)
         {
             Interval interval = new Interval(-10, 20);
 

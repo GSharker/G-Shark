@@ -139,13 +139,13 @@ namespace GShark.Test.XUnit.Core
             Transform transform = Transform.PlanarProjection(plane);
 
             // Assert
-            transform[0][0].Should().BeApproximately(0.692308, GeoSharpMath.MAXTOLERANCE);
-            transform[0][1].Should().BeApproximately(-0.461538, GeoSharpMath.MAXTOLERANCE);
-            transform[0][3].Should().BeApproximately(1.538462, GeoSharpMath.MAXTOLERANCE);
-            transform[1][0].Should().BeApproximately(-0.461538, GeoSharpMath.MAXTOLERANCE);
-            transform[1][1].Should().BeApproximately(0.307692, GeoSharpMath.MAXTOLERANCE);
-            transform[1][3].Should().BeApproximately(2.307692, GeoSharpMath.MAXTOLERANCE);
-            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAXTOLERANCE);
+            transform[0][0].Should().BeApproximately(0.692308, GeoSharpMath.MAX_TOLERANCE);
+            transform[0][1].Should().BeApproximately(-0.461538, GeoSharpMath.MAX_TOLERANCE);
+            transform[0][3].Should().BeApproximately(1.538462, GeoSharpMath.MAX_TOLERANCE);
+            transform[1][0].Should().BeApproximately(-0.461538, GeoSharpMath.MAX_TOLERANCE);
+            transform[1][1].Should().BeApproximately(0.307692, GeoSharpMath.MAX_TOLERANCE);
+            transform[1][3].Should().BeApproximately(2.307692, GeoSharpMath.MAX_TOLERANCE);
+            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAX_TOLERANCE);
         }
 
         [Fact]
@@ -160,13 +160,13 @@ namespace GShark.Test.XUnit.Core
             Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, plane);
 
             // Assert
-            transform[0][0].Should().BeApproximately(-0.832050, GeoSharpMath.MAXTOLERANCE);
-            transform[0][2].Should().BeApproximately(-0.554700, GeoSharpMath.MAXTOLERANCE);
-            transform[0][3].Should().BeApproximately(5.0, GeoSharpMath.MAXTOLERANCE);
-            transform[1][0].Should().BeApproximately(0.554700, GeoSharpMath.MAXTOLERANCE);
-            transform[1][2].Should().BeApproximately(-0.832050, GeoSharpMath.MAXTOLERANCE);
-            transform[2][1].Should().BeApproximately(-1.0, GeoSharpMath.MAXTOLERANCE);
-            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAXTOLERANCE);
+            transform[0][0].Should().BeApproximately(-0.832050, GeoSharpMath.MAX_TOLERANCE);
+            transform[0][2].Should().BeApproximately(-0.554700, GeoSharpMath.MAX_TOLERANCE);
+            transform[0][3].Should().BeApproximately(5.0, GeoSharpMath.MAX_TOLERANCE);
+            transform[1][0].Should().BeApproximately(0.554700, GeoSharpMath.MAX_TOLERANCE);
+            transform[1][2].Should().BeApproximately(-0.832050, GeoSharpMath.MAX_TOLERANCE);
+            transform[2][1].Should().BeApproximately(-1.0, GeoSharpMath.MAX_TOLERANCE);
+            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MAX_TOLERANCE);
         }
     }
 }

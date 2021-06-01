@@ -282,6 +282,7 @@ namespace GShark.Operation
                 }
 
                 result = result.Where((t) => t >= 0 && t <= 1).ToList();
+                //ToDo result is a collection of doubles, t, therefore the comparison for Sort should be implicit using standard sorting methods in LINQ.
                 result.Sort(GeoSharpMath.NumberSort);
                 extrema[j] = result;
             }

@@ -37,13 +37,13 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             crv.Degree.Should().Be(degree);
-            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
-            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
 
             foreach (Vector3 pt in pts)
             {
                 Vector3 closedPt = crv.ClosestPt(pt);
-                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
             }
         }
 
@@ -60,8 +60,8 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
 
             // Assert
-            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
-            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
 
             foreach (var crvControlPoint in crv.ControlPoints)
             {
@@ -71,7 +71,7 @@ namespace GShark.Test.XUnit.Operation
             foreach (Vector3 pt in pts)
             {
                 Vector3 closedPt = crv.ClosestPt(pt);
-                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
             }
         }
 

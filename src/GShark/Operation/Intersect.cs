@@ -241,12 +241,12 @@ namespace GShark.Operation
             double det = b * b - 4 * a * c;
             double t;
 
-            if ((a <= GeoSharpMath.MAXTOLERANCE) || (det < 0))
+            if ((a <= GeoSharpMath.MAX_TOLERANCE) || (det < 0))
             {
                 pts = new Vector3[] { };
                 return false;
             }
-            else if (Math.Abs(det) < GeoSharpMath.MAXTOLERANCE)
+            else if (Math.Abs(det) < GeoSharpMath.MAX_TOLERANCE)
             {
                 t = -b / (2 * a);
                 Vector3 intersection = pt0 + lnDir * t;
