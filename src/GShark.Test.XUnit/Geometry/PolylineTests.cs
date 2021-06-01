@@ -27,8 +27,6 @@ namespace GShark.Test.XUnit.Geometry
                 new Vector3 {30, 10, 0}, 
                 new Vector3 {45, 12.5, 0}
             };
-
-            Polyline poly = new Polyline(_examplePts);
             #endregion
         }
 

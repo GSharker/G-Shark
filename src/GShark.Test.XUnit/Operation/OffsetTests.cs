@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
@@ -12,7 +13,6 @@ namespace GShark.Test.XUnit.Operation
     public class OffsetTests
     {
         private readonly ITestOutputHelper _testOutput;
-
         public OffsetTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
@@ -51,7 +51,14 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_The_Offset_Of_A_Open_Polyline()
         {
             // Arrange
-            Polyline pl = new Polyline(PolylineTests.ExamplePts);
+            Polyline pl = new Polyline(new[]
+            {
+                new Vector3 {5, 0, 0},
+                new Vector3 {15, 15, 0},
+                new Vector3 {20, 5, 0},
+                new Vector3 {30, 10, 0},
+                new Vector3 {45, 12.5, 0}
+            });
             double offset = 5;
 
             // Act
