@@ -53,7 +53,7 @@ namespace GShark.Core
         /// <summary>
         /// True if t0 == t1.
         /// </summary>
-        public bool IsSingleton => Math.Abs(T1 - T0) >= GeoSharpMath.EPSILON;
+        public bool IsSingleton => Math.Abs(T1 - T0) <= GeoSharpMath.EPSILON;
 
         /// <summary>
         /// Returns the largest value in the interval.
