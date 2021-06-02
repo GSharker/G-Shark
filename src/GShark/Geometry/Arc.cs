@@ -25,10 +25,6 @@ namespace GShark.Geometry
         //ToDo consider providing overloads for degrees, or make it standard across codebase.
         public Arc(Plane plane, double radius, Interval angleDomain)
         {
-            #region example
-            double t = 0.0;
-            #endregion
-
             if (angleDomain.T1 < angleDomain.T0)
             {
                 throw new Exception("Angle domain must never be decreasing.");

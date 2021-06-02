@@ -210,7 +210,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             double[] lengths = _polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
-            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MAXTOLERANCE));
+            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MAX_TOLERANCE));
         }
 
         [Fact]

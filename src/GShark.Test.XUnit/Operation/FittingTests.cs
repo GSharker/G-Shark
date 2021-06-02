@@ -110,7 +110,7 @@ namespace GShark.Test.XUnit.Operation
             approximateCurve.ControlPoints.Count.Should().Be(4);
             for (int i = 0; i < approximateCurve.ControlPoints.Count; i++)
             {
-                approximateCurve.ControlPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GeoSharpMath.MAXTOLERANCE);
+                approximateCurve.ControlPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
             }
         }
     }

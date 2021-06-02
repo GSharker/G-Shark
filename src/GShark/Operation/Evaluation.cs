@@ -78,8 +78,8 @@ namespace GShark.Operation
         public static double OneBasisFunction(int degree, Knot knots, int span, double knot)
         {
             // Special case at boundaries.
-            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAXTOLERANCE) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MAXTOLERANCE)
+            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAX_TOLERANCE) ||
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MAX_TOLERANCE)
             {
                 return 1.0;
             }
