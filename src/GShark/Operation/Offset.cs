@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace GShark.Operation
 {
-    // ToDo: Add cap to the offset.
     /// <summary>
     /// Collects a set of method for offsetting primitives and NURBS geometries.
     /// </summary>

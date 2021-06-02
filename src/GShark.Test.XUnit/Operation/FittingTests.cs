@@ -90,5 +90,28 @@ namespace GShark.Test.XUnit.Operation
                areCollinear.Should().BeTrue();
             }
         }
+
+        [Fact]
+        public void Returns_An_Approximated_Curve()
+        {
+            // Arrange
+            List<Vector3> expectedCtrlPts = new List<Vector3>
+            {
+                new Vector3 {0, 0, 0},
+                new Vector3 {9.610024470158852, 8.200277881464892, 0.0},
+                new Vector3 {-8.160625855418692, 3.3820642030608417, 0.0},
+                new Vector3 {-4, -3, 0}
+            };
+
+            // Act
+            NurbsCurve approximateCurve = Fitting.ApproximateCurve(pts, 3);
+
+            // Assert
+            approximateCurve.ControlPoints.Count.Should().Be(4);
+            for (int i = 0; i < approximateCurve.ControlPoints.Count; i++)
+            {
+                approximateCurve.ControlPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            }
+        }
     }
 }

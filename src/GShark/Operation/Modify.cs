@@ -8,8 +8,6 @@ using System.Linq;
 
 namespace GShark.Operation
 {
-    // ToDo: CurveElevateDegree
-    // ToDo: CurveKnotInsert
     /// <summary>
     /// Contains many fundamental algorithms for working with NURBS.<br/>
     /// These include algorithms for:<br/>

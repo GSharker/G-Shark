@@ -21,12 +21,12 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="degree">Degree of a curve.</param>
         /// <param name="knots">Set of knots.</param>
-        /// <param name="parameter">Parameter.</param>
+        /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, Knot knots, double parameter)
+        public static List<double> BasicFunction(int degree, Knot knots, double knot)
         {
-            int span = knots.Span(degree, parameter);
-            return BasicFunction(degree, knots, span, parameter);
+            int span = knots.Span(degree, knot);
+            return BasicFunction(degree, knots, span, knot);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace GShark.Operation
         /// <param name="degree">Degree of a curve.</param>
         /// <param name="knots">Set of knots.</param>
         /// <param name="span">Index span of knots.</param>
-        /// <param name="parameter">Parameter.</param>
+        /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, Knot knots, int span, double parameter)
+        public static List<double> BasicFunction(int degree, Knot knots, int span, double knot)
         {
             Vector3 left = Vector3.Zero1d(degree + 1);
             Vector3 right = Vector3.Zero1d(degree + 1);
@@ -49,8 +49,8 @@ namespace GShark.Operation
 
             for (int j = 1; j < degree + 1; j++)
             {
-                left[j] = parameter - knots[span + 1 - j];
-                right[j] = knots[span + j] - parameter;
+                left[j] = knot - knots[span + 1 - j];
+                right[j] = knots[span + j] - knot;
                 double saved = 0.0;
 
                 for (int r = 0; r < j; r++)
@@ -64,6 +64,70 @@ namespace GShark.Operation
             }
 
             return N;
+        }
+
+        /// <summary>
+        /// Computes the value of a basis function for a single value.<br/>
+        /// <em>Implementation of Algorithm A2.4 from The NURBS Book by Piegl and Tiller.</em><br/>
+        /// </summary>
+        /// <param name="degree">Degree of a curve.</param>
+        /// <param name="knots">Set of knots.</param>
+        /// <param name="span">Index span of knots.</param>
+        /// <param name="knot">knot value.</param>
+        /// <returns>The single parameter value of the basis function.</returns>
+        public static double OneBasisFunction(int degree, Knot knots, int span, double knot)
+        {
+            // Special case at boundaries.
+            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAX_TOLERANCE) ||
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MAX_TOLERANCE)
+            {
+                return 1.0;
+            }
+            // Local property, parameter is outside of span range.
+            if (knot < knots[span] || knot >= knots[span + degree + 1])
+            {
+                return 0.0;
+            }
+
+            List<double> N = Sets.RepeatData(0.0, degree + span + 1);
+            // Initialize the zeroth degree basic functions.
+            for (int j = 0; j < degree + 1; j++)
+            {
+                if (knot >= knots[span + j] && knot < knots[span + j + 1])
+                {
+                    N[j] = 1.0;
+                }
+            }
+
+            // Compute triangular table of basic functions.
+            for (int k = 1; k < degree + 1; k++)
+            {
+                double saved = 0.0;
+                if (N[0] != 0.0)
+                {
+                    saved = ((knot - knots[span]) * N[0]) / (knots[span + k] - knots[span]);
+                }
+
+                for (int j = 0; j < degree - k + 1; j++)
+                {
+                    double uLeft = knots[span + j + 1];
+                    double uRight = knots[span + j + k + 1];
+
+                    if (N[j + 1] == 0.0)
+                    {
+                        N[j] = saved;
+                        saved = 0.0;
+                    }
+                    else
+                    {
+                        double temp = N[j + 1] / (uRight - uLeft);
+                        N[j] = saved + (uRight - knot) * temp;
+                        saved = (knot - uLeft) * temp;
+                    }
+                }
+            }
+
+            return N[0];
         }
 
         /// <summary>
