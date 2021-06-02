@@ -16,27 +16,12 @@ namespace GShark.Operation
         public static NurbsCurve ApproximateCurve(List<Vector3> pts, int degree, bool centripetal = false)
         {
             int numberCpts = pts.Count - 1;
-            // Gets uk parameters.
-            List<double> uk = ParametersCurve(pts, centripetal);
 
-            // Compute knot vectors.
-            // Start knot vectors.
-            Knot knots = Sets.RepeatData(0.0, degree + 1).ToKnot();
+            // Gets the parameters curve uk.
+            List<double> uk = CurveParameters(pts, centripetal);
 
-            // Compute 'd' value - Eqn 9.68.
-            double d = (double) pts.Count / (numberCpts - degree);
-
-            // Find the internal knots - Eqn 9.69.
-            for (int j = 1; j < numberCpts - degree; j++)
-            {
-                int i = (int)(j * d);
-                double alpha = (j * d) - i;
-                double knot = ((1.0 - alpha) * uk[i - 1]) + (alpha * uk[i]);
-                knots.Add(knot);
-            }
-
-            // Add end knot vectors.
-            knots.AddRange(Sets.RepeatData(1.0, degree + 1));
+            // Computes knot vectors.
+            Knot knots = ComputeKnotsForCurveApproximation(uk, degree, numberCpts, pts.Count);
 
             // Compute matrix N
             Matrix matrixN = new Matrix();
@@ -45,7 +30,7 @@ namespace GShark.Operation
                 List<double> tempRow = new List<double>();
                 for (int j = 1; j < numberCpts - 1; j++)
                 {
-                    tempRow.Add(Evaluation.OneBasicFunction(degree, knots, j, uk[i]));
+                    tempRow.Add(Evaluation.OneBasisFunction(degree, knots, j, uk[i]));
                 }
                 matrixN.Add(tempRow);
             }
@@ -56,60 +41,14 @@ namespace GShark.Operation
             Matrix matrixNtN = matrixNt * matrixN;
 
             // Computes Rk - Eqn 9.63.
-            Vector3 pt0 = pts[0]; // Q0
-            Vector3 ptm = pts[^1]; // Qm
-            List<Vector3> Rk = new List<Vector3>();
-            for (int i = 1; i < pts.Count - 1; i++)
-            {
-                Vector3 pti = pts[i];
-                double n0p = Evaluation.OneBasicFunction(degree, knots, 0, uk[i]);
-                double nnp = Evaluation.OneBasicFunction(degree, knots, numberCpts - 1, uk[i]);
-                Vector3 elem2 = pt0 * n0p;
-                Vector3 elem3 = ptm * nnp;
-
-                Vector3 tempVec = Vector3.Zero1d(pti.Count);
-                for (int j = 0; j < pti.Count; j++)
-                {
-                    tempVec[j] = (pti[j] - elem2[j] - elem3[j]);
-                }
-                Rk.Add(tempVec);
-            }
+            List<Vector3> Rk = ComputesValuesRk(knots, uk, degree, pts, numberCpts);
 
             // Compute R - Eqn 9.67.
-            List<Vector3> vectorR = new List<Vector3>();
-            for (int i = 1; i < numberCpts - 1; i++)
-            {
-                List<Vector3> ruTemp = new List<Vector3>();
-                for (int j = 0; j < Rk.Count; j++)
-                {
-                    double tempBasisVal = Evaluation.OneBasicFunction(degree, knots, i, uk[j + 1]);
-                    ruTemp.Add(Rk[j] * tempBasisVal);
-                }
+            var vectorR = ComputeValuesR(knots, uk, Rk, degree, numberCpts);
 
-                Vector3 tempVec = Vector3.Zero1d(ruTemp[0].Count);
-                for (int g = 0; g < ruTemp[0].Count; g++)
-                {
-                    foreach (Vector3 vec in ruTemp)
-                    {
-                        tempVec[g] += vec[g];
-                    }
-                }
-                vectorR.Add(tempVec);
-            }
-
-            Matrix matrixLu = Matrix.Decompose(matrixNtN, out int[] permutation);
-            Matrix ptsSolved = new Matrix();
-
-            // Solve for each dimension.
-            for (int i = 0; i < pts[0].Count; i++)
-            {
-                Vector3 b = vectorR.Select(pt => pt[i]).ToVector();
-                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
-                ptsSolved.Add(solution);
-            }
-
-            List<Vector3> ctrlPts = new List<Vector3> {pts[0]};
-            ctrlPts.AddRange(ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList());
+            // Computes control points, fixing the first and last point from the input points.
+            List<Vector3> ctrlPts = new List<Vector3> { pts[0] };
+            ctrlPts.AddRange(SolveCtrlPts(knots, vectorR, matrixNtN));
             ctrlPts.Add(pts[^1]);
             return new NurbsCurve(degree, knots, ctrlPts);
         }
@@ -131,7 +70,7 @@ namespace GShark.Operation
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
-                beziers.Add(new NurbsCurve(new List<Vector3> {pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1]},
+                beziers.Add(new NurbsCurve(new List<Vector3> { pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1] },
                     3));
             }
 
@@ -157,16 +96,92 @@ namespace GShark.Operation
             }
 
             // Gets uk parameters.
-            List<double> uk = ParametersCurve(pts, centripetal);
+            List<double> uk = CurveParameters(pts, centripetal);
 
             // Compute knot vectors.
+            bool hasTangents = startTangent != null && endTangent != null;
+            Knot knots = ComputeKnotsForInterpolation(uk, degree, hasTangents);
+
+            // Global interpolation.
+            // Build matrix of basis function coefficients.
+            Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
+            // Solve for each points.
+            List<Vector3> ctrlPts = (hasTangents)
+                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, startTangent, endTangent)
+                : SolveCtrlPts(knots, pts, coeffMatrix);
+
+            return new NurbsCurve(degree, knots, ctrlPts);
+        }
+
+        /// <summary>
+        /// Compute R - Eqn 9.67.
+        /// </summary>
+        private static List<Vector3> ComputeValuesR(Knot knots, List<double> curveParameters, List<Vector3> Rk, int degree, int numberOfCtrPts)
+        {
+            List<Vector3> vectorR = new List<Vector3>();
+            for (int i = 1; i < numberOfCtrPts - 1; i++)
+            {
+                List<Vector3> ruTemp = new List<Vector3>();
+                for (int j = 0; j < Rk.Count; j++)
+                {
+                    double tempBasisVal = Evaluation.OneBasisFunction(degree, knots, i, curveParameters[j + 1]);
+                    ruTemp.Add(Rk[j] * tempBasisVal);
+                }
+
+                Vector3 tempVec = Vector3.Zero1d(ruTemp[0].Count);
+                for (int g = 0; g < ruTemp[0].Count; g++)
+                {
+                    foreach (Vector3 vec in ruTemp)
+                    {
+                        tempVec[g] += vec[g];
+                    }
+                }
+
+                vectorR.Add(tempVec);
+            }
+
+            return vectorR;
+        }
+
+        /// <summary>
+        /// Computes Rk - Eqn 9.63.
+        /// </summary>
+        private static List<Vector3> ComputesValuesRk(Knot knots, List<double> curveParameters, int degree, List<Vector3> pts, int numberOfCtrPts)
+        {
+            Vector3 pt0 = pts[0]; // Q0
+            Vector3 ptm = pts[^1]; // Qm
+            List<Vector3> Rk = new List<Vector3>();
+            for (int i = 1; i < pts.Count - 1; i++)
+            {
+                Vector3 pti = pts[i];
+                double n0p = Evaluation.OneBasisFunction(degree, knots, 0, curveParameters[i]);
+                double nnp = Evaluation.OneBasisFunction(degree, knots, numberOfCtrPts - 1, curveParameters[i]);
+                Vector3 elem2 = pt0 * n0p;
+                Vector3 elem3 = ptm * nnp;
+
+                Vector3 tempVec = Vector3.Zero1d(pti.Count);
+                for (int j = 0; j < pti.Count; j++)
+                {
+                    tempVec[j] = (pti[j] - elem2[j] - elem3[j]);
+                }
+
+                Rk.Add(tempVec);
+            }
+
+            return Rk;
+        }
+
+        /// <summary>
+        /// Computes the knot vectors used to calculate a curve global interpolation.
+        /// </summary>
+        private static Knot ComputeKnotsForInterpolation(List<double> curveParameters, int degree, bool hasTangents)
+        {
             // Start knot vectors.
             Knot knots = Sets.RepeatData(0.0, degree + 1).ToKnot();
 
             // If we have tangent values we need two more control points and knots.
-            bool hasTangents = startTangent != null && endTangent != null;
             int start = (hasTangents) ? 0 : 1;
-            int end = (hasTangents) ? uk.Count - degree + 1 : uk.Count - degree;
+            int end = (hasTangents) ? curveParameters.Count - degree + 1 : curveParameters.Count - degree;
 
             // Use averaging method (Eqn 9.8) to compute internal knots in the knot vector.
             for (int i = start; i < end; i++)
@@ -174,7 +189,7 @@ namespace GShark.Operation
                 double weightSum = 0.0;
                 for (int j = 0; j < degree; j++)
                 {
-                    weightSum += uk[i + j];
+                    weightSum += curveParameters[i + j];
                 }
 
                 knots.Add((1.0 / degree) * weightSum);
@@ -182,21 +197,58 @@ namespace GShark.Operation
 
             // Add end knot vectors.
             knots.AddRange(Sets.RepeatData(1.0, degree + 1));
+            return knots;
+        }
 
-            // Global interpolation.
-            // Build matrix of basis function coefficients.
-            Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
-            // Solve for each points.
-            List<Vector3> ctrlPts = SolveCtrlPts(pts, degree, startTangent, endTangent, coeffMatrix, knots, hasTangents);
+        /// <summary>
+        /// Computes the knots vectors used to calculate an approximate curve.
+        /// </summary>
+        private static Knot ComputeKnotsForCurveApproximation(List<double> curveParameters, int degree, int numberOfCtrPts, int numberOfPts)
+        {
+            // Start knot vectors.
+            Knot knots = Sets.RepeatData(0.0, degree + 1).ToKnot();
 
-            return new NurbsCurve(degree, knots, ctrlPts);
+            // Compute 'd' value - Eqn 9.68.
+            double d = (double)numberOfPts / (numberOfCtrPts - degree);
+
+            // Find the internal knots - Eqn 9.69.
+            for (int j = 1; j < numberOfCtrPts - degree; j++)
+            {
+                int i = (int)(j * d);
+                double alpha = (j * d) - i;
+                double knot = ((1.0 - alpha) * curveParameters[i - 1]) + (alpha * curveParameters[i]);
+                knots.Add(knot);
+            }
+
+            // Add end knot vectors.
+            knots.AddRange(Sets.RepeatData(1.0, degree + 1));
+            return knots;
         }
 
         /// <summary>
         /// Defines the control points.
         /// </summary>
-        internal static List<Vector3> SolveCtrlPts(List<Vector3> pts, int degree, Vector3 startTangent, Vector3 endTangent, Matrix coeffMatrix,
-            Knot knots, bool hasTangents)
+        private static List<Vector3> SolveCtrlPts(Knot knots, List<Vector3> pts, Matrix coeffMatrix)
+        {
+            Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
+            Matrix ptsSolved = new Matrix();
+
+            // Solve for each dimension.
+            for (int i = 0; i < pts[0].Count; i++)
+            {
+                Vector3 b = new Vector3();
+                b = pts.Select(pt => pt[i]).ToVector();
+                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
+                ptsSolved.Add(solution);
+            }
+
+            return ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
+        }
+
+        /// <summary>
+        /// Defines the control points defining the tangent values for the first and last points.
+        /// </summary>
+        private static List<Vector3> SolveCtrlPtsWithTangents(Knot knots, List<Vector3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -210,22 +262,15 @@ namespace GShark.Operation
             for (int i = 0; i < pts[0].Count; i++)
             {
                 Vector3 b = new Vector3();
-                if (!hasTangents)
-                {
-                    b = pts.Select(pt => pt[i]).ToVector();
-                }
-                else
-                {
-                    // Insert the tangents at the second and second to last index.
-                    b.Add(pts[0][i]);
-                    // Equations 9.11
-                    b.Add(startTangent[i] * mult0);
-                    b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
-                    // Equations 9.12
-                    b.Add(endTangent[i] * mult1);
-                    b.Add(pts[^1][i]);
-                }
-
+                // Insert the tangents at the second and second to last index.
+                b.Add(pts[0][i]);
+                // Equations 9.11
+                b.Add(startTangent[i] * mult0);
+                b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
+                // Equations 9.12
+                b.Add(endTangent[i] * mult1);
+                b.Add(pts[^1][i]);
+                
                 Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
@@ -234,16 +279,16 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Builds the coefficient matrix for global interpolation.
+        /// Builds the coefficient matrix used to calculate a curve global interpolation.
         /// </summary>
-        internal static Matrix BuildCoefficientsMatrix(List<Vector3> pts, int degree, bool hasTangents, List<double> uk, Knot knots)
+        internal static Matrix BuildCoefficientsMatrix(List<Vector3> pts, int degree, bool hasTangents, List<double> curveParameters, Knot knots)
         {
             int dim = (hasTangents) ? pts.Count + 1 : pts.Count - 1;
             Matrix coeffMatrix = new Matrix();
 
             int dimEnd = (hasTangents) ? pts.Count - (degree - 1) : pts.Count - (degree + 1);
 
-            foreach (double u in uk)
+            foreach (double u in curveParameters)
             {
                 int span = knots.Span(dim, degree, u);
                 List<double> basicFunction = Evaluation.BasicFunction(degree, knots, span, u);
@@ -254,14 +299,13 @@ namespace GShark.Operation
                 coeffMatrix.Add(startRow.Concat(basicFunction).Concat(endRow).ToList());
             }
 
-            if (hasTangents)
-            {
-                List<double> zeros = Sets.RepeatData(0.0, coeffMatrix[0].Count - 2);
-                List<double> tangent = new List<double> { -1.0, 1.0 };
+            if (!hasTangents) return coeffMatrix;
 
-                coeffMatrix.Insert(1, tangent.Concat(zeros).ToList());
-                coeffMatrix.Insert(coeffMatrix.Count - 1, zeros.Concat(tangent).ToList());
-            }
+            List<double> zeros = Sets.RepeatData(0.0, coeffMatrix[0].Count - 2);
+            List<double> tangent = new List<double> { -1.0, 1.0 };
+
+            coeffMatrix.Insert(1, tangent.Concat(zeros).ToList());
+            coeffMatrix.Insert(coeffMatrix.Count - 1, zeros.Concat(tangent).ToList());
 
             return coeffMatrix;
         }
@@ -270,7 +314,7 @@ namespace GShark.Operation
         /// Refer to the Equations 9.4 and 9.5 for chord length parametrization, and Equation 9.6 for centripetal method
         /// on The NURBS Book(2nd Edition), pp.364-365.
         /// </summary>
-        internal static List<double> ParametersCurve(List<Vector3> pts, bool centripetal = false)
+        internal static List<double> CurveParameters(List<Vector3> pts, bool centripetal = false)
         {
             List<double> chords = new List<double> { 0.0 };
             for (int i = 1; i < pts.Count; i++)
@@ -290,7 +334,10 @@ namespace GShark.Operation
             return uk;
         }
 
-        internal static (List<Vector3> ptsA, List<Vector3> ptsB) SolveBezierCtrlPts(List<Vector3> pts, bool getsEndDerivatives = false)
+        /// <summary>
+        /// Solves finding the control points of a Bezier.
+        /// </summary>
+        private static (List<Vector3> ptsA, List<Vector3> ptsB) SolveBezierCtrlPts(List<Vector3> pts, bool getsEndDerivatives = false)
         {
             int n = pts.Count - 1;
 
@@ -302,7 +349,7 @@ namespace GShark.Operation
             coeffMatrix[n - 1][n - 2] = 2;
 
             // Build the vector points.
-            List<Vector3> vecPts = (getsEndDerivatives) 
+            List<Vector3> vecPts = (getsEndDerivatives)
                 ? Vector3.Zero2d(2, pts[0].Count)
                 : Vector3.Zero2d(n, pts[0].Count);
 

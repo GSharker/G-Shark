@@ -75,7 +75,7 @@ namespace GShark.Operation
         /// <param name="span">Index span of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>The single parameter value of the basis function.</returns>
-        public static double OneBasicFunction(int degree, Knot knots, int span, double knot)
+        public static double OneBasisFunction(int degree, Knot knots, int span, double knot)
         {
             // Special case at boundaries.
             if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAXTOLERANCE) ||
