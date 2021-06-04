@@ -131,7 +131,7 @@ namespace GShark.Geometry
 
         public List<Vector3> HomogenizedPoints { get; private set; }
 
-        public Knot Knots { get; private set; }
+        public KnotVector Knots { get; private set; }
 
         /// <summary>
         /// Gets the BoundingBox of this arc.
@@ -324,7 +324,7 @@ namespace GShark.Geometry
             Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
             Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
-            Knot knots = new Knot(Sets.RepeatData(0.0, ctrPts.Length + 3));
+            KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
             double angle = Domain.T0;
 

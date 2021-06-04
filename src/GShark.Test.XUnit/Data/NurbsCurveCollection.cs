@@ -15,7 +15,7 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {10,5,5},
                 new Vector3 {20,0,0}
             };
-            Knot knots = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
 
             return new NurbsCurve(degree, knots, pts);
         }
@@ -29,7 +29,7 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {10,5,5},
                 new Vector3 {20,0,0}
             };
-            Knot knots = new Knot { 1, 1, 1, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 1, 1, 1, 1, 1, 1 };
             List<double> weights = new List<double> { 0.5, 0.5, 0.5 };
 
             return new NurbsCurve(degree, knots, pts, weights);
@@ -37,7 +37,7 @@ namespace GShark.Test.XUnit.Data
 
         public static NurbsCurve NurbsCurvePlanarExample()
         {
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
@@ -71,7 +71,7 @@ namespace GShark.Test.XUnit.Data
 
         public static NurbsCurve NurbsCurveCubicBezierPlanar()
         {
-            Knot knots = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {

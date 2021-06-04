@@ -23,7 +23,7 @@ namespace GShark.Operation
         /// <param name="knots">Set of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, Knot knots, double knot)
+        public static List<double> BasicFunction(int degree, KnotVector knots, double knot)
         {
             int span = knots.Span(degree, knot);
             return BasicFunction(degree, knots, span, knot);
@@ -39,7 +39,7 @@ namespace GShark.Operation
         /// <param name="span">Index span of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, Knot knots, int span, double knot)
+        public static List<double> BasicFunction(int degree, KnotVector knots, int span, double knot)
         {
             Vector3 left = Vector3.Zero1d(degree + 1);
             Vector3 right = Vector3.Zero1d(degree + 1);
@@ -75,7 +75,7 @@ namespace GShark.Operation
         /// <param name="span">Index span of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>The single parameter value of the basis function.</returns>
-        public static double OneBasisFunction(int degree, Knot knots, int span, double knot)
+        public static double OneBasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             // Special case at boundaries.
             if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAX_TOLERANCE) ||
@@ -141,9 +141,9 @@ namespace GShark.Operation
         {
             int degree = curve.Degree;
             List<Vector3> curveHomogenizedPoints = curve.HomogenizedPoints;
-            Knot knots = curve.Knots;
+            KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.AreValidKnots(degree, curveHomogenizedPoints.Count))
+            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot");
             }
@@ -183,12 +183,12 @@ namespace GShark.Operation
             List<List<Vector3>> surfaceHomoPts = surface.HomogenizedPoints;
             int dim = controlPoints[0][0].Count;
 
-            if (!surface.KnotsU.AreValidKnots(surface.DegreeU, surfaceHomoPts.Count))
+            if (!surface.KnotsU.IsValid(surface.DegreeU, surfaceHomoPts.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot in u direction");
             }
 
-            if (!surface.KnotsV.AreValidKnots(surface.DegreeV, surfaceHomoPts[0].Count))
+            if (!surface.KnotsV.IsValid(surface.DegreeV, surfaceHomoPts[0].Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot in v direction");
             }
@@ -229,7 +229,7 @@ namespace GShark.Operation
         /// <returns>Curve representing the iso-curve of the surface.</returns>
         public static ICurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
         {
-            Knot knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
+            KnotVector knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
             int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
             Dictionary<double, int> knotMults = knots.Multiplicities();
 
@@ -250,7 +250,7 @@ namespace GShark.Operation
             }
 
             //Insert the knots
-            NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new Knot(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
+            NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
             int span = knots.Span(degree, t);
 
             if (Math.Abs(t - knots[0]) < GeoSharpMath.EPSILON)
@@ -487,9 +487,9 @@ namespace GShark.Operation
         {
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.HomogenizedPoints;
-            Knot knots = curve.Knots;
+            KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.AreValidKnots(degree, controlPoints.Count))
+            if (!curve.Knots.IsValid(degree, controlPoints.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot");
             }
@@ -528,7 +528,7 @@ namespace GShark.Operation
         /// <param name="knots">Sets of non-decreasing knot values.</param>
         /// <returns>The derivatives at the given parameter.</returns>
         public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
-            int order, Knot knots)
+            int order, KnotVector knots)
         {
             Vector3 left = Vector3.Zero1d(degree + 1);
             Vector3 right = Vector3.Zero1d(degree + 1);
@@ -731,10 +731,10 @@ namespace GShark.Operation
             int degreeU = nurbsSurface.DegreeU;
             int degreeV = nurbsSurface.DegreeV;
             List<List<Vector3>> ctrlPts = nurbsSurface.HomogenizedPoints;
-            Knot knotsU = nurbsSurface.KnotsU;
-            Knot knotsV = nurbsSurface.KnotsV;
+            KnotVector knotsU = nurbsSurface.KnotsU;
+            KnotVector knotsV = nurbsSurface.KnotsV;
 
-            if (!knotsU.AreValidKnots(degreeU, ctrlPts.Count) || !knotsV.AreValidKnots(degreeV, ctrlPts[0].Count))
+            if (!knotsU.IsValid(degreeU, ctrlPts.Count) || !knotsV.IsValid(degreeV, ctrlPts[0].Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot vector, and n");
             }

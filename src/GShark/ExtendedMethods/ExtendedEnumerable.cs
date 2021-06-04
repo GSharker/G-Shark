@@ -19,13 +19,13 @@ namespace GShark.ExtendedMethods
         }
 
         /// <summary>
-        /// Transforms a set of double into a <see cref="Knot"/>.
+        /// Transforms a set of double into a <see cref="KnotVector"/>.
         /// </summary>
         /// <param name="enumerable">Sets of values.</param>
-        /// <returns>A <see cref="Knot"/></returns>
-        public static Knot ToKnot(this IEnumerable<double> enumerable)
+        /// <returns>A <see cref="KnotVector"/></returns>
+        public static KnotVector ToKnot(this IEnumerable<double> enumerable)
         {
-            return new Knot(enumerable.ToList());
+            return new KnotVector(enumerable.ToList());
         }
 
         /// <summary>

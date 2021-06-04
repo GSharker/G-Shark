@@ -34,7 +34,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
             List<double> newKnots = new List<double>();
             for (int i = 0; i < insertion; i++)
@@ -66,7 +66,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
             List<Vector3> controlPts = new List<Vector3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)

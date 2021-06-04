@@ -19,8 +19,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             int degreeU = 3;
             int degreeV = 3;
-            Knot knotsU = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
-            Knot knotsV = new Knot() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knotsU = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knotsV = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
 
             List<Vector3> u1 = new List<Vector3>()
             {
@@ -66,8 +66,8 @@ namespace GShark.Test.XUnit.Geometry
             var p3 = new Vector3() { 1.0d, 1.0d, 1.0d };
             var p4 = new Vector3() { 0.0d, 1.0d, 1.0d };
 
-            Knot knotU = new Knot { 0.0d, 0.0d, 1.0d, 1.0d };
-            Knot knotV = new Knot { 0.0d, 0.0d, 1.0d, 1.0d };
+            KnotVector knotU = new KnotVector { 0.0d, 0.0d, 1.0d, 1.0d };
+            KnotVector knotV = new KnotVector { 0.0d, 0.0d, 1.0d, 1.0d };
 
             var nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
             nurbsSurface.Should().NotBeNull();

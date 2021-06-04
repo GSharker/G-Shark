@@ -21,7 +21,7 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput = testOutput;
         }
 
-        public static (int degree, List<Vector3> pts, Knot knots, List<double> weights) CurveData =>
+        public static (int degree, List<Vector3> pts, KnotVector knots, List<double> weights) CurveData =>
         (
             2,
             new List<Vector3>
@@ -30,7 +30,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Vector3 {10,5,5},
                 new Vector3 {20,0,0}
             },
-            new Knot { 1, 1, 1, 1, 1, 1 },
+            new KnotVector { 1, 1, 1, 1, 1, 1 },
             new List<double> { 0.5, 0.5, 0.5 }
         );
 
@@ -68,7 +68,7 @@ namespace GShark.Test.XUnit.Geometry
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(2);
             nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, CurveData.pts.Count));
-            nurbsCurve.Knots.Should().BeEquivalentTo(new Knot(CurveData.degree, CurveData.pts.Count));
+            nurbsCurve.Knots.Should().BeEquivalentTo(new KnotVector(CurveData.degree, CurveData.pts.Count));
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace GShark.Test.XUnit.Geometry
         public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
         {
             // Arrange
-            var knots = new Knot { 0, 0, 1, 1, 2, 2 };
+            var knots = new KnotVector { 0, 0, 1, 1, 2, 2 };
 
             // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);

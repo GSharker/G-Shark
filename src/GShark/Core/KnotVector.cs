@@ -6,33 +6,34 @@ using System.Linq;
 namespace GShark.Core
 {
     /// <summary>
-    /// A knot is a non-decreasing sequence of doubles.
+    /// The Knot Vector is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
+    /// The number of knots is always equal to the number of control points plus curve degree plus one (i.e. number of control points plus curve order).
     /// </summary>
-    public class Knot : List<double>
+    public class KnotVector : List<double>
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Knot()
+        public KnotVector()
         {
         }
 
         /// <summary>
-        /// Creates an instance of the class knot.
+        /// Creates an instance of the knot vector given degree, number of control points and whether it is clamped or unclamped.
         /// </summary>
         /// <param name="degree">Degree of the curve.</param>
         /// <param name="numberOfControlPts">Number of control points of the curve.</param>
         /// <param name="clamped">If the curve is clamped or not.</param>
-        public Knot(int degree, int numberOfControlPts, bool clamped = true)
+        public KnotVector(int degree, int numberOfControlPts, bool clamped = true)
         {
             Create(degree, numberOfControlPts, clamped);
         }
 
         /// <summary>
-        /// Creates an instance of the class from a list of values.
+        /// Creates an instance of the knot vector from a list of double values.
         /// </summary>
         /// <param name="values">Set of knots.</param>
-        public Knot(IEnumerable<double> values)
+        public KnotVector(IEnumerable<double> values)
         {
             AddRange(values);
         }
@@ -47,9 +48,9 @@ namespace GShark.Core
         /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
         /// <param name="degree">The degree of the curve.</param>
-        /// <param name="numControlPts">The number of control points.</param>
+        /// <param name="numberOfControlPts"></param>
         /// <returns>Whether the knots are valid.</returns>
-        public bool AreValidKnots(int degree, int numControlPts)
+        public bool IsValid(int degree, int numberOfControlPts)
         {
             if (Count == 0)
             {
@@ -61,7 +62,7 @@ namespace GShark.Core
                 return false;
             }
             // Check the formula: m = p + n + 1
-            if (numControlPts + degree + 1 - Count != 0)
+            if (numberOfControlPts + degree + 1 - Count != 0)
             {
                 return false;
             }
@@ -102,10 +103,10 @@ namespace GShark.Core
         public double Domain => this[^1] - this[0];
 
         /// <summary>
-        /// Finds the span on the knots without supplying a number of control points.
+        /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
         /// </summary>
-        /// <param name="degree">Integer degree of function.</param>
-        /// <param name="u">Parameter.</param>
+        /// <param name="degree">Curve degree.</param>
+        /// <param name="u">Parameter on curve.</param>
         /// <returns>The index of the knot span.</returns>
         public int Span(int degree, double u)
         {
@@ -113,7 +114,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Finds the span on the knot list of the given parameter.<br/>
+        /// Finds the span on the knot vector of the given parameter.<br/>
         /// <em>Corresponds to algorithm 2.1 from the NURBS book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="n">Number of basis functions.</param>
@@ -155,7 +156,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Calculates the multiplicity of the knot.
+        /// Calculates the multiplicity of a knot.
         /// </summary>
         /// <param name="knotIndex">The index of the knot to determine multiplicity.</param>
         /// <returns>The multiplicity of the knot.</returns>
@@ -242,11 +243,11 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Normalizes the input knots vector to [0, 1] domain.
+        /// Normalizes the input knot vector to a range from 0 to 1.
         /// </summary>
         /// <param name="knots">Knots vector to be normalized.</param>
         /// <returns>Normalized knots vector.</returns>
-        public static Knot Normalize(Knot knots)
+        public static KnotVector Normalize(KnotVector knots)
         {
             if (knots.Count == 0)
             {
@@ -261,15 +262,15 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Reverses the input knots.
+        /// Reverses the order of the knots in the knot vector.
         /// </summary>
         /// <param name="knots">Knot vectors to be reversed.</param>
         /// <returns>Reversed knot vectors.</returns>
-        public static Knot Reverse(Knot knots)
+        public static KnotVector Reverse(KnotVector knots)
         {
             double firstKnot = knots[0];
 
-            Knot reversedKnots = new Knot {firstKnot};
+            KnotVector reversedKnots = new KnotVector {firstKnot};
             for (int i = 1; i < knots.Count; i++)
             {
                 reversedKnots.Add(reversedKnots[i-1] + (knots[^i] - knots[knots.Count - i - 1]));
@@ -279,7 +280,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Creates a text version of the knots.
+        /// Creates a text representation of the knot vector.
         /// </summary>
         /// <returns>Knots in a string version.</returns>
         public override string ToString()

@@ -30,7 +30,7 @@ namespace GShark.Operation
 
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.ControlPoints;
-            Knot knots = curve.Knots;
+            KnotVector knots = curve.Knots;
 
             // Initialize common variables.
             int n = controlPoints.Count - 1;
@@ -104,7 +104,7 @@ namespace GShark.Operation
         {
             int degree = curve.Degree;
             List<Vector3> controlPoints = curve.ControlPoints;
-            Knot knots = curve.Knots;
+            KnotVector knots = curve.Knots;
 
             // Find all of the unique knot values and their multiplicity.
             // For each, increase their multiplicity to degree + 1.
@@ -131,8 +131,8 @@ namespace GShark.Operation
             while (i < controlPoints.Count)
             {
 
-                Knot knotsRange = (normalize)
-                    ? Knot.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
+                KnotVector knotsRange = (normalize)
+                    ? KnotVector.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
                     : knots.GetRange(i, crvKnotLength).ToKnot();
                 List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
@@ -158,7 +158,7 @@ namespace GShark.Operation
             List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
             weights.Reverse();
 
-            Knot knots = Knot.Reverse(curve.Knots);
+            KnotVector knots = KnotVector.Reverse(curve.Knots);
 
             return new NurbsCurve(curve.Degree, knots, pts, weights);
         }
@@ -170,11 +170,11 @@ namespace GShark.Operation
         /// <param name="knots">The knots to insert - an array of parameter positions within the surface domain.</param>
         /// <param name="useU">Whether to insert in the U direction or V direction of the surface. U is default.</param>
         /// <returns>A NURBS surface with the knot refined.</returns>
-        public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, Knot knotsToInsert, bool useU = true)
+        public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, KnotVector knotsToInsert, bool useU = true)
         {
             List<List<Vector3>> ctrlPts;
             List<List<Vector3>> refinedPts = new List<List<Vector3>>();
-            Knot knots;
+            KnotVector knots;
             int degree;
 
             //u dir
@@ -201,7 +201,7 @@ namespace GShark.Operation
                 refinedPts.Add(crv.ControlPoints);
             }
 
-            Knot newKnots = crv.Knots;
+            KnotVector newKnots = crv.Knots;
             if (useU)
                 return new NurbsSurface(nurbsSurface.DegreeU, nurbsSurface.DegreeV, newKnots, nurbsSurface.KnotsV, Sets.Reverse2DMatrixPoints(refinedPts));
             else

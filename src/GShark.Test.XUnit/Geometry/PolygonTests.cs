@@ -131,7 +131,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             ICurve poly2D = new Polygon(Planar2D);
-            Knot knots = poly2D.Knots;
+            KnotVector knots = poly2D.Knots;
 
             // Assert
             poly2D.Degree.Should().Be(1);

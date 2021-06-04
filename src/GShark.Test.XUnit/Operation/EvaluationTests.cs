@@ -24,8 +24,8 @@ namespace GShark.Test.XUnit.Operation
         {
             int degreeU = 3;
             int degreeV = 3;
-            Knot knotsU = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
-            Knot knotsV = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knotsU = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knotsV = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
 
             List<Vector3> u1 = new List<Vector3>
             {
@@ -69,7 +69,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             int degree = 2;
             int span = 4;
-            Knot knots = new Knot { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
 
             // Act
             List<double> result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
@@ -92,7 +92,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_A_Point_At_A_Given_Parameter(double parameter, double[] result)
         {
             // Arrange
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
@@ -195,8 +195,8 @@ namespace GShark.Test.XUnit.Operation
                 u1, u2, u3, u4
             };
             int degreeU = 3; int degreeV = degreeU;
-            Knot knotsU = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
-            Knot knotsV = knotsU;
+            KnotVector knotsU = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knotsV = knotsU;
 
             // Act
             NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
@@ -318,7 +318,7 @@ namespace GShark.Test.XUnit.Operation
             int span = 4;
             int order = 2;
             double parameter = 2.5;
-            Knot knots = new Knot { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
             double[,] expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
 
             // Act
@@ -347,7 +347,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             int degree = 3;
             int parameter = 0;
-            Knot knots = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             int numberDerivs = 2;
             List<Vector3> controlPts = new List<Vector3>
             {
@@ -375,7 +375,7 @@ namespace GShark.Test.XUnit.Operation
             // Example at page 126.
             // Arrange
             int degree = 2;
-            Knot knots = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weight = new List<double> { 1, 1, 2 };
             List<Vector3> controlPts = new List<Vector3>()
             {
@@ -431,7 +431,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
+            KnotVector knots = new KnotVector { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
             List<Vector3> pts = new List<Vector3>
             {
                 new Vector3 {0, 0, 0},
