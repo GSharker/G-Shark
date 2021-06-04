@@ -2,11 +2,14 @@
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
-**GShark** is the nickname for **Geometry Shark**. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GShark).
-There are plenty of libraries written in C++, Python and some of them also in C# but we couldn't find a library to rule them all and, most important, free and open source.
-For this reason we have started this crazy project going back to books, learning from other libraries (which we thank for, in particular [Verb](http://verbnurbs.com/) that defines the backbone of this library) and finally provinding our own touch to it.
+**GShark** is short for **Geometry Shark**. It all started with a need for a geometry library able to handle curves, surfaces, meshes and solids written in C#. Although there
+are plenty of geometry libraries written in a variety of languages including C, C++, Python and some also in C# but, as is often the case, we could not find a library that encompassed all the functionality that we were looking for in one place.
 
-We are very far from beeing super performant and, in fact, we are still writing code and committing every day something new. The idea is to have something that is software agnostic, hopefully well documented and easy to use.
+For this reason we began work on this ambitious project to create an easy to use, well documented, and highly functional geometry library for C# development, targeted primarily at the AECO sector and computational designers. We've gone back to the text books and first principles of computational geometry, and we learn what we can from the great work done by others before us for which we are very thankful, in particular [Verb](http://verbnurbs.com/) which is our reference for the backbone of this library. 
+
+We try to write and commit code every day and look forward to contributions from the open source dev community. 
+
+There's a tonne of work to be done and we appreciate all the help we can get! If you would like to contribute, reach out and we'll have you committing code in no time! :) 
 
 ## The library
 work in progres...
