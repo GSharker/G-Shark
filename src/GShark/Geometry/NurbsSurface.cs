@@ -26,7 +26,7 @@ namespace GShark.Geometry
         /// <param name="controlPoints">Two dimensional array of points</param>
         /// <param name="weights">Two dimensional array of weight values</param>
         /// <return>A new NurbsSurface</return>
-        public NurbsSurface(int degreeU, int degreeV, Knot knotsU, Knot knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
+        public NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
         {
 
             if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
@@ -38,7 +38,7 @@ namespace GShark.Geometry
                 throw new ArgumentException("controlPointsU.length + degreeU + 1 must equal knotsU.length!");
             if (knotsV.Count != controlPoints[0].Count + degreeV + 1)
                 throw new ArgumentException("controlPointsV.length + degreeV + 1 must equal knotsV.length!");
-            if (!knotsU.AreValidKnots(degreeU, controlPoints.Count) || !knotsV.AreValidKnots(degreeV, controlPoints[0].Count))
+            if (!knotsU.IsValid(degreeU, controlPoints.Count) || !knotsV.IsValid(degreeV, controlPoints[0].Count))
                 throw new ArgumentException("Invalid knot knots format!  Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             //return data;
 
@@ -59,7 +59,7 @@ namespace GShark.Geometry
         /// <param name="degreeU">Surface degree u</param>
         /// <param name="degreeV">Surface degree v</param>
         public NurbsSurface(List<List<Vector3>> controlPoints, int degreeU, int degreeV)
-            : this(degreeU, degreeV, new Knot(degreeU, controlPoints.Count), new Knot(degreeV, controlPoints[0].Count), controlPoints)
+            : this(degreeU, degreeV, new KnotVector(degreeU, controlPoints.Count), new KnotVector(degreeV, controlPoints[0].Count), controlPoints)
         {
         }
 
@@ -72,8 +72,8 @@ namespace GShark.Geometry
             DegreeU = surface.DegreeU;
             DegreeV = surface.DegreeV;
             HomogenizedPoints = new List<List<Vector3>>(surface.HomogenizedPoints);
-            KnotsU = new Knot(surface.KnotsU);
-            KnotsV = new Knot(surface.KnotsV);
+            KnotsU = new KnotVector(surface.KnotsU);
+            KnotsV = new KnotVector(surface.KnotsV);
             Weights = new List<List<double>>(surface.Weights!);
         }
 
@@ -104,8 +104,8 @@ namespace GShark.Geometry
             }
             var zeros = Sets.RepeatData(0.0d, degree + 1);
             var ones = Sets.RepeatData(1.0d, degree + 1);
-            Knot knotU = zeros.Concat(ones).ToKnot();
-            Knot knotV = zeros.Concat(ones).ToKnot();
+            KnotVector knotU = zeros.Concat(ones).ToKnot();
+            KnotVector knotV = zeros.Concat(ones).ToKnot();
 
             return new NurbsSurface(degree, degree, knotU, knotV, pts);
         }
@@ -145,11 +145,11 @@ namespace GShark.Geometry
         /// <summary>
         /// List of non-decreasing knot values in u direction.
         /// </summary>
-        public Knot KnotsU { get; }
+        public KnotVector KnotsU { get; }
         /// <summary>
         /// List of non-decreasing knot values in v direction.
         /// </summary>
-        public Knot KnotsV { get; }
+        public KnotVector KnotsV { get; }
 
         /// <summary>
         /// Determine the valid u domain of the surface.

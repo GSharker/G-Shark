@@ -13,7 +13,7 @@ namespace GShark.Test.XUnit.Core
         [InlineData(-1, 0)]
         public void Knot_Throws_An_Exception_If_Degree_Or_Number_Of_ControlPts_Are_Less_Than_Or_Zero(int degree, int numberOfControlPts)
         {
-            Func<Knot> funcResult = () => new Knot(degree, numberOfControlPts);
+            Func<KnotVector> funcResult = () => new KnotVector(degree, numberOfControlPts);
 
             funcResult.Should().Throw<Exception>().WithMessage("Input values must be positive and different than zero.");
         }
@@ -23,9 +23,9 @@ namespace GShark.Test.XUnit.Core
         {
             var degree = 4;
             var ctrlPts = 12;
-            var resultExpected = new Knot(){ 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0};
+            var resultExpected = new KnotVector(){ 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-            var generateKnots = new Knot(degree, ctrlPts);
+            var generateKnots = new KnotVector(degree, ctrlPts);
 
             generateKnots.Should().BeEquivalentTo(resultExpected);
         }
@@ -35,9 +35,9 @@ namespace GShark.Test.XUnit.Core
         {
             var degree = 3;
             var ctrlPts = 5;
-            var resultExpected = new Knot() { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
+            var resultExpected = new KnotVector() { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
 
-            var generateKnots = new Knot(degree, ctrlPts, false);
+            var generateKnots = new KnotVector(degree, ctrlPts, false);
 
             generateKnots.Should().BeEquivalentTo(resultExpected);
         }
@@ -56,8 +56,8 @@ namespace GShark.Test.XUnit.Core
         // [InlineData(new double[] { 0, 0, 0, 0.5, 0.25, 1, 1, 1 }, 2, true)]  Check for periodic knots
         public void It_Checks_If_The_Knots_Are_Valid(double[] knots, int degree, int ctrlPts, bool expectedResult)
         {
-            var knot = new Knot(knots);
-            knot.AreValidKnots(degree, ctrlPts).Should().Be(expectedResult);
+            var knot = new KnotVector(knots);
+            knot.IsValid(degree, ctrlPts).Should().Be(expectedResult);
         }
 
         [Theory]
@@ -71,7 +71,7 @@ namespace GShark.Test.XUnit.Core
         [InlineData(2, -1)]
         public void It_Returns_The_KnotSpan_Given_A_Parameter(int expectedValue, double parameter)
         {
-            var knotVector = new Knot() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
+            var knotVector = new KnotVector() { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
             var degree = 2;
 
             var result = knotVector.Span(knotVector.Count - degree - 2, 2, parameter);
@@ -82,7 +82,7 @@ namespace GShark.Test.XUnit.Core
         [Fact]
         public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Scope()
         {
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
+            var knots = new KnotVector() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
 
             Func<object> funcResult = () => knots.MultiplicityByIndex(12);
 
@@ -99,7 +99,7 @@ namespace GShark.Test.XUnit.Core
         [InlineData(11, 3)]
         public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(int index, int result)
         {
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+            var knots = new KnotVector() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             var knotMult = knots.MultiplicityByIndex(index);
 
@@ -113,7 +113,7 @@ namespace GShark.Test.XUnit.Core
             var multiplicityResult = new int[] {4, 2, 3, 1, 1, 3};
             var count = 0;
 
-            var knots = new Knot() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+            var knots = new KnotVector() { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             var multiplicities = knots.Multiplicities();
 
@@ -130,10 +130,10 @@ namespace GShark.Test.XUnit.Core
         [Fact]
         public void It_Returns_A_Normalized_Knot_Vectors()
         {
-            var knots = new Knot() { -5, -5, -3, -2, 2, 3, 5, 5 };
-            var knotsExpected = new Knot() { 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
+            var knots = new KnotVector() { -5, -5, -3, -2, 2, 3, 5, 5 };
+            var knotsExpected = new KnotVector() { 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
 
-            var normalizedKnots = Knot.Normalize(knots);
+            var normalizedKnots = KnotVector.Normalize(knots);
 
             normalizedKnots.Should().BeEquivalentTo(knotsExpected);
         }
@@ -141,9 +141,9 @@ namespace GShark.Test.XUnit.Core
         [Fact]
         public void It_Throws_An_Exception_If_Input_Knot()
         {
-            var knots = new Knot();
+            var knots = new KnotVector();
 
-            Func<Knot> func = () => Knot.Normalize(knots);
+            Func<KnotVector> func = () => KnotVector.Normalize(knots);
 
             func.Should().Throw<Exception>().WithMessage("Input knot vector cannot be empty");
         }
@@ -151,10 +151,10 @@ namespace GShark.Test.XUnit.Core
         [Fact]
         public void It_Returns_The_Reversed_Knot_Vectors()
         {
-            var knots = new Knot { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
-            var knotsExpected = new Knot {0, 0, 0, 0.7000000000000002, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4};
+            var knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+            var knotsExpected = new KnotVector {0, 0, 0, 0.7000000000000002, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4};
 
-            var reversedKnots = Knot.Reverse(knots);
+            var reversedKnots = KnotVector.Reverse(knots);
 
             reversedKnots.Should().BeInAscendingOrder();
             reversedKnots.Should().BeEquivalentTo(knotsExpected);

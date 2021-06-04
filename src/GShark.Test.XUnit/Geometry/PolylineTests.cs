@@ -270,7 +270,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             ICurve poly = new Polyline(pts);
-            Knot knots = poly.Knots;
+            KnotVector knots = poly.Knots;
 
             // Assert
             poly.Degree.Should().Be(1);

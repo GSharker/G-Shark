@@ -35,7 +35,7 @@ namespace GShark.Geometry
 
         public List<Vector3> HomogenizedPoints { get; private set; }
 
-        public Knot Knots { get; private set; }
+        public KnotVector Knots { get; private set; }
 
         public Interval Domain => new Interval(0, this.Count - 1);
 
@@ -270,7 +270,7 @@ namespace GShark.Geometry
         protected void ToNurbsCurve()
         {
             double lengthSum = 0;
-            Knot knots = new Knot { 0 };
+            KnotVector knots = new KnotVector { 0 };
             List<double> weights = new List<double>();
 
             for (int i = 0; i < this.Count; i++)

@@ -24,8 +24,8 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots1 = new Knot { 0, 0, 0, 0, 1, 1, 1, 1 };
-            Knot knots2 = new Knot { 1, 1, 1, 1, 4, 4, 4, 4 };
+            KnotVector knots1 = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
+            KnotVector knots2 = new KnotVector { 1, 1, 1, 1, 4, 4, 4, 4 };
             List<Vector3> controlPts = new List<Vector3>
             {
                 new Vector3 {0, 0, 0},

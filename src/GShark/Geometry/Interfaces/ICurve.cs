@@ -23,7 +23,7 @@ namespace GShark.Geometry.Interfaces
         /// <summary>
         /// Gets a the collection of non-decreasing knot values.
         /// </summary>
-        public Knot Knots { get; }
+        public KnotVector Knots { get; }
 
         /// <summary>
         /// Gets the domain of the curve.

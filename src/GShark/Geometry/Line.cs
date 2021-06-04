@@ -76,7 +76,7 @@ namespace GShark.Geometry
 
         public List<Vector3> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
 
-        public Knot Knots => new Knot {0, 0, 1, 1};
+        public KnotVector Knots => new KnotVector {0, 0, 1, 1};
 
         public Interval Domain => new Interval(0.0, 1.0);
 

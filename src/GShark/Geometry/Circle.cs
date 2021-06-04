@@ -104,8 +104,8 @@ namespace GShark.Geometry
             }
         }
 
-        public Knot Knots =>
-            new Knot
+        public KnotVector Knots =>
+            new KnotVector
             {
                 0, 0, 0,
                 0.5 * Math.PI, 0.5 * Math.PI,

@@ -34,7 +34,7 @@ namespace GShark.Test.XUnit.Operation
                 new Vector3 {7,12,0},
                 new Vector3 {15,2,0}
             };
-            Knot knots = new Knot(degree, controlPts.Count);
+            KnotVector knots = new KnotVector(degree, controlPts.Count);
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act

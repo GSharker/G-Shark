@@ -58,7 +58,7 @@ namespace GShark.Operation
         public static (List<double> tValues, List<Vector3> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
         {
             if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[^1], tolerance);
-            Knot copyKnot = new Knot(curve.Knots);
+            KnotVector copyKnot = new KnotVector(curve.Knots);
             copyKnot.RemoveAt(0);
             copyKnot.RemoveAt(copyKnot.Count - 1);
             return (copyKnot, curve.ControlPoints);

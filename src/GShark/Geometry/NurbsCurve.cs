@@ -27,7 +27,7 @@ namespace GShark.Geometry
         /// <param name="knots">The knots defining the curve.</param>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="weights">The weight values.</param>
-        public NurbsCurve(int degree, Knot knots, List<Vector3> controlPoints, List<double>? weights = null)
+        public NurbsCurve(int degree, KnotVector knots, List<Vector3> controlPoints, List<double>? weights = null)
         {
             if (controlPoints is null)
             {
@@ -49,7 +49,7 @@ namespace GShark.Geometry
                 throw new ArgumentException("Number of points + degree + 1 must equal knots length!");
             }
 
-            if (!knots.AreValidKnots(degree, controlPoints.Count))
+            if (!knots.IsValid(degree, controlPoints.Count))
             {
                 throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             }
@@ -67,7 +67,7 @@ namespace GShark.Geometry
         /// <param name="controlPoints">The control points.</param>
         /// <param name="degree">The curve degree.</param>
         public NurbsCurve(List<Vector3> controlPoints, int degree)
-            : this(degree, new Knot(degree, controlPoints.Count), controlPoints)
+            : this(degree, new KnotVector(degree, controlPoints.Count), controlPoints)
         {
         }
 
@@ -80,7 +80,7 @@ namespace GShark.Geometry
             Degree = curve.Degree;
             ControlPoints = new List<Vector3>(curve.ControlPoints);
             HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
-            Knots = new Knot(curve.Knots);
+            Knots = new KnotVector(curve.Knots);
             Weights = new List<double>(curve.Weights!);
         }
 
@@ -95,7 +95,7 @@ namespace GShark.Geometry
 
         public List<Vector3> HomogenizedPoints { get; }
 
-        public Knot Knots { get; }
+        public KnotVector Knots { get; }
 
         public Interval Domain => new Interval(Knots.First(), Knots.Last());
 

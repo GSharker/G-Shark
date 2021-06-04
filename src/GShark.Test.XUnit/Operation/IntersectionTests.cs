@@ -250,11 +250,11 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree0 = 1;
-            Knot crvKnots0 = new Knot { 0, 0, 1, 1 };
+            KnotVector crvKnots0 = new KnotVector { 0, 0, 1, 1 };
             List<Vector3> crvCtrPts0 = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 2, 0, 0 } };
 
             int crvDegree1 = 1;
-            Knot crvKnots1 = new Knot { 0, 0, 1, 1 };
+            KnotVector crvKnots1 = new KnotVector { 0, 0, 1, 1 };
             List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.5, -1.5, 0 } };
 
             NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
@@ -278,7 +278,7 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(p1, p2);
 
             int crvDegree1 = 2;
-            Knot crvKnots1 = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector crvKnots1 = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.7, 0, 0 }, new Vector3 { 0.5, -1.5, 0 } };
             ICurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
             
@@ -296,11 +296,11 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree0 = 2;
-            Knot crvKnots0 = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector crvKnots0 = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<Vector3> crvCtrPts0 = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.1, 0 }, new Vector3 { 2, 0, 0 } };
 
             int crvDegree1 = 2;
-            Knot crvKnots1 = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector crvKnots1 = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<Vector3> crvCtrPts1 = new List<Vector3> { new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 0.7, 0, 0 }, new Vector3 { 0.5, -1.5, 0 } };
 
             NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
@@ -320,7 +320,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Vector3> crvCtrPts0 = new List<Vector3>
             {
                 new Vector3 { -5, 0, 0 }, new Vector3 { 10, 0, 0 }, new Vector3 { 10, 10, 0 },
@@ -353,7 +353,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Vector3> crvCtrPts0 = new List<Vector3>
             {
                 new Vector3 { 0, 0, 0 }, new Vector3 { 5, 2.5, 5 }, new Vector3 { 5, 5, 0 },
@@ -390,7 +390,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree = 2;
-            Knot crvKnots = new Knot { 0, 0, 0, 1, 1, 1 };
+            KnotVector crvKnots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<Vector3> crvCtrPts = new List<Vector3> { new Vector3 { 0, 0, 0 }, new Vector3 { 0.5, 0.5, 0 }, new Vector3 { 2, 0, 0 } };
             NurbsCurve crv = new NurbsCurve(crvDegree, crvKnots, crvCtrPts);
             Plane pl = Plane.PlaneYZ.SetOrigin(new Vector3 { xValue, 0.0, 0.0 });
@@ -410,7 +410,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Vector3> crvCtrPts = new List<Vector3>
             {
                 new Vector3 { 2.225594, 1.226218, 2.01283 }, new Vector3 { 8.681402, 4.789645, 5.010206 }, new Vector3 { 6.181402, 4.789645, 0.010206 },
@@ -439,7 +439,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Vector3> crvCtrPts = new List<Vector3>
             {
                 new Vector3 { 0,5,5 }, new Vector3 { 2.5,0,0 }, new Vector3 { 5,5,2.5 },
@@ -462,7 +462,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            Knot knots = new Knot { 0.0, 0.0, 0.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0 };
             List<Vector3> crvCtrPts = new List<Vector3>
             {
                 new Vector3 { 0,5,0 }, new Vector3 { 2.5,0,0 }, new Vector3 { 5,2.5,0 },
