@@ -11,6 +11,8 @@ We try to write and commit code every day and look forward to contributions from
 
 There's a tonne of work to be done and we appreciate all the help we can get! If you would like to contribute, reach out and we'll have you committing code in no time! :) 
 
-## The library
-work in progres...
+## Contributing to G-Shark
+[Guidelines](CONTRIBUTING.md)
 
+## Documentation
+[G-Shark Doc](https://gsharker.github.io/G-Shark/)
