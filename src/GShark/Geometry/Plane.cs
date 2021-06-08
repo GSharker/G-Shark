@@ -330,7 +330,7 @@ namespace GShark.Geometry
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine($"Origin({Origin})");
+            builder.AppendLine($"Default({Origin})");
             builder.AppendLine($"X({XAxis})");
             builder.AppendLine($"Y({YAxis})");
             builder.AppendLine($"Z({ZAxis})");

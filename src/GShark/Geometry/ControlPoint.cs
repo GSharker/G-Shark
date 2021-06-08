@@ -9,7 +9,7 @@ namespace GShark.Geometry
     /// The fourth value (w) is considered the weight of the point.
     /// ControlPoint could be also identify as a control point.
     /// </summary>
-    public struct ControlPoint : ICoordinateXYZ, IEquatable<ControlPoint>
+    public struct ControlPoint : IVector3, IEquatable<ControlPoint>
     {
         /// <summary>
         /// Constructs a new instance of a control point by coordinates.
@@ -58,18 +58,6 @@ namespace GShark.Geometry
         /// Gets the weight of the control point.
         /// </summary>
         public double W { get; }
-
-        /// <summary>
-        /// Gets the 3d location of the control point.
-        /// </summary>
-        public Point3 Location
-        {
-            get
-            {
-                double weight = Math.Abs(W - 1.0) < GeoSharpMath.MAX_TOLERANCE ? 1.0 : W;
-                return new Point3(X * weight, Y * weight, Z * weight);
-            }
-        }
 
         /// <summary>
         /// Checks if two control points are exactly the same.

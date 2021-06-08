@@ -7,7 +7,7 @@ namespace GShark.Geometry
     /// <summary>
     /// Point3 represents a geometrical point in 3-dimensional space, defined by three coordinates xyz.
     /// </summary>
-    public struct Point3 : ICoordinateXYZ, ITransformable<Point3>, IComparable<Point3>, IEquatable<Point3>
+    public struct Point3 : IVector3, ITransformable<Point3>, IComparable<Point3>, IEquatable<Point3>
     {
         /// <summary>
         /// Creates an instance of a point by three coordinates.
@@ -37,7 +37,7 @@ namespace GShark.Geometry
         /// Creates an instance of a point cooping the components of a vector.
         /// </summary>
         /// <param name="vector">The vector used to create the new point.</param>
-        public Point3(V3 vector)
+        public Point3(Vector3d vector)
         {
             X = vector.X;
             Y = vector.Y;
@@ -62,7 +62,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets a point located at (0,0,0).
         /// </summary>
-        public Point3 Origin => new Point3(0.0, 0.0, 0.0);
+        public Point3 Default => new Point3(0.0, 0.0, 0.0);
 
         /// <summary>
         /// Gets a value indicating whether this vector is valid.<br/>
@@ -98,6 +98,8 @@ namespace GShark.Geometry
             double y = 0.0;
             double z = 0.0;
             double w = 0.0;
+
+            //ToDO Convert to Matrix multiplication! Create a column row vector from the point. i.e. IVector
 
             x = t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3];
             y = t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3];

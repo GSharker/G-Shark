@@ -86,9 +86,9 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not this is a unit vector.
+        /// Test a vector to see if it is unitzed.
         /// </summary>
-        /// <returns>True if </returns>
+        /// <returns>True if vector is unitized.</returns>
         public bool IsUnitize()
         {
             return (GeoSharpMath.IsValidDouble(this[0]) &&
