@@ -45,8 +45,8 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             _testOutput.WriteLine(bBox.ToString());
             bBox.Should().NotBeNull();
-            bBox.Min.DistanceTo(expectedMin).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
-            bBox.Max.DistanceTo(expectedMax).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            bBox.Min.DistanceTo(expectedMin).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            bBox.Max.DistanceTo(expectedMax).Should().BeLessThan(GeoSharpMath.MaxTolerance);
         }
 
         [Fact]

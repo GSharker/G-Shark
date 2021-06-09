@@ -83,7 +83,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             closestPt.IsEqualRoundingDecimal(new Vector3 {3.153846, 1.230769, 3}, 6).Should().BeTrue();
-            System.Math.Abs(distance).Should().BeApproximately(expectedDistance, GeoSharpMath.MAX_TOLERANCE);
+            System.Math.Abs(distance).Should().BeApproximately(expectedDistance, GeoSharpMath.MaxTolerance);
         }
 
         [Fact]

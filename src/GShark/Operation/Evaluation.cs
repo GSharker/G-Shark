@@ -78,8 +78,8 @@ namespace GShark.Operation
         public static double OneBasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             // Special case at boundaries.
-            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MAX_TOLERANCE) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MAX_TOLERANCE)
+            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MaxTolerance) ||
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MaxTolerance)
             {
                 return 1.0;
             }
@@ -236,7 +236,7 @@ namespace GShark.Operation
             int reqKnotIndex = -1;
             foreach (double i in knotMults.Keys)
             {
-                if (Math.Abs(t - i) < GeoSharpMath.EPSILON)
+                if (Math.Abs(t - i) < GeoSharpMath.Epsilon)
                 {
                     reqKnotIndex = knotMults.GetValueOrDefault(i);
                     break;
@@ -253,12 +253,12 @@ namespace GShark.Operation
             NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
             int span = knots.Span(degree, t);
 
-            if (Math.Abs(t - knots[0]) < GeoSharpMath.EPSILON)
+            if (Math.Abs(t - knots[0]) < GeoSharpMath.Epsilon)
             {
                 span = 0;
             }
 
-            if (Math.Abs(t - knots[^1]) < GeoSharpMath.EPSILON)
+            if (Math.Abs(t - knots[^1]) < GeoSharpMath.Epsilon)
             {
                 span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
             }

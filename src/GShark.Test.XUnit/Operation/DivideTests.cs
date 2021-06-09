@@ -46,13 +46,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = curves[0].Knots.Count - (degree + 1);
-                curves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAX_TOLERANCE);
+                curves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MaxTolerance);
             }
 
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = 0;
-                curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAX_TOLERANCE);
+                curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MaxTolerance);
             }
         }
 
@@ -70,7 +70,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)
-                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MinTolerance);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)
-                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MinTolerance);
         }
     }
 }

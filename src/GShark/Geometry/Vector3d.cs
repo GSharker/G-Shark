@@ -3,6 +3,7 @@ using System;
 
 namespace GShark.Geometry
 {
+    //ToDo Add Operator overload for Vector3d * 4x4 Matrix (represent vector as x,y,z,0 column see https://www.euclideanspace.com/maths/geometry/affine/matrix4x4/index.htm)
     /// <summary>
     /// Defines a Vector in Euclidean space with coordinates X, Y, and Z.
     /// Referenced from https://github.com/mcneel/rhinocommon/blob/master/dotnet/opennurbs/opennurbs_point.cs
@@ -33,12 +34,12 @@ namespace GShark.Geometry
         public Vector3d(Point3d point) : this(point.X, point.Y, point.Z)
         {
         }
-        
+
         /// <summary>
         /// Initializes a new instance of a vector, copying the three components from a vector.
         /// </summary>
         /// <param name="vector">A double-precision vector.</param>
-        public Vector3d(Vector3d vector3d) : this(vector3d.X, vector3d.Y, vector3d.Z)
+        public Vector3d(Vector3d vector) : this(vector.X, vector.Y, vector.Z)
         {
         }
 
@@ -65,7 +66,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of the vector with each component set to GeoSharpMath.UNSET_VALUE.
         /// </summary>
-        public static Vector3d Unset => new Vector3d(GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE);
+        public static Vector3d Unset => new Vector3d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a vector by a number, having the effect of scaling it.
@@ -206,7 +207,7 @@ namespace GShark.Geometry
         {
             if (!a.Unitize() || !b.Unitize())
             {
-                return GeoSharpMath.UNSET_VALUE;
+                return GeoSharpMath.UnsetValue;
             }
 
             //compute dot product
@@ -235,42 +236,43 @@ namespace GShark.Geometry
         /// <returns>On success, the angle (in radians) between a and b as projected onto the plane; GeoSharpMath.UNSET_VALUE on failure.</returns>
         public static double VectorAngle(Vector3d a, Vector3d b, Plane plane)
         {
-            { // Project vectors onto plane.
-                Point3d pA = plane.Origin + a;
-                Point3d pB = plane.Origin + b;
+            throw new NotImplementedException();
+            //{ // Project vectors onto plane.
+            //    Point3d pA = plane.Origin + a;
+            //    Point3d pB = plane.Origin + b;
 
-                pA = plane.ClosestPoint(pA);
-                pB = plane.ClosestPoint(pB);
+            //    pA = plane.ClosestPoint(pA);
+            //    pB = plane.ClosestPoint(pB);
 
-                a = pA - plane.Origin;
-                b = pB - plane.Origin;
-            }
+            //    a = pA - plane.Origin;
+            //    b = pB - plane.Origin;
+            //}
 
-            // Abort on invalid cases.
-            if (!a.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
-            if (!b.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
+            //// Abort on invalid cases.
+            //if (!a.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
+            //if (!b.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
 
-            double dot = a * b;
-            { // Limit dot product to valid range.
-                if (dot >= 1.0)
-                { dot = 1.0; }
-                else if (dot < -1.0)
-                { dot = -1.0; }
-            }
+            //double dot = a * b;
+            //{ // Limit dot product to valid range.
+            //    if (dot >= 1.0)
+            //    { dot = 1.0; }
+            //    else if (dot < -1.0)
+            //    { dot = -1.0; }
+            //}
 
-            double angle = Math.Acos(dot);
-            { // Special case (anti)parallel vectors.
-                if (Math.Abs(angle) < 1e-64) { return 0.0; }
-                if (Math.Abs(angle - Math.PI) < 1e-64) { return Math.PI; }
-            }
+            //double angle = Math.Acos(dot);
+            //{ // Special case (anti)parallel vectors.
+            //    if (Math.Abs(angle) < 1e-64) { return 0.0; }
+            //    if (Math.Abs(angle - Math.PI) < 1e-64) { return Math.PI; }
+            //}
 
-            Vector3d cross = Vector3d.CrossProduct(a, b);
-            if (plane.ZAxis.IsParallelTo(cross) == +1)
-            {
-                return angle;
-            }
+            //Vector3d cross = Vector3d.CrossProduct(a, b);
+            //if (plane.ZAxis.IsParallelTo(cross) == +1)
+            //{
+            //    return angle;
+            //}
 
-            return 2.0 * Math.PI - angle;
+            //return 2.0 * Math.PI - angle;
         }
 
         /// <summary>
@@ -440,19 +442,9 @@ namespace GShark.Geometry
                 // checks for invalid values and returns 0.0 if there are any
                 double length = GetLengthHelper(_x, _y, _z);
                 //ToDo Rhino implements this check against SqrtEpsilon. Is it necessary?
-                return Math.Abs(length - 1.0) <= GeoSharpMath.EPSILON;
+                return Math.Abs(length - 1.0) <= GeoSharpMath.Epsilon;
             }
         }
-
-        /// <summary>
-        /// Uses GeoSharpMath.ZeroTolerance for IsTiny calculation.
-        /// </summary>
-        /// <returns>true if vector is very small, otherwise false.</returns>
-        public bool IsTiny()
-        {
-            return IsTiny(RhinoMath.ZeroTolerance);
-        }
-
 
         /// <summary>
         /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
@@ -478,19 +470,6 @@ namespace GShark.Geometry
         public bool Equals(Vector3d vector)
         {
             return this == vector;
-        }
-
-        /// <summary>
-        /// Check that all values in other are within epsilon of the values in this
-        /// </summary>
-        /// <param name="other"></param>
-        /// <param name="epsilon"></param>
-        /// <returns></returns>
-        public bool EpsilonEquals(Vector3d other, double epsilon)
-        {
-            return RhinoMath.EpsilonEquals(_x, other._x, epsilon) &&
-                   RhinoMath.EpsilonEquals(_y, other._y, epsilon) &&
-                   RhinoMath.EpsilonEquals(_z, other._z, epsilon);
         }
 
         /// <summary>
@@ -578,8 +557,7 @@ namespace GShark.Geometry
         /// <returns>true on success or false on failure.</returns>
         public bool Unitize()
         {
-            bool rc = IsValid && UnsafeNativeMethods.ON_3dVector_Unitize(ref this);
-            return rc;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -590,13 +568,14 @@ namespace GShark.Geometry
         /// <param name="transformation">Transformation matrix to apply.</param>
         public void Transform(Transform transformation)
         {
-            double xx = transformation.m_00 * _x + transformation.m_01 * _y + transformation.m_02 * _z;
-            double yy = transformation.m_10 * _x + transformation.m_11 * _y + transformation.m_12 * _z;
-            double zz = transformation.m_20 * _x + transformation.m_21 * _y + transformation.m_22 * _z;
+            throw new NotImplementedException();
+            //double xx = transformation.m_00 * _x + transformation.m_01 * _y + transformation.m_02 * _z;
+            //double yy = transformation.m_10 * _x + transformation.m_11 * _y + transformation.m_12 * _z;
+            //double zz = transformation.m_20 * _x + transformation.m_21 * _y + transformation.m_22 * _z;
 
-            _x = xx;
-            _y = yy;
-            _z = zz;
+            //_x = xx;
+            //_y = yy;
+            //_z = zz;
         }
 
         /// <summary>
@@ -607,12 +586,7 @@ namespace GShark.Geometry
         /// <returns>true on success, false on failure.</returns>
         public bool Rotate(double angleRadians, Vector3d rotationAxis)
         {
-            if (RhinoMath.IsValidDouble(angleRadians) && rotationAxis.IsValid)
-            {
-                UnsafeNativeMethods.ON_3dVector_Rotate(ref this, angleRadians, rotationAxis);
-                return true;
-            }
-            return false;
+            throw new NotImplementedException();
         }
 
         ///<summary>
@@ -634,26 +608,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether this vector is parallel to another vector, within one degree (within Pi / 180). 
-        /// </summary>
-        /// <param name="other">Vector to use for comparison.</param>
-        /// <returns>
-        /// Parallel indicator:
-        /// <para>+1 = both vectors are parallel</para>
-        /// <para> 0 = vectors are not parallel, or at least one of the vectors is zero</para>
-        /// <para>-1 = vectors are anti-parallel.</para>
-        /// </returns>
-        /// <example>
-        /// <code source='examples\vbnet\ex_intersectlines.vb' lang='vbnet'/>
-        /// <code source='examples\cs\ex_intersectlines.cs' lang='cs'/>
-        /// <code source='examples\py\ex_intersectlines.py' lang='py'/>
-        /// </example>
-        public int IsParallelTo(Vector3d other)
-        {
-            return IsParallelTo(other, RhinoMath.DefaultAngleTolerance);
-        }
-
-        /// <summary>
         /// Determines whether this vector is parallel to another vector, within a provided tolerance. 
         /// </summary>
         /// <param name="other">Vector to use for comparison.</param>
@@ -664,20 +618,9 @@ namespace GShark.Geometry
         /// <para>0 = vectors are not parallel or at least one of the vectors is zero.</para>
         /// <para>-1 = vectors are anti-parallel.</para>
         /// </returns>
-        public int IsParallelTo(Vector3d other, double angleTolerance)
+        public int IsParallelTo(Vector3d other, double angleTolerance = GeoSharpMath.AngleTolerance)
         {
-            int rc = UnsafeNativeMethods.ON_3dVector_IsParallelTo(this, other, angleTolerance);
-            return rc;
-        }
-
-        ///<summary>
-        /// Test to see whether this vector is perpendicular to within one degree of another one. 
-        ///</summary>
-        /// <param name="other">Vector to compare to.</param>
-        ///<returns>true if both vectors are perpendicular, false if otherwise.</returns>
-        public bool IsPerpendicularTo(Vector3d other)
-        {
-            return IsPerpendicularTo(other, RhinoMath.DefaultAngleTolerance);
+            throw new NotImplementedException();
         }
 
         ///<summary>
@@ -686,18 +629,18 @@ namespace GShark.Geometry
         /// <param name="other">Vector to use for comparison.</param>
         /// <param name="angleTolerance">Angle tolerance (in radians).</param>
         ///<returns>true if vectors form Pi-radians (90-degree) angles with each other; otherwise false.</returns>
-        public bool IsPerpendicularTo(Vector3d other, double angleTolerance)
+        public bool IsPerpendicularTo(Vector3d other, double angleTolerance = GeoSharpMath.AngleTolerance)
         {
-            bool rc = false;
+            bool result = false;
             double ll = Length * other.Length;
             if (ll > 0.0)
             {
                 if (Math.Abs((_x * other._x + _y * other._y + _z * other._z) / ll) <= Math.Sin(angleTolerance))
                 {
-                    rc = true;
+                    result = true;
                 }
             }
-            return rc;
+            return result;
         }
 
         ///<summary>
@@ -708,13 +651,13 @@ namespace GShark.Geometry
         ///<returns>true on success, false if input vector is zero or invalid.</returns>
         public bool PerpendicularTo(Vector3d other)
         {
-            return UnsafeNativeMethods.ON_3dVector_PerpendicularTo(ref this, other);
+            throw new NotImplementedException();
         }
         internal static double GetLengthHelper(double dx, double dy, double dz)
         {
-            if (!RhinoMath.IsValidDouble(dx) ||
-                !RhinoMath.IsValidDouble(dy) ||
-                !RhinoMath.IsValidDouble(dz))
+            if (!GeoSharpMath.IsValidDouble(dx) ||
+                !GeoSharpMath.IsValidDouble(dy) ||
+                !GeoSharpMath.IsValidDouble(dz))
             {
                 return 0.0;
             }
@@ -748,7 +691,7 @@ namespace GShark.Geometry
                 fz *= len;
                 len = fx * Math.Sqrt(1.0 + fy * fy + fz * fz);
             }
-            else if (fx > 0.0 && RhinoMath.IsValidDouble(fx))
+            else if (fx > 0.0 && GeoSharpMath.IsValidDouble(fx))
             {
                 len = fx;
             }

@@ -298,7 +298,7 @@ namespace GShark.Geometry
             for (int i = 1; i < vertices.Count; i++)
             {
                 coincidenceFlag[i] = 0;
-                if (vertices[i] == null || vertices[i - 1].DistanceTo(vertices[i]) <= GeoSharpMath.MAX_TOLERANCE)
+                if (vertices[i] == null || vertices[i - 1].DistanceTo(vertices[i]) <= GeoSharpMath.MaxTolerance)
                 {
                     coincidenceFlag[i] = 1;
                 }

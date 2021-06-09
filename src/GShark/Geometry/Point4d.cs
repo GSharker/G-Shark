@@ -255,6 +255,6 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of a point with all coordinates set as RhinoMath.UnsetValue.
         /// </summary>
-        public static Point4d Unset => new Point4d(GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE);
+        public static Point4d Unset => new Point4d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
     }
 }

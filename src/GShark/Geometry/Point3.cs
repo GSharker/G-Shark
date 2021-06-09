@@ -7,7 +7,7 @@ namespace GShark.Geometry
     /// <summary>
     /// Point3 represents a geometrical point in 3-dimensional space, defined by three coordinates xyz.
     /// </summary>
-    public struct Point3 : IVector3, ITransformable<Point3>, IComparable<Point3>, IEquatable<Point3>
+    public struct Point3 : ITransformable<Point3>, IComparable<Point3>, IEquatable<Point3>
     {
         /// <summary>
         /// Creates an instance of a point by three coordinates.

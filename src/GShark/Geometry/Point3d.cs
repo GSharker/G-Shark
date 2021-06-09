@@ -56,7 +56,7 @@ namespace GShark.Geometry
         /// <param name="point">A point.</param>
         public Point3d(Point4d point)
         {
-            double w = (Math.Abs(point.W - 1.0) > GeoSharpMath.EPSILON && point.W != 0.0) ? 1.0 / point.W : 1.0;
+            double w = (Math.Abs(point.W - 1.0) > GeoSharpMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
             
             _x = point.X * w;
             _y = point.Y * w;
@@ -71,7 +71,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of a point at location RhinoMath.UnsetValue,RhinoMath.UnsetValue,RhinoMath.UnsetValue.
         /// </summary>
-        public static Point3d Unset => new Point3d(GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE);
+        public static Point3d Unset => new Point3d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a <see cref="Point3d"/> by a number.
@@ -191,8 +191,7 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3d a, Point3d b)
         {
-            //ToDo Embed Epsilon comparison here instead of implementing a separate IEpsilonEquatable?
-            return (a._x == b._x && a._y == b._y && a._z == b._z);
+             return (a._x == b._x && a._y == b._y && a._z == b._z);
         }
 
         /// <summary>
@@ -365,7 +364,7 @@ namespace GShark.Geometry
                     minimumCoordinate = System.Math.Abs(_z);
                 }
                 else
-                    minimumCoordinate = GeoSharpMath.UNSET_VALUE;
+                    minimumCoordinate = GeoSharpMath.UnsetValue;
                 return minimumCoordinate;
             }
         }
@@ -398,7 +397,7 @@ namespace GShark.Geometry
                     maximumCoordinate = System.Math.Abs(_z);
                 }
                 else
-                    maximumCoordinate = GeoSharpMath.UNSET_VALUE;
+                    maximumCoordinate = GeoSharpMath.UnsetValue;
                 return maximumCoordinate;
             }
         }

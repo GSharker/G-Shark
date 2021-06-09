@@ -9,7 +9,7 @@ namespace GShark.Geometry
     /// The fourth value (w) is considered the weight of the point.
     /// ControlPoint could be also identify as a control point.
     /// </summary>
-    public struct ControlPoint : IVector3, IEquatable<ControlPoint>
+    public struct ControlPoint : IEquatable<ControlPoint>
     {
         /// <summary>
         /// Constructs a new instance of a control point by coordinates.
@@ -23,7 +23,7 @@ namespace GShark.Geometry
             X = x;
             Y = y;
             Z = z;
-            W = Math.Abs(w - 1.0) < GeoSharpMath.MAX_TOLERANCE || w == 0.0 ? 1.0 : w;
+            W = Math.Abs(w - 1.0) < GeoSharpMath.MaxTolerance || w == 0.0 ? 1.0 : w;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace GShark.Geometry
             X = point.X;
             Y = point.Y;
             Z = point.Z;
-            W = Math.Abs(weight - 1.0) < GeoSharpMath.MAX_TOLERANCE || weight == 0.0 ? 1.0 : weight;
+            W = Math.Abs(weight - 1.0) < GeoSharpMath.MaxTolerance || weight == 0.0 ? 1.0 : weight;
         }
 
         /// <summary>
@@ -66,10 +66,10 @@ namespace GShark.Geometry
         /// <returns>True if the other control point matches.</returns>
         public bool Equals(ControlPoint other)
         {
-            return Math.Abs(other.X - X) < GeoSharpMath.MAX_TOLERANCE &&
-                   Math.Abs(other.Y - Y) < GeoSharpMath.MAX_TOLERANCE &&
-                   Math.Abs(other.Z - Z) < GeoSharpMath.MAX_TOLERANCE &&
-                   Math.Abs(other.W - W) < GeoSharpMath.MAX_TOLERANCE;
+            return Math.Abs(other.X - X) < GeoSharpMath.MaxTolerance &&
+                   Math.Abs(other.Y - Y) < GeoSharpMath.MaxTolerance &&
+                   Math.Abs(other.Z - Z) < GeoSharpMath.MaxTolerance &&
+                   Math.Abs(other.W - W) < GeoSharpMath.MaxTolerance;
         }
     }
 }

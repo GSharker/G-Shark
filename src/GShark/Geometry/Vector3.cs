@@ -36,7 +36,7 @@ namespace GShark.Geometry
         /// Gets the value of a point at location GeoSharpMath.UNSET_VALUE,GeoSharpMath.UNSET_VALUE,GeoSharpMath.UNSET_VALUE.
         /// </summary>
         public static Vector3 Unset => new Vector3
-            {GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE, GeoSharpMath.UNSET_VALUE};
+            {GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue};
 
         /// <summary>
         /// Gets the value of the vector with components 1,0,0.
@@ -94,7 +94,7 @@ namespace GShark.Geometry
             return (GeoSharpMath.IsValidDouble(this[0]) &&
                     GeoSharpMath.IsValidDouble(this[1]) &&
                     GeoSharpMath.IsValidDouble(this[2]) &&
-                    (Math.Abs(Length() - 1.0) <= GeoSharpMath.EPSILON));
+                    (Math.Abs(Length() - 1.0) <= GeoSharpMath.Epsilon));
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace GShark.Geometry
         /// <returns>True if all the component are less than Epsilon.</returns>
         public bool IsZero()
         {
-            return this.All(value => Math.Abs(value) < GeoSharpMath.EPSILON);
+            return this.All(value => Math.Abs(value) < GeoSharpMath.Epsilon);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace GShark.Geometry
         public bool IsPerpendicularTo(Vector3 other, double tolerance = -1)
         {
             bool result = false;
-            double toleranceSet = (tolerance < 0) ? GeoSharpMath.ANGLE_TOLERANCE : tolerance;
+            double toleranceSet = (tolerance < 0) ? GeoSharpMath.AngleTolerance : tolerance;
             double length = this.Length() * other.Length();
             double dotUnitize = Vector3.Dot(this, other) / length;
             if (length > 0 && dotUnitize <= Math.Sin(toleranceSet)) result = true;
@@ -175,7 +175,7 @@ namespace GShark.Geometry
         public int IsParallelTo(Vector3 other, double tolerance = -1)
         {
             int result = 0;
-            double toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.ANGLE_TOLERANCE) : Math.Cos(tolerance);
+            double toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharpMath.AngleTolerance) : Math.Cos(tolerance);
             double length = this.Length() * other.Length();
             double dotUnitize = Vector3.Dot(this, other) / length;
             if (!(length > 0)) return result;
@@ -533,7 +533,7 @@ namespace GShark.Geometry
             }
 
             return v1.Select((val, i) => Math.Abs(val - v2[i]))
-                .All(val => val < GeoSharpMath.EPSILON);
+                .All(val => val < GeoSharpMath.Epsilon);
         }
 
         /// <summary>

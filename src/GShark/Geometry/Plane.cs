@@ -223,13 +223,13 @@ namespace GShark.Geometry
                 throw new Exception("The points don't span a plane.");
             }
 
-            if (Math.Abs(determinantMax - determinantX) < GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(determinantMax - determinantX) < GeoSharpMath.MaxTolerance)
             {
                 normal[0] = determinantX;
                 normal[1] = xz * yz - xy * zz;
                 normal[2] = xy * yz - xz * yy;
             }
-            else if (Math.Abs(determinantMax - determinantY) < GeoSharpMath.MAX_TOLERANCE)
+            else if (Math.Abs(determinantMax - determinantY) < GeoSharpMath.MaxTolerance)
             {
                 normal[0] = xz * yz - xy * zz;
                 normal[1] = determinantY;
@@ -277,10 +277,10 @@ namespace GShark.Geometry
         {
             Vector3 origin = Origin * transformation;
 
-            bool check = (Math.Abs(transformation[3][0]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(transformation[3][1]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(transformation[3][2]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(1.0 - transformation[3][3]) <= GeoSharpMath.MAX_TOLERANCE);
+            bool check = (Math.Abs(transformation[3][0]) <= GeoSharpMath.MaxTolerance &&
+                          Math.Abs(transformation[3][1]) <= GeoSharpMath.MaxTolerance &&
+                          Math.Abs(transformation[3][2]) <= GeoSharpMath.MaxTolerance &&
+                          Math.Abs(1.0 - transformation[3][3]) <= GeoSharpMath.MaxTolerance);
 
             Vector3 xDir = check ? ((Origin + XAxis) * transformation) - origin : XAxis * transformation;
             Vector3 yDir = check ? ((Origin + YAxis) * transformation) - origin : YAxis * transformation;

@@ -91,7 +91,7 @@ namespace GShark.Test.XUnit.Geometry
             double length = _polyline.Length();
 
             // Assert
-            length.Should().BeApproximately(expectedLength, GeoSharpMath.MAX_TOLERANCE);
+            length.Should().BeApproximately(expectedLength, GeoSharpMath.MaxTolerance);
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             segments.Length.Should().Be(expectedNumberOfSegments);
             segments[1].Length.Should().Be(segments[2].Length)
-                .And.BeApproximately(expectedSegmentLength, GeoSharpMath.MAX_TOLERANCE);
+                .And.BeApproximately(expectedSegmentLength, GeoSharpMath.MaxTolerance);
         }
 
         [Theory]
@@ -140,7 +140,7 @@ namespace GShark.Test.XUnit.Geometry
             double param = _polyline.ClosestParameter(closestPt);
 
             // Assert
-            param.Should().BeApproximately(expextedParam, GeoSharpMath.MAX_TOLERANCE);
+            param.Should().BeApproximately(expextedParam, GeoSharpMath.MaxTolerance);
         }
 
         [Theory]
@@ -181,7 +181,7 @@ namespace GShark.Test.XUnit.Geometry
             Line segment = _polyline.SegmentAt(index);
 
             // Assert
-            segment.Length.Should().BeApproximately(segmentLength, GeoSharpMath.MAX_TOLERANCE);
+            segment.Length.Should().BeApproximately(segmentLength, GeoSharpMath.MaxTolerance);
         }
 
         [Theory]
@@ -210,7 +210,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             double[] lengths = _polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
-            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MAX_TOLERANCE));
+            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MaxTolerance));
         }
 
         [Fact]

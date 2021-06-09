@@ -234,7 +234,7 @@ namespace GShark.Geometry
             double twoPi = 2.0 * Math.PI;
 
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharpMath.MAX_TOLERANCE && Math.Abs(v) < GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(u) < GeoSharpMath.MaxTolerance && Math.Abs(v) < GeoSharpMath.MaxTolerance)
             {
                 return PointAt(0.0);
             }
@@ -404,8 +404,8 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MAX_TOLERANCE &&
-                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MAX_TOLERANCE &&
+            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MaxTolerance &&
+                   Math.Abs(Angle - other.Angle) < GeoSharpMath.MaxTolerance &&
                    Plane == other.Plane;
         }
 
