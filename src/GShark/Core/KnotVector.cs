@@ -26,7 +26,17 @@ namespace GShark.Core
         /// <param name="clamped">If the curve is clamped or not.</param>
         public KnotVector(int degree, int numberOfControlPts, bool clamped = true)
         {
-            Create(degree, numberOfControlPts, clamped);
+            if (degree < 1 || numberOfControlPts < 1)
+            {
+                throw new Exception("Input values must be positive and different than zero.");
+            }
+
+            if (numberOfControlPts < degree)
+            {
+                throw new Exception("Degree must be less than the number of control point.");
+            }
+
+            CreateUniformNonPeriodicKnotVector(degree, numberOfControlPts, clamped);
         }
 
         /// <summary>
@@ -67,23 +77,34 @@ namespace GShark.Core
                 return false;
             }
 
-            double rep = this.First();
             for (int i = 0; i < Count; i++)
             {
-                // Verb doesn't allow for periodic knots, these two ifs should be removed.
-                if (i < degree + 1)
+                if (!GeoSharpMath.IsValidDouble(this[i]))
                 {
-                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
+            }
 
-                if (i > Count - degree - 1 && i < Count)
+            bool periodic = this[0] < this[1] && this[1] < this[2];
+            double rep = this[0];
+            for (int i = 0; i < Count; i++)
+            {
+                if (!periodic)
                 {
-                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                    if (i < degree + 1)
                     {
-                        return false;
+                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (i > Count - degree - 1 && i < Count)
+                    {
+                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        {
+                            return false;
+                        }
                     }
                 }
 
@@ -136,7 +157,7 @@ namespace GShark.Core
 
             int low = degree;
             int high = n + 1;
-            int mid = (int) Math.Floor((double)(low + high) / 2);
+            int mid = (int)Math.Floor((double)(low + high) / 2);
 
             while (parameter < this[mid] || parameter >= this[mid + 1])
             {
@@ -149,7 +170,7 @@ namespace GShark.Core
                     low = mid;
                 }
 
-                mid = (int) Math.Floor((double)(low + high) / 2);
+                mid = (int)Math.Floor((double)(low + high) / 2);
             }
 
             return mid;
@@ -170,7 +191,7 @@ namespace GShark.Core
             int index = knotIndex;
             double knot = this[knotIndex];
             int multiplicity = 1;
-            while (index < Count-1)
+            while (index < Count - 1)
             {
                 if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
                 {
@@ -190,7 +211,7 @@ namespace GShark.Core
         /// <returns>Dictionary where the key is the knot and the value the multiplicity.</returns>
         public Dictionary<double, int> Multiplicities()
         {
-            Dictionary<double, int> multiplicities = new Dictionary<double, int> {{this[0], 0}};
+            Dictionary<double, int> multiplicities = new Dictionary<double, int> { { this[0], 0 } };
             double tempKnot = this[0];
 
             foreach (double knot in this)
@@ -208,19 +229,14 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Generates an equally spaced knot vector.
+        /// Generates an equally spaced knot vector.<br/>
         /// Clamp curve is tangent to the first and the last legs at the first and last control points.
         /// </summary>
         /// <param name="degree">Degree.</param>
         /// <param name="numberOfControlPts">Number of control points.</param>
-        /// <param name="clamped">Flag to choose from clamped or un-clamped knot vector options, default true.</param>
-        public void Create(int degree, int numberOfControlPts, bool clamped = true)
+        /// <param name="clamped">Option to choose from clamped or un-clamped knot vector options, default true.</param>
+        private void CreateUniformNonPeriodicKnotVector(int degree, int numberOfControlPts, bool clamped = true)
         {
-            if (degree <= 0 || numberOfControlPts <= 0)
-            {
-                throw new Exception("Input values must be positive and different than zero.");
-            }
-
             // Number of repetitions at the start and end of the array.
             int numOfRepeat = degree;
             // Number of knots in the middle.
@@ -234,12 +250,51 @@ namespace GShark.Core
                 numOfSegments = degree + numberOfControlPts - 1;
             }
 
-            List<double> knotVector = new List<double>();
-            knotVector.AddRange(Sets.RepeatData(0.0, numOfRepeat));
-            knotVector.AddRange(Sets.LinearSpace(new Interval(0.0,1.0), numOfSegments+2));
-            knotVector.AddRange(Sets.RepeatData(1.0, numOfRepeat));
+            this.AddRange(Sets.RepeatData(0.0, numOfRepeat));
+            this.AddRange(Sets.LinearSpace(new Interval(0.0, 1.0), numOfSegments + 2));
+            this.AddRange(Sets.RepeatData(1.0, numOfRepeat));
+        }
 
-            AddRange(knotVector);
+        /// <summary>
+        /// Generates a periodic uniform spaced knot vectors.
+        /// </summary>
+        /// <param name="degree">Degree.</param>
+        /// <param name="numberOfControlPts">Number of control points.</param>
+        public static KnotVector CreateUniformPeriodicKnotVector(int degree, int numberOfControlPts)
+        {
+            if (numberOfControlPts < 2)
+            {
+                throw new Exception("Number of control points must be bigger than two.");
+            }
+
+            if (degree < 2)
+            {
+                throw new Exception("Degree must be equal or bigger than two.");
+            }
+
+            if (numberOfControlPts < degree)
+            {
+                throw new Exception("Degree must be less than the number of points.");
+            }
+
+            double[] knot = new double[degree + numberOfControlPts + 1];
+
+            double k = 0.0;
+            int i, knotCount = numberOfControlPts + degree + 1;
+
+            double delta = 1.0 / (numberOfControlPts - degree);
+
+            for (i = degree, k = 0.0; i < knotCount; i++, k += delta)
+            {
+                knot[i] = k;
+            }
+
+            for (i = degree - 1, k = -delta; i >= 0; i--, k -= delta)
+            {
+                knot[i] = k;
+            }
+
+            return knot.ToKnot();
         }
 
         /// <summary>
@@ -270,10 +325,10 @@ namespace GShark.Core
         {
             double firstKnot = knots[0];
 
-            KnotVector reversedKnots = new KnotVector {firstKnot};
+            KnotVector reversedKnots = new KnotVector { firstKnot };
             for (int i = 1; i < knots.Count; i++)
             {
-                reversedKnots.Add(reversedKnots[i-1] + (knots[^i] - knots[knots.Count - i - 1]));
+                reversedKnots.Add(reversedKnots[i - 1] + (knots[^i] - knots[knots.Count - i - 1]));
             }
 
             return reversedKnots;
