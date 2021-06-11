@@ -108,7 +108,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(controlPts, degree);
         }
 
-        public static NurbsCurve ClosedNurbsCurve()
+        public static NurbsCurve PeriodicClosedNurbsCurve()
         {
             int degree = 2;
             List<Vector3> controlPts = new List<Vector3>
@@ -116,9 +116,8 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {4.5,2.5,2.5},
                 new Vector3 {5,5,5},
                 new Vector3 {0,5,0},
-                new Vector3 {4.5,2.5,2.5}
             };
-            return NurbsCurve.CloseCurve(controlPts, degree);
+            return new NurbsCurve(controlPts, degree).Close();
         }
 
         public static NurbsCurve NurbsCurveWithStartingAndEndPointOverlapping()
@@ -131,7 +130,6 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {0,5,0},
                 new Vector3 {4.5,2.5,2.5}
             };
-
             return new NurbsCurve(controlPts, degree);
         }
     }

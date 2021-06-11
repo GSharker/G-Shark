@@ -132,8 +132,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Checks if a NURBS curve is closed.<br/>
-        /// A curve is closed if the knots is periodic and the first points are coincident with the last points.<br/>
-        /// The number of overlapping points is defined by the the curve degree.
+        /// A curve is closed if the first point and the last are the same or if it is periodic, where the number of overlapping points is defined by the the curve degree.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed()
@@ -151,7 +150,10 @@ namespace GShark.Geometry
             }
             else
             {
-                return false;
+                if (ControlPoints[0].DistanceTo(ControlPoints[^1]) > 0)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -171,17 +173,17 @@ namespace GShark.Geometry
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A closed NURBS curve.</returns>
         public NurbsCurve Close()
         {
+            // Wrapping control points
             List<Vector3> copyCtrPts = new List<Vector3>(ControlPoints);
             for (int i = 0; i < Degree; i++)
             {
-                ControlPoints.Add(ControlPoints[i]);
+                copyCtrPts.Add(copyCtrPts[i]);
             }
 
             KnotVector knots = KnotVector.CreateUniformPeriodicKnotVector(Degree, copyCtrPts.Count);
-
             return new NurbsCurve(Degree, knots, copyCtrPts);
         }
 

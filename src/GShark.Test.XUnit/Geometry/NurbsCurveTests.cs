@@ -62,7 +62,6 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve nurbsCurve = new NurbsCurve(controlPts, degree).Close();
             Vector3 ptAt00 = nurbsCurve.PointAt(0.75);
             Vector3 ptAt01 = nurbsCurve.PointAt(1);
-            ////var b = nurbsCurve.BoundingBox;
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
@@ -78,8 +77,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Checks_If_A_NurbsCurve_Is_Closed()
         {
             // Assert
-            NurbsCurveCollection.ClosedNurbsCurve().IsClosed().Should().BeTrue();
-            NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeFalse();
+            NurbsCurveCollection.PeriodicClosedNurbsCurve().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
             NurbsCurveCollection.NurbsCurveExample().IsClosed().Should().BeFalse();
         }
 
