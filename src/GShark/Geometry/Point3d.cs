@@ -420,7 +420,9 @@ namespace GShark.Geometry
         /// <returns></returns>
         public bool EpsilonEquals(Point3d other, double epsilon)
         {
-            throw new NotImplementedException();
+            return Math.Abs(_x - other.X) <= GeoSharpMath.MaxTolerance &&
+                   Math.Abs(_y - other.Y) <= GeoSharpMath.MaxTolerance &&
+                   Math.Abs(_z - other.Z) <= GeoSharpMath.MaxTolerance;
         }
 
         /// <summary>
@@ -484,7 +486,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Interpolate between two points.
+        /// Interpolate between two points returning a new point at the given interpolation parameter.
         /// </summary>
         /// <param name="pA">First point.</param>
         /// <param name="pB">Second point.</param>
@@ -492,11 +494,28 @@ namespace GShark.Geometry
         /// If t=0 then this point is set to pA. 
         /// If t=1 then this point is set to pB. 
         /// Values of t in between 0.0 and 1.0 result in points between pA and pB.</param>
-        public void Interpolate(Point3d pA, Point3d pB, double t)
+        public static Point3d Interpolate(Point3d pA, Point3d pB, double t)
         {
-            _x = pA._x + t * (pB._x - pA._x);
-            _y = pA._y + t * (pB._y - pA._y);
-            _z = pA._z + t * (pB._z - pA._z);
+            if (t < 0 || t > 1) throw new ArgumentException($"{nameof(t)} must be between 0 and 1.");
+            if (t == 0) return pA;
+            if (t == 1) return pB;
+            
+            var x = pA.X + t * (pB.X - pA.X);
+            var y = pA.Y + t * (pB.Y - pA.Y);
+            var z = pA.Z + t * (pB.Z - pA.Z);
+
+            return new Point3d(x, y, z);
+        }
+
+        /// <summary>
+        /// Get a point between two points.
+        /// </summary>
+        /// <param name="p1">First point.</param>
+        /// <param name="p2">Second point.</param>
+        /// <returns>Point between first and second point.</returns>
+        public static Point3d PointBetween(Point3d p1, Point3d p2)
+        {
+            return Interpolate(p1, p2, 0.5);
         }
 
         /// <summary>
@@ -521,20 +540,19 @@ namespace GShark.Geometry
         /// </example>
         public double DistanceTo(Point3d other)
         {
-            throw new NotImplementedException();
-            //double d;
-            //if (IsValid && other.IsValid)
-            //{
-            //    double dx = other._x - _x;
-            //    double dy = other._y - _y;
-            //    double dz = other._z - _z;
-            //    d = Vector3d.GetLengthHelper(dx, dy, dz);
-            //}
-            //else
-            //{
-            //    d = 0.0;
-            //}
-            //return d;
+            double d;
+            if (IsValid && other.IsValid)
+            {
+                double dx = other._x - _x;
+                double dy = other._y - _y;
+                double dz = other._z - _z;
+                d = Vector3d.GetLengthHelper(dx, dy, dz);
+            }
+            else
+            {
+                d = 0.0;
+            }
+            return d;
         }
 
         /// <summary>
@@ -577,12 +595,11 @@ namespace GShark.Geometry
         /// <para>Points that fall within this tolerance will be discarded.</para>
         /// .</param>
         /// <returns>An array of points without duplicates; or null on error.</returns>
-        public static Point3d[] CullDuplicates(System.Collections.Generic.IEnumerable<Point3d> points, double tolerance)
+        public static Point3d[] CullDuplicates(IEnumerable<Point3d> points, double tolerance)
         {
             if (null == points)
                 return null;
 
-            // This code duplicates the static function CullDuplicatePoints in tl_brep_intersect.cpp
             var pointList = new List<Point3d>(points);
             int count = pointList.Count;
             if (0 == count)

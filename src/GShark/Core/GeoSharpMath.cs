@@ -61,7 +61,7 @@ namespace GShark.Core
         /// <returns>True if it is valid.</returns>
         public static bool IsValidDouble(double x)
         {
-            return Math.Abs((double) x - (-1.23432101234321E+308)) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
+            return Math.Abs(x - UnsetValue) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
         /// <summary>

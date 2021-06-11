@@ -1,5 +1,6 @@
 ﻿using GShark.Core;
 using System;
+using static GShark.Geometry.Vector3d;
 
 namespace GShark.Geometry
 {
@@ -149,17 +150,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the opposite vector.
-        /// <para>(Provided for languages that do not support operator overloading. You can use the - unary operator otherwise)</para>
-        /// </summary>
-        /// <param name="vector">A vector to negate.</param>
-        /// <returns>A new vector where all components were multiplied by -1.</returns>
-        public static Vector3d Negate(Vector3d vector)
-        {
-            return new Vector3d(-vector._x, -vector._y, -vector._z);
-        }
-
-        /// <summary>
         /// Determines whether two vectors have the same value.
         /// </summary>
         /// <param name="a">A vector.</param>
@@ -202,17 +192,17 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="a">First vector for angle.</param>
         /// <param name="b">Second vector for angle.</param>
-        /// <returns>If the input is valid, the angle (in radians) between a and b; GeoSharpMath.UNSET_VALUE otherwise.</returns>
+        /// <returns>If the input is valid, the angle in radians between a and b; GeoSharpMath.UNSET_VALUE otherwise.</returns>
         public static double VectorAngle(Vector3d a, Vector3d b)
         {
-            if (!a.Unitize() || !b.Unitize())
+            if (!a.IsValid || !b.IsValid)
             {
                 return GeoSharpMath.UnsetValue;
             }
 
             //compute dot product
-            double dot = a._x * b._x + a._y * b._y + a._z * b._z;
-            // remove any "noise"
+            double dot = DotProduct(a.Unitize(), b.Unitize());
+            
             if (dot > 1.0)
             {
                 dot = 1.0;
@@ -472,6 +462,14 @@ namespace GShark.Geometry
             return this == vector;
         }
 
+        public bool EpsilonEquals(Vector3d vector, double epsilon)
+        {
+            return Math.Abs(_x - vector.X) <= epsilon &&
+                   Math.Abs(_y - vector.Y) <= epsilon &&
+                   Math.Abs(_z - vector.Z) <= epsilon;
+
+        }
+
         /// <summary>
         /// Compares this <see cref="Vector3d" /> with another <see cref="Vector3d" />.
         /// <para>Component evaluation priority is first X, then Y, then Z.</para>
@@ -545,48 +543,64 @@ namespace GShark.Geometry
         /// <returns>A string with the current location of the point.</returns>
         public override string ToString()
         {
-            System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.InvariantCulture;
-            return string.Format("{0},{1},{2}",
-              _x.ToString(culture), _y.ToString(culture), _z.ToString(culture));
+            return $"Vector3d: ({_x},{_y},{_z})";
         }
 
         /// <summary>
-        /// Unitizes the vector in place. A unit vector has length 1 unit. 
-        /// <para>An invalid or zero length vector cannot be unitized.</para>
+        /// Unitizes the vector. A unit vector has length 1 unit.
         /// </summary>
-        /// <returns>true on success or false on failure.</returns>
-        public bool Unitize()
+        /// <returns>A new vector unitized.</returns>
+        public Vector3d Unitize()
         {
-            throw new NotImplementedException();
+            if (IsUnitVector)
+            {
+                return this;
+            }
+
+            if (Length <= double.Epsilon)
+            {
+                return Unset;
+            }
+
+            return this * (1 / Length);
         }
 
         /// <summary>
-        /// Transforms the vector in place.
-        /// <para>The transformation matrix acts on the left of the vector; i.e.,</para>
-        /// <para>result = transformation*vector</para>
+        /// Rotates this vector around a given axis.<br/>
+        /// The rotation is computed using Rodrigues Rotation formula.<br/>
+        /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
         /// </summary>
-        /// <param name="transformation">Transformation matrix to apply.</param>
-        public void Transform(Transform transformation)
+        /// <param name="axis">Axis of rotation.</param>
+        /// <param name="angle">Angle of rotation (in radians).</param>
+        /// <returns>Rotated vector.</returns>
+        public Vector3d Rotate(Vector3d axis, double angle)
         {
-            throw new NotImplementedException();
-            //double xx = transformation.m_00 * _x + transformation.m_01 * _y + transformation.m_02 * _z;
-            //double yy = transformation.m_10 * _x + transformation.m_11 * _y + transformation.m_12 * _z;
-            //double zz = transformation.m_20 * _x + transformation.m_21 * _y + transformation.m_22 * _z;
+            double cosAngle = Math.Cos(angle);
+            double sinAngle = Math.Sin(angle);
 
-            //_x = xx;
-            //_y = yy;
-            //_z = zz;
+            GeoSharpMath.KillNoise(ref sinAngle, ref cosAngle);
+
+            Vector3d unitizedAxis = axis.Unitize();
+            Vector3d crossProduct = CrossProduct(unitizedAxis, this);
+            double dotProduct = DotProduct(unitizedAxis, this);
+
+            return (this * cosAngle) + (crossProduct * sinAngle) + (unitizedAxis * dotProduct * (1 - cosAngle));
         }
 
         /// <summary>
-        /// Rotates this vector around a given axis.
+        /// Gets a new amplified vector by unitizing and uniformly scaling this vector by the amplitude value.
         /// </summary>
-        /// <param name="angleRadians">Angle of rotation (in radians).</param>
-        /// <param name="rotationAxis">Axis of rotation.</param>
-        /// <returns>true on success, false on failure.</returns>
-        public bool Rotate(double angleRadians, Vector3d rotationAxis)
+        /// <param name="amplitude">The scalar value to amplify the vector.</param>
+        /// <returns>The amplified vector.</returns>
+        public Vector3d Amplify(double amplitude)
         {
-            throw new NotImplementedException();
+            if (!GeoSharpMath.IsValidDouble(amplitude))
+            {
+                throw new ArgumentException("Invalid double value.");
+            }
+
+            Vector3d unitVector = Unitize();
+            return (unitVector * amplitude);
         }
 
         ///<summary>
@@ -620,7 +634,43 @@ namespace GShark.Geometry
         /// </returns>
         public int IsParallelTo(Vector3d other, double angleTolerance = GeoSharpMath.AngleTolerance)
         {
-            throw new NotImplementedException();
+            int result = 0;
+            double toleranceSet = Math.Cos(angleTolerance);
+            double length = Length * other.Length;
+            double dotUnitize = DotProduct(this, other) / length;
+            if (!(length > 0))
+            {
+                return result;
+            }
+
+            if (dotUnitize >= toleranceSet)
+            {
+                result = 1;
+            }
+
+            if (dotUnitize <= -toleranceSet)
+            {
+                result = -1;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the dot product between two vectors.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <returns>The dot product.</returns>
+        public static double DotProduct(Vector3d vector1, Vector3d vector2)
+        {
+            if (!vector1.IsValid || !vector2.IsValid)
+            {
+                throw new ArgumentException("One of the vectors is invalid.");
+            }
+
+            double result = vector1.X * vector2.X + vector1.Y * vector2.Y + vector1.Z * vector2.Z;
+            return result;
         }
 
         ///<summary>
@@ -643,15 +693,136 @@ namespace GShark.Geometry
             return result;
         }
 
-        ///<summary>
-        /// Sets this vector to be perpendicular to another vector. 
+        /// <summary>
+            /// Computes the perpendicular to another vector.<br/>
+            /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector <br/>
+            /// Result is not unitized.
+            /// </summary>
+            /// <param name="vector">The other vector.</param>
+            /// <returns>The perpendicular vector.</returns>
+        public Vector3d PerpendicularTo(Vector3d vector)
+            {
+                double[] vectorComponents = {vector.X, vector.Y, vector.Z};
+                double[] tempVector = new double[3];
+                int i, j, k;
+                double a, b;
+                if (Math.Abs(vectorComponents[1]) > Math.Abs(vectorComponents[0]))
+                {
+                    if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
+                    {
+                        // |v.z| > |v.y| > |v.x|
+                        i = 2;
+                        j = 1;
+                        k = 0;
+                        a = vectorComponents[2];
+                        b = -vectorComponents[1];
+                    }
+                    else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
+                    {
+                        // |v.y| >= |v.z| >= |v.x|
+                        i = 1;
+                        j = 2;
+                        k = 0;
+                        a = vectorComponents[1];
+                        b = -vectorComponents[2];
+                    }
+                    else
+                    {
+                        // |v.y| > |v.x| > |v.z|
+                        i = 1;
+                        j = 0;
+                        k = 2;
+                        a = vectorComponents[1];
+                        b = -vectorComponents[0];
+                    }
+                }
+                else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
+                {
+                    // |v.z| > |v.x| >= |v.y|
+                    i = 2;
+                    j = 0;
+                    k = 1;
+                    a = vectorComponents[2];
+                    b = -vectorComponents[0];
+                }
+                else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
+                {
+                    // |v.x| >= |v.z| > |v.y|
+                    i = 0;
+                    j = 2;
+                    k = 1;
+                    a = vectorComponents[0];
+                    b = -vectorComponents[2];
+                }
+                else
+                {
+                    // |v.x| >= |v.y| >= |v.z|
+                    i = 0;
+                    j = 1;
+                    k = 2;
+                    a = vectorComponents[0];
+                    b = -vectorComponents[1];
+                }
+
+                tempVector[i] = b;
+                tempVector[j] = a;
+                tempVector[k] = 0.0;
+
+                return new Vector3d(tempVector[0], tempVector[1], tempVector[2]);
+            }
+
+        /// <summary>
+        /// Computes the perpendicular of a vector given three points.<br/>
         /// Result is not unitized.
-        ///</summary>
-        /// <param name="other">Vector to use as guide.</param>
-        ///<returns>true on success, false if input vector is zero or invalid.</returns>
-        public bool PerpendicularTo(Vector3d other)
+        /// </summary>
+        /// <param name="pt1">First point.</param>
+        /// <param name="pt2">Second point.</param>
+        /// <param name="pt3">Third point.</param>
+        /// <returns>The perpendicular vector.</returns>
+        public Vector3d PerpendicularTo(Point3d pt1, Point3d pt2, Point3d pt3)
         {
-            throw new NotImplementedException();
+            Vector3d vec0 = pt3 - pt2;
+            Vector3d vec1 = pt1 - pt3;
+            Vector3d vec2 = pt2 - pt1;
+
+            Vector3d normal0 = CrossProduct(vec1, vec2);
+            if (normal0.Length <= double.Epsilon)
+            {
+                return Unset;
+            }
+            Vector3d normal1 = CrossProduct(vec2, vec0);
+            if (normal1.Length <= double.Epsilon)
+            {
+                return Unset;
+            }
+            Vector3d normal2 = CrossProduct(vec0, vec1);
+            if (normal2.Length <= double.Epsilon)
+            {
+                return Unset;
+            }
+
+            double s0 = 1.0 / vec0.Length;
+            double s1 = 1.0 / vec1.Length;
+            double s2 = 1.0 / vec2.Length;
+
+            // choose normal with smallest total error
+            double e0 = s0 * Math.Abs(DotProduct(normal0, vec0)) +
+                        s1 * Math.Abs(DotProduct(normal0, vec1)) +
+                        s2 * Math.Abs(DotProduct(normal0, vec2));
+
+            double e1 = s0 * Math.Abs(DotProduct(normal1, vec0)) +
+                        s1 * Math.Abs(DotProduct(normal1, vec1)) +
+                        s2 * Math.Abs(DotProduct(normal1, vec2));
+
+            double e2 = s0 * Math.Abs(DotProduct(normal2, vec0)) +
+                        s1 * Math.Abs(DotProduct(normal2, vec1)) +
+                        s2 * Math.Abs(DotProduct(normal2, vec2));
+
+            if (e0 <= e1)
+            {
+                return e0 <= e2 ? normal0 : normal2;
+            }
+            return e1 <= e2 ? normal1 : normal2;
         }
         internal static double GetLengthHelper(double dx, double dy, double dz)
         {
@@ -674,15 +845,7 @@ namespace GShark.Geometry
             {
                 len = fx; fx = fz; fz = len;
             }
-
-            // 15 September 2003 Dale Lear
-            //     For small denormalized doubles (positive but smaller
-            //     than DBL_MIN), some compilers/FPUs set 1.0/fx to +INF.
-            //     Without the ON_DBL_MIN test we end up with
-            //     microscopic vectors that have infinite length!
-            //
-            //     Since this code starts with floats, none of this
-            //     should be necessary, but it doesn't hurt anything.
+            //ToDo Substitute with GSharkMath const.
             const double ON_DBL_MIN = 2.2250738585072014e-308;
             if (fx > ON_DBL_MIN)
             {
