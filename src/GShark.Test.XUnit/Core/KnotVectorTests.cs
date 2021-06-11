@@ -111,6 +111,33 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Theory]
+        [InlineData(new double[] { 0, 0, 0, 1, 1, 1 }, 2, false)]
+        [InlineData(new double[] { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 }, 3, false)]
+        [InlineData(new double[] { -0.666, -0.333, 0, 0.333, 0.666, 1, 1.333, 1.666 }, 2, true)]
+        public void It_Checks_If_Knots_Is_Periodic(double[] knots, int degree, bool expectedResult)
+        {
+            // Act
+            KnotVector knot = new KnotVector(knots);
+
+            // Assert
+            knot.IsKnotVectorPeriodic(degree).Should().Be(expectedResult);
+        }
+
+        [Theory]
+        [InlineData(new double[] { 0, 0, 0, 1, 1, 1 }, 2, true)]
+        [InlineData(new double[] { 0, 0, 1, 1, 1 }, 2, false)]
+        [InlineData(new double[] { 0, 0, 0.5, 1, 1, 1 }, 2, false)]
+        [InlineData(new double[] { 0, 0, 0, 1, 1, 2 }, 2, false)]
+        public void It_Checks_If_Knots_Is_Clamped(double[] knots, int degree, bool expectedResult)
+        {
+            // Act
+            KnotVector knot = new KnotVector(knots);
+
+            // Assert
+            knot.IsKnotVectorClamped(degree).Should().Be(expectedResult);
+        }
+
+        [Theory]
         [InlineData(4, 2.5)]
         [InlineData(3, 1)]
         [InlineData(3, 1.5)]

@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Test.XUnit.Core;
 using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Operation;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,7 +36,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsCurve()
         {
             // Act
-            var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsCurve nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Assert
             nurbsCurve.Should().NotBeNull();
@@ -47,10 +45,49 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_A_Closed_CurveNurbs()
+        {
+            // Arrange
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {4.5,2.5,2.5},
+                new Vector3 {5,5,5},
+                new Vector3 {0,5,0}
+            };
+            Vector3 expectedPt00 = new Vector3 {3.25, 3.28125, 1.875};
+            Vector3 expectedPt01 = new Vector3 { 4.75, 3.75, 3.75 };
+
+            // Act
+            NurbsCurve nurbsCurve = NurbsCurve.CloseCurve(controlPts, degree);
+            Vector3 ptAt00 = nurbsCurve.PointAt(0.75);
+            Vector3 ptAt01 = nurbsCurve.PointAt(1);
+            //var b = nurbsCurve.BoundingBox;
+
+            // Assert
+            nurbsCurve.ControlPoints.Count.Should().Be(5);
+            nurbsCurve.ControlPoints[1].DistanceTo(nurbsCurve.ControlPoints[^1]).Should().BeLessThan(GeoSharpMath.EPSILON);
+            nurbsCurve.Knots.Count.Should().Be(8);
+            nurbsCurve.Domain.T0.Should().Be(0.0);
+            nurbsCurve.Domain.T1.Should().Be(1.0);
+            expectedPt00.DistanceTo(ptAt00).Should().BeLessThan(GeoSharpMath.EPSILON);
+            expectedPt01.DistanceTo(ptAt01).Should().BeLessThan(GeoSharpMath.EPSILON);
+        }
+
+        [Fact]
+        public void It_Checks_If_A_NurbsCurve_Is_Closed()
+        {
+            // Assert
+            NurbsCurveCollection.ClosedNurbsCurve().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeFalse();
+            NurbsCurveCollection.NurbsCurveExample().IsClosed().Should().BeFalse();
+        }
+
+        [Fact]
         public void It_Returns_A_NurbsCurve_Evaluated_With_A_List_Of_Weights()
         {
             // Act
-            var nurbsCurve = NurbsCurveCollection.NurbsCurvePtsAndWeightsExample();
+            NurbsCurve nurbsCurve = NurbsCurveCollection.NurbsCurvePtsAndWeightsExample();
 
             // Assert
             nurbsCurve.Should().NotBeNull();
@@ -62,7 +99,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsCurve_From_ControlPoints_And_Degree()
         {
             // Act
-            var nurbsCurve = new NurbsCurve(CurveData.pts, CurveData.degree);
+            NurbsCurve nurbsCurve = new NurbsCurve(CurveData.pts, CurveData.degree);
 
             // Assert
             nurbsCurve.Should().NotBeNull();
@@ -169,7 +206,7 @@ namespace GShark.Test.XUnit.Geometry
         public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
         {
             // Arrange
-            var knots = new KnotVector { 0, 0, 1, 1, 2, 2 };
+            KnotVector knots = new KnotVector { 0, 0, 1, 1, 2, 2 };
 
             // Act
             Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);
@@ -183,10 +220,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Copied_NurbsCurve()
         {
             // Arrange
-            var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            
+            NurbsCurve nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
+
             // Act
-            var copiedNurbs = nurbsCurve.Clone();
+            NurbsCurve copiedNurbs = nurbsCurve.Clone();
 
             // Assert
             copiedNurbs.Should().NotBeNull();
@@ -200,7 +237,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Domain_Of_The_Curve()
         {
             // Act
-            var curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain;
+            Interval curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain;
 
             // Assert
             curveDomain.T0.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.First());
@@ -211,14 +248,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
         {
             // Arrange
-            var curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            var transform = Transform.Translation(new Vector3 { -10, 20, 0 });
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            Transform transform = Transform.Translation(new Vector3 { -10, 20, 0 });
 
             // Act
-            var transformedCurve = curve.Transform(transform);
-            var pt1 = curve.PointAt(0.5);
-            var pt2 = transformedCurve.PointAt(0.5);
-            var distanceBetweenPts = System.Math.Round((pt2 - pt1).Length(), 6);
+            NurbsCurve transformedCurve = curve.Transform(transform);
+            Vector3 pt1 = curve.PointAt(0.5);
+            Vector3 pt2 = transformedCurve.PointAt(0.5);
+            double distanceBetweenPts = System.Math.Round((pt2 - pt1).Length(), 6);
 
             // Assert
             distanceBetweenPts.Should().Be(22.36068);

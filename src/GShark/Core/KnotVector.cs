@@ -6,7 +6,7 @@ using System.Linq;
 namespace GShark.Core
 {
     /// <summary>
-    /// The Knot Vector is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
+    /// The Knot Vector is a sequence of parameter values that determines where and how the control points affect the NURBS curve.<br/>
     /// The number of knots is always equal to the number of control points plus curve degree plus one (i.e. number of control points plus curve order).
     /// </summary>
     public class KnotVector : List<double>
@@ -53,9 +53,8 @@ namespace GShark.Core
         /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).<br/>
         /// Refer to The NURBS Book (2nd Edition), p.50 for details.<br/>
         /// <br/>
-        /// More specifically, this method checks if the knot knots is of the following structure:<br/>
+        /// More specifically, this method checks if the knots is of the following structure:<br/>
         /// The knot knots must be non-decreasing and of length (degree + 1) * 2 or greater<br/>
-        /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// </summary>
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="numberOfControlPts"></param>
@@ -85,11 +84,11 @@ namespace GShark.Core
                 }
             }
 
-            bool periodic = this[0] < this[1] && this[1] < this[2];
+            bool hasMultiplicity = MultiplicityByIndex(0) > 1 || MultiplicityByIndex(this.Count - 1) > 1;
             double rep = this[0];
             for (int i = 0; i < Count; i++)
             {
-                if (!periodic)
+                if (hasMultiplicity)
                 {
                     if (i < degree + 1)
                     {
@@ -119,6 +118,43 @@ namespace GShark.Core
         }
 
         /// <summary>
+        /// Checks if the knot is clamped, so if they are in the following structure.<br/>
+        /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ].
+        /// </summary>
+        /// <param name="degree">Curve degree.</param>
+        /// <returns>If true the knot is clamped, if false is unclamped.</returns>
+        public bool IsKnotVectorClamped(int degree)
+        {
+            if (Math.Abs(this[0] - this[degree]) > GeoSharpMath.EPSILON)
+            {
+                return false;
+            }
+
+            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharpMath.EPSILON);
+        }
+
+        /// <summary>
+        /// Checks if the knot is periodic, so if they are in the following structure.<br/>
+        /// [ (degree, negative values), internal non-decreasing knots between 0 and 1, (degree, positive values bigger than 1.0) ].
+        /// </summary>
+        /// <param name="degree"></param>
+        /// <returns>If true the knot is periodic, if false is clamped or unclamped.</returns>
+        public bool IsKnotVectorPeriodic(int degree)
+        {
+            if (this[0] > this[degree])
+            {
+                return false;
+            }
+
+            if (this[degree] > 0)
+            {
+                return false;
+            }
+
+            return this[Count - degree - 1] < this[^1] && !(this[Count - degree - 1] < 1);
+        }
+
+        /// <summary>
         /// Gets the domain of the knots, as the max value - min value.
         /// </summary>
         public double Domain => this[^1] - this[0];
@@ -133,6 +169,7 @@ namespace GShark.Core
         {
             return Span(Count - degree - 2, degree, u);
         }
+
 
         /// <summary>
         /// Finds the span on the knot vector of the given parameter.<br/>

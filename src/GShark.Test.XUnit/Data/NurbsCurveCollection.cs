@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
+using Xunit;
 
 namespace GShark.Test.XUnit.Data
 {
@@ -104,6 +105,33 @@ namespace GShark.Test.XUnit.Data
                 new Vector3 {5,5,5},
                 new Vector3 {0,5,0}
             };
+            return new NurbsCurve(controlPts, degree);
+        }
+
+        public static NurbsCurve ClosedNurbsCurve()
+        {
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {4.5,2.5,2.5},
+                new Vector3 {5,5,5},
+                new Vector3 {0,5,0},
+                new Vector3 {4.5,2.5,2.5}
+            };
+            return NurbsCurve.CloseCurve(controlPts, degree);
+        }
+
+        public static NurbsCurve NurbsCurveWithStartingAndEndPointOverlapping()
+        {
+            int degree = 2;
+            List<Vector3> controlPts = new List<Vector3>
+            {
+                new Vector3 {4.5,2.5,2.5},
+                new Vector3 {5,5,5},
+                new Vector3 {0,5,0},
+                new Vector3 {4.5,2.5,2.5}
+            };
+
             return new NurbsCurve(controlPts, degree);
         }
     }
