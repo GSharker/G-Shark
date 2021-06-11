@@ -385,7 +385,7 @@ namespace GShark.Test.XUnit.Geometry
             var expected = 3;
 
             //Act
-            var result = v1.MaximumCoordinate;
+            var result = v1.MinimumCoordinate;
 
             //Assert
             result.Should().Be(expected);
