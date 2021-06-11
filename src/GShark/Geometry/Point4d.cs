@@ -102,18 +102,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Sums two <see cref="Point4d"/> together.
-        /// <para>(Provided for languages that do not support operator overloading. You can use the + operator otherwise)</para>
-        /// </summary>
-        /// <param name="point1">First point.</param>
-        /// <param name="point2">Second point.</param>
-        /// <returns>A new point that results from the weighted addition of point1 and point2.</returns>
-        public static Point4d Add(Point4d point1, Point4d point2)
-        {
-            return point1 + point2;
-        }
-
-        /// <summary>
         /// Subtracts the second point from the first point.
         /// </summary>
         /// <param name="point1">First point.</param>
@@ -189,8 +177,10 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are equal; otherwise false.</returns>
         public static bool operator ==(Point4d a, Point4d b)
         {
-            //Normalize points then compare.
-            throw new NotImplementedException();
+            return Math.Abs(a.X - b.X) <= GeoSharpMath.Epsilon &&
+                   Math.Abs(a.Y - b.Y) <= GeoSharpMath.Epsilon &&
+                   Math.Abs(a.Z - b.Z) <= GeoSharpMath.Epsilon &&
+                   Math.Abs(a.W - b.W) <= GeoSharpMath.Epsilon;
         }
 
         /// <summary>
@@ -203,7 +193,6 @@ namespace GShark.Geometry
         {
             return !(a == b);
         }
-
 
         /// <summary>
         /// Determines whether the specified System.Object is Point4d and has same coordinates as the present point.
@@ -233,8 +222,10 @@ namespace GShark.Geometry
         /// <returns></returns>
         public bool EpsilonEquals(Point4d other, double epsilon)
         {
-            //ToDo Implement EpsilonEquals interface IEpsilonEquatable
-            throw new NotImplementedException();
+            return Math.Abs(_x - other.X) <= epsilon &&
+                   Math.Abs(_y - other.Y) <= epsilon &&
+                   Math.Abs(_z - other.Z) <= epsilon &&
+                   Math.Abs(_z - other.W) <= epsilon;
         }
 
         /// <summary>
@@ -243,13 +234,7 @@ namespace GShark.Geometry
         /// <returns>A non-unique hash code, which uses all coordiantes of this object.</returns>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
-            //// operator == uses normalized values to compare. This should
-            //// also be done for GetHashCode so we get similar results
-            //Point4d x = this;
-            //UnsafeNativeMethods.ON_4dPoint_Normalize(ref x);
-            //// MSDN docs recommend XOR'ing the internal values to get a hash code
-            //return x._x.GetHashCode() ^ x._y.GetHashCode() ^ x._z.GetHashCode() ^ x._w.GetHashCode();
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode() ^ W.GetHashCode();
         }
 
         /// <summary>
