@@ -171,19 +171,18 @@ namespace GShark.Geometry
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
-        /// <param name="controlPoints">The control points of the curve.</param>
-        /// <param name="degree">The curve degree.</param>
         /// <returns></returns>
-        public static NurbsCurve CloseCurve(List<Vector3> controlPoints, int degree)
+        public NurbsCurve Close()
         {
-            for (int i = 0; i < degree; i++)
+            List<Vector3> copyCtrPts = new List<Vector3>(ControlPoints);
+            for (int i = 0; i < Degree; i++)
             {
-                controlPoints.Add(controlPoints[i]);
+                ControlPoints.Add(ControlPoints[i]);
             }
 
-            KnotVector knots = KnotVector.CreateUniformPeriodicKnotVector(degree, controlPoints.Count);
+            KnotVector knots = KnotVector.CreateUniformPeriodicKnotVector(Degree, copyCtrPts.Count);
 
-            return new NurbsCurve(degree, knots, controlPoints);
+            return new NurbsCurve(Degree, knots, copyCtrPts);
         }
 
         /// <summary>

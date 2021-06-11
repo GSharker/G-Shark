@@ -170,7 +170,6 @@ namespace GShark.Core
             return Span(Count - degree - 2, degree, u);
         }
 
-
         /// <summary>
         /// Finds the span on the knot vector of the given parameter.<br/>
         /// <em>Corresponds to algorithm 2.1 from the NURBS book by Piegl and Tiller.</em>

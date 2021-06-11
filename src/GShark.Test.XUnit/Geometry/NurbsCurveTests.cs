@@ -59,10 +59,10 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedPt01 = new Vector3 { 4.75, 3.75, 3.75 };
 
             // Act
-            NurbsCurve nurbsCurve = NurbsCurve.CloseCurve(controlPts, degree);
+            NurbsCurve nurbsCurve = new NurbsCurve(controlPts, degree).Close();
             Vector3 ptAt00 = nurbsCurve.PointAt(0.75);
             Vector3 ptAt01 = nurbsCurve.PointAt(1);
-            //var b = nurbsCurve.BoundingBox;
+            ////var b = nurbsCurve.BoundingBox;
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
