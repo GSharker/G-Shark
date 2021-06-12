@@ -49,8 +49,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             var result = Point3d.Interpolate(p1, p2, amount);
-
-
+            
             // Assert
             result.Equals(expectedPoint).Should().Be(true);
         }
@@ -78,34 +77,6 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             (p1 == p2).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Maximum_Coordinate_Of_A_Point()
-        {
-            //Arrange
-            var p1 = new Point3d(12, 4, 3);
-            var expected = 12;
-
-            //Act
-            var result = p1.MaximumCoordinate;
-
-            //Assert
-            result.Should().Be(expected);
-        }
-
-        [Fact]
-        public void It_Returns_The_Minimum_Coordinate_Of_A_Point()
-        {
-            //Arrange
-            var p1 = new Point3d(12, 4, 3);
-            var expected = 3;
-
-            //Act
-            var result = p1.MinimumCoordinate;
-
-            //Assert
-            result.Should().Be(expected);
         }
     }
 }

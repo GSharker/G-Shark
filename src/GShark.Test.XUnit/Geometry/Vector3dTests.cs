@@ -285,7 +285,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void Unitize_Throws_An_Error_If_Vector_Or_Zero_Length()
+        public void Unitize_Returns_UnsetValue_If_Vector_Is_Unset_Or_Zero_Length()
         {
             //Arrange
             Vector3d vectorZero = new Vector3d(0, 0, 0);
@@ -344,7 +344,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Checks_If_Two_Vectors_Are_Parallel(/*double[] v4, double[] v2, int result*/)
+        public void It_Checks_If_Two_Vectors_Are_Parallel()
         {
             // Arrange
             Vector3d vec1 = new Vector3d(11.5, 0.0, 0.0);
@@ -361,34 +361,6 @@ namespace GShark.Test.XUnit.Geometry
             vec1.IsParallelTo(vec2).Should().Be(expectedVec1Vec2);
             vec3.IsParallelTo(vec4).Should().Be(expectedVec3Vec4);
             vec5.IsParallelTo(vec6).Should().Be(expectedVec5Vec6);
-        }
-
-        [Fact]
-        public void It_Returns_The_Maximum_Coordinate_Of_A_Vector()
-        {
-            //Arrange
-            var v1 = new Vector3d(12, 4, 3);
-            var expected = 12;
-
-            //Act
-            var result = v1.MaximumCoordinate;
-
-            //Assert
-            result.Should().Be(expected);
-        }
-
-        [Fact]
-        public void It_Returns_The_Minimum_Coordinate_Of_A_Vector()
-        {
-            //Arrange
-            var v1 = new Vector3d(12, 4, 3);
-            var expected = 3;
-
-            //Act
-            var result = v1.MinimumCoordinate;
-
-            //Assert
-            result.Should().Be(expected);
         }
     }
 }

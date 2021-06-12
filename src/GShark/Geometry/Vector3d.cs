@@ -1,6 +1,5 @@
 ﻿using GShark.Core;
 using System;
-using static GShark.Geometry.Vector3d;
 
 namespace GShark.Geometry
 {
@@ -382,30 +381,6 @@ namespace GShark.Geometry
         public bool IsValid => GeoSharpMath.IsValidDouble(_x) && GeoSharpMath.IsValidDouble(_y) && GeoSharpMath.IsValidDouble(_z);
 
         /// <summary>
-        /// Gets the smallest (both positive and negative) component value in this vector.
-        /// </summary>
-        public double MinimumCoordinate
-        {
-            get
-            {
-                Point3d p = new Point3d(this);
-                return p.MinimumCoordinate;
-            }
-        }
-
-        /// <summary>
-        /// Gets the largest (both positive and negative) component value in this vector.
-        /// </summary>
-        public double MaximumCoordinate
-        {
-            get
-            {
-                Point3d p = new Point3d(this);
-                return p.MaximumCoordinate;
-            }
-        }
-
-        /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
         /// This is an application of Pythagoras' theorem.
         /// If this vector is invalid, its length is considered 0.
@@ -694,12 +669,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-            /// Computes the perpendicular to another vector.<br/>
-            /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector <br/>
-            /// Result is not unitized.
-            /// </summary>
-            /// <param name="vector">The other vector.</param>
-            /// <returns>The perpendicular vector.</returns>
+        /// Computes the perpendicular to another vector.<br/>
+        /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector <br/>
+        /// Result is not unitized.
+        /// </summary>
+        /// <param name="vector">The other vector.</param>
+        /// <returns>The perpendicular vector.</returns>
         public Vector3d PerpendicularTo(Vector3d vector)
             {
                 double[] vectorComponents = {vector.X, vector.Y, vector.Z};
