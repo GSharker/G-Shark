@@ -15,10 +15,6 @@ namespace GShark.Geometry
     /// </summary>
     public struct Point3d : IEquatable<Point3d>, IComparable<Point3d>, IComparable
     {
-        private double _x;
-        private double _y;
-        private double _z;
-
         /// <summary>
         /// Initializes a new point by defining the X, Y and Z coordinates.
         /// </summary>
@@ -27,9 +23,9 @@ namespace GShark.Geometry
         /// <param name="z">The value of the Z (third) coordinate.</param>
         public Point3d(double x, double y, double z)
         {
-            _x = x;
-            _y = y;
-            _z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         /// <summary>
@@ -58,9 +54,9 @@ namespace GShark.Geometry
         {
             double w = (Math.Abs(point.W - 1.0) > GeoSharpMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
             
-            _x = point.X * w;
-            _y = point.Y * w;
-            _z = point.Z * w;
+            X = point.X * w;
+            Y = point.Y * w;
+            Z = point.Z * w;
         }
 
         /// <summary>
@@ -81,7 +77,7 @@ namespace GShark.Geometry
         /// <returns>A new point that is coordinate-wise multiplied by t.</returns>
         public static Point3d operator *(Point3d point, double t)
         {
-            return new Point3d(point._x * t, point._y * t, point._z * t);
+            return new Point3d(point.X * t, point.Y * t, point.Z * t);
         }
 
         /// <summary>
@@ -92,7 +88,7 @@ namespace GShark.Geometry
         /// <returns>A new point that is coordinate-wise multiplied by t.</returns>
         public static Point3d operator *(double t, Point3d point)
         {
-            return new Point3d(point._x * t, point._y * t, point._z * t);
+            return new Point3d(point.X * t, point.Y * t, point.Z * t);
         }
 
         /// <summary>
@@ -103,7 +99,7 @@ namespace GShark.Geometry
         /// <returns>A new point that is coordinate-wise divided by t.</returns>
         public static Point3d operator /(Point3d point, double t)
         {
-            return new Point3d(point._x / t, point._y / t, point._z / t);
+            return new Point3d(point.X / t, point.Y / t, point.Z / t);
         }
 
         /// <summary>
@@ -114,7 +110,7 @@ namespace GShark.Geometry
         /// <returns>A new point that results from the addition of point1 and point2.</returns>
         public static Point3d operator +(Point3d point1, Point3d point2)
         {
-            return new Point3d(point1._x + point2._x, point1._y + point2._y, point1._z + point2._z);
+            return new Point3d(point1.X + point2.X, point1.Y + point2.Y, point1.Z + point2.Z);
         }
 
         /// <summary>
@@ -125,7 +121,7 @@ namespace GShark.Geometry
         /// <returns>A new point that results from the addition of point and vector.</returns>
         public static Point3d operator +(Point3d point, Vector3d vector)
         {
-            return new Point3d(point._x + vector.X, point._y + vector.Y, point._z + vector.Z);
+            return new Point3d(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
         /// <summary>
@@ -136,7 +132,7 @@ namespace GShark.Geometry
         /// <returns>A new point that results from the addition of point and vector.</returns>
         public static Point3d operator +(Vector3d vector, Point3d point)
         {
-            return new Point3d(point._x + vector.X, point._y + vector.Y, point._z + vector.Z);
+            return new Point3d(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
         /// <summary>
@@ -148,7 +144,7 @@ namespace GShark.Geometry
         /// <returns>A new point that results from the addition of point and vector.</returns>
         public static Point3d Add(Vector3d vector, Point3d point)
         {
-            return new Point3d(point._x + vector.X, point._y + vector.Y, point._z + vector.Z);
+            return new Point3d(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
         /// <summary>
@@ -159,7 +155,7 @@ namespace GShark.Geometry
         /// <returns>A new point that is the difference of point minus vector.</returns>
         public static Point3d operator -(Point3d point, Vector3d vector)
         {
-            return new Point3d(point._x - vector.X, point._y - vector.Y, point._z - vector.Z);
+            return new Point3d(point.X - vector.X, point.Y - vector.Y, point.Z - vector.Z);
         }
 
         /// <summary>
@@ -170,7 +166,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that is the difference of point minus vector.</returns>
         public static Vector3d operator -(Point3d point1, Point3d point2)
         {
-            return new Vector3d(point1._x - point2._x, point1._y - point2._y, point1._z - point2._z);
+            return new Vector3d(point1.X - point2.X, point1.Y - point2.Y, point1.Z - point2.Z);
         }
 
         /// <summary>
@@ -180,7 +176,7 @@ namespace GShark.Geometry
         /// <returns>A point value that, when summed with the point input, yields the <see cref="Origin"/>.</returns>
         public static Point3d operator -(Point3d point)
         {
-            return new Point3d(-point._x, -point._y, -point._z);
+            return new Point3d(-point.X, -point.Y, -point.Z);
         }
 
         /// <summary>
@@ -191,7 +187,7 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3d a, Point3d b)
         {
-             return (a._x == b._x && a._y == b._y && a._z == b._z);
+             return (a.X == b.X && a.Y == b.Y && a.Z == b.Z);
         }
 
         /// <summary>
@@ -202,7 +198,7 @@ namespace GShark.Geometry
         /// <returns>true if the two points differ in any coordinate; false otherwise.</returns>
         public static bool operator !=(Point3d a, Point3d b)
         {
-            return (a._x != b._x || a._y != b._y || a._z != b._z);
+            return (a.X != b.X || a.Y != b.Y || a.Z != b.Z);
         }
 
         /// <summary>
@@ -318,23 +314,22 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets or sets the X (first) coordinate of this point.
         /// </summary>
-        public double X { get => _x; set => _x = value;
-        }
+        public double X { get; set; }
 
         /// <summary>
         /// Gets or sets the Y (second) coordinate of this point.
         /// </summary>
-        public double Y { get => _y; set => _y = value; }
+        public double Y { get; set; }
 
         /// <summary>
         /// Gets or sets the Z (third) coordinate of this point.
         /// </summary>
-        public double Z { get => _z; set => _z = value; }
+        public double Z { get; set; }
 
         /// <summary>
         /// Each coordinate of the point must pass the <see cref="GeoSharpMath.IsValidDouble"/> test.
         /// </summary>
-        public bool IsValid => GeoSharpMath.IsValidDouble(_x) && GeoSharpMath.IsValidDouble(_y) && GeoSharpMath.IsValidDouble(_z);
+        public bool IsValid => GeoSharpMath.IsValidDouble(X) && GeoSharpMath.IsValidDouble(Y) && GeoSharpMath.IsValidDouble(Z);
 
         //Indexer to allow access to properties as array.
         public double this[int i]
@@ -342,16 +337,16 @@ namespace GShark.Geometry
             get
             {
                 if (i < 0 || i > 2) throw new IndexOutOfRangeException();
-                if (i == 0) return _x;
-                if (i == 1) return _y;
-                return _z;
+                if (i == 0) return X;
+                if (i == 1) return Y;
+                return Z;
             }
             set
             {
                 if (i < 0 || i > 2) throw new IndexOutOfRangeException();
-                if (i == 0) _x = value;
-                if (i == 1) _y = value;
-                _z = value;
+                if (i == 0) X = value;
+                if (i == 1) Y = value;
+                Z = value;
             }
         }
 
@@ -373,9 +368,9 @@ namespace GShark.Geometry
         /// <returns></returns>
         public bool EpsilonEquals(Point3d other, double epsilon)
         {
-            return Math.Abs(_x - other.X) <= GeoSharpMath.MaxTolerance &&
-                   Math.Abs(_y - other.Y) <= GeoSharpMath.MaxTolerance &&
-                   Math.Abs(_z - other.Z) <= GeoSharpMath.MaxTolerance;
+            return Math.Abs(X - other.X) <= GeoSharpMath.MaxTolerance &&
+                   Math.Abs(Y - other.Y) <= GeoSharpMath.MaxTolerance &&
+                   Math.Abs(Z - other.Z) <= GeoSharpMath.MaxTolerance;
         }
 
         /// <summary>
@@ -392,19 +387,19 @@ namespace GShark.Geometry
         /// </returns>
         public int CompareTo(Point3d other)
         {
-            if (_x < other._x)
+            if (X < other.X)
                 return -1;
-            if (_x > other._x)
+            if (X > other.X)
                 return 1;
 
-            if (_y < other._y)
+            if (Y < other.Y)
                 return -1;
-            if (_y > other._y)
+            if (Y > other.Y)
                 return 1;
 
-            if (_z < other._z)
+            if (Z < other.Z)
                 return -1;
-            if (_z > other._z)
+            if (Z > other.Z)
                 return 1;
 
             return 0;
@@ -478,7 +473,7 @@ namespace GShark.Geometry
         public override string ToString()
         {
             var culture = System.Globalization.CultureInfo.InvariantCulture;
-            return $"{_x.ToString(culture)},{_y.ToString(culture)},{_z.ToString(culture)}";
+            return $"{X.ToString(culture)},{Y.ToString(culture)},{Z.ToString(culture)}";
         }
 
         /// <summary>
@@ -496,9 +491,9 @@ namespace GShark.Geometry
             double d;
             if (IsValid && other.IsValid)
             {
-                double dx = other._x - _x;
-                double dy = other._y - _y;
-                double dz = other._z - _z;
+                double dx = other.X - X;
+                double dy = other.Y - Y;
+                double dz = other.Z - Z;
                 d = Vector3d.GetLengthHelper(dx, dy, dz);
             }
             else
