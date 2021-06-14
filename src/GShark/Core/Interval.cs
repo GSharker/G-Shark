@@ -32,7 +32,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the value between the interval's min and max values.
         /// </summary>
-        public double Mid => Math.Abs(T0 - T1) > GeoSharpMath.MAX_TOLERANCE ? 0.5 * (T0 + T1) : T0;
+        public double Mid => Math.Abs(T0 - T1) > GeoSharpMath.MaxTolerance ? 0.5 * (T0 + T1) : T0;
 
         /// <summary>
         /// Gets the length of the interval.<br/>
@@ -53,7 +53,7 @@ namespace GShark.Core
         /// <summary>
         /// True if t0 == t1.
         /// </summary>
-        public bool IsSingleton => Math.Abs(T1 - T0) <= GeoSharpMath.EPSILON;
+        public bool IsSingleton => Math.Abs(T1 - T0) <= GeoSharpMath.Epsilon;
 
         /// <summary>
         /// Returns the largest value in the interval.
@@ -73,7 +73,7 @@ namespace GShark.Core
         public double ParameterAt(double normalizedParameter)
         {
             return !GeoSharpMath.IsValidDouble(normalizedParameter)
-                ? GeoSharpMath.UNSET_VALUE
+                ? GeoSharpMath.UnsetValue
                 : (1.0 - normalizedParameter) * T0 + normalizedParameter * T1;
         }
     }

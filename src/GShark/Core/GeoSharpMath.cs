@@ -11,28 +11,28 @@ namespace GShark.Core
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
-        public static double MIN_TOLERANCE => 1e-3;
+        public const double MinTolerance = 1e-3;
 
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
-        public static double MAX_TOLERANCE => 1e-6;
+        public const double MaxTolerance = 1e-6;
 
         /// <summary>
         /// The minimum value to determine whether two floating point numbers are the same.
         /// </summary>
-        public static double EPSILON => 1e-10;
+        public const double Epsilon = 1e-10;
 
         /// <summary>
         /// The value of an unset object.
         /// </summary>
-        public static double UNSET_VALUE => -1.23432101234321E+308;
+        public const double UnsetValue = -1.23432101234321E+308;
 
         /// <summary>
         /// Represents the default angle tolerance, used when no other values are provided.
         /// This is one degree, expressed in radians.
         /// </summary>
-        public static double ANGLE_TOLERANCE => 0.0174532925199433;
+        public const double AngleTolerance = 0.0174532925199433;
 
         /// <summary>
         /// Converts degrees to radians.
@@ -61,7 +61,7 @@ namespace GShark.Core
         /// <returns>True if it is valid.</returns>
         public static bool IsValidDouble(double x)
         {
-            return Math.Abs((double) x - (-1.23432101234321E+308)) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
+            return Math.Abs(x - UnsetValue) > double.Epsilon && !double.IsInfinity(x) && !double.IsNaN(x);
         }
 
         /// <summary>
@@ -83,21 +83,21 @@ namespace GShark.Core
         /// <param name="cosAngle">Cos angle value.</param>
         internal static void KillNoise(ref double sinAngle, ref double cosAngle)
         {
-            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MAX_TOLERANCE &&
-                Math.Abs(cosAngle) <= GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(sinAngle) >= 1.0 - GeoSharpMath.MaxTolerance &&
+                Math.Abs(cosAngle) <= GeoSharpMath.MaxTolerance)
             {
                 cosAngle = 0.0;
                 sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
             }
 
-            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MAX_TOLERANCE &&
-                Math.Abs(sinAngle) <= GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(cosAngle) >= 1.0 - GeoSharpMath.MaxTolerance &&
+                Math.Abs(sinAngle) <= GeoSharpMath.MaxTolerance)
             {
                 cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
                 sinAngle = 0.0;
             }
 
-            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharpMath.MaxTolerance)
             {
                 Vector3 vec = new Vector3 { cosAngle, sinAngle };
                 if (vec.Length() > 0.0)
@@ -112,15 +112,15 @@ namespace GShark.Core
                 }
             }
 
-            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(cosAngle) < GeoSharpMath.EPSILON)
+            if (Math.Abs(sinAngle) > 1.0 - GeoSharpMath.Epsilon &&
+                Math.Abs(cosAngle) < GeoSharpMath.Epsilon)
             {
                 cosAngle = 0.0;
                 sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
             }
 
-            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.EPSILON &&
-                Math.Abs(sinAngle) < GeoSharpMath.EPSILON)
+            if (Math.Abs(cosAngle) > 1.0 - GeoSharpMath.Epsilon &&
+                Math.Abs(sinAngle) < GeoSharpMath.Epsilon)
             {
                 cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
                 sinAngle = 0.0;

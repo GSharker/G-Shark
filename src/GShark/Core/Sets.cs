@@ -58,7 +58,7 @@ namespace GShark.Core
         /// <returns>A collection of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.T0 - domain.T1) <= GeoSharpMath.EPSILON)
+            if(Math.Abs(domain.T0 - domain.T1) <= GeoSharpMath.Epsilon)
             {
                 return new List<double>(){ domain.T0 };
             }

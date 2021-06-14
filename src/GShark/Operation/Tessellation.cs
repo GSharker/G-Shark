@@ -77,7 +77,7 @@ namespace GShark.Operation
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
         public static (List<double> tValues, List<Vector3> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
         {
-            double setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MAX_TOLERANCE : tolerance;
+            double setTolerance = (tolerance <= 0.0) ? GeoSharpMath.MaxTolerance : tolerance;
 
             // Sample curve at three pts.
             Random random = new Random();

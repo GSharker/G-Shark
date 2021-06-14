@@ -73,7 +73,7 @@ namespace GShark.Core
                 // Verb doesn't allow for periodic knots, these two ifs should be removed.
                 if (i < degree + 1)
                 {
-                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                    if (Math.Abs(this[i] - rep) > GeoSharpMath.Epsilon)
                     {
                         return false;
                     }
@@ -81,13 +81,13 @@ namespace GShark.Core
 
                 if (i > Count - degree - 1 && i < Count)
                 {
-                    if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                    if (Math.Abs(this[i] - rep) > GeoSharpMath.Epsilon)
                     {
                         return false;
                     }
                 }
 
-                if (this[i] < rep - GeoSharpMath.EPSILON)
+                if (this[i] < rep - GeoSharpMath.Epsilon)
                 {
                     return false;
                 }
@@ -124,12 +124,12 @@ namespace GShark.Core
         public int Span(int n, int degree, double parameter)
         {
             // special case if parameter == knots[n+1]
-            if (parameter > this[n + 1] - GeoSharpMath.EPSILON)
+            if (parameter > this[n + 1] - GeoSharpMath.Epsilon)
             {
                 return n;
             }
 
-            if (parameter < this[degree] + GeoSharpMath.EPSILON)
+            if (parameter < this[degree] + GeoSharpMath.Epsilon)
             {
                 return degree;
             }
@@ -172,7 +172,7 @@ namespace GShark.Core
             int multiplicity = 1;
             while (index < Count-1)
             {
-                if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
+                if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.Epsilon)
                 {
                     break;
                 }
@@ -195,7 +195,7 @@ namespace GShark.Core
 
             foreach (double knot in this)
             {
-                if (Math.Abs(knot - tempKnot) > GeoSharpMath.EPSILON)
+                if (Math.Abs(knot - tempKnot) > GeoSharpMath.Epsilon)
                 {
                     multiplicities.Add(knot, 0);
                     tempKnot = knot;

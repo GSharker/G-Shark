@@ -10,6 +10,23 @@ namespace GShark.Core
     /// </summary>
     public class Transform : List<IList<double>>
     {
+        internal readonly double M00;
+        internal readonly double M01;
+        internal readonly double M02;
+        internal readonly double M03;
+        internal readonly double M10;
+        internal readonly double M11;
+        internal readonly double M12;
+        internal readonly double M13;
+        internal readonly double M20;
+        internal readonly double M21;
+        internal readonly double M22;
+        internal readonly double M23;
+        internal readonly double M30;
+        internal readonly double M31;
+        internal readonly double M32;
+        internal readonly double M33;
+
         /// <summary>
         /// Initializes a 4 x 4 transformation matrix.<br/>
         /// All the values are set to zero.
@@ -17,6 +34,23 @@ namespace GShark.Core
         public Transform()
         {
             AddRange(Matrix.Construct(4, 4));
+        M00 = this[0][0];
+        M01 = this[0][1];
+        M02 = this[0][2];
+        M03 = this[0][3];
+        M10 = this[1][0];
+        M11 = this[1][1];
+        M12 = this[1][2];
+        M13 = this[1][3];
+        M20 = this[2][0];
+        M21 = this[2][1];
+        M22 = this[2][2];
+        M23 = this[2][3];
+        M30 = this[3][0];
+        M31 = this[3][1];
+        M32 = this[3][2];
+        M33 = this[3][3];
+
         }
 
         /// <summary>

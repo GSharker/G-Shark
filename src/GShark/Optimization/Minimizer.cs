@@ -44,7 +44,7 @@ namespace GShark.Optimization
                 throw new Exception("Unconstrained Minimizer: f(x0) is a NaN!");
             }
 
-            gradientTolerance = Math.Max(gradientTolerance, GeoSharpMath.EPSILON);
+            gradientTolerance = Math.Max(gradientTolerance, GeoSharpMath.Epsilon);
             Matrix H1 = Matrix.Identity(n);
             int iteration = 0;
             Vector3 g0 = _objectiveFunction.Gradient(x0);

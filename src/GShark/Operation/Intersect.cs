@@ -30,7 +30,7 @@ namespace GShark.Operation
             line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 0, 0, 1 });
 
             Vector3 directionVec = Vector3.Cross(plNormal1, plNormal2);
-            if (Vector3.Dot(directionVec, directionVec) < GeoSharpMath.EPSILON)
+            if (Vector3.Dot(directionVec, directionVec) < GeoSharpMath.Epsilon)
             {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace GShark.Operation
             double denominator = Vector3.Dot(plane.Normal, lnDir);
             double numerator = Vector3.Dot(plane.Normal, ptPlane);
 
-            if (Math.Abs(denominator) < GeoSharpMath.EPSILON)
+            if (Math.Abs(denominator) < GeoSharpMath.Epsilon)
             {
                 pt = Vector3.Unset;
                 t = 0.0;
@@ -166,7 +166,7 @@ namespace GShark.Operation
             double e = Vector3.Dot(lnDir1, ln0Ln1Dir);
             double div = a * c - b * b;
 
-            if (Math.Abs(div) < GeoSharpMath.EPSILON)
+            if (Math.Abs(div) < GeoSharpMath.Epsilon)
             {
                 pt0 = Vector3.Unset;
                 pt1 = Vector3.Unset;
@@ -238,12 +238,12 @@ namespace GShark.Operation
             double det = b * b - 4 * a * c;
             double t;
 
-            if ((a <= GeoSharpMath.MAX_TOLERANCE) || (det < 0))
+            if ((a <= GeoSharpMath.MaxTolerance) || (det < 0))
             {
                 pts = new Vector3[] { };
                 return false;
             }
-            else if (Math.Abs(det) < GeoSharpMath.MAX_TOLERANCE)
+            else if (Math.Abs(det) < GeoSharpMath.MaxTolerance)
             {
                 t = -b / (2 * a);
                 Vector3 intersection = pt0 + lnDir * t;
@@ -276,7 +276,7 @@ namespace GShark.Operation
             Vector3 clPt = cl.Center;
 
             Vector3 cCross = Vector3.Cross(pl.Origin, clPt);
-            if (Math.Abs(cCross.Length()) < GeoSharpMath.EPSILON)
+            if (Math.Abs(cCross.Length()) < GeoSharpMath.Epsilon)
             {
                 return false;
             }
@@ -285,7 +285,7 @@ namespace GShark.Operation
             Vector3 closestPt = intersectionLine.ClosestPt(clPt);
             double distance = clPt.DistanceTo(intersectionLine);
 
-            if (Math.Abs(distance) < GeoSharpMath.EPSILON)
+            if (Math.Abs(distance) < GeoSharpMath.Epsilon)
             {
                 Vector3 pt = cl.ClosestPt(closestPt);
                 pts = new[] { pt };
