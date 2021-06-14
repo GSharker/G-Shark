@@ -314,18 +314,17 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets or sets the X (first) coordinate of this point.
         /// </summary>
-        public double X { get => X; set => X = value;
-        }
+        public double X { get; set; }
 
         /// <summary>
         /// Gets or sets the Y (second) coordinate of this point.
         /// </summary>
-        public double Y { get => Y; set => Y = value; }
+        public double Y { get; set; }
 
         /// <summary>
         /// Gets or sets the Z (third) coordinate of this point.
         /// </summary>
-        public double Z { get => Z; set => Z = value; }
+        public double Z { get; set; }
 
         /// <summary>
         /// Each coordinate of the point must pass the <see cref="GeoSharpMath.IsValidDouble"/> test.

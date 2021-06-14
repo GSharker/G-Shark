@@ -360,15 +360,15 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets or sets the X (first) component of the vector.
         /// </summary>
-        public double X { get => X; set => X = value; }
+        public double X { get; set; }
         /// <summary>
         /// Gets or sets the Y (second) component of the vector.
         /// </summary>
-        public double Y { get => Y; set => Y = value; }
+        public double Y { get; set; }
         /// <summary>
         /// Gets or sets the Z (third) component of the vector.
         /// </summary>
-        public double Z { get => Z; set => Z = value; }
+        public double Z { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this vector is valid. 

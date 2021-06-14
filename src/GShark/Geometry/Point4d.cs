@@ -35,24 +35,22 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets or sets the X (first) coordinate of this point.
         /// </summary>
-        public double X { get => X;
-            set => X = value;
-        }
+        public double X { get; set; }
 
         /// <summary>
         /// Gets or sets the Y (second) coordinate of this point.
         /// </summary>
-        public double Y { get => Y; set => Y = value; }
+        public double Y { get; set; }
 
         /// <summary>
         /// Gets or sets the Z (third) coordinate of this point.
         /// </summary>
-        public double Z { get => Z; set => Z = value; }
+        public double Z { get; set; }
 
         /// <summary>
         /// Gets or sets the W (fourth) coordinate -or weight- of this point.
         /// </summary>
-        public double W { get => W; set => W = value; }
+        public double W { get; set; }
 
         /// <summary>
         /// Sums two <see cref="Point4d"/> together.
