@@ -416,6 +416,24 @@ namespace GShark.Geometry
         /// </summary>
         public bool IsZero => (_x == 0.0 && _y == 0.0 && _z == 0.0);
 
+        //Indexer to allow access to properties as array.
+        public double this[int i]
+        {
+            get
+            {
+                if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
+                if (i == 0) return _x;
+                if (i == 1) return _y;
+                return _z;
+            }
+            set
+            {
+                if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
+                if (i == 0) _x = value;
+                if (i == 1) _y = value;
+                _z = value;
+            }
+        }
 
         /// <summary>
         /// Determines whether the specified System.Object is a Vector3d and has the same values as the present vector.
