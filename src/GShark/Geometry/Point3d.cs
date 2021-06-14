@@ -331,11 +331,29 @@ namespace GShark.Geometry
         /// </summary>
         public double Z { get => _z; set => _z = value; }
 
-
         /// <summary>
         /// Each coordinate of the point must pass the <see cref="GeoSharpMath.IsValidDouble"/> test.
         /// </summary>
         public bool IsValid => GeoSharpMath.IsValidDouble(_x) && GeoSharpMath.IsValidDouble(_y) && GeoSharpMath.IsValidDouble(_z);
+
+        //Indexer to allow access to properties as array.
+        public double this[int i]
+        {
+            get
+            {
+                if (i < 0 || i > 2) throw new IndexOutOfRangeException();
+                if (i == 0) return _x;
+                if (i == 1) return _y;
+                return _z;
+            }
+            set
+            {
+                if (i < 0 || i > 2) throw new IndexOutOfRangeException();
+                if (i == 0) _x = value;
+                if (i == 1) _y = value;
+                _z = value;
+            }
+        }
 
         /// <summary>
         /// Determines whether the specified <see cref="object"/> is a <see cref="Point3d"/> and has the same values as the present point.
