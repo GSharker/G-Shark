@@ -10,10 +10,6 @@ namespace GShark.Geometry
     /// </summary>
     public struct Vector3d : IEquatable<Vector3d>, IComparable<Vector3d>, IComparable
     {
-        private double _x;
-        private double _y;
-        private double _z;
-
         /// <summary>
         /// Initializes a new instance of a vector, using its three components.
         /// </summary>
@@ -22,9 +18,9 @@ namespace GShark.Geometry
         /// <param name="z">The Z (third) component.</param>
         public Vector3d(double x, double y, double z)
         {
-            _x = x;
-            _y = y;
-            _z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         /// <summary>
@@ -76,7 +72,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
         public static Vector3d operator *(Vector3d vector, double t)
         {
-            return new Vector3d(vector._x * t, vector._y * t, vector._z * t);
+            return new Vector3d(vector.X * t, vector.Y * t, vector.Z * t);
         }
 
         /// <summary>
@@ -87,7 +83,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
         public static Vector3d operator *(double t, Vector3d vector)
         {
-            return new Vector3d(vector._x * t, vector._y * t, vector._z * t);
+            return new Vector3d(vector.X * t, vector.Y * t, vector.Z * t);
         }
 
         /// <summary>
@@ -98,7 +94,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that is componentwise divided by t.</returns>
         public static Vector3d operator /(Vector3d vector, double t)
         {
-            return new Vector3d(vector._x / t, vector._y / t, vector._z / t);
+            return new Vector3d(vector.X / t, vector.Y / t, vector.Z / t);
         }
 
         /// <summary>
@@ -109,7 +105,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that results from the componentwise addition of the two vectors.</returns>
         public static Vector3d operator +(Vector3d vector1, Vector3d vector2)
         {
-            return new Vector3d(vector1._x + vector2._x, vector1._y + vector2._y, vector1._z + vector2._z);
+            return new Vector3d(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
         }
 
         /// <summary>
@@ -120,7 +116,7 @@ namespace GShark.Geometry
         /// <returns>A new vector that results from the componentwise difference of vector1 - vector2.</returns>
         public static Vector3d operator -(Vector3d vector1, Vector3d vector2)
         {
-            return new Vector3d(vector1._x - vector2._x, vector1._y - vector2._y, vector1._z - vector2._z);
+            return new Vector3d(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
         }
 
         /// <summary>
@@ -135,7 +131,7 @@ namespace GShark.Geometry
         /// </returns>
         public static double operator *(Vector3d vector1, Vector3d vector2)
         {
-            return (vector1._x * vector2._x + vector1._y * vector2._y + vector1._z * vector2._z);
+            return (vector1.X * vector2.X + vector1.Y * vector2.Y + vector1.Z * vector2.Z);
         }
 
         /// <summary>
@@ -145,7 +141,7 @@ namespace GShark.Geometry
         /// <returns>A new vector where all components were multiplied by -1.</returns>
         public static Vector3d operator -(Vector3d vector)
         {
-            return new Vector3d(-vector._x, -vector._y, -vector._z);
+            return new Vector3d(-vector.X, -vector.Y, -vector.Z);
         }
 
         /// <summary>
@@ -156,7 +152,7 @@ namespace GShark.Geometry
         /// <returns>true if all coordinates are pairwise equal; false otherwise.</returns>
         public static bool operator ==(Vector3d a, Vector3d b)
         {
-            return a._x == b._x && a._y == b._y && a._z == b._z;
+            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
         }
 
         /// <summary>
@@ -167,7 +163,7 @@ namespace GShark.Geometry
         /// <returns>true if any coordinate pair is different; false otherwise.</returns>
         public static bool operator !=(Vector3d a, Vector3d b)
         {
-            return a._x != b._x || a._y != b._y || a._z != b._z;
+            return a.X != b.X || a.Y != b.Y || a.Z != b.Z;
         }
 
         /// <summary>
@@ -182,7 +178,7 @@ namespace GShark.Geometry
         /// </returns>
         public static Vector3d CrossProduct(Vector3d a, Vector3d b)
         {
-            return new Vector3d(a._y * b._z - b._y * a._z, a._z * b._x - b._z * a._x, a._x * b._y - b._x * a._y);
+            return new Vector3d(a.Y * b.Z - b.Y * a.Z, a.Z * b.X - b.Z * a.X, a.X * b.Y - b.X * a.Y);
         }
 
         /// <summary>
@@ -364,28 +360,28 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets or sets the X (first) component of the vector.
         /// </summary>
-        public double X { get => _x; set => _x = value; }
+        public double X { get => X; set => X = value; }
         /// <summary>
         /// Gets or sets the Y (second) component of the vector.
         /// </summary>
-        public double Y { get => _y; set => _y = value; }
+        public double Y { get => Y; set => Y = value; }
         /// <summary>
         /// Gets or sets the Z (third) component of the vector.
         /// </summary>
-        public double Z { get => _z; set => _z = value; }
+        public double Z { get => Z; set => Z = value; }
 
         /// <summary>
         /// Gets a value indicating whether this vector is valid. 
         /// A valid vector must be formed of valid component values for x, y and z.
         /// </summary>
-        public bool IsValid => GeoSharpMath.IsValidDouble(_x) && GeoSharpMath.IsValidDouble(_y) && GeoSharpMath.IsValidDouble(_z);
+        public bool IsValid => GeoSharpMath.IsValidDouble(X) && GeoSharpMath.IsValidDouble(Y) && GeoSharpMath.IsValidDouble(Z);
 
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
         /// This is an application of Pythagoras' theorem.
         /// If this vector is invalid, its length is considered 0.
         /// </summary>
-        public double Length => GetLengthHelper(_x, _y, _z);
+        public double Length => GetLengthHelper(X, Y, Z);
 
         /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
@@ -394,7 +390,7 @@ namespace GShark.Geometry
         /// this property does not. You should check validity in advance,
         /// if this vector can be invalid.
         /// </summary>
-        public double SquareLength => (_x * _x) + (_y * _y) + (_z * _z);
+        public double SquareLength => (X * X) + (Y * Y) + (Z * Z);
 
         /// <summary>
         /// Gets a value indicating whether or not this is a unit vector. 
@@ -405,7 +401,7 @@ namespace GShark.Geometry
             get
             {
                 // checks for invalid values and returns 0.0 if there are any
-                double length = GetLengthHelper(_x, _y, _z);
+                double length = GetLengthHelper(X, Y, Z);
                 //ToDo Rhino implements this check against SqrtEpsilon. Is it necessary?
                 return Math.Abs(length - 1.0) <= GeoSharpMath.Epsilon;
             }
@@ -414,7 +410,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
         /// </summary>
-        public bool IsZero => (_x == 0.0 && _y == 0.0 && _z == 0.0);
+        public bool IsZero => (X == 0.0 && Y == 0.0 && Z == 0.0);
 
         //Indexer to allow access to properties as array.
         public double this[int i]
@@ -422,16 +418,16 @@ namespace GShark.Geometry
             get
             {
                 if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
-                if (i == 0) return _x;
-                if (i == 1) return _y;
-                return _z;
+                if (i == 0) return X;
+                if (i == 1) return Y;
+                return Z;
             }
             set
             {
                 if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
-                if (i == 0) _x = value;
-                if (i == 1) _y = value;
-                _z = value;
+                if (i == 0) X = value;
+                if (i == 1) Y = value;
+                Z = value;
             }
         }
 
@@ -457,9 +453,9 @@ namespace GShark.Geometry
 
         public bool EpsilonEquals(Vector3d vector, double epsilon)
         {
-            return Math.Abs(_x - vector.X) <= epsilon &&
-                   Math.Abs(_y - vector.Y) <= epsilon &&
-                   Math.Abs(_z - vector.Z) <= epsilon;
+            return Math.Abs(X - vector.X) <= epsilon &&
+                   Math.Abs(Y - vector.Y) <= epsilon &&
+                   Math.Abs(Z - vector.Z) <= epsilon;
 
         }
 
@@ -477,32 +473,32 @@ namespace GShark.Geometry
         /// </returns>
         public int CompareTo(Vector3d other)
         {
-            if (_x < other._x)
+            if (X < other.X)
             {
                 return -1;
             }
 
-            if (_x > other._x)
+            if (X > other.X)
             {
                 return 1;
             }
 
-            if (_y < other._y)
+            if (Y < other.Y)
             {
                 return -1;
             }
 
-            if (_y > other._y)
+            if (Y > other.Y)
             {
                 return 1;
             }
 
-            if (_z < other._z)
+            if (Z < other.Z)
             {
                 return -1;
             }
 
-            if (_z > other._z)
+            if (Z > other.Z)
             {
                 return 1;
             }
@@ -527,7 +523,7 @@ namespace GShark.Geometry
         public override int GetHashCode()
         {
             // MSDN docs recommend XOR'ing the internal values to get a hash code
-            return _x.GetHashCode() ^ _y.GetHashCode() ^ _z.GetHashCode();
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
         /// <summary>
@@ -536,7 +532,7 @@ namespace GShark.Geometry
         /// <returns>A string with the current location of the point.</returns>
         public override string ToString()
         {
-            return $"Vector3d: ({_x},{_y},{_z})";
+            return $"Vector3d: ({X},{Y},{Z})";
         }
 
         /// <summary>
@@ -608,9 +604,9 @@ namespace GShark.Geometry
                 return false;
             }
 
-            _x = -_x;
-            _y = -_y;
-            _z = -_z;
+            X = -X;
+            Y = -Y;
+            Z = -Z;
             return true;
         }
 
@@ -678,7 +674,7 @@ namespace GShark.Geometry
             double ll = Length * other.Length;
             if (ll > 0.0)
             {
-                if (Math.Abs((_x * other._x + _y * other._y + _z * other._z) / ll) <= Math.Sin(angleTolerance))
+                if (Math.Abs((X * other.X + Y * other.Y + Z * other.Z) / ll) <= Math.Sin(angleTolerance))
                 {
                     result = true;
                 }

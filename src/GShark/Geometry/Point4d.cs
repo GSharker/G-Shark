@@ -5,11 +5,6 @@ namespace GShark.Geometry
 {
     public struct Point4d : IEquatable<Point4d>
     {
-        private double _x;
-        private double _y;
-        private double _z;
-        private double _w;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Point4d"/> class based on coordinates.
         /// </summary>
@@ -19,10 +14,10 @@ namespace GShark.Geometry
         /// <param name="w">The W (fourth) dimension, or weight.</param>
         public Point4d(double x, double y, double z, double w)
         {
-            _x = x;
-            _y = y;
-            _z = z;
-            _w = w;
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
         }
 
         /// <summary>
@@ -31,33 +26,33 @@ namespace GShark.Geometry
         /// <param name="point">.</param>
         public Point4d(Point3d point)
         {
-            _x = point.X;
-            _y = point.Y;
-            _z = point.Z;
-            _w = 1.0;
+            X = point.X;
+            Y = point.Y;
+            Z = point.Z;
+            W = 1.0;
         }
 
         /// <summary>
         /// Gets or sets the X (first) coordinate of this point.
         /// </summary>
-        public double X { get => _x;
-            set => _x = value;
+        public double X { get => X;
+            set => X = value;
         }
 
         /// <summary>
         /// Gets or sets the Y (second) coordinate of this point.
         /// </summary>
-        public double Y { get => _y; set => _y = value; }
+        public double Y { get => Y; set => Y = value; }
 
         /// <summary>
         /// Gets or sets the Z (third) coordinate of this point.
         /// </summary>
-        public double Z { get => _z; set => _z = value; }
+        public double Z { get => Z; set => Z = value; }
 
         /// <summary>
         /// Gets or sets the W (fourth) coordinate -or weight- of this point.
         /// </summary>
-        public double W { get => _w; set => _w = value; }
+        public double W { get => W; set => W = value; }
 
         /// <summary>
         /// Sums two <see cref="Point4d"/> together.
@@ -68,35 +63,35 @@ namespace GShark.Geometry
         public static Point4d operator +(Point4d point1, Point4d point2)
         {
             Point4d result = point1; //copy of the value
-            if (point2._w == point1._w)
+            if (point2.W == point1.W)
             {
-                result._x += point2._x;
-                result._y += point2._y;
-                result._z += point2._z;
+                result.X += point2.X;
+                result.Y += point2.Y;
+                result.Z += point2.Z;
             }
-            else if (point2._w == 0)
+            else if (point2.W == 0)
             {
-                result._x += point2._x;
-                result._y += point2._y;
-                result._z += point2._z;
+                result.X += point2.X;
+                result.Y += point2.Y;
+                result.Z += point2.Z;
             }
-            else if (point1._w == 0)
+            else if (point1.W == 0)
             {
-                result._x += point2._x;
-                result._y += point2._y;
-                result._z += point2._z;
-                result._w = point2._w;
+                result.X += point2.X;
+                result.Y += point2.Y;
+                result.Z += point2.Z;
+                result.W = point2.W;
             }
             else
             {
-                double sw1 = (point1._w > 0.0) ? Math.Sqrt(point1._w) : -Math.Sqrt(-point1._w);
-                double sw2 = (point2._w > 0.0) ? Math.Sqrt(point2._w) : -Math.Sqrt(-point2._w);
+                double sw1 = (point1.W > 0.0) ? Math.Sqrt(point1.W) : -Math.Sqrt(-point1.W);
+                double sw2 = (point2.W > 0.0) ? Math.Sqrt(point2.W) : -Math.Sqrt(-point2.W);
                 double s1 = sw2 / sw1;
                 double s2 = sw1 / sw2;
-                result._x = point1._x * s1 + point2._x * s2;
-                result._y = point1._y * s1 + point2._y * s2;
-                result._z = point1._z * s1 + point2._z * s2;
-                result._w = sw1 * sw2;
+                result.X = point1.X * s1 + point2.X * s2;
+                result.Y = point1.Y * s1 + point2.Y * s2;
+                result.Z = point1.Z * s1 + point2.Z * s2;
+                result.W = sw1 * sw2;
             }
             return result;
         }
@@ -110,35 +105,35 @@ namespace GShark.Geometry
         public static Point4d operator -(Point4d point1, Point4d point2)
         {
             Point4d result = point1; //copy of the value
-            if (point2._w == point1._w)
+            if (point2.W == point1.W)
             {
-                result._x -= point2._x;
-                result._y -= point2._y;
-                result._z -= point2._z;
+                result.X -= point2.X;
+                result.Y -= point2.Y;
+                result.Z -= point2.Z;
             }
-            else if (point2._w == 0.0)
+            else if (point2.W == 0.0)
             {
-                result._x -= point2._x;
-                result._y -= point2._y;
-                result._z -= point2._z;
+                result.X -= point2.X;
+                result.Y -= point2.Y;
+                result.Z -= point2.Z;
             }
-            else if (point1._w == 0.0)
+            else if (point1.W == 0.0)
             {
-                result._x -= point2._x;
-                result._y -= point2._y;
-                result._z -= point2._z;
-                result._w = point2._w;
+                result.X -= point2.X;
+                result.Y -= point2.Y;
+                result.Z -= point2.Z;
+                result.W = point2.W;
             }
             else
             {
-                double sw1 = (point1._w > 0.0) ? Math.Sqrt(point1._w) : -Math.Sqrt(-point1._w);
-                double sw2 = (point2._w > 0.0) ? Math.Sqrt(point2._w) : -Math.Sqrt(-point2._w);
+                double sw1 = (point1.W > 0.0) ? Math.Sqrt(point1.W) : -Math.Sqrt(-point1.W);
+                double sw2 = (point2.W > 0.0) ? Math.Sqrt(point2.W) : -Math.Sqrt(-point2.W);
                 double s1 = sw2 / sw1;
                 double s2 = sw1 / sw2;
-                result._x = point1._x * s1 - point2._x * s2;
-                result._y = point1._y * s1 - point2._y * s2;
-                result._z = point1._z * s1 - point2._z * s2;
-                result._w = sw1 * sw2;
+                result.X = point1.X * s1 - point2.X * s2;
+                result.Y = point1.Y * s1 - point2.Y * s2;
+                result.Z = point1.Z * s1 - point2.Z * s2;
+                result.W = sw1 * sw2;
             }
             return result;
         }
@@ -151,7 +146,7 @@ namespace GShark.Geometry
         /// <returns>A new point that results from the coordinatewise multiplication of point with d.</returns>
         public static Point4d operator *(Point4d point, double d)
         {
-            return new Point4d(point._x * d, point._y * d, point._z * d, point._w * d);
+            return new Point4d(point.X * d, point.Y * d, point.Z * d, point.W * d);
         }
 
         /// <summary>
@@ -163,10 +158,10 @@ namespace GShark.Geometry
         /// <returns>A value that results from the coordinatewise multiplication of point1 and point2.</returns>
         public static double operator *(Point4d point1, Point4d point2)
         {
-            return (point1._x * point2._x) +
-              (point1._y * point2._y) +
-              (point1._z * point2._z) +
-              (point1._w * point2._w);
+            return (point1.X * point2.X) +
+              (point1.Y * point2.Y) +
+              (point1.Z * point2.Z) +
+              (point1.W * point2.W);
         }
 
         /// <summary>
@@ -222,10 +217,10 @@ namespace GShark.Geometry
         /// <returns></returns>
         public bool EpsilonEquals(Point4d other, double epsilon)
         {
-            return Math.Abs(_x - other.X) <= epsilon &&
-                   Math.Abs(_y - other.Y) <= epsilon &&
-                   Math.Abs(_z - other.Z) <= epsilon &&
-                   Math.Abs(_z - other.W) <= epsilon;
+            return Math.Abs(X - other.X) <= epsilon &&
+                   Math.Abs(Y - other.Y) <= epsilon &&
+                   Math.Abs(Z - other.Z) <= epsilon &&
+                   Math.Abs(Z - other.W) <= epsilon;
         }
 
         /// <summary>
