@@ -23,50 +23,50 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Generates_An_Equal_Space_Clamped_Knot()
+        public void It_Creates_A_Clamped_Uniform_KnotVector()
         {
             // Arrange
             int degree = 4;
             int ctrlPts = 12;
-            KnotVector resultExpected = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 };
+            KnotVector expectedKnotVector = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 };
             
             // Act
             KnotVector knots = new KnotVector(degree, ctrlPts);
 
             // Assert
-            knots.Should().BeEquivalentTo(resultExpected);
+            knots.Should().BeEquivalentTo(expectedKnotVector);
         }
 
         [Fact]
-        public void It_Generates_An_Equal_Space_Unclamped_Knot()
+        public void It_Creates_An_Unclamped_Uniform_KnotVector()
         {
             // Arrange
             int degree = 3;
             int ctrlPts = 5;
-            KnotVector resultExpected = new KnotVector { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
+            KnotVector expectedKnotVector = new KnotVector { 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 };
 
             // Act
             KnotVector knots = new KnotVector(degree, ctrlPts, false);
 
             // Assert
-            knots.Should().BeEquivalentTo(resultExpected);
+            knots.Should().BeEquivalentTo(expectedKnotVector);
         }
 
         [Fact]
-        public void It_Generates_An_Equal_Space_Periodic_Knot()
+        public void It_Creates_A_Periodic_Uniform_KnotVector()
         {
             // Arrange
             int degree = 2;
             int ctrlPts = 5;
-            KnotVector resultExpected = new KnotVector { -0.666667, -0.333333, 0, 0.333333, 0.666667, 1, 1.333333, 1.666667 };
+            KnotVector expectedKnotVector = new KnotVector { -0.666667, -0.333333, 0, 0.333333, 0.666667, 1, 1.333333, 1.666667 };
 
             // Act
-            KnotVector knots = KnotVector.CreateUniformPeriodicKnotVector(degree, ctrlPts);
+            KnotVector knots = KnotVector.UniformPeriodic(degree, ctrlPts);
 
             // Assert
             for (int i = 0; i < knots.Count; i++)
             {
-                (resultExpected[i] - knots[i]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+                (expectedKnotVector[i] - knots[i]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
             }
         }
 
@@ -76,13 +76,13 @@ namespace GShark.Test.XUnit.Core
         [InlineData(-1, 0)]
         [InlineData(3, 2)]
         [InlineData(1, 3)]
-        public void Periodic_KnotVector_Throws_An_Exception_If_Are_Not_Valid_Inputs(int degree, int numberOfControlPts)
+        public void CreateUniformPeriodicKnotVector_Throws_An_Exception_If_Are_Not_Valid_Inputs(int degree, int numberOfControlPts)
         {
             // Are identifies as not valid inputs when:
             // Degree and control points count is less than 2.
             // Degree is bigger than the control points count.
             // Act
-            Func<KnotVector> funcResult = () => KnotVector.CreateUniformPeriodicKnotVector(degree, numberOfControlPts);
+            Func<KnotVector> funcResult = () => KnotVector.UniformPeriodic(degree, numberOfControlPts);
 
             // Assert
             funcResult.Should().Throw<Exception>();
@@ -128,13 +128,13 @@ namespace GShark.Test.XUnit.Core
         [InlineData(new double[] { 0, 0, 1, 1, 1 }, 2, false)]
         [InlineData(new double[] { 0, 0, 0.5, 1, 1, 1 }, 2, false)]
         [InlineData(new double[] { 0, 0, 0, 1, 1, 2 }, 2, false)]
-        public void It_Checks_If_Knots_Is_Clamped(double[] knots, int degree, bool expectedResult)
+        public void It_Returns_True_If_KnotVector_Is_Clamped(double[] knots, int degree, bool expectedResult)
         {
             // Act
-            KnotVector knot = new KnotVector(knots);
+            KnotVector knotVector = new KnotVector(knots);
 
             // Assert
-            knot.IsKnotVectorClamped(degree).Should().Be(expectedResult);
+            knotVector.IsClamped(degree).Should().Be(expectedResult);
         }
 
         [Theory]
@@ -160,13 +160,13 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Scope()
+        public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Range()
         {
             // Arrange
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
 
             // Act
-            Func<object> funcResult = () => knots.MultiplicityByIndex(12);
+            Func<object> funcResult = () => knots.Multiplicity(12);
 
             // Assert
             funcResult.Should().Throw<Exception>()
@@ -186,7 +186,7 @@ namespace GShark.Test.XUnit.Core
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             // Act
-            int knotMult = knots.MultiplicityByIndex(index);
+            int knotMult = knots.Multiplicity(index);
 
             // Assert
             knotMult.Should().Be(result);
@@ -216,45 +216,44 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Normalized_Knot_Vectors()
+        public void It_Returns_A_Normalized_Knot_Vector()
         {
             // Arrange
             KnotVector knots = new KnotVector { -5, -5, -3, -2, 2, 3, 5, 5 };
             KnotVector knotsExpected = new KnotVector { 0.0, 0.0, 0.2, 0.3, 0.7, 0.8, 1.0, 1.0 };
 
             // Act
-            KnotVector normalizedKnots = KnotVector.Normalize(knots);
+            KnotVector normalizedKnots = knots.Normalize();
 
             // Assert
             normalizedKnots.Should().BeEquivalentTo(knotsExpected);
         }
 
         [Fact]
-        public void It_Throws_An_Exception_If_Input_Knot()
+        public void It_Throws_An_Exception_If_Input_Knot_Vector_Is_Empty()
         {
             // Assert
             KnotVector knots = new KnotVector();
 
             // Act
-            Func<KnotVector> func = () => KnotVector.Normalize(knots);
+            Func<KnotVector> func = () => knots.Normalize();
 
             // Arrange
             func.Should().Throw<Exception>().WithMessage("Input knot vector cannot be empty");
         }
 
         [Fact]
-        public void It_Returns_The_Reversed_Knot_Vectors()
+        public void It_Reverses_A_Knot_Vectors()
         {
             // Assert
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
-            KnotVector knotsExpected = new KnotVector { 0, 0, 0, 0.7000000000000002, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4 };
+            KnotVector knotVector = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+            KnotVector expectedKnotVector = new KnotVector { 0, 0, 0, 0.7000000000000002, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4 };
 
             // Act
-            KnotVector reversedKnots = KnotVector.Reverse(knots);
+            KnotVector reversedKnots = KnotVector.Reverse(knotVector);
 
             // Arrange
-            reversedKnots.Should().BeInAscendingOrder();
-            reversedKnots.Should().BeEquivalentTo(knotsExpected);
+            reversedKnots.Should().BeEquivalentTo(expectedKnotVector);
         }
     }
 }

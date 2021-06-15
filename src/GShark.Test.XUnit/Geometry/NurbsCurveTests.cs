@@ -45,7 +45,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Closed_CurveNurbs()
+        public void It_Returns_A_Closed_NurbsCurve()
         {
             // Arrange
             int degree = 2;
@@ -74,7 +74,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Checks_If_A_NurbsCurve_Is_Closed()
+        public void It_Returns_True_If_A_NurbsCurve_Is_Closed()
         {
             // Assert
             NurbsCurveCollection.PeriodicClosedNurbsCurve().IsClosed().Should().BeTrue();
@@ -95,7 +95,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_From_ControlPoints_And_Degree()
+        public void It_Creates_A_NurbsCurve_From_ControlPoints_And_Degree()
         {
             // Act
             NurbsCurve nurbsCurve = new NurbsCurve(CurveData.pts, CurveData.degree);
@@ -216,20 +216,20 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Copied_NurbsCurve()
+        public void It_Returns_A_Copy_Of_A_NurbsCurve()
         {
             // Arrange
             NurbsCurve nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Act
-            NurbsCurve copiedNurbs = nurbsCurve.Clone();
+            NurbsCurve nurbsCurveCopy = nurbsCurve.Clone();
 
             // Assert
-            copiedNurbs.Should().NotBeNull();
-            copiedNurbs.Equals(nurbsCurve).Should().BeTrue();
-            copiedNurbs.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
-            copiedNurbs.Degree.Should().Be(nurbsCurve.Degree);
-            copiedNurbs.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
+            nurbsCurveCopy.Should().NotBeNull();
+            nurbsCurveCopy.Equals(nurbsCurve).Should().BeTrue();
+            nurbsCurveCopy.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
+            nurbsCurveCopy.Degree.Should().Be(nurbsCurve.Degree);
+            nurbsCurveCopy.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
         }
 
         [Fact]
@@ -244,7 +244,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Transformed_NurbsCurve_By_A_Given_Matrix()
+        public void It_Transforms_A_NurbsCurve_By_A_Given_Matrix()
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();

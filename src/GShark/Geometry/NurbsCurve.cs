@@ -183,7 +183,7 @@ namespace GShark.Geometry
                 copyCtrPts.Add(copyCtrPts[i]);
             }
 
-            KnotVector knots = KnotVector.CreateUniformPeriodicKnotVector(Degree, copyCtrPts.Count);
+            KnotVector knots = KnotVector.UniformPeriodic(Degree, copyCtrPts.Count);
             return new NurbsCurve(Degree, knots, copyCtrPts);
         }
 
