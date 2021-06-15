@@ -20,12 +20,13 @@ namespace GShark.Geometry
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
         public NurbsCurve(){}
+
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
         /// <param name="degree">The curve degree.</param>
         /// <param name="knots">The knots defining the curve.</param>
-        /// <param name="controlPoints">The control points.</param>
+        /// <param name="controlPoints">The control points of the curve.</param>
         /// <param name="weights">The weight values.</param>
         public NurbsCurve(int degree, KnotVector knots, List<Vector3> controlPoints, List<double>? weights = null)
         {
@@ -64,7 +65,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
-        /// <param name="controlPoints">The control points.</param>
+        /// <param name="controlPoints">The control points of the curve.</param>
         /// <param name="degree">The curve degree.</param>
         public NurbsCurve(List<Vector3> controlPoints, int degree)
             : this(degree, new KnotVector(degree, controlPoints.Count), controlPoints)
@@ -97,7 +98,17 @@ namespace GShark.Geometry
 
         public KnotVector Knots { get; }
 
-        public Interval Domain => new Interval(Knots.First(), Knots.Last());
+        public Interval Domain
+        {
+            get
+            {
+                if (IsClosed())
+                {
+                    return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
+                }
+                return new Interval(Knots[0], Knots[^1]);
+            }
+        }
 
         public BoundingBox BoundingBox
         {
@@ -120,12 +131,60 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Checks if a NURBS curve is closed.<br/>
+        /// A curve is closed if the first point and the last are the same or if it is periodic, where the number of overlapping points is defined by the the curve degree.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        public bool IsClosed()
+        {
+            if (Knots.IsKnotVectorPeriodic(Degree))
+            {
+                int i, j = 0;
+                for (i = 0, j = ControlPoints.Count - Degree; i < Degree; i++, j++)
+                {
+                    if (ControlPoints[i].DistanceTo(ControlPoints[j]) > 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (ControlPoints[0].DistanceTo(ControlPoints[^1]) > 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Gets a copy of the curve.
         /// </summary>
         /// <returns>The copied curve.</returns>
         public NurbsCurve Clone()
         {
             return new NurbsCurve(this);
+        }
+
+        /// <summary>
+        /// Creates a closed NURBS curve.<br/>
+        /// This method uses the control point wrapping solution.
+        /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
+        /// </summary>
+        /// <returns>A closed NURBS curve.</returns>
+        public NurbsCurve Close()
+        {
+            // Wrapping control points
+            List<Vector3> copyCtrPts = new List<Vector3>(ControlPoints);
+            for (int i = 0; i < Degree; i++)
+            {
+                copyCtrPts.Add(copyCtrPts[i]);
+            }
+
+            KnotVector knots = KnotVector.UniformPeriodic(Degree, copyCtrPts.Count);
+            return new NurbsCurve(Degree, knots, copyCtrPts);
         }
 
         /// <summary>
