@@ -8,6 +8,7 @@ namespace GShark.Operation
     /// <summary>
     /// Collects a set of method for offsetting primitives and NURBS geometries.
     /// </summary>
+    //ToDo Refactor as extension method on ICurve with switch cases for types?
     public static class Offset
     {
         /// <summary>
@@ -74,7 +75,7 @@ namespace GShark.Operation
             int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
 
             Vector3[] offsetPts = new Vector3[poly.Count];
-            Line[] segments = poly.Segments();
+            Line[] segments = poly.Segments;
             Line[] offsetSegments = new Line[segments.Length + 1];
 
             for (int i = 0; i < iteration; i++)

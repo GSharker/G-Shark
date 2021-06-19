@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using GShark.Core;
 using GShark.Geometry;
 using Xunit;
 using Xunit.Abstractions;
@@ -11,23 +12,24 @@ namespace GShark.Test.XUnit.Geometry
         private readonly ITestOutputHelper _testOutput;
         private readonly Circle _circle2D;
         private readonly Circle _circle3D;
+
         public CircleTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
 
             #region example
             // Initializes a circle from a plane and a radius.
-            Vector3 center = new Vector3 { 85.591741, 24.79606, 1.064717 };
-            Vector3 xDir = new Vector3 { -0.687455, 0.703828, -0.178976 };
-            Vector3 yDir = new Vector3 { -0.726183, -0.663492, 0.180104 };
-            Vector3 normal = new Vector3 { 0.008012, 0.253783, 0.967228 };
+            Point3d center = new Point3d(85.591741, 24.79606, 1.064717);
+            Vector3d xDir = new Vector3d(-0.687455, 0.703828, -0.178976);
+            Vector3d yDir = new Vector3d(-0.726183, -0.663492, 0.180104);
+            Vector3d normal = new Vector3d(0.008012, 0.253783, 0.967228);
             Plane plane = new Plane(center, xDir, yDir, normal);
             _circle2D = new Circle(plane, 23);
 
             // Initializes a circle from 3 points.
-            Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
-            Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
-            Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+            Point3d pt1 = new Point3d(74.264416, 36.39316, -1.884313);
+            Point3d pt2 = new Point3d(97.679126, 13.940616, 3.812853);
+            Point3d pt3 = new Point3d(100.92443, 30.599893, -0.585116);
             _circle3D = new Circle(pt1, pt2, pt3);
             #endregion
         }
@@ -37,7 +39,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Assert
             int radius = 23;
-            Vector3 expectedCenter = new Vector3 {0.0, 0.0, 0.0};
+            Point3d expectedCenter = new Point3d(0.0, 0.0, 0.0);
 
             // Act
             Circle circle = new Circle(radius);
@@ -53,27 +55,27 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle3D;
-            Vector3[] ptsExpected = new []
+            Point3d[] ptsExpected = new []
             {
-                new Vector3 {74.264416, 36.39316, -1.884313},
-                new Vector3 {62.298962, 25.460683, 1.083287},
-                new Vector3 {73.626287, 13.863582, 4.032316},
-                new Vector3 {84.953611, 2.266482, 6.981346},
-                new Vector3 {96.919065, 13.198959, 4.013746},
-                new Vector3 {108.884519, 24.131437, 1.046146},
-                new Vector3 {97.557194, 35.728537, -1.902883},
-                new Vector3 {86.22987, 47.325637, -4.851913},
-                new Vector3 {74.264416, 36.39316, -1.884313}
+                new Point3d(74.264416, 36.39316, -1.884313),
+                new Point3d(62.298962, 25.460683, 1.083287),
+                new Point3d(73.626287, 13.863582, 4.032316),
+                new Point3d(84.953611, 2.266482, 6.981346),
+                new Point3d(96.919065, 13.198959, 4.013746),
+                new Point3d(108.884519, 24.131437, 1.046146),
+                new Point3d(97.557194, 35.728537, -1.902883),
+                new Point3d(86.22987, 47.325637, -4.851913),
+                new Point3d(74.264416, 36.39316, -1.88431)
             };
 
             // Act
-            List<Vector3> ctrPts = circle.ControlPoints;
+            List<Point3d> ctrPts = circle.ControlPoints;
 
             // Assert
             ctrPts.Count.Should().Be(9);
             for (int i = 0; i < ptsExpected.Length; i++)
             {
-                ctrPts[i].IsEqualRoundingDecimal(ptsExpected[i], 6).Should().BeTrue();
+                ctrPts[i].EpsilonEquals(ptsExpected[i], GeoSharpMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -97,14 +99,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3 expectedPt = new Vector3(pts);
+            Point3d expectedPt = new Point3d(pts[0],pts[1],pts[2]);
             Circle circle = _circle2D;
 
             // Act
-            Vector3 pt = circle.PointAt(t);
+            Point3d pt = circle.PointAt(t);
 
             // Assert
-            pt.IsEqualRoundingDecimal(expectedPt, 4).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -113,14 +115,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3 expectedTangent = new Vector3(pts);
+            Vector3d expectedTangent = new Vector3d(pts[0], pts[1], pts[2]);
             Circle circle = _circle2D;
 
             // Act
-            Vector3 tangent = circle.TangentAt(t);
+            Point3d tangent = circle.TangentAt(t);
 
             // Assert
-            tangent.IsEqualRoundingDecimal(expectedTangent, 4).Should().BeTrue();
+            tangent.EpsilonEquals(expectedTangent, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -128,15 +130,15 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle2D;
-            Vector3 minCheck = new Vector3 { 62.592479, 2.549053, -4.7752 };
-            Vector3 maxCheck = new Vector3 { 108.591003, 47.043067, 6.904634 };
+            Point3d minCheck = new Point3d(62.592479, 2.549053, -4.7752);
+            Point3d maxCheck = new Point3d(108.591003, 47.043067, 6.904634);
 
             // Act
             BoundingBox bBox = circle.BoundingBox;
 
             // Assert
-            bBox.Min.IsEqualRoundingDecimal(minCheck, 6).Should().BeTrue();
-            bBox.Max.IsEqualRoundingDecimal(maxCheck, 6).Should().BeTrue();
+            bBox.Min.EpsilonEquals(minCheck, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            bBox.Max.EpsilonEquals(maxCheck, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -145,15 +147,15 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
         {
             // Arrange
-            Vector3 testPt = new Vector3(ptToTest);
-            Vector3 expectedPt = new Vector3(result);
+            Point3d testPt = new Point3d(ptToTest[0], ptToTest[1], ptToTest[2]);
+            Point3d expectedPt = new Point3d(result[0], result[1], result[2]);
 
             // Act
             Circle circle = _circle2D;
-            Vector3 pt = circle.ClosestPt(testPt);
+            Point3d pt = circle.ClosestPoint(testPt);
 
             // Assert
-            pt.IsEqualRoundingDecimal(expectedPt, 4).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace GShark.Geometry
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
         public NurbsCurve(){}
+
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
@@ -27,7 +28,7 @@ namespace GShark.Geometry
         /// <param name="knots">The knots defining the curve.</param>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="weights">The weight values.</param>
-        public NurbsCurve(int degree, KnotVector knots, List<Vector3> controlPoints, List<double>? weights = null)
+        public NurbsCurve(int degree, KnotVector knots, List<Point3d> controlPoints, List<double>? weights = null)
         {
             if (controlPoints is null)
             {
@@ -66,7 +67,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="degree">The curve degree.</param>
-        public NurbsCurve(List<Vector3> controlPoints, int degree)
+        public NurbsCurve(List<Point3d> controlPoints, int degree)
             : this(degree, new KnotVector(degree, controlPoints.Count), controlPoints)
         {
         }
@@ -78,8 +79,8 @@ namespace GShark.Geometry
         private NurbsCurve(NurbsCurve curve)
         {
             Degree = curve.Degree;
-            ControlPoints = new List<Vector3>(curve.ControlPoints);
-            HomogenizedPoints = new List<Vector3>(curve.HomogenizedPoints);
+            ControlPoints = new List<Point3d>(curve.ControlPoints);
+            HomogenizedPoints = new List<Point4d>(curve.HomogenizedPoints);
             Knots = new KnotVector(curve.Knots);
             Weights = new List<double>(curve.Weights!);
         }
@@ -91,9 +92,10 @@ namespace GShark.Geometry
 
         public int Degree { get; }
 
-        public List<Vector3> ControlPoints { get; }
+        public List<Point3d> ControlPoints { get; }
 
-        public List<Vector3> HomogenizedPoints { get; }
+        //ToDo To avoid confusion, the definition of a NURBS curve should consist only of ControlPoints as a collection of Point4d. These should only ever be dehomogenized as needed by another method, or via implicit operator on Point4d->Point3d.
+        public List<Point4d> HomogenizedPoints { get; }
 
         public KnotVector Knots { get; }
 
@@ -103,7 +105,7 @@ namespace GShark.Geometry
         {
             get
             {
-                List<Vector3> pts = new List<Vector3> {ControlPoints[0]};
+                List<Point3d> pts = new List<Point3d> {ControlPoints[0]};
                 List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
                 foreach (ICurve crv in beziers)
                 {
@@ -135,7 +137,7 @@ namespace GShark.Geometry
         /// <returns>A new curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            var pts = new List<Vector3>(ControlPoints);
+            List<Point3d> pts = new List<Point3d>(ControlPoints);
 
             for (int i = 0; i < pts.Count; i++)
             {
@@ -152,7 +154,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
-        public Vector3 PointAt(double t)
+        public Point3d PointAt(double t)
         {
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
         }
@@ -162,7 +164,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
-        public Vector3 TangentAt(double t)
+        public Vector3d TangentAt(double t)
         {
             return Evaluation.RationalCurveTangent(this, t);
         }
@@ -190,7 +192,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Point to analyze.</param>
         /// <returns>The closest point on the curve.</returns>
-        public Vector3 ClosestPt(Vector3 point)
+        public Point3d ClosestPt(Vector3d point)
         {
             return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
@@ -224,7 +226,7 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
-            List<Vector3>? otherPts = other?.ControlPoints;
+            List<Point3d>? otherPts = other?.ControlPoints;
 
             if (other == null)
             {

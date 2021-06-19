@@ -23,10 +23,10 @@ namespace GShark.Operation
         /// <param name="knots">Set of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, KnotVector knots, double knot)
+        public static List<double> BasisFunction(int degree, KnotVector knots, double knot)
         {
             int span = knots.Span(degree, knot);
-            return BasicFunction(degree, knots, span, knot);
+            return BasisFunction(degree, knots, span, knot);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace GShark.Operation
         /// <param name="span">Index span of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, KnotVector knots, int span, double knot)
+        public static List<double> BasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             Vector3 left = Vector3.Zero1d(degree + 1);
             Vector3 right = Vector3.Zero1d(degree + 1);
@@ -137,34 +137,33 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        public static Vector3 CurvePointAt(ICurve curve, double t)
+        //ToDo Return Point3d by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
+        public static Point3d CurvePointAt(ICurve curve, double t)
         {
-            int degree = curve.Degree;
-            List<Vector3> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot");
-            }
+            //ToDo Input validation on t within range.
 
-            int n = knots.Count - degree - 2;
+            int n = knots.Count - curve.Degree - 2;
 
-            int knotSpan = knots.Span(n, degree, t);
-            List<double> basisValue = BasicFunction(degree, knots, knotSpan, t);
-            Vector3 position = Vector3.Zero1d(curveHomogenizedPoints[0].Count);
+            int knotSpan = knots.Span(n, curve.Degree, t);
+            List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
+            Point4d pointOnCurve = new Point4d(0,0,0,0);
 
-            for (int i = 0; i < degree + 1; i++)
+            for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Vector3 pt = curveHomogenizedPoints[knotSpan - degree + i];
-                for (int j = 0; j < position.Count; j++)
-                {
-                    position[j] = position[j] + valToMultiply * pt[j];
-                }
+                Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+
+                pointOnCurve.X += valToMultiply * pt.X;
+                pointOnCurve.Y += valToMultiply * pt.Y;
+                pointOnCurve.Z += valToMultiply * pt.Z;
+                pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            return position;
+            //ToDo Check if this is correct. Previous implementation was outputting a 4d point, but in unit test checking against 3d point.
+            return LinearAlgebra.PointDehomogenizer(pointOnCurve);
         }
 
         /// <summary>
@@ -175,14 +174,15 @@ namespace GShark.Operation
         /// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
         /// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        public static Vector3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        public static Point3d SurfacePointAt(NurbsSurface surface, double u, double v)
         {
             int n = surface.KnotsU.Count - surface.DegreeU - 2;
             int m = surface.KnotsV.Count - surface.DegreeV - 2;
-            List<List<Vector3>> controlPoints = surface.ControlPoints;
-            List<List<Vector3>> surfaceHomoPts = surface.HomogenizedPoints;
-            int dim = controlPoints[0][0].Count;
+            List<List<Point3d>> controlPoints = surface.ControlPoints;
+            List<List<Point4d>> surfaceHomoPts = surface.HomogenizedPoints;
+            int dim = 3;//dimension of point
 
+            //ToDo These checks should be in the validity check of surface. Here should check that u and v are in range.
             if (!surface.KnotsU.IsValid(surface.DegreeU, surfaceHomoPts.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot in u direction");
@@ -195,23 +195,25 @@ namespace GShark.Operation
 
             int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
             int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
-            List<double> basisUValue = BasicFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
-            List<double> basisVValue = BasicFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
+            List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
+            List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             int uIndex = knotSpanU - surface.DegreeU;
-            Vector3 position = Vector3.Zero1d(dim);
+            Point3d position = new Point3d(0,0,0);
+
+            //ToDo refactor to use point coordinate properties instead of inidces. X,Y,Z.
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Vector3.Zero1d(dim);
+                var temp = new Point3d(0,0,0);
                 var vIndex = knotSpanV - surface.DegreeV + l;
                 for (int x = 0; x < surface.DegreeU + 1; x++)
                 {
-                    for (int j = 0; j < temp.Count; j++)
+                    for (int j = 0; j < dim; j++)
                     {
                         temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
                     }
                 }
 
-                for (int j = 0; j < position.Count; j++)
+                for (int j = 0; j < dim; j++)
                 {
                     position[j] = position[j] + basisVValue[l] * temp[j];
                 }
@@ -263,12 +265,12 @@ namespace GShark.Operation
                 span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
             }
 
-            List<Vector3> ctrlPts = new List<Vector3>();
+            List<Point3d> ctrlPts = new List<Point3d>();
             if (!useU)
             {
-                foreach (List<Vector3> row in newSrf.ControlPoints)
+                foreach (var row in newSrf.ControlPoints)
                 {
-                    ctrlPts.Add(row[span]);
+                    ctrlPts.Add(new Point3d(row[span][0], row[span][1], row[span][2]));
                 }
 
                 return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
@@ -282,7 +284,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The tangent vector at the given parameter.</returns>
-        public static Vector3 RationalCurveTangent(ICurve curve, double t)
+        public static Vector3d RationalCurveTangent(ICurve curve, double t)
         {
             List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
             return derivatives[1];
@@ -293,9 +295,9 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The points collection to evaluate.</param>
         /// <returns>The centroid point.</returns>
-        public static Vector3 CentroidByVertices(IList<Vector3> pts)
+        public static Point3d CentroidByVertices(IList<Point3d> pts)
         {
-            Vector3 centroid = new Vector3 { 0.0, 0.0, 0.0 };
+            Point3d centroid = new Point3d();
             bool isClosed = pts[0] == pts[^1];
             int count = pts.Count;
 
@@ -360,17 +362,17 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
-        internal static List<List<Vector3>> DerivativeCoordinates(List<Vector3> pts)
+        internal static List<List<Point3d>> DerivativeCoordinates(List<Point3d> pts)
         {
-            List<List<Vector3>> derivPts = new List<List<Vector3>>();
+            List<List<Point3d>> derivPts = new List<List<Point3d>>();
 
-            List<Vector3> p = new List<Vector3>(pts);
+            List<Point3d> p = new List<Point3d>(pts);
             int d = p.Count;
             int c = d - 1;
 
             for (; d > 1; d--, c--)
             {
-                List<Vector3> list = new List<Vector3>();
+                List<Point3d> list = new List<Point3d>();
                 for (int j = 0; j < c; j++)
                 {
                     var dpt = (p[j + 1] - p[j]) * c;
@@ -389,16 +391,16 @@ namespace GShark.Operation
         /// Find all roots (derivative=0) for both derivatives.<br/>
         /// https://pomax.github.io/bezierinfo/#extremities
         /// </summary>
-        /// <param name="derivs">The derivatives.</param>
+        /// <param name="derivatives">The derivatives.</param>
         /// <returns>The roots values.</returns>
-        internal static IList<double> DerivRoots(IList<double> derivs)
+        internal static IList<double> DerivRoots(IList<double> derivatives)
         {
             // quadratic roots
-            if (derivs.Count == 3)
+            if (derivatives.Count == 3)
             {
-                var a = derivs[0];
-                var b = derivs[1];
-                var c = derivs[2];
+                var a = derivatives[0];
+                var b = derivatives[1];
+                var c = derivatives[2];
                 var d = a - 2 * b + c;
                 if (d != 0)
                 {
@@ -416,10 +418,10 @@ namespace GShark.Operation
             }
 
             // linear roots
-            if (derivs.Count == 2)
+            if (derivatives.Count == 2)
             {
-                var a = derivs[0];
-                var b = derivs[1];
+                var a = derivatives[0];
+                var b = derivatives[1];
                 if (a != b)
                 {
                     return new[] { a / (a - b) };
@@ -483,22 +485,24 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Vector3> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
+        public static List<Vector3d> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
             int degree = curve.Degree;
-            List<Vector3> controlPoints = curve.HomogenizedPoints;
+            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.IsValid(degree, controlPoints.Count))
+            //ToDo Check should be in validity of ICurve. Here should check for parameter u being in range 0 to 1, or within curve domain.
+            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot");
             }
 
             int n = knots.Count - degree - 2;
 
-            int ptDimension = controlPoints[0].Count;
+            int homogenizedPointDimension = 4;
             int derivateOrder = numberDerivs < degree ? numberDerivs : degree;
-            List<Vector3> CK = Vector3.Zero2d(numberDerivs + 1, ptDimension);
+
+            List<Vector3> ck = Vector3.Zero2d(numberDerivs + 1, homogenizedPointDimension);
             int knotSpan = knots.Span(n, degree, parameter);
             List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, degree, derivateOrder, knots);
 
@@ -507,14 +511,14 @@ namespace GShark.Operation
                 for (int j = 0; j < degree + 1; j++)
                 {
                     double valToMultiply = derived2d[k][j];
-                    Vector3 pt = controlPoints[knotSpan - degree + j];
-                    for (int i = 0; i < CK[k].Count; i++)
+                    Point4d pt = curveHomogenizedPoints[knotSpan - degree + j];
+                    for (int i = 0; i < ck[k].Count; i++)
                     {
-                        CK[k][i] = CK[k][i] + (valToMultiply * pt[i]);
+                        ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
                     }
                 }
             }
-            return CK;
+            return ck;
         }
 
         /// <summary>

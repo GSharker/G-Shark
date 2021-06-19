@@ -573,5 +573,28 @@ namespace GShark.Geometry
 
             return nonDups.ToArray();
         }
+
+        /// <summary>
+        /// Calculates the distance of a point to a line.
+        /// </summary>
+        /// <param name="line">The line from which to calculate the distance.</param>
+        /// <returns>The distance.</returns>
+        public double DistanceTo(Line line)
+        {
+            Point3d projectedPt = line.ClosestPoint(this);
+            Vector3d ptToProjectedPt = projectedPt - this;
+            return ptToProjectedPt.Length;
+        }
+
+        /// <summary>
+        /// Determinate if the provided point lies on the plane.
+        /// </summary>
+        /// <param name="plane">The plane on which to find if the point lies on.</param>
+        /// <param name="tolerance">If the tolerance is not set, as per default is use 1e-6</param>
+        /// <returns>Whether the point is on the plane.</returns>
+        public bool IsOnPlane(Plane plane, double tolerance = GeoSharpMath.MaxTolerance)
+        {
+            return Math.Abs(Vector3d.DotProduct(this - plane.Origin, plane.Normal)) < tolerance;
+        }
     }
 }

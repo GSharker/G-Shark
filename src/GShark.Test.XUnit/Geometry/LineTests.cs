@@ -125,21 +125,21 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_ClosestPoint()
         {
             // Arrange
-            Vector3 pt = new Vector3 { 5, 8, 0 };
-            Vector3 expectedPt = new Vector3 { 8.692308, 5.538462, 0 };
+            Point3d pt = new Point3d ( 5, 8, 0);
+            Point3d expectedPt = new Point3d(8.692308, 5.538462, 0);
 
             // Act
-            Vector3 closestPt = _exampleLine.ClosestPt(pt);
+            Point3d closestPt = _exampleLine.ClosestPoint(pt);
 
             // Assert
-            closestPt.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
+            closestPt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
         }
 
         [Fact]
         public void PointAt_Throw_An_Exception_If_Parameter_Outside_The_Curve_Domain()
         {
             // Act
-            Func<Vector3> func = () => _exampleLine.PointAt(2);
+            Func<Point3d> func = () => _exampleLine.PointAt(2);
 
             // Assert
             func.Should().Throw<ArgumentOutOfRangeException>()
@@ -155,10 +155,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Evaluated_Point_At_The_Given_Parameter(double t, double[] ptExpected)
         {
             // Act
-            Vector3 ptEvaluated = _exampleLine.PointAt(t);
+            Point3d ptEvaluated = _exampleLine.PointAt(t);
 
             // Assert
-            ptEvaluated.Equals(ptExpected.ToVector()).Should().BeTrue();
+            ptEvaluated.Equals(ptExpected).Should().BeTrue();
         }
 
         [Theory]
@@ -222,8 +222,8 @@ namespace GShark.Test.XUnit.Geometry
             Line transformedLine = _exampleLine.Transform(transform);
 
             // Assert
-            transformedLine.Start.Should().BeEquivalentTo(new Vector3 { 15, 10, 0 });
-            transformedLine.End.Should().BeEquivalentTo(new Vector3 { 25, 25, 0 });
+            transformedLine.Start.Should().BeEquivalentTo(new Point3d(15, 10, 0));
+            transformedLine.End.Should().BeEquivalentTo(new Point3d(25, 25, 0));
         }
 
         [Fact]

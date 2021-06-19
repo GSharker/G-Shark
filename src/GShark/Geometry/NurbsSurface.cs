@@ -26,7 +26,7 @@ namespace GShark.Geometry
         /// <param name="controlPoints">Two dimensional array of points</param>
         /// <param name="weights">Two dimensional array of weight values</param>
         /// <return>A new NurbsSurface</return>
-        public NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Vector3>> controlPoints, List<List<double>>? weights = null)
+        public NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3d>> controlPoints, List<List<double>>? weights = null)
         {
 
             if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
@@ -84,20 +84,20 @@ namespace GShark.Geometry
         /// <param name="p2">The second point</param>
         /// <param name="p3">The third point</param>
         /// <param name="p4">The fourth point</param>
-        public static NurbsSurface ByFourPoints(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+        public static NurbsSurface ByFourPoints(Point3d p1, Point3d p2, Point3d p3, Point3d p4)
         {
             int degree = 1;
-            var pts = new List<List<Vector3>>();
+            var pts = new List<List<Point3d>>();
             for (int i = 0; i < degree + 1; i++)
             {
-                var row = new List<Vector3>();
+                var row = new List<Point3d>();
                 for (int j = 0; j < degree + 1; j++)
                 {
                     var l = (1.0d - i / degree);
-                    var p1p2 = Vector3.Lerp(p1, p2, l);
-                    var p4p3 = Vector3.Lerp(p4, p3, l);
-                    var res = Vector3.Lerp(p1p2, p4p3, 1.0d - j / degree);
-                    res.Add(1.0d);
+                    var p1p2 = Point3d.Interpolate(p1, p2, l);
+                    var p4p3 = Point3d.Interpolate(p4, p3, l);
+                    var res = Point3d.Interpolate(p1p2, p4p3, 1.0d - j / degree);
+                    var res4d = new Point4d(res.X, res.Y, res.Z, 1.0d);
                     row.Add(res);
                 }
                 pts.Add(row);
@@ -116,7 +116,7 @@ namespace GShark.Geometry
         /// <param name="u">u parameter</param>
         /// <param name="v">v parameter</param>
         /// <returns></returns>
-        public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+        public Vector3d Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
 
         /// <summary>
         /// Obtain the surface tangent at the given u and v parameters in the u direction
@@ -124,7 +124,7 @@ namespace GShark.Geometry
         /// <param name="u">u parameter</param>
         /// <param name="v">v parameter</param>
         /// <returns></returns>
-        public Vector3 TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
+        public Vector3d TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
 
         /// <summary>
         /// Obtain the surface tangent at the given u and v parameters in the v direction
@@ -132,7 +132,7 @@ namespace GShark.Geometry
         /// <param name="u">u parameter</param>
         /// <param name="v">v parameter</param>
         /// <returns></returns>
-        public Vector3 TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
+        public Vector3d TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
 
         /// <summary>
         /// Integer degree of surface in u direction.
@@ -172,12 +172,12 @@ namespace GShark.Geometry
         /// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         /// and where each control point is an list of length (dim).
         /// </summary>
-        public List<List<Vector3>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
+        public List<List<Point3d>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
         /// <summary>
         ///Two dimensional array of weight values
         /// </summary>
         public List<List<double>> Weights { get; }
-        public List<List<Vector3>> HomogenizedPoints { get; }
+        public List<List<Point4d>> HomogenizedPoints { get; }
 
         public bool Equals(NurbsSurface other){
             //var pts = this.ControlPoints;

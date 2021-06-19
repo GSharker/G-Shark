@@ -27,35 +27,35 @@ namespace GShark.Test.XUnit.Operation
             KnotVector knotsU = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             KnotVector knotsV = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
 
-            List<Vector3> u1 = new List<Vector3>
+            List<Point3d> u1 = new List<Point3d>
             {
-                new Vector3 { 0d, 0d, 0d },
-                new Vector3 { 10d, 0d, 0d },
-                new Vector3 { 20d, 0d, 0d },
-                new Vector3 { 30d, 0d, 0d }
+                new (0d, 0d, 0d),
+                new (10d, 0d, 0d),
+                new (20d, 0d, 0d),
+                new (30d, 0d, 0d)
             };
-            List<Vector3> u2 = new List<Vector3>
+            List<Point3d> u2 = new List<Point3d>
             {
-                new Vector3 { 0d, -10d, 0d },
-                new Vector3 { 10d, -10d, 10d },
-                new Vector3 { 20d, -10d, 0d },
-                new Vector3 { 30d, -10d, 0d }
+                new (0d, -10d, 0d),
+                new (10d, -10d, 10d),
+                new (20d, -10d, 0d),
+                new (30d, -10d, 0d)
             };
-            List<Vector3> u3 = new List<Vector3>
+            List<Point3d> u3 = new List<Point3d>
             {
-                new Vector3 { 0d, -20d, 0d },
-                new Vector3 { 10d, -20d, 0d },
-                new Vector3 { 20d, -20d, 0d },
-                new Vector3 { 30d, -20d, 0d }
+                new (0d, -20d, 0d),
+                new (10d, -20d, 0d),
+                new (20d, -20d, 0d),
+                new (30d, -20d, 0d)
             };
-            List<Vector3> u4 = new List<Vector3>
+            List<Point3d> u4 = new List<Point3d>
             {
-                new Vector3 { 0d, -30d, 0d },
-                new Vector3 { 10d, -30d, 0d },
-                new Vector3 { 20d, -30d, 0d },
-                new Vector3 { 30d, -30d, 0d }
+                new (0d, -30d, 0d),
+                new (10d, -30d, 0d),
+                new (20d, -30d, 0d),
+                new (30d, -30d, 0d)
             };
-            List<List<Vector3>> controlPoints = new List<List<Vector3>>
+            List<List<Point3d>> controlPoints = new List<List<Point3d>>
             {
                 u1, u2, u3, u4
             };
@@ -72,8 +72,8 @@ namespace GShark.Test.XUnit.Operation
             KnotVector knots = new KnotVector { 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5 };
 
             // Act
-            List<double> result1 = Evaluation.BasicFunction(degree, knots, span, 2.5);
-            List<double> result2 = Evaluation.BasicFunction(degree, knots, 2.5);
+            List<double> result1 = Evaluation.BasisFunction(degree, knots, span, 2.5);
+            List<double> result2 = Evaluation.BasisFunction(degree, knots, 2.5);
 
             // Assert
             result1.Should().BeEquivalentTo(result2);
@@ -84,29 +84,29 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Theory]
-        [InlineData(0.0, new double[] { 5.0, 5.0, 0.0 })]
-        [InlineData(0.3, new double[] { 18.617, 13.377, 0.0 })]
-        [InlineData(0.5, new double[] { 27.645, 14.691, 0.0 })]
-        [InlineData(0.6, new double[] { 32.143, 14.328, 0.0 })]
-        [InlineData(1.0, new double[] { 50.0, 5.0, 0.0 })]
+        [InlineData(0.0, new[] { 5.0, 5.0, 0.0 })]
+        [InlineData(0.3, new[] { 18.617, 13.377, 0.0 })]
+        [InlineData(0.5, new[] { 27.645, 14.691, 0.0 })]
+        [InlineData(0.6, new[] { 32.143, 14.328, 0.0 })]
+        [InlineData(1.0, new[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_A_Given_Parameter(double parameter, double[] result)
         {
             // Arrange
             KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3d> controlPts = new List<Point3d>
             {
-                new Vector3 {5,5,0},
-                new Vector3 {10, 10, 0},
-                new Vector3 {20, 15, 0},
-                new Vector3 {35, 15, 0},
-                new Vector3 {45, 10, 0},
-                new Vector3 {50, 5, 0}
+                new (5,5,0),
+                new (10, 10, 0),
+                new (20, 15, 0),
+                new (35, 15, 0),
+                new (45, 10, 0),
+                new (50, 5, 0)
             };
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
-            Vector3 pt = Evaluation.CurvePointAt(curve, parameter);
+            Point3d pt = Evaluation.CurvePointAt(curve, parameter);
 
             // Assert
             pt[0].Should().BeApproximately(result[0], 0.001);
@@ -117,19 +117,18 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_A_Point_On_Four_Points_Surface_At_A_Given_U_And_V_Parameter()
         {
             // Arrange
-            Vector3 p1 = new Vector3 { 6.292d, -3.297d, -1.311d };
-            Vector3 p2 = new Vector3 { 4.599d, 4.910d, 5.869d };
-            Vector3 p3 = new Vector3 { -8.032d, -8.329d, -0.556d };
-            Vector3 p4 = new Vector3 { -7.966d, 7.580d, 5.366d };
+            Point3d p1 = new Point3d(6.292d, -3.297d, -1.311d);
+            Point3d p2 = new Point3d(4.599d, 4.910d, 5.869d);
+            Point3d p3 = new Point3d(-8.032d, -8.329d, -0.556d);
+            Point3d p4 = new Point3d(-7.966d, 7.580d, 5.366d);
 
             // Act
             NurbsSurface nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
             
             // Assert
             nurbsSurface.Should().NotBeNull();
-            Vector3 pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
+            Point3d pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
 
-            pt.Should().NotBeEmpty();
             pt[0].Should().BeApproximately(-1.27675, 0.00001);
             pt[1].Should().BeApproximately(0.216, 0.00001);
             pt[2].Should().BeApproximately(2.342, 0.00001);
@@ -139,12 +138,12 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_Extrema_Values()
         {
             // Arrange
-            List<Vector3> pts = new List<Vector3>
+            List<Point3d> pts = new List<Point3d>
             {
-                new Vector3 {330, 592, 0},
-                new Vector3 {330, 557, 0},
-                new Vector3 {315, 522, 0},
-                new Vector3 {315, 485, 0}
+                new (330, 592, 0),
+                new (330, 557, 0),
+                new (315, 522, 0),
+                new (315, 485, 0)
             };
             NurbsCurve curve = new NurbsCurve(pts, 3);
 
@@ -162,35 +161,35 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_A_Point_On_Surface_At_A_Given_U_And_V_Parameter()
         {
             // Arrange
-            List<Vector3> u1 = new List<Vector3>
+            List<Point3d> u1 = new List<Point3d>
             {
-                new Vector3 { 0d, 0d, 50d },
-                new Vector3 { 10d, 0d, 0d },
-                new Vector3 { 20d, 0d, 0d },
-                new Vector3 { 30d, 0d, 0d }
+                new (0d, 0d, 50),
+                new (10d, 0d, 0),
+                new (20d, 0d, 0),
+                new (30d, 0d, 0)
             };
-            List<Vector3> u2 = new List<Vector3>
+            List<Point3d> u2 = new List<Point3d>
             {
-                new Vector3 { 0d, -10d, 0d },
-                new Vector3 { 10d, -10d, 10d },
-                new Vector3 { 20d, -10d, 10d },
-                new Vector3 { 30d, -10d, 0d }
+                new (0d, -10d, 0),
+                new (10d, -10d, 10),
+                new (20d, -10d, 10),
+                new (30d, -10d, 0)
             };
-            List<Vector3> u3 = new List<Vector3>
+            List<Point3d> u3 = new List<Point3d>
             {
-                new Vector3 { 0d, -20d, 0d },
-                new Vector3 { 10d, -20d, 10d },
-                new Vector3 { 20d, -20d, 10d },
-                new Vector3 { 30d, -20d, 0d }
+                new (0d, -20d, 0),
+                new (10d, -20d, 10),
+                new (20d, -20d, 10),
+                new (30d, -20d, 0)
             };
-            List<Vector3> u4 = new List<Vector3>
+            List<Point3d> u4 = new List<Point3d>
             {
-                new Vector3 { 0d, -30d, 0d },
-                new Vector3 { 10d, -30d, 0d },
-                new Vector3 { 20d, -30d, 0d },
-                new Vector3 { 30d, -30d, 0d }
+                new (0d, -30d, 0),
+                new (10d, -30d, 0),
+                new (20d, -30d, 0),
+                new (30d, -30d, 0)
             };
-            List<List<Vector3>> controlPoints = new List<List<Vector3>>
+            List<List<Point3d>> controlPoints = new List<List<Point3d>>
             {
                 u1, u2, u3, u4
             };
@@ -200,14 +199,15 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-            Vector3 pt1 = Evaluation.SurfacePointAt(nurbsSurface, 0, 0);
+            Point3d pt1 = Evaluation.SurfacePointAt(nurbsSurface, 0, 0);
 
             // Assert
+            //ToDo Break out into arrange as expected results.
             pt1[0].Should().BeApproximately(u1[0][0], 0.00001);
             pt1[1].Should().BeApproximately(u1[0][1], 0.00001);
             pt1[2].Should().BeApproximately(u1[0][2], 0.00001);
 
-            Vector3 ptMid = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
+            Point3d ptMid = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
             ptMid[0].Should().BeApproximately(15d, 0.00001);
             ptMid[1].Should().BeApproximately(-15d, 0.00001);
             ptMid[2].Should().BeApproximately(6.40625d, 0.00001);
@@ -223,7 +223,7 @@ namespace GShark.Test.XUnit.Operation
             int numDers = 1;
 
             // Act
-            List<List<Vector3>> res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
+            var res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
 
             // Assert
             // 0th derivative with respect to u & v
@@ -282,6 +282,7 @@ namespace GShark.Test.XUnit.Operation
         [Fact]
         public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
         {
+            //ToDo Reorganise sections. 
             // Arrange
             NurbsSurface nurbsSurface = ConstructNurbsSurface();
             double t = 0.2;
@@ -291,17 +292,18 @@ namespace GShark.Test.XUnit.Operation
             ICurve res = Evaluation.SurfaceIsoCurve(nurbsSurface, 0.2);
 
             // Assert
-            Vector3 p1 = Evaluation.CurvePointAt(res, 0.5);
+            Point3d p1 = Evaluation.CurvePointAt(res, 0.5);
             p1[0].Should().BeApproximately(6d, 5);
             p1[1].Should().BeApproximately(-15d, 5);
             p1[2].Should().BeApproximately(-1.44d, 5);
-            Vector3 p2 = Evaluation.CurvePointAt(res, 0.2);
+
+            Point3d p2 = Evaluation.CurvePointAt(res, 0.2);
             p2[0].Should().BeApproximately(6d, 5);
             p2[1].Should().BeApproximately(-6d, 5);
             p2[2].Should().BeApproximately(-1.47456d, 5);
 
             ICurve res1 = Evaluation.SurfaceIsoCurve(nurbsSurface, t, false);
-            Vector3 p3 = Evaluation.CurvePointAt(res1, v);
+            Point3d p3 = Evaluation.CurvePointAt(res1, v);
             p3[0].Should().BeApproximately(9d, 3);
             p3[1].Should().BeApproximately(-6d, 3);
             p3[2].Should().BeApproximately(1.69344d, 3);
@@ -349,12 +351,12 @@ namespace GShark.Test.XUnit.Operation
             int parameter = 0;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             int numberDerivs = 2;
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3d> controlPts = new List<Point3d>
             {
-                new Vector3 {10, 0, 0},
-                new Vector3 {20, 10, 0},
-                new Vector3 {30, 20, 0},
-                new Vector3 {50, 50, 0}
+                new (10, 0, 0),
+                new (20, 10, 0),
+                new (30, 20, 0),
+                new (50, 50, 0)
             };
 
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
@@ -427,31 +429,33 @@ namespace GShark.Test.XUnit.Operation
         [InlineData(0.5, new double[] { 1.0, 0.0, 0.0 })]
         [InlineData(0.75, new double[] { 0.931457, -0.363851, 0 })]
         [InlineData(1.0, new double[] { 0.707107, -0.707107, 0.0 })]
-        public void It_Returns_The_Tangent_At_Give_Point(double t, double[] tangentData)
+        public void It_Returns_The_Tangent_At_Given_Point(double t, double[] tangentData)
         {
+            //ToDO Reorganise sections.
+
             // Arrange
             int degree = 3;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
-            List<Vector3> pts = new List<Vector3>
+            List<Point3d> pts = new List<Point3d>
             {
-                new Vector3 {0, 0, 0},
-                new Vector3 {1, 0, 0},
-                new Vector3 {2, 0, 0},
-                new Vector3 {3, 0, 0},
-                new Vector3 {4, 0, 0}
+                new (0, 0, 0),
+                new (1, 0, 0),
+                new (2, 0, 0),
+                new (3, 0, 0),
+                new (4, 0, 0)
             };
             List<double> weights = new List<double> { 1, 1, 1, 1, 1 };
             NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
 
             // Act
-            Vector3 tangent = Evaluation.RationalCurveTangent(curve, 0.5);
+            Vector3d tangent = Evaluation.RationalCurveTangent(curve, 0.5);
 
             // Assert
             tangent.Should().BeEquivalentTo(new Vector3 { 3, 0, 0 });
 
-            Vector3 tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
-            Vector3 tangentNormalized = tangentToCheck.Unitize();
-            Vector3 tangentExpected = new Vector3(tangentData);
+            var tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
+            var tangentNormalized = tangentToCheck.Unitize();
+            var tangentExpected = new Vector3(tangentData);
 
             tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))

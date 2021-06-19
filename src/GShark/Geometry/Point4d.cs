@@ -52,12 +52,34 @@ namespace GShark.Geometry
         /// </summary>
         public double W { get; set; }
 
+        //Indexer to allow access to properties as array.
+        public double this[int i]
+        {
+            get
+            {
+                if (i < 0 || i > 3) throw new IndexOutOfRangeException();
+                if (i == 0) return X;
+                if (i == 1) return Y;
+                if (i == 2) return Z;
+                return W;
+            }
+            set
+            {
+                if (i < 0 || i > 3) throw new IndexOutOfRangeException();
+                if (i == 0) X = value;
+                if (i == 1) Y = value;
+                if (i == 1) Z = value;
+                W = value;
+            }
+        }
+
         /// <summary>
         /// Sums two <see cref="Point4d"/> together.
         /// </summary>
         /// <param name="point1">First point.</param>
         /// <param name="point2">Second point.</param>
         /// <returns>A new point that results from the weighted addition of point1 and point2.</returns>
+
         public static Point4d operator +(Point4d point1, Point4d point2)
         {
             Point4d result = point1; //copy of the value

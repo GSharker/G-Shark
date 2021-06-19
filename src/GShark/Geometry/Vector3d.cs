@@ -596,18 +596,14 @@ namespace GShark.Geometry
         /// Reverses (inverts) this vector in place.
         /// <para>If this vector is Invalid, no changes will occur and false will be returned.</para>
         ///</summary>
-        ///<returns>true on success or false if the vector is invalid.</returns>
-        public bool Reverse()
+        ///<returns>Returns a reversed vector on success or Vector3d.Unset if the vector is invalid.</returns>
+        public Vector3d Reverse()
         {
             if (!IsValid)
             {
-                return false;
+                return Vector3d.Unset;
             }
-
-            X = -X;
-            Y = -Y;
-            Z = -Z;
-            return true;
+            return new Vector3d(-X, -Y, -Z);
         }
 
         /// <summary>

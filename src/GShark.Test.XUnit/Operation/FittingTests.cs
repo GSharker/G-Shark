@@ -17,13 +17,13 @@ namespace GShark.Test.XUnit.Operation
             _testOutput = testOutput;
         }
 
-        public static List<Vector3> pts => new List<Vector3>
+        public static List<Point3d> pts => new()
         {
-            new Vector3 {0, 0, 0},
-            new Vector3 {3, 4, 0},
-            new Vector3 {-1, 4, 0},
-            new Vector3 {-4, 0, 0},
-            new Vector3 {-4, -3, 0},
+            new (0, 0, 0),
+            new (3, 4, 0),
+            new (-1, 4, 0),
+            new (-4, 0, 0),
+            new (-4, -3, 0),
         };
 
         [Theory]
@@ -40,10 +40,10 @@ namespace GShark.Test.XUnit.Operation
             crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
             crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
 
-            foreach (Vector3 pt in pts)
+            foreach (var pt in pts)
             {
-                Vector3 closedPt = crv.ClosestPt(pt);
-                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+                var closestPt = crv.ClosestPt(pt);
+                closestPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
             }
         }
 

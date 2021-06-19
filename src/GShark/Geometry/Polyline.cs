@@ -12,13 +12,13 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class Polyline : List<Vector3>, ICurve
+    public class Polyline : List<Point3d>, ICurve
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
-        public Polyline(IList<Vector3> vertices)
+        public Polyline(IList<Point3d> vertices)
         {
             if (vertices.Count < 2)
             {
@@ -31,9 +31,9 @@ namespace GShark.Geometry
 
         public int Degree => 1;
 
-        public List<Vector3> ControlPoints => this;
+        public List<Point3d> ControlPoints => this;
 
-        public List<Vector3> HomogenizedPoints { get; private set; }
+        public List<Point4d> HomogenizedPoints { get; private set; }
 
         public KnotVector Knots { get; private set; }
 
@@ -59,33 +59,39 @@ namespace GShark.Geometry
         /// <summary>
         /// Calculates the length of the polyline.
         /// </summary>
-        /// <returns>The total length of the polyline.</returns>
-        public double Length()
+        /// <value>The total length of the polyline.</value>
+        public double Length
         {
-            double length = 0.0;
-
-            for (int i = 0; i < Count - 1; i++)
+            get
             {
-                length += this[i].DistanceTo(this[i + 1]);
-            }
+                double length = 0.0;
 
-            return length;
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    length += this[i].DistanceTo(this[i + 1]);
+                }
+
+                return length;
+            }
         }
 
         /// <summary>
         /// Constructs a collections of lines, which make the polyline.
         /// </summary>
-        /// <returns>A collection of lines.</returns>
-        public Line[] Segments()
+        /// <value>A collection of lines.</value>
+        public Line[] Segments
         {
-            Line[] lines = new Line[Count - 1];
-
-            for (int i = 0; i < Count - 1; i++)
+            get
             {
-                lines[i] = new Line(this[i], this[i + 1]);
-            }
+                Line[] lines = new Line[Count - 1];
 
-            return lines;
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    lines[i] = new Line(this[i], this[i + 1]);
+                }
+
+                return lines;
+            }
         }
 
         /// <summary>
@@ -108,7 +114,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The polyline parameter.</param>
         /// <returns>The unit tangent at the parameter t.</returns>
-        public Vector3 TangentAt(double t)
+        public Vector3d TangentAt(double t)
         {
             int index = (int)Math.Truncate(t);
             if (index < 0)
@@ -128,11 +134,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The polyline parameter.</param>
         /// <returns>The point on the polyline at the parameter.</returns>
-        public Vector3 PointAt(double t)
+        public Point3d PointAt(double t)
         {
             if (t < 0 || t > Count - 1)
             {
-                throw new Exception("Parameter t must be between the polyline's domain.");
+                throw new ArgumentException("Parameter out of curve domain range.", nameof(t));
             }
 
             int index = (int)Math.Truncate(t);
@@ -152,7 +158,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The point to test.</param>
         /// <returns>The parameter closest to the point.</returns>
-        public double ClosestParameter(Vector3 pt)
+        public double ClosestParameter(Point3d pt)
         {
             int index = 0;
             double valueT = 0.0;
@@ -188,18 +194,18 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">Point to test.</param>
         /// <returns>The point closest to the given point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public Point3d ClosestPt(Point3d pt)
         {
             // Brute force
             if (Count <= 4)
             {
                 double distance = double.MaxValue;
-                Vector3 closestPt = Vector3.Unset;
+                Point3d closestPt = Point3d.Unset;
 
                 for (int i = 0; i < Count - 1; i++)
                 {
                     Line tempLine = new Line(this[i], this[i + 1]);
-                    Vector3 tempPt = tempLine.ClosestPt(pt);
+                    Point3d tempPt = tempLine.ClosestPoint(pt);
                     double tempDistance = tempPt.DistanceTo(pt);
 
                     if (!(tempDistance < distance)) continue;
@@ -211,9 +217,9 @@ namespace GShark.Geometry
             }
 
             // Divide and conquer.
-            List<Vector3> leftSubCollection = new List<Vector3>();
-            List<Vector3> rightSubCollection = new List<Vector3>();
-            List<Vector3> conquer = new List<Vector3>(this);
+            List<Point3d> leftSubCollection = new List<Point3d>();
+            List<Point3d> rightSubCollection = new List<Point3d>();
+            List<Point3d> conquer = new List<Point3d>(this);
 
             while (leftSubCollection.Count != 2 || rightSubCollection.Count != 2)
             {
@@ -224,20 +230,20 @@ namespace GShark.Geometry
                 Polyline leftPoly = new Polyline(leftSubCollection);
                 Polyline rightPoly = new Polyline(rightSubCollection);
 
-                Vector3 leftPt = leftPoly.PointAt(0.5);
-                Vector3 rightPt = rightPoly.PointAt(0.5);
+                Point3d leftPt = leftPoly.PointAt(0.5);
+                Point3d rightPt = rightPoly.PointAt(0.5);
 
                 double leftDistance = leftPt.DistanceTo(pt);
                 double rightDistance = rightPt.DistanceTo(pt);
 
                 conquer = leftDistance > rightDistance
-                    ? new List<Vector3>(rightSubCollection)
-                    : new List<Vector3>(leftSubCollection);
+                    ? new List<Point3d>(rightSubCollection)
+                    : new List<Point3d>(leftSubCollection);
             }
 
             Line line = new Line(conquer[0], conquer[1]);
 
-            return line.ClosestPt(pt);
+            return line.ClosestPoint(pt);
         }
 
         /// <summary>
@@ -246,7 +252,7 @@ namespace GShark.Geometry
         /// <returns>A polyline reversed.</returns>
         public new Polyline Reverse()
         {
-            List<Vector3> copyVertices = new List<Vector3>(this);
+            List<Point3d> copyVertices = new List<Point3d>(this);
             copyVertices.Reverse();
             return new Polyline(copyVertices);
         }
@@ -258,7 +264,7 @@ namespace GShark.Geometry
         /// <returns>A polyline transformed.</returns>
         public Polyline Transform(Transform transform)
         {
-            List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
+            List<Point3d> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
 
             return new Polyline(transformedPts);
         }
@@ -290,7 +296,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
         /// <returns>A cleaned collections of points if necessary otherwise the same collection of points.</returns>
-        protected static IList<Vector3> CleanVerticesForShortLength(IList<Vector3> vertices)
+        protected static IList<Point3d> CleanVerticesForShortLength(IList<Point3d> vertices)
         {
             int[] coincidenceFlag = new int[vertices.Count];
             coincidenceFlag[0] = 0;
@@ -298,19 +304,19 @@ namespace GShark.Geometry
             for (int i = 1; i < vertices.Count; i++)
             {
                 coincidenceFlag[i] = 0;
-                if (vertices[i] == null || vertices[i - 1].DistanceTo(vertices[i]) <= GeoSharpMath.MaxTolerance)
+                if (vertices[i - 1].DistanceTo(vertices[i]) <= GeoSharpMath.MaxTolerance)
                 {
                     coincidenceFlag[i] = 1;
                 }
             }
 
-            int numberOfCoincidence = coincidenceFlag.Sum();
-            if (numberOfCoincidence == 0)
+            int numberOfCoincidences = coincidenceFlag.Sum();
+            if (numberOfCoincidences == 0)
             {
                 return vertices;
             }
 
-            Vector3[] cleanedList = new Vector3[vertices.Count - numberOfCoincidence];
+            Point3d[] cleanedList = new Point3d[vertices.Count - numberOfCoincidences];
 
             int counter = 0;
             for (int i = 0; i < vertices.Count; i++)
@@ -333,7 +339,7 @@ namespace GShark.Geometry
         /// <returns>A text string.</returns>
         public override string ToString()
         {
-            return string.Join<Vector3>(" : ", this);
+            return string.Join(" : ", this);
         }
     }
 }
