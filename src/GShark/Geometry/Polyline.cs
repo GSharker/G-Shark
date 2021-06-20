@@ -194,7 +194,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">Point to test.</param>
         /// <returns>The point closest to the given point.</returns>
-        public Point3d ClosestPt(Point3d pt)
+        public Point3d ClosestPoint(Point3d pt)
         {
             // Brute force
             if (Count <= 4)
