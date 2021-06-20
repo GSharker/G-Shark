@@ -29,7 +29,7 @@ namespace GShark.Operation
                 return curve;
 
             int degree = curve.Degree;
-            List<Vector3> controlPoints = curve.ControlPoints;
+            List<Point3d> controlPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             // Initialize common variables.
@@ -38,7 +38,7 @@ namespace GShark.Operation
             int r = knotsToInsert.Count - 1;
             int a = knots.Span(degree, knotsToInsert[0]);
             int b = knots.Span(degree, knotsToInsert[r]);
-            Vector3[] controlPointsPost = new Vector3[n + r + 2];
+            Point3d[] controlPointsPost = new Point3d[n + r + 2];
             double[] knotsPost = new double[m + r + 2];
 
             // New control points.
@@ -103,7 +103,7 @@ namespace GShark.Operation
         public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
-            List<Vector3> controlPoints = curve.ControlPoints;
+            List<Point3d> controlPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             // Find all of the unique knot values and their multiplicity.
@@ -134,7 +134,7 @@ namespace GShark.Operation
                 KnotVector knotsRange = (normalize)
                     ? KnotVector.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
                     : knots.GetRange(i, crvKnotLength).ToKnot();
-                List<Vector3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
+                List<Point3d> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
                 curves.Add(tempCrv);
@@ -152,7 +152,7 @@ namespace GShark.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            List<Vector3> pts = new List<Vector3>(curve.ControlPoints);
+            List<Point3d> pts = new List<Point3d>(curve.ControlPoints);
             pts.Reverse();
 
             List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);
@@ -172,8 +172,8 @@ namespace GShark.Operation
         /// <returns>A NURBS surface with the knot refined.</returns>
         public static NurbsSurface SurfaceKnotRefine(NurbsSurface nurbsSurface, KnotVector knotsToInsert, bool useU = true)
         {
-            List<List<Vector3>> ctrlPts;
-            List<List<Vector3>> refinedPts = new List<List<Vector3>>();
+            List<List<Point3d>> ctrlPts;
+            List<List<Point3d>> refinedPts = new List<List<Point3d>>();
             KnotVector knots;
             int degree;
 
@@ -195,7 +195,7 @@ namespace GShark.Operation
 
             //Do knot refinement on every row
             ICurve crv = new NurbsCurve();
-            foreach (List<Vector3> cptRow in ctrlPts)
+            foreach (List<Point3d> cptRow in ctrlPts)
             {
                 crv = CurveKnotRefine(new NurbsCurve(degree, knots, cptRow), knotsToInsert);
                 refinedPts.Add(crv.ControlPoints);

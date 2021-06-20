@@ -278,14 +278,9 @@ namespace GShark.Geometry
         {
             Point3d origin = Origin.Transform(transformation);
 
-            bool check = (Math.Abs(transformation[3][0]) <= GeoSharpMath.MaxTolerance &&
-                          Math.Abs(transformation[3][1]) <= GeoSharpMath.MaxTolerance &&
-                          Math.Abs(transformation[3][2]) <= GeoSharpMath.MaxTolerance &&
-                          Math.Abs(1.0 - transformation[3][3]) <= GeoSharpMath.MaxTolerance);
-
-            Vector3d xDir = check ? ((Origin + XAxis) * transformation) - origin : XAxis * transformation;
-            Vector3d yDir = check ? ((Origin + YAxis) * transformation) - origin : YAxis * transformation;
-            Vector3d zDir = check ? ((Origin + ZAxis) * transformation) - origin : ZAxis * transformation;
+            Vector3d xDir = ((Point3d) XAxis).Transform(transformation);
+            Vector3d yDir = ((Point3d) YAxis).Transform(transformation);
+            Vector3d zDir = ((Point3d) ZAxis).Transform(transformation);
 
             return new Plane(origin, xDir, yDir, zDir);
         }

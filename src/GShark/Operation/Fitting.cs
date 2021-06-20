@@ -41,13 +41,13 @@ namespace GShark.Operation
             Matrix matrixNtN = matrixNt * matrixN;
 
             // Computes Rk - Eqn 9.63.
-            List<Vector3> Rk = ComputesValuesRk(knots, uk, degree, pts, numberCpts);
+            List<Point3d> Rk = ComputesValuesRk(knots, uk, degree, pts, numberCpts);
 
             // Compute R - Eqn 9.67.
             var vectorR = ComputeValuesR(knots, uk, Rk, degree, numberCpts);
 
             // Computes control points, fixing the first and last point from the input points.
-            List<Vector3> ctrlPts = new List<Vector3> { pts[0] };
+            List<Point3d> ctrlPts = new List<Point3d> { pts[0] };
             ctrlPts.AddRange(SolveCtrlPts(knots, vectorR, matrixNtN));
             ctrlPts.Add(pts[^1]);
             return new NurbsCurve(degree, knots, ctrlPts);
@@ -58,7 +58,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">Set of points to interpolate.</param>
         /// <returns>A set of cubic beziers.</returns>
-        public static List<NurbsCurve> BezierInterpolation(List<Vector3> pts)
+        public static List<NurbsCurve> BezierInterpolation(List<Point3d> pts)
         {
             if (pts.Count == 0)
             {
@@ -66,11 +66,11 @@ namespace GShark.Operation
             }
 
             List<NurbsCurve> beziers = new List<NurbsCurve>();
-            (List<Vector3> ptsA, List<Vector3> ptsB) ctrlPts = SolveBezierCtrlPts(pts);
+            (List<Point3d> ptsA, List<Point3d> ptsB) ctrlPts = SolveBezierCtrlPts(pts);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
-                beziers.Add(new NurbsCurve(new List<Vector3> { pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1] },
+                beziers.Add(new NurbsCurve(new List<Point3d> { pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1] },
                     3));
             }
 
@@ -87,8 +87,8 @@ namespace GShark.Operation
         /// <param name="endTangent">The tangent vector for the last point.</param>
         /// <param name="centripetal">True use the chord as per knot spacing, false use the squared chord.</param>
         /// <returns>A the interpolated curve.</returns>
-        public static NurbsCurve InterpolatedCurve(List<Point3d> pts, int degree, Vector3d startTangent,
-            Vector3d endTangent, bool centripetal = false)
+        public static NurbsCurve InterpolatedCurve(List<Point3d> pts, int degree, Vector3d? startTangent = null,
+            Vector3d? endTangent = null, bool centripetal = false)
         {
             if (pts.Count < degree + 1)
             {
@@ -146,24 +146,28 @@ namespace GShark.Operation
         /// <summary>
         /// Computes Rk - Eqn 9.63.
         /// </summary>
-        private static List<Vector3> ComputesValuesRk(KnotVector knots, List<double> curveParameters, int degree, List<Vector3> pts, int numberOfCtrPts)
+        private static List<Point3d> ComputesValuesRk(KnotVector knots, List<double> curveParameters, int degree, List<Point3d> pts, int numberOfCtrPts)
         {
-            Vector3 pt0 = pts[0]; // Q0
-            Vector3 ptm = pts[^1]; // Qm
-            List<Vector3> Rk = new List<Vector3>();
+            Point3d pt0 = pts[0]; // Q0
+            Point3d ptm = pts[^1]; // Qm
+            List<Point3d> Rk = new List<Point3d>();
             for (int i = 1; i < pts.Count - 1; i++)
             {
-                Vector3 pti = pts[i];
+                Point3d pti = pts[i];
                 double n0p = Evaluation.OneBasisFunction(degree, knots, 0, curveParameters[i]);
                 double nnp = Evaluation.OneBasisFunction(degree, knots, numberOfCtrPts - 1, curveParameters[i]);
-                Vector3 elem2 = pt0 * n0p;
-                Vector3 elem3 = ptm * nnp;
+                Point3d elem2 = pt0 * n0p;
+                Point3d elem3 = ptm * nnp;
 
-                Vector3 tempVec = Vector3.Zero1d(pti.Count);
-                for (int j = 0; j < pti.Count; j++)
+                Point3d tempVec = new Point3d();
+                for (int j = 0; j < 3; j++)
                 {
                     tempVec[j] = (pti[j] - elem2[j] - elem3[j]);
                 }
+
+                tempVec.X = pti.X - elem2.X - elem3.X;
+                tempVec.Y = pti.Y - elem2.Y - elem3.Y;
+                tempVec.Z = pti.Z - elem2.Z - elem3.Z;
 
                 Rk.Add(tempVec);
             }

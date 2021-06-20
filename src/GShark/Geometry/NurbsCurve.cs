@@ -137,14 +137,7 @@ namespace GShark.Geometry
         /// <returns>A new curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            List<Point3d> pts = new List<Point3d>(ControlPoints);
-
-            for (int i = 0; i < pts.Count; i++)
-            {
-                var pt = pts[i];
-                pt.Add(1.0);
-                pts[i] = (pt * transformation).Take(pt.Count - 1).ToVector();
-            }
+            List<Point3d> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
 
             return new NurbsCurve(Degree, Knots, pts, Weights!);
         }
@@ -192,7 +185,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Point to analyze.</param>
         /// <returns>The closest point on the curve.</returns>
-        public Point3d ClosestPt(Vector3d point)
+        public Point3d ClosestPoint(Point3d point)
         {
             return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }

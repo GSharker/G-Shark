@@ -42,7 +42,7 @@ namespace GShark.Test.XUnit.Operation
 
             foreach (var pt in pts)
             {
-                var closestPt = crv.ClosestPt(pt);
+                var closestPt = crv.ClosestPoint(pt);
                 closestPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
             }
         }
@@ -50,10 +50,10 @@ namespace GShark.Test.XUnit.Operation
         [Fact]
         public void Interpolates_With_End_And_Start_Tangent()
         {
-            Vector3 v1 = new Vector3 { 1.278803, 1.06885, 0 };
-            Vector3 v2 = new Vector3 { -4.204863, -2.021209, 0 };
+            Point3d v1 = new Point3d(1.278803, 1.06885, 0);
+            Point3d v2 = new Point3d(-4.204863, -2.021209, 0);
 
-            var newPts = new List<Vector3>(pts);
+            var newPts = new List<Point3d>(pts);
             newPts.Insert(1, v1);
             newPts.Insert(newPts.Count-1, v2);
             // Act
@@ -68,9 +68,9 @@ namespace GShark.Test.XUnit.Operation
                 _testOutput.WriteLine($"{{{crvControlPoint}}}");
             }
 
-            foreach (Vector3 pt in pts)
+            foreach (var pt in pts)
             {
-                Vector3 closedPt = crv.ClosestPt(pt);
+                var closedPt = crv.ClosestPoint(pt);
                 closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
             }
         }
@@ -95,12 +95,12 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_An_Approximated_Curve()
         {
             // Arrange
-            List<Vector3> expectedCtrlPts = new List<Vector3>
+            List<Point3d> expectedCtrlPts = new List<Point3d>
             {
-                new Vector3 {0, 0, 0},
-                new Vector3 {9.610024470158852, 8.200277881464892, 0.0},
-                new Vector3 {-8.160625855418692, 3.3820642030608417, 0.0},
-                new Vector3 {-4, -3, 0}
+                new (0, 0, 0),
+                new (9.610024470158852, 8.200277881464892, 0.0),
+                new (-8.160625855418692, 3.3820642030608417, 0.0),
+                new (-4, -3, 0)
             };
 
             // Act
