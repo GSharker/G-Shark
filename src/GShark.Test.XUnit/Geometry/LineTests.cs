@@ -20,12 +20,12 @@ namespace GShark.Test.XUnit.Geometry
 
             #region example
             // Initializes a line by start and end point.
-            Vector3 pt1 = new Vector3 { 5, 0, 0 };
-            Vector3 pt2 = new Vector3 { 15, 15, 0 };
+            Point3d pt1 = new Point3d(5, 0, 0);
+            Point3d pt2 = new Point3d(15, 15, 0);
             _exampleLine = new Line(pt1, pt2);
 
             // Initializes a line by a starting point a direction and a length.
-            Line line = new Line(pt1, Vector3.XAxis, 15);
+            Line line = new Line(pt1, Vector3d.XAxis, 15);
             #endregion
         }
 
@@ -174,7 +174,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Parameter_On_The_Line_Closest_To_The_Point(double expectedParam, double[] pts)
         {
             // Arrange
-            Vector3 pt = new Vector3(pts);
+            Point3d pt = new Point3d(pts[0], pts[1], pts[2]);
 
             // Act
             double parameter = _exampleLine.ClosestParameter(pt);
