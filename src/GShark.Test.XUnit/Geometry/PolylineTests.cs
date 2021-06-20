@@ -222,7 +222,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d expectedPt = new Point3d(18.2, 8.6, 0.0);
 
             // Act
-            Point3d closestPt = _polyline.ClosestPt(testPt);
+            Point3d closestPt = _polyline.ClosestPoint(testPt);
 
             // Assert
             closestPt.EpsilonEquals(expectedPt, GeoSharpMath.Epsilon).Should().BeTrue();
