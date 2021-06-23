@@ -167,6 +167,49 @@ namespace GShark.Operation
             return position;
         }
 
+        internal List<Vector3> Deboor(NurbsCurve curve, double t, int side)
+        {
+            // ToDo: side
+            // ToDo: checks
+
+
+            // delta_t = {knot[order-1] - t, knot[order] -  t, .. knot[2*order-3] - t}
+            List<double> deltaT = new List<double>();
+            int knotsStart = curve.Degree + 1;
+
+            int k = curve.Degree;
+            int i = 0;
+            while (k-- > 0)
+            {
+                deltaT.Add(curve.Knots[knotsStart + i] - t);
+                i++;
+            }
+
+            int j = curve.Degree + 1;
+            while (--j > 0)
+            {
+                int m = j;
+                int counter = 0;
+                while (m-- > 0)
+                {
+                    double k0 = curve.Knots[knotsStart - j + counter];
+                    double k1 = curve.Knots[knotsStart + counter];
+
+                    double alpha0 = deltaT[counter] / (k1 - k0);
+                    double alpha1 = 1.0 - alpha0;
+
+                    var cv1 = curve.ControlPoints[counter + 1];
+                    var cv0 = curve.ControlPoints[counter];
+
+                    curve.ControlPoints[counter] = (cv0 * alpha0) + (cv1 * alpha1);
+
+                    counter++;
+                }
+            }
+
+
+        }
+
         /// <summary>
         /// Computes a point on a non-uniform, non-rational B spline surface.<br/>
         /// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
