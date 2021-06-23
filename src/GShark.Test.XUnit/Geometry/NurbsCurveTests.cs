@@ -259,5 +259,17 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             distanceBetweenPts.Should().Be(22.36068);
         }
+
+        [Fact]
+        public void It_Returns_A_NurbsCurve_With_Clamped_End()
+        {
+            // Arrange
+            NurbsCurve curve = NurbsCurveCollection.PeriodicClosedNurbsCurve();
+
+            // Act
+            NurbsCurve curveClamped = curve.ClampEnds(0);
+
+            _testOutput.WriteLine(curveClamped.ToString());
+        }
     }
 }

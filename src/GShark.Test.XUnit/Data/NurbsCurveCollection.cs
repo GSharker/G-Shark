@@ -110,12 +110,14 @@ namespace GShark.Test.XUnit.Data
 
         public static NurbsCurve PeriodicClosedNurbsCurve()
         {
-            int degree = 2;
+            int degree = 3;
             List<Vector3> controlPts = new List<Vector3>
             {
-                new Vector3 {4.5,2.5,2.5},
-                new Vector3 {5,5,5},
-                new Vector3 {0,5,0},
+                new Vector3 {0, 5, 5},
+                new Vector3 {0, 0, 0},
+                new Vector3 {4, 0, 0},
+                new Vector3 {5, 5, 5},
+                new Vector3 { 0, 5, 0 }
             };
             return new NurbsCurve(controlPts, degree).Close();
         }

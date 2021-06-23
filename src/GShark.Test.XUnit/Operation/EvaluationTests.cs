@@ -457,41 +457,5 @@ namespace GShark.Test.XUnit.Operation
                 .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
                 .WhenTypeIs<double>());
         }
-
-        [Fact]
-        public void t()
-        {
-            int degree = 3;
-            KnotVector knots = new KnotVector { -2, -1, 0, 1, 2, 3, 4, 5, 6, 7 };
-            List<Vector3> pts = new List<Vector3>
-            {
-                new Vector3 {0, 5, 5},
-                new Vector3 {0, 0, 0},
-                new Vector3 {4, 0, 0},
-                new Vector3 {5, 5, 5},
-                new Vector3 {0, 5, 0}
-            };
-
-            int n = knots.Count - degree - 2;
-
-            int knotSpan = knots.Span(n, degree, 0.0);
-            List<double> basisValue = Evaluation.BasicFunction(degree, knots, knotSpan, 0.0);
-
-            for (int i = 0; i < degree; i++)
-            {
-                double valToMultiply = basisValue[1];
-                Vector3 pt = pts[knotSpan - degree + i];
-                Vector3 pt2 = pts[knotSpan - degree + i + 1];
-                for (int j = 0; j < 3; j++)
-                {
-                    pt[j] = valToMultiply * pt[j] + valToMultiply * pt2[j];
-                }
-            }
-
-            foreach (var pt in pts)
-            {
-                _testOutput.WriteLine(pt.ToString());
-            }
-        }
     }
 }

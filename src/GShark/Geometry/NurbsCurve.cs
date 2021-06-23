@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using GShark.ExtendedMethods;
 using GShark.Operation.Utilities;
+using Newtonsoft.Json.Linq;
 
 namespace GShark.Geometry
 {
@@ -273,6 +274,26 @@ namespace GShark.Geometry
         public double LengthParameter(double t)
         {
             return Analyze.CurveLength(this, t);
+        }
+
+        public NurbsCurve ClampEnds()
+        {
+            List<Vector3> evalPts = new List<Vector3>(ControlPoints);
+            KnotVector clampedKnots = new KnotVector(Knots);
+            int j = 2;
+
+            while (j-- > 0)
+            {
+                Evaluation.DeBoor(ref evalPts, clampedKnots, Degree, clampedKnots[Degree]);
+                for (int i = 0; i < Degree; i++)
+                {
+                    clampedKnots[i] = clampedKnots[Degree];
+                }
+                evalPts.Reverse();
+                clampedKnots.Reverse();
+            }
+
+            return new NurbsCurve(Degree, clampedKnots, evalPts);
         }
 
         /// <summary>

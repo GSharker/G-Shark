@@ -83,6 +83,7 @@ namespace GShark.Operation
             {
                 return 1.0;
             }
+
             // Local property, parameter is outside of span range.
             if (knot < knots[span] || knot >= knots[span + degree + 1])
             {
@@ -167,47 +168,46 @@ namespace GShark.Operation
             return position;
         }
 
-        internal List<Vector3> Deboor(NurbsCurve curve, double t, int side)
+        internal static void DeBoor(ref List<Vector3> controlPts, KnotVector knots, int degree, double t)
         {
-            // ToDo: side
-            // ToDo: checks
+            if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharpMath.EPSILON)
+            {
+                throw new Exception($"DeBoor evaluation failed: {knots[degree]} == {knots[degree + 1]}");
+            }
 
-
-            // delta_t = {knot[order-1] - t, knot[order] -  t, .. knot[2*order-3] - t}
+            // deltaT = {knot[order-1] - t, knot[order] -  t, .. knot[2*order-3] - t}
             List<double> deltaT = new List<double>();
-            int knotsStart = curve.Degree + 1;
+            int knotsStart = degree + 1;
 
-            int k = curve.Degree;
+            int k = degree;
             int i = 0;
             while (k-- > 0)
             {
-                deltaT.Add(curve.Knots[knotsStart + i] - t);
+                deltaT.Add(knots[knotsStart + i] - t);
                 i++;
             }
 
-            int j = curve.Degree + 1;
+            int j = degree + 1;
             while (--j > 0)
             {
                 int m = j;
                 int counter = 0;
                 while (m-- > 0)
                 {
-                    double k0 = curve.Knots[knotsStart - j + counter];
-                    double k1 = curve.Knots[knotsStart + counter];
+                    double k0 = knots[knotsStart - j + counter];
+                    double k1 = knots[knotsStart + counter];
 
                     double alpha0 = deltaT[counter] / (k1 - k0);
                     double alpha1 = 1.0 - alpha0;
 
-                    var cv1 = curve.ControlPoints[counter + 1];
-                    var cv0 = curve.ControlPoints[counter];
+                    var cv1 = controlPts[counter + 1];
+                    var cv0 = controlPts[counter];
 
-                    curve.ControlPoints[counter] = (cv0 * alpha0) + (cv1 * alpha1);
+                    controlPts[counter] = (cv0 * alpha0) + (cv1 * alpha1);
 
                     counter++;
                 }
             }
-
-
         }
 
         /// <summary>
