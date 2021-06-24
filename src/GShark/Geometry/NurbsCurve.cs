@@ -1,14 +1,13 @@
 ﻿#nullable enable
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
+using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GShark.ExtendedMethods;
-using GShark.Operation.Utilities;
-using Newtonsoft.Json.Linq;
 
 namespace GShark.Geometry
 {
@@ -20,7 +19,7 @@ namespace GShark.Geometry
     /// </example>
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
-        public NurbsCurve(){}
+        public NurbsCurve() { }
 
         /// <summary>
         /// Creates a NURBS curve.
@@ -115,14 +114,14 @@ namespace GShark.Geometry
         {
             get
             {
-                List<Vector3> pts = new List<Vector3> {ControlPoints[0]};
+                List<Vector3> pts = new List<Vector3> { ControlPoints[0] };
                 List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
                 foreach (ICurve crv in beziers)
                 {
                     Extrema e = Evaluation.ComputeExtrema(crv);
                     foreach (double eValue in e.Values)
                     {
-                        if(eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MAX_TOLERANCE) continue;
+                        if (eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MAX_TOLERANCE) continue;
                         pts.Add(crv.PointAt(eValue));
                     }
                 }
@@ -133,30 +132,30 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Checks if a NURBS curve is closed.<br/>
-        /// A curve is closed if the first point and the last are the same or if it is periodic, where the number of overlapping points is defined by the the curve degree.
+        /// A curve is closed if the first point and the last are the same.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed()
         {
-            if (Knots.IsKnotVectorPeriodic(Degree))
+            return !(ControlPoints[0].DistanceTo(ControlPoints[^1]) > 0);
+        }
+
+        /// <summary>
+        /// Checks if a NURBS curve is periodic.<br/>
+        /// A curve is periodic, where the number of overlapping points is equal the curve degree.
+        /// </summary>
+        /// <returns>True if the curve is periodic.</returns>
+        public bool IsPeriodic()
+        {
+            if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
+            int i, j = 0;
+            for (i = 0, j = ControlPoints.Count - Degree; i < Degree; i++, j++)
             {
-                int i, j = 0;
-                for (i = 0, j = ControlPoints.Count - Degree; i < Degree; i++, j++)
-                {
-                    if (ControlPoints[i].DistanceTo(ControlPoints[j]) > 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
-            {
-                if (ControlPoints[0].DistanceTo(ControlPoints[^1]) > 0)
+                if (ControlPoints[i].DistanceTo(ControlPoints[j]) > 0)
                 {
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -195,11 +194,11 @@ namespace GShark.Geometry
         /// <returns>A new curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            var pts = new List<Vector3>(ControlPoints);
+            List<Vector3>? pts = new List<Vector3>(ControlPoints);
 
             for (int i = 0; i < pts.Count; i++)
             {
-                var pt = pts[i];
+                Vector3? pt = pts[i];
                 pt.Add(1.0);
                 pts[i] = (pt * transformation).Take(pt.Count - 1).ToVector();
             }
@@ -242,7 +241,7 @@ namespace GShark.Geometry
         /// <returns>A reversed curve.</returns>
         public NurbsCurve Reverse()
         {
-            return (NurbsCurve) Modify.ReverseCurve(this);
+            return (NurbsCurve)Modify.ReverseCurve(this);
         }
 
         /// <summary>
@@ -337,7 +336,7 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS curves are equal.</returns>
         public override bool Equals(object? obj)
         {
-            if(obj is NurbsCurve curve)
+            if (obj is NurbsCurve curve)
                 return Equals(curve);
             return false;
         }
