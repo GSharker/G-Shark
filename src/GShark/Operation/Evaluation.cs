@@ -192,7 +192,7 @@ namespace GShark.Operation
                 deltaT.Add(knots[degree + 1 + k] - t);
             }
             
-            for (int i = degree + 1; i > 0; --i)
+            for (int i = degree; i > 0; --i)
             {
                 for (int j = 0; j < i; j++)
                 {

@@ -267,9 +267,14 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve curve = NurbsCurveCollection.PeriodicClosedNurbsCurve();
 
             // Act
-            NurbsCurve curveClamped = curve.ClampEnds(0);
+            NurbsCurve curveClamped = curve.ClampEnds();
 
-            _testOutput.WriteLine(curveClamped.ToString());
+            // Assert
+            curveClamped.Knots.IsClamped(curveClamped.Degree).Should().BeTrue();
+            curveClamped.ControlPoints[0].Select((val, i) => val.Should()
+                    .BeApproximately(curveClamped.ControlPoints[^1][i], GeoSharpMath.MAX_TOLERANCE));
+            curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
+            curve.ControlPoints[^3].Should().BeEquivalentTo(curveClamped.ControlPoints[^3]);
         }
     }
 }
