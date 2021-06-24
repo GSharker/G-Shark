@@ -102,7 +102,7 @@ namespace GShark.Geometry
         {
             get
             {
-                if (IsClosed())
+                if (IsPeriodic())
                 {
                     return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
                 }
@@ -114,18 +114,26 @@ namespace GShark.Geometry
         {
             get
             {
-                List<Vector3> pts = new List<Vector3> { ControlPoints[0] };
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
+                NurbsCurve curve = this;
+
+                if (IsPeriodic())
+                {
+                    curve = ClampEnds();
+                }
+
+                List<Vector3> pts = new List<Vector3> { curve.ControlPoints[0] };
+                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
                 foreach (ICurve crv in beziers)
                 {
                     Extrema e = Evaluation.ComputeExtrema(crv);
                     foreach (double eValue in e.Values)
                     {
-                        if (eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MAX_TOLERANCE) continue;
                         pts.Add(crv.PointAt(eValue));
                     }
                 }
-                pts.Add(ControlPoints[^1]);
+
+                pts.Add(curve.ControlPoints[^1]);
+                // ToDo clean the pts from duplicated points.
                 return new BoundingBox(pts);
             }
         }
@@ -169,11 +177,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Creates a closed NURBS curve.<br/>
+        /// Creates a periodic NURBS curve.<br/>
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
-        /// <returns>A closed NURBS curve.</returns>
+        /// <returns>A periodic NURBS curve.</returns>
         public NurbsCurve Close()
         {
             // Wrapping control points
