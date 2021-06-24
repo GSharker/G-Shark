@@ -1,10 +1,10 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
+using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Operation.Utilities;
 
 namespace GShark.Operation
 {
@@ -168,6 +168,15 @@ namespace GShark.Operation
             return position;
         }
 
+        /// <summary>
+        /// This method evaluate a B-spline span using the deBoor algorithm.
+        /// https://github.com/mcneel/opennurbs/blob/2b96cf31429dab25bf8a1dbd171227c506b06f88/opennurbs_evaluate_nurbs.cpp#L1249
+        /// This method is not implemented for clamped knots.
+        /// </summary>
+        /// <param name="controlPts">The control points of the curve.</param>
+        /// <param name="knots">The knot vector of the curve.</param>
+        /// <param name="degree">The value degree of the curve.</param>
+        /// <param name="t">The parameter value where the curve is evaluated.</param>
         internal static void DeBoor(ref List<Vector3> controlPts, KnotVector knots, int degree, double t)
         {
             if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharpMath.EPSILON)
@@ -177,35 +186,26 @@ namespace GShark.Operation
 
             // deltaT = {knot[order-1] - t, knot[order] -  t, .. knot[2*order-3] - t}
             List<double> deltaT = new List<double>();
-            int knotsStart = degree + 1;
 
-            int k = degree;
-            int i = 0;
-            while (k-- > 0)
+            for (int k = 0; k < degree; k++)
             {
-                deltaT.Add(knots[knotsStart + i] - t);
-                i++;
+                deltaT.Add(knots[degree + 1 + k] - t);
             }
-
-            int j = degree + 1;
-            while (--j > 0)
+            
+            for (int i = degree + 1; i > 0; --i)
             {
-                int m = j;
-                int counter = 0;
-                while (m-- > 0)
+                for (int j = 0; j < i; j++)
                 {
-                    double k0 = knots[knotsStart - j + counter];
-                    double k1 = knots[knotsStart + counter];
+                    double k0 = knots[degree + 1 - i + j];
+                    double k1 = knots[degree + 1 + j];
 
-                    double alpha0 = deltaT[counter] / (k1 - k0);
+                    double alpha0 = deltaT[j] / (k1 - k0);
                     double alpha1 = 1.0 - alpha0;
 
-                    var cv1 = controlPts[counter + 1];
-                    var cv0 = controlPts[counter];
+                    Vector3 cv1 = controlPts[j + 1];
+                    Vector3 cv0 = controlPts[j];
 
-                    controlPts[counter] = (cv0 * alpha0) + (cv1 * alpha1);
-
-                    counter++;
+                    controlPts[j] = (cv0 * alpha0) + (cv1 * alpha1);
                 }
             }
         }
@@ -244,8 +244,8 @@ namespace GShark.Operation
             Vector3 position = Vector3.Zero1d(dim);
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Vector3.Zero1d(dim);
-                var vIndex = knotSpanV - surface.DegreeV + l;
+                Vector3 temp = Vector3.Zero1d(dim);
+                int vIndex = knotSpanV - surface.DegreeV + l;
                 for (int x = 0; x < surface.DegreeU + 1; x++)
                 {
                     for (int j = 0; j < temp.Count; j++)
@@ -360,7 +360,7 @@ namespace GShark.Operation
         /// <returns>The extrema </returns>
         public static Extrema ComputeExtrema(ICurve curve)
         {
-            var derivPts = DerivativeCoordinates(curve.ControlPoints);
+            List<List<Vector3>> derivPts = DerivativeCoordinates(curve.ControlPoints);
             Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Count;
@@ -416,7 +416,7 @@ namespace GShark.Operation
                 List<Vector3> list = new List<Vector3>();
                 for (int j = 0; j < c; j++)
                 {
-                    var dpt = (p[j + 1] - p[j]) * c;
+                    Vector3 dpt = (p[j + 1] - p[j]) * c;
 
                     list.Add(dpt);
                 }
@@ -439,16 +439,16 @@ namespace GShark.Operation
             // quadratic roots
             if (derivs.Count == 3)
             {
-                var a = derivs[0];
-                var b = derivs[1];
-                var c = derivs[2];
-                var d = a - 2 * b + c;
+                double a = derivs[0];
+                double b = derivs[1];
+                double c = derivs[2];
+                double d = a - 2 * b + c;
                 if (d != 0)
                 {
-                    var m1 = -Math.Sqrt(b * b - a * c);
-                    var m2 = -a + b;
-                    var v1 = -(m1 + m2) / d;
-                    var v2 = -(-m1 + m2) / d;
+                    double m1 = -Math.Sqrt(b * b - a * c);
+                    double m2 = -a + b;
+                    double v1 = -(m1 + m2) / d;
+                    double v2 = -(-m1 + m2) / d;
                     return new[] { v1, v2 };
                 }
                 else if (b != c && d == 0)
@@ -461,8 +461,8 @@ namespace GShark.Operation
             // linear roots
             if (derivs.Count == 2)
             {
-                var a = derivs[0];
-                var b = derivs[1];
+                double a = derivs[0];
+                double b = derivs[1];
                 if (a != b)
                 {
                     return new[] { a / (a - b) };
@@ -807,7 +807,7 @@ namespace GShark.Operation
                     }
                 }
                 int nk = numDerivs - k;
-                var dd = nk < dv ? nk : dv;
+                int dd = nk < dv ? nk : dv;
 
                 for (int l = 0; l < dd + 1; l++)
                 {
