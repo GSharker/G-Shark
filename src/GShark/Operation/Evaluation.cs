@@ -355,9 +355,8 @@ namespace GShark.Operation
         /// Extrema are calculated for each dimension, rather than for the full curve, <br/>
         /// so that the result is not the number of convex/concave transitions, but the number of those transitions for each separate dimension.
         /// </summary>
-        /// <param name="derivPts">A collection of derivative coordinates.</param>
-        /// <param name="order">Order of the curve.</param>
-        /// <returns>The extrema </returns>
+        /// <param name="curve">Curve where the extrema are calculated.</param>
+        /// <returns>The extrema.</returns>
         public static Extrema ComputeExtrema(ICurve curve)
         {
             List<List<Vector3>> derivPts = DerivativeCoordinates(curve.ControlPoints);
