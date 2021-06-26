@@ -9,7 +9,7 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// Provides all of the core algorithms for evaluating points and derivatives on nurbs curves and surfaces.<br/>
+    /// Provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.<br/>
     /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
     /// </summary>
     public class Evaluation
