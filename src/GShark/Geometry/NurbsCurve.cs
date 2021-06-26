@@ -283,6 +283,10 @@ namespace GShark.Geometry
             return Analyze.CurveLength(this, t);
         }
 
+        /// <summary>
+        /// Converts a NURBS curve where the knotVector is clamped.
+        /// </summary>
+        /// <returns>A NURBS curve with clamped knots.</returns>
         public NurbsCurve ClampEnds()
         {
             List<Vector3> evalPts = new List<Vector3>(ControlPoints);
