@@ -133,7 +133,7 @@ namespace GShark.Geometry
                 }
 
                 pts.Add(curve.ControlPoints[^1]);
-                // ToDo clean the pts from duplicated points.
+                // ToDo: clean the pts from duplicated points.
                 return new BoundingBox(pts);
             }
         }

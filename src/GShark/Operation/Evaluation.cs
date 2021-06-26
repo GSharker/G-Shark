@@ -398,7 +398,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the derivative from the coordinate points.
+        /// Computes the derivatives of a Bezier.
+        /// https://pomax.github.io/bezierinfo/#derivatives
+        /// https://github.com/Pomax/bezierjs/blob/9ac7cec37fc56621dceabc430a7862b54917c3e2/dist/bezier.cjs#L199
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
@@ -442,7 +444,7 @@ namespace GShark.Operation
                 double b = derivs[1];
                 double c = derivs[2];
                 double d = a - 2 * b + c;
-                if (d != 0)
+                if (Math.Abs(d) * double.Epsilon != 0)
                 {
                     double m1 = -Math.Sqrt(b * b - a * c);
                     double m2 = -a + b;
@@ -450,7 +452,7 @@ namespace GShark.Operation
                     double v2 = -(-m1 + m2) / d;
                     return new[] { v1, v2 };
                 }
-                else if (b != c && d == 0)
+                else if (Math.Abs(b - c) > GeoSharpMath.EPSILON && Math.Abs(d) * double.Epsilon == 0.0)
                 {
                     return new[] { (2 * b - c) / (2 * (b - c)) };
                 }
@@ -462,7 +464,7 @@ namespace GShark.Operation
             {
                 double a = derivs[0];
                 double b = derivs[1];
-                if (a != b)
+                if (Math.Abs(a - b) > GeoSharpMath.EPSILON)
                 {
                     return new[] { a / (a - b) };
                 }
