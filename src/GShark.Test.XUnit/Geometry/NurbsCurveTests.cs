@@ -296,29 +296,5 @@ namespace GShark.Test.XUnit.Geometry
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
             curve.ControlPoints[^3].Should().BeEquivalentTo(curveClamped.ControlPoints[^3]);
         }
-
-        [Fact]
-        public void t()
-        {
-            int degree = 3;
-            //List<Vector3> controlPts = new List<Vector3>
-            //{
-            //    new Vector3 {0, 5, 5},
-            //    new Vector3 {0, 0, 0},
-            //    new Vector3 {4, 0, 0},
-            //    new Vector3 {0, 5, 0}
-            //};
-
-            List<Vector3> controlPts = new List<Vector3>
-            {
-                new Vector3 { 0.66666666666666663,0.83333333333333348,0.83333333333333348},
-                new Vector3 { 1.3333333333333335,0.0,0.0},
-                new Vector3 { 2.666666666666667,0.0,0.0},
-                new Vector3 { 3.5,0.83333333333333315,0.83333333333333315}
-            };
-
-            NurbsCurve v = new NurbsCurve(controlPts, degree);
-            var b = v.BoundingBox;
-        }
     }
 }
