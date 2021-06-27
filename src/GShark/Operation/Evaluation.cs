@@ -1,15 +1,15 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
+using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Operation.Utilities;
 
 namespace GShark.Operation
 {
     /// <summary>
-    /// Provides all of the core algorithms for evaluating points and derivatives on nurbs curves and surfaces.<br/>
+    /// Provides all of the core algorithms for evaluating points and derivatives on NURBS curves and surfaces.<br/>
     /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
     /// </summary>
     public class Evaluation
@@ -83,6 +83,7 @@ namespace GShark.Operation
             {
                 return 1.0;
             }
+
             // Local property, parameter is outside of span range.
             if (knot < knots[span] || knot >= knots[span + degree + 1])
             {
@@ -168,6 +169,48 @@ namespace GShark.Operation
         }
 
         /// <summary>
+        /// This method evaluate a B-spline span using the deBoor algorithm.
+        /// https://github.com/mcneel/opennurbs/blob/2b96cf31429dab25bf8a1dbd171227c506b06f88/opennurbs_evaluate_nurbs.cpp#L1249
+        /// This method is not implemented for clamped knots.
+        /// </summary>
+        /// <param name="controlPts">The control points of the curve.</param>
+        /// <param name="knots">The knot vector of the curve.</param>
+        /// <param name="degree">The value degree of the curve.</param>
+        /// <param name="t">The parameter value where the curve is evaluated.</param>
+        internal static void DeBoor(ref List<Vector3> controlPts, KnotVector knots, int degree, double t)
+        {
+            if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharpMath.EPSILON)
+            {
+                throw new Exception($"DeBoor evaluation failed: {knots[degree]} == {knots[degree + 1]}");
+            }
+
+            // deltaT = {knot[order-1] - t, knot[order] -  t, .. knot[2*order-3] - t}
+            List<double> deltaT = new List<double>();
+
+            for (int k = 0; k < degree; k++)
+            {
+                deltaT.Add(knots[degree + 1 + k] - t);
+            }
+            
+            for (int i = degree; i > 0; --i)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    double k0 = knots[degree + 1 - i + j];
+                    double k1 = knots[degree + 1 + j];
+
+                    double alpha0 = deltaT[j] / (k1 - k0);
+                    double alpha1 = 1.0 - alpha0;
+
+                    Vector3 cv1 = controlPts[j + 1];
+                    Vector3 cv0 = controlPts[j];
+
+                    controlPts[j] = (cv0 * alpha0) + (cv1 * alpha1);
+                }
+            }
+        }
+
+        /// <summary>
         /// Computes a point on a non-uniform, non-rational B spline surface.<br/>
         /// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
         /// </summary>
@@ -201,8 +244,8 @@ namespace GShark.Operation
             Vector3 position = Vector3.Zero1d(dim);
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Vector3.Zero1d(dim);
-                var vIndex = knotSpanV - surface.DegreeV + l;
+                Vector3 temp = Vector3.Zero1d(dim);
+                int vIndex = knotSpanV - surface.DegreeV + l;
                 for (int x = 0; x < surface.DegreeU + 1; x++)
                 {
                     for (int j = 0; j < temp.Count; j++)
@@ -312,12 +355,11 @@ namespace GShark.Operation
         /// Extrema are calculated for each dimension, rather than for the full curve, <br/>
         /// so that the result is not the number of convex/concave transitions, but the number of those transitions for each separate dimension.
         /// </summary>
-        /// <param name="derivPts">A collection of derivative coordinates.</param>
-        /// <param name="order">Order of the curve.</param>
-        /// <returns>The extrema </returns>
+        /// <param name="curve">Curve where the extrema are calculated.</param>
+        /// <returns>The extrema.</returns>
         public static Extrema ComputeExtrema(ICurve curve)
         {
-            var derivPts = DerivativeCoordinates(curve.ControlPoints);
+            List<List<Vector3>> derivPts = DerivativeCoordinates(curve.ControlPoints);
             Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Count;
@@ -356,7 +398,9 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the derivative from the coordinate points.
+        /// Computes the derivatives of a Bezier.
+        /// https://pomax.github.io/bezierinfo/#derivatives
+        /// https://github.com/Pomax/bezierjs/blob/9ac7cec37fc56621dceabc430a7862b54917c3e2/dist/bezier.cjs#L199
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
@@ -373,7 +417,7 @@ namespace GShark.Operation
                 List<Vector3> list = new List<Vector3>();
                 for (int j = 0; j < c; j++)
                 {
-                    var dpt = (p[j + 1] - p[j]) * c;
+                    Vector3 dpt = (p[j + 1] - p[j]) * c;
 
                     list.Add(dpt);
                 }
@@ -396,19 +440,19 @@ namespace GShark.Operation
             // quadratic roots
             if (derivs.Count == 3)
             {
-                var a = derivs[0];
-                var b = derivs[1];
-                var c = derivs[2];
-                var d = a - 2 * b + c;
-                if (d != 0)
+                double a = derivs[0];
+                double b = derivs[1];
+                double c = derivs[2];
+                double d = a - 2 * b + c;
+                if (Math.Abs(d) * double.Epsilon != 0)
                 {
-                    var m1 = -Math.Sqrt(b * b - a * c);
-                    var m2 = -a + b;
-                    var v1 = -(m1 + m2) / d;
-                    var v2 = -(-m1 + m2) / d;
+                    double m1 = -Math.Sqrt(b * b - a * c);
+                    double m2 = -a + b;
+                    double v1 = -(m1 + m2) / d;
+                    double v2 = -(-m1 + m2) / d;
                     return new[] { v1, v2 };
                 }
-                else if (b != c && d == 0)
+                else if (Math.Abs(b - c) > GeoSharpMath.EPSILON && Math.Abs(d) * double.Epsilon == 0.0)
                 {
                     return new[] { (2 * b - c) / (2 * (b - c)) };
                 }
@@ -418,9 +462,9 @@ namespace GShark.Operation
             // linear roots
             if (derivs.Count == 2)
             {
-                var a = derivs[0];
-                var b = derivs[1];
-                if (a != b)
+                double a = derivs[0];
+                double b = derivs[1];
+                if (Math.Abs(a - b) > GeoSharpMath.EPSILON)
                 {
                     return new[] { a / (a - b) };
                 }
@@ -764,7 +808,7 @@ namespace GShark.Operation
                     }
                 }
                 int nk = numDerivs - k;
-                var dd = nk < dv ? nk : dv;
+                int dd = nk < dv ? nk : dv;
 
                 for (int l = 0; l < dd + 1; l++)
                 {
