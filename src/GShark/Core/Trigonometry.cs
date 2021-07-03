@@ -14,7 +14,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="points">Provided points.</param>
         /// <returns>Whether the point are coplanar.</returns>
-        public static bool ArePointsCoplanar(IList<Vector3> points)
+        public static bool ArePointsCoplanar(IList<Point3d> points)
         {
             // https://en.wikipedia.org/wiki/Triple_product
             if (points.Count < 3)
@@ -22,13 +22,13 @@ namespace GShark.Core
                 return true;
             }
 
-            Vector3 vec1 = points[1] - points[0];
-            Vector3 vec2 = points[2] - points[0];
+            var vec1 = points[1] - points[0];
+            var vec2 = points[2] - points[0];
 
             for (int i = 3; i < points.Count; i++)
             {
-                Vector3 vec3 = points[i] - points[0];
-                double tripleProduct = Vector3.Dot(Vector3.Cross(vec3, vec2), vec1);
+                var vec3 = points[i] - points[0];
+                double tripleProduct = Vector3d.DotProduct(Vector3d.CrossProduct(vec3, vec2), vec1);
                 if (Math.Abs(tripleProduct) > GeoSharpMath.Epsilon)
                 {
                     return false;
