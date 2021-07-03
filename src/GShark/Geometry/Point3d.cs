@@ -60,6 +60,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Dimension of point.
+        /// </summary>
+        public int Size => 3;
+
+        /// <summary>
         /// Gets the value of a point at location 0,0,0.
         /// </summary>
         public static Point3d Origin => new Point3d(0, 0, 0);
@@ -222,14 +227,15 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Converts a vector in a point, without needing casting.
+        /// Converts a point in a vector, without needing casting.
         /// </summary>
-        /// <param name="vector">A vector.</param>
-        /// <returns>The resulting point.</returns>
-        public static implicit operator Point3d(Vector3d vector)
+        /// <param name="point3d">A point.</param>
+        /// <returns>The resulting Vector3.</returns>
+        public static implicit operator Vector3(Point3d point3d)
         {
-            return new Point3d(vector);
+            return new Vector3{ point3d.X, point3d.Y, point3d.Z};
         }
+
 
         /// <summary>
         /// Determines whether the first specified point comes before (has inferior sorting value than) the second point.

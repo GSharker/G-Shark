@@ -52,6 +52,11 @@ namespace GShark.Geometry
         /// </summary>
         public double W { get; set; }
 
+        /// <summary>
+        /// Dimension of point.
+        /// </summary>
+        public int Size => 4;
+
         //Indexer to allow access to properties as array.
         public double this[int i]
         {

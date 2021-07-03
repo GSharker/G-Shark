@@ -3,6 +3,7 @@ using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GShark.Operation
@@ -106,8 +107,8 @@ namespace GShark.Operation
             // Build matrix of basis function coefficients.
             Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
             // Solve for each points.
-            List<Vector3> ctrlPts = (hasTangents)
-                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, startTangent, endTangent)
+            List<Point3d> ctrlPts = (hasTangents)
+                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3d(startTangent.Value), new Vector3d(endTangent.Value))
                 : SolveCtrlPts(knots, pts, coeffMatrix);
 
             return new NurbsCurve(degree, knots, ctrlPts);
@@ -116,7 +117,7 @@ namespace GShark.Operation
         /// <summary>
         /// Compute R - Eqn 9.67.
         /// </summary>
-        private static List<Vector3> ComputeValuesR(KnotVector knots, List<double> curveParameters, List<Vector3> Rk, int degree, int numberOfCtrPts)
+        private static List<Point3d> ComputeValuesR(KnotVector knots, List<double> curveParameters, List<Point3d> Rk, int degree, int numberOfCtrPts)
         {
             List<Vector3> vectorR = new List<Vector3>();
             for (int i = 1; i < numberOfCtrPts - 1; i++)
@@ -140,7 +141,7 @@ namespace GShark.Operation
                 vectorR.Add(tempVec);
             }
 
-            return vectorR;
+            return vectorR.Select(v => new Point3d(v[0], v[1], v[2])).ToList();
         }
 
         /// <summary>
@@ -232,27 +233,26 @@ namespace GShark.Operation
         /// <summary>
         /// Defines the control points.
         /// </summary>
-        private static List<Vector3> SolveCtrlPts(KnotVector knots, List<Vector3> pts, Matrix coeffMatrix)
+        private static List<Point3d> SolveCtrlPts(KnotVector knots, List<Point3d> pts, Matrix coeffMatrix)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
 
             // Solve for each dimension.
-            for (int i = 0; i < pts[0].Count; i++)
+            for (int i = 0; i < pts[0].Size; i++)
             {
                 Vector3 b = new Vector3();
                 b = pts.Select(pt => pt[i]).ToVector();
                 Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
-
-            return ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point3d(pt[0], pt[1], pt[2])).ToList();
         }
 
         /// <summary>
         /// Defines the control points defining the tangent values for the first and last points.
         /// </summary>
-        private static List<Vector3> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3d> pts, Matrix coeffMatrix, int degree, Vector3d startTangent, Vector3d endTangent)
+        private static List<Point3d> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3d> pts, Matrix coeffMatrix, int degree, Vector3d startTangent, Vector3d endTangent)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -279,7 +279,7 @@ namespace GShark.Operation
                 ptsSolved.Add(solution);
             }
 
-            return ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point3d(pt[0], pt[1], pt[2])).ToList();
         }
 
         /// <summary>
@@ -353,9 +353,7 @@ namespace GShark.Operation
             coeffMatrix[n - 1][n - 2] = 2;
 
             // Build the vector points.
-            List<Vector3> vecPts = (getsEndDerivatives)
-                ? Vector3.Zero2d(2, 3)//3 is dimension of pts, Point3d
-                : Vector3.Zero2d(n, 3);
+            List<Vector3d> vecPts = (getsEndDerivatives) ? Enumerable.Repeat(new Vector3d(), 2).ToList() : Enumerable.Repeat(new Vector3d(), n).ToList();
 
             if (!getsEndDerivatives)
             {
@@ -372,7 +370,7 @@ namespace GShark.Operation
             Matrix ptsSolved = new Matrix();
 
             // Solve for each dimension.
-            for (int i = 0; i < vecPts[0].Count; i++)
+            for (int i = 0; i < vecPts[0].Size; i++)
             {
                 Vector3 b = new Vector3();
                 b = vecPts.Select(pt => pt[i]).ToVector();
@@ -381,10 +379,9 @@ namespace GShark.Operation
                 ptsSolved.Add(solution);
             }
 
-            List<Vector3> ctrlPtsA = ptsSolved.Transpose().Select(pt => pt.ToVector()).ToList();
-            List<Vector3> ctrlPtsB = (getsEndDerivatives)
-                ? Vector3.Zero2d(2, pts[0].Count)
-                : Vector3.Zero2d(n, pts[0].Count);
+            List<Point3d> ctrlPtsA = ptsSolved.Transpose().Select(pt => new Point3d(pt[0], pt[1], pt[2])).ToList();
+            List<Point3d> ctrlPtsB = (getsEndDerivatives) ? Enumerable.Repeat(new Point3d(), 2).ToList() : Enumerable.Repeat(new Point3d(), n).ToList();
+
             for (int i = 0; i < n - 1; i++)
             {
                 ctrlPtsB[i] = pts[i + 1] * 2 - ctrlPtsA[i + 1];

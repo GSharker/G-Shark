@@ -167,6 +167,26 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Converts a vector3d in a vector3, without needing casting.
+        /// </summary>
+        /// <param name="vector3d">A Vector3d.</param>
+        /// <returns>The resulting Vector3.</returns>
+        public static implicit operator Vector3(Vector3d vector3d)
+        {
+            return new Vector3{vector3d.X, vector3d.Y, vector3d.Z};
+        }
+
+        /// <summary>
+        /// Converts a vector3d in a point3d, without needing casting.
+        /// </summary>
+        /// <param name="vector3d">A Vector3d.</param>
+        /// <returns>The resulting Point3d.</returns>
+        public static implicit operator Point3d(Vector3d vector3d)
+        {
+            return new Point3d(vector3d);
+        }
+
+        /// <summary>
         /// Computes the cross product (or vector product, or exterior product) of two vectors.
         /// <para>This operation is not commutative.</para>
         /// </summary>
@@ -369,6 +389,11 @@ namespace GShark.Geometry
         /// Gets or sets the Z (third) component of the vector.
         /// </summary>
         public double Z { get; set; }
+
+        /// <summary>
+        /// Dimension of vector.
+        /// </summary>
+        public int Size => 3;
 
         /// <summary>
         /// Gets a value indicating whether this vector is valid. 

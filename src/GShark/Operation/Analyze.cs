@@ -62,9 +62,9 @@ namespace GShark.Operation
             for (int i = 0; i < gaussDegree; i++)
             {
                 double cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
-                List<Vector3> tan = Evaluation.RationalCurveDerivatives(curve, cu);
+                List<Vector3d> tan = Evaluation.RationalCurveDerivatives(curve, cu);
 
-                sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length();
+                sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length;
             }
 
             return z * sum;
@@ -174,7 +174,7 @@ namespace GShark.Operation
             // To avoid infinite loop we limited the interaction.
             while (j < maxIterations)
             {
-                List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
+                List<Vector3d> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
                 Vector3 diff = e[0] - new Vector3{point.X, point.Y, point.Z}; // C(u) - P
 
                 // First condition, point coincidence:
@@ -187,7 +187,7 @@ namespace GShark.Operation
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
                 double c2n = Vector3.Dot(e[1], diff);
-                double c2d = (e[1] * c1v).Length();
+                double c2d = (e[1] * c1v).Length;
                 double c2v = c2n / c2d;
                 bool c2 = Math.Abs(c2v) <= tol2;
 
@@ -202,7 +202,7 @@ namespace GShark.Operation
                 if (ct > tVal1) ct = isCurveClosed ? tVal0 + (ct - tVal1) : tVal1;
 
                 // the parameter does not change significantly, the point is off the end of the curve.
-                double c3v = (e[1] * (ct - Cu)).Length();
+                double c3v = (e[1] * (ct - Cu)).Length;
                 if (c3v < tol1) return Cu;
 
                 Cu = ct;
@@ -219,7 +219,7 @@ namespace GShark.Operation
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
+        private static double NewtonIteration(double u, List<Vector3d> derivativePts, Vector3 difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
