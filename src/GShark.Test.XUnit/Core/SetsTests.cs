@@ -201,28 +201,28 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Reversed_BiDimensional_Collection_Of_Points()
         {
             // Arrange
-            List<List<Vector3>> pts = new List<List<Vector3>>
+            List<List<Point3d>> pts = new List<List<Point3d>>
             {
-                new List<Vector3>
+                new List<Point3d>
                 {
-                    new Vector3 { 0d, -10d, 0d },
-                    new Vector3 { 10d, -10d, 10d }
+                    new Point3d( 0d, -10d, 0),
+                    new Point3d( 10d, -10d, 10)
                 },
-                new List<Vector3>
+                new List<Point3d>
                 {                
-                    new Vector3 { 0d, -30d, 0d },
-                    new Vector3 { 10d, -30d, 0d }
+                    new Point3d( 0d, -30d, 0),
+                    new Point3d( 10d, -30d, 0)
 
                 },
-                new List<Vector3>
+                new List<Point3d>
                 {
-                    new Vector3 { 0d, 0d, 50d },
-                    new Vector3 { 10d, 0d, 0d }
+                    new Point3d( 0d, 0d, 50),
+                    new Point3d( 10d, 0d, 0)
                 }
             };
 
             // Act
-            List<List<Vector3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
+            List<List<Point3d>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
 
             // Assert
             reversedPts.Count.Should().Be(2);
