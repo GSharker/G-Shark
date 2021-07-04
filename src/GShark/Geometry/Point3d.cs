@@ -510,6 +510,18 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Calculates the distance of a point to a line.
+        /// </summary>
+        /// <param name="line">The line from which to calculate the distance.</param>
+        /// <returns>The distance.</returns>
+        public double DistanceTo(Line line)
+        {
+            Point3d projectedPt = line.ClosestPoint(this);
+            Vector3d ptToProjectedPt = projectedPt - this;
+            return ptToProjectedPt.Length;
+        }
+
+        /// <summary>
         /// Transforms the point using a transformation matrix.
         /// </summary>
         /// <param name="t">The transformation matrix.</param>
@@ -578,18 +590,6 @@ namespace GShark.Geometry
             }
 
             return nonDups.ToArray();
-        }
-
-        /// <summary>
-        /// Calculates the distance of a point to a line.
-        /// </summary>
-        /// <param name="line">The line from which to calculate the distance.</param>
-        /// <returns>The distance.</returns>
-        public double DistanceTo(Line line)
-        {
-            Point3d projectedPt = line.ClosestPoint(this);
-            Vector3d ptToProjectedPt = projectedPt - this;
-            return ptToProjectedPt.Length;
         }
 
         /// <summary>

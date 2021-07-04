@@ -350,32 +350,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
-        {
-            // Arrange
-            var line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 10, 20, 0 };
-            double distanceExpected = 2.7735009811261464;
-
-            // Act
-            double distance = pt.DistanceTo(line);
-
-            // Assert
-            distance.Should().Be(distanceExpected);
-        }
-
-        [Fact]
-        public void It_Checks_If_A_Point_Lies_On_A_Plane()
-        {
-            // Arrange
-            Plane plane = new Plane(new Vector3 { 30, 45, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 26.565905, 47.289396, 0.0 };
-
-            // Assert
-            pt.IsOnPlane(plane, 0.001).Should().BeTrue();
-        }
-
-        [Fact]
         public void It_Returns_The_Perpendicular_Vector()
         {
             // Arrange
