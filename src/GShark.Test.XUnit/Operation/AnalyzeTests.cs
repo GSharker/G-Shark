@@ -26,12 +26,12 @@ namespace GShark.Test.XUnit.Operation
             int degree = 3;
             KnotVector knots1 = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             KnotVector knots2 = new KnotVector { 1, 1, 1, 1, 4, 4, 4, 4 };
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3d> controlPts = new List<Point3d>
             {
-                new Vector3 {0, 0, 0},
-                new Vector3 {0.5, 0, 0},
-                new Vector3 {2.5, 0, 0},
-                new Vector3 {3, 0, 0}
+                new Point3d(0, 0, 0),
+                new Point3d(0.5, 0, 0),
+                new Point3d(2.5, 0, 0),
+                new Point3d(3, 0, 0)
             };
 
             NurbsCurve curve1 = new NurbsCurve(degree, knots1, controlPts);
@@ -81,11 +81,11 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
-            (List<double> tvalues, List<Vector3> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
+            (List<double> tvalues, List<Point3d> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
 
             double length = 0.0;
             for (int j = 0; j < samples.pts.Count - 1; j++)
-                length += (samples.pts[j + 1] - samples.pts[j]).Length();
+                length += (samples.pts[j + 1] - samples.pts[j]).Length;
 
             // Assert
             crvLength.Should().BeApproximately(length, 1e-3);
@@ -102,17 +102,16 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            
+            Point3d testPt = new Point3d(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
+            Point3d expectedPt = new Point3d(ptExpected[0], ptExpected[1], ptExpected[2]);
+
             // Act
-            Vector3 ptHomogenized = Analyze.CurveClosestPoint(curve, ptToCheck.ToVector(), out double t);
-            Vector3 pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
+            var ptHomogenized = Analyze.CurveClosestPoint(curve, testPt, out double t);
+            var pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
 
             // Assert
             t.Should().BeApproximately(tValExpected, GeoSharpMath.MaxTolerance);
-            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
-            pt.Should().BeEquivalentTo(ptExpected.ToVector(), options => options
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MaxTolerance))
-                .WhenTypeIs<double>());
+            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]

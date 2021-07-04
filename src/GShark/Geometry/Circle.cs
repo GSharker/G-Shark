@@ -2,6 +2,7 @@
 using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -42,15 +43,15 @@ namespace GShark.Geometry
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
         /// <param name="pt3">End point of the arc.</param>
-        public Circle(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        public Circle(Point3d pt1, Point3d pt2, Point3d pt3)
         {
-            Vector3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
-            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
-            Vector3 xDir = pt1 - center;
-            Vector3 yDir = Vector3.Cross(normal, xDir);
+            Point3d center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Vector3d normal = Vector3d.ZAxis.PerpendicularTo(pt1, pt2, pt3);
+            Vector3d xDir = pt1 - center;
+            Vector3d yDir = Vector3d.CrossProduct(normal, xDir);
 
             Plane = new Plane(center, xDir, yDir, normal);
-            Radius = xDir.Length();
+            Radius = xDir.Length;
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the center of the circle.
         /// </summary>
-        public Vector3 Center => Plane.Origin;
+        public Point3d Center => Plane.Origin;
 
         /// <summary>
         /// Gets the circumference of the circle.
@@ -75,11 +76,11 @@ namespace GShark.Geometry
 
         public int Degree => 2;
 
-        public List<Vector3> ControlPoints
+        public List<Point3d> ControlPoints
         {
             get
             {
-                Vector3[] ctrPts = new Vector3[9];
+                Point3d[] ctrPts = new Point3d[9];
                 ctrPts[0] = Plane.PointAt(Radius, 0.0);
                 ctrPts[1] = Plane.PointAt(Radius, Radius);
                 ctrPts[2] = Plane.PointAt(0.0, Radius);
@@ -93,7 +94,7 @@ namespace GShark.Geometry
             }
         }
 
-        public List<Vector3> HomogenizedPoints
+        public List<Point4d> HomogenizedPoints
         {
             get
             {
@@ -134,9 +135,8 @@ namespace GShark.Geometry
                 double minZ = Plane.Origin[2] - val3;
                 double maxZ = Plane.Origin[2] + val3;
 
-                Vector3 min = new Vector3 {minX, minY, minZ};
-                Vector3 max = new Vector3 { maxX, maxY, maxZ };
-
+                Point3d min = new Point3d(minX, minY, minZ);
+                Point3d max = new Point3d(maxX, maxY, maxZ);
                 return new BoundingBox(min, max);
             }
         }
@@ -146,7 +146,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public Vector3 PointAt(double t)
+        public Point3d PointAt(double t)
         {
             return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
         }
@@ -156,12 +156,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public Vector3 TangentAt(double t)
+        public Vector3d TangentAt(double t)
         {
             double r1 = Radius * (-Math.Sin(t));
             double r2 = Radius * (Math.Cos(t));
 
-            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
+            Vector3d vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
             return vector.Unitize();
         }
@@ -171,7 +171,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The test point to project onto the circle.</param>
         /// <returns>The point on the circle that is close to the test point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public Point3d ClosestPoint(Point3d pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharpMath.MaxTolerance && Math.Abs(v) < GeoSharpMath.MaxTolerance)

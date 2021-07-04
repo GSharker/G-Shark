@@ -16,7 +16,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="min">Point containing all the minimum coordinates.</param>
         /// <param name="max">Point containing all the maximum coordinates.</param>
-        public BoundingBox(Vector3 min, Vector3 max)
+        public BoundingBox(Point3d min, Point3d max)
         {
             Min = min;
             Max = max;
@@ -27,19 +27,19 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pts">Collection of points will be contained in the BoundingBox.</param>
         /// <param name="orientation">Orientation plane.</param>
-        public BoundingBox(IList<Vector3> pts, Plane orientation = null)
+        public BoundingBox(IList<Point3d> pts, Plane orientation = null)
         {
-            List<Vector3> copyPt = new List<Vector3>(pts);
+            List<Point3d> copyPt = new List<Point3d>(pts);
             if (orientation != null)
             {
                 Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, orientation);
-                copyPt = pts.Select(pt => pt * transform).ToList();
+                copyPt = pts.Select(pt => pt.Transform(transform)).ToList();
             }
 
-            Vector3 min = new Vector3 { double.MaxValue, double.MaxValue, double.MaxValue };
-            Vector3 max = new Vector3 { double.MinValue, double.MinValue, double.MinValue };
+            Point3d min = new Point3d (double.MaxValue, double.MaxValue, double.MaxValue);
+            Point3d max = new Point3d (double.MinValue, double.MinValue, double.MinValue);
 
-            foreach (Vector3 pt in copyPt)
+            foreach (var pt in copyPt)
             {
                 if (pt[0] < min[0])
                 {
@@ -79,22 +79,22 @@ namespace GShark.Geometry
         /// <summary>
         /// The minimum point of the BoundingBox. The coordinates of this point are always smaller than max.
         /// </summary>
-        public Vector3 Min { get; }
+        public Point3d Min { get; }
 
         /// <summary>
         /// The maximum point of the BoundingBox. The coordinates of this point are always bigger than min.
         /// </summary>
-        public Vector3 Max { get; }
+        public Point3d Max { get; }
 
         /// <summary>
         /// Gets a BoundingBox that has Unset coordinates for T0 and T1.
         /// </summary>
-        public static BoundingBox Unset { get; } = new BoundingBox(Vector3.Unset, Vector3.Unset);
+        public static BoundingBox Unset { get; } = new BoundingBox(Point3d.Unset, Point3d.Unset);
 
         /// <summary>
         /// Gets if the BoundingBox is valid.
         /// </summary>
-        public bool IsValid => Min.IsValid() && Max.IsValid() &&
+        public bool IsValid => Min.IsValid && Max.IsValid &&
                                (Min[0] <= Max[0] && Min[1] <= Max[1]) &&
                                Min[2] <= Max[2];
 
@@ -179,9 +179,9 @@ namespace GShark.Geometry
         /// be considered 'outside'.
         /// </param>
         /// <returns>Return true if the point is contained in the BoundingBox.</returns>
-        public bool Contains(Vector3 pt, bool strict)
+        public bool Contains(Point3d pt, bool strict)
         {
-            if (pt == null)
+            if (pt == Point3d.Unset)
             {
                 return false;
             }
@@ -238,15 +238,15 @@ namespace GShark.Geometry
                 return Unset;
             }
 
-            Vector3 minPt = new Vector3();
-            Vector3 maxPt = new Vector3();
-            minPt.Add(bBox1.Min[0] >= bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
-            minPt.Add(bBox1.Min[1] >= bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
-            minPt.Add(bBox1.Min[2] >= bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);
+            Point3d minPt = new Point3d();
+            Point3d maxPt = new Point3d();
+            minPt.X = bBox1.Min[0] >= bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0];
+            minPt.Y = bBox1.Min[1] >= bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1];
+            minPt.Z = bBox1.Min[2] >= bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2];
 
-            maxPt.Add(bBox1.Max[0] <= bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0]);
-            maxPt.Add(bBox1.Max[1] <= bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
-            maxPt.Add(bBox1.Max[2] <= bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
+            maxPt.X = bBox1.Max[0] <= bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0];
+            maxPt.Y = bBox1.Max[1] <= bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1];
+            maxPt.Z = bBox1.Max[2] <= bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2];
 
             return new BoundingBox(minPt, maxPt);
         }
@@ -279,15 +279,15 @@ namespace GShark.Geometry
                 return bBox1;
             }
 
-            Vector3 minPt = new Vector3();
-            Vector3 maxPt = new Vector3();
-            minPt.Add(bBox1.Min[0] < bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0]);
-            minPt.Add(bBox1.Min[1] < bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1]);
-            minPt.Add(bBox1.Min[2] < bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2]);
+            Point3d minPt = new Point3d();
+            Point3d maxPt = new Point3d();
+            minPt.X = bBox1.Min[0] < bBox2.Min[0] ? bBox1.Min[0] : bBox2.Min[0];
+            minPt.Y = bBox1.Min[1] < bBox2.Min[1] ? bBox1.Min[1] : bBox2.Min[1];
+            minPt.Z = bBox1.Min[2] < bBox2.Min[2] ? bBox1.Min[2] : bBox2.Min[2];
 
-            maxPt.Add(bBox1.Max[0] > bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0]);
-            maxPt.Add(bBox1.Max[1] > bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1]);
-            maxPt.Add(bBox1.Max[2] > bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2]);
+            maxPt.X = bBox1.Max[0] > bBox2.Max[0] ? bBox1.Max[0] : bBox2.Max[0];
+            maxPt.Y = bBox1.Max[1] > bBox2.Max[1] ? bBox1.Max[1] : bBox2.Max[1];
+            maxPt.Z = bBox1.Max[2] > bBox2.Max[2] ? bBox1.Max[2] : bBox2.Max[2];
 
             return new BoundingBox(minPt, maxPt);
         }
@@ -299,9 +299,9 @@ namespace GShark.Geometry
         /// <returns>A BoundingBox made valid.</returns>
         public BoundingBox MakeItValid()
         {
-            if(!Min.IsValid() || !Max.IsValid())
+            if(!Min.IsValid || !Max.IsValid)
             {
-                return BoundingBox.Unset;
+                return Unset;
             }
 
             double x1 = Math.Min(Min[0], Max[0]);
@@ -312,8 +312,8 @@ namespace GShark.Geometry
             double y2 = Math.Max(Min[1], Max[1]);
             double z2 = Math.Max(Min[2], Max[2]);
 
-            Vector3 min = new Vector3 {x1, y1, z1};
-            Vector3 max = new Vector3 { x2, y2, z2 };
+            Point3d min = new Point3d(x1, y1, z1);
+            Point3d max = new Point3d(x2, y2, z2);
 
             return new BoundingBox(min, max);
         }

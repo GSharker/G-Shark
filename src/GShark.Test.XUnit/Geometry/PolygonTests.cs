@@ -16,23 +16,32 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput = testOutput;
         }
 
-        public static Vector3[] Planar2D => new[]
+        public static Point3d[] Planar2D => new[]
         {
-            new Vector3 {1d, 1d, 0d}, new Vector3 {10d, 1d, 0d},
-            new Vector3 {2d, 10d, 0d}, new Vector3 {1d, 10d, 0d}, new Vector3 {1d, 1d, 0d}
+            new Point3d(1d, 1d, 0d), 
+            new Point3d(10d, 1d, 0d),
+            new Point3d(2d, 10d, 0d), 
+            new Point3d(1d, 10d, 0d), 
+            new Point3d(1d, 1d, 0)
         };
 
-        public static Vector3[] NotPlanar2D => new[]
+        public static Point3d[] NotPlanar2D => new[]
         {
-            new Vector3 {1d, 1d, 5d}, new Vector3 {10d, 1d, 0d},
-            new Vector3 {2d, 10d, 0d}, new Vector3 {1d, 10d, -5d}, new Vector3 {1d, 1d, 0d}
+            new Point3d(1d, 1d, 5d),
+            new Point3d(10d, 1d, 0d),
+            new Point3d(2d, 10d, 0d),
+            new Point3d(1d, 10d, -5d),
+            new Point3d(1d, 1d, 0)
         };
 
-        public static Vector3[] Planar3D => new[]
+        public static Point3d[] Planar3D => new[]
         {
-            new Vector3 {74.264416, 36.39316, -1.884313}, new Vector3 {79.65881, 22.402983, 1.741763},
-            new Vector3 {97.679126, 13.940616, 3.812853}, new Vector3 {100.92443, 30.599893, -0.585116},
-            new Vector3 {78.805261, 45.16886, -4.22451}, new Vector3 {74.264416, 36.39316, -1.884313}
+            new Point3d(74.264416, 36.39316, -1.884313),
+            new Point3d(79.65881, 22.402983, 1.741763),
+            new Point3d(97.679126, 13.940616, 3.812853),
+            new Point3d(100.92443, 30.599893, -0.585116),
+            new Point3d(78.805261, 45.16886, -4.22451),
+            new Point3d(74.264416, 36.39316, -1.884313)
         };
 
         [Fact]
@@ -43,16 +52,16 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             polygon.Should().NotBeEmpty();
-            polygon.Segments().Length.Should().Be(5);
+            polygon.Segments.Length.Should().Be(5);
         }
 
         [Fact]
         public void Polygon_Throws_An_Exception_If_The_Collection_Of_Points_Is_Less_Than_3()
         {
             // Arrange
-            Vector3[] pts = new[]
+            Point3d[] pts = new[]
             {
-                new Vector3 {74.264416, 36.39316, -1.884313}, new Vector3 {79.65881, 22.402983, 1.741763},
+                new Point3d(74.264416, 36.39316, -1.884313), new Point3d(79.65881, 22.402983, 1.741763),
             };
 
             // Act
@@ -95,16 +104,16 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Vector3 centroid2DExpected = new Vector3 { 3.5, 5.5, 0.0 };
-            Vector3 centroid3DExpected = new Vector3 { 86.266409, 29.701102, -0.227864 };
+            Point3d centroid2DExpected = new Point3d( 3.5, 5.5, 0.0);
+            Point3d centroid3DExpected = new Point3d( 86.266409, 29.701102, -0.227864);
 
             // Act
-            Vector3 poly2DCentroid = poly2D.CentroidByVertices;
-            Vector3 poly3DCentroid = poly3D.CentroidByVertices;
+            Point3d poly2DCentroid = poly2D.CentroidByVertices;
+            Point3d poly3DCentroid = poly3D.CentroidByVertices;
 
             // Assert
             poly2DCentroid.Equals(centroid2DExpected).Should().BeTrue();
-            poly3DCentroid.IsEqualRoundingDecimal(centroid3DExpected, 5).Should().BeTrue();
+            poly3DCentroid.EpsilonEquals(centroid3DExpected, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -114,12 +123,12 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Vector3 centroid2DExpected = new Vector3 { 4.033333, 4.3, 0};
-            Vector3 centroid3DExpected = new Vector3 { 87.620479, 29.285305, -0.129984};
+            Point3d centroid2DExpected = new Point3d( 4.033333, 4.3, 0);
+            Point3d centroid3DExpected = new Point3d( 87.620479, 29.285305, -0.129984);
 
             // Act
-            Vector3 poly2DCentroid = poly2D.CentroidByArea;
-            Vector3 poly3DCentroid = poly3D.CentroidByArea;
+            Point3d poly2DCentroid = poly2D.CentroidByArea;
+            Point3d poly3DCentroid = poly3D.CentroidByArea;
 
             // Assert
             poly2DCentroid.DistanceTo(centroid2DExpected).Should().BeLessThan(GeoSharpMath.MaxTolerance);
@@ -137,7 +146,7 @@ namespace GShark.Test.XUnit.Geometry
             poly2D.Degree.Should().Be(1);
             for (int i = 1; i < poly2D.Knots.Count - 1; i++)
             {
-                Vector3 pt = poly2D.PointAt(knots[i]);
+                Point3d pt = poly2D.PointAt(knots[i]);
                 Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
             }
         }

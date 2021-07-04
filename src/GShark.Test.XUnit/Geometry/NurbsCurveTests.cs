@@ -21,14 +21,14 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput = testOutput;
         }
 
-        public static (int degree, List<Vector3> pts, KnotVector knots, List<double> weights) CurveData =>
+        public static (int degree, List<Point3d> pts, KnotVector knots, List<double> weights) CurveData =>
         (
             2,
-            new List<Vector3>
+            new List<Point3d>
             {
-                new Vector3 {-10,15,5},
-                new Vector3 {10,5,5},
-                new Vector3 {20,0,0}
+                new Point3d(-10,15,5),
+                new Point3d(10,5,5),
+                new Point3d(20,0,0)
             },
             new KnotVector { 1, 1, 1, 1, 1, 1 },
             new List<double> { 0.5, 0.5, 0.5 }
@@ -54,8 +54,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Vector3 { 10, 0, 0, 0.5 });
-            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Vector3 { 20, 0, 0 });
+            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Point4d(10, 0, 0, 0.5));
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Point3d( 20, 0, 0));
         }
 
         [Fact]
@@ -98,11 +98,11 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve crv0 = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
             NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadraticBezierPlanar();
 
-            Vector3 expectedPtMin0 = new Vector3 { 0, 0, 0 };
-            Vector3 expectedPtMax0 = new Vector3 { 2, 0.444444, 0 };
-
-            Vector3 expectedPtMin1 = new Vector3 { -10, 0, 0 };
-            Vector3 expectedPtMax1 = new Vector3 { 20, 15, 5 };
+            var expectedPtMin0 = new Point3d( 0, 0, 0);
+            var expectedPtMax0 = new Point3d( 2, 0.444444, 0);
+            
+            var expectedPtMin1 = new Point3d( -10, 0, 0);
+            var expectedPtMax1 = new Point3d( 20, 15, 5);
 
             // Act
             BoundingBox bBox0 = crv0.BoundingBox;
@@ -123,11 +123,11 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve crv0 = NurbsCurveCollection.NurbsCurve3DExample();
             NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
 
-            Vector3 expectedPtMin0 = new Vector3 { 0, 0.5555556, 0 };
-            Vector3 expectedPtMax0 = new Vector3 { 4.089468, 5, 5 };
+            var expectedPtMin0 = new Point3d( 0, 0.5555556, 0);
+            var expectedPtMax0 = new Point3d( 4.089468, 5, 5);
 
-            Vector3 expectedPtMin1 = new Vector3 { 0, 2.5, 0 };
-            Vector3 expectedPtMax1 = new Vector3 { 4.545455, 5, 3.333333 };
+            var expectedPtMin1 = new Point3d( 0, 2.5, 0);
+            var expectedPtMax1 = new Point3d( 4.545455, 5, 3.333333);
 
             // Act
             BoundingBox bBox0 = crv0.BoundingBox;
@@ -212,13 +212,13 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            var transform = Transform.Translation(new Vector3 { -10, 20, 0 });
+            var transform = Transform.Translation(new Vector3d(-10, 20, 0));
 
             // Act
             var transformedCurve = curve.Transform(transform);
             var pt1 = curve.PointAt(0.5);
             var pt2 = transformedCurve.PointAt(0.5);
-            var distanceBetweenPts = System.Math.Round((pt2 - pt1).Length(), 6);
+            var distanceBetweenPts = System.Math.Round((pt2 - pt1).Length, 6);
 
             // Assert
             distanceBetweenPts.Should().Be(22.36068);

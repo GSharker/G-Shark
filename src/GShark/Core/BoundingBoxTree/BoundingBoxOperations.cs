@@ -77,11 +77,11 @@ namespace GShark.Core.BoundingBoxTree
                 //NurbsCurve crv = a.Yield();
                 //Vector3 pt1 = crv.ControlPoints[0];
                 //Vector3 pt2 = crv.ControlPoints[^1];
-                Vector3 pt1 = a.BoundingBox().Max;
-                Vector3 pt2 = a.BoundingBox().Min;
+                var pt1 = a.BoundingBox().Max;
+                var pt2 = a.BoundingBox().Min;
                 double pt1pt2Length = pt1.DistanceTo(pt2);
-                Vector3 ppt1 = pl.ClosestPoint(pt1, out double h1);
-                Vector3 ppt2 = pl.ClosestPoint(pt2, out double h2);
+                var ppt1 = pl.ClosestPoint(pt1, out double h1);
+                var ppt2 = pl.ClosestPoint(pt2, out double h2);
 
                 if (Math.Abs(h1) < tolerance || Math.Abs(h2) < tolerance || h1 * h2 > 0.0)
                 {

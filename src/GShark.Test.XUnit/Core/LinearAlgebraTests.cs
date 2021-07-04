@@ -23,22 +23,22 @@ namespace GShark.Test.XUnit.Core
             new object[]
             {
                 new List<double> {0.5, 0.5, 0.5},
-                new List<Vector3>
+                new List<Point4d>
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {1.25, -1.25, 0.0, 0.5},
-                    new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (1.25, -1.25, 0.0, 0.5),
+                    new (2.5, 0.0, 0.0, 0.5)
                 }
             },
 
             new object[]
             {
                 new List<double> {0.5},
-                new List<Vector3>
+                new List<Point4d>
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {2.5, -2.5, 0.0, 1.0},
-                    new Vector3 {5.0, 0.0, 0.0, 1.0}
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (2.5, -2.5, 0.0, 1.0),
+                    new (5.0, 0.0, 0.0, 1.0)
                 }
             },
         };
@@ -48,39 +48,41 @@ namespace GShark.Test.XUnit.Core
             new object[]
             {
                 new List<List<double>> {
-                    new List<double> { 0.5, 0.5, 0.5 },
-                    new List<double> { 0.5, 0.5, 0.5 },
+                    new() { 0.5, 0.5, 0.5 },
+                    new() { 0.5, 0.5, 0.5 },
                 },
-                new List<List<Vector3>>()
+                new List<List<Point4d>>()
                 {
-                    new List<Vector3>{
-                        new Vector3 {0.0, 0.0, 0.0, 0.5},
-                        new Vector3 {1.25, -1.25, 0.0, 0.5},
-                        new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new()
+                    {
+                        new (0.0, 0.0, 0.0, 0.5),
+                        new (1.25, -1.25, 0.0, 0.5),
+                        new (2.5, 0.0, 0.0, 0.5)
                     },
-                    new List<Vector3>{
-                        new Vector3 {0.0, 0.0, 0.0, 0.5},
-                        new Vector3 {1.25, -1.25, 0.0, 0.5},
-                        new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new()
+                    {
+                        new (0.0, 0.0, 0.0, 0.5),
+                        new (1.25, -1.25, 0.0, 0.5),
+                        new (2.5, 0.0, 0.0, 0.5)
                     }
                 }
             },
             new object[]
             {
-                new List<List<double>> { new List<double> { 0.5 }, new List<double> { 0.5 }},
-                new List<List<Vector3>>
+                new List<List<double>> { new() { 0.5 }, new() { 0.5 }},
+                new List<List<Point4d>>
                 {
-                    new List<Vector3>
+                    new()
                     {
-                        new Vector3() {0.0, 0.0, 0.0, 0.5},
-                        new Vector3() {2.5, -2.5, 0.0, 1.0},
-                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                        new (0.0, 0.0, 0.0, 0.5),
+                        new (2.5, -2.5, 0.0, 1.0),
+                        new (5.0, 0.0, 0.0, 1.0)
                     },
-                    new List<Vector3>
+                    new()
                     {
-                        new Vector3() {0.0, 0.0, 0.0, 0.5},
-                        new Vector3() {2.5, -2.5, 0.0, 1.0},
-                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                        new (0.0, 0.0, 0.0, 0.5),
+                        new (2.5, -2.5, 0.0, 1.0),
+                        new (5.0, 0.0, 0.0, 1.0)
                     }
                 }
             },
@@ -88,19 +90,19 @@ namespace GShark.Test.XUnit.Core
             new object[]
             {
                 null,
-                new List<List<Vector3>>
+                new List<List<Point4d>>
                 {
-                    new List<Vector3>
+                    new()
                     {
-                        new Vector3() {0.0, 0.0, 0.0, 1.0},
-                        new Vector3() {2.5, -2.5, 0.0, 1.0},
-                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                        new (0.0, 0.0, 0.0, 1.0),
+                        new (2.5, -2.5, 0.0, 1.0),
+                        new (5.0, 0.0, 0.0, 1.0)
                     },
-                    new List<Vector3>
+                    new()
                     {
-                        new Vector3() {0.0, 0.0, 0.0, 1.0},
-                        new Vector3() {2.5, -2.5, 0.0, 1.0},
-                        new Vector3() {5.0, 0.0, 0.0, 1.0}
+                        new (0.0, 0.0, 0.0, 1.0),
+                        new (2.5, -2.5, 0.0, 1.0),
+                        new (5.0, 0.0, 0.0, 1.0)
                     }
                 }
             }
@@ -110,7 +112,7 @@ namespace GShark.Test.XUnit.Core
         public void PointsHomogeniser_Throws_An_Exception_If_The_Weight_Collection_Is_Bigger_Than_ControlPts()
         {
             // Arrange
-            List<Vector3> controlPts = new List<Vector3>();
+            List<Point3d> controlPts = new List<Point3d>();
             List<double> weights = new List<double> { 1.0, 1.5, 1.0 };
 
             // Act
@@ -122,102 +124,85 @@ namespace GShark.Test.XUnit.Core
 
         [Theory]
         [MemberData(nameof(Homogenized1dData))]
-        public void It_Returns_A_New_Set_Of_Homogenizer_Points(List<double> weights, List<Vector3> controlPtsExpected)
+        //ToDo Should parameter be called expectedHomogenizedPoints? Confusing interchangeability between control point and homogenized point?
+        public void It_Returns_A_New_Set_Of_Homogenized_Points(List<double> weights, List<Point4d> expectedHomogenizedPoints)
         {
             // Arrange
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3d> controlPts = new List<Point3d>
             {
-                new Vector3 {0.0, 0.0, 0},
-                new Vector3 {2.5, -2.5, 0},
-                new Vector3 {5.0, 0.0, 0}
+                new (0.0, 0.0, 0),
+                new (2.5, -2.5, 0),
+                new (5.0, 0.0, 0)
             };
 
             // Act
-            List<Vector3> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, weights);
+            List<Point4d> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, weights);
 
             // Assert
-            newControlPts.Should().BeEquivalentTo(controlPtsExpected);
+            newControlPts.SequenceEqual(expectedHomogenizedPoints).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Returns_A_New_Set_Of_Homogenizer_Points_By_A_Given_Weight_Value()
+        public void It_Returns_A_New_Set_Of_Homogenized_Points_By_A_Given_Weight_Value()
         {
             // Arrange
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3d> controlPts = new List<Point3d>
             {
-                new Vector3 {0.0, 0.0, 0},
-                new Vector3 {2.5, -2.5, 0},
-                new Vector3 {5.0, 0.0, 0}
+                new (0.0, 0.0, 0),
+                new (2.5, -2.5, 0),
+                new (5.0, 0.0, 0)
             };
-            List<Vector3> controlPtsExpected = new List<Vector3>
+            List<Point4d> expectedHomogenizedPoints = new List<Point4d>
             {
-                new Vector3 {0.0, 0.0, 0.0, 1.0},
-                new Vector3 {2.5, -2.5, 0.0, 1.0},
-                new Vector3 { 5.0, 0.0, 0.0, 1.0 }
+                new (0.0, 0.0, 0.0, 1.0),
+                new (2.5, -2.5, 0.0, 1.0),
+                new (5.0, 0.0, 0.0, 1.0)
             };
 
             // Act
-            List<Vector3> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, 1.0);
+            List<Point4d> homogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPts, 1.0);
 
             // Assert
-            newControlPts.Should().BeEquivalentTo(controlPtsExpected);
+            homogenizedPoints.SequenceEqual(expectedHomogenizedPoints).Should().BeTrue();
         }
 
         [Theory]
         [MemberData(nameof(Homogenized2dData))]
-        public void It_Returns_A_Set_Of_Homogenized_Control_Points(List<List<double>> weights, List<List<Vector3>> controlPtsExpected)
+        public void It_Returns_A_Set_Of_Homogenized_Control_Points(List<List<double>> weights, List<List<Point4d>> expectedHomogenizedPoints)
         {
             // Arrange
-            List<List<Vector3>> controlPts = new List<List<Vector3>>()
+            List<List<Point3d>> controlPts = new List<List<Point3d>>()
             {
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0},
-                    new Vector3 {2.5, -2.5, 0},
-                    new Vector3 {5.0, 0.0, 0}
+                    new (0.0, 0.0, 0),
+                    new (2.5, -2.5, 0),
+                    new (5.0, 0.0, 0)
                 },
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0},
-                    new Vector3 {2.5, -2.5, 0},
-                    new Vector3 {5.0, 0.0, 0}
+                    new (0.0, 0.0, 0),
+                    new (2.5, -2.5, 0),
+                    new (5.0, 0.0, 0)
                 }
             };
 
             // Act
-            List<List<Vector3>> newControlPts = LinearAlgebra.PointsHomogeniser2d(controlPts, weights);
+            List<List<Point4d>> homogenizedPoints = LinearAlgebra.PointsHomogeniser2d(controlPts, weights);
             
             // Assert
-            newControlPts.Should().BeEquivalentTo(controlPtsExpected);
-        }
-
-        [Fact]
-        public void GetWeights_Throws_An_Exception_If_The_Set_Of_Points_Has_Not_The_Same_Dimension()
-        {
-            // Arrange
-            List<Vector3> homogeneousPts = new List<Vector3>
-            {
-                new Vector3 {0.0, 0.0, 0.0},
-                new Vector3 {1.25, -1.25, 0.0, 0.5},
-                new Vector3 {2.5, 0.0, 0.0, 0.5}
-            };
-
-            // Act
-            Func<object> resultFunc = () => LinearAlgebra.GetWeights(homogeneousPts);
-
-            // Assert
-            resultFunc.Should().Throw<ArgumentOutOfRangeException>();
+            homogenizedPoints.SequenceEqual(expectedHomogenizedPoints).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Set_Of_Weights()
         {
             // Arrange
-            List<Vector3> homogeneousPts = new List<Vector3>
+            List<Point4d> homogeneousPts = new List<Point4d>
             {
-                new Vector3 {0.0, 0.0, 0.0, 0.5},
-                new Vector3 {1.25, -1.25, 0.0, 0.5},
-                new Vector3 {2.5, 0.0, 0.0, 0.5}
+                new (0.0, 0.0, 0.0, 0.5),
+                new (1.25, -1.25, 0.0, 0.5),
+                new (2.5, 0.0, 0.0, 0.5)
             };
             List<double> expectedWeights = new List<double> {0.5, 0.5, 0.5};
 
@@ -225,192 +210,190 @@ namespace GShark.Test.XUnit.Core
             List<double> weight1d = LinearAlgebra.GetWeights(homogeneousPts);
 
             // Assert
-            weight1d.Should().BeEquivalentTo(expectedWeights);
+            weight1d.SequenceEqual(expectedWeights).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Two_Dimensional_Set_Of_Weights()
         {
             // Arrange
-            List<List<Vector3>> homogeneousPts = new List<List<Vector3>>
+            List<List<Point4d>> homogeneousPts = new List<List<Point4d>>
             {
-                new List<Vector3> {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {1.25, -1.25, 0.0, 0.5},
-                    new Vector3 {2.5, 0.0, 0.0, 0.5}
-                },
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {1.25, -1.25, 0.0, 0.5},
-                    new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (1.25, -1.25, 0.0, 0.5),
+                    new (2.5, 0.0, 0.0, 0.5)
+                },
+                new()
+                {
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (1.25, -1.25, 0.0, 0.5),
+                    new (2.5, 0.0, 0.0, 0.5)
                 }
             };
 
             List<List<double>> expectedWeights = new List<List<double>>
             {
-                new List<double> {0.5, 0.5, 0.5},
-                new List<double> {0.5, 0.5, 0.5}
+                new() {0.5, 0.5, 0.5},
+                new() {0.5, 0.5, 0.5}
             };
 
             // Act
             List<List<double>> weight2d = LinearAlgebra.GetWeights2d(homogeneousPts);
             
             // Assert
-            weight2d.Should().BeEquivalentTo(expectedWeights);
+            weight2d.SequenceEqual(expectedWeights).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Dehomogenized_Point()
         {
             // Arrange
-            Vector3 homogeneousPts = new Vector3 { 1.25, -1.25, 0.0, 0.5 };
-            Vector3 dehomogenizeExpected = new Vector3 { 2.5, -2.5, 0 };
+            Point4d homogeneousPts = new Point4d(1.25, -1.25, 0.0, 0.5);
+            Point3d expectedDehomogenizedPoint = new Point3d(2.5, -2.5, 0 );
 
             // Act
-            Vector3 dehomogenizePts = LinearAlgebra.PointDehomogenizer(homogeneousPts);
+            Point3d dehomogenizedPt = LinearAlgebra.PointDehomogenizer(homogeneousPts);
 
             // Assert
-            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+            dehomogenizedPt.Equals(expectedDehomogenizedPoint).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Set_Of_Dehomogenized_Points()
         {
             // Arrange
-            List<Vector3> homogeneousPts = new List<Vector3>
+            List<Point4d> homogeneousPts = new List<Point4d>
             {
-                new Vector3 {0.0, 0.0, 0.0, 0.5},
-                new Vector3 {1.25, -1.25, 0.0, 0.5},
-                new Vector3 {2.5, 0.0, 0.0, 0.5}
+                new (0.0, 0.0, 0.0, 0.5),
+                new (1.25, -1.25, 0.0, 0.5),
+                new (2.5, 0.0, 0.0, 0.5)
             };
 
-            List<Vector3> dehomogenizeExpected = new List<Vector3>
+            List<Point3d> dehomogenizeExpected = new List<Point3d>
             {
-                new Vector3 {0.0, 0.0, 0},
-                new Vector3 {2.5, -2.5, 0},
-                new Vector3 {5.0, 0.0, 0}
+                new (0.0, 0.0, 0),
+                new (2.5, -2.5, 0),
+                new (5.0, 0.0, 0)
             };
 
             // Act
-            List<Vector3> dehomogenizePts = LinearAlgebra.PointDehomogenizer1d(homogeneousPts);
+            List<Point3d> dehomogenizedPts = LinearAlgebra.PointDehomogenizer1d(homogeneousPts);
 
             // Assert
-            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+            dehomogenizedPts.SequenceEqual(dehomogenizeExpected).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Two_Dimensional_Set_Of_Dehomogenized_Points()
         {
             // Arrange
-            List<List<Vector3>> homogeneousPts = new List<List<Vector3>>
+            List<List<Point4d>> homogeneousPts = new List<List<Point4d>>
             {
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {1.25, -1.25, 0.0, 0.5},
-                    new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new(0.0, 0.0, 0.0, 0.5),
+                    new(1.25, -1.25, 0.0, 0.5),
+                    new(2.5, 0.0, 0.0, 0.5)
                 },
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {1.25, -1.25, 0.0, 0.5},
-                    new Vector3 {2.5, 0.0, 0.0, 0.5}
+                    new(0.0, 0.0, 0.0, 0.5),
+                    new(1.25, -1.25, 0.0, 0.5),
+                    new(2.5, 0.0, 0.0, 0.5)
                 }
             };
 
-            List<List<Vector3>> dehomogenizeExpected = new List<List<Vector3>>
+            List<List<Point3d>> expectedDehomogenizedPoints = new List<List<Point3d>>
             {
-               new List<Vector3>
+               new()
                {
-                   new Vector3 {0.0, 0.0, 0},
-                   new Vector3 {2.5, -2.5, 0},
-                   new Vector3 {5.0, 0.0, 0}
+                   new (0.0, 0.0, 0),
+                   new (2.5, -2.5, 0),
+                   new (5.0, 0.0, 0)
                },
-               new List<Vector3>
+               new()
                {
-                   new Vector3 {0.0, 0.0, 0},
-                   new Vector3 {2.5, -2.5, 0},
-                   new Vector3 {5.0, 0.0, 0}
+                   new (0.0, 0.0, 0),
+                   new (2.5, -2.5, 0),
+                   new (5.0, 0.0, 0)
                }
             };
 
             // Act
-            List<List<Vector3>> dehomogenizePts = LinearAlgebra.PointDehomogenizer2d(homogeneousPts);
+            var dehomogenizedPts = LinearAlgebra.PointDehomogenizer2d(homogeneousPts);
 
             // Arrange
-            dehomogenizePts.Should().BeEquivalentTo(dehomogenizeExpected);
+            dehomogenizedPts.Should().BeEquivalentTo(expectedDehomogenizedPoints);
         }
 
         [Fact]
         public void It_Returns_A_Rationalized_Set_Of_Points()
         {
             // Arrange
-            List<Vector3> homoPts = new List<Vector3>
+            List<Point4d> homogenousPoints = new List<Point4d>
             {
-                new Vector3 {0.0, 0.0, 0.0, 0.5},
-                new Vector3 {2.5, -2.5, 0.0, 1.0},
-                new Vector3 {5.0, 0.0, 0.0, 1.0}
+                new (0.0, 0.0, 0.0, 0.5),
+                new (2.5, -2.5, 0.0, 1.0),
+                new (5.0, 0.0, 0.0, 1.0)
             };
 
-            List<Vector3> expectedPts = new List<Vector3>
+            List<Point3d> expectedPts = new List<Point3d>
             {
-                new Vector3 {0.0, 0.0, 0.0},
-                new Vector3 {2.5, -2.5, 0.0},
-                new Vector3 {5.0, 0.0, 0.0}
+                new (0.0, 0.0, 0.0),
+                new (2.5, -2.5, 0.0),
+                new (5.0, 0.0, 0.0)
             };
 
             // Act
-            List<Vector3> ratioPts = LinearAlgebra.RationalPoints(homoPts);
+            List<Point3d> rationalPoints = LinearAlgebra.RationalPoints(homogenousPoints);
 
             // Assert
-            ratioPts.All(pt => pt.Count == 3).Should().BeTrue();
-            ratioPts.Should().BeEquivalentTo(expectedPts);
+            rationalPoints.SequenceEqual(expectedPts).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Rationalized_Two_Dimensioanl_Set_Of_Points()
         {
             // Arrange
-            List<List<Vector3>> homoPts = new List<List<Vector3>>
+            List<List<Point4d>> homogenousPoints = new List<List<Point4d>>
             {
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {2.5, -2.5, 0.0, 1.0},
-                    new Vector3 {5.0, 0.0, 0.0, 1.0}
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (2.5, -2.5, 0.0, 1.0),
+                    new (5.0, 0.0, 0.0, 1.0)
                 },
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0, 0.5},
-                    new Vector3 {2.5, -2.5, 0.0, 1.0},
-                    new Vector3 {5.0, 0.0, 0.0, 1.0}
+                    new (0.0, 0.0, 0.0, 0.5),
+                    new (2.5, -2.5, 0.0, 1.0),
+                    new (5.0, 0.0, 0.0, 1.0)
                 }
             };
 
-            List<List<Vector3>> expectedPts = new List<List<Vector3>>
+            List<List<Point3d>> expectedPts = new List<List<Point3d>>
             {
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0},
-                    new Vector3 {2.5, -2.5, 0.0},
-                    new Vector3 {5.0, 0.0, 0.0}
+                    new (0.0, 0.0, 0.0),
+                    new (2.5, -2.5, 0.0),
+                    new (5.0, 0.0, 0.0)
                 },
-                new List<Vector3>
+                new()
                 {
-                    new Vector3 {0.0, 0.0, 0.0},
-                    new Vector3 {2.5, -2.5, 0.0},
-                    new Vector3 {5.0, 0.0, 0.0}
+                    new (0.0, 0.0, 0.0),
+                    new (2.5, -2.5, 0.0),
+                    new (5.0, 0.0, 0.0)
                 }
             };
 
             // Act
-            List<List<Vector3>> ratioPts = LinearAlgebra.Rational2d(homoPts);
+            List<List<Point3d>> rationalPoints = LinearAlgebra.Rational2d(homogenousPoints);
 
             // Assert
-            ratioPts.All(lst => lst.Count == 3).Should().BeTrue();
-            ratioPts[0].All(pt => pt.Count == 3).Should().BeTrue();
-            ratioPts.Should().BeEquivalentTo(expectedPts);
+            rationalPoints.SequenceEqual(expectedPts).Should().BeTrue();
         }
 
         [Theory]

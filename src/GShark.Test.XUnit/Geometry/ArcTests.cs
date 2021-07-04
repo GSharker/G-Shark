@@ -23,9 +23,9 @@ namespace GShark.Test.XUnit.Geometry
             _exampleArc2D = new Arc(Plane.PlaneXY, 15, angle);
 
             // Initializes an arc by 3 points.
-            Vector3 pt1 = new Vector3 { 74.264416, 36.39316, -1.884313 };
-            Vector3 pt2 = new Vector3 { 97.679126, 13.940616, 3.812853 };
-            Vector3 pt3 = new Vector3 { 100.92443, 30.599893, -0.585116 };
+            Point3d pt1 = new Point3d(74.264416, 36.39316, -1.884313);
+            Point3d pt2 = new Point3d(97.679126, 13.940616, 3.812853);
+            Point3d pt3 = new Point3d(100.92443, 30.599893, -0.585116);
             _exampleArc3D = new Arc(pt1, pt2, pt3);
             #endregion
         }
@@ -60,16 +60,16 @@ namespace GShark.Test.XUnit.Geometry
         public void Initializes_An_Arc_By_Two_Points_And_A_Direction()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { 5, 5, 5 };
-            Vector3 pt2 = new Vector3 { 10, 15, 10 };
-            Vector3 dir = new Vector3 { 3, 3, 0 };
+            Point3d pt1 = new Point3d(5, 5, 5);
+            Point3d pt2 = new Point3d(10, 15, 10);
+            Point3d dir = new Point3d(3, 3, 0);
 
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
 
             // Assert
-            arc.StartPoint.IsEqualRoundingDecimal(pt1, 6).Should().BeTrue();
-            arc.EndPoint.IsEqualRoundingDecimal(pt2, 6).Should().BeTrue();
+            arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
+            arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();
             arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MaxTolerance);
         }
 
@@ -86,11 +86,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox3D = arc3D.BoundingBox;
 
             // Assert
-            bBox2D.Min.IsEqualRoundingDecimal(new Vector3 {11.490667, 0, 0}, 6).Should().BeTrue();
-            bBox2D.Max.IsEqualRoundingDecimal(new Vector3 { 15, 9.641814, 0 }, 6).Should().BeTrue();
-
-            bBox3D.Min.IsEqualRoundingDecimal(new Vector3 { 69.115079, 8.858347, -1.884313 }, 6).Should().BeTrue();
-            bBox3D.Max.IsEqualRoundingDecimal(new Vector3 { 102.068402, 36.39316, 5.246477 }, 6).Should().BeTrue();
+            bBox2D.Min.EpsilonEquals(new Vector3d(11.490667, 0, 0), 6).Should().BeTrue();
+            bBox2D.Max.EpsilonEquals(new Vector3d(15, 9.641814, 0), 6).Should().BeTrue();
+                       
+            bBox3D.Min.EpsilonEquals(new Vector3d(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
+            bBox3D.Max.EpsilonEquals(new Vector3d(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
         }
 
         [Theory]
@@ -99,14 +99,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
         {
             // Arrange
-            Vector3 expectedPt = new Vector3(pts);
+            var expectedPt = new Point3d(pts[0], pts[1], pts[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Vector3 pt = arc.PointAt(t);
+            var pt = arc.PointAt(t);
 
             // Assert
-            pt.IsEqualRoundingDecimal(expectedPt, 6).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
         }
 
         [Theory]
@@ -115,15 +115,15 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
         {
             // Arrange
-            Vector3 testPt = new Vector3(ptToTest);
-            Vector3 expectedPt = new Vector3(result);
+            Point3d testPt = new Point3d(ptToTest[0], ptToTest[1], ptToTest[2]);
+            Point3d expectedPt = new Point3d(result[0], result[1], result[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Vector3 pt = arc.ClosestPt(testPt);
+            Point3d pt = arc.ClosestPoint(testPt);
 
             // Assert
-            pt.IsEqualRoundingDecimal(expectedPt, 5).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
         }
 
         [Fact]
@@ -131,16 +131,16 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Arc arc = _exampleArc3D;
-            Vector3 expectedStartPt = new Vector3 { 16.47719, 0, 0 };
-            Vector3 expectedEndPt = new Vector3 { -6.160353, -15.282272, 0 };
+            Point3d expectedStartPt = new Point3d(16.47719, 0, 0);
+            Point3d expectedEndPt = new Point3d(-6.160353, -15.282272, 0);
             Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
 
             // Act
             Arc arcTransformed = arc.Transform(transform);
 
             // Assert
-            arcTransformed.StartPoint.IsEqualRoundingDecimal(expectedStartPt, 6).Should().BeTrue();
-            arcTransformed.EndPoint.IsEqualRoundingDecimal(expectedEndPt, 6).Should().BeTrue();
+            arcTransformed.StartPoint.EpsilonEquals(expectedStartPt, 1e-6).Should().BeTrue();
+            arcTransformed.EndPoint.EpsilonEquals(expectedEndPt, 1e-6).Should().BeTrue();
         }
 
         [Theory]
@@ -149,14 +149,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3 expectedTangent = new Vector3(pts);
+            Vector3d expectedTangent = new Vector3d(pts[0], pts[1], pts[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Vector3 tangent = arc.TangentAt(t);
+            Vector3d tangent = arc.TangentAt(t);
 
             // Assert
-            tangent.IsEqualRoundingDecimal(expectedTangent, 6).Should().BeTrue();
+            tangent.EpsilonEquals(expectedTangent, 1e-6).Should().BeTrue();
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace GShark.Test.XUnit.Geometry
             for (int i = 0; i < ptChecks.Length; i++)
             {
                 arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
+                arc.HomogenizedPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
@@ -221,7 +221,7 @@ namespace GShark.Test.XUnit.Geometry
             for (int i = 0; i < ptChecks.Length; i++)
             {
                 arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
-                arc.HomogenizedPoints[i][^1].Should().Be(weightChecks[i]);
+                arc.HomogenizedPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
                 {
@@ -243,12 +243,12 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Arc_Based_On_A_Start_And_An_End_Point_And_A_Direction()
         {
             // Arrange
-            Vector3 startPt = new Vector3 {5, 5, 5};
-            Vector3 endPt = new Vector3 { 10, 15, 10 };
-            Vector3 dir = new Vector3 { 3, 3, 0 };
+            Point3d startPt = new Point3d(5, 5, 5);
+            Point3d endPt = new Point3d(10, 15, 10);
+            Vector3d dir = new Vector3d(3, 3, 0);
             double radiusExpected = 12.247449;
             double angleExpected = GeoSharpMath.ToRadians(60);
-            Vector3 centerExpected = new Vector3 { 0, 10, 15 };
+            Point3d centerExpected = new Point3d(0, 10, 15);
 
             // Act
             Arc arc = Arc.ByStartEndDirection(startPt, endPt, dir);
@@ -256,7 +256,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             arc.Angle.Should().BeApproximately(angleExpected, 1e-6);
             arc.Radius.Should().BeApproximately(radiusExpected, 1e-6);
-            arc.Plane.Origin.IsEqualRoundingDecimal(centerExpected, 6).Should().BeTrue();
+            arc.Plane.Origin.EpsilonEquals(centerExpected, 1e-6).Should().BeTrue();
         }
     }
 }

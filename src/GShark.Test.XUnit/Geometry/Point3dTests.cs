@@ -35,7 +35,27 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var line = new Line(new Point3d(0, 0, 0), new Point3d(30, 45, 0));
+            var pt = new Point3d(10, 20, 0);
+            double distanceExpected = 2.7735009811261464;
+
+            // Act
+            double distance = pt.DistanceTo(line);
+
+            // Assert
+            distance.Should().Be(distanceExpected);
+        }
+
+        [Fact]
+        public void It_Checks_If_A_Point_Lies_On_A_Plane()
+        {
+            // Arrange
+            Plane plane = new Plane(new Point3d(30, 45, 0), new Point3d(30, 45, 0));
+            var pt = new Point3d(26.565905, 47.289396, 0.0);
+
+            // Assert
+            pt.IsOnPlane(plane, 0.001).Should().BeTrue();
         }
 
         [Fact]

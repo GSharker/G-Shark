@@ -350,32 +350,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Distance_Between_A_Point_And_A_Line()
-        {
-            // Arrange
-            var line = new Line(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 10, 20, 0 };
-            double distanceExpected = 2.7735009811261464;
-
-            // Act
-            double distance = pt.DistanceTo(line);
-
-            // Assert
-            distance.Should().Be(distanceExpected);
-        }
-
-        [Fact]
-        public void It_Checks_If_A_Point_Lies_On_A_Plane()
-        {
-            // Arrange
-            Plane plane = new Plane(new Vector3 { 30, 45, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 26.565905, 47.289396, 0.0 };
-
-            // Assert
-            pt.IsOnPlane(plane, 0.001).Should().BeTrue();
-        }
-
-        [Fact]
         public void It_Returns_The_Perpendicular_Vector()
         {
             // Arrange
@@ -473,15 +447,15 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_And_A_HomogenizedPoint_Transformed()
         {
             // Arrange
-            var pt1 = new Vector3{5,5,0};
-            var pt2 = new Vector3{5,5,0,0.2};
-            var pt1Expected = new Vector3 { 15, 15, 0 };
-            var pt2Expected = new Vector3 { 7, 7, 0, 0.2 };
-            var transform = Transform.Translation(new Vector3 {10, 10, 0});
+            var pt1 = new Point3d(5,5,0);
+            var pt2 = new Point4d(5,5,0,0.2);
+            var pt1Expected = new Point3d(15, 15, 0);
+            var pt2Expected = new Point4d(7, 7, 0, 0.2);
+            var transform = Transform.Translation(new Vector3d(10, 10, 0));
 
             // Act
-            var pt1Translated = pt1 * transform;
-            var pt2Translated = pt2 * transform;
+            var pt1Translated = pt1.Transform(transform);
+            var pt2Translated = pt2.Transform(transform);
 
             // Assert
             pt1Translated.Should().BeEquivalentTo(pt1Expected);

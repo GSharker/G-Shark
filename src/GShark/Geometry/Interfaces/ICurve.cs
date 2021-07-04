@@ -13,15 +13,15 @@ namespace GShark.Geometry.Interfaces
         /// <summary>
         /// Gets the control points, where each control point is a list like (x,y,z).
         /// </summary>
-        public List<Vector3> ControlPoints { get; }
+        public List<Point3d> ControlPoints { get; }
 
         /// <summary>
         /// Gets the homogenize points, where represented a set (wi*pi, wi).
         /// </summary>
-        public List<Vector3> HomogenizedPoints { get; }
+        public List<Point4d> HomogenizedPoints { get; }
 
         /// <summary>
-        /// Gets a the collection of non-decreasing knot values.
+        /// Gets the collection of non-decreasing knot values.
         /// </summary>
         public KnotVector Knots { get; }
 
@@ -40,13 +40,13 @@ namespace GShark.Geometry.Interfaces
         /// </summary>
         /// <param name="t">The parameter t on the curve.</param>
         /// <returns>The point on the curve.</returns>
-        public Vector3 PointAt(double t);
+        public Point3d PointAt(double t);
 
         /// <summary>
         /// Computes the closest point on the curve that is close to the test point.
         /// </summary>
         /// <param name="pt">The test point.</param>
         /// <returns>The closest point.</returns>
-        public Vector3 ClosestPt(Vector3 pt);
+        public Point3d ClosestPoint(Point3d pt);
     }
 }

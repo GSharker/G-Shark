@@ -23,10 +23,10 @@ namespace GShark.Operation
         /// <param name="knots">Set of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, KnotVector knots, double knot)
+        public static List<double> BasisFunction(int degree, KnotVector knots, double knot)
         {
             int span = knots.Span(degree, knot);
-            return BasicFunction(degree, knots, span, knot);
+            return BasisFunction(degree, knots, span, knot);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace GShark.Operation
         /// <param name="span">Index span of knots.</param>
         /// <param name="knot">knot value.</param>
         /// <returns>List of non-vanishing basis functions.</returns>
-        public static List<double> BasicFunction(int degree, KnotVector knots, int span, double knot)
+        public static List<double> BasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             Vector3 left = Vector3.Zero1d(degree + 1);
             Vector3 right = Vector3.Zero1d(degree + 1);
@@ -137,144 +137,35 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        public static Vector3 CurvePointAt(ICurve curve, double t)
+        //ToDo Return Point3d by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
+        public static Point3d CurvePointAt(ICurve curve, double t)
         {
-            int degree = curve.Degree;
-            List<Vector3> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot");
-            }
+            //ToDo Input validation on t within range.
 
-            int n = knots.Count - degree - 2;
+            int n = knots.Count - curve.Degree - 2;
 
-            int knotSpan = knots.Span(n, degree, t);
-            List<double> basisValue = BasicFunction(degree, knots, knotSpan, t);
-            Vector3 position = Vector3.Zero1d(curveHomogenizedPoints[0].Count);
+            int knotSpan = knots.Span(n, curve.Degree, t);
+            List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
+            Point4d pointOnCurve = new Point4d(0,0,0,0);
 
-            for (int i = 0; i < degree + 1; i++)
+            for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Vector3 pt = curveHomogenizedPoints[knotSpan - degree + i];
-                for (int j = 0; j < position.Count; j++)
-                {
-                    position[j] = position[j] + valToMultiply * pt[j];
-                }
+                Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+
+                pointOnCurve.X += valToMultiply * pt.X;
+                pointOnCurve.Y += valToMultiply * pt.Y;
+                pointOnCurve.Z += valToMultiply * pt.Z;
+                pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            return position;
+            //ToDo Check if this is correct. Previous implementation was outputting a 4d point, but in unit test checking against 3d point.
+            return LinearAlgebra.PointDehomogenizer(pointOnCurve);
         }
 
-        /// <summary>
-        /// Computes a point on a non-uniform, non-rational B spline surface.<br/>
-        /// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
-        /// </summary>
-        /// <param name="surface">The surface.</param>
-        /// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
-        /// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
-        /// <returns>The evaluated point.</returns>
-        public static Vector3 SurfacePointAt(NurbsSurface surface, double u, double v)
-        {
-            int n = surface.KnotsU.Count - surface.DegreeU - 2;
-            int m = surface.KnotsV.Count - surface.DegreeV - 2;
-            List<List<Vector3>> controlPoints = surface.ControlPoints;
-            List<List<Vector3>> surfaceHomoPts = surface.HomogenizedPoints;
-            int dim = controlPoints[0][0].Count;
-
-            if (!surface.KnotsU.IsValid(surface.DegreeU, surfaceHomoPts.Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot in u direction");
-            }
-
-            if (!surface.KnotsV.IsValid(surface.DegreeV, surfaceHomoPts[0].Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot in v direction");
-            }
-
-            int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
-            int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
-            List<double> basisUValue = BasicFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
-            List<double> basisVValue = BasicFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
-            int uIndex = knotSpanU - surface.DegreeU;
-            Vector3 position = Vector3.Zero1d(dim);
-            for (int l = 0; l < surface.DegreeV + 1; l++)
-            {
-                var temp = Vector3.Zero1d(dim);
-                var vIndex = knotSpanV - surface.DegreeV + l;
-                for (int x = 0; x < surface.DegreeU + 1; x++)
-                {
-                    for (int j = 0; j < temp.Count; j++)
-                    {
-                        temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
-                    }
-                }
-
-                for (int j = 0; j < position.Count; j++)
-                {
-                    position[j] = position[j] + basisVValue[l] * temp[j];
-                }
-            }
-            return position;
-
-        }
-
-        /// <summary>
-        /// Extracts the iso-curve in u or v direction at a specified parameter.
-        /// </summary>
-        /// <param name="nurbsSurface">The surface to be evaluated</param>
-        /// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
-        /// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
-        /// <returns>Curve representing the iso-curve of the surface.</returns>
-        public static ICurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
-        {
-            KnotVector knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
-            int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
-            Dictionary<double, int> knotMults = knots.Multiplicities();
-
-            int reqKnotIndex = -1;
-            foreach (double i in knotMults.Keys)
-            {
-                if (Math.Abs(t - i) < GeoSharpMath.Epsilon)
-                {
-                    reqKnotIndex = knotMults.GetValueOrDefault(i);
-                    break;
-                }
-            }
-
-            int numKnotsToInsert = degree + 1;
-            if (reqKnotIndex >= 0)
-            {
-                numKnotsToInsert -= knotMults.GetValueOrDefault(reqKnotIndex);
-            }
-
-            //Insert the knots
-            NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
-            int span = knots.Span(degree, t);
-
-            if (Math.Abs(t - knots[0]) < GeoSharpMath.Epsilon)
-            {
-                span = 0;
-            }
-
-            if (Math.Abs(t - knots[^1]) < GeoSharpMath.Epsilon)
-            {
-                span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
-            }
-
-            List<Vector3> ctrlPts = new List<Vector3>();
-            if (!useU)
-            {
-                foreach (List<Vector3> row in newSrf.ControlPoints)
-                {
-                    ctrlPts.Add(row[span]);
-                }
-
-                return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
-            }
-            return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.ControlPoints[span]);
-        }
 
         /// <summary>
         /// Computes the tangent at a point on a curve.
@@ -282,9 +173,9 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The tangent vector at the given parameter.</returns>
-        public static Vector3 RationalCurveTangent(ICurve curve, double t)
+        public static Vector3d RationalCurveTangent(ICurve curve, double t)
         {
-            List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
+            List<Vector3d> derivatives = RationalCurveDerivatives(curve, t, 1);
             return derivatives[1];
         }
 
@@ -293,9 +184,9 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The points collection to evaluate.</param>
         /// <returns>The centroid point.</returns>
-        public static Vector3 CentroidByVertices(IList<Vector3> pts)
+        public static Point3d CentroidByVertices(IList<Point3d> pts)
         {
-            Vector3 centroid = new Vector3 { 0.0, 0.0, 0.0 };
+            Point3d centroid = new Point3d();
             bool isClosed = pts[0] == pts[^1];
             int count = pts.Count;
 
@@ -320,7 +211,7 @@ namespace GShark.Operation
             var derivPts = DerivativeCoordinates(curve.ControlPoints);
             Extrema extrema = new Extrema();
 
-            int dim = derivPts[0][0].Count;
+            int dim = derivPts[0][0].Size;
 
             for (int j = 0; j < dim; j++)
             {
@@ -360,17 +251,17 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
-        internal static List<List<Vector3>> DerivativeCoordinates(List<Vector3> pts)
+        internal static List<List<Point3d>> DerivativeCoordinates(List<Point3d> pts)
         {
-            List<List<Vector3>> derivPts = new List<List<Vector3>>();
+            List<List<Point3d>> derivPts = new List<List<Point3d>>();
 
-            List<Vector3> p = new List<Vector3>(pts);
+            List<Point3d> p = new List<Point3d>(pts);
             int d = p.Count;
             int c = d - 1;
 
             for (; d > 1; d--, c--)
             {
-                List<Vector3> list = new List<Vector3>();
+                List<Point3d> list = new List<Point3d>();
                 for (int j = 0; j < c; j++)
                 {
                     var dpt = (p[j + 1] - p[j]) * c;
@@ -389,16 +280,16 @@ namespace GShark.Operation
         /// Find all roots (derivative=0) for both derivatives.<br/>
         /// https://pomax.github.io/bezierinfo/#extremities
         /// </summary>
-        /// <param name="derivs">The derivatives.</param>
+        /// <param name="derivatives">The derivatives.</param>
         /// <returns>The roots values.</returns>
-        internal static IList<double> DerivRoots(IList<double> derivs)
+        internal static IList<double> DerivRoots(IList<double> derivatives)
         {
             // quadratic roots
-            if (derivs.Count == 3)
+            if (derivatives.Count == 3)
             {
-                var a = derivs[0];
-                var b = derivs[1];
-                var c = derivs[2];
+                var a = derivatives[0];
+                var b = derivatives[1];
+                var c = derivatives[2];
                 var d = a - 2 * b + c;
                 if (d != 0)
                 {
@@ -416,10 +307,10 @@ namespace GShark.Operation
             }
 
             // linear roots
-            if (derivs.Count == 2)
+            if (derivatives.Count == 2)
             {
-                var a = derivs[0];
-                var b = derivs[1];
+                var a = derivatives[0];
+                var b = derivatives[1];
                 if (a != b)
                 {
                     return new[] { a / (a - b) };
@@ -436,40 +327,40 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
-        /// <param name="numberDerivs">Number of derivatives to evaluate</param>
+        /// <param name="numberOfDerivatives"></param>
         /// <returns>The derivatives.</returns>
-        public static List<Vector3> RationalCurveDerivatives(ICurve curve, double parameter, int numberDerivs = 1)
+        public static List<Vector3d> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
         {
-            List<Vector3> derivatives = CurveDerivatives(curve, parameter, numberDerivs);
-            // Array of derivate of A(t).
+            List<Point4d> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
+            // Array of derivative of A(t).
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Vector3> vecDers = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3d> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
             // Correspond in the book to wDers.
             List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
-            List<Vector3> CK = new List<Vector3>();
+            List<Vector3d> CK = new List<Vector3d>();
 
-            for (int k = 0; k < numberDerivs + 1; k++)
+            for (int k = 0; k < numberOfDerivatives + 1; k++)
             {
-                Vector3 v = vecDers[k];
+                Point3d rationalDerivativePoint = rationalDerivativePoints[k];
 
                 for (int i = 1; i < k + 1; i++)
                 {
                     double valToMultiply = LinearAlgebra.GetBinomial(k, i) * weightDers[i];
-                    Vector3 pt = CK[k - i];
-                    for (int j = 0; j < v.Count; j++)
+                    var pt = CK[k - i];
+                    for (int j = 0; j < rationalDerivativePoint.Size; j++)
                     {
-                        v[j] = v[j] - valToMultiply * pt[j];
+                        rationalDerivativePoint[j] = rationalDerivativePoint[j] - valToMultiply * pt[j];
                     }
                 }
 
-                for (int j = 0; j < v.Count; j++)
+                for (int j = 0; j < rationalDerivativePoint.Size; j++)
                 {
-                    v[j] = v[j] * (1 / weightDers[0]);
+                    rationalDerivativePoint[j] = rationalDerivativePoint[j] * (1 / weightDers[0]);
                 }
 
-                CK.Add(v);
+                CK.Add(rationalDerivativePoint);
             }
             // Return C(t) derivatives.
             return CK;
@@ -483,22 +374,22 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Vector3> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
+        public static List<Point4d> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
             int degree = curve.Degree;
-            List<Vector3> controlPoints = curve.HomogenizedPoints;
+            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
-            if (!curve.Knots.IsValid(degree, controlPoints.Count))
+            //ToDo Check should be in validity of ICurve. Here should check for parameter u being in range 0 to 1, or within curve domain.
+            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
             {
                 throw new ArgumentException("Invalid relations between control points, knot");
             }
 
             int n = knots.Count - degree - 2;
-
-            int ptDimension = controlPoints[0].Count;
             int derivateOrder = numberDerivs < degree ? numberDerivs : degree;
-            List<Vector3> CK = Vector3.Zero2d(numberDerivs + 1, ptDimension);
+
+            Point4d[] ck = new Point4d[numberDerivs + 1];
             int knotSpan = knots.Span(n, degree, parameter);
             List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, degree, derivateOrder, knots);
 
@@ -507,14 +398,14 @@ namespace GShark.Operation
                 for (int j = 0; j < degree + 1; j++)
                 {
                     double valToMultiply = derived2d[k][j];
-                    Vector3 pt = controlPoints[knotSpan - degree + j];
-                    for (int i = 0; i < CK[k].Count; i++)
+                    Point4d pt = curveHomogenizedPoints[knotSpan - degree + j];
+                    for (int i = 0; i < 4; i++)//ToDo Implement Point4d.Size
                     {
-                        CK[k][i] = CK[k][i] + (valToMultiply * pt[i]);
+                        ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
                     }
                 }
             }
-            return CK;
+            return ck.ToList();
         }
 
         /// <summary>
@@ -639,143 +530,256 @@ namespace GShark.Operation
             return ders;
         }
 
-        /// <summary>
-        /// Computes the normal vector at uv parameter on a NURBS surface.
-        /// </summary>
-        /// <param name="nurbsSurface">The surface.</param>
-        /// <param name="u">The u parameter.</param>
-        /// <param name="v">the v parameter.</param>
-        /// <returns>The normal vector at the given uv of the surface.</returns>
-        public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
-        {
-            List<List<Vector3>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
-            return Vector3.Cross(derivs[1][0], derivs[0][1]);
-        }
+        ///// <summary>
+        ///// Computes the normal vector at uv parameter on a NURBS surface.
+        ///// </summary>
+        ///// <param name="nurbsSurface">The surface.</param>
+        ///// <param name="u">The u parameter.</param>
+        ///// <param name="v">the v parameter.</param>
+        ///// <returns>The normal vector at the given uv of the surface.</returns>
+        //public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
+        //{
+        //    List<List<Vector3>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
+        //    return Vector3.Cross(derivs[1][0], derivs[0][1]);
+        //}
 
 
-        /// <summary>
-        /// Computes the derivatives at a point on a NURBS surface.
-        /// </summary>
-        /// <param name="nurbsSurface">The surface.</param>
-        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        /// <param name="numDerivs">Number of derivatives to evaluate (default is 1)</param>
-        /// <returns>The derivatives.</returns>
-        public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
-        {
-            List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
-            List<List<Vector3>> Aders = LinearAlgebra.Rational2d(ders);
-            List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
-            List<List<Vector3>> SKL = new List<List<Vector3>>();
-            int dim = Aders[0][0].Count;
+        ///// <summary>
+        ///// Computes the derivatives at a point on a NURBS surface.
+        ///// </summary>
+        ///// <param name="nurbsSurface">The surface.</param>
+        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        ///// <param name="numDerivs">Number of derivatives to evaluate (default is 1)</param>
+        ///// <returns>The derivatives.</returns>
+        //public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
+        //{
+        //    List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
+        //    List<List<Vector3>> Aders = LinearAlgebra.Rational2d(ders);
+        //    List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
+        //    List<List<Vector3>> SKL = new List<List<Vector3>>();
+        //    int dim = Aders[0][0].Count;
 
-            for (int k = 0; k < numDerivs + 1; k++)
-            {
-                SKL.Add(new List<Vector3>());
-                for (int l = 0; l < numDerivs - k + 1; l++)
-                {
-                    Vector3 t1 = Aders[k][l];
-                    for (int j = 1; j < l + 1; j++)
-                    {
-                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
-                    }
+        //    for (int k = 0; k < numDerivs + 1; k++)
+        //    {
+        //        SKL.Add(new List<Vector3>());
+        //        for (int l = 0; l < numDerivs - k + 1; l++)
+        //        {
+        //            Vector3 t1 = Aders[k][l];
+        //            for (int j = 1; j < l + 1; j++)
+        //            {
+        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
+        //            }
 
-                    for (int i = 1; i < k + 1; i++)
-                    {
-                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
-                        Vector3 t2 = Vector3.Zero1d(dim);
-                        for (int j = 1; j < l + 1; j++)
-                        {
-                            Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
-                        }
+        //            for (int i = 1; i < k + 1; i++)
+        //            {
+        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
+        //                Vector3 t2 = Vector3.Zero1d(dim);
+        //                for (int j = 1; j < l + 1; j++)
+        //                {
+        //                    Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
+        //                }
 
-                        Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
-                    }
-                    Vector3 t = t1 * (1 / wders[0][0]);
-                    SKL[k].Add(t); //demogenize
-                }
-            }
+        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
+        //            }
+        //            Vector3 t = t1 * (1 / wders[0][0]);
+        //            SKL[k].Add(t); //demogenize
+        //        }
+        //    }
 
-            return SKL;
-        }
+        //    return SKL;
+        //}
 
-        /// <summary>
-        /// Computes the derivatives on a NURBS surface.
-        /// </summary>
-        /// <param name="nurbsSurface">Object representing the surface.</param>
-        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        /// <param name="numDerivs">Number of derivatives to evaluate.</param>
-        /// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
-        {
-            int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
-            int m = nurbsSurface.KnotsV.Count - nurbsSurface.DegreeV - 2;
-            return SurfaceDerivativesGivenNM(nurbsSurface, n, m, u, v, numDerivs);
-        }
+        ///// <summary>
+        ///// Computes the derivatives on a NURBS surface.
+        ///// </summary>
+        ///// <param name="nurbsSurface">Object representing the surface.</param>
+        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        ///// <param name="numDerivs">Number of derivatives to evaluate.</param>
+        ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
+        //public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
+        //{
+        //    int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
+        //    int m = nurbsSurface.KnotsV.Count - nurbsSurface.DegreeV - 2;
+        //    return SurfaceDerivativesGivenNM(nurbsSurface, n, m, u, v, numDerivs);
+        //}
 
-        /// <summary>
-        /// Computes the derivatives on a non-uniform, non-rational B spline surface.<br/>
-        /// SKL is the derivative S(u,v) with respect to u K-times and v L-times.<br/>
-        /// <em>Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.</em>
-        /// </summary>
-        /// <param name="nurbsSurface">The surface.</param>
-        /// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2.</param>
-        /// <param name="m">Integer number of basis functions in v dir - 1 = knotsU.length - degreeU - 2.</param>
-        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        /// <param name="numDerivs">The number of derivatives to evaluate.</param>
-        /// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
-        {
-            int degreeU = nurbsSurface.DegreeU;
-            int degreeV = nurbsSurface.DegreeV;
-            List<List<Vector3>> ctrlPts = nurbsSurface.HomogenizedPoints;
-            KnotVector knotsU = nurbsSurface.KnotsU;
-            KnotVector knotsV = nurbsSurface.KnotsV;
+        ///// <summary>
+        ///// Computes the derivatives on a non-uniform, non-rational B spline surface.<br/>
+        ///// SKL is the derivative S(u,v) with respect to u K-times and v L-times.<br/>
+        ///// <em>Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.</em>
+        ///// </summary>
+        ///// <param name="nurbsSurface">The surface.</param>
+        ///// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2.</param>
+        ///// <param name="m">Integer number of basis functions in v dir - 1 = knotsU.length - degreeU - 2.</param>
+        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        ///// <param name="numDerivs">The number of derivatives to evaluate.</param>
+        ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
+        //public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
+        //{
+        //    int degreeU = nurbsSurface.DegreeU;
+        //    int degreeV = nurbsSurface.DegreeV;
+        //    List<List<Vector3>> ctrlPts = nurbsSurface.HomogenizedPoints;
+        //    KnotVector knotsU = nurbsSurface.KnotsU;
+        //    KnotVector knotsV = nurbsSurface.KnotsV;
 
-            if (!knotsU.IsValid(degreeU, ctrlPts.Count) || !knotsV.IsValid(degreeV, ctrlPts[0].Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot vector, and n");
-            }
+        //    if (!knotsU.IsValid(degreeU, ctrlPts.Count) || !knotsV.IsValid(degreeV, ctrlPts[0].Count))
+        //    {
+        //        throw new ArgumentException("Invalid relations between control points, knot vector, and n");
+        //    }
 
-            //This should be always 3 
-            int dim = ctrlPts[0][0].Count;
-            int du = numDerivs < degreeU ? numDerivs : degreeU;
-            int dv = numDerivs < degreeV ? numDerivs : degreeV;
+        //    //This should be always 3 
+        //    int dim = ctrlPts[0][0].Count;
+        //    int du = numDerivs < degreeU ? numDerivs : degreeU;
+        //    int dv = numDerivs < degreeV ? numDerivs : degreeV;
 
-            List<List<Vector3>> SKL = Vector3.Zero3d(numDerivs + 1, numDerivs + 1, dim);
-            int knotSpanU = knotsU.Span(n, degreeU, u);
-            int knotSpanV = knotsV.Span(m, degreeV, v);
+        //    List<List<Vector3>> SKL = Vector3.Zero3d(numDerivs + 1, numDerivs + 1, dim);
+        //    int knotSpanU = knotsU.Span(n, degreeU, u);
+        //    int knotSpanV = knotsV.Span(m, degreeV, v);
 
-            List<Vector3> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
-            List<Vector3> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
+        //    List<Vector3> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
+        //    List<Vector3> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
 
-            List<Vector3> temp = Vector3.Zero2d(degreeV + 1, dim);
+        //    List<Vector3> temp = Vector3.Zero2d(degreeV + 1, dim);
 
-            for (int k = 0; k < du + 1; k++)
-            {
-                for (int s = 0; s < degreeV + 1; s++)
-                {
-                    temp[s] = Vector3.Zero1d(dim);
-                    for (int r = 0; r < degreeU + 1; r++)
-                    {
-                        Vector3.AddMulMutate(temp[s], uders[k][r], ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s]);
-                    }
-                }
-                int nk = numDerivs - k;
-                var dd = nk < dv ? nk : dv;
+        //    for (int k = 0; k < du + 1; k++)
+        //    {
+        //        for (int s = 0; s < degreeV + 1; s++)
+        //        {
+        //            temp[s] = Vector3.Zero1d(dim);
+        //            for (int r = 0; r < degreeU + 1; r++)
+        //            {
+        //                Vector3.AddMulMutate(temp[s], uders[k][r], ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s]);
+        //            }
+        //        }
+        //        int nk = numDerivs - k;
+        //        var dd = nk < dv ? nk : dv;
 
-                for (int l = 0; l < dd + 1; l++)
-                {
-                    SKL[k][l] = Vector3.Zero1d(dim);
-                    for (int s = 0; s < degreeV + 1; s++)
-                    {
-                        Vector3.AddMulMutate(SKL[k][l], vders[l][s], temp[s]);
-                    }
-                }
-            }
-            return SKL;
-        }
+        //        for (int l = 0; l < dd + 1; l++)
+        //        {
+        //            SKL[k][l] = Vector3.Zero1d(dim);
+        //            for (int s = 0; s < degreeV + 1; s++)
+        //            {
+        //                Vector3.AddMulMutate(SKL[k][l], vders[l][s], temp[s]);
+        //            }
+        //        }
+        //    }
+        //    return SKL;
+        //}
+
+        ///// <summary>
+        ///// Computes a point on a non-uniform, non-rational B spline surface.<br/>
+        ///// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
+        ///// </summary>
+        ///// <param name="surface">The surface.</param>
+        ///// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
+        ///// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
+        ///// <returns>The evaluated point.</returns>
+        //public static Point3d SurfacePointAt(NurbsSurface surface, double u, double v)
+        //{
+        //    int n = surface.KnotsU.Count - surface.DegreeU - 2;
+        //    int m = surface.KnotsV.Count - surface.DegreeV - 2;
+        //    List<List<Point3d>> controlPoints = surface.ControlPoints;
+        //    List<List<Point4d>> surfaceHomoPts = surface.HomogenizedPoints;
+        //    int dim = 3;//dimension of point
+
+        //    //ToDo These checks should be in the validity check of surface. Here should check that u and v are in range.
+        //    if (!surface.KnotsU.IsValid(surface.DegreeU, surfaceHomoPts.Count))
+        //    {
+        //        throw new ArgumentException("Invalid relations between control points, knot in u direction");
+        //    }
+
+        //    if (!surface.KnotsV.IsValid(surface.DegreeV, surfaceHomoPts[0].Count))
+        //    {
+        //        throw new ArgumentException("Invalid relations between control points, knot in v direction");
+        //    }
+
+        //    int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
+        //    int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
+        //    List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
+        //    List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
+        //    int uIndex = knotSpanU - surface.DegreeU;
+        //    Point3d position = new Point3d(0,0,0);
+
+        //    //ToDo refactor to use point coordinate properties instead of inidces. X,Y,Z.
+        //    for (int l = 0; l < surface.DegreeV + 1; l++)
+        //    {
+        //        var temp = new Point3d(0,0,0);
+        //        var vIndex = knotSpanV - surface.DegreeV + l;
+        //        for (int x = 0; x < surface.DegreeU + 1; x++)
+        //        {
+        //            for (int j = 0; j < dim; j++)
+        //            {
+        //                temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
+        //            }
+        //        }
+
+        //        for (int j = 0; j < dim; j++)
+        //        {
+        //            position[j] = position[j] + basisVValue[l] * temp[j];
+        //        }
+        //    }
+        //    return position;
+
+        //}
+
+        ///// <summary>
+        ///// Extracts the iso-curve in u or v direction at a specified parameter.
+        ///// </summary>
+        ///// <param name="nurbsSurface">The surface to be evaluated</param>
+        ///// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
+        ///// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
+        ///// <returns>Curve representing the iso-curve of the surface.</returns>
+        //public static ICurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
+        //{
+        //    KnotVector knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
+        //    int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
+        //    Dictionary<double, int> knotMults = knots.Multiplicities();
+
+        //    int reqKnotIndex = -1;
+        //    foreach (double i in knotMults.Keys)
+        //    {
+        //        if (Math.Abs(t - i) < GeoSharpMath.Epsilon)
+        //        {
+        //            reqKnotIndex = knotMults.GetValueOrDefault(i);
+        //            break;
+        //        }
+        //    }
+
+        //    int numKnotsToInsert = degree + 1;
+        //    if (reqKnotIndex >= 0)
+        //    {
+        //        numKnotsToInsert -= knotMults.GetValueOrDefault(reqKnotIndex);
+        //    }
+
+        //    //Insert the knots
+        //    NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
+        //    int span = knots.Span(degree, t);
+
+        //    if (Math.Abs(t - knots[0]) < GeoSharpMath.Epsilon)
+        //    {
+        //        span = 0;
+        //    }
+
+        //    if (Math.Abs(t - knots[^1]) < GeoSharpMath.Epsilon)
+        //    {
+        //        span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
+        //    }
+
+        //    List<Point3d> ctrlPts = new List<Point3d>();
+        //    if (!useU)
+        //    {
+        //        foreach (var row in newSrf.ControlPoints)
+        //        {
+        //            ctrlPts.Add(new Point3d(row[span][0], row[span][1], row[span][2]));
+        //        }
+
+        //        return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
+        //    }
+        //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.ControlPoints[span]);
+        //}
+
     }
 }

@@ -18,11 +18,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="start">Start point.</param>
         /// <param name="end">End point.</param>
-        public Line(Vector3 start, Vector3 end)
+        public Line(Point3d start, Point3d end)
         {
-            if(start == end || !start.IsValid() || !end.IsValid())
+            if(start == end || !start.IsValid || !end.IsValid)
             {
-                throw new Exception("Inputs are not valid, or are equal");
+                throw new Exception("Start or end point is not valid, or they are equal");
             }
 
             Start = start;
@@ -37,7 +37,7 @@ namespace GShark.Geometry
         /// <param name="start">Starting point of the line.</param>
         /// <param name="direction">Direction of the line.</param>
         /// <param name="length">Length of the line.</param>
-        public Line(Vector3 start, Vector3 direction, double length)
+        public Line(Point3d start, Vector3d direction, double length)
         {
             if(length >= -GeoSharpMath.Epsilon && length <= GeoSharpMath.Epsilon)
             {
@@ -53,12 +53,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Start point of the line.
         /// </summary>
-        public Vector3 Start { get; }
+        public Point3d Start { get; }
 
         /// <summary>
         /// End point of the line.
         /// </summary>
-        public Vector3 End { get; }
+        public Point3d End { get; }
 
         /// <summary>
         /// Length of the line.
@@ -68,13 +68,13 @@ namespace GShark.Geometry
         /// <summary>
         /// Direction of the line.
         /// </summary>
-        public Vector3 Direction { get; }
+        public Vector3d Direction { get; }
 
         public int Degree => 1;
 
-        public List<Vector3> ControlPoints => new List<Vector3> {Start, End};
+        public List<Point3d> ControlPoints => new List<Point3d>{Start, End};
 
-        public List<Vector3> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
+        public List<Point4d> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
 
         public KnotVector Knots => new KnotVector {0, 0, 1, 1};
 
@@ -98,11 +98,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The closest point to find.</param>
         /// <returns>The closest point on the line from this point.</returns>
-        public Vector3 ClosestPt(Vector3 pt)
+        public Point3d ClosestPoint(Point3d pt)
         {
-            Vector3 dir = Direction;
-            Vector3 v = pt - Start;
-            double d = Vector3.Dot(v, dir);
+            Vector3d dir = Direction;
+            Vector3d v = pt - Start;
+            double d = Vector3d.DotProduct(v, dir);
 
             d = Math.Min(Length, d);
             d = Math.Max(d, 0);
@@ -115,20 +115,21 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The test point.</param>
         /// <returns>The parameter on the line closest to the test point.</returns>
-        public double ClosestParameter(Vector3 pt)
+        public double ClosestParameter(Point3d pt)
         {
-            Vector3 dir = End - Start;
-            double dirLength = dir.SquaredLength();
+            Vector3d dir = End - Start;
+            double dirLength = dir.SquareLength;
 
             if (!(dirLength > 0.0)) return 0.0;
-            Vector3 ptToStart = pt - Start;
-            Vector3 ptToEnd = pt - End;
-            if (ptToStart.SquaredLength() <= ptToEnd.SquaredLength())
+            Vector3d ptToStart = pt - Start;
+            Vector3d ptToEnd = pt - End;
+
+            if (ptToStart.SquareLength <= ptToEnd.SquareLength)
             {
-                return Vector3.Dot(ptToStart, dir) / dirLength;
+                return Vector3d.DotProduct(ptToStart, dir) / dirLength;
             }
 
-            return 1.0 + Vector3.Dot(ptToEnd, dir) / dirLength;
+            return 1.0 + Vector3d.DotProduct(ptToEnd, dir) / dirLength;
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
         /// <returns>The point at the specific parameter.</returns>
-        public Vector3 PointAt(double t)
+        public Point3d PointAt(double t)
         {
             if (t > 1.0 || t < 0.0)
             {
@@ -163,8 +164,8 @@ namespace GShark.Geometry
         /// <returns>The extended line.</returns>
         public Line Extend(double startLength, double endLength)
         {
-            Vector3 start = Start;
-            Vector3 end = End;
+            Point3d start = Start;
+            Point3d end = End;
 
             if (startLength >= -GeoSharpMath.Epsilon || startLength <= GeoSharpMath.Epsilon)
             {
@@ -183,12 +184,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Transforms the line using the transformation matrix.
         /// </summary>
-        /// <param name="transformation">Transform matrix to apply.</param>
+        /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A line transformed.</returns>
-        public Line Transform(Transform transformation)
+        public Line Transform(Transform transform)
         {
-            Vector3 pt1 = Start * transformation;
-            Vector3 pt2 = End * transformation;
+            Point3d pt1 = Start.Transform(transform);
+            Point3d pt2 = End.Transform(transform);
             return new Line(pt1, pt2);
         }
 

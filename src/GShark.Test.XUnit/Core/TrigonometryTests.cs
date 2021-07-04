@@ -13,11 +13,11 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_True_If_Points_Are_Planar()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { 0.0, 0.0, 0.0 };
-            Vector3 pt2 = new Vector3 { 10.0, 0.0, 0.0 };
-            Vector3 pt3 = new Vector3 { 5.0, 5.0, 0.0 };
-            Vector3 pt4 = new Vector3 { -5.0, -15.0, 0.0 };
-            List<Vector3> points = new List<Vector3>{pt1,pt2,pt3,pt4};
+            Point3d pt1 = new Point3d( 0.0, 0.0, 0.0);
+            Point3d pt2 = new Point3d( 10.0, 0.0, 0.0);
+            Point3d pt3 = new Point3d( 5.0, 5.0, 0.0);
+            Point3d pt4 = new Point3d( -5.0, -15.0, 0.0);
+            List<Point3d> points = new List<Point3d>{pt1,pt2,pt3,pt4};
 
             // Arrange
             Trigonometry.ArePointsCoplanar(points).Should().BeTrue();
@@ -27,9 +27,9 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_True_If_Three_Points_Are_Collinear()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { 25.923, 27.057, 0.0 };
-            Vector3 pt2 = new Vector3 { 35.964, 31.367, 0.0 };
-            Vector3 pt3 = new Vector3 { 51.299, 37.950, 0.0 };
+            Point3d pt1 = new Point3d( 25.923, 27.057, 0.0);
+            Point3d pt2 = new Point3d( 35.964, 31.367, 0.0);
+            Point3d pt3 = new Point3d( 51.299, 37.950, 0.0);
 
             // Assert
             Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MinTolerance).Should().BeTrue();
@@ -39,9 +39,9 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_False_If_Three_Points_Are_Not_Collinear()
         {
             // Arrange
-            Vector3 pt1 = new Vector3 { 25.923, 27.057, 0.0 };
-            Vector3 pt2 = new Vector3 { 35.964, 20.451, 0.0 };
-            Vector3 pt3 = new Vector3 { 51.299, 37.950, 0.0 };
+            Point3d pt1 = new Point3d( 25.923, 27.057, 0.0);
+            Point3d pt2 = new Point3d( 35.964, 20.451, 0.0);
+            Point3d pt3 = new Point3d( 51.299, 37.950, 0.0);
 
             // Assert
             Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharpMath.MinTolerance).Should().BeFalse();
@@ -56,11 +56,12 @@ namespace GShark.Test.XUnit.Core
             // Arrange
             // We are not passing a segment like a line or ray but the part that compose the segment,
             // t values [0 and 1] and start and end point.
-            Vector3 pt0 = new Vector3 { 5, 5, 0 };
-            Vector3 pt1 = new Vector3 { 10, 10, 0 };
+            var testPt = new Point3d(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
+            Point3d pt0 = new Point3d( 5, 5, 0);
+            Point3d pt1 = new Point3d( 10, 10, 0);
 
             // Act
-            (double tValue, Vector3 pt) closestPt = Trigonometry.ClosestPointToSegment(ptToCheck.ToVector(), pt0, pt1, 0, 1);
+            (double tValue, Point3d pt) closestPt = Trigonometry.ClosestPointToSegment(testPt, pt0, pt1, 0, 1);
 
             // Assert
             closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharpMath.MaxTolerance);

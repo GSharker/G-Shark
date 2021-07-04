@@ -47,7 +47,7 @@ namespace GShark.Operation
             Minimizer min = new Minimizer(objectiveFunctions);
             MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
 
-            Vector3 pt = crv.PointAt(solution.SolutionPoint[0]);
+            Point3d pt = crv.PointAt(solution.SolutionPoint[0]);
             (double u, double v) parameters = plane.ClosestParameters(pt);
             Vector3 uv = new Vector3 { parameters.u, parameters.v, 0.0 };
 

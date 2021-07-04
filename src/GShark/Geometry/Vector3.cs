@@ -309,7 +309,8 @@ namespace GShark.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            Vector3 projectedPt = line.ClosestPt(this);
+            var pt = line.ClosestPoint(new Point3d(this[0], this[1], this[2]));
+            Vector3 projectedPt = new Vector3{pt[0],pt[1],pt[2]};
             Vector3 ptToProjectedPt = projectedPt - this;
             return ptToProjectedPt.Length();
         }
@@ -322,7 +323,9 @@ namespace GShark.Geometry
         /// <returns>Whether the point is on the plane.</returns>
         public bool IsOnPlane(Plane plane, double tol = 1e-6)
         {
-            return Math.Abs(Dot(this - plane.Origin, plane.Normal)) < tol;
+            var origin = new Vector3() { plane.Origin.X, plane.Origin.Y, plane.Origin.Z };
+            var normal = new Vector3() { plane.Normal.X, plane.Normal.Y, plane.Normal.Z };
+            return Math.Abs(Dot(this - origin, normal)) < tol;
         }
 
         // Note: this is mutable.

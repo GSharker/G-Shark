@@ -62,9 +62,9 @@ namespace GShark.Operation
             for (int i = 0; i < gaussDegree; i++)
             {
                 double cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
-                List<Vector3> tan = Evaluation.RationalCurveDerivatives(curve, cu);
+                List<Vector3d> tan = Evaluation.RationalCurveDerivatives(curve, cu);
 
-                sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length();
+                sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length;
             }
 
             return z * sum;
@@ -124,10 +124,10 @@ namespace GShark.Operation
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Vector3 CurveClosestPoint(ICurve curve, Vector3 point, out double t)
+        public static Point3d  CurveClosestPoint(ICurve curve, Point3d  point, out double t)
         {
             t = CurveClosestParameter(curve, point);
-            return Evaluation.CurvePointAt(curve, t);
+            return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, t));
         }
 
         /// <summary>
@@ -137,45 +137,45 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
-        public static double CurveClosestParameter(ICurve curve, Vector3 point)
+        public static double CurveClosestParameter(ICurve curve, Point3d point)
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = default(double);
-            List<Vector3> ctrlPts = curve.ControlPoints;
+            List<Point3d> ctrlPts = curve.ControlPoints;
 
-            (List<double> tValues, List<Vector3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Point3d> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
                 double t0 = tValues[i];
                 double t1 = tValues[i + 1];
 
-                Vector3 pt0 = pts[i];
-                Vector3 pt1 = pts[i + 1];
+                Point3d pt0 = pts[i];
+                Point3d pt1 = pts[i + 1];
 
-                (double tValue, Vector3 pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
-                double distance = (point - projection.pt).Length();
+                (double tValue, Point3d pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                double distance = projection.pt.DistanceTo(point);
 
                 if (!(distance < minimumDistance)) continue;
                 minimumDistance = distance;
                 tParameter = projection.tValue;
             }
 
-            int maxInteraction = 5;
+            int maxIterations = 5;
             int j = 0;
             // Two zero tolerances can be used to indicate convergence:
             double tol1 = GeoSharpMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
             double tVal1 = curve.Knots[^1];
-            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquaredLength() < GeoSharpMath.Epsilon;
+            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquareLength < GeoSharpMath.Epsilon;
             double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
-            while (j < maxInteraction)
+            while (j < maxIterations)
             {
-                List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                Vector3 diff = e[0] - point; // C(u) - P
+                List<Vector3d> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
+                Vector3 diff = e[0] - new Vector3{point.X, point.Y, point.Z}; // C(u) - P
 
                 // First condition, point coincidence:
                 // |C(u) - p| < e1
@@ -187,7 +187,7 @@ namespace GShark.Operation
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
                 double c2n = Vector3.Dot(e[1], diff);
-                double c2d = (e[1] * c1v).Length();
+                double c2d = (e[1] * c1v).Length;
                 double c2v = c2n / c2d;
                 bool c2 = Math.Abs(c2v) <= tol2;
 
@@ -202,7 +202,7 @@ namespace GShark.Operation
                 if (ct > tVal1) ct = isCurveClosed ? tVal0 + (ct - tVal1) : tVal1;
 
                 // the parameter does not change significantly, the point is off the end of the curve.
-                double c3v = (e[1] * (ct - Cu)).Length();
+                double c3v = (e[1] * (ct - Cu)).Length;
                 if (c3v < tol1) return Cu;
 
                 Cu = ct;
@@ -219,7 +219,7 @@ namespace GShark.Operation
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
+        private static double NewtonIteration(double u, List<Vector3d> derivativePts, Vector3 difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)

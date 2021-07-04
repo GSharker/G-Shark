@@ -167,6 +167,26 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Converts a vector3d in a vector3, without needing casting.
+        /// </summary>
+        /// <param name="vector3d">A Vector3d.</param>
+        /// <returns>The resulting Vector3.</returns>
+        public static implicit operator Vector3(Vector3d vector3d)
+        {
+            return new Vector3{vector3d.X, vector3d.Y, vector3d.Z};
+        }
+
+        /// <summary>
+        /// Converts a vector3d in a point3d, without needing casting.
+        /// </summary>
+        /// <param name="vector3d">A Vector3d.</param>
+        /// <returns>The resulting Point3d.</returns>
+        public static implicit operator Point3d(Vector3d vector3d)
+        {
+            return new Point3d(vector3d);
+        }
+
+        /// <summary>
         /// Computes the cross product (or vector product, or exterior product) of two vectors.
         /// <para>This operation is not commutative.</para>
         /// </summary>
@@ -369,6 +389,11 @@ namespace GShark.Geometry
         /// Gets or sets the Z (third) component of the vector.
         /// </summary>
         public double Z { get; set; }
+
+        /// <summary>
+        /// Dimension of vector.
+        /// </summary>
+        public int Size => 3;
 
         /// <summary>
         /// Gets a value indicating whether this vector is valid. 
@@ -596,18 +621,14 @@ namespace GShark.Geometry
         /// Reverses (inverts) this vector in place.
         /// <para>If this vector is Invalid, no changes will occur and false will be returned.</para>
         ///</summary>
-        ///<returns>true on success or false if the vector is invalid.</returns>
-        public bool Reverse()
+        ///<returns>Returns a reversed vector on success or Vector3d.Unset if the vector is invalid.</returns>
+        public Vector3d Reverse()
         {
             if (!IsValid)
             {
-                return false;
+                return Vector3d.Unset;
             }
-
-            X = -X;
-            Y = -Y;
-            Z = -Z;
-            return true;
+            return new Vector3d(-X, -Y, -Z);
         }
 
         /// <summary>
