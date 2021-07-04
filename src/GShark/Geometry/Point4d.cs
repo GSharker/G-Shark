@@ -79,6 +79,39 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Transforms the point using a transformation matrix.
+        /// </summary>
+        /// <param name="t">The transformation matrix.</param>
+        /// <returns>The transformed point as a new instance.</returns>
+        public Point4d Transform(Transform t)
+        {
+            double x;
+            double y;
+            double z;
+            double w;
+
+            //ToDO Convert to Matrix multiplication! Create a column row vector from the point. i.e. IVector
+
+            x = t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3];
+            y = t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3];
+            z = t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3];
+            w = t[3][0] * X + t[3][1] * Y + t[3][2] * Z + t[3][3];
+
+            if (w <= 0.0)
+            {
+                return new Point3d(x, y, z);
+            }
+
+            double w2 = 1.0 / w;
+            x *= w2;
+            y *= w2;
+            z *= w2;
+            w = W;
+
+            return new Point4d(x, y, z, w);
+        }
+
+        /// <summary>
         /// Sums two <see cref="Point4d"/> together.
         /// </summary>
         /// <param name="point1">First point.</param>
