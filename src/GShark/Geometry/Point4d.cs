@@ -62,13 +62,13 @@ namespace GShark.Geometry
         {
             get
             {
-                if (i < 0 || i > 3) throw new IndexOutOfRangeException();
                 return i switch
                 {
                     0 => X,
                     1 => Y,
                     2 => Z,
-                    _ => W
+                    3 => W,
+                    _ => throw new IndexOutOfRangeException()
                 };
             }
             set

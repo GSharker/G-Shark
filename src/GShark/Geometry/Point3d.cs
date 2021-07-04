@@ -342,17 +342,29 @@ namespace GShark.Geometry
         {
             get
             {
-                if (i < 0 || i > 2) throw new IndexOutOfRangeException();
-                if (i == 0) return X;
-                if (i == 1) return Y;
-                return Z;
+                return i switch
+                {
+                    0 => X,
+                    1 => Y,
+                    2 => Z,
+                    _ => throw new IndexOutOfRangeException()
+                };
             }
             set
             {
                 if (i < 0 || i > 2) throw new IndexOutOfRangeException();
-                if (i == 0) X = value;
-                if (i == 1) Y = value;
-                Z = value;
+                switch (i)
+                {
+                    case 0:
+                        X = value;
+                        break;
+                    case 1:
+                        Y = value;
+                        break;
+                    case 2:
+                        Z = value;
+                        break;
+                }
             }
         }
 
@@ -451,9 +463,14 @@ namespace GShark.Geometry
         public static Point3d Interpolate(Point3d pA, Point3d pB, double t)
         {
             if (t < 0 || t > 1) throw new ArgumentException($"{nameof(t)} must be between 0 and 1.");
-            if (t == 0) return pA;
-            if (t == 1) return pB;
-            
+            switch (t)
+            {
+                case 0:
+                    return pA;
+                case 1:
+                    return pB;
+            }
+
             var x = pA.X + t * (pB.X - pA.X);
             var y = pA.Y + t * (pB.Y - pA.Y);
             var z = pA.Z + t * (pB.Z - pA.Z);

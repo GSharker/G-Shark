@@ -442,17 +442,29 @@ namespace GShark.Geometry
         {
             get
             {
-                if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
-                if (i == 0) return X;
-                if (i == 1) return Y;
-                return Z;
+                return i switch
+                {
+                    0 => X,
+                    1 => Y,
+                    2 => Z,
+                    _ => throw new IndexOutOfRangeException()
+                };
             }
             set
             {
-                if (i < 0 || i > 2) throw new ArgumentOutOfRangeException();
-                if (i == 0) X = value;
-                if (i == 1) Y = value;
-                Z = value;
+                if (i < 0 || i > 2) throw new IndexOutOfRangeException();
+                switch (i)
+                {
+                    case 0:
+                        X = value;
+                        break;
+                    case 1:
+                        Y = value;
+                        break;
+                    case 2:
+                        Z = value;
+                        break;
+                }
             }
         }
 
