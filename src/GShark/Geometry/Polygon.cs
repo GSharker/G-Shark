@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using GShark.Core;
 using GShark.Operation;
@@ -44,12 +45,12 @@ namespace GShark.Geometry
         {
             get
             {
-                bool isOnPlaneXY = true;
+                bool isOnPlaneXy = true;
                 Transform transformBack = new Transform();
                 List<Vector3> copiedPts = new List<Vector3>(this);
                 if (Math.Abs(this[0][2]) > GeoSharpMath.MAX_TOLERANCE)
                 {
-                    isOnPlaneXY = false;
+                    isOnPlaneXy = false;
                     Plane polygonPlane = new Plane(this[0], this[1], this[2]);
                     Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
                     transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
@@ -80,7 +81,7 @@ namespace GShark.Geometry
 
                 Vector3 centroid = new Vector3 { valueX, valueY, 0.0 };
 
-                if (!isOnPlaneXY)
+                if (!isOnPlaneXy)
                 {
                     return centroid * transformBack;
                 }
@@ -113,6 +114,18 @@ namespace GShark.Geometry
                 area *= 0.5;
                 return Math.Abs(area);
             }
+        }
+
+        // ToDo: has to be implemented.
+        public static Polygon Rectangle(Plane plane, double width, double height)
+        {
+            throw new NotImplementedException();
+        }
+
+        // ToDo: has to be implemented.
+        public static Polygon RegularPolygon(Plane plane, double radius, int numberOfSegments)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
