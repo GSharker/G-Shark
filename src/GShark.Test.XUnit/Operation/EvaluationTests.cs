@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
+using GShark.Operation.Utilities;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
-using GShark.Operation.Utilities;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -124,7 +123,7 @@ namespace GShark.Test.XUnit.Operation
 
         //    // Act
         //    NurbsSurface nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
-            
+
         //    // Assert
         //    nurbsSurface.Should().NotBeNull();
         //    Point3d pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
@@ -387,7 +386,7 @@ namespace GShark.Test.XUnit.Operation
             };
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts, weight);
             int derivativesOrder = 2;
-            
+
             // Act
             List<Vector3d> resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
 
@@ -431,8 +430,6 @@ namespace GShark.Test.XUnit.Operation
         [InlineData(1.0, new double[] { 0.707107, -0.707107, 0.0 })]
         public void It_Returns_The_Tangent_At_Given_Point(double t, double[] tangentData)
         {
-            //ToDO Reorganise sections.
-
             // Arrange
             int degree = 3;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
@@ -446,20 +443,18 @@ namespace GShark.Test.XUnit.Operation
             };
             List<double> weights = new List<double> { 1, 1, 1, 1, 1 };
             NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
+            Vector3d tangentExpectedLinearCurve = new Vector3d(3, 0, 0);
+            Vector3d tangentExpectedPlanarCurve = new Vector3d(tangentData[0], tangentData[1], tangentData[2]);
 
             // Act
-            Vector3d tangent = Evaluation.RationalCurveTangent(curve, 0.5);
+            // Act on a linear nurbs curve.
+            Vector3d tangentLinearCurve = Evaluation.RationalCurveTangent(curve, 0.5);
+            var tangentPlanarCurve = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
+            Vector3d tangentNormalized = tangentPlanarCurve.Unitize();
 
             // Assert
-            tangent.Should().BeEquivalentTo(new Vector3 { 3, 0, 0 });
-
-            var tangentToCheck = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
-            var tangentNormalized = tangentToCheck.Unitize();
-            var tangentExpected = new Vector3(tangentData);
-
-            tangentNormalized.Should().BeEquivalentTo(tangentExpected, option => option
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
-                .WhenTypeIs<double>());
+            tangentLinearCurve.Should().BeEquivalentTo(tangentExpectedLinearCurve);
+            tangentNormalized.EpsilonEquals(tangentExpectedPlanarCurve, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

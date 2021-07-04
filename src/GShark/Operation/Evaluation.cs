@@ -376,30 +376,22 @@ namespace GShark.Operation
         /// <returns>The derivatives.</returns>
         public static List<Point4d> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
-            int degree = curve.Degree;
             List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
-            KnotVector knots = curve.Knots;
 
-            //ToDo Check should be in validity of ICurve. Here should check for parameter u being in range 0 to 1, or within curve domain.
-            if (!curve.Knots.IsValid(degree, curveHomogenizedPoints.Count))
-            {
-                throw new ArgumentException("Invalid relations between control points, knot");
-            }
-
-            int n = knots.Count - degree - 2;
-            int derivateOrder = numberDerivs < degree ? numberDerivs : degree;
+            int n = curve.Knots.Count - curve.Degree - 2;
+            int derivateOrder = numberDerivs < curve.Degree ? numberDerivs : curve.Degree;
 
             Point4d[] ck = new Point4d[numberDerivs + 1];
-            int knotSpan = knots.Span(n, degree, parameter);
-            List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, degree, derivateOrder, knots);
+            int knotSpan = curve.Knots.Span(n, curve.Degree, parameter);
+            List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
 
             for (int k = 0; k < derivateOrder + 1; k++)
             {
-                for (int j = 0; j < degree + 1; j++)
+                for (int j = 0; j < curve.Degree + 1; j++)
                 {
                     double valToMultiply = derived2d[k][j];
-                    Point4d pt = curveHomogenizedPoints[knotSpan - degree + j];
-                    for (int i = 0; i < 4; i++)//ToDo Implement Point4d.Size
+                    Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + j];
+                    for (int i = 0; i < pt.Size; i++)
                     {
                         ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
                     }

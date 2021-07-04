@@ -40,8 +40,8 @@ namespace GShark.Core
                 Point4d tempPt = new Point4d
                 {
                     X = controlPoints[i].X * weights[i],
-                    Y = controlPoints[i].X * weights[i],
-                    Z = controlPoints[i].X * weights[i],
+                    Y = controlPoints[i].Y * weights[i],
+                    Z = controlPoints[i].Z * weights[i],
                     W = weights[i]
                 };
 
