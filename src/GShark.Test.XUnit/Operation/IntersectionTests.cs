@@ -23,8 +23,8 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             Plane pl0 = Plane.PlaneXY;
-            Plane pl1 = Plane.PlaneYZ.SetOrigin(new Point3d( 10, 10, 5));
-            Plane pl2 = Plane.PlaneXZ.SetOrigin(new Point3d( 10, -10, -5));
+            Plane pl1 = Plane.PlaneYZ.SetOrigin(new Point3d(10, 10, 5));
+            Plane pl2 = Plane.PlaneXZ.SetOrigin(new Point3d(10, -10, -5));
 
             // Act
             bool intersection0 = Intersect.PlanePlane(pl0, pl1, out Line lineIntersect0);
@@ -32,12 +32,12 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             intersection0.Should().BeTrue();
-            lineIntersect0.Start.Should().BeEquivalentTo(new Point3d( 10, 0, 0));
+            lineIntersect0.Start.Should().BeEquivalentTo(new Point3d(10, 0, 0));
             lineIntersect0.Direction.Should().BeEquivalentTo(new Point3d( 0, 1, 0));
 
             intersection1.Should().BeTrue();
-            lineIntersect1.Start.Should().BeEquivalentTo(new Point3d( 10, -10, 0));
-            lineIntersect1.Direction.Should().BeEquivalentTo(new Point3d( 0, 0, 1));
+            lineIntersect1.Start.Should().BeEquivalentTo(new Point3d(10, -10, 0));
+            lineIntersect1.Direction.Should().BeEquivalentTo(new Point3d(0, 0, 1));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_The_Intersection_Point_Between_A_Segment_And_A_Plane()
         {
             // Arrange
-            Plane pl = Plane.PlaneYZ.SetOrigin(new Point3d( 10, 20, 5));
+            Plane pl = Plane.PlaneYZ.SetOrigin(new Point3d(10, 20, 5));
             Line ln0 = new Line(new Point3d(0, 0, 0), new Point3d(20, 20, 10));
             Line ln1 = new Line(new Point3d(0, 0, 0), new Point3d(5, 5, 10));
 
