@@ -399,7 +399,7 @@ namespace GShark.Operation
                 {
                     double valToMultiply = derived2d[k][j];
                     Point4d pt = curveHomogenizedPoints[knotSpan - degree + j];
-                    for (int i = 0; i < 4; i++)//ToDo Implement Point4d.Size
+                    for (int i = 0; i < pt.Size; i++)
                     {
                         ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
                     }

@@ -63,18 +63,32 @@ namespace GShark.Geometry
             get
             {
                 if (i < 0 || i > 3) throw new IndexOutOfRangeException();
-                if (i == 0) return X;
-                if (i == 1) return Y;
-                if (i == 2) return Z;
-                return W;
+                return i switch
+                {
+                    0 => X,
+                    1 => Y,
+                    2 => Z,
+                    _ => W
+                };
             }
             set
             {
                 if (i < 0 || i > 3) throw new IndexOutOfRangeException();
-                if (i == 0) X = value;
-                if (i == 1) Y = value;
-                if (i == 1) Z = value;
-                W = value;
+                switch (i)
+                {
+                    case 0:
+                        X = value;
+                        break;
+                    case 1:
+                        Y = value;
+                        break;
+                    case 2:
+                        Z = value;
+                        break;
+                    case 3:
+                        W = value;
+                        break;
+                }
             }
         }
 
@@ -278,7 +292,7 @@ namespace GShark.Geometry
             return Math.Abs(X - other.X) <= epsilon &&
                    Math.Abs(Y - other.Y) <= epsilon &&
                    Math.Abs(Z - other.Z) <= epsilon &&
-                   Math.Abs(Z - other.W) <= epsilon;
+                   Math.Abs(W - other.W) <= epsilon;
         }
 
         /// <summary>
