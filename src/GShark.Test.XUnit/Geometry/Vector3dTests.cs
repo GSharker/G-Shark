@@ -35,16 +35,15 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Radian_Angle_Between_Two_Vectors_On_A_Plane()
         {
-            throw new NotImplementedException();
-            //// Arrange
-            //Vector3d v1 = new Vector3d(20d, 0d, 0d);
-            //Vector3d v2 = new Vector3d(-10d, 15d, 0d);
+            // Arrange
+            Vector3d v1 = new Vector3d(20d, 0d, 0d);
+            Vector3d v2 = new Vector3d(-10d, 15d, 0d);
 
-            //// Act
-            //double angle = Vector3d.VectorAngle(v1, v2);
+            // Act
+            double angle = Vector3d.VectorAngle(v1, v2);
 
-            //// Assert
-            //angle.Should().Be(2.1587989303424644);
+            // Assert
+            angle.Should().Be(2.1587989303424644);
         }
 
         [Fact]
@@ -55,10 +54,10 @@ namespace GShark.Test.XUnit.Geometry
             Vector3d vectorExpected = new Vector3d(-20d, 0d, 0d);
 
             // Act
-            v1.Reverse();
+            var reversedVector = v1.Reverse();
 
             // Assert
-            v1.Should().BeEquivalentTo(vectorExpected);
+            reversedVector.Should().BeEquivalentTo(vectorExpected);
         }
 
         [Fact]

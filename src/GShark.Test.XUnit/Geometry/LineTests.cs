@@ -58,7 +58,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             func0.Should().Throw<Exception>();
-            func1.Should().Throw<Exception>().WithMessage("Inputs are not valid, or are equal");
+            func1.Should().Throw<Exception>();
         }
 
         [Fact]
@@ -160,11 +160,15 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(1.0, new[] { 15.0, 15.0, 0 })]
         public void It_Returns_The_Evaluated_Point_At_The_Given_Parameter(double t, double[] ptExpected)
         {
+            //Arrange
+            var expectedPt = new Point3d(ptExpected[0], ptExpected[1], ptExpected[2]);
+
             // Act
             Point3d ptEvaluated = _exampleLine.PointAt(t);
 
             // Assert
-            ptEvaluated.Equals(ptExpected).Should().BeTrue();
+           ptEvaluated.EpsilonEquals(expectedPt, GeoSharpMath.Epsilon).Should().BeTrue();
+            
         }
 
         [Theory]

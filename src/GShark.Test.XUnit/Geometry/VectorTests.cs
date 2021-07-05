@@ -458,8 +458,8 @@ namespace GShark.Test.XUnit.Geometry
             var pt2Translated = pt2.Transform(transform);
 
             // Assert
-            pt1Translated.Should().BeEquivalentTo(pt1Expected);
-            pt2Translated.Should().BeEquivalentTo(pt2Expected);
+            pt1Translated.Equals(pt1Expected);
+            pt2Translated.Equals(pt2Expected);
         }
     }
 }

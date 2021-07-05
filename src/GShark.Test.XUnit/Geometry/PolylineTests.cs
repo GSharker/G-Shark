@@ -239,8 +239,8 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox = _polyline.BoundingBox;
 
             // Assert
-            bBox.Min.Should().BeEquivalentTo(minExpected);
-            bBox.Max.Should().BeEquivalentTo(maxExpected);
+            bBox.Min.EpsilonEquals(minExpected, GeoSharpMath.Epsilon).Should().BeTrue();
+            bBox.Max.EpsilonEquals(maxExpected, GeoSharpMath.Epsilon).Should().BeTrue();
         }
 
         [Fact]
@@ -280,7 +280,7 @@ namespace GShark.Test.XUnit.Geometry
             for (int i = 1; i < poly.Knots.Count - 1; i++)
             {
                 Point3d pt = poly.PointAt(knots[i]);
-                pts[i - 1].Equals(poly.PointAt(knots[i])).Should().BeTrue();
+                pts[i - 1].EpsilonEquals(poly.PointAt(knots[i]), GeoSharpMath.MaxTolerance).Should().BeTrue();
             }
         }
     }

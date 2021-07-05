@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Drawing;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
@@ -164,12 +165,12 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
-            Vector3[] ptChecks = new[] {
-                new Vector3 { 0, 20, 0 },
-                new Vector3 { 0, 20, 9.661101312331581 },
-                new Vector3 { 0, 12.432199365413288, 15.666538192549668 },
-                new Vector3 { 0, 4.864398730826554, 21.671975072767786 },
-                new Vector3 { 0, -4.544041893861742, 19.476952617563903 }
+            Point3d[] ptChecks = new[] {
+                new Point3d(0, 20, 0),
+                new Point3d(0, 20, 9.661101312331581),
+                new Point3d(0, 12.432199365413288, 15.666538192549668),
+                new Point3d(0, 4.864398730826554, 21.671975072767786),
+                new Point3d(0, -4.544041893861742, 19.476952617563903)
             };
 
             // Act
@@ -200,15 +201,15 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Is_A_Curve_Representation_Of_ExampleArc3D()
         {
             // Arrange
-            double[] weightChecks = new[] { 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0 };
-            Vector3[] ptChecks = new[] {
-                new Vector3 { 74.264416, 36.39316, -1.8843129999999997 },
-                new Vector3 { 63.73736394529969, 26.774907230101093, 0.7265431054950776 },
-                new Vector3 { 72.2808868605866, 15.429871621311115, 3.6324963299804987 },
-                new Vector3 { 80.8244097758736, 4.084836012521206, 6.538449554465901 },
-                new Vector3 { 93.52800280921122, 10.812836698886068, 4.6679117389561 },
-                new Vector3 { 106.23159584254901, 17.54083738525103, 2.797373923446271 },
-                new Vector3 { 100.92443, 30.599893, -0.5851159999999997 }
+            double[] weightChecks = { 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0 };
+            Point3d[] ptChecks = {
+                new Point3d(74.264416, 36.39316, -1.8843129999999997),
+                new Point3d(63.73736394529969, 26.774907230101093, 0.7265431054950776),
+                new Point3d(72.2808868605866, 15.429871621311115, 3.6324963299804987),
+                new Point3d(80.8244097758736, 4.084836012521206, 6.538449554465901),
+                new Point3d(93.52800280921122, 10.812836698886068, 4.6679117389561),
+                new Point3d(106.23159584254901, 17.54083738525103, 2.797373923446271),
+                new Point3d(100.92443, 30.599893, -0.5851159999999997)
             };
 
             // Act
@@ -220,7 +221,7 @@ namespace GShark.Test.XUnit.Geometry
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.ControlPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.ControlPoints[i].EpsilonEquals(ptChecks[i], GeoSharpMath.MaxTolerance).Should().BeTrue();
                 arc.HomogenizedPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
