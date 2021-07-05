@@ -3,7 +3,6 @@ using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 
 namespace GShark.Geometry
@@ -276,13 +275,19 @@ namespace GShark.Geometry
         /// <returns>The transformed plane.</returns>
         public Plane Transform(Transform transformation)
         {
-            Point3d origin = Origin.Transform(transformation);
+            //ToDo Review https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_plane.cpp#L375
+            Point3d tranformedOrigin = Origin.Transform(transformation);
 
-            Vector3d xDir = ((Point3d) XAxis).Transform(transformation);
-            Vector3d yDir = ((Point3d) YAxis).Transform(transformation);
-            Vector3d zDir = ((Point3d) ZAxis).Transform(transformation);
+            var xDirPt = ((Point3d) XAxis).Transform(transformation);
+            var yDirPt = ((Point3d) YAxis).Transform(transformation);
+            var zDirPt = ((Point3d) ZAxis).Transform(transformation);
 
-            return new Plane(origin, xDir, yDir, zDir);
+            Transform translation = Core.Transform.Translation(tranformedOrigin);
+
+            var xDir = (Origin + XAxis).Transform(transformation) - tranformedOrigin;
+            var yDir = (Origin + YAxis).Transform(transformation) - tranformedOrigin;
+
+            return new Plane(tranformedOrigin, xDir, yDir);
         }
 
         /// <summary>

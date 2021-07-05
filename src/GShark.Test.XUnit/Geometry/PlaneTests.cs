@@ -112,14 +112,16 @@ namespace GShark.Test.XUnit.Geometry
             Plane plane = new Plane(pt1, pt2, pt3);
             Transform translation = Transform.Translation(new Point3d( 10, 15, 0));
             Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Point3d(0, 0, 0));
+            var expectedOrigin = new Point3d(17.320508, 42.320508, 0);
+            var expectedZAxis = new Vector3d( 0, 0, -1);
 
             // Act
             Transform combinedTransformations = translation.Combine(rotation);
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
             // Assert
-            transformedPlane.Origin.EpsilonEquals(new Point3d(17.320508, 42.320508, 0), GeoSharpMath.MaxTolerance).Should().BeTrue();
-            transformedPlane.ZAxis.EpsilonEquals(new Vector3d( 0, 0, -1), GeoSharpMath.MaxTolerance).Should().BeTrue();
+            transformedPlane.Origin.EpsilonEquals(expectedOrigin, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            transformedPlane.ZAxis.EpsilonEquals(expectedZAxis, GeoSharpMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]

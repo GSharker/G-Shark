@@ -91,7 +91,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the center point of this arc.
         /// </summary>
-        public Vector3d Center => Plane.Origin;
+        public Point3d Center => Plane.Origin;
 
         /// <summary>
         /// Gets the angle of this arc.

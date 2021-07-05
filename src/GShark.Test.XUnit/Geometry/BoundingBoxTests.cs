@@ -19,7 +19,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxCollections), MemberType = typeof(BoundingBoxCollection))]
-        public void It_Creates_A_BoundingBox_From_Points(Point3d[] pts, Vector3 min, Vector3 max)
+        public void It_Creates_A_BoundingBox_From_Points(Point3d[] pts, Point3d min, Point3d max)
         {
             // Act
             var bBox = new BoundingBox(pts);
@@ -126,8 +126,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             bBoxIntersect.IsValid.Should().BeFalse();
-            bBoxIntersect.Max.Should().BeEquivalentTo(Vector3d.Unset);
-            bBoxIntersect.Min.Should().BeEquivalentTo(Vector3d.Unset);
+            bBoxIntersect.Max.Equals(Vector3d.Unset);
+            bBoxIntersect.Min.Equals(Vector3d.Unset);
         }
 
         [Fact]
