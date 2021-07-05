@@ -361,7 +361,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
-            List<Point4d> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
+            List<Point4> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
 
             // Assert
             p[0][0].Should().Be(10);

@@ -18,7 +18,7 @@ namespace GShark.Geometry.Interfaces
         /// <summary>
         /// Gets the homogenize points, where represented a set (wi*pi, wi).
         /// </summary>
-        public List<Point4d> HomogenizedPoints { get; }
+        public List<Point4> HomogenizedPoints { get; }
 
         /// <summary>
         /// Gets the collection of non-decreasing knot values.

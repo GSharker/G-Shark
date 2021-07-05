@@ -54,7 +54,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Point4d(10, 0, 0, 0.5));
+            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Point4(10, 0, 0, 0.5));
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Point3( 20, 0, 0));
         }
 

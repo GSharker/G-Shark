@@ -80,7 +80,7 @@ namespace GShark.Geometry
         {
             Degree = curve.Degree;
             ControlPoints = new List<Point3>(curve.ControlPoints);
-            HomogenizedPoints = new List<Point4d>(curve.HomogenizedPoints);
+            HomogenizedPoints = new List<Point4>(curve.HomogenizedPoints);
             Knots = new KnotVector(curve.Knots);
             Weights = new List<double>(curve.Weights!);
         }
@@ -94,8 +94,8 @@ namespace GShark.Geometry
 
         public List<Point3> ControlPoints { get; }
 
-        //ToDo To avoid confusion, the definition of a NURBS curve should consist only of ControlPoints as a collection of Point4d. These should only ever be dehomogenized as needed by another method, or via implicit operator on Point4d->Point3.
-        public List<Point4d> HomogenizedPoints { get; }
+        //ToDo To avoid confusion, the definition of a NURBS curve should consist only of ControlPoints as a collection of Point4. These should only ever be dehomogenized as needed by another method, or via implicit operator on Point4->Point3.
+        public List<Point4> HomogenizedPoints { get; }
 
         public KnotVector Knots { get; }
 

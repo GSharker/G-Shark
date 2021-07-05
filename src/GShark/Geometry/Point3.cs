@@ -45,7 +45,7 @@ namespace GShark.Geometry
         /// If the W (fourth) dimension of the input point is zero, then it will be discarded.
         /// </summary>
         /// <param name="point">A point.</param>
-        public Point3(Point4d point)
+        public Point3(Point4 point)
         {
             double w = (Math.Abs(point.W - 1.0) > GeoSharkMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
 
@@ -206,9 +206,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns>The control point.</returns>
-        public static implicit operator Point4d(Point3 point)
+        public static implicit operator Point4(Point3 point)
         {
-            return new Point4d(point);
+            return new Point4(point);
         }
 
         /// <summary>

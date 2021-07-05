@@ -140,7 +140,7 @@ namespace GShark.Operation
         //ToDo Return Point3 by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
             //ToDo Input validation on t within range.
@@ -149,12 +149,12 @@ namespace GShark.Operation
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4d pointOnCurve = new Point4d(0,0,0,0);
+            Point4 pointOnCurve = new Point4(0,0,0,0);
 
             for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+                Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
 
                 pointOnCurve.X += valToMultiply * pt.X;
                 pointOnCurve.Y += valToMultiply * pt.Y;
@@ -331,7 +331,7 @@ namespace GShark.Operation
         /// <returns>The derivatives.</returns>
         public static List<Vector3d> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
         {
-            List<Point4d> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
+            List<Point4> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
             // Array of derivative of A(t).
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
@@ -374,14 +374,14 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Point4d> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
+        public static List<Point4> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
-            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
 
             int n = curve.Knots.Count - curve.Degree - 2;
             int derivateOrder = numberDerivs < curve.Degree ? numberDerivs : curve.Degree;
 
-            Point4d[] ck = new Point4d[numberDerivs + 1];
+            Point4[] ck = new Point4[numberDerivs + 1];
             int knotSpan = curve.Knots.Span(n, curve.Degree, parameter);
             List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
 
@@ -390,7 +390,7 @@ namespace GShark.Operation
                 for (int j = 0; j < curve.Degree + 1; j++)
                 {
                     double valToMultiply = derived2d[k][j];
-                    Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + j];
+                    Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + j];
                     for (int i = 0; i < pt.Size; i++)
                     {
                         ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
@@ -674,7 +674,7 @@ namespace GShark.Operation
         //    int n = surface.KnotsU.Count - surface.DegreeU - 2;
         //    int m = surface.KnotsV.Count - surface.DegreeV - 2;
         //    List<List<Point3>> controlPoints = surface.ControlPoints;
-        //    List<List<Point4d>> surfaceHomoPts = surface.HomogenizedPoints;
+        //    List<List<Point4>> surfaceHomoPts = surface.HomogenizedPoints;
         //    int dim = 3;//dimension of point
 
         //    //ToDo These checks should be in the validity check of surface. Here should check that u and v are in range.

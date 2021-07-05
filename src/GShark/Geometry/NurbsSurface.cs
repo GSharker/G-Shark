@@ -71,7 +71,7 @@ namespace GShark.Geometry
         //{
         //    DegreeU = surface.DegreeU;
         //    DegreeV = surface.DegreeV;
-        //    HomogenizedPoints = new List<List<Point4d>>(surface.HomogenizedPoints);
+        //    HomogenizedPoints = new List<List<Point4>>(surface.HomogenizedPoints);
         //    KnotsU = new KnotVector(surface.KnotsU);
         //    KnotsV = new KnotVector(surface.KnotsV);
         //    Weights = new List<List<double>>(surface.Weights!);
@@ -97,7 +97,7 @@ namespace GShark.Geometry
         //            var p1p2 = Point3.Interpolate(p1, p2, l);
         //            var p4p3 = Point3.Interpolate(p4, p3, l);
         //            var res = Point3.Interpolate(p1p2, p4p3, 1.0d - j / degree);
-        //            var res4d = new Point4d(res.X, res.Y, res.Z, 1.0d);
+        //            var res4d = new Point4(res.X, res.Y, res.Z, 1.0d);
         //            row.Add(res);
         //        }
         //        pts.Add(row);
@@ -177,7 +177,7 @@ namespace GShark.Geometry
         /////Two dimensional array of weight values
         ///// </summary>
         //public List<List<double>> Weights { get; }
-        //public List<List<Point4d>> HomogenizedPoints { get; }
+        //public List<List<Point4>> HomogenizedPoints { get; }
 
         //public bool Equals(NurbsSurface other){
         //    //var pts = this.ControlPoints;

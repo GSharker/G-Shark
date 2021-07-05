@@ -94,7 +94,7 @@ namespace GShark.Geometry
             }
         }
 
-        public List<Point4d> HomogenizedPoints
+        public List<Point4> HomogenizedPoints
         {
             get
             {

@@ -129,7 +129,7 @@ namespace GShark.Geometry
 
         public List<Point3> ControlPoints { get; private set; }
 
-        public List<Point4d> HomogenizedPoints { get; private set; }
+        public List<Point4> HomogenizedPoints { get; private set; }
 
         public KnotVector Knots { get; private set; }
 

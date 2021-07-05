@@ -74,7 +74,7 @@ namespace GShark.Geometry
 
         public List<Point3> ControlPoints => new List<Point3>{Start, End};
 
-        public List<Point4d> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
+        public List<Point4> HomogenizedPoints => LinearAlgebra.PointsHomogeniser(ControlPoints, 1.0);
 
         public KnotVector Knots => new KnotVector {0, 0, 1, 1};
 
