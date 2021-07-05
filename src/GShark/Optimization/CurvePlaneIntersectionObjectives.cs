@@ -31,17 +31,17 @@ namespace GShark.Optimization
 
             var p0P1 = p0 - p1;
 
-            return Vector3d.DotProduct(p0P1, p0P1);
+            return Vector3.DotProduct(p0P1, p0P1);
         }
 
         public Vector Gradient(Vector v)
         {
             var deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
-            var r = deriveC0[0] - new Vector3d(_plane.Origin);
+            var r = deriveC0[0] - new Vector3(_plane.Origin);
 
-            double f = Vector3d.DotProduct(_plane.Normal, r);
+            double f = Vector3.DotProduct(_plane.Normal, (Vector3)r);
             // Compute the derivative of function.
-            double df = Vector3d.DotProduct(_plane.Normal, deriveC0[1]);
+            double df = Vector3.DotProduct(_plane.Normal, deriveC0[1]);
 
             double value0 = 2 * (f / df);
 

@@ -46,9 +46,9 @@ namespace GShark.Geometry
         public Circle(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
-            Vector3d normal = Vector3d.ZAxis.PerpendicularTo(pt1, pt2, pt3);
-            Vector3d xDir = pt1 - center;
-            Vector3d yDir = Vector3d.CrossProduct(normal, xDir);
+            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
+            Vector3 xDir = pt1 - center;
+            Vector3 yDir = Vector3.CrossProduct(normal, xDir);
 
             Plane = new Plane(center, xDir, yDir, normal);
             Radius = xDir.Length;
@@ -156,12 +156,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter of tangent ot evaluate.</param>
         /// <returns></returns>
-        public Vector3d TangentAt(double t)
+        public Vector3 TangentAt(double t)
         {
             double r1 = Radius * (-Math.Sin(t));
             double r2 = Radius * (Math.Cos(t));
 
-            Vector3d vector = Plane.XAxis * r1 + Plane.YAxis * r2;
+            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
             return vector.Unitize();
         }

@@ -126,8 +126,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             bBoxIntersect.IsValid.Should().BeFalse();
-            bBoxIntersect.Max.Equals(Vector3d.Unset);
-            bBoxIntersect.Min.Equals(Vector3d.Unset);
+            bBoxIntersect.Max.Equals(Vector3.Unset);
+            bBoxIntersect.Min.Equals(Vector3.Unset);
         }
 
         [Fact]

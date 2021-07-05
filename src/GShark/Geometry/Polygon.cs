@@ -102,12 +102,12 @@ namespace GShark.Geometry
             get
             {
                 double area = 0.0;
-                Vector3d normal = Vector3d.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
+                Vector3 normal = Vector3.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
 
                 for (int i = 0; i < this.Count - 1; i++)
                 {
-                    Vector3d product = Vector3d.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
-                    area += Vector3d.DotProduct(product, normal);
+                    Vector3 product = Vector3.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
+                    area += Vector3.DotProduct(product, normal);
                 }
 
                 area *= 0.5;

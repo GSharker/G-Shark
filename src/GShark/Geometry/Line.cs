@@ -37,7 +37,7 @@ namespace GShark.Geometry
         /// <param name="start">Starting point of the line.</param>
         /// <param name="direction">Direction of the line.</param>
         /// <param name="length">Length of the line.</param>
-        public Line(Point3 start, Vector3d direction, double length)
+        public Line(Point3 start, Vector3 direction, double length)
         {
             if(length >= -GeoSharkMath.Epsilon && length <= GeoSharkMath.Epsilon)
             {
@@ -68,7 +68,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Direction of the line.
         /// </summary>
-        public Vector3d Direction { get; }
+        public Vector3 Direction { get; }
 
         public int Degree => 1;
 
@@ -100,9 +100,9 @@ namespace GShark.Geometry
         /// <returns>The closest point on the line from this point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
-            Vector3d dir = Direction;
-            Vector3d v = pt - Start;
-            double d = Vector3d.DotProduct(v, dir);
+            Vector3 dir = Direction;
+            Vector3 v = pt - Start;
+            double d = Vector3.DotProduct(v, dir);
 
             d = Math.Min(Length, d);
             d = Math.Max(d, 0);
@@ -117,19 +117,19 @@ namespace GShark.Geometry
         /// <returns>The parameter on the line closest to the test point.</returns>
         public double ClosestParameter(Point3 pt)
         {
-            Vector3d dir = End - Start;
+            Vector3 dir = End - Start;
             double dirLength = dir.SquareLength;
 
             if (!(dirLength > 0.0)) return 0.0;
-            Vector3d ptToStart = pt - Start;
-            Vector3d ptToEnd = pt - End;
+            Vector3 ptToStart = pt - Start;
+            Vector3 ptToEnd = pt - End;
 
             if (ptToStart.SquareLength <= ptToEnd.SquareLength)
             {
-                return Vector3d.DotProduct(ptToStart, dir) / dirLength;
+                return Vector3.DotProduct(ptToStart, dir) / dirLength;
             }
 
-            return 1.0 + Vector3d.DotProduct(ptToEnd, dir) / dirLength;
+            return 1.0 + Vector3.DotProduct(ptToEnd, dir) / dirLength;
         }
 
         /// <summary>

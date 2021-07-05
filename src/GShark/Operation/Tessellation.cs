@@ -89,10 +89,10 @@ namespace GShark.Operation
             Point3 pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
             Point3 pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
 
-            Vector3d diff = pt1 - pt3;
-            Vector3d diff2 = pt1 - pt2;
+            Vector3 diff = pt1 - pt3;
+            Vector3 diff2 = pt1 - pt2;
 
-            if ((Vector3d.DotProduct(diff, diff) < setTolerance && Vector3d.DotProduct(diff2, diff2) > setTolerance)
+            if ((Vector3.DotProduct(diff, diff) < setTolerance && Vector3.DotProduct(diff2, diff2) > setTolerance)
                 || !Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, setTolerance))
             {
                 // Get the exact middle value or a random value start + (end - start) * (0.45 + 0.1 * random.NextDouble());

@@ -224,9 +224,9 @@ namespace GShark.Core
         /// </summary>
         /// <param name="transform">Transformation to check.</param>
         /// <returns>The rotation axis used for the transformation.</returns>
-        public static Vector3d GetRotationAxis(Transform transform)
+        public static Vector3 GetRotationAxis(Transform transform)
         {
-            Vector3d axis = Vector3d.Unset;
+            Vector3 axis = Vector3.Unset;
 
             if (Math.Abs(transform[0][1] + transform[1][0]) < GeoSharkMath.MinTolerance || 
                 Math.Abs(transform[0][2] + transform[2][0]) < GeoSharkMath.MinTolerance ||

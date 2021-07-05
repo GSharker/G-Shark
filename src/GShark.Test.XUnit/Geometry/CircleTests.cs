@@ -21,9 +21,9 @@ namespace GShark.Test.XUnit.Geometry
             #region example
             // Initializes a circle from a plane and a radius.
             Point3 center = new Point3(85.591741, 24.79606, 1.064717);
-            Vector3d xDir = new Vector3d(-0.687455, 0.703828, -0.178976);
-            Vector3d yDir = new Vector3d(-0.726183, -0.663492, 0.180104);
-            Vector3d normal = new Vector3d(0.008012, 0.253783, 0.967228);
+            Vector3 xDir = new Vector3(-0.687455, 0.703828, -0.178976);
+            Vector3 yDir = new Vector3(-0.726183, -0.663492, 0.180104);
+            Vector3 normal = new Vector3(0.008012, 0.253783, 0.967228);
             Plane plane = new Plane(center, xDir, yDir, normal);
             _circle2D = new Circle(plane, 23);
 
@@ -115,7 +115,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3d expectedTangent = new Vector3d(pts[0], pts[1], pts[2]);
+            Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
             Circle circle = _circle2D;
 
             // Act

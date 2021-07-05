@@ -28,7 +28,7 @@ namespace GShark.Core
             for (int i = 3; i < points.Count; i++)
             {
                 var vec3 = points[i] - points[0];
-                double tripleProduct = Vector3d.DotProduct(Vector3d.CrossProduct(vec3, vec2), vec1);
+                double tripleProduct = Vector3.DotProduct(Vector3.CrossProduct(vec3, vec2), vec1);
                 if (Math.Abs(tripleProduct) > GeoSharkMath.Epsilon)
                 {
                     return false;
@@ -50,10 +50,10 @@ namespace GShark.Core
         {
             // Find the area of the triangle without using square root and multiply it for 0.5
             // http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
-            Vector3d pt1ToPt2 = pt2 - pt1;
-            Vector3d pt1ToPt3 = pt3 - pt1;
-            Vector3d norm = Vector3d.CrossProduct(pt1ToPt2, pt1ToPt3);
-            double area = Vector3d.DotProduct(norm, norm);
+            Vector3 pt1ToPt2 = pt2 - pt1;
+            Vector3 pt1ToPt3 = pt3 - pt1;
+            Vector3 norm = Vector3.CrossProduct(pt1ToPt2, pt1ToPt3);
+            double area = Vector3.DotProduct(norm, norm);
 
             return area < tol;
         }
@@ -71,7 +71,7 @@ namespace GShark.Core
         public static (double tValue, Point3 pt) ClosestPointToSegment(Point3 point, Point3 segmentPt0,
             Point3 segmentPt1, double valueT0, double valueT1)
         {
-            Vector3d direction = segmentPt1 - segmentPt0;
+            Vector3 direction = segmentPt1 - segmentPt0;
             double length = direction.Length;
 
             if (length < GeoSharkMath.Epsilon)
@@ -79,9 +79,9 @@ namespace GShark.Core
                 return (tValue: valueT0, pt: segmentPt0);
             }
 
-            Vector3d vecUnitized = direction.Unitize();
-            Vector3d ptToSegPt0 = point - segmentPt0;
-            double dotResult = Vector3d.DotProduct(ptToSegPt0, vecUnitized);
+            Vector3 vecUnitized = direction.Unitize();
+            Vector3 ptToSegPt0 = point - segmentPt0;
+            double dotResult = Vector3.DotProduct(ptToSegPt0, vecUnitized);
 
             if (dotResult < 0.0)
             {
@@ -110,12 +110,12 @@ namespace GShark.Core
             if (LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
                 throw new Exception("Points must not be collinear.");
 
-            Vector3d v1 = pt2 - pt1;
-            Vector3d v2 = pt3 - pt1;
+            Vector3 v1 = pt2 - pt1;
+            Vector3 v2 = pt3 - pt1;
 
-            double v1V1 = Vector3d.DotProduct(v1, v1);
-            double v2V2 = Vector3d.DotProduct(v2, v2);
-            double v1V2 = Vector3d.DotProduct(v1, v2);
+            double v1V1 = Vector3.DotProduct(v1, v1);
+            double v2V2 = Vector3.DotProduct(v2, v2);
+            double v1V2 = Vector3.DotProduct(v1, v2);
 
             double a = 0.5 / (v1V1 * v2V2 - v1V2 * v1V2);
             double k1 = a * v2V2 * (v1V1 - v1V2);

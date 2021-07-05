@@ -173,9 +173,9 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The tangent vector at the given parameter.</returns>
-        public static Vector3d RationalCurveTangent(ICurve curve, double t)
+        public static Vector3 RationalCurveTangent(ICurve curve, double t)
         {
-            List<Vector3d> derivatives = RationalCurveDerivatives(curve, t, 1);
+            List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
             return derivatives[1];
         }
 
@@ -329,7 +329,7 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numberOfDerivatives"></param>
         /// <returns>The derivatives.</returns>
-        public static List<Vector3d> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
+        public static List<Vector3> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
         {
             List<Point4> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
             // Array of derivative of A(t).
@@ -339,7 +339,7 @@ namespace GShark.Operation
             List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
             // Correspond in the book to wDers.
             List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
-            List<Vector3d> CK = new List<Vector3d>();
+            List<Vector3> CK = new List<Vector3>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
             {

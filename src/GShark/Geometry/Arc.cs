@@ -59,9 +59,9 @@ namespace GShark.Geometry
         public Arc(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
-            Vector3d normal = Vector3d.ZAxis.PerpendicularTo(pt1, pt2, pt3);
-            Vector3d xDir = pt1 - center;
-            Vector3d yDir = Vector3d.CrossProduct(normal, xDir);
+            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
+            Vector3 xDir = pt1 - center;
+            Vector3 yDir = Vector3.CrossProduct(normal, xDir);
             Plane pl = new Plane(center, xDir, yDir, normal);
 
             (double u, double v) = pl.ClosestParameters(pt3);
@@ -113,17 +113,17 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the start point of the arc.
         /// </summary>
-        public Vector3d StartPoint => ControlPoints[0];
+        public Vector3 StartPoint => ControlPoints[0];
 
         /// <summary>
         /// Gets the mid-point of the arc.
         /// </summary>
-        public Vector3d MidPoint => PointAt(Domain.Mid);
+        public Vector3 MidPoint => PointAt(Domain.Mid);
 
         /// <summary>
         /// Gets the end point of the arc.
         /// </summary>
-        public Vector3d EndPoint => ControlPoints[^1];
+        public Vector3 EndPoint => ControlPoints[^1];
 
         public int Degree => 2;
 
@@ -141,7 +141,7 @@ namespace GShark.Geometry
         {
             get
             {
-                Plane orientedPlane = Plane.Align(Vector3d.XAxis);
+                Plane orientedPlane = Plane.Align(Vector3.XAxis);
                 Point3 pt0 = StartPoint;
                 Point3 pt1 = EndPoint;
                 Point3 ptC = orientedPlane.Origin;
@@ -179,17 +179,17 @@ namespace GShark.Geometry
         /// <param name="ptEnd">End point arc.</param>
         /// <param name="dir">TangentAt direction at start.</param>
         /// <returns>An arc.</returns>
-        public static Arc ByStartEndDirection(Point3 ptStart, Point3 ptEnd, Vector3d dir)
+        public static Arc ByStartEndDirection(Point3 ptStart, Point3 ptEnd, Vector3 dir)
         {
-            Vector3d vec0 = dir.Unitize();
-            Vector3d vec1 = (ptEnd - ptStart).Unitize();
+            Vector3 vec0 = dir.Unitize();
+            Vector3 vec1 = (ptEnd - ptStart).Unitize();
             if (vec1.Length == 0.0)
             {
                 throw new Exception("Points must not be coincident.");
             }
 
-            Vector3d vec2 = (vec0 + vec1).Unitize();
-            Vector3d vec3 = vec2 * ( 0.5 * ptStart.DistanceTo(ptEnd) / Vector3d.DotProduct(vec2, vec0));
+            Vector3 vec2 = (vec0 + vec1).Unitize();
+            Vector3 vec3 = vec2 * ( 0.5 * ptStart.DistanceTo(ptEnd) / Vector3.DotProduct(vec2, vec0));
             return new Arc(ptStart, ptStart + vec3, ptEnd);
         }
 
@@ -200,8 +200,8 @@ namespace GShark.Geometry
         /// <returns>Point on the arc.</returns>
         public Point3 PointAt(double t)
         {
-            Vector3d xDir = Plane.XAxis * Math.Cos(t) * Radius;
-            Vector3d yDir = Plane.YAxis * Math.Sin(t) * Radius;
+            Vector3 xDir = Plane.XAxis * Math.Cos(t) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(t) * Radius;
 
             return Plane.Origin + xDir + yDir;
         }
@@ -211,7 +211,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
         /// <returns>Tangent vector at the t parameter.</returns>
-        public Vector3d TangentAt(double t)
+        public Vector3 TangentAt(double t)
         {
             double r1 = Radius;
             double r2 = Radius;
@@ -219,7 +219,7 @@ namespace GShark.Geometry
             r1 *= -Math.Sin(t);
             r2 *= Math.Cos(t);
 
-            Vector3d vector = Plane.XAxis * r1 + Plane.YAxis * r2;
+            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
             return vector.Unitize();
         }
@@ -286,8 +286,8 @@ namespace GShark.Geometry
         /// <returns>A nurbs curve shaped like this arc.</returns>
         private void ToNurbsCurve()
         {
-            Vector3d axisX = Plane.XAxis;
-            Vector3d axisY = Plane.YAxis;
+            Vector3 axisX = Plane.XAxis;
+            Vector3 axisY = Plane.YAxis;
             int numberOfArc;
             Point3[] ctrPts;
             double[] weights;
@@ -321,8 +321,8 @@ namespace GShark.Geometry
 
             double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3d p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
-            Vector3d t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
             KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
@@ -334,16 +334,16 @@ namespace GShark.Geometry
             for (int i = 1; i < numberOfArc + 1; i++)
             {
                 angle += detTheta;
-                Vector3d p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
+                Vector3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
                 
                 weights[index + 2] = 1;
                 ctrPts[index + 2] = p2;
 
-                Vector3d t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
+                Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
                 Line ln0 = new Line(p0, t0.Unitize() + p0);
                 Line ln1 = new Line(p2, t2.Unitize() + p2);
                 bool intersect = Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out double u1);
-                Vector3d p1 = p0 + (t0 * u0);
+                Vector3 p1 = p0 + (t0 * u0);
 
                 weights[index + 1] = weight1;
                 ctrPts[index + 1] = p1;

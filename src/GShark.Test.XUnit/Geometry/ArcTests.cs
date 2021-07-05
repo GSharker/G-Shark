@@ -87,11 +87,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox3D = arc3D.BoundingBox;
 
             // Assert
-            bBox2D.Min.EpsilonEquals(new Vector3d(11.490667, 0, 0), 6).Should().BeTrue();
-            bBox2D.Max.EpsilonEquals(new Vector3d(15, 9.641814, 0), 6).Should().BeTrue();
+            bBox2D.Min.EpsilonEquals(new Vector3(11.490667, 0, 0), 6).Should().BeTrue();
+            bBox2D.Max.EpsilonEquals(new Vector3(15, 9.641814, 0), 6).Should().BeTrue();
                        
-            bBox3D.Min.EpsilonEquals(new Vector3d(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
-            bBox3D.Max.EpsilonEquals(new Vector3d(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
+            bBox3D.Min.EpsilonEquals(new Vector3(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
+            bBox3D.Max.EpsilonEquals(new Vector3(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
         }
 
         [Theory]
@@ -150,11 +150,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3d expectedTangent = new Vector3d(pts[0], pts[1], pts[2]);
+            Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Vector3d tangent = arc.TangentAt(t);
+            Vector3 tangent = arc.TangentAt(t);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, 1e-6).Should().BeTrue();
@@ -246,7 +246,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             Point3 startPt = new Point3(5, 5, 5);
             Point3 endPt = new Point3(10, 15, 10);
-            Vector3d dir = new Vector3d(3, 3, 0);
+            Vector3 dir = new Vector3(3, 3, 0);
             double radiusExpected = 12.247449;
             double angleExpected = GeoSharkMath.ToRadians(60);
             Point3 centerExpected = new Point3(0, 10, 15);

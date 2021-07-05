@@ -388,7 +388,7 @@ namespace GShark.Test.XUnit.Operation
             int derivativesOrder = 2;
 
             // Act
-            List<Vector3d> resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
+            List<Vector3> resultToCheck = Evaluation.RationalCurveDerivatives(curve, 0, derivativesOrder);
 
             // Assert
             resultToCheck[0][0].Should().Be(1);
@@ -400,7 +400,7 @@ namespace GShark.Test.XUnit.Operation
             resultToCheck[2][0].Should().Be(-4);
             resultToCheck[2][1].Should().Be(0);
 
-            List<Vector3d> resultToCheck2 = Evaluation.RationalCurveDerivatives(curve, 1, derivativesOrder);
+            List<Vector3> resultToCheck2 = Evaluation.RationalCurveDerivatives(curve, 1, derivativesOrder);
 
             resultToCheck2[0][0].Should().Be(0);
             resultToCheck2[0][1].Should().Be(1);
@@ -411,12 +411,12 @@ namespace GShark.Test.XUnit.Operation
             resultToCheck2[2][0].Should().Be(1);
             resultToCheck2[2][1].Should().Be(-1);
 
-            List<Vector3d> resultToCheck3 = Evaluation.RationalCurveDerivatives(curve, 0, 3);
+            List<Vector3> resultToCheck3 = Evaluation.RationalCurveDerivatives(curve, 0, 3);
 
             resultToCheck3[3][0].Should().Be(0);
             resultToCheck3[3][1].Should().Be(-12);
 
-            List<Vector3d> resultToCheck4 = Evaluation.RationalCurveDerivatives(curve, 1, 3);
+            List<Vector3> resultToCheck4 = Evaluation.RationalCurveDerivatives(curve, 1, 3);
 
             resultToCheck4[3][0].Should().Be(0);
             resultToCheck4[3][1].Should().Be(3);
@@ -443,14 +443,14 @@ namespace GShark.Test.XUnit.Operation
             };
             List<double> weights = new List<double> { 1, 1, 1, 1, 1 };
             NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
-            Vector3d tangentExpectedLinearCurve = new Vector3d(3, 0, 0);
-            Vector3d tangentExpectedPlanarCurve = new Vector3d(tangentData[0], tangentData[1], tangentData[2]);
+            Vector3 tangentExpectedLinearCurve = new Vector3(3, 0, 0);
+            Vector3 tangentExpectedPlanarCurve = new Vector3(tangentData[0], tangentData[1], tangentData[2]);
 
             // Act
             // Act on a linear nurbs curve.
-            Vector3d tangentLinearCurve = Evaluation.RationalCurveTangent(curve, 0.5);
+            Vector3 tangentLinearCurve = Evaluation.RationalCurveTangent(curve, 0.5);
             var tangentPlanarCurve = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsCurvePlanarExample(), t);
-            Vector3d tangentNormalized = tangentPlanarCurve.Unitize();
+            Vector3 tangentNormalized = tangentPlanarCurve.Unitize();
 
             // Assert
             tangentLinearCurve.Should().BeEquivalentTo(tangentExpectedLinearCurve);

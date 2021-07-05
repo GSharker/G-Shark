@@ -61,7 +61,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Translated_Transformed_Matrix()
         {
             // Arrange
-            var translation = new Vector3d(10, 10, 0);
+            var translation = new Vector3(10, 10, 0);
 
             // Act
             Transform transform = Transform.Translation(translation);
@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Core
 
             // Assert
             GeoSharkMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharkMath.Epsilon);
-            axis.Should().BeEquivalentTo(Vector3d.ZAxis);
+            axis.Should().BeEquivalentTo(Vector3.ZAxis);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             var pt = new Point3(10,10,0);
-            Plane plane = new Plane(pt, Vector3d.XAxis);
+            Plane plane = new Plane(pt, Vector3.XAxis);
 
             // Act
             Transform transform = Transform.Reflection(plane);
@@ -153,7 +153,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             var origin = new Point3( 5, 0, 0);
-            var dir = new Vector3d(-10, -15, 0);
+            var dir = new Vector3(-10, -15, 0);
             Plane plane = new Plane(origin, dir);
 
             // Act

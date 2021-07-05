@@ -8,7 +8,7 @@ namespace GShark.Geometry
     /// Defines a Vector in Euclidean space with coordinates X, Y, and Z.
     /// Referenced from https://github.com/mcneel/rhinocommon/blob/master/dotnet/opennurbs/opennurbs_point.cs
     /// </summary>
-    public struct Vector3d : IEquatable<Vector3d>, IComparable<Vector3d>, IComparable
+    public struct Vector3 : IEquatable<Vector3>, IComparable<Vector3>, IComparable
     {
         /// <summary>
         /// Initializes a new instance of a vector, using its three components.
@@ -16,7 +16,7 @@ namespace GShark.Geometry
         /// <param name="x">The X (first) component.</param>
         /// <param name="y">The Y (second) component.</param>
         /// <param name="z">The Z (third) component.</param>
-        public Vector3d(double x, double y, double z)
+        public Vector3(double x, double y, double z)
         {
             X = x;
             Y = y;
@@ -27,7 +27,7 @@ namespace GShark.Geometry
         /// Initializes a new instance of a vector, copying the three components from the three coordinates of a point.
         /// </summary>
         /// <param name="point">The point to copy from.</param>
-        public Vector3d(Point3 point) : this(point.X, point.Y, point.Z)
+        public Vector3(Point3 point) : this(point.X, point.Y, point.Z)
         {
         }
 
@@ -35,34 +35,34 @@ namespace GShark.Geometry
         /// Initializes a new instance of a vector, copying the three components from a vector.
         /// </summary>
         /// <param name="vector">A double-precision vector.</param>
-        public Vector3d(Vector3d vector) : this(vector.X, vector.Y, vector.Z)
+        public Vector3(Vector3 vector) : this(vector.X, vector.Y, vector.Z)
         {
         }
 
         /// <summary>
         /// Gets the value of the vector with components 0,0,0.
         /// </summary>
-        public static Vector3d Zero => new Vector3d(0,0,0);
+        public static Vector3 Zero => new Vector3(0,0,0);
 
         /// <summary>
         /// Gets the value of the vector with components 1,0,0.
         /// </summary>
-        public static Vector3d XAxis => new Vector3d(1.0, 0.0, 0.0);
+        public static Vector3 XAxis => new Vector3(1.0, 0.0, 0.0);
 
         /// <summary>
         /// Gets the value of the vector with components 0,1,0.
         /// </summary>
-        public static Vector3d YAxis => new Vector3d(0.0, 1.0, 0.0);
+        public static Vector3 YAxis => new Vector3(0.0, 1.0, 0.0);
 
         /// <summary>
         /// Gets the value of the vector with components 0,0,1.
         /// </summary>
-        public static Vector3d ZAxis => new Vector3d(0.0, 0.0, 1.0);
+        public static Vector3 ZAxis => new Vector3(0.0, 0.0, 1.0);
 
         /// <summary>
         /// Gets the value of the vector with each component set to GeoSharkMath.UNSET_VALUE.
         /// </summary>
-        public static Vector3d Unset => new Vector3d(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+        public static Vector3 Unset => new Vector3(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a vector by a number, having the effect of scaling it.
@@ -70,9 +70,9 @@ namespace GShark.Geometry
         /// <param name="vector">A vector.</param>
         /// <param name="t">A number.</param>
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
-        public static Vector3d operator *(Vector3d vector, double t)
+        public static Vector3 operator *(Vector3 vector, double t)
         {
-            return new Vector3d(vector.X * t, vector.Y * t, vector.Z * t);
+            return new Vector3(vector.X * t, vector.Y * t, vector.Z * t);
         }
 
         /// <summary>
@@ -81,20 +81,20 @@ namespace GShark.Geometry
         /// <param name="t">A number.</param>
         /// <param name="vector">A vector.</param>
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
-        public static Vector3d operator *(double t, Vector3d vector)
+        public static Vector3 operator *(double t, Vector3 vector)
         {
-            return new Vector3d(vector.X * t, vector.Y * t, vector.Z * t);
+            return new Vector3(vector.X * t, vector.Y * t, vector.Z * t);
         }
 
         /// <summary>
-        /// Divides a <see cref="Vector3d"/> by a number, having the effect of shrinking it.
+        /// Divides a <see cref="Vector3"/> by a number, having the effect of shrinking it.
         /// </summary>
         /// <param name="vector">A vector.</param>
         /// <param name="t">A number.</param>
         /// <returns>A new vector that is componentwise divided by t.</returns>
-        public static Vector3d operator /(Vector3d vector, double t)
+        public static Vector3 operator /(Vector3 vector, double t)
         {
-            return new Vector3d(vector.X / t, vector.Y / t, vector.Z / t);
+            return new Vector3(vector.X / t, vector.Y / t, vector.Z / t);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace GShark.Geometry
         /// <param name="vector1">A vector.</param>
         /// <param name="vector2">A second vector.</param>
         /// <returns>A new vector that results from the componentwise addition of the two vectors.</returns>
-        public static Vector3d operator +(Vector3d vector1, Vector3d vector2)
+        public static Vector3 operator +(Vector3 vector1, Vector3 vector2)
         {
-            return new Vector3d(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
+            return new Vector3(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector2.Z);
         }
 
         /// <summary>
@@ -114,9 +114,9 @@ namespace GShark.Geometry
         /// <param name="vector1">A vector.</param>
         /// <param name="vector2">A second vector.</param>
         /// <returns>A new vector that results from the componentwise difference of vector1 - vector2.</returns>
-        public static Vector3d operator -(Vector3d vector1, Vector3d vector2)
+        public static Vector3 operator -(Vector3 vector1, Vector3 vector2)
         {
-            return new Vector3d(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
+            return new Vector3(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector2.Z);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace GShark.Geometry
         /// A value that results from the evaluation of v1.X*v2.X + v1.Y*v2.Y + v1.Z*v2.Z.
         /// <para>This value equals v1.Length * v2.Length * cos(alpha), where alpha is the angle between vectors.</para>
         /// </returns>
-        public static double operator *(Vector3d vector1, Vector3d vector2)
+        public static double operator *(Vector3 vector1, Vector3 vector2)
         {
             return (vector1.X * vector2.X + vector1.Y * vector2.Y + vector1.Z * vector2.Z);
         }
@@ -139,9 +139,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector">A vector to negate.</param>
         /// <returns>A new vector where all components were multiplied by -1.</returns>
-        public static Vector3d operator -(Vector3d vector)
+        public static Vector3 operator -(Vector3 vector)
         {
-            return new Vector3d(-vector.X, -vector.Y, -vector.Z);
+            return new Vector3(-vector.X, -vector.Y, -vector.Z);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace GShark.Geometry
         /// <param name="a">A vector.</param>
         /// <param name="b">Another vector.</param>
         /// <returns>true if all coordinates are pairwise equal; false otherwise.</returns>
-        public static bool operator ==(Vector3d a, Vector3d b)
+        public static bool operator ==(Vector3 a, Vector3 b)
         {
             return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
         }
@@ -161,7 +161,7 @@ namespace GShark.Geometry
         /// <param name="a">A vector.</param>
         /// <param name="b">Another vector.</param>
         /// <returns>true if any coordinate pair is different; false otherwise.</returns>
-        public static bool operator !=(Vector3d a, Vector3d b)
+        public static bool operator !=(Vector3 a, Vector3 b)
         {
             return a.X != b.X || a.Y != b.Y || a.Z != b.Z;
         }
@@ -171,7 +171,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector3d">A Vector3d.</param>
         /// <returns>The resulting Vector3.</returns>
-        public static implicit operator Vector(Vector3d vector3d)
+        public static implicit operator Vector(Vector3 vector3d)
         {
             return new Vector{vector3d.X, vector3d.Y, vector3d.Z};
         }
@@ -181,7 +181,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector3d">A Vector3d.</param>
         /// <returns>The resulting Point3d.</returns>
-        public static implicit operator Point3(Vector3d vector3d)
+        public static implicit operator Point3(Vector3 vector3d)
         {
             return new Point3(vector3d);
         }
@@ -196,9 +196,9 @@ namespace GShark.Geometry
         /// <para>has Length == a.Length * b.Length and</para>
         /// <para>with a result that is oriented following the right hand rule.</para>
         /// </returns>
-        public static Vector3d CrossProduct(Vector3d a, Vector3d b)
+        public static Vector3 CrossProduct(Vector3 a, Vector3 b)
         {
-            return new Vector3d(a.Y * b.Z - b.Y * a.Z, a.Z * b.X - b.Z * a.X, a.X * b.Y - b.X * a.Y);
+            return new Vector3(a.Y * b.Z - b.Y * a.Z, a.Z * b.X - b.Z * a.X, a.X * b.Y - b.X * a.Y);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace GShark.Geometry
         /// <param name="a">First vector for angle.</param>
         /// <param name="b">Second vector for angle.</param>
         /// <returns>If the input is valid, the angle in radians between a and b; GeoSharkMath.UNSET_VALUE otherwise.</returns>
-        public static double VectorAngle(Vector3d a, Vector3d b)
+        public static double VectorAngle(Vector3 a, Vector3 b)
         {
             if (!a.IsValid || !b.IsValid)
             {
@@ -239,7 +239,7 @@ namespace GShark.Geometry
         /// <param name="b">Second vector.</param>
         /// <param name="plane">Two-dimensional plane on which to perform the angle measurement.</param>
         /// <returns>On success, the angle (in radians) between a and b as projected onto the plane; GeoSharkMath.UNSET_VALUE on failure.</returns>
-        public static double VectorAngle(Vector3d a, Vector3d b, Plane plane)
+        public static double VectorAngle(Vector3 a, Vector3 b, Plane plane)
         {
             throw new NotImplementedException();
             //{ // Project vectors onto plane.
@@ -290,7 +290,7 @@ namespace GShark.Geometry
         /// or a.X == b.X and a.Y is smaller than b.Y,
         /// or a.X == b.X and a.Y == b.Y and a.Z is smaller than b.Z;
         /// otherwise, false.</returns>
-        public static bool operator <(Vector3d a, Vector3d b)
+        public static bool operator <(Vector3 a, Vector3 b)
         {
             if (a.X < b.X)
             {
@@ -323,7 +323,7 @@ namespace GShark.Geometry
         /// or a.X == b.X and a.Y is smaller than b.Y,
         /// or a.X == b.X and a.Y == b.Y and a.Z &lt;= b.Z;
         /// otherwise, false.</returns>
-        public static bool operator <=(Vector3d a, Vector3d b)
+        public static bool operator <=(Vector3 a, Vector3 b)
         {
             return a.CompareTo(b) <= 0;
         }
@@ -339,7 +339,7 @@ namespace GShark.Geometry
         /// or a.X == b.X and a.Y is larger than b.Y,
         /// or a.X == b.X and a.Y == b.Y and a.Z is larger than b.Z;
         /// otherwise, false.</returns>
-        public static bool operator >(Vector3d a, Vector3d b)
+        public static bool operator >(Vector3 a, Vector3 b)
         {
             if (a.X > b.X)
             {
@@ -372,7 +372,7 @@ namespace GShark.Geometry
         /// or a.X == b.X and a.Y is larger than b.Y,
         /// or a.X == b.X and a.Y == b.Y and a.Z &gt;= b.Z;
         /// otherwise, false.</returns>
-        public static bool operator >=(Vector3d a, Vector3d b)
+        public static bool operator >=(Vector3 a, Vector3 b)
         {
             return a.CompareTo(b) >= 0;
         }
@@ -475,7 +475,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Vector3d and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Vector3d && this == (Vector3d)obj);
+            return (obj is Vector3 && this == (Vector3)obj);
         }
 
         /// <summary>
@@ -483,12 +483,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector">The specified vector.</param>
         /// <returns>true if vector has the same coordinates as this; otherwise false.</returns>
-        public bool Equals(Vector3d vector)
+        public bool Equals(Vector3 vector)
         {
             return this == vector;
         }
 
-        public bool EpsilonEquals(Vector3d vector, double epsilon)
+        public bool EpsilonEquals(Vector3 vector, double epsilon)
         {
             return Math.Abs(X - vector.X) <= epsilon &&
                    Math.Abs(Y - vector.Y) <= epsilon &&
@@ -497,10 +497,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares this <see cref="Vector3d" /> with another <see cref="Vector3d" />.
+        /// Compares this <see cref="Vector3" /> with another <see cref="Vector3" />.
         /// <para>Component evaluation priority is first X, then Y, then Z.</para>
         /// </summary>
-        /// <param name="other">The other <see cref="Vector3d" /> to use in comparison.</param>
+        /// <param name="other">The other <see cref="Vector3" /> to use in comparison.</param>
         /// <returns>
         /// <para> 0: if this is identical to other</para>
         /// <para>-1: if this.X &lt; other.X</para>
@@ -508,7 +508,7 @@ namespace GShark.Geometry
         /// <para>-1: if this.X == other.X and this.Y == other.Y and this.Z &lt; other.Z</para>
         /// <para>+1: otherwise.</para>
         /// </returns>
-        public int CompareTo(Vector3d other)
+        public int CompareTo(Vector3 other)
         {
             if (X < other.X)
             {
@@ -545,9 +545,9 @@ namespace GShark.Geometry
 
         int IComparable.CompareTo(object obj)
         {
-            if (obj is Vector3d)
+            if (obj is Vector3)
             {
-                return CompareTo((Vector3d)obj);
+                return CompareTo((Vector3)obj);
             }
 
             throw new ArgumentException("Input must be of type Vector3d", "obj");
@@ -576,7 +576,7 @@ namespace GShark.Geometry
         /// Unitizes the vector. A unit vector has length 1 unit.
         /// </summary>
         /// <returns>A new vector unitized.</returns>
-        public Vector3d Unitize()
+        public Vector3 Unitize()
         {
             if (IsUnitVector)
             {
@@ -599,15 +599,15 @@ namespace GShark.Geometry
         /// <param name="axis">Axis of rotation.</param>
         /// <param name="angle">Angle of rotation (in radians).</param>
         /// <returns>Rotated vector.</returns>
-        public Vector3d Rotate(Vector3d axis, double angle)
+        public Vector3 Rotate(Vector3 axis, double angle)
         {
             double cosAngle = Math.Cos(angle);
             double sinAngle = Math.Sin(angle);
 
             GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 
-            Vector3d unitizedAxis = axis.Unitize();
-            Vector3d crossProduct = CrossProduct(unitizedAxis, this);
+            Vector3 unitizedAxis = axis.Unitize();
+            Vector3 crossProduct = CrossProduct(unitizedAxis, this);
             double dotProduct = DotProduct(unitizedAxis, this);
 
             return (this * cosAngle) + (crossProduct * sinAngle) + (unitizedAxis * dotProduct * (1 - cosAngle));
@@ -618,14 +618,14 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="amplitude">The scalar value to amplify the vector.</param>
         /// <returns>The amplified vector.</returns>
-        public Vector3d Amplify(double amplitude)
+        public Vector3 Amplify(double amplitude)
         {
             if (!GeoSharkMath.IsValidDouble(amplitude))
             {
                 throw new ArgumentException("Invalid double value.");
             }
 
-            Vector3d unitVector = Unitize();
+            Vector3 unitVector = Unitize();
             return (unitVector * amplitude);
         }
 
@@ -634,13 +634,13 @@ namespace GShark.Geometry
         /// <para>If this vector is Invalid, no changes will occur and false will be returned.</para>
         ///</summary>
         ///<returns>Returns a reversed vector on success or Vector3d.Unset if the vector is invalid.</returns>
-        public Vector3d Reverse()
+        public Vector3 Reverse()
         {
             if (!IsValid)
             {
-                return Vector3d.Unset;
+                return Vector3.Unset;
             }
-            return new Vector3d(-X, -Y, -Z);
+            return new Vector3(-X, -Y, -Z);
         }
 
         /// <summary>
@@ -654,7 +654,7 @@ namespace GShark.Geometry
         /// <para>0 = vectors are not parallel or at least one of the vectors is zero.</para>
         /// <para>-1 = vectors are anti-parallel.</para>
         /// </returns>
-        public int IsParallelTo(Vector3d other, double angleTolerance = GeoSharkMath.AngleTolerance)
+        public int IsParallelTo(Vector3 other, double angleTolerance = GeoSharkMath.AngleTolerance)
         {
             int result = 0;
             double toleranceSet = Math.Cos(angleTolerance);
@@ -684,7 +684,7 @@ namespace GShark.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
-        public static double DotProduct(Vector3d vector1, Vector3d vector2)
+        public static double DotProduct(Vector3 vector1, Vector3 vector2)
         {
             if (!vector1.IsValid || !vector2.IsValid)
             {
@@ -701,7 +701,7 @@ namespace GShark.Geometry
         /// <param name="other">Vector to use for comparison.</param>
         /// <param name="angleTolerance">Angle tolerance (in radians).</param>
         ///<returns>true if vectors form Pi-radians (90-degree) angles with each other; otherwise false.</returns>
-        public bool IsPerpendicularTo(Vector3d other, double angleTolerance = GeoSharkMath.AngleTolerance)
+        public bool IsPerpendicularTo(Vector3 other, double angleTolerance = GeoSharkMath.AngleTolerance)
         {
             bool result = false;
             double ll = Length * other.Length;
@@ -722,7 +722,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector">The other vector.</param>
         /// <returns>The perpendicular vector.</returns>
-        public Vector3d PerpendicularTo(Vector3d vector)
+        public Vector3 PerpendicularTo(Vector3 vector)
             {
                 double[] vectorComponents = {vector.X, vector.Y, vector.Z};
                 double[] tempVector = new double[3];
@@ -790,7 +790,7 @@ namespace GShark.Geometry
                 tempVector[j] = a;
                 tempVector[k] = 0.0;
 
-                return new Vector3d(tempVector[0], tempVector[1], tempVector[2]);
+                return new Vector3(tempVector[0], tempVector[1], tempVector[2]);
             }
 
         /// <summary>
@@ -801,23 +801,23 @@ namespace GShark.Geometry
         /// <param name="pt2">Second point.</param>
         /// <param name="pt3">Third point.</param>
         /// <returns>The perpendicular vector.</returns>
-        public Vector3d PerpendicularTo(Point3 pt1, Point3 pt2, Point3 pt3)
+        public Vector3 PerpendicularTo(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            Vector3d vec0 = pt3 - pt2;
-            Vector3d vec1 = pt1 - pt3;
-            Vector3d vec2 = pt2 - pt1;
+            Vector3 vec0 = pt3 - pt2;
+            Vector3 vec1 = pt1 - pt3;
+            Vector3 vec2 = pt2 - pt1;
 
-            Vector3d normal0 = CrossProduct(vec1, vec2);
+            Vector3 normal0 = CrossProduct(vec1, vec2);
             if (normal0.Length <= double.Epsilon)
             {
                 return Unset;
             }
-            Vector3d normal1 = CrossProduct(vec2, vec0);
+            Vector3 normal1 = CrossProduct(vec2, vec0);
             if (normal1.Length <= double.Epsilon)
             {
                 return Unset;
             }
-            Vector3d normal2 = CrossProduct(vec0, vec1);
+            Vector3 normal2 = CrossProduct(vec0, vec1);
             if (normal2.Length <= double.Epsilon)
             {
                 return Unset;

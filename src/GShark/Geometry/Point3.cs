@@ -32,7 +32,7 @@ namespace GShark.Geometry
         /// Initializes a new point by copying coordinates from the components of a vector.
         /// </summary>
         /// <param name="vector">A vector.</param>
-        public Point3(Vector3d vector) : this(vector.X, vector.Y, vector.Z)
+        public Point3(Vector3 vector) : this(vector.X, vector.Y, vector.Z)
         {
         }
 
@@ -124,7 +124,7 @@ namespace GShark.Geometry
         /// <param name="point">A point.</param>
         /// <param name="vector">A vector.</param>
         /// <returns>A new point that results from the addition of point and vector.</returns>
-        public static Point3 operator +(Point3 point, Vector3d vector)
+        public static Point3 operator +(Point3 point, Vector3 vector)
         {
             return new Point3(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
@@ -135,7 +135,7 @@ namespace GShark.Geometry
         /// <param name="vector">A vector.</param>
         /// <param name="point">A point.</param>
         /// <returns>A new point that results from the addition of point and vector.</returns>
-        public static Point3 operator +(Vector3d vector, Point3 point)
+        public static Point3 operator +(Vector3 vector, Point3 point)
         {
             return new Point3(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
@@ -147,7 +147,7 @@ namespace GShark.Geometry
         /// <param name="vector">A vector.</param>
         /// <param name="point">A point.</param>
         /// <returns>A new point that results from the addition of point and vector.</returns>
-        public static Point3 Add(Vector3d vector, Point3 point)
+        public static Point3 Add(Vector3 vector, Point3 point)
         {
             return new Point3(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
@@ -158,7 +158,7 @@ namespace GShark.Geometry
         /// <param name="point">A point.</param>
         /// <param name="vector">A vector.</param>
         /// <returns>A new point that is the difference of point minus vector.</returns>
-        public static Point3 operator -(Point3 point, Vector3d vector)
+        public static Point3 operator -(Point3 point, Vector3 vector)
         {
             return new Point3(point.X - vector.X, point.Y - vector.Y, point.Z - vector.Z);
         }
@@ -169,9 +169,9 @@ namespace GShark.Geometry
         /// <param name="point1">A point.</param>
         /// <param name="point2">Another point.</param>
         /// <returns>A new vector that is the difference of point minus vector.</returns>
-        public static Vector3d operator -(Point3 point1, Point3 point2)
+        public static Vector3 operator -(Point3 point1, Point3 point2)
         {
-            return new Vector3d(point1.X - point2.X, point1.Y - point2.Y, point1.Z - point2.Z);
+            return new Vector3(point1.X - point2.X, point1.Y - point2.Y, point1.Z - point2.Z);
         }
 
         /// <summary>
@@ -221,9 +221,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">A point.</param>
         /// <returns>The resulting vector.</returns>
-        public static implicit operator Vector3d(Point3 point)
+        public static implicit operator Vector3(Point3 point)
         {
-            return new Vector3d(point);
+            return new Vector3(point);
         }
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace GShark.Geometry
                 double dx = other.X - X;
                 double dy = other.Y - Y;
                 double dz = other.Z - Z;
-                d = Vector3d.GetLengthHelper(dx, dy, dz);
+                d = Vector3.GetLengthHelper(dx, dy, dz);
             }
             else
             {
@@ -534,7 +534,7 @@ namespace GShark.Geometry
         public double DistanceTo(Line line)
         {
             Point3 projectedPt = line.ClosestPoint(this);
-            Vector3d ptToProjectedPt = projectedPt - this;
+            Vector3 ptToProjectedPt = projectedPt - this;
             return ptToProjectedPt.Length;
         }
 
@@ -617,7 +617,7 @@ namespace GShark.Geometry
         /// <returns>Whether the point is on the plane.</returns>
         public bool IsOnPlane(Plane plane, double tolerance = GeoSharkMath.MaxTolerance)
         {
-            return Math.Abs(Vector3d.DotProduct(this - plane.Origin, plane.Normal)) < tolerance;
+            return Math.Abs(Vector3.DotProduct(this - plane.Origin, plane.Normal)) < tolerance;
         }
     }
 }
