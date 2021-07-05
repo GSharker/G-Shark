@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
@@ -55,7 +56,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle3D;
-            Point3d[] ptsExpected = new []
+            var ptsExpected = new List<Point3d>
             {
                 new Point3d(74.264416, 36.39316, -1.884313),
                 new Point3d(62.298962, 25.460683, 1.083287),
@@ -72,10 +73,9 @@ namespace GShark.Test.XUnit.Geometry
             List<Point3d> ctrPts = circle.ControlPoints;
 
             // Assert
-            ctrPts.Count.Should().Be(9);
-            for (int i = 0; i < ptsExpected.Length; i++)
+            for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
-                ctrPts[i].EpsilonEquals(ptsExpected[i], GeoSharpMath.MaxTolerance).Should().BeTrue();
+                ctrPts[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GeoSharpMath.MaxTolerance);
             }
         }
 
@@ -111,7 +111,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
-        [InlineData(2.5, new double[] { 0.993199, 0.110331, -0.037176 })]
+        [InlineData(2.5, new double[] { 0.993199, 0.110330, -0.037177 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
@@ -142,8 +142,8 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 77.787891, 3.884768, 6.616098 })]
-        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 69.780279, 40.984093, -3.051743 })]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 77.787894, 3.884764, 6.616100 })]
+        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 69.780281, 40.984098, -3.051729 })]
         public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
         {
             // Arrange

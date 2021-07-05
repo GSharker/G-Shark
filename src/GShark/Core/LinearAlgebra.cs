@@ -68,7 +68,7 @@ namespace GShark.Core
             {
                 Point4d tempPt = new Point4d
                 {
-                    X = pt.X * weight, Y = pt.X * weight, Z = pt.X * weight, W = weight
+                    X = pt.X * weight, Y = pt.Y * weight, Z = pt.Z * weight, W = weight
                 };
                 
                 controlPtsHomogenized.Add(tempPt);
@@ -226,9 +226,9 @@ namespace GShark.Core
         /// </summary>
         /// <param name="transform">Transformation to check.</param>
         /// <returns>The rotation axis used for the transformation.</returns>
-        public static Vector3 GetRotationAxis(Transform transform)
+        public static Vector3d GetRotationAxis(Transform transform)
         {
-            Vector3 axis = Vector3.Unset;
+            Vector3d axis = Vector3d.Unset;
 
             if (Math.Abs(transform[0][1] + transform[1][0]) < GeoSharpMath.MinTolerance || 
                 Math.Abs(transform[0][2] + transform[2][0]) < GeoSharpMath.MinTolerance ||

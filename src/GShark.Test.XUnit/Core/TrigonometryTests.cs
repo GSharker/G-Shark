@@ -57,6 +57,7 @@ namespace GShark.Test.XUnit.Core
             // We are not passing a segment like a line or ray but the part that compose the segment,
             // t values [0 and 1] and start and end point.
             var testPt = new Point3d(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
+            var expectedPt = new Point3d(ptExpected[0], ptExpected[1], ptExpected[2]);
             Point3d pt0 = new Point3d( 5, 5, 0);
             Point3d pt1 = new Point3d( 10, 10, 0);
 
@@ -65,7 +66,7 @@ namespace GShark.Test.XUnit.Core
 
             // Assert
             closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharpMath.MaxTolerance);
-            closestPt.pt.Should().BeEquivalentTo(ptExpected.ToVector());
+            closestPt.pt.EpsilonEquals(expectedPt, GeoSharpMath.Epsilon).Should().BeTrue();
         }
     }
 }
