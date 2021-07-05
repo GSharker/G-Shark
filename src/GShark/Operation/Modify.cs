@@ -29,7 +29,7 @@ namespace GShark.Operation
                 return curve;
 
             int degree = curve.Degree;
-            List<Point3d> controlPoints = curve.ControlPoints;
+            List<Point3> controlPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             // Initialize common variables.
@@ -38,7 +38,7 @@ namespace GShark.Operation
             int r = knotsToInsert.Count - 1;
             int a = knots.Span(degree, knotsToInsert[0]);
             int b = knots.Span(degree, knotsToInsert[r]);
-            Point3d[] controlPointsPost = new Point3d[n + r + 2];
+            Point3[] controlPointsPost = new Point3[n + r + 2];
             double[] knotsPost = new double[m + r + 2];
 
             // New control points.
@@ -103,7 +103,7 @@ namespace GShark.Operation
         public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
-            List<Point3d> controlPoints = curve.ControlPoints;
+            List<Point3> controlPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             // Find all of the unique knot values and their multiplicity.
@@ -134,7 +134,7 @@ namespace GShark.Operation
                 KnotVector knotsRange = (normalize)
                     ? KnotVector.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
                     : knots.GetRange(i, crvKnotLength).ToKnot();
-                List<Point3d> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
+                List<Point3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
                 curves.Add(tempCrv);
@@ -152,7 +152,7 @@ namespace GShark.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            List<Point3d> pts = new List<Point3d>(curve.ControlPoints);
+            List<Point3> pts = new List<Point3>(curve.ControlPoints);
             pts.Reverse();
 
             List<double> weights = LinearAlgebra.GetWeights(curve.HomogenizedPoints);

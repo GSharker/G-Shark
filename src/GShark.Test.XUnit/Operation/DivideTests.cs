@@ -27,12 +27,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            List<Point3d> controlPts = new List<Point3d>
+            List<Point3> controlPts = new List<Point3>
             {
-                new Point3d(2,2,0),
-                new Point3d(4,12,0),
-                new Point3d(7,12,0),
-                new Point3d(15,2,0)
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,0)
             };
             KnotVector knots = new KnotVector(degree, controlPts.Count);
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);

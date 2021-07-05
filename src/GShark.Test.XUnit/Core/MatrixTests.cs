@@ -51,10 +51,10 @@ namespace GShark.Test.XUnit.Core
             }
         };
 
-        public static TheoryData<Matrix, Vector3, Vector3> SolveMatrixEquation => new TheoryData<Matrix, Vector3, Vector3>
+        public static TheoryData<Matrix, Vector, Vector> SolveMatrixEquation => new TheoryData<Matrix, Vector, Vector>
         {
-            {new Matrix {new List<double> {1,2,4}, new List<double> {3,8,14}, new List<double> {2,6,13}}, new Vector3{3,13,4}, new Vector3{3,4,-2}},
-            {new Matrix {new List<double> {3,1,6}, new List<double> {-6,0,-16}, new List<double> {0,8,-17}}, new Vector3{0,4,17}, new Vector3{2,0,-1}}
+            {new Matrix {new List<double> {1,2,4}, new List<double> {3,8,14}, new List<double> {2,6,13}}, new Vector{3,13,4}, new Vector{3,4,-2}},
+            {new Matrix {new List<double> {3,1,6}, new List<double> {-6,0,-16}, new List<double> {0,8,-17}}, new Vector{0,4,17}, new Vector{2,0,-1}}
         };
 
         private readonly ITestOutputHelper _testOutput;
@@ -247,11 +247,11 @@ namespace GShark.Test.XUnit.Core
 
         [Theory]
         [MemberData(nameof(SolveMatrixEquation))]
-        public void Compute_The_Equation_Between_A_LuMatrix_And_A_Vector(Matrix matrix, Vector3 vector, Vector3 result)
+        public void Compute_The_Equation_Between_A_LuMatrix_And_A_Vector(Matrix matrix, Vector vector, Vector result)
         {
             // Act
             Matrix matrixLu = Matrix.Decompose(matrix, out int[] permutation);
-            Vector3 solution = Matrix.Solve(matrixLu, permutation, vector);
+            Vector solution = Matrix.Solve(matrixLu, permutation, vector);
 
             // Assert
             solution.Equals(result).Should().BeTrue();
@@ -262,7 +262,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             Matrix matrix = new Matrix { new List<double> { 2,4,6 }, new List<double> { 2,0,2 }, new List<double> { 6,8,14 } };
-            Vector3 vector = new Vector3 {3, 13, 4};
+            Vector vector = new Vector {3, 13, 4};
             int[] pivot = new[] {1, 1, 1};
 
             // Act
@@ -277,7 +277,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             Matrix matrix = new Matrix {new List<double> {1, 2, 4}, new List<double> {3, 8, 14}, new List<double> {2, 6, 13}};
-            Vector3 vector = new Vector3 { 3, 13};
+            Vector vector = new Vector { 3, 13};
             int[] pivot = new[] { 1, 1, 1 };
 
             // Act

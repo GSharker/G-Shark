@@ -24,9 +24,9 @@ namespace GShark.Test.XUnit.Geometry
             _exampleArc2D = new Arc(Plane.PlaneXY, 15, angle);
 
             // Initializes an arc by 3 points.
-            Point3d pt1 = new Point3d(74.264416, 36.39316, -1.884313);
-            Point3d pt2 = new Point3d(97.679126, 13.940616, 3.812853);
-            Point3d pt3 = new Point3d(100.92443, 30.599893, -0.585116);
+            Point3 pt1 = new Point3(74.264416, 36.39316, -1.884313);
+            Point3 pt2 = new Point3(97.679126, 13.940616, 3.812853);
+            Point3 pt3 = new Point3(100.92443, 30.599893, -0.585116);
             _exampleArc3D = new Arc(pt1, pt2, pt3);
             #endregion
         }
@@ -61,9 +61,9 @@ namespace GShark.Test.XUnit.Geometry
         public void Initializes_An_Arc_By_Two_Points_And_A_Direction()
         {
             // Arrange
-            Point3d pt1 = new Point3d(5, 5, 5);
-            Point3d pt2 = new Point3d(10, 15, 10);
-            Point3d dir = new Point3d(3, 3, 0);
+            Point3 pt1 = new Point3(5, 5, 5);
+            Point3 pt2 = new Point3(10, 15, 10);
+            Point3 dir = new Point3(3, 3, 0);
 
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
@@ -87,11 +87,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox3D = arc3D.BoundingBox;
 
             // Assert
-            bBox2D.Min.EpsilonEquals(new Vector3d(11.490667, 0, 0), 6).Should().BeTrue();
-            bBox2D.Max.EpsilonEquals(new Vector3d(15, 9.641814, 0), 6).Should().BeTrue();
+            bBox2D.Min.EpsilonEquals(new Vector3(11.490667, 0, 0), 6).Should().BeTrue();
+            bBox2D.Max.EpsilonEquals(new Vector3(15, 9.641814, 0), 6).Should().BeTrue();
                        
-            bBox3D.Min.EpsilonEquals(new Vector3d(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
-            bBox3D.Max.EpsilonEquals(new Vector3d(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
+            bBox3D.Min.EpsilonEquals(new Vector3(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
+            bBox3D.Max.EpsilonEquals(new Vector3(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
         }
 
         [Theory]
@@ -100,7 +100,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
         {
             // Arrange
-            var expectedPt = new Point3d(pts[0], pts[1], pts[2]);
+            var expectedPt = new Point3(pts[0], pts[1], pts[2]);
             Arc arc = _exampleArc3D;
 
             // Act
@@ -116,12 +116,12 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
         {
             // Arrange
-            Point3d testPt = new Point3d(ptToTest[0], ptToTest[1], ptToTest[2]);
-            Point3d expectedPt = new Point3d(result[0], result[1], result[2]);
+            Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
+            Point3 expectedPt = new Point3(result[0], result[1], result[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Point3d pt = arc.ClosestPoint(testPt);
+            Point3 pt = arc.ClosestPoint(testPt);
 
             // Assert
             pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
@@ -132,8 +132,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Arc arc = _exampleArc3D;
-            Point3d expectedStartPt = new Point3d(16.47719, 0, 0);
-            Point3d expectedEndPt = new Point3d(-6.160353, -15.282272, 0);
+            Point3 expectedStartPt = new Point3(16.47719, 0, 0);
+            Point3 expectedEndPt = new Point3(-6.160353, -15.282272, 0);
             Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
 
             // Act
@@ -150,11 +150,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Vector3d expectedTangent = new Vector3d(pts[0], pts[1], pts[2]);
+            Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
             Arc arc = _exampleArc3D;
 
             // Act
-            Vector3d tangent = arc.TangentAt(t);
+            Vector3 tangent = arc.TangentAt(t);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, 1e-6).Should().BeTrue();
@@ -165,12 +165,12 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
-            Point3d[] ptChecks = new[] {
-                new Point3d(0, 20, 0),
-                new Point3d(0, 20, 9.661101312331581),
-                new Point3d(0, 12.432199365413288, 15.666538192549668),
-                new Point3d(0, 4.864398730826554, 21.671975072767786),
-                new Point3d(0, -4.544041893861742, 19.476952617563903)
+            Point3[] ptChecks = new[] {
+                new Point3(0, 20, 0),
+                new Point3(0, 20, 9.661101312331581),
+                new Point3(0, 12.432199365413288, 15.666538192549668),
+                new Point3(0, 4.864398730826554, 21.671975072767786),
+                new Point3(0, -4.544041893861742, 19.476952617563903)
             };
 
             // Act
@@ -202,14 +202,14 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             double[] weightChecks = { 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0, 0.7507927793532885, 1.0 };
-            Point3d[] ptChecks = {
-                new Point3d(74.264416, 36.39316, -1.8843129999999997),
-                new Point3d(63.73736394529969, 26.774907230101093, 0.7265431054950776),
-                new Point3d(72.2808868605866, 15.429871621311115, 3.6324963299804987),
-                new Point3d(80.8244097758736, 4.084836012521206, 6.538449554465901),
-                new Point3d(93.52800280921122, 10.812836698886068, 4.6679117389561),
-                new Point3d(106.23159584254901, 17.54083738525103, 2.797373923446271),
-                new Point3d(100.92443, 30.599893, -0.5851159999999997)
+            Point3[] ptChecks = {
+                new Point3(74.264416, 36.39316, -1.8843129999999997),
+                new Point3(63.73736394529969, 26.774907230101093, 0.7265431054950776),
+                new Point3(72.2808868605866, 15.429871621311115, 3.6324963299804987),
+                new Point3(80.8244097758736, 4.084836012521206, 6.538449554465901),
+                new Point3(93.52800280921122, 10.812836698886068, 4.6679117389561),
+                new Point3(106.23159584254901, 17.54083738525103, 2.797373923446271),
+                new Point3(100.92443, 30.599893, -0.5851159999999997)
             };
 
             // Act
@@ -244,12 +244,12 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Arc_Based_On_A_Start_And_An_End_Point_And_A_Direction()
         {
             // Arrange
-            Point3d startPt = new Point3d(5, 5, 5);
-            Point3d endPt = new Point3d(10, 15, 10);
-            Vector3d dir = new Vector3d(3, 3, 0);
+            Point3 startPt = new Point3(5, 5, 5);
+            Point3 endPt = new Point3(10, 15, 10);
+            Vector3 dir = new Vector3(3, 3, 0);
             double radiusExpected = 12.247449;
             double angleExpected = GeoSharkMath.ToRadians(60);
-            Point3d centerExpected = new Point3d(0, 10, 15);
+            Point3 centerExpected = new Point3(0, 10, 15);
 
             // Act
             Arc arc = Arc.ByStartEndDirection(startPt, endPt, dir);

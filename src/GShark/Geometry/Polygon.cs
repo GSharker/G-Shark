@@ -11,7 +11,7 @@ namespace GShark.Geometry
     /// </summary>
     public class Polygon : Polyline
     {
-        public Polygon(IList<Point3d> vertices) : base(vertices)
+        public Polygon(IList<Point3> vertices) : base(vertices)
         {
             if (vertices.Count < 3)
             {
@@ -33,20 +33,20 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the centroid averaging the vertices. 
         /// </summary>
-        public Point3d CentroidByVertices => Evaluation.CentroidByVertices(this);
+        public Point3 CentroidByVertices => Evaluation.CentroidByVertices(this);
 
         /// <summary>
         /// Gets the centroid of mass of the polygon.<br/>
         /// https://stackoverflow.com/questions/9815699/how-to-calculate-centroid <br/>
         /// http://csharphelper.com/blog/2014/07/find-the-centroid-of-a-polygon-in-c/
         /// </summary>
-        public Point3d CentroidByArea
+        public Point3 CentroidByArea
         {
             get
             {
                 bool isOnPlaneXY = true;
                 Transform transformBack = new Transform();
-                List<Point3d> copiedPts = new List<Point3d>(this);
+                List<Point3> copiedPts = new List<Point3>(this);
                 if (Math.Abs(this[0][2]) > GeoSharkMath.MaxTolerance)
                 {
                     isOnPlaneXY = false;
@@ -78,7 +78,7 @@ namespace GShark.Geometry
                 valueX /= (6.0 * signedArea);
                 valueY /= (6.0 * signedArea);
 
-                Point3d centroid = new Point3d(valueX, valueY, 0.0);
+                Point3 centroid = new Point3(valueX, valueY, 0.0);
 
                 if (!isOnPlaneXY)
                 {
@@ -102,12 +102,12 @@ namespace GShark.Geometry
             get
             {
                 double area = 0.0;
-                Vector3d normal = Vector3d.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
+                Vector3 normal = Vector3.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
 
                 for (int i = 0; i < this.Count - 1; i++)
                 {
-                    Vector3d product = Vector3d.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
-                    area += Vector3d.DotProduct(product, normal);
+                    Vector3 product = Vector3.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
+                    area += Vector3.DotProduct(product, normal);
                 }
 
                 area *= 0.5;
@@ -122,7 +122,7 @@ namespace GShark.Geometry
         /// <returns>A polygon transformed.</returns>
         public new Polygon Transform(Transform transform)
         {
-            List<Point3d> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
+            List<Point3> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
 
             return new Polygon(transformedPts);
         }

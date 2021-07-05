@@ -40,9 +40,9 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < insertion; i++)
                 newKnots.Add(val);
 
-            List<Point3d> controlPts = new List<Point3d>();
+            List<Point3> controlPts = new List<Point3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Point3d( i, 0.0, 0.0));
+                controlPts.Add(new Point3( i, 0.0, 0.0));
 
             ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
@@ -53,8 +53,8 @@ namespace GShark.Test.XUnit.Operation
             (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
             (controlPts.Count + insertion).Should().Be(curveAfterRefine.ControlPoints.Count);
 
-            Point3d p0 = curve.PointAt(2.5);
-            Point3d p1 = curveAfterRefine.PointAt(2.5);
+            Point3 p0 = curve.PointAt(2.5);
+            Point3 p1 = curveAfterRefine.PointAt(2.5);
 
             p0[0].Should().BeApproximately(p1[0], GeoSharkMath.MaxTolerance);
             p0[1].Should().BeApproximately(p1[1], GeoSharkMath.MaxTolerance);
@@ -68,9 +68,9 @@ namespace GShark.Test.XUnit.Operation
             int degree = 3;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
-            List<Point3d> controlPts = new List<Point3d>();
+            List<Point3> controlPts = new List<Point3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Point3d( i, 0.0, 0.0));
+                controlPts.Add(new Point3( i, 0.0, 0.0));
 
             ICurve curve = new NurbsCurve(degree, knots, controlPts);
 
@@ -82,8 +82,8 @@ namespace GShark.Test.XUnit.Operation
             foreach (ICurve bezierCurve in curvesAfterDecompose)
             {
                 double t = bezierCurve.Knots[0];
-                Point3d pt0 = bezierCurve.PointAt(t);
-                Point3d pt1 = curve.PointAt(t);
+                Point3 pt0 = bezierCurve.PointAt(t);
+                Point3 pt1 = curve.PointAt(t);
 
                 double pt0_pt1 = (pt0 - pt1).Length;
 
@@ -96,13 +96,13 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 2;
-            List<Point3d> controlPts = new List<Point3d>
+            List<Point3> controlPts = new List<Point3>
             {
-                new Point3d(0, 5, 5),
-                new Point3d(0, 0, 0),
-                new Point3d(4, 0, 0),
-                new Point3d(5, 5, 5),
-                new Point3d(0, 5, 0),
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(4, 0, 0),
+                new Point3(5, 5, 5),
+                new Point3(0, 5, 0),
             };
             NurbsCurve curve = new NurbsCurve(controlPts, degree);
 
@@ -114,8 +114,8 @@ namespace GShark.Test.XUnit.Operation
             foreach (ICurve bezierCurve in curvesAfterDecompose)
             {
                 double t = bezierCurve.Knots[0];
-                Point3d pt0 = bezierCurve.PointAt(t);
-                Point3d pt1 = curve.PointAt(t);
+                Point3 pt0 = bezierCurve.PointAt(t);
+                Point3 pt1 = curve.PointAt(t);
 
                 double pt0_pt1 = (pt0 - pt1).Length;
 
@@ -133,8 +133,8 @@ namespace GShark.Test.XUnit.Operation
             ICurve crvRev1 = Modify.ReverseCurve(curve);
             ICurve crvRev2 = Modify.ReverseCurve(crvRev1);
 
-            Point3d pt0 = curve.PointAt(0.0);
-            Point3d pt1 = crvRev1.PointAt(1.0);
+            Point3 pt0 = curve.PointAt(0.0);
+            Point3 pt1 = crvRev1.PointAt(1.0);
 
             // Assert
             pt0.Should().BeEquivalentTo(pt1);

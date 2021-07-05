@@ -27,19 +27,19 @@ namespace GShark.Test.XUnit.Operation
             KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weights1 = new List<double> { 1, 1, 1 };
             List<double> weights2 = new List<double> { 1, 1, 2 };
-            List<Point3d> controlPts = new List<Point3d>
+            List<Point3> controlPts = new List<Point3>
             {
-                new Point3d(1, 0, 0),
-                new Point3d(1, 1, 0),
-                new Point3d(0, 2, 0)
+                new Point3(1, 0, 0),
+                new Point3(1, 1, 0),
+                new Point3(0, 2, 0)
             };
 
             NurbsCurve curve1 = new NurbsCurve(degree, knots, controlPts, weights1);
             NurbsCurve curve2 = new NurbsCurve(degree, knots, controlPts, weights2);
 
             // Act
-            (List<double> tvalues, List<Point3d> pts) curveLength1 = Tessellation.CurveRegularSample(curve1, 10);
-            (List<double> tvalues, List<Point3d> pts) curveLength2 = Tessellation.CurveRegularSample(curve2, 10);
+            (List<double> tvalues, List<Point3> pts) curveLength1 = Tessellation.CurveRegularSample(curve1, 10);
+            (List<double> tvalues, List<Point3> pts) curveLength2 = Tessellation.CurveRegularSample(curve2, 10);
 
             // Assert
             for (int i = 0; i < curveLength1.pts.Count; i++)
@@ -59,8 +59,8 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
 
             // Act
-            (List<double> tValues, List<Point3d> pts) result0 = Tessellation.CurveAdaptiveSample(curve, 1.0);
-            (List<double> tValues, List<Point3d> pts) result1 = Tessellation.CurveAdaptiveSample(curve, 0.01);
+            (List<double> tValues, List<Point3> pts) result0 = Tessellation.CurveAdaptiveSample(curve, 1.0);
+            (List<double> tValues, List<Point3> pts) result1 = Tessellation.CurveAdaptiveSample(curve, 0.01);
 
             // Arrange
             result0.Should().NotBeNull();
@@ -82,11 +82,11 @@ namespace GShark.Test.XUnit.Operation
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3d> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPoints;
+            List<Point3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPoints;
             NurbsCurve curve = new NurbsCurve(controlPts, 1);
 
             // Act
-            (List<double> tValues, List<Point3d> pts) = Tessellation.CurveAdaptiveSample(curve, 0.1);
+            (List<double> tValues, List<Point3> pts) = Tessellation.CurveAdaptiveSample(curve, 0.1);
 
             // Assert
             tValues.Count.Should().Be(pts.Count).And.Be(6);
@@ -97,12 +97,12 @@ namespace GShark.Test.XUnit.Operation
         public void Return_Adaptive_Sample_Subdivision_Of_A_Line()
         {
             // Arrange
-            Point3d p1 = new Point3d(0, 0, 0);
-            Point3d p2 = new Point3d(10, 0, 0);
+            Point3 p1 = new Point3(0, 0, 0);
+            Point3 p2 = new Point3(10, 0, 0);
             Line ln = new Line(p1, p2);
 
             // Act
-            (List<double> tValues, List<Point3d> pts) result = Tessellation.CurveAdaptiveSample(ln);
+            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(ln);
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(2);
@@ -114,16 +114,16 @@ namespace GShark.Test.XUnit.Operation
         public void Return_Adaptive_Sample_Subdivision_Of_A_Polyline()
         {
             // Arrange
-            var p1 = new Point3d( 0, 0, 0);
-            var p2 = new Point3d( 10, 10, 0);
-            var p3 = new Point3d( 14, 20, 0);
-            var p4 = new Point3d( 10, 32, 4);
-            var p5 = new Point3d( 12, 16, 22);
-            List<Point3d> pts = new List<Point3d> { p1, p2, p3, p4, p5 };
+            var p1 = new Point3( 0, 0, 0);
+            var p2 = new Point3( 10, 10, 0);
+            var p3 = new Point3( 14, 20, 0);
+            var p4 = new Point3( 10, 32, 4);
+            var p5 = new Point3( 12, 16, 22);
+            List<Point3> pts = new List<Point3> { p1, p2, p3, p4, p5 };
             Polyline poly = new Polyline(pts);
 
             // Act
-            (List<double> tValues, List<Point3d> pts) result = Tessellation.CurveAdaptiveSample(poly);
+            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(poly);
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);
@@ -135,7 +135,7 @@ namespace GShark.Test.XUnit.Operation
         public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
         {
             // Act
-            (List<double> tValues, List<Point3d> pts) = Tessellation.CurveAdaptiveSample(NurbsCurveCollection.NurbsCurvePlanarExample(), 0.0);
+            (List<double> tValues, List<Point3> pts) = Tessellation.CurveAdaptiveSample(NurbsCurveCollection.NurbsCurvePlanarExample(), 0.0);
 
             // Assert
             tValues.Should().NotBeEmpty();

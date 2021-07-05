@@ -19,7 +19,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxCollections), MemberType = typeof(BoundingBoxCollection))]
-        public void It_Creates_A_BoundingBox_From_Points(Point3d[] pts, Point3d min, Point3d max)
+        public void It_Creates_A_BoundingBox_From_Points(Point3[] pts, Point3 min, Point3 max)
         {
             // Act
             var bBox = new BoundingBox(pts);
@@ -36,8 +36,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Plane orientedPlane = Plane.PlaneXY.Rotate(GeoSharkMath.ToRadians(30));
-            var expectedMin = new Point3d( 45.662928, 59.230957, -4.22451);
-            var expectedMax = new Point3d( 77.622297, 78.520011, 3.812853);
+            var expectedMin = new Point3( 45.662928, 59.230957, -4.22451);
+            var expectedMax = new Point3( 77.622297, 78.520011, 3.812853);
 
             // Act
             var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox3D(), orientedPlane);
@@ -53,7 +53,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_True_If_A_Point_Is_Contained_Into_TheBoundingBox()
         {
             // Arrange
-            var conteinedPt = new Point3d(2.5, 4.5, 0.0);
+            var conteinedPt = new Point3(2.5, 4.5, 0.0);
             var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
 
             // Act
@@ -67,7 +67,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_False_IfAPoint_Is_Outside_TheBoundingBox()
         {
             // Arrange
-            var externalPt = new Point3d(12.4, 5.0, 0.0);
+            var externalPt = new Point3(12.4, 5.0, 0.0);
             var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
 
             // Act
@@ -79,7 +79,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersections), MemberType = typeof(BoundingBoxCollection))]
-        public void It_Returns_True_If_TwoBoundingBoxes_Intersect(Point3d[] ptsBBox1, Point3d[] ptsBBox2, bool result)
+        public void It_Returns_True_If_TwoBoundingBoxes_Intersect(Point3[] ptsBBox1, Point3[] ptsBBox2, bool result)
         {
             // Arrange
             var bBox1 = new BoundingBox(ptsBBox1);
@@ -96,10 +96,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_BooleanUnion_Between_Two_BoundingBoxes()
         {
             // Arrange
-            var pt1 = new Point3d(5d, 5d, 0);
-            var pt2 = new Point3d(-15d, -13d, -5);
-            var pts = new List<Point3d> {pt1, pt2};
-            var pMax = new Point3d(10, 10, 0);
+            var pt1 = new Point3(5d, 5d, 0);
+            var pt2 = new Point3(-15d, -13d, -5);
+            var pts = new List<Point3> {pt1, pt2};
+            var pMax = new Point3(10, 10, 0);
             var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts);
 
@@ -116,7 +116,7 @@ namespace GShark.Test.XUnit.Geometry
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxIntersectionsUnset),
             MemberType = typeof(BoundingBoxCollection))]
         public void Intersect_Returns_UnsetBBox_If_OneOfTheTwoBBoxes_IsNotInitialized_OrNotIntersection(
-            Point3d[] bBoxPts, BoundingBox bBox2)
+            Point3[] bBoxPts, BoundingBox bBox2)
         {
             // Arrange
             var bBox1 = new BoundingBox(bBoxPts);
@@ -126,17 +126,17 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             bBoxIntersect.IsValid.Should().BeFalse();
-            bBoxIntersect.Max.Equals(Vector3d.Unset);
-            bBoxIntersect.Min.Equals(Vector3d.Unset);
+            bBoxIntersect.Max.Equals(Vector3.Unset);
+            bBoxIntersect.Min.Equals(Vector3.Unset);
         }
 
         [Fact]
         public void Intersect_Returns_BBox_As_Intersection_Of_Two_BBoxes()
         {
             // Arrange
-            var pt1 = new Point3d(5d, 5d, 0);
-            var pt2 = new Point3d(15d, 15d, 0);
-            var pts2 = new List<Point3d> {pt1, pt2};
+            var pt1 = new Point3(5d, 5d, 0);
+            var pt2 = new Point3(15d, 15d, 0);
+            var pts2 = new List<Point3> {pt1, pt2};
             var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts2);
 
@@ -151,7 +151,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [MemberData(nameof(BoundingBoxCollection.BoundingBoxAxisLength), MemberType = typeof(BoundingBoxCollection))]
-        public void It_Returns_ACollection_Of_GetAxisLength(Point3d[] pts, int index, double length)
+        public void It_Returns_ACollection_Of_GetAxisLength(Point3[] pts, int index, double length)
         {
             // Arrange
             var bBox = new BoundingBox(pts);
@@ -194,7 +194,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_BoundingBox_In_Ascending_Way()
         {
             // Arrange
-            var bBox = new BoundingBox(new Point3d(15,15,0), new Point3d(5,0,0));
+            var bBox = new BoundingBox(new Point3(15,15,0), new Point3(5,0,0));
 
             // Act
             var bBoxMadeValid = bBox.MakeItValid();

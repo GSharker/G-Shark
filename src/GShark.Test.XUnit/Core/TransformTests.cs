@@ -61,7 +61,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Translated_Transformed_Matrix()
         {
             // Arrange
-            var translation = new Vector3d(10, 10, 0);
+            var translation = new Vector3(10, 10, 0);
 
             // Act
             Transform transform = Transform.Translation(translation);
@@ -76,7 +76,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Rotated_Transformed_Matrix()
         {
             // Arrange
-            var center = new Point3d(5,5,0);
+            var center = new Point3(5,5,0);
             double angleInRadians = GeoSharkMath.ToRadians(30);
 
             // Act
@@ -89,15 +89,15 @@ namespace GShark.Test.XUnit.Core
 
             // Assert
             GeoSharkMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharkMath.Epsilon);
-            axis.Should().BeEquivalentTo(Vector3d.ZAxis);
+            axis.Should().BeEquivalentTo(Vector3.ZAxis);
         }
 
         [Fact]
         public void It_Returns_A_Scaled_Transformation_Matrix()
         {
             // Act
-            Transform scale1 = Transform.Scale(new Point3d(0, 0, 0), 0.5);
-            Transform scale2 = Transform.Scale(new Point3d( 10, 10, 0), 0.5);
+            Transform scale1 = Transform.Scale(new Point3(0, 0, 0), 0.5);
+            Transform scale2 = Transform.Scale(new Point3( 10, 10, 0), 0.5);
 
             // Assert
             scale1[0][0].Should().Be(0.5); scale2[0][0].Should().Be(0.5);
@@ -113,8 +113,8 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Mirrored_Transformation_Matrix()
         {
             // Arrange
-            var pt = new Point3d(10,10,0);
-            Plane plane = new Plane(pt, Vector3d.XAxis);
+            var pt = new Point3(10,10,0);
+            Plane plane = new Plane(pt, Vector3.XAxis);
 
             // Act
             Transform transform = Transform.Reflection(plane);
@@ -131,8 +131,8 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Transformation_Projection_By_A_Plane()
         {
             // Arrange
-            var origin = new Point3d(5, 0, 0);
-            var dir = new Point3d(-10, -15, 0);
+            var origin = new Point3(5, 0, 0);
+            var dir = new Point3(-10, -15, 0);
             Plane plane = new Plane(origin, dir);
 
             // Act
@@ -152,8 +152,8 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
         {
             // Arrange
-            var origin = new Point3d( 5, 0, 0);
-            var dir = new Vector3d(-10, -15, 0);
+            var origin = new Point3( 5, 0, 0);
+            var dir = new Vector3(-10, -15, 0);
             Plane plane = new Plane(origin, dir);
 
             // Act

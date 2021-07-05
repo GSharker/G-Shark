@@ -21,7 +21,7 @@ namespace GShark.Operation
         public static Line Line(Line ln, double distance, Plane pln)
         {
             if (distance == 0.0) return ln;
-            Vector3d vecOffset = Vector3d.CrossProduct(ln.Direction, pln.Normal).Amplify(distance);
+            Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.Normal).Amplify(distance);
             return new Line(ln.Start + vecOffset, ln.End + vecOffset);
         }
 
@@ -48,13 +48,13 @@ namespace GShark.Operation
         {
             if (distance == 0.0) return crv;
 
-            (List<double> tValues, List<Point3d> pts) subdivision = Tessellation.CurveAdaptiveSample(crv);
+            (List<double> tValues, List<Point3> pts) subdivision = Tessellation.CurveAdaptiveSample(crv);
 
-            List<Point3d> offsetPts = new List<Point3d>();
+            List<Point3> offsetPts = new List<Point3>();
             for (int i = 0; i < subdivision.pts.Count; i++)
             {
-                Vector3d tangent = Evaluation.RationalCurveTangent(crv, subdivision.tValues[i]);
-                Vector3d vecOffset = Vector3d.CrossProduct(tangent, pln.Normal).Amplify(distance);
+                Vector3 tangent = Evaluation.RationalCurveTangent(crv, subdivision.tValues[i]);
+                Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.Normal).Amplify(distance);
                 offsetPts.Add(subdivision.pts[i] + vecOffset);
             }
 
@@ -74,7 +74,7 @@ namespace GShark.Operation
 
             int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
 
-            Point3d[] offsetPts = new Point3d[poly.Count];
+            Point3[] offsetPts = new Point3[poly.Count];
             Line[] segments = poly.Segments;
             Line[] offsetSegments = new Line[segments.Length + 1];
 
@@ -86,7 +86,7 @@ namespace GShark.Operation
                     goto Intersection;
                 }
 
-                Vector3d vecOffset = Vector3d.CrossProduct(segments[k].Direction, pln.Normal).Amplify(distance);
+                Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.Normal).Amplify(distance);
                 Transform xForm = Transform.Translation(vecOffset);
                 offsetSegments[k] = segments[k].Transform(xForm);
 
@@ -101,7 +101,7 @@ namespace GShark.Operation
                 }
 
                 Intersection:
-                bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3d pt, out _, out _, out _);
+                bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
                 if (!ccx) continue;
                 offsetPts[k] = pt;
 

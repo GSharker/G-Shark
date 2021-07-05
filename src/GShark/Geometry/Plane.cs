@@ -17,11 +17,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="origin">The point describing the origin of the plane.</param>
         /// <param name="direction">The vector representing the normal of the plane.</param>
-        public Plane(Point3d origin, Vector3d direction)
+        public Plane(Point3 origin, Vector3 direction)
         {
             ZAxis = direction.Unitize();
-            XAxis = Vector3d.XAxis.PerpendicularTo(ZAxis).Unitize();
-            YAxis = Vector3d.CrossProduct(ZAxis, XAxis).Unitize();
+            XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
+            YAxis = Vector3.CrossProduct(ZAxis, XAxis).Unitize();
             Origin = origin;
         }
 
@@ -31,20 +31,20 @@ namespace GShark.Geometry
         /// <param name="pt1">Firs point representing the origin.</param>
         /// <param name="pt2">Second point representing the x direction.</param>
         /// <param name="pt3">Third point representing the y direction.</param>
-        public Plane(Point3d pt1, Point3d pt2, Point3d pt3)
+        public Plane(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             if(LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
             {
                 throw new Exception("Plane cannot be created, the tree points must not be collinear");
             }
 
-            Vector3d dir1 = pt2 - pt1;
-            Vector3d dir2 = pt3 - pt1;
-            Vector3d normal = Vector3d.CrossProduct(dir1, dir2);
+            Vector3 dir1 = pt2 - pt1;
+            Vector3 dir2 = pt3 - pt1;
+            Vector3 normal = Vector3.CrossProduct(dir1, dir2);
 
             Origin = pt1;
             XAxis = dir1.Unitize();
-            YAxis = Vector3d.CrossProduct(normal, dir1).Unitize();
+            YAxis = Vector3.CrossProduct(normal, dir1).Unitize();
             ZAxis = normal.Unitize();
         }
 
@@ -55,7 +55,7 @@ namespace GShark.Geometry
         /// <param name="xDirection">X direction.</param>
         /// <param name="yDirection">Y direction.</param>
         /// <param name="zDirection">Z direction.</param>
-        public Plane(Point3d origin, Vector3d xDirection, Vector3d yDirection, Vector3d zDirection)
+        public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
         {
             Origin = origin;
             XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
@@ -66,42 +66,42 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXY => new Plane(new Vector3d(0.0, 0.0, 0.0), Vector3d.ZAxis);
+        public static Plane PlaneXY => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.ZAxis);
 
         /// <summary>
         /// Gets a YZ plane.
         /// </summary>
-        public static Plane PlaneYZ => new Plane(new Vector3d(0.0, 0.0, 0.0), Vector3d.XAxis);
+        public static Plane PlaneYZ => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.XAxis);
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXZ => new Plane(new Vector3d(0.0, 0.0, 0.0), Vector3d.YAxis);
+        public static Plane PlaneXZ => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.YAxis);
 
         /// <summary>
         /// Gets the normal of the plan.
         /// </summary>
-        public Vector3d Normal => ZAxis;
+        public Vector3 Normal => ZAxis;
 
         /// <summary>
         /// Gets the origin of the plane.
         /// </summary>
-        public Point3d Origin { get; }
+        public Point3 Origin { get; }
 
         /// <summary>
         /// Gets the XAxis of the plane.
         /// </summary>
-        public Vector3d XAxis { get; }
+        public Vector3 XAxis { get; }
 
         /// <summary>
         /// Gets the YAxis of the plane.
         /// </summary>
-        public Vector3d YAxis { get; }
+        public Vector3 YAxis { get; }
 
         /// <summary>
         /// Gets the ZAxis of the plane.
         /// </summary>
-        public Vector3d ZAxis { get; }
+        public Vector3 ZAxis { get; }
 
         /// <summary>
         /// Finds the closest point on a plane.
@@ -110,13 +110,13 @@ namespace GShark.Geometry
         /// <param name="pt">The point to get close to plane.</param>
         /// <param name="length">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
         /// <returns>The point on the plane that is closest to the sample point.</returns>
-        public Point3d ClosestPoint(Vector3d pt, out double length)
+        public Point3 ClosestPoint(Vector3 pt, out double length)
         {
-            Vector3d ptToOrigin = Origin - pt;
+            Vector3 ptToOrigin = Origin - pt;
 
             // signed distance.
-            length = Vector3d.DotProduct(ptToOrigin, Normal);
-            Point3d projection = pt + Normal * length;
+            length = Vector3.DotProduct(ptToOrigin, Normal);
+            Point3 projection = pt + Normal * length;
 
             return projection;
         }
@@ -126,9 +126,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="direction">The guide vector.</param>
         /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
-        public Plane Align(Vector3d direction)
+        public Plane Align(Vector3 direction)
         {
-            Point3d tempPt = Origin + direction;
+            Point3 tempPt = Origin + direction;
 
             (double u, double v) = ClosestParameters(tempPt);
             double angle = -(Math.Atan2(u, v)) + Math.PI / 2.0;
@@ -141,11 +141,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">Test point, the point to get close to.</param>
         /// <returns>The u parameter is along X-direction and v parameter is along the Y-direction.</returns>
-        public (double u, double v) ClosestParameters(Point3d pt)
+        public (double u, double v) ClosestParameters(Point3 pt)
         {
-            Vector3d v1 = pt - Origin;
-            double u = Vector3d.DotProduct(v1, XAxis);
-            double v = Vector3d.DotProduct(v1, YAxis);
+            Vector3 v1 = pt - Origin;
+            double u = Vector3.DotProduct(v1, XAxis);
+            double v = Vector3.DotProduct(v1, YAxis);
             return (u, v);
         }
 
@@ -155,7 +155,7 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation parameter.</param>
         /// <param name="v">Evaluation parameter.</param>
         /// <returns>The evaluated point.</returns>
-        public Point3d PointAt(double u, double v)
+        public Point3 PointAt(double u, double v)
         {
             return Origin + XAxis * u + YAxis * v;
         }
@@ -166,7 +166,7 @@ namespace GShark.Geometry
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-            Vector3d zDir = Normal.Reverse();
+            Vector3 zDir = Normal.Reverse();
             return  new Plane(Origin, YAxis, XAxis, zDir);
         }
 
@@ -175,7 +175,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="origin">The new origin point of a plane.</param>
         /// <returns>The plane with the new origin.</returns>
-        public Plane SetOrigin(Point3d origin)
+        public Plane SetOrigin(Point3 origin)
         {
             return new Plane(origin, XAxis, YAxis, ZAxis);
         }
@@ -187,22 +187,22 @@ namespace GShark.Geometry
         /// <param name="pts">Points to fit.</param>
         /// <param name="deviation">Maximum deviation between the points and the plane.</param>
         /// <returns>The defined plane generated.</returns>
-        public static Plane FitPlane(IList<Point3d> pts, out double deviation)
+        public static Plane FitPlane(IList<Point3> pts, out double deviation)
         {
             if (pts.Count < 3)
             {
                 throw new Exception("The collection must have minimum three points.");
             }
 
-            Point3d centroid = Evaluation.CentroidByVertices(pts);
-            Vector3d normal = Vector3d.Unset;
+            Point3 centroid = Evaluation.CentroidByVertices(pts);
+            Vector3 normal = Vector3.Unset;
 
             double xx = 0.0; double xy = 0.0; double xz = 0.0;
             double yy = 0.0; double yz = 0.0; double zz = 0.0;
 
             foreach (var pt in pts)
             {
-                Vector3d tempDir = pt - centroid;
+                Vector3 tempDir = pt - centroid;
 
                 xx += tempDir[0] * tempDir[0];
                 xy += tempDir[0] * tempDir[1];
@@ -262,8 +262,8 @@ namespace GShark.Geometry
         /// <returns>The plan rotated.</returns>
         public Plane Rotate(double angle)
         {
-            Vector3d xRotate = XAxis.Rotate(ZAxis, angle);
-            Vector3d yRotate = Vector3d.CrossProduct(ZAxis, xRotate);
+            Vector3 xRotate = XAxis.Rotate(ZAxis, angle);
+            Vector3 yRotate = Vector3.CrossProduct(ZAxis, xRotate);
 
             return new Plane(Origin, xRotate, yRotate, ZAxis);
         }
@@ -276,11 +276,11 @@ namespace GShark.Geometry
         public Plane Transform(Transform transformation)
         {
             //ToDo Review https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_plane.cpp#L375
-            Point3d tranformedOrigin = Origin.Transform(transformation);
+            Point3 tranformedOrigin = Origin.Transform(transformation);
 
-            var xDirPt = ((Point3d) XAxis).Transform(transformation);
-            var yDirPt = ((Point3d) YAxis).Transform(transformation);
-            var zDirPt = ((Point3d) ZAxis).Transform(transformation);
+            var xDirPt = ((Point3) XAxis).Transform(transformation);
+            var yDirPt = ((Point3) YAxis).Transform(transformation);
+            var zDirPt = ((Point3) ZAxis).Transform(transformation);
 
             Transform translation = Core.Transform.Translation(tranformedOrigin);
 
