@@ -77,10 +77,10 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             var center = new Point3d(5,5,0);
-            double radiance = GeoSharpMath.ToRadians(30);
+            double angleInRadians = GeoSharpMath.ToRadians(30);
 
             // Act
-            Transform transform = Transform.Rotation(radiance, center);
+            Transform transform = Transform.Rotation(angleInRadians, center);
 
             // Getting the angles.
             Dictionary<string, double> angles = LinearAlgebra.GetYawPitchRoll(transform);
