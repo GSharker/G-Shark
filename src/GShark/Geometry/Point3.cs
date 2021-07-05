@@ -225,10 +225,10 @@ namespace GShark.Geometry
         /// Converts a point in a vector, without needing casting.
         /// </summary>
         /// <param name="point3">A point.</param>
-        /// <returns>The resulting Vector3.</returns>
-        public static implicit operator Vector3(Point3 point3)
+        /// <returns>The resulting Vector.</returns>
+        public static implicit operator Vector(Point3 point3)
         {
-            return new Vector3 { point3.X, point3.Y, point3.Z };
+            return new Vector { point3.X, point3.Y, point3.Z };
         }
 
 

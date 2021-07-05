@@ -29,14 +29,14 @@ namespace GShark.Optimization
         /// <param name="gradientTolerance">The gradient tolerance set per default to 1e-8.</param>
         /// <param name="maxIteration">The number of iteration used, set per default 1000.</param>
         /// <returns>The minimization result, <see cref="MinimizationResult"/>.</returns>
-        public MinimizationResult UnconstrainedMinimizer(Vector3 initialGuess, double gradientTolerance = 1e-8, int maxIteration = 1000)
+        public MinimizationResult UnconstrainedMinimizer(Vector initialGuess, double gradientTolerance = 1e-8, int maxIteration = 1000)
         {
-            Vector3 x0 = new Vector3(initialGuess);
+            Vector x0 = new Vector(initialGuess);
             int n = x0.Count;
             double f0 = _objectiveFunction.Value(x0);
             double f1 = 0.0;
-            Vector3 x1 = null;
-            Vector3 s = null;
+            Vector x1 = null;
+            Vector s = null;
             string message = string.Empty;
 
             if (double.IsNaN(f0))
@@ -47,7 +47,7 @@ namespace GShark.Optimization
             gradientTolerance = Math.Max(gradientTolerance, GeoSharkMath.Epsilon);
             Matrix H1 = Matrix.Identity(n);
             int iteration = 0;
-            Vector3 g0 = _objectiveFunction.Gradient(x0);
+            Vector g0 = _objectiveFunction.Gradient(x0);
 
             while (iteration < maxIteration)
             {
@@ -56,7 +56,7 @@ namespace GShark.Optimization
                     message = "Gradient has Infinity or NaN.";
                     break;
                 }
-                Vector3 step = Vector3.Reverse(g0 * H1);
+                Vector step = Vector.Reverse(g0 * H1);
                 if (step.Any(val => double.IsNaN(val) || double.IsInfinity(val)))
                 {
                     message = "Search direction has Infinity or NaN";
@@ -71,7 +71,7 @@ namespace GShark.Optimization
                 }
 
                 double t = 1.0;
-                double df0 = Vector3.Dot(g0, step);
+                double df0 = Vector.Dot(g0, step);
 
                 // Line search.
                 while (iteration < maxIteration)
@@ -106,16 +106,16 @@ namespace GShark.Optimization
                     break;
                 }
 
-                Vector3 g1 = _objectiveFunction.Gradient(x1);
-                Vector3 y = g1 - g0;
-                double ys = Vector3.Dot(y, s);
-                Vector3 Hy = y * H1;
+                Vector g1 = _objectiveFunction.Gradient(x1);
+                Vector y = g1 - g0;
+                double ys = Vector.Dot(y, s);
+                Vector Hy = y * H1;
 
                 Matrix T0 = Tensor(s, s);
                 Matrix T1 = Tensor(Hy, s);
                 Matrix T2 = Tensor(s, Hy);
 
-                H1 = (H1 + (T0 * (ys + Vector3.Dot(y, Hy)) / (ys * ys))) - (T1 + T2) / ys;
+                H1 = (H1 + (T0 * (ys + Vector.Dot(y, Hy)) / (ys * ys))) - (T1 + T2) / ys;
                 x0 = x1;
                 f0 = f1;
                 g0 = g1;
@@ -125,7 +125,7 @@ namespace GShark.Optimization
             return new MinimizationResult(x0, f0, g0, H1, iteration, message);
         }
 
-        private Matrix Tensor(Vector3 vec0, Vector3 vec1)
+        private Matrix Tensor(Vector vec0, Vector vec1)
         {
             int m = vec0.Count;
             int n = vec1.Count;

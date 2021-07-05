@@ -254,7 +254,7 @@ namespace GShark.Test.XUnit.Operation
         //    int numDers = 1;
 
         //    // Act
-        //    List<List<Vector3>> res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
+        //    List<List<Vector>> res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
 
         //    // Assert
         //    // 0th derivative with respect to u & v
@@ -323,7 +323,7 @@ namespace GShark.Test.XUnit.Operation
             double[,] expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
 
             // Act
-            List<Vector3> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
+            List<Vector> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
             resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharkMath.MaxTolerance);

@@ -99,10 +99,10 @@ namespace GShark.Core
 
             if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharkMath.MaxTolerance)
             {
-                Vector3 vec = new Vector3 { cosAngle, sinAngle };
+                Vector vec = new Vector { cosAngle, sinAngle };
                 if (vec.Length() > 0.0)
                 {
-                    Vector3 vecUnitized = vec.Unitize();
+                    Vector vecUnitized = vec.Unitize();
                     cosAngle = vecUnitized[0];
                     sinAngle = vecUnitized[1];
                 }

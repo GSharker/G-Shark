@@ -119,20 +119,20 @@ namespace GShark.Operation
         /// </summary>
         private static List<Point3> ComputeValuesR(KnotVector knots, List<double> curveParameters, List<Point3> Rk, int degree, int numberOfCtrPts)
         {
-            List<Vector3> vectorR = new List<Vector3>();
+            List<Vector> vectorR = new List<Vector>();
             for (int i = 1; i < numberOfCtrPts - 1; i++)
             {
-                List<Vector3> ruTemp = new List<Vector3>();
+                List<Vector> ruTemp = new List<Vector>();
                 for (int j = 0; j < Rk.Count; j++)
                 {
                     double tempBasisVal = Evaluation.OneBasisFunction(degree, knots, i, curveParameters[j + 1]);
                     ruTemp.Add(Rk[j] * tempBasisVal);
                 }
 
-                Vector3 tempVec = Vector3.Zero1d(ruTemp[0].Count);
+                Vector tempVec = Vector.Zero1d(ruTemp[0].Count);
                 for (int g = 0; g < ruTemp[0].Count; g++)
                 {
-                    foreach (Vector3 vec in ruTemp)
+                    foreach (Vector vec in ruTemp)
                     {
                         tempVec[g] += vec[g];
                     }
@@ -241,9 +241,9 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < pts[0].Size; i++)
             {
-                Vector3 b = new Vector3();
+                Vector b = new Vector();
                 b = pts.Select(pt => pt[i]).ToVector();
-                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
+                Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
             return ptsSolved.Transpose().Select(pt => new Point3(pt[0], pt[1], pt[2])).ToList();
@@ -265,7 +265,7 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < 3; i++)
             {
-                Vector3 b = new Vector3();
+                Vector b = new Vector();
                 // Insert the tangents at the second and second to last index.
                 b.Add(pts[0][i]);
                 // Equations 9.11
@@ -275,7 +275,7 @@ namespace GShark.Operation
                 b.Add(endTangent[i] * mult1);
                 b.Add(pts[^1][i]);
                 
-                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
+                Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
 
@@ -372,10 +372,10 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < vecPts[0].Size; i++)
             {
-                Vector3 b = new Vector3();
+                Vector b = new Vector();
                 b = vecPts.Select(pt => pt[i]).ToVector();
 
-                Vector3 solution = Matrix.Solve(matrixLu, permutation, b);
+                Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
 

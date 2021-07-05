@@ -24,7 +24,7 @@ namespace GShark.Optimization
             _plane = plane;
         }
 
-        public double Value(Vector3 v)
+        public double Value(Vector v)
         {
             var p0 = _curve.PointAt(v[0]);
             var p1 = _plane.ClosestPoint(p0, out _);
@@ -34,7 +34,7 @@ namespace GShark.Optimization
             return Vector3d.DotProduct(p0P1, p0P1);
         }
 
-        public Vector3 Gradient(Vector3 v)
+        public Vector Gradient(Vector v)
         {
             var deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
             var r = deriveC0[0] - new Vector3d(_plane.Origin);
@@ -45,7 +45,7 @@ namespace GShark.Optimization
 
             double value0 = 2 * (f / df);
 
-            return new Vector3{value0, value0};
+            return new Vector{value0, value0};
         }
     }
 }

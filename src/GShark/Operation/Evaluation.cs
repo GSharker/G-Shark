@@ -41,10 +41,10 @@ namespace GShark.Operation
         /// <returns>List of non-vanishing basis functions.</returns>
         public static List<double> BasisFunction(int degree, KnotVector knots, int span, double knot)
         {
-            Vector3 left = Vector3.Zero1d(degree + 1);
-            Vector3 right = Vector3.Zero1d(degree + 1);
+            Vector left = Vector.Zero1d(degree + 1);
+            Vector right = Vector.Zero1d(degree + 1);
             // N[0] = 1.0 by definition;
-            Vector3 N = Vector3.Zero1d(degree + 1);
+            Vector N = Vector.Zero1d(degree + 1);
             N[0] = 1.0;
 
             for (int j = 1; j < degree + 1; j++)
@@ -383,7 +383,7 @@ namespace GShark.Operation
 
             Point4[] ck = new Point4[numberDerivs + 1];
             int knotSpan = curve.Knots.Span(n, curve.Degree, parameter);
-            List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
+            List<Vector> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
 
             for (int k = 0; k < derivateOrder + 1; k++)
             {
@@ -410,13 +410,13 @@ namespace GShark.Operation
         /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="knots">Sets of non-decreasing knot values.</param>
         /// <returns>The derivatives at the given parameter.</returns>
-        public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
+        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
             int order, KnotVector knots)
         {
-            Vector3 left = Vector3.Zero1d(degree + 1);
-            Vector3 right = Vector3.Zero1d(degree + 1);
+            Vector left = Vector.Zero1d(degree + 1);
+            Vector right = Vector.Zero1d(degree + 1);
             // N[0][0] = 1.0 by definition
-            List<Vector3> ndu = Vector3.Zero2d(degree + 1, degree + 1);
+            List<Vector> ndu = Vector.Zero2d(degree + 1, degree + 1);
             ndu[0][0] = 1.0;
 
             for (int j = 1; j < degree + 1; j++)
@@ -438,14 +438,14 @@ namespace GShark.Operation
             }
 
             // Load the basic functions.
-            List<Vector3> ders = Vector3.Zero2d(order + 1, degree + 1);
+            List<Vector> ders = Vector.Zero2d(order + 1, degree + 1);
             for (int j = 0; j < degree + 1; j++)
             {
                 ders[0][j] = ndu[j][degree];
             }
 
             // Start calculating derivatives.
-            List<Vector3> a = Vector3.Zero2d(2, degree + 1);
+            List<Vector> a = Vector.Zero2d(2, degree + 1);
             // Loop over function index.
             for (int r = 0; r < degree + 1; r++)
             {
@@ -529,10 +529,10 @@ namespace GShark.Operation
         ///// <param name="u">The u parameter.</param>
         ///// <param name="v">the v parameter.</param>
         ///// <returns>The normal vector at the given uv of the surface.</returns>
-        //public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
+        //public static Vector RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
         //{
-        //    List<List<Vector3>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
-        //    return Vector3.Cross(derivs[1][0], derivs[0][1]);
+        //    List<List<Vector>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
+        //    return Vector.Cross(derivs[1][0], derivs[0][1]);
         //}
 
 
@@ -544,37 +544,37 @@ namespace GShark.Operation
         ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
         ///// <param name="numDerivs">Number of derivatives to evaluate (default is 1)</param>
         ///// <returns>The derivatives.</returns>
-        //public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
+        //public static List<List<Vector>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
         //{
-        //    List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
-        //    List<List<Vector3>> Aders = LinearAlgebra.Rational2d(ders);
+        //    List<List<Vector>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
+        //    List<List<Vector>> Aders = LinearAlgebra.Rational2d(ders);
         //    List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
-        //    List<List<Vector3>> SKL = new List<List<Vector3>>();
+        //    List<List<Vector>> SKL = new List<List<Vector>>();
         //    int dim = Aders[0][0].Count;
 
         //    for (int k = 0; k < numDerivs + 1; k++)
         //    {
-        //        SKL.Add(new List<Vector3>());
+        //        SKL.Add(new List<Vector>());
         //        for (int l = 0; l < numDerivs - k + 1; l++)
         //        {
-        //            Vector3 t1 = Aders[k][l];
+        //            Vector t1 = Aders[k][l];
         //            for (int j = 1; j < l + 1; j++)
         //            {
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
         //            }
 
         //            for (int i = 1; i < k + 1; i++)
         //            {
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
-        //                Vector3 t2 = Vector3.Zero1d(dim);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
+        //                Vector t2 = Vector.Zero1d(dim);
         //                for (int j = 1; j < l + 1; j++)
         //                {
-        //                    Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
+        //                    Vector.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
         //                }
 
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
         //            }
-        //            Vector3 t = t1 * (1 / wders[0][0]);
+        //            Vector t = t1 * (1 / wders[0][0]);
         //            SKL[k].Add(t); //demogenize
         //        }
         //    }
@@ -590,7 +590,7 @@ namespace GShark.Operation
         ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
         ///// <param name="numDerivs">Number of derivatives to evaluate.</param>
         ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        //public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
+        //public static List<List<Vector>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
         //{
         //    int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
         //    int m = nurbsSurface.KnotsV.Count - nurbsSurface.DegreeV - 2;
@@ -609,11 +609,11 @@ namespace GShark.Operation
         ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
         ///// <param name="numDerivs">The number of derivatives to evaluate.</param>
         ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        //public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
+        //public static List<List<Vector>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
         //{
         //    int degreeU = nurbsSurface.DegreeU;
         //    int degreeV = nurbsSurface.DegreeV;
-        //    List<List<Vector3>> ctrlPts = nurbsSurface.HomogenizedPoints;
+        //    List<List<Vector>> ctrlPts = nurbsSurface.HomogenizedPoints;
         //    KnotVector knotsU = nurbsSurface.KnotsU;
         //    KnotVector knotsV = nurbsSurface.KnotsV;
 
@@ -627,23 +627,23 @@ namespace GShark.Operation
         //    int du = numDerivs < degreeU ? numDerivs : degreeU;
         //    int dv = numDerivs < degreeV ? numDerivs : degreeV;
 
-        //    List<List<Vector3>> SKL = Vector3.Zero3d(numDerivs + 1, numDerivs + 1, dim);
+        //    List<List<Vector>> SKL = Vector.Zero3d(numDerivs + 1, numDerivs + 1, dim);
         //    int knotSpanU = knotsU.Span(n, degreeU, u);
         //    int knotSpanV = knotsV.Span(m, degreeV, v);
 
-        //    List<Vector3> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
-        //    List<Vector3> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
+        //    List<Vector> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
+        //    List<Vector> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
 
-        //    List<Vector3> temp = Vector3.Zero2d(degreeV + 1, dim);
+        //    List<Vector> temp = Vector.Zero2d(degreeV + 1, dim);
 
         //    for (int k = 0; k < du + 1; k++)
         //    {
         //        for (int s = 0; s < degreeV + 1; s++)
         //        {
-        //            temp[s] = Vector3.Zero1d(dim);
+        //            temp[s] = Vector.Zero1d(dim);
         //            for (int r = 0; r < degreeU + 1; r++)
         //            {
-        //                Vector3.AddMulMutate(temp[s], uders[k][r], ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s]);
+        //                Vector.AddMulMutate(temp[s], uders[k][r], ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s]);
         //            }
         //        }
         //        int nk = numDerivs - k;
@@ -651,10 +651,10 @@ namespace GShark.Operation
 
         //        for (int l = 0; l < dd + 1; l++)
         //        {
-        //            SKL[k][l] = Vector3.Zero1d(dim);
+        //            SKL[k][l] = Vector.Zero1d(dim);
         //            for (int s = 0; s < degreeV + 1; s++)
         //            {
-        //                Vector3.AddMulMutate(SKL[k][l], vders[l][s], temp[s]);
+        //                Vector.AddMulMutate(SKL[k][l], vders[l][s], temp[s]);
         //            }
         //        }
         //    }

@@ -173,7 +173,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Tests a point for BoundingBox inclusion.
         /// </summary>
-        /// <param name="pt">Vector3 to test</param>
+        /// <param name="pt">Vector to test</param>
         /// <param name="strict">
         /// If true, the point needs to be fully on the inside of the BoundingBox. I.e. coincident points will
         /// be considered 'outside'.

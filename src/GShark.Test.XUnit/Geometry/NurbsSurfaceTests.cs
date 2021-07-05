@@ -22,35 +22,35 @@
 //            KnotVector knotsU = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
 //            KnotVector knotsV = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
 
-//            List<Vector3> u1 = new List<Vector3>()
+//            List<Vector> u1 = new List<Vector>()
 //            {
-//                new Vector3() { 0d, 0d, 0d },
-//                new Vector3() { 10d, 0d, 0d },
-//                new Vector3() { 20d, 0d, 0d },
-//                new Vector3() { 30d, 0d, 0d }
+//                new Vector() { 0d, 0d, 0d },
+//                new Vector() { 10d, 0d, 0d },
+//                new Vector() { 20d, 0d, 0d },
+//                new Vector() { 30d, 0d, 0d }
 //            };
-//            List<Vector3> u2 = new List<Vector3>()
+//            List<Vector> u2 = new List<Vector>()
 //            {
-//                new Vector3() { 0d, -10d, 0d },
-//                new Vector3() { 10d, -10d, 10d },
-//                new Vector3() { 20d, -10d, 0d },
-//                new Vector3() { 30d, -10d, 0d }
+//                new Vector() { 0d, -10d, 0d },
+//                new Vector() { 10d, -10d, 10d },
+//                new Vector() { 20d, -10d, 0d },
+//                new Vector() { 30d, -10d, 0d }
 //            };
-//            List<Vector3> u3 = new List<Vector3>()
+//            List<Vector> u3 = new List<Vector>()
 //            {
-//                new Vector3() { 0d, -20d, 0d },
-//                new Vector3() { 10d, -20d, 0d },
-//                new Vector3() { 20d, -20d, 0d },
-//                new Vector3() { 30d, -20d, 0d }
+//                new Vector() { 0d, -20d, 0d },
+//                new Vector() { 10d, -20d, 0d },
+//                new Vector() { 20d, -20d, 0d },
+//                new Vector() { 30d, -20d, 0d }
 //            };
-//            List<Vector3> u4 = new List<Vector3>()
+//            List<Vector> u4 = new List<Vector>()
 //            {
-//                new Vector3() { 0d, -30d, 0d },
-//                new Vector3() { 10d, -30d, 0d },
-//                new Vector3() { 20d, -30d, 0d },
-//                new Vector3() { 30d, -30d, 0d }
+//                new Vector() { 0d, -30d, 0d },
+//                new Vector() { 10d, -30d, 0d },
+//                new Vector() { 20d, -30d, 0d },
+//                new Vector() { 30d, -30d, 0d }
 //            };
-//            List<List<Vector3>> controlPoints = new List<List<Vector3>>()
+//            List<List<Vector>> controlPoints = new List<List<Vector>>()
 //            {
 //                u1, u2, u3, u4
 //            };
@@ -61,10 +61,10 @@
 //        [Fact]
 //        public void It_Returns_A_NurbSurface_By_Four_Points()
 //        {
-//            var p1 = new Vector3() { 0.0d, 0.0d, 0.0d };
-//            var p2 = new Vector3() { 1.0d, 0.0d, 0.0d };
-//            var p3 = new Vector3() { 1.0d, 1.0d, 1.0d };
-//            var p4 = new Vector3() { 0.0d, 1.0d, 1.0d };
+//            var p1 = new Vector() { 0.0d, 0.0d, 0.0d };
+//            var p2 = new Vector() { 1.0d, 0.0d, 0.0d };
+//            var p3 = new Vector() { 1.0d, 1.0d, 1.0d };
+//            var p4 = new Vector() { 0.0d, 1.0d, 1.0d };
 
 //            KnotVector knotU = new KnotVector { 0.0d, 0.0d, 1.0d, 1.0d };
 //            KnotVector knotV = new KnotVector { 0.0d, 0.0d, 1.0d, 1.0d };

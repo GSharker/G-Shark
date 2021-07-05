@@ -55,7 +55,7 @@ namespace GShark.Geometry
         ///// <summary>
         ///// Creates a Nurbs surface object.
         ///// </summary>
-        ///// <param name="controlPoints">Control points, as a 2d collection of Vector3.</param>
+        ///// <param name="controlPoints">Control points, as a 2d collection of Vector.</param>
         ///// <param name="degreeU">Surface degree u</param>
         ///// <param name="degreeV">Surface degree v</param>
         //public NurbsSurface(List<List<Point3>> controlPoints, int degreeU, int degreeV)

@@ -22,7 +22,7 @@ namespace GShark.Operation
         {
             IObjectiveFunction objectiveFunctions = new CurvesIntersectionObjectives(crv0, crv1);
             Minimizer min = new Minimizer(objectiveFunctions);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { firstGuess, secondGuess }, tolerance * tolerance);
 
             Point3 pt1 = crv0.PointAt(solution.SolutionPoint[0]);
             Point3 pt2 = crv1.PointAt(solution.SolutionPoint[1]);
@@ -45,11 +45,11 @@ namespace GShark.Operation
         {
             IObjectiveFunction objectiveFunctions = new CurvePlaneIntersectionObjectives(crv, plane);
             Minimizer min = new Minimizer(objectiveFunctions);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector3 { firstGuess, secondGuess }, tolerance * tolerance);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { firstGuess, secondGuess }, tolerance * tolerance);
 
             Point3 pt = crv.PointAt(solution.SolutionPoint[0]);
             (double u, double v) parameters = plane.ClosestParameters(pt);
-            Vector3 uv = new Vector3 { parameters.u, parameters.v, 0.0 };
+            Vector uv = new Vector { parameters.u, parameters.v, 0.0 };
 
             return new CurvePlaneIntersectionResult(pt, solution.SolutionPoint[0], uv);
         }

@@ -84,8 +84,8 @@ namespace GShark.Test.XUnit.Geometry
             line1.End.Should().BeEquivalentTo(expectedEndPoint);
 
             //ToDo Review assertion.
-            //line2.Direction.Should().BeEquivalentTo(Vector3.Reverse(expectedDirection));
-            //line2.End.Should().BeEquivalentTo(Vector3.Reverse(expectedEndPoint));
+            //line2.Direction.Should().BeEquivalentTo(Vector.Reverse(expectedDirection));
+            //line2.End.Should().BeEquivalentTo(Vector.Reverse(expectedEndPoint));
         }
 
         [Fact]

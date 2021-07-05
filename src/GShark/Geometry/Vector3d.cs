@@ -170,10 +170,10 @@ namespace GShark.Geometry
         /// Converts a vector3d in a vector3, without needing casting.
         /// </summary>
         /// <param name="vector3d">A Vector3d.</param>
-        /// <returns>The resulting Vector3.</returns>
-        public static implicit operator Vector3(Vector3d vector3d)
+        /// <returns>The resulting Vector.</returns>
+        public static implicit operator Vector(Vector3d vector3d)
         {
-            return new Vector3{vector3d.X, vector3d.Y, vector3d.Z};
+            return new Vector{vector3d.X, vector3d.Y, vector3d.Z};
         }
 
         /// <summary>
