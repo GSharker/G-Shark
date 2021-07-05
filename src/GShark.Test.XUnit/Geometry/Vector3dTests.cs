@@ -166,7 +166,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3d amplifiedVector = vec1.Amplify(amplitude);
             
             // Assert
-            amplifiedVector.EpsilonEquals(vec1AmplifiedByAmplitude, GeoSharpMath.MaxTolerance).Should().Be(true);
+            amplifiedVector.EpsilonEquals(vec1AmplifiedByAmplitude, GeoSharkMath.MaxTolerance).Should().Be(true);
         }
 
         [Fact]
@@ -318,13 +318,13 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3d vector = new Vector3d(-7, 10, -5);
-            double rotationAngle1 = GeoSharpMath.ToRadians(-0.0000125);
+            double rotationAngle1 = GeoSharkMath.ToRadians(-0.0000125);
             Vector3d expectedResult1 = new Vector3d(-7.0, 10.0, -5.0);
-            double rotationAngle2 = GeoSharpMath.ToRadians(0.0);
+            double rotationAngle2 = GeoSharkMath.ToRadians(0.0);
             Vector3d expectedResult2 = new Vector3d(-7.0, 10.0, -5.0);
-            double rotationAngle3 = GeoSharpMath.ToRadians(12.5);
+            double rotationAngle3 = GeoSharkMath.ToRadians(12.5);
             Vector3d expectedResult3 = new Vector3d(-7.454672, 10.649531, -2.239498);
-            double rotationAngle4 = GeoSharpMath.ToRadians(450);
+            double rotationAngle4 = GeoSharkMath.ToRadians(450);
             Vector3d expectedResult4 = new Vector3d(-2.867312, 4.09616, 12.206556);
 
             Vector3d axis = new Vector3d(10, 7, 0);

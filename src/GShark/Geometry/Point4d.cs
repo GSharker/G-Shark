@@ -244,10 +244,10 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are equal; otherwise false.</returns>
         public static bool operator ==(Point4d a, Point4d b)
         {
-            return Math.Abs(a.X - b.X) <= GeoSharpMath.Epsilon &&
-                   Math.Abs(a.Y - b.Y) <= GeoSharpMath.Epsilon &&
-                   Math.Abs(a.Z - b.Z) <= GeoSharpMath.Epsilon &&
-                   Math.Abs(a.W - b.W) <= GeoSharpMath.Epsilon;
+            return Math.Abs(a.X - b.X) <= GeoSharkMath.Epsilon &&
+                   Math.Abs(a.Y - b.Y) <= GeoSharkMath.Epsilon &&
+                   Math.Abs(a.Z - b.Z) <= GeoSharkMath.Epsilon &&
+                   Math.Abs(a.W - b.W) <= GeoSharkMath.Epsilon;
         }
 
         /// <summary>
@@ -307,6 +307,6 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of a point with all coordinates set as RhinoMath.UnsetValue.
         /// </summary>
-        public static Point4d Unset => new Point4d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
+        public static Point4d Unset => new Point4d(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
     }
 }

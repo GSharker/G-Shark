@@ -52,7 +52,7 @@ namespace GShark.Geometry
         /// <param name="point">A point.</param>
         public Point3d(Point4d point)
         {
-            double w = (Math.Abs(point.W - 1.0) > GeoSharpMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
+            double w = (Math.Abs(point.W - 1.0) > GeoSharkMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
             
             X = point.X * w;
             Y = point.Y * w;
@@ -72,7 +72,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of a point at location RhinoMath.UnsetValue,RhinoMath.UnsetValue,RhinoMath.UnsetValue.
         /// </summary>
-        public static Point3d Unset => new Point3d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
+        public static Point3d Unset => new Point3d(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a <see cref="Point3d"/> by a number.
@@ -333,9 +333,9 @@ namespace GShark.Geometry
         public double Z { get; set; }
 
         /// <summary>
-        /// Each coordinate of the point must pass the <see cref="GeoSharpMath.IsValidDouble"/> test.
+        /// Each coordinate of the point must pass the <see cref="GeoSharkMath.IsValidDouble"/> test.
         /// </summary>
-        public bool IsValid => GeoSharpMath.IsValidDouble(X) && GeoSharpMath.IsValidDouble(Y) && GeoSharpMath.IsValidDouble(Z);
+        public bool IsValid => GeoSharkMath.IsValidDouble(X) && GeoSharkMath.IsValidDouble(Y) && GeoSharkMath.IsValidDouble(Z);
 
         //Indexer to allow access to properties as array.
         public double this[int i]
@@ -386,9 +386,9 @@ namespace GShark.Geometry
         /// <returns></returns>
         public bool EpsilonEquals(Point3d other, double epsilon)
         {
-            return Math.Abs(X - other.X) <= GeoSharpMath.MaxTolerance &&
-                   Math.Abs(Y - other.Y) <= GeoSharpMath.MaxTolerance &&
-                   Math.Abs(Z - other.Z) <= GeoSharpMath.MaxTolerance;
+            return Math.Abs(X - other.X) <= GeoSharkMath.MaxTolerance &&
+                   Math.Abs(Y - other.Y) <= GeoSharkMath.MaxTolerance &&
+                   Math.Abs(Z - other.Z) <= GeoSharkMath.MaxTolerance;
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace GShark.Geometry
         /// <param name="plane">The plane on which to find if the point lies on.</param>
         /// <param name="tolerance">If the tolerance is not set, as per default is use 1e-6</param>
         /// <returns>Whether the point is on the plane.</returns>
-        public bool IsOnPlane(Plane plane, double tolerance = GeoSharpMath.MaxTolerance)
+        public bool IsOnPlane(Plane plane, double tolerance = GeoSharkMath.MaxTolerance)
         {
             return Math.Abs(Vector3d.DotProduct(this - plane.Origin, plane.Normal)) < tolerance;
         }

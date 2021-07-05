@@ -109,11 +109,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox1 = crv1.BoundingBox;
 
             // Assert
-            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
 
-            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -134,11 +134,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox1 = crv1.BoundingBox;
 
             // Assert
-            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
 
-            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
         }
 
         [Fact]

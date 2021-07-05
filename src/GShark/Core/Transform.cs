@@ -133,7 +133,7 @@ namespace GShark.Core
             double sAngle = sinAngle;
             double cAngle = cosAngle;
 
-            GeoSharpMath.KillNoise(ref sAngle, ref cAngle);
+            GeoSharkMath.KillNoise(ref sAngle, ref cAngle);
 
             Transform transform = Identity();
             double oneMinusCosAngle = 1 - cosAngle;

@@ -20,7 +20,7 @@ namespace GShark.Test.XUnit.Geometry
 
             #region example
             // Initializes an arc by plane, radius and angle.
-            double angle = GeoSharpMath.ToRadians(40);
+            double angle = GeoSharkMath.ToRadians(40);
             _exampleArc2D = new Arc(Plane.PlaneXY, 15, angle);
 
             // Initializes an arc by 3 points.
@@ -39,10 +39,10 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             arc.Should().NotBeNull();
-            arc.Length.Should().BeApproximately(10.471976, GeoSharpMath.MaxTolerance);
+            arc.Length.Should().BeApproximately(10.471976, GeoSharkMath.MaxTolerance);
             arc.Center.Should().BeEquivalentTo(Plane.PlaneXY.Origin);
             arc.Radius.Should().Be(15);
-            arc.Angle.Should().BeApproximately(0.698132, GeoSharpMath.MaxTolerance);
+            arc.Angle.Should().BeApproximately(0.698132, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -52,9 +52,9 @@ namespace GShark.Test.XUnit.Geometry
             Arc arc = _exampleArc3D;
 
             // Assert
-            arc.Length.Should().BeApproximately(71.333203, GeoSharpMath.MaxTolerance);
-            arc.Radius.Should().BeApproximately(16.47719, GeoSharpMath.MaxTolerance);
-            GeoSharpMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharpMath.MaxTolerance);
+            arc.Length.Should().BeApproximately(71.333203, GeoSharkMath.MaxTolerance);
+            arc.Radius.Should().BeApproximately(16.47719, GeoSharkMath.MaxTolerance);
+            GeoSharkMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -71,14 +71,14 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
             arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();
-            arc.Radius.Should().BeApproximately(12.247449, GeoSharpMath.MaxTolerance);
+            arc.Radius.Should().BeApproximately(12.247449, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
             // Arrange
-            double angle = GeoSharpMath.ToRadians(40);
+            double angle = GeoSharkMath.ToRadians(40);
             Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
             Arc arc3D = _exampleArc3D;
 
@@ -221,7 +221,7 @@ namespace GShark.Test.XUnit.Geometry
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.ControlPoints[i].EpsilonEquals(ptChecks[i], GeoSharpMath.MaxTolerance).Should().BeTrue();
+                arc.ControlPoints[i].EpsilonEquals(ptChecks[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
                 arc.HomogenizedPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
@@ -248,7 +248,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d endPt = new Point3d(10, 15, 10);
             Vector3d dir = new Vector3d(3, 3, 0);
             double radiusExpected = 12.247449;
-            double angleExpected = GeoSharpMath.ToRadians(60);
+            double angleExpected = GeoSharkMath.ToRadians(60);
             Point3d centerExpected = new Point3d(0, 10, 15);
 
             // Act

@@ -75,7 +75,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
-                ctrPts[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GeoSharpMath.MaxTolerance);
+                ctrPts[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GeoSharkMath.MaxTolerance);
             }
         }
 
@@ -106,7 +106,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d pt = circle.PointAt(t);
 
             // Assert
-            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -122,7 +122,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d tangent = circle.TangentAt(t);
 
             // Assert
-            tangent.EpsilonEquals(expectedTangent, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            tangent.EpsilonEquals(expectedTangent, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -137,8 +137,8 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox = circle.BoundingBox;
 
             // Assert
-            bBox.Min.EpsilonEquals(minCheck, GeoSharpMath.MaxTolerance).Should().BeTrue();
-            bBox.Max.EpsilonEquals(maxCheck, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            bBox.Min.EpsilonEquals(minCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            bBox.Max.EpsilonEquals(maxCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -155,7 +155,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d pt = circle.ClosestPoint(testPt);
 
             // Assert
-            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

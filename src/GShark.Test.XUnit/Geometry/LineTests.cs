@@ -167,7 +167,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d ptEvaluated = _exampleLine.PointAt(t);
 
             // Assert
-           ptEvaluated.EpsilonEquals(expectedPt, GeoSharpMath.Epsilon).Should().BeTrue();
+           ptEvaluated.EpsilonEquals(expectedPt, GeoSharkMath.Epsilon).Should().BeTrue();
             
         }
 
@@ -184,7 +184,7 @@ namespace GShark.Test.XUnit.Geometry
             double parameter = _exampleLine.ClosestParameter(pt);
 
             // Assert
-            parameter.Should().BeApproximately(expectedParam, GeoSharpMath.MaxTolerance);
+            parameter.Should().BeApproximately(expectedParam, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -205,7 +205,7 @@ namespace GShark.Test.XUnit.Geometry
             Line extendedLine = _exampleLine.Extend(0, -5);
 
             // Assert
-            extendedLine.Length.Should().BeApproximately(13.027756, GeoSharpMath.MaxTolerance);
+            extendedLine.Length.Should().BeApproximately(13.027756, GeoSharkMath.MaxTolerance);
             extendedLine.Start.Should().BeEquivalentTo(_exampleLine.Start);
         }
 
