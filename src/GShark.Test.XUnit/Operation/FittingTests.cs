@@ -17,7 +17,7 @@ namespace GShark.Test.XUnit.Operation
             _testOutput = testOutput;
         }
 
-        public static List<Point3d> pts => new()
+        public static List<Point3> pts => new()
         {
             new (0, 0, 0),
             new (3, 4, 0),
@@ -50,10 +50,10 @@ namespace GShark.Test.XUnit.Operation
         [Fact]
         public void Interpolates_With_End_And_Start_Tangent()
         {
-            Point3d v1 = new Point3d(1.278803, 1.06885, 0);
-            Point3d v2 = new Point3d(-4.204863, -2.021209, 0);
+            Point3 v1 = new Point3(1.278803, 1.06885, 0);
+            Point3 v2 = new Point3(-4.204863, -2.021209, 0);
 
-            var newPts = new List<Point3d>(pts);
+            var newPts = new List<Point3>(pts);
             newPts.Insert(1, v1);
             newPts.Insert(newPts.Count-1, v2);
             // Act
@@ -95,7 +95,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_An_Approximated_Curve()
         {
             // Arrange
-            List<Point3d> expectedCtrlPts = new List<Point3d>
+            List<Point3> expectedCtrlPts = new List<Point3>
             {
                 new (0, 0, 0),
                 new (9.610024470158852, 8.200277881464892, 0.0),

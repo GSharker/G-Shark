@@ -13,7 +13,7 @@ namespace GShark.Core.IntersectionResults
         /// <param name="point">ICurve's intersection point.</param>
         /// <param name="t">Curve's parameter t on curve.</param>
         /// <param name="uv">Parameter uv on plane.</param>
-        public CurvePlaneIntersectionResult(Point3d point, double t, Vector3 uv)
+        public CurvePlaneIntersectionResult(Point3 point, double t, Vector uv)
         {
             Point = point;
             T = t;
@@ -23,7 +23,7 @@ namespace GShark.Core.IntersectionResults
         /// <summary>
         /// Gets the curve's intersection point.
         /// </summary>
-        public Point3d Point { get; }
+        public Point3 Point { get; }
 
         /// <summary>
         /// Gets the curve's parameter t.
@@ -33,7 +33,7 @@ namespace GShark.Core.IntersectionResults
         /// <summary>
         /// Gets the parameter uv on plane.
         /// </summary>
-        public Vector3 Uv { get; }
+        public Vector Uv { get; }
 
         /// <summary>
         /// Compose the curve intersection result as a text.

@@ -14,7 +14,7 @@ namespace GShark.Core.IntersectionResults
         /// <param name="pt1">Second curve's intersection point.</param>
         /// <param name="t0">First curve's t parameter on curve.</param>
         /// <param name="t1">Second curve's t parameter on curve.</param>
-        public CurvesIntersectionResult(Point3d pt0, Point3d pt1, double t0, double t1)
+        public CurvesIntersectionResult(Point3 pt0, Point3 pt1, double t0, double t1)
         {
             Pt0 = pt0;
             Pt1 = pt1;
@@ -25,12 +25,12 @@ namespace GShark.Core.IntersectionResults
         /// <summary>
         /// Gets the first curve's intersection point.
         /// </summary>
-        public Point3d Pt0 { get; }
+        public Point3 Pt0 { get; }
 
         /// <summary>
         /// Gets the second curve's intersection point.
         /// </summary>
-        public Point3d Pt1 { get; }
+        public Point3 Pt1 { get; }
 
         /// <summary>
         /// Gets the first curve's t parameter on curve.

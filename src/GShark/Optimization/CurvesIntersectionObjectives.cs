@@ -24,28 +24,28 @@ namespace GShark.Optimization
             _curve1 = curve1;
         }
 
-        public double Value(Vector3 v)
+        public double Value(Vector v)
         {
-            Vector3 p0 = Evaluation.CurvePointAt(_curve0, v[0]);
-            Vector3 p1 = Evaluation.CurvePointAt(_curve1, v[1]);
+            Vector p0 = Evaluation.CurvePointAt(_curve0, v[0]);
+            Vector p1 = Evaluation.CurvePointAt(_curve1, v[1]);
 
-            Vector3 p0P1 = p0 - p1;
+            Vector p0P1 = p0 - p1;
 
-            return Vector3.Dot(p0P1, p0P1);
+            return Vector.Dot(p0P1, p0P1);
         }
 
-        public Vector3 Gradient(Vector3 v)
+        public Vector Gradient(Vector v)
         {
             List<Vector3d> deriveC0 = Evaluation.RationalCurveDerivatives(_curve0, v[0], 1);
             List<Vector3d> deriveC1 = Evaluation.RationalCurveDerivatives(_curve1, v[1], 1);
 
-            Vector3 r = deriveC0[0] - deriveC1[0];
-            Vector3 drDt = deriveC1[1] * -1.0;
+            Vector r = deriveC0[0] - deriveC1[0];
+            Vector drDt = deriveC1[1] * -1.0;
 
-            double value0 = 2.0 * Vector3.Dot(deriveC0[1], r);
-            double value1 = 2.0 * Vector3.Dot(drDt, r);
+            double value0 = 2.0 * Vector.Dot(deriveC0[1], r);
+            double value1 = 2.0 * Vector.Dot(drDt, r);
 
-            return new Vector3 { value0, value1 };
+            return new Vector { value0, value1 };
         }
     }
 }

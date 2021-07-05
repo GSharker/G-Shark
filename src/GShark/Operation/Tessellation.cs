@@ -25,7 +25,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="numSamples">Number of samples.</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tvalues, List<Point3d> pts) CurveRegularSample(ICurve curve, int numSamples)
+        public static (List<double> tvalues, List<Point3> pts) CurveRegularSample(ICurve curve, int numSamples)
         {
             if (numSamples < 1)
                 throw new Exception("Number of sample must be at least 1 and not negative.");
@@ -34,14 +34,14 @@ namespace GShark.Operation
             double end = curve.Knots[^1];
 
             double span = (end - start) / (numSamples - 1);
-            List<Point3d> pts = new List<Point3d>();
+            List<Point3> pts = new List<Point3>();
             List<double> tValues = new List<double>();
 
             for (int i = 0; i < numSamples; i++)
             {
                 double t = start + span * i;
 
-                Point3d ptEval = curve.PointAt(t);
+                Point3 ptEval = curve.PointAt(t);
                 pts.Add(ptEval);
                 tValues.Add(t);
             }
@@ -56,7 +56,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve to sampling.</param>
         /// <param name="tolerance">The tolerance for the adaptive division.</param>
         /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
-        public static (List<double> tValues, List<Point3d> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
+        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
         {
             if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[^1], tolerance);
             KnotVector copyKnot = new KnotVector(curve.Knots);
@@ -76,7 +76,7 @@ namespace GShark.Operation
         /// <param name="tolerance">Tolerance for the adaptive scheme.
         /// If tolerance is smaller or equal 0.0, the tolerance used is set as MAX_TOLERANCE (1e-6).</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Point3d> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
+        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
         {
             double setTolerance = (tolerance <= 0.0) ? GeoSharkMath.MaxTolerance : tolerance;
 
@@ -85,9 +85,9 @@ namespace GShark.Operation
             double t = 0.5 + 0.2 * random.NextDouble();
             double mid = start + (end - start) * t;
 
-            Point3d pt1 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
-            Point3d pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
-            Point3d pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
+            Point3 pt1 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
+            Point3 pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
+            Point3 pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
 
             Vector3d diff = pt1 - pt3;
             Vector3d diff2 = pt1 - pt2;
@@ -99,16 +99,16 @@ namespace GShark.Operation
                 double tMiddle = start + (end - start) * 0.5;
 
                 // Recurse the two halves.
-                (List<double> tValues, List<Point3d> pts) leftHalves = CurveAdaptiveSampleRange(curve, start, tMiddle, tolerance);
-                (List<double> tValues, List<Point3d> pts) rightHalves = CurveAdaptiveSampleRange(curve, tMiddle, end, tolerance);
+                (List<double> tValues, List<Point3> pts) leftHalves = CurveAdaptiveSampleRange(curve, start, tMiddle, tolerance);
+                (List<double> tValues, List<Point3> pts) rightHalves = CurveAdaptiveSampleRange(curve, tMiddle, end, tolerance);
 
                 List<double> tMerged = leftHalves.tValues.SkipLast(1).Concat(rightHalves.tValues).ToList();
-                List<Point3d> ptsMerged = leftHalves.pts.SkipLast(1).Concat(rightHalves.pts).ToList();
+                List<Point3> ptsMerged = leftHalves.pts.SkipLast(1).Concat(rightHalves.pts).ToList();
 
                 return (tMerged, ptsMerged);
             }
 
-            return (new List<double> { start, end }, new List<Point3d> { pt1, pt3 });
+            return (new List<double> { start, end }, new List<Point3> { pt1, pt3 });
         }
     }
 }

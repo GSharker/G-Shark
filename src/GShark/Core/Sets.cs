@@ -193,9 +193,9 @@ namespace GShark.Core
         /// </summary>
         /// <param name="pts">The bi-dimensional collection of points.</param>
         /// <returns>The bi-dimensional collection reversed.</returns>
-        public static List<List<Point3d>> Reverse2DMatrixPoints(List<List<Point3d>> pts)
+        public static List<List<Point3>> Reverse2DMatrixPoints(List<List<Point3>> pts)
         {
-            List<List<Point3d>> reversedPts = new List<List<Point3d>>();
+            List<List<Point3>> reversedPts = new List<List<Point3>>();
             //Reverse the points matrix
             if (pts.Count == 0)
             {
@@ -206,7 +206,7 @@ namespace GShark.Core
             int columns = pts[0].Count;
             for (int c = 0; c < columns; c++)
             {
-                List<Point3d> rr = new List<Point3d>();
+                List<Point3> rr = new List<Point3>();
                 for (int r = 0; r < rows; r++)
                 {
                     rr.Add(pts[r][c]);

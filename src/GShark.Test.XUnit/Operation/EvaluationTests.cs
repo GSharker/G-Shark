@@ -93,7 +93,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
-            List<Point3d> controlPts = new List<Point3d>
+            List<Point3> controlPts = new List<Point3>
             {
                 new (5,5,0),
                 new (10, 10, 0),
@@ -105,7 +105,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
-            Point3d pt = Evaluation.CurvePointAt(curve, parameter);
+            Point3 pt = Evaluation.CurvePointAt(curve, parameter);
 
             // Assert
             pt[0].Should().BeApproximately(result[0], 0.001);
@@ -137,7 +137,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_Extrema_Values()
         {
             // Arrange
-            List<Point3d> pts = new List<Point3d>
+            List<Point3> pts = new List<Point3>
             {
                 new (330, 592, 0),
                 new (330, 557, 0),
@@ -323,7 +323,7 @@ namespace GShark.Test.XUnit.Operation
             double[,] expectedResult = new double[,] { { 0.125, 0.75, 0.125 }, { -0.5, 0.0, 0.5 }, { 1.0, -2.0, 1.0 } };
 
             // Act
-            List<Vector3> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
+            List<Vector> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
             resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharkMath.MaxTolerance);
@@ -350,7 +350,7 @@ namespace GShark.Test.XUnit.Operation
             int parameter = 0;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             int numberDerivs = 2;
-            List<Point3d> controlPts = new List<Point3d>
+            List<Point3> controlPts = new List<Point3>
             {
                 new (10, 0, 0),
                 new (20, 10, 0),
@@ -361,7 +361,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
-            List<Point4d> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
+            List<Point4> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
 
             // Assert
             p[0][0].Should().Be(10);
@@ -378,11 +378,11 @@ namespace GShark.Test.XUnit.Operation
             int degree = 2;
             KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weight = new List<double> { 1, 1, 2 };
-            List<Point3d> controlPts = new List<Point3d>()
+            List<Point3> controlPts = new List<Point3>()
             {
-                new Point3d(1, 0, 0),
-                new Point3d(1, 1, 0),
-                new Point3d(0, 1, 0)
+                new Point3(1, 0, 0),
+                new Point3(1, 1, 0),
+                new Point3(0, 1, 0)
             };
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts, weight);
             int derivativesOrder = 2;
@@ -433,7 +433,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             int degree = 3;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
-            List<Point3d> pts = new List<Point3d>
+            List<Point3> pts = new List<Point3>
             {
                 new (0, 0, 0),
                 new (1, 0, 0),

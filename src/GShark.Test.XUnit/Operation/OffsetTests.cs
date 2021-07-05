@@ -22,7 +22,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_The_Offset_Of_A_Line()
         {
             // Arrange
-            Line ln = new Line(new Point3d(5, 0, 0), new Point3d(0, 5, 0));
+            Line ln = new Line(new Point3(5, 0, 0), new Point3(0, 5, 0));
             double offset = 12;
 
             // Act
@@ -73,8 +73,8 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             offsetResult[0].DistanceTo(offsetResult[^1]).Should().Be(0.0);
-            Point3d pt = offsetResult.PointAt(0.5);
-            Point3d closestPt = pl.ClosestPoint(pt);
+            Point3 pt = offsetResult.PointAt(0.5);
+            Point3 closestPt = pl.ClosestPoint(pt);
             pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharkMath.MinTolerance);
         }
 
@@ -91,8 +91,8 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             for (double i = 0; i <= 1; i += 0.1)
             {
-                Point3d pt = offsetResult.PointAt(i);
-                Point3d closestPt = crv.ClosestPoint(pt);
+                Point3 pt = offsetResult.PointAt(i);
+                Point3 closestPt = crv.ClosestPoint(pt);
                 pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharkMath.MinTolerance);
             }
         }

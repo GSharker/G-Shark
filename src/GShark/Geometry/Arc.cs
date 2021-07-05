@@ -56,9 +56,9 @@ namespace GShark.Geometry
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
         /// <param name="pt3">End point of the arc.</param>
-        public Arc(Point3d pt1, Point3d pt2, Point3d pt3)
+        public Arc(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            Point3d center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
             Vector3d normal = Vector3d.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3d xDir = pt1 - center;
             Vector3d yDir = Vector3d.CrossProduct(normal, xDir);
@@ -91,7 +91,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the center point of this arc.
         /// </summary>
-        public Point3d Center => Plane.Origin;
+        public Point3 Center => Plane.Origin;
 
         /// <summary>
         /// Gets the angle of this arc.
@@ -127,9 +127,9 @@ namespace GShark.Geometry
 
         public int Degree => 2;
 
-        public List<Point3d> ControlPoints { get; private set; }
+        public List<Point3> ControlPoints { get; private set; }
 
-        public List<Point4d> HomogenizedPoints { get; private set; }
+        public List<Point4> HomogenizedPoints { get; private set; }
 
         public KnotVector Knots { get; private set; }
 
@@ -142,14 +142,14 @@ namespace GShark.Geometry
             get
             {
                 Plane orientedPlane = Plane.Align(Vector3d.XAxis);
-                Point3d pt0 = StartPoint;
-                Point3d pt1 = EndPoint;
-                Point3d ptC = orientedPlane.Origin;
+                Point3 pt0 = StartPoint;
+                Point3 pt1 = EndPoint;
+                Point3 ptC = orientedPlane.Origin;
 
                 double theta0 = Math.Atan2(pt0[1] - ptC[1], pt0[0] - ptC[0]);
                 double theta1 = Math.Atan2(pt1[1] - ptC[1], pt1[0] - ptC[0]);
 
-                List<Point3d> pts = new List<Point3d>{ pt0, pt1 };
+                List<Point3> pts = new List<Point3>{ pt0, pt1 };
 
                 if (AnglesSequence(theta0, 0, theta1))
                 {
@@ -179,7 +179,7 @@ namespace GShark.Geometry
         /// <param name="ptEnd">End point arc.</param>
         /// <param name="dir">TangentAt direction at start.</param>
         /// <returns>An arc.</returns>
-        public static Arc ByStartEndDirection(Point3d ptStart, Point3d ptEnd, Vector3d dir)
+        public static Arc ByStartEndDirection(Point3 ptStart, Point3 ptEnd, Vector3d dir)
         {
             Vector3d vec0 = dir.Unitize();
             Vector3d vec1 = (ptEnd - ptStart).Unitize();
@@ -198,7 +198,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
         /// <returns>Point on the arc.</returns>
-        public Point3d PointAt(double t)
+        public Point3 PointAt(double t)
         {
             Vector3d xDir = Plane.XAxis * Math.Cos(t) * Radius;
             Vector3d yDir = Plane.YAxis * Math.Sin(t) * Radius;
@@ -229,7 +229,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The test point. Point to get close to.</param>
         /// <returns>The point on the arc that is close to the test point.</returns>
-        public Point3d ClosestPoint(Point3d pt)
+        public Point3 ClosestPoint(Point3 pt)
         {
             double twoPi = 2.0 * Math.PI;
 
@@ -289,7 +289,7 @@ namespace GShark.Geometry
             Vector3d axisX = Plane.XAxis;
             Vector3d axisY = Plane.YAxis;
             int numberOfArc;
-            Point3d[] ctrPts;
+            Point3[] ctrPts;
             double[] weights;
 
             // Number of arcs.
@@ -297,25 +297,25 @@ namespace GShark.Geometry
             if (Angle <= piNum)
             {
                 numberOfArc = 1;
-                ctrPts = new Point3d[3];
+                ctrPts = new Point3[3];
                 weights = new double[3];
             }
             else if (Angle <= piNum * 2)
             {
                 numberOfArc = 2;
-                ctrPts = new Point3d[5];
+                ctrPts = new Point3[5];
                 weights = new double[5];
             }
             else if (Angle <= piNum * 3)
             {
                 numberOfArc = 3;
-                ctrPts = new Point3d[7];
+                ctrPts = new Point3[7];
                 weights = new double[7];
             }
             else
             {
                 numberOfArc = 4;
-                ctrPts = new Point3d[9];
+                ctrPts = new Point3[9];
                 weights = new double[9];
             }
 

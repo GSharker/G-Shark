@@ -9,13 +9,13 @@ namespace GShark.ExtendedMethods
     public static class ExtendedEnumerable
     {
         /// <summary>
-        /// Transforms a set of double into a <see cref="Vector3"/>.
+        /// Transforms a set of double into a <see cref="Vector"/>.
         /// </summary>
         /// <param name="enumerable">Sets of values.</param>
-        /// <returns>A <see cref="Vector3"/></returns>
-        public static Vector3 ToVector(this IEnumerable<double> enumerable)
+        /// <returns>A <see cref="Vector"/></returns>
+        public static Vector ToVector(this IEnumerable<double> enumerable)
         {
-            return new Vector3(enumerable.ToList());
+            return new Vector(enumerable.ToList());
         }
 
         /// <summary>

@@ -54,7 +54,7 @@ namespace GShark.Core
         public static Matrix Identity(int size, double diagonalValue = 1.0)
         {
             Matrix m = new Matrix();
-            List<Vector3> zeros = Vector3.Zero2d(size, size);
+            List<Vector> zeros = Vector.Zero2d(size, size);
             for (int i = 0; i < size; i++)
             {
                 zeros[i][i] = diagonalValue;
@@ -323,7 +323,7 @@ namespace GShark.Core
         /// <param name="permutation">The permutation row, or pivot row interchanged with row i.</param>
         /// <param name="b">Column vector.</param>
         /// <returns>The solution of the equation Ax = B is a vector.</returns>
-        public static Vector3 Solve(Matrix LuMatrix, int[] permutation, Vector3 b)
+        public static Vector Solve(Matrix LuMatrix, int[] permutation, Vector b)
         {
             int rows = LuMatrix.Count;
             int cols = LuMatrix[0].Count;

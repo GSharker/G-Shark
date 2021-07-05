@@ -28,7 +28,7 @@ namespace GShark.Geometry
         /// <param name="knots">The knots defining the curve.</param>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="weights">The weight values.</param>
-        public NurbsCurve(int degree, KnotVector knots, List<Point3d> controlPoints, List<double>? weights = null)
+        public NurbsCurve(int degree, KnotVector knots, List<Point3> controlPoints, List<double>? weights = null)
         {
             if (controlPoints is null)
             {
@@ -67,7 +67,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="controlPoints">The control points.</param>
         /// <param name="degree">The curve degree.</param>
-        public NurbsCurve(List<Point3d> controlPoints, int degree)
+        public NurbsCurve(List<Point3> controlPoints, int degree)
             : this(degree, new KnotVector(degree, controlPoints.Count), controlPoints)
         {
         }
@@ -79,8 +79,8 @@ namespace GShark.Geometry
         private NurbsCurve(NurbsCurve curve)
         {
             Degree = curve.Degree;
-            ControlPoints = new List<Point3d>(curve.ControlPoints);
-            HomogenizedPoints = new List<Point4d>(curve.HomogenizedPoints);
+            ControlPoints = new List<Point3>(curve.ControlPoints);
+            HomogenizedPoints = new List<Point4>(curve.HomogenizedPoints);
             Knots = new KnotVector(curve.Knots);
             Weights = new List<double>(curve.Weights!);
         }
@@ -92,10 +92,10 @@ namespace GShark.Geometry
 
         public int Degree { get; }
 
-        public List<Point3d> ControlPoints { get; }
+        public List<Point3> ControlPoints { get; }
 
         //ToDo To avoid confusion, the definition of a NURBS curve should consist only of ControlPoints as a collection of Point4d. These should only ever be dehomogenized as needed by another method, or via implicit operator on Point4d->Point3d.
-        public List<Point4d> HomogenizedPoints { get; }
+        public List<Point4> HomogenizedPoints { get; }
 
         public KnotVector Knots { get; }
 
@@ -105,7 +105,7 @@ namespace GShark.Geometry
         {
             get
             {
-                List<Point3d> pts = new List<Point3d> {ControlPoints[0]};
+                List<Point3> pts = new List<Point3> {ControlPoints[0]};
                 List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
                 foreach (ICurve crv in beziers)
                 {
@@ -137,7 +137,7 @@ namespace GShark.Geometry
         /// <returns>A new curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            List<Point3d> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
+            List<Point3> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
 
             return new NurbsCurve(Degree, Knots, pts, Weights!);
         }
@@ -147,7 +147,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>A point at the given parameter.</returns>
-        public Point3d PointAt(double t)
+        public Point3 PointAt(double t)
         {
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
         }
@@ -185,7 +185,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Point to analyze.</param>
         /// <returns>The closest point on the curve.</returns>
-        public Point3d ClosestPoint(Point3d point)
+        public Point3 ClosestPoint(Point3 point)
         {
             return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
@@ -219,7 +219,7 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
-            List<Point3d>? otherPts = other?.ControlPoints;
+            List<Point3>? otherPts = other?.ControlPoints;
 
             if (other == null)
             {

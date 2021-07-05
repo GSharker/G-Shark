@@ -43,9 +43,9 @@ namespace GShark.Geometry
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
         /// <param name="pt3">End point of the arc.</param>
-        public Circle(Point3d pt1, Point3d pt2, Point3d pt3)
+        public Circle(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            Point3d center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
             Vector3d normal = Vector3d.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3d xDir = pt1 - center;
             Vector3d yDir = Vector3d.CrossProduct(normal, xDir);
@@ -67,7 +67,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the center of the circle.
         /// </summary>
-        public Point3d Center => Plane.Origin;
+        public Point3 Center => Plane.Origin;
 
         /// <summary>
         /// Gets the circumference of the circle.
@@ -76,11 +76,11 @@ namespace GShark.Geometry
 
         public int Degree => 2;
 
-        public List<Point3d> ControlPoints
+        public List<Point3> ControlPoints
         {
             get
             {
-                Point3d[] ctrPts = new Point3d[9];
+                Point3[] ctrPts = new Point3[9];
                 ctrPts[0] = Plane.PointAt(Radius, 0.0);
                 ctrPts[1] = Plane.PointAt(Radius, Radius);
                 ctrPts[2] = Plane.PointAt(0.0, Radius);
@@ -94,7 +94,7 @@ namespace GShark.Geometry
             }
         }
 
-        public List<Point4d> HomogenizedPoints
+        public List<Point4> HomogenizedPoints
         {
             get
             {
@@ -135,8 +135,8 @@ namespace GShark.Geometry
                 double minZ = Plane.Origin[2] - val3;
                 double maxZ = Plane.Origin[2] + val3;
 
-                Point3d min = new Point3d(minX, minY, minZ);
-                Point3d max = new Point3d(maxX, maxY, maxZ);
+                Point3 min = new Point3(minX, minY, minZ);
+                Point3 max = new Point3(maxX, maxY, maxZ);
                 return new BoundingBox(min, max);
             }
         }
@@ -146,7 +146,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter of point to evaluate.</param>
         /// <returns>The point on the circle at the given parameter.</returns>
-        public Point3d PointAt(double t)
+        public Point3 PointAt(double t)
         {
             return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
         }
@@ -171,7 +171,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The test point to project onto the circle.</param>
         /// <returns>The point on the circle that is close to the test point.</returns>
-        public Point3d ClosestPoint(Point3d pt)
+        public Point3 ClosestPoint(Point3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GeoSharkMath.MaxTolerance && Math.Abs(v) < GeoSharkMath.MaxTolerance)

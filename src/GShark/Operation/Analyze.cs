@@ -124,7 +124,7 @@ namespace GShark.Operation
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Point3d  CurveClosestPoint(ICurve curve, Point3d  point, out double t)
+        public static Point3  CurveClosestPoint(ICurve curve, Point3  point, out double t)
         {
             t = CurveClosestParameter(curve, point);
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, t));
@@ -137,23 +137,23 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
-        public static double CurveClosestParameter(ICurve curve, Point3d point)
+        public static double CurveClosestParameter(ICurve curve, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = default(double);
-            List<Point3d> ctrlPts = curve.ControlPoints;
+            List<Point3> ctrlPts = curve.ControlPoints;
 
-            (List<double> tValues, List<Point3d> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
                 double t0 = tValues[i];
                 double t1 = tValues[i + 1];
 
-                Point3d pt0 = pts[i];
-                Point3d pt1 = pts[i + 1];
+                Point3 pt0 = pts[i];
+                Point3 pt1 = pts[i + 1];
 
-                (double tValue, Point3d pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                (double tValue, Point3 pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
                 double distance = projection.pt.DistanceTo(point);
 
                 if (!(distance < minimumDistance)) continue;
@@ -175,7 +175,7 @@ namespace GShark.Operation
             while (j < maxIterations)
             {
                 List<Vector3d> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                Vector3 diff = e[0] - new Vector3{point.X, point.Y, point.Z}; // C(u) - P
+                Vector diff = e[0] - new Vector{point.X, point.Y, point.Z}; // C(u) - P
 
                 // First condition, point coincidence:
                 // |C(u) - p| < e1
@@ -186,7 +186,7 @@ namespace GShark.Operation
                 // C'(u) * (C(u) - P)
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
-                double c2n = Vector3.Dot(e[1], diff);
+                double c2n = Vector.Dot(e[1], diff);
                 double c2d = (e[1] * c1v).Length;
                 double c2v = c2n / c2d;
                 bool c2 = Math.Abs(c2v) <= tol2;
@@ -219,16 +219,16 @@ namespace GShark.Operation
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static double NewtonIteration(double u, List<Vector3d> derivativePts, Vector3 difference)
+        private static double NewtonIteration(double u, List<Vector3d> derivativePts, Vector difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
             // C(u) is the curve, p is the point, * is a dot product
-            double f = Vector3.Dot(derivativePts[1], difference);
+            double f = Vector.Dot(derivativePts[1], difference);
 
             //	f' = C"(u) * ( C(u) - p ) + C'(u) * C'(u)
-            double s0 = Vector3.Dot(derivativePts[2], difference);
-            double s1 = Vector3.Dot(derivativePts[1], derivativePts[1]);
+            double s0 = Vector.Dot(derivativePts[2], difference);
+            double s1 = Vector.Dot(derivativePts[1], derivativePts[1]);
             double df = s0 + s1;
 
             return u - f / df;

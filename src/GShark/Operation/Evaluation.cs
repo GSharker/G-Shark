@@ -41,10 +41,10 @@ namespace GShark.Operation
         /// <returns>List of non-vanishing basis functions.</returns>
         public static List<double> BasisFunction(int degree, KnotVector knots, int span, double knot)
         {
-            Vector3 left = Vector3.Zero1d(degree + 1);
-            Vector3 right = Vector3.Zero1d(degree + 1);
+            Vector left = Vector.Zero1d(degree + 1);
+            Vector right = Vector.Zero1d(degree + 1);
             // N[0] = 1.0 by definition;
-            Vector3 N = Vector3.Zero1d(degree + 1);
+            Vector N = Vector.Zero1d(degree + 1);
             N[0] = 1.0;
 
             for (int j = 1; j < degree + 1; j++)
@@ -138,9 +138,9 @@ namespace GShark.Operation
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
         //ToDo Return Point3d by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
-        public static Point3d CurvePointAt(ICurve curve, double t)
+        public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
 
             //ToDo Input validation on t within range.
@@ -149,12 +149,12 @@ namespace GShark.Operation
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4d pointOnCurve = new Point4d(0,0,0,0);
+            Point4 pointOnCurve = new Point4(0,0,0,0);
 
             for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+                Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
 
                 pointOnCurve.X += valToMultiply * pt.X;
                 pointOnCurve.Y += valToMultiply * pt.Y;
@@ -184,9 +184,9 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The points collection to evaluate.</param>
         /// <returns>The centroid point.</returns>
-        public static Point3d CentroidByVertices(IList<Point3d> pts)
+        public static Point3 CentroidByVertices(IList<Point3> pts)
         {
-            Point3d centroid = new Point3d();
+            Point3 centroid = new Point3();
             bool isClosed = pts[0] == pts[^1];
             int count = pts.Count;
 
@@ -251,17 +251,17 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
-        internal static List<List<Point3d>> DerivativeCoordinates(List<Point3d> pts)
+        internal static List<List<Point3>> DerivativeCoordinates(List<Point3> pts)
         {
-            List<List<Point3d>> derivPts = new List<List<Point3d>>();
+            List<List<Point3>> derivPts = new List<List<Point3>>();
 
-            List<Point3d> p = new List<Point3d>(pts);
+            List<Point3> p = new List<Point3>(pts);
             int d = p.Count;
             int c = d - 1;
 
             for (; d > 1; d--, c--)
             {
-                List<Point3d> list = new List<Point3d>();
+                List<Point3> list = new List<Point3>();
                 for (int j = 0; j < c; j++)
                 {
                     var dpt = (p[j + 1] - p[j]) * c;
@@ -331,19 +331,19 @@ namespace GShark.Operation
         /// <returns>The derivatives.</returns>
         public static List<Vector3d> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
         {
-            List<Point4d> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
+            List<Point4> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
             // Array of derivative of A(t).
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Point3d> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
             // Correspond in the book to wDers.
             List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
             List<Vector3d> CK = new List<Vector3d>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
             {
-                Point3d rationalDerivativePoint = rationalDerivativePoints[k];
+                Point3 rationalDerivativePoint = rationalDerivativePoints[k];
 
                 for (int i = 1; i < k + 1; i++)
                 {
@@ -374,23 +374,23 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Point4d> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
+        public static List<Point4> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
-            List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
 
             int n = curve.Knots.Count - curve.Degree - 2;
             int derivateOrder = numberDerivs < curve.Degree ? numberDerivs : curve.Degree;
 
-            Point4d[] ck = new Point4d[numberDerivs + 1];
+            Point4[] ck = new Point4[numberDerivs + 1];
             int knotSpan = curve.Knots.Span(n, curve.Degree, parameter);
-            List<Vector3> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
+            List<Vector> derived2d = DerivativeBasisFunctionsGivenNI(knotSpan, parameter, curve.Degree, derivateOrder, curve.Knots);
 
             for (int k = 0; k < derivateOrder + 1; k++)
             {
                 for (int j = 0; j < curve.Degree + 1; j++)
                 {
                     double valToMultiply = derived2d[k][j];
-                    Point4d pt = curveHomogenizedPoints[knotSpan - curve.Degree + j];
+                    Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + j];
                     for (int i = 0; i < pt.Size; i++)
                     {
                         ck[k][i] = ck[k][i] + (valToMultiply * pt[i]);
@@ -410,13 +410,13 @@ namespace GShark.Operation
         /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="knots">Sets of non-decreasing knot values.</param>
         /// <returns>The derivatives at the given parameter.</returns>
-        public static List<Vector3> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
+        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
             int order, KnotVector knots)
         {
-            Vector3 left = Vector3.Zero1d(degree + 1);
-            Vector3 right = Vector3.Zero1d(degree + 1);
+            Vector left = Vector.Zero1d(degree + 1);
+            Vector right = Vector.Zero1d(degree + 1);
             // N[0][0] = 1.0 by definition
-            List<Vector3> ndu = Vector3.Zero2d(degree + 1, degree + 1);
+            List<Vector> ndu = Vector.Zero2d(degree + 1, degree + 1);
             ndu[0][0] = 1.0;
 
             for (int j = 1; j < degree + 1; j++)
@@ -438,14 +438,14 @@ namespace GShark.Operation
             }
 
             // Load the basic functions.
-            List<Vector3> ders = Vector3.Zero2d(order + 1, degree + 1);
+            List<Vector> ders = Vector.Zero2d(order + 1, degree + 1);
             for (int j = 0; j < degree + 1; j++)
             {
                 ders[0][j] = ndu[j][degree];
             }
 
             // Start calculating derivatives.
-            List<Vector3> a = Vector3.Zero2d(2, degree + 1);
+            List<Vector> a = Vector.Zero2d(2, degree + 1);
             // Loop over function index.
             for (int r = 0; r < degree + 1; r++)
             {
