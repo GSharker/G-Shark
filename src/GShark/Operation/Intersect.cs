@@ -327,7 +327,7 @@ namespace GShark.Operation
             List<Tuple<ICurve, ICurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
-                .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquaredLength() < tolerance)
+                .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquareLength < tolerance)
                 .Unique((a, b) => Math.Abs(a.T0 - b.T0) < tolerance * 5);
 
             return intersectionResults;
