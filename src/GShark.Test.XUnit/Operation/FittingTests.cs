@@ -37,13 +37,13 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             crv.Degree.Should().Be(degree);
-            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
 
             foreach (var pt in pts)
             {
                 var closestPt = crv.ClosestPoint(pt);
-                closestPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+                closestPt.DistanceTo(pt).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
         }
 
@@ -60,8 +60,8 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
 
             // Assert
-            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
-            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+            crv.ControlPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            crv.ControlPoints[^1].DistanceTo(pts[^1]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
 
             foreach (var crvControlPoint in crv.ControlPoints)
             {
@@ -71,7 +71,7 @@ namespace GShark.Test.XUnit.Operation
             foreach (var pt in pts)
             {
                 var closedPt = crv.ClosestPoint(pt);
-                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+                closedPt.DistanceTo(pt).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
         }
 
@@ -110,7 +110,7 @@ namespace GShark.Test.XUnit.Operation
             approximateCurve.ControlPoints.Count.Should().Be(4);
             for (int i = 0; i < approximateCurve.ControlPoints.Count; i++)
             {
-                approximateCurve.ControlPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GeoSharpMath.MaxTolerance);
+                approximateCurve.ControlPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
         }
     }

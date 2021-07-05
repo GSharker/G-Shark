@@ -92,7 +92,7 @@ namespace GShark.Test.XUnit.Geometry
             double length = _polyline.Length;
 
             // Assert
-            length.Should().BeApproximately(expectedLength, GeoSharpMath.MaxTolerance);
+            length.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             segments.Length.Should().Be(expectedNumberOfSegments);
             segments[1].Length.Should().Be(segments[2].Length)
-                .And.BeApproximately(expectedSegmentLength, GeoSharpMath.MaxTolerance);
+                .And.BeApproximately(expectedSegmentLength, GeoSharkMath.MaxTolerance);
         }
 
         [Theory]
@@ -125,7 +125,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d ptResult = _polyline.PointAt(t);
 
             // Assert
-            ptResult.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            ptResult.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -141,7 +141,7 @@ namespace GShark.Test.XUnit.Geometry
             double param = _polyline.ClosestParameter(closestPt);
 
             // Assert
-            param.Should().BeApproximately(expectedParam, GeoSharpMath.MaxTolerance);
+            param.Should().BeApproximately(expectedParam, GeoSharkMath.MaxTolerance);
         }
 
         [Theory]
@@ -170,7 +170,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3d tanResult = _polyline.TangentAt(t);
 
             // Assert
-            tanResult.EpsilonEquals(expectedTangent, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            tanResult.EpsilonEquals(expectedTangent, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -182,7 +182,7 @@ namespace GShark.Test.XUnit.Geometry
             Line segment = _polyline.SegmentAt(index);
 
             // Assert
-            segment.Length.Should().BeApproximately(segmentLength, GeoSharpMath.MaxTolerance);
+            segment.Length.Should().BeApproximately(segmentLength, GeoSharkMath.MaxTolerance);
         }
 
         [Theory]
@@ -202,7 +202,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Transform translation = Transform.Translation(new Vector3d(10, 15, 0));
-            Transform rotation = Transform.Rotation(GeoSharpMath.ToRadians(30), new Point3d(0, 0, 0));
+            Transform rotation = Transform.Rotation(GeoSharkMath.ToRadians(30), new Point3d(0, 0, 0));
             Transform combinedTransformations = translation.Combine(rotation);
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
 
@@ -211,7 +211,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             double[] lengths = _polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
-            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharpMath.MaxTolerance));
+            lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GeoSharkMath.MaxTolerance));
         }
 
         [Fact]
@@ -225,7 +225,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3d closestPt = _polyline.ClosestPoint(testPt);
 
             // Assert
-            closestPt.EpsilonEquals(expectedPt, GeoSharpMath.Epsilon).Should().BeTrue();
+            closestPt.EpsilonEquals(expectedPt, GeoSharkMath.Epsilon).Should().BeTrue();
         }
 
         [Fact]
@@ -239,8 +239,8 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox = _polyline.BoundingBox;
 
             // Assert
-            bBox.Min.EpsilonEquals(minExpected, GeoSharpMath.Epsilon).Should().BeTrue();
-            bBox.Max.EpsilonEquals(maxExpected, GeoSharpMath.Epsilon).Should().BeTrue();
+            bBox.Min.EpsilonEquals(minExpected, GeoSharkMath.Epsilon).Should().BeTrue();
+            bBox.Max.EpsilonEquals(maxExpected, GeoSharkMath.Epsilon).Should().BeTrue();
         }
 
         [Fact]
@@ -280,7 +280,7 @@ namespace GShark.Test.XUnit.Geometry
             for (int i = 1; i < poly.Knots.Count - 1; i++)
             {
                 Point3d pt = poly.PointAt(knots[i]);
-                pts[i - 1].EpsilonEquals(poly.PointAt(knots[i]), GeoSharpMath.MaxTolerance).Should().BeTrue();
+                pts[i - 1].EpsilonEquals(poly.PointAt(knots[i]), GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
     }

@@ -201,8 +201,8 @@ namespace GShark.Core
         {
             Dictionary<string, double> values = new Dictionary<string, double>();
 
-            if ((Math.Abs(transform[1][0]) < GeoSharpMath.MinTolerance && Math.Abs(transform[0][0]) < GeoSharpMath.MinTolerance) ||
-                (Math.Abs(transform[2][1]) < GeoSharpMath.MinTolerance && Math.Abs(transform[2][2]) < GeoSharpMath.MinTolerance) ||
+            if ((Math.Abs(transform[1][0]) < GeoSharkMath.MinTolerance && Math.Abs(transform[0][0]) < GeoSharkMath.MinTolerance) ||
+                (Math.Abs(transform[2][1]) < GeoSharkMath.MinTolerance && Math.Abs(transform[2][2]) < GeoSharkMath.MinTolerance) ||
                 (Math.Abs(transform[2][0]) >= 1.0))
             {
                 values.Add("Pitch" , (transform[2][0] > 0) ? -Math.PI / 2.0 : Math.PI / 2.0);
@@ -228,9 +228,9 @@ namespace GShark.Core
         {
             Vector3d axis = Vector3d.Unset;
 
-            if (Math.Abs(transform[0][1] + transform[1][0]) < GeoSharpMath.MinTolerance || 
-                Math.Abs(transform[0][2] + transform[2][0]) < GeoSharpMath.MinTolerance ||
-                Math.Abs(transform[1][2] + transform[2][1]) < GeoSharpMath.MinTolerance)
+            if (Math.Abs(transform[0][1] + transform[1][0]) < GeoSharkMath.MinTolerance || 
+                Math.Abs(transform[0][2] + transform[2][0]) < GeoSharkMath.MinTolerance ||
+                Math.Abs(transform[1][2] + transform[2][1]) < GeoSharkMath.MinTolerance)
             {
                 double xx = (transform[0][0] + 1) / 2;
                 double yy = (transform[1][1] + 1) / 2;
@@ -240,7 +240,7 @@ namespace GShark.Core
                 double yz = (transform[1][2] + transform[2][1]) / 4;
                 if ((xx > yy) && (xx > zz))
                 { // m[0][0] is the largest diagonal term
-                    if (xx < GeoSharpMath.MinTolerance)
+                    if (xx < GeoSharkMath.MinTolerance)
                     {
                         axis[0] = 0;
                         axis[1] = 0.7071;
@@ -255,7 +255,7 @@ namespace GShark.Core
                 }
                 else if (yy > zz)
                 { // m[1][1] is the largest diagonal term
-                    if (yy < GeoSharpMath.MinTolerance)
+                    if (yy < GeoSharkMath.MinTolerance)
                     {
                         axis[0] = 0.7071;
                         axis[1] = 0;
@@ -270,7 +270,7 @@ namespace GShark.Core
                 }
                 else
                 { // m[2][2] is the largest diagonal term so base result on this
-                    if (zz < GeoSharpMath.MinTolerance)
+                    if (zz < GeoSharkMath.MinTolerance)
                     {
                         axis[0] = 0.7071;
                         axis[1] = 0.7071;
@@ -308,7 +308,7 @@ namespace GShark.Core
         {
             double result = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
 
-            if (Math.Abs(result) < GeoSharpMath.Epsilon)
+            if (Math.Abs(result) < GeoSharkMath.Epsilon)
             {
                 return 0;
             }

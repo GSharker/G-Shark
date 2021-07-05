@@ -29,7 +29,7 @@ namespace GShark.Core
             {
                 var vec3 = points[i] - points[0];
                 double tripleProduct = Vector3d.DotProduct(Vector3d.CrossProduct(vec3, vec2), vec1);
-                if (Math.Abs(tripleProduct) > GeoSharpMath.Epsilon)
+                if (Math.Abs(tripleProduct) > GeoSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -74,7 +74,7 @@ namespace GShark.Core
             Vector3d direction = segmentPt1 - segmentPt0;
             double length = direction.Length;
 
-            if (length < GeoSharpMath.Epsilon)
+            if (length < GeoSharkMath.Epsilon)
             {
                 return (tValue: valueT0, pt: segmentPt0);
             }

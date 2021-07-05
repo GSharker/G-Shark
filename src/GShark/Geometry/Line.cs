@@ -39,7 +39,7 @@ namespace GShark.Geometry
         /// <param name="length">Length of the line.</param>
         public Line(Point3d start, Vector3d direction, double length)
         {
-            if(length >= -GeoSharpMath.Epsilon && length <= GeoSharpMath.Epsilon)
+            if(length >= -GeoSharkMath.Epsilon && length <= GeoSharkMath.Epsilon)
             {
                 throw new Exception("Length must not be 0.0");
             }
@@ -167,12 +167,12 @@ namespace GShark.Geometry
             Point3d start = Start;
             Point3d end = End;
 
-            if (startLength >= -GeoSharpMath.Epsilon || startLength <= GeoSharpMath.Epsilon)
+            if (startLength >= -GeoSharkMath.Epsilon || startLength <= GeoSharkMath.Epsilon)
             {
                 start = Start - (Direction * startLength);
             }
 
-            if (endLength >= -GeoSharpMath.Epsilon || endLength <= GeoSharpMath.Epsilon)
+            if (endLength >= -GeoSharkMath.Epsilon || endLength <= GeoSharkMath.Epsilon)
             {
                 end = End + (Direction * endLength);
             }

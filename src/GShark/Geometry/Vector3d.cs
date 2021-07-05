@@ -60,9 +60,9 @@ namespace GShark.Geometry
         public static Vector3d ZAxis => new Vector3d(0.0, 0.0, 1.0);
 
         /// <summary>
-        /// Gets the value of the vector with each component set to GeoSharpMath.UNSET_VALUE.
+        /// Gets the value of the vector with each component set to GeoSharkMath.UNSET_VALUE.
         /// </summary>
-        public static Vector3d Unset => new Vector3d(GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue, GeoSharpMath.UnsetValue);
+        public static Vector3d Unset => new Vector3d(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a vector by a number, having the effect of scaling it.
@@ -207,12 +207,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="a">First vector for angle.</param>
         /// <param name="b">Second vector for angle.</param>
-        /// <returns>If the input is valid, the angle in radians between a and b; GeoSharpMath.UNSET_VALUE otherwise.</returns>
+        /// <returns>If the input is valid, the angle in radians between a and b; GeoSharkMath.UNSET_VALUE otherwise.</returns>
         public static double VectorAngle(Vector3d a, Vector3d b)
         {
             if (!a.IsValid || !b.IsValid)
             {
-                return GeoSharpMath.UnsetValue;
+                return GeoSharkMath.UnsetValue;
             }
 
             //compute dot product
@@ -238,7 +238,7 @@ namespace GShark.Geometry
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <param name="plane">Two-dimensional plane on which to perform the angle measurement.</param>
-        /// <returns>On success, the angle (in radians) between a and b as projected onto the plane; GeoSharpMath.UNSET_VALUE on failure.</returns>
+        /// <returns>On success, the angle (in radians) between a and b as projected onto the plane; GeoSharkMath.UNSET_VALUE on failure.</returns>
         public static double VectorAngle(Vector3d a, Vector3d b, Plane plane)
         {
             throw new NotImplementedException();
@@ -254,8 +254,8 @@ namespace GShark.Geometry
             //}
 
             //// Abort on invalid cases.
-            //if (!a.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
-            //if (!b.Unitize()) { return GeoSharpMath.UNSET_VALUE; }
+            //if (!a.Unitize()) { return GeoSharkMath.UNSET_VALUE; }
+            //if (!b.Unitize()) { return GeoSharkMath.UNSET_VALUE; }
 
             //double dot = a * b;
             //{ // Limit dot product to valid range.
@@ -399,7 +399,7 @@ namespace GShark.Geometry
         /// Gets a value indicating whether this vector is valid. 
         /// A valid vector must be formed of valid component values for x, y and z.
         /// </summary>
-        public bool IsValid => GeoSharpMath.IsValidDouble(X) && GeoSharpMath.IsValidDouble(Y) && GeoSharpMath.IsValidDouble(Z);
+        public bool IsValid => GeoSharkMath.IsValidDouble(X) && GeoSharkMath.IsValidDouble(Y) && GeoSharkMath.IsValidDouble(Z);
 
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
@@ -428,7 +428,7 @@ namespace GShark.Geometry
                 // checks for invalid values and returns 0.0 if there are any
                 double length = GetLengthHelper(X, Y, Z);
                 //ToDo Rhino implements this check against SqrtEpsilon. Is it necessary?
-                return Math.Abs(length - 1.0) <= GeoSharpMath.Epsilon;
+                return Math.Abs(length - 1.0) <= GeoSharkMath.Epsilon;
             }
         }
 
@@ -604,7 +604,7 @@ namespace GShark.Geometry
             double cosAngle = Math.Cos(angle);
             double sinAngle = Math.Sin(angle);
 
-            GeoSharpMath.KillNoise(ref sinAngle, ref cosAngle);
+            GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 
             Vector3d unitizedAxis = axis.Unitize();
             Vector3d crossProduct = CrossProduct(unitizedAxis, this);
@@ -620,7 +620,7 @@ namespace GShark.Geometry
         /// <returns>The amplified vector.</returns>
         public Vector3d Amplify(double amplitude)
         {
-            if (!GeoSharpMath.IsValidDouble(amplitude))
+            if (!GeoSharkMath.IsValidDouble(amplitude))
             {
                 throw new ArgumentException("Invalid double value.");
             }
@@ -654,7 +654,7 @@ namespace GShark.Geometry
         /// <para>0 = vectors are not parallel or at least one of the vectors is zero.</para>
         /// <para>-1 = vectors are anti-parallel.</para>
         /// </returns>
-        public int IsParallelTo(Vector3d other, double angleTolerance = GeoSharpMath.AngleTolerance)
+        public int IsParallelTo(Vector3d other, double angleTolerance = GeoSharkMath.AngleTolerance)
         {
             int result = 0;
             double toleranceSet = Math.Cos(angleTolerance);
@@ -701,7 +701,7 @@ namespace GShark.Geometry
         /// <param name="other">Vector to use for comparison.</param>
         /// <param name="angleTolerance">Angle tolerance (in radians).</param>
         ///<returns>true if vectors form Pi-radians (90-degree) angles with each other; otherwise false.</returns>
-        public bool IsPerpendicularTo(Vector3d other, double angleTolerance = GeoSharpMath.AngleTolerance)
+        public bool IsPerpendicularTo(Vector3d other, double angleTolerance = GeoSharkMath.AngleTolerance)
         {
             bool result = false;
             double ll = Length * other.Length;
@@ -848,9 +848,9 @@ namespace GShark.Geometry
         }
         internal static double GetLengthHelper(double dx, double dy, double dz)
         {
-            if (!GeoSharpMath.IsValidDouble(dx) ||
-                !GeoSharpMath.IsValidDouble(dy) ||
-                !GeoSharpMath.IsValidDouble(dz))
+            if (!GeoSharkMath.IsValidDouble(dx) ||
+                !GeoSharkMath.IsValidDouble(dy) ||
+                !GeoSharkMath.IsValidDouble(dz))
             {
                 return 0.0;
             }
@@ -876,7 +876,7 @@ namespace GShark.Geometry
                 fz *= len;
                 len = fx * Math.Sqrt(1.0 + fy * fy + fz * fz);
             }
-            else if (fx > 0.0 && GeoSharpMath.IsValidDouble(fx))
+            else if (fx > 0.0 && GeoSharkMath.IsValidDouble(fx))
             {
                 len = fx;
             }

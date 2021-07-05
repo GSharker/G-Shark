@@ -43,8 +43,8 @@ namespace GShark.Test.XUnit.Operation
             double curveLength2 = Analyze.BezierCurveLength(curve2, 4);
 
             // Assert
-            curveLength1.Should().BeApproximately(expectedLength, GeoSharpMath.MaxTolerance);
-            curveLength2.Should().BeApproximately(expectedLength, GeoSharpMath.MaxTolerance);
+            curveLength1.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
+            curveLength2.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -61,13 +61,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < steps + 1; i++)
             {
                 // Act
-                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MaxTolerance);
+                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharkMath.MaxTolerance);
 
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MinTolerance);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharpMath.MinTolerance);
+                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
+                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MinTolerance);
 
                 sumLengths += length;
             }
@@ -110,8 +110,8 @@ namespace GShark.Test.XUnit.Operation
             var pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
 
             // Assert
-            t.Should().BeApproximately(tValExpected, GeoSharpMath.MaxTolerance);
-            pt.EpsilonEquals(expectedPt, GeoSharpMath.MaxTolerance).Should().BeTrue();
+            t.Should().BeApproximately(tValExpected, GeoSharkMath.MaxTolerance);
+            pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]

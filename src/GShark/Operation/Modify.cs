@@ -76,7 +76,7 @@ namespace GShark.Operation
                     int ind = k - degree + l;
                     double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-                    if (Math.Abs(alfa) < GeoSharpMath.Epsilon)
+                    if (Math.Abs(alfa) < GeoSharkMath.Epsilon)
                         controlPointsPost[ind - 1] = controlPointsPost[ind];
                     else
                     {

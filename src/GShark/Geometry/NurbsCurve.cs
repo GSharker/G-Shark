@@ -112,7 +112,7 @@ namespace GShark.Geometry
                     Extrema e = Evaluation.ComputeExtrema(crv);
                     foreach (double eValue in e.Values)
                     {
-                        if(eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharpMath.MaxTolerance) continue;
+                        if(eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharkMath.MaxTolerance) continue;
                         pts.Add(crv.PointAt(eValue));
                     }
                 }

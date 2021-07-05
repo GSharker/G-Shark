@@ -418,7 +418,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             var vector = new Vector3 { -7, 10, -5 };
             var axis = new Vector3 { 10, 7, 0 };
-            var radiance = GeoSharpMath.ToRadians(angle);
+            var radiance = GeoSharkMath.ToRadians(angle);
 
             // Act
             var vectorRot = vector.Rotate(axis, radiance);

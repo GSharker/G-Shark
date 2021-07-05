@@ -174,7 +174,7 @@ namespace GShark.Geometry
         public Point3d ClosestPoint(Point3d pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharpMath.MaxTolerance && Math.Abs(v) < GeoSharpMath.MaxTolerance)
+            if (Math.Abs(u) < GeoSharkMath.MaxTolerance && Math.Abs(v) < GeoSharkMath.MaxTolerance)
             {
                 return PointAt(0.0);
             }
@@ -217,7 +217,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharpMath.MaxTolerance && Plane == other.Plane;
+            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MaxTolerance && Plane == other.Plane;
         }
 
         /// <summary>

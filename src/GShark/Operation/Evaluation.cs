@@ -78,8 +78,8 @@ namespace GShark.Operation
         public static double OneBasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             // Special case at boundaries.
-            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharpMath.MaxTolerance) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharpMath.MaxTolerance)
+            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharkMath.MaxTolerance) ||
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharkMath.MaxTolerance)
             {
                 return 1.0;
             }
@@ -238,7 +238,7 @@ namespace GShark.Operation
 
                 result = result.Where((t) => t >= 0 && t <= 1).ToList();
                 //ToDo result is a collection of doubles, t, therefore the comparison for Sort should be implicit using standard sorting methods in LINQ.
-                result.Sort(GeoSharpMath.NumberSort);
+                result.Sort(GeoSharkMath.NumberSort);
                 extrema[j] = result;
             }
 
@@ -733,7 +733,7 @@ namespace GShark.Operation
         //    int reqKnotIndex = -1;
         //    foreach (double i in knotMults.Keys)
         //    {
-        //        if (Math.Abs(t - i) < GeoSharpMath.Epsilon)
+        //        if (Math.Abs(t - i) < GeoSharkMath.Epsilon)
         //        {
         //            reqKnotIndex = knotMults.GetValueOrDefault(i);
         //            break;
@@ -750,12 +750,12 @@ namespace GShark.Operation
         //    NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
         //    int span = knots.Span(degree, t);
 
-        //    if (Math.Abs(t - knots[0]) < GeoSharpMath.Epsilon)
+        //    if (Math.Abs(t - knots[0]) < GeoSharkMath.Epsilon)
         //    {
         //        span = 0;
         //    }
 
-        //    if (Math.Abs(t - knots[^1]) < GeoSharpMath.Epsilon)
+        //    if (Math.Abs(t - knots[^1]) < GeoSharkMath.Epsilon)
         //    {
         //        span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
         //    }

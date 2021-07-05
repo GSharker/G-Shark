@@ -31,7 +31,7 @@ namespace GShark.Operation
             double sum = 0.0;
             ICurve tempCrv = crvs[0];
 
-            while (i < crvs.Count && tempCrv.Knots[0] + GeoSharpMath.Epsilon < uSet)
+            while (i < crvs.Count && tempCrv.Knots[0] + GeoSharkMath.Epsilon < uSet)
             {
                 tempCrv = crvs[i];
                 double param = Math.Min(tempCrv.Knots.Last(), uSet);
@@ -89,7 +89,7 @@ namespace GShark.Operation
             if (segmentLength > setCurveLength) return curve.Knots[^1];
 
             // Divide and conquer.
-            double setTolerance = tolerance <= 0.0 ? GeoSharpMath.Epsilon : tolerance;
+            double setTolerance = tolerance <= 0.0 ? GeoSharkMath.Epsilon : tolerance;
 
             double startT = curve.Knots[0];
             double startLength = 0.0;
@@ -164,11 +164,11 @@ namespace GShark.Operation
             int maxIterations = 5;
             int j = 0;
             // Two zero tolerances can be used to indicate convergence:
-            double tol1 = GeoSharpMath.MaxTolerance; // a measure of Euclidean distance;
+            double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
             double tVal1 = curve.Knots[^1];
-            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquareLength < GeoSharpMath.Epsilon;
+            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquareLength < GeoSharkMath.Epsilon;
             double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
@@ -243,19 +243,19 @@ namespace GShark.Operation
         /// <returns>The parameter on the curve.</returns>
         public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
         {
-            if (segmentLength < GeoSharpMath.Epsilon) return curve.Knots[0];
-            if (Math.Abs(curve.Length() - segmentLength) < GeoSharpMath.Epsilon) return curve.Knots[^1];
+            if (segmentLength < GeoSharkMath.Epsilon) return curve.Knots[0];
+            if (Math.Abs(curve.Length() - segmentLength) < GeoSharkMath.Epsilon) return curve.Knots[^1];
 
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
-            double curveLength = -GeoSharpMath.Epsilon;
+            double curveLength = -GeoSharkMath.Epsilon;
 
             while (curveLength < segmentLength && i < curves.Count)
             {
                 double bezierLength = BezierCurveLength(curve);
                 curveLength += bezierLength;
 
-                if (segmentLength < curveLength + GeoSharpMath.Epsilon)
+                if (segmentLength < curveLength + GeoSharkMath.Epsilon)
                     return BezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
                 i++;
             }

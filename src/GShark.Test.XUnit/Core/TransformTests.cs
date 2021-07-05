@@ -77,7 +77,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             var center = new Point3d(5,5,0);
-            double angleInRadians = GeoSharpMath.ToRadians(30);
+            double angleInRadians = GeoSharkMath.ToRadians(30);
 
             // Act
             Transform transform = Transform.Rotation(angleInRadians, center);
@@ -88,7 +88,7 @@ namespace GShark.Test.XUnit.Core
             var axis = LinearAlgebra.GetRotationAxis(transform);
 
             // Assert
-            GeoSharpMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharpMath.Epsilon);
+            GeoSharkMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GeoSharkMath.Epsilon);
             axis.Should().BeEquivalentTo(Vector3d.ZAxis);
         }
 
@@ -139,13 +139,13 @@ namespace GShark.Test.XUnit.Core
             Transform transform = Transform.PlanarProjection(plane);
 
             // Assert
-            transform[0][0].Should().BeApproximately(0.692308, GeoSharpMath.MaxTolerance);
-            transform[0][1].Should().BeApproximately(-0.461538, GeoSharpMath.MaxTolerance);
-            transform[0][3].Should().BeApproximately(1.538462, GeoSharpMath.MaxTolerance);
-            transform[1][0].Should().BeApproximately(-0.461538, GeoSharpMath.MaxTolerance);
-            transform[1][1].Should().BeApproximately(0.307692, GeoSharpMath.MaxTolerance);
-            transform[1][3].Should().BeApproximately(2.307692, GeoSharpMath.MaxTolerance);
-            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MaxTolerance);
+            transform[0][0].Should().BeApproximately(0.692308, GeoSharkMath.MaxTolerance);
+            transform[0][1].Should().BeApproximately(-0.461538, GeoSharkMath.MaxTolerance);
+            transform[0][3].Should().BeApproximately(1.538462, GeoSharkMath.MaxTolerance);
+            transform[1][0].Should().BeApproximately(-0.461538, GeoSharkMath.MaxTolerance);
+            transform[1][1].Should().BeApproximately(0.307692, GeoSharkMath.MaxTolerance);
+            transform[1][3].Should().BeApproximately(2.307692, GeoSharkMath.MaxTolerance);
+            transform[3][3].Should().BeApproximately(1.0, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -160,13 +160,13 @@ namespace GShark.Test.XUnit.Core
             Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, plane);
 
             // Assert
-            transform[0][0].Should().BeApproximately(-0.832050, GeoSharpMath.MaxTolerance);
-            transform[0][2].Should().BeApproximately(-0.554700, GeoSharpMath.MaxTolerance);
-            transform[0][3].Should().BeApproximately(5.0, GeoSharpMath.MaxTolerance);
-            transform[1][0].Should().BeApproximately(0.554700, GeoSharpMath.MaxTolerance);
-            transform[1][2].Should().BeApproximately(-0.832050, GeoSharpMath.MaxTolerance);
-            transform[2][1].Should().BeApproximately(-1.0, GeoSharpMath.MaxTolerance);
-            transform[3][3].Should().BeApproximately(1.0, GeoSharpMath.MaxTolerance);
+            transform[0][0].Should().BeApproximately(-0.832050, GeoSharkMath.MaxTolerance);
+            transform[0][2].Should().BeApproximately(-0.554700, GeoSharkMath.MaxTolerance);
+            transform[0][3].Should().BeApproximately(5.0, GeoSharkMath.MaxTolerance);
+            transform[1][0].Should().BeApproximately(0.554700, GeoSharkMath.MaxTolerance);
+            transform[1][2].Should().BeApproximately(-0.832050, GeoSharkMath.MaxTolerance);
+            transform[2][1].Should().BeApproximately(-1.0, GeoSharkMath.MaxTolerance);
+            transform[3][3].Should().BeApproximately(1.0, GeoSharkMath.MaxTolerance);
         }
     }
 }
