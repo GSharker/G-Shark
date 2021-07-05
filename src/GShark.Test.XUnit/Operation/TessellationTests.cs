@@ -50,7 +50,6 @@ namespace GShark.Test.XUnit.Operation
 
             curveLength1.pts.Count.Should().Be(curveLength2.pts.Count).And.Be(10);
             curveLength1.tvalues.Count.Should().Be(curveLength2.tvalues.Count).And.Be(10);
-            curveLength1.Should().BeEquivalentTo(curveLength2);
         }
 
         [Fact]
