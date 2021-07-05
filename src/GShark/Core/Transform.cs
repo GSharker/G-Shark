@@ -75,7 +75,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="v">Translation vector.</param>
         /// <returns>A transformation matrix which moves the geometry along the vector.</returns>
-        public static Transform Translation(Vector3d v)
+        public static Transform Translation(Vector3 v)
         {
             return Translation(v[0], v[1], v[2]);
         }
@@ -117,7 +117,7 @@ namespace GShark.Core
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
         public static Transform Rotation(double angle, Point3 center)
         {
-            return Rotation(Math.Sin(angle), Math.Cos(angle), Vector3d.ZAxis, center);
+            return Rotation(Math.Sin(angle), Math.Cos(angle), Vector3.ZAxis, center);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace GShark.Core
         /// <param name="axis">Axis direction.</param>
         /// <param name="origin">Rotation center.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        private static Transform Rotation(double sinAngle, double cosAngle, Vector3d axis, Point3 origin)
+        private static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Point3 origin)
         {
             double sAngle = sinAngle;
             double cAngle = cosAngle;
@@ -272,11 +272,11 @@ namespace GShark.Core
         public static Transform Reflection(Plane plane)
         {
             Point3 pt = plane.Origin;
-            Vector3d normal = plane.Normal;
+            Vector3 normal = plane.Normal;
             Transform transform = Identity();
 
-            Vector3d unitizedN = normal.Unitize();
-            Vector3d translation = unitizedN * (2.0 * (unitizedN[0]*pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
+            Vector3 unitizedN = normal.Unitize();
+            Vector3 translation = unitizedN * (2.0 * (unitizedN[0]*pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
 
             transform[0][0] = 1 - 2.0 * unitizedN[0] * unitizedN[0];
             transform[0][1] = - 2.0 * unitizedN[0] * unitizedN[1];
@@ -305,8 +305,8 @@ namespace GShark.Core
         public static Transform PlanarProjection(Plane plane)
         {
             Transform transform = Transform.Identity();
-            Vector3d x = plane.XAxis;
-            Vector3d y = plane.YAxis;
+            Vector3 x = plane.XAxis;
+            Vector3 y = plane.YAxis;
             Point3 pt = plane.Origin;
             double[] q = new double[3];
 

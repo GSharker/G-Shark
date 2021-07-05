@@ -157,7 +157,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve.</param>
         /// <returns>The vector at the given parameter.</returns>
-        public Vector3d TangentAt(double t)
+        public Vector3 TangentAt(double t)
         {
             return Evaluation.RationalCurveTangent(this, t);
         }

@@ -114,7 +114,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The polyline parameter.</param>
         /// <returns>The unit tangent at the parameter t.</returns>
-        public Vector3d TangentAt(double t)
+        public Vector3 TangentAt(double t)
         {
             int index = (int)Math.Truncate(t);
             if (index < 0)

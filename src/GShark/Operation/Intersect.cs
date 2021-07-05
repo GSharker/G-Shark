@@ -25,12 +25,12 @@ namespace GShark.Operation
         /// <returns>True if the intersection success.</returns>
         public static bool PlanePlane(Plane p1, Plane p2, out Line line)
         {
-            Vector3d plNormal1 = p1.Normal;
-            Vector3d plNormal2 = p2.Normal;
+            Vector3 plNormal1 = p1.Normal;
+            Vector3 plNormal2 = p2.Normal;
             line = new Line(new Point3(0, 0, 0), new Point3(0, 0, 1));
 
-            Vector3d directionVec = Vector3d.CrossProduct(plNormal1, plNormal2);
-            if (Vector3d.DotProduct(directionVec, directionVec) < GeoSharkMath.Epsilon)
+            Vector3 directionVec = Vector3.CrossProduct(plNormal1, plNormal2);
+            if (Vector3.DotProduct(directionVec, directionVec) < GeoSharkMath.Epsilon)
             {
                 return false;
             }
@@ -80,8 +80,8 @@ namespace GShark.Operation
                     break;
             }
 
-            double dot1 = -Vector3d.DotProduct(p1.Origin, plNormal1);
-            double dot2 = -Vector3d.DotProduct(p2.Origin, plNormal2);
+            double dot1 = -Vector3.DotProduct(p1.Origin, plNormal1);
+            double dot2 = -Vector3.DotProduct(p2.Origin, plNormal2);
 
             double denominator = a1 * b2 - a2 * b1;
 
@@ -126,12 +126,12 @@ namespace GShark.Operation
         /// <returns>True if the intersection success.</returns>
         public static bool LinePlane(Line line, Plane plane, out Point3 pt, out double t)
         {
-            Vector3d lnDir = line.Direction;
+            Vector3 lnDir = line.Direction;
             Point3 ptPlane = plane.Origin - line.Start;
             double segmentLength = line.Length;
 
-            double denominator = Vector3d.DotProduct(plane.Normal, lnDir);
-            double numerator = Vector3d.DotProduct(plane.Normal, ptPlane);
+            double denominator = Vector3.DotProduct(plane.Normal, lnDir);
+            double numerator = Vector3.DotProduct(plane.Normal, ptPlane);
 
             if (Math.Abs(denominator) < GeoSharkMath.Epsilon)
             {
@@ -165,21 +165,21 @@ namespace GShark.Operation
         {
             double ln0Length = ln0.Length;
             double ln1Length = ln1.Length;
-            Vector3d lnDir0 = ln0.Direction;
-            Vector3d lnDir1 = ln1.Direction;
-            Vector3d ln0Ln1Dir = ln0.Start - ln1.Start;
+            Vector3 lnDir0 = ln0.Direction;
+            Vector3 lnDir1 = ln1.Direction;
+            Vector3 ln0Ln1Dir = ln0.Start - ln1.Start;
 
-            double a = Vector3d.DotProduct(lnDir0, lnDir0);
-            double b = Vector3d.DotProduct(lnDir0, lnDir1);
-            double c = Vector3d.DotProduct(lnDir1, lnDir1);
-            double d = Vector3d.DotProduct(lnDir0, ln0Ln1Dir);
-            double e = Vector3d.DotProduct(lnDir1, ln0Ln1Dir);
+            double a = Vector3.DotProduct(lnDir0, lnDir0);
+            double b = Vector3.DotProduct(lnDir0, lnDir1);
+            double c = Vector3.DotProduct(lnDir1, lnDir1);
+            double d = Vector3.DotProduct(lnDir0, ln0Ln1Dir);
+            double e = Vector3.DotProduct(lnDir1, ln0Ln1Dir);
             double div = a * c - b * b;
 
             if (Math.Abs(div) < GeoSharkMath.Epsilon)
             {
-                pt0 = Vector3d.Unset;
-                pt1 = Vector3d.Unset;
+                pt0 = Vector3.Unset;
+                pt1 = Vector3.Unset;
                 t0 = 0.0;
                 t1 = 0.0;
                 return false;
@@ -238,12 +238,12 @@ namespace GShark.Operation
         {
             Point3 pt0 = ln.Start;
             Point3 ptCircle = cl.Center;
-            Vector3d lnDir = ln.Direction;
+            Vector3 lnDir = ln.Direction;
             Point3 pt0PtCir = pt0 - ptCircle;
 
-            double a = Vector3d.DotProduct(lnDir, lnDir);
-            double b = Vector3d.DotProduct(lnDir, pt0PtCir) * 2;
-            double c = Vector3d.DotProduct(pt0PtCir, pt0PtCir) - (cl.Radius * cl.Radius);
+            double a = Vector3.DotProduct(lnDir, lnDir);
+            double b = Vector3.DotProduct(lnDir, pt0PtCir) * 2;
+            double c = Vector3.DotProduct(pt0PtCir, pt0PtCir) - (cl.Radius * cl.Radius);
 
             double det = b * b - 4 * a * c;
             double t;
@@ -284,7 +284,7 @@ namespace GShark.Operation
             pts = new Point3[] { };
             Point3 clPt = cl.Center;
 
-            Vector3d cCross = Vector3d.CrossProduct(pl.Origin, clPt);
+            Vector3 cCross = Vector3.CrossProduct(pl.Origin, clPt);
             if (Math.Abs(cCross.Length) < GeoSharkMath.Epsilon)
             {
                 return false;

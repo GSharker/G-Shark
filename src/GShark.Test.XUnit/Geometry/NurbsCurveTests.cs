@@ -212,7 +212,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            var transform = Transform.Translation(new Vector3d(-10, 20, 0));
+            var transform = Transform.Translation(new Vector3(-10, 20, 0));
 
             // Act
             var transformedCurve = curve.Transform(transform);

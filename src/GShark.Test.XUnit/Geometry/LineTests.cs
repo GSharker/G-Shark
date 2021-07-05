@@ -25,7 +25,7 @@ namespace GShark.Test.XUnit.Geometry
             _exampleLine = new Line(pt1, pt2);
 
             // Initializes a line by a starting point a direction and a length.
-            Line line = new Line(pt1, Vector3d.XAxis, 15);
+            Line line = new Line(pt1, Vector3.XAxis, 15);
             #endregion
         }
 
@@ -54,7 +54,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             Func<Line> func0 = () => new Line(pt, pt);
-            Func<Line> func1 = () => new Line(pt, Vector3d.Unset);
+            Func<Line> func1 = () => new Line(pt, Vector3.Unset);
 
             // Assert
             func0.Should().Throw<Exception>();
@@ -67,14 +67,14 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             Point3 startPoint = new Point3(0, 0, 0);
             int lineLength = 15;
-            Vector3d expectedDirection = new Vector3d(1, 0, 0);
+            Vector3 expectedDirection = new Vector3(1, 0, 0);
             Point3 expectedEndPoint = new Point3(lineLength, 0, 0);
 
             // Act
-            Line line1 = new Line(startPoint, Vector3d.XAxis, lineLength);
+            Line line1 = new Line(startPoint, Vector3.XAxis, lineLength);
             
             //ToDo this should give an error since it is the direction which should be negated/reversed. Length should always be > 0.
-            Line line2 = new Line(startPoint, Vector3d.XAxis, -lineLength);
+            Line line2 = new Line(startPoint, Vector3.XAxis, -lineLength);
 
             // Assert
             line1.Length.Should().Be(line2.Length).And.Be(lineLength);
@@ -94,7 +94,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             Point3 startPoint = new Point3(0, 0, 0);
             // Act
-            Func<Line> func = () => new Line(startPoint, Vector3d.XAxis, 0);
+            Func<Line> func = () => new Line(startPoint, Vector3.XAxis, 0);
 
             // Assert
             //ToDo Length should always be > 0.
@@ -118,10 +118,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Line_Direction()
         {
             // Arrange
-            Vector3d expectedDirection = new Vector3d(0.5547, 0.83205, 0);
+            Vector3 expectedDirection = new Vector3(0.5547, 0.83205, 0);
 
             // Act
-            Vector3d dir = _exampleLine.Direction;
+            Vector3 dir = _exampleLine.Direction;
 
             // Assert
             dir.EpsilonEquals(expectedDirection, 1e-5).Should().BeTrue();
@@ -226,7 +226,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Translates_A_Line()
         {
             // Arrange
-            Transform transform = Transform.Translation(new Vector3d(10, 10, 0));
+            Transform transform = Transform.Translation(new Vector3(10, 10, 0));
 
             // Act
             Line transformedLine = _exampleLine.Transform(transform);

@@ -164,10 +164,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Tangent_Vector_At_The_Given_Parameter(double t, double[] tangent)
         {
             // Arrange
-            Vector3d expectedTangent = new Vector3d(tangent[0], tangent[1], tangent[2]);
+            Vector3 expectedTangent = new Vector3(tangent[0], tangent[1], tangent[2]);
 
             // Act
-            Vector3d tanResult = _polyline.TangentAt(t);
+            Vector3 tanResult = _polyline.TangentAt(t);
 
             // Assert
             tanResult.EpsilonEquals(expectedTangent, GeoSharkMath.MaxTolerance).Should().BeTrue();
@@ -201,7 +201,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_Polyline()
         {
             // Arrange
-            Transform translation = Transform.Translation(new Vector3d(10, 15, 0));
+            Transform translation = Transform.Translation(new Vector3(10, 15, 0));
             Transform rotation = Transform.Rotation(GeoSharkMath.ToRadians(30), new Point3(0, 0, 0));
             Transform combinedTransformations = translation.Combine(rotation);
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };

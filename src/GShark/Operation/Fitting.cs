@@ -88,8 +88,8 @@ namespace GShark.Operation
         /// <param name="endTangent">The tangent vector for the last point.</param>
         /// <param name="centripetal">True use the chord as per knot spacing, false use the squared chord.</param>
         /// <returns>A the interpolated curve.</returns>
-        public static NurbsCurve InterpolatedCurve(List<Point3> pts, int degree, Vector3d? startTangent = null,
-            Vector3d? endTangent = null, bool centripetal = false)
+        public static NurbsCurve InterpolatedCurve(List<Point3> pts, int degree, Vector3? startTangent = null,
+            Vector3? endTangent = null, bool centripetal = false)
         {
             if (pts.Count < degree + 1)
             {
@@ -108,7 +108,7 @@ namespace GShark.Operation
             Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
             // Solve for each points.
             List<Point3> ctrlPts = (hasTangents)
-                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3d(startTangent.Value), new Vector3d(endTangent.Value))
+                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3(startTangent.Value), new Vector3(endTangent.Value))
                 : SolveCtrlPts(knots, pts, coeffMatrix);
 
             return new NurbsCurve(degree, knots, ctrlPts);
@@ -252,7 +252,7 @@ namespace GShark.Operation
         /// <summary>
         /// Defines the control points defining the tangent values for the first and last points.
         /// </summary>
-        private static List<Point3> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3d startTangent, Vector3d endTangent)
+        private static List<Point3> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -353,7 +353,7 @@ namespace GShark.Operation
             coeffMatrix[n - 1][n - 2] = 2;
 
             // Build the vector points.
-            List<Vector3d> vecPts = (getsEndDerivatives) ? Enumerable.Repeat(new Vector3d(), 2).ToList() : Enumerable.Repeat(new Vector3d(), n).ToList();
+            List<Vector3> vecPts = (getsEndDerivatives) ? Enumerable.Repeat(new Vector3(), 2).ToList() : Enumerable.Repeat(new Vector3(), n).ToList();
 
             if (!getsEndDerivatives)
             {

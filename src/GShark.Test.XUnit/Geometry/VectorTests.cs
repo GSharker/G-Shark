@@ -450,7 +450,7 @@ namespace GShark.Test.XUnit.Geometry
             var pt2 = new Point4(5,5,0,0.2);
             var pt1Expected = new Point3(15, 15, 0);
             var pt2Expected = new Point4(7, 7, 0, 0.2);
-            var transform = Transform.Translation(new Vector3d(10, 10, 0));
+            var transform = Transform.Translation(new Vector3(10, 10, 0));
 
             // Act
             var pt1Translated = pt1.Transform(transform);
