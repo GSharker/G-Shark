@@ -24,7 +24,7 @@ namespace GShark.Geometry
         /// Initializes a new instance of the <see cref="Point4d"/> class from the coordinates of a point.
         /// </summary>
         /// <param name="point">.</param>
-        public Point4d(Point3d point)
+        public Point4d(Point3 point)
         {
             X = point.X;
             Y = point.Y;
@@ -113,7 +113,7 @@ namespace GShark.Geometry
 
             if (w <= 0.0)
             {
-                return new Point3d(x, y, z);
+                return new Point3(x, y, z);
             }
 
             double w2 = 1.0 / w;

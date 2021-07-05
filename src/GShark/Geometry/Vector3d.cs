@@ -27,7 +27,7 @@ namespace GShark.Geometry
         /// Initializes a new instance of a vector, copying the three components from the three coordinates of a point.
         /// </summary>
         /// <param name="point">The point to copy from.</param>
-        public Vector3d(Point3d point) : this(point.X, point.Y, point.Z)
+        public Vector3d(Point3 point) : this(point.X, point.Y, point.Z)
         {
         }
 
@@ -177,13 +177,13 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Converts a vector3d in a point3d, without needing casting.
+        /// Converts a vector3d in a point3, without needing casting.
         /// </summary>
         /// <param name="vector3d">A Vector3d.</param>
-        /// <returns>The resulting Point3d.</returns>
-        public static implicit operator Point3d(Vector3d vector3d)
+        /// <returns>The resulting Point3.</returns>
+        public static implicit operator Point3(Vector3d vector3d)
         {
-            return new Point3d(vector3d);
+            return new Point3(vector3d);
         }
 
         /// <summary>
@@ -243,8 +243,8 @@ namespace GShark.Geometry
         {
             throw new NotImplementedException();
             //{ // Project vectors onto plane.
-            //    Point3d pA = plane.Origin + a;
-            //    Point3d pB = plane.Origin + b;
+            //    Point3 pA = plane.Origin + a;
+            //    Point3 pB = plane.Origin + b;
 
             //    pA = plane.ClosestPoint(pA);
             //    pB = plane.ClosestPoint(pB);
@@ -801,7 +801,7 @@ namespace GShark.Geometry
         /// <param name="pt2">Second point.</param>
         /// <param name="pt3">Third point.</param>
         /// <returns>The perpendicular vector.</returns>
-        public Vector3d PerpendicularTo(Point3d pt1, Point3d pt2, Point3d pt3)
+        public Vector3d PerpendicularTo(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             Vector3d vec0 = pt3 - pt2;
             Vector3d vec1 = pt1 - pt3;

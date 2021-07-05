@@ -137,8 +137,8 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point.</returns>
-        //ToDo Return Point3d by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
-        public static Point3d CurvePointAt(ICurve curve, double t)
+        //ToDo Return Point3 by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
+        public static Point3 CurvePointAt(ICurve curve, double t)
         {
             List<Point4d> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
@@ -184,9 +184,9 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The points collection to evaluate.</param>
         /// <returns>The centroid point.</returns>
-        public static Point3d CentroidByVertices(IList<Point3d> pts)
+        public static Point3 CentroidByVertices(IList<Point3> pts)
         {
-            Point3d centroid = new Point3d();
+            Point3 centroid = new Point3();
             bool isClosed = pts[0] == pts[^1];
             int count = pts.Count;
 
@@ -251,17 +251,17 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
-        internal static List<List<Point3d>> DerivativeCoordinates(List<Point3d> pts)
+        internal static List<List<Point3>> DerivativeCoordinates(List<Point3> pts)
         {
-            List<List<Point3d>> derivPts = new List<List<Point3d>>();
+            List<List<Point3>> derivPts = new List<List<Point3>>();
 
-            List<Point3d> p = new List<Point3d>(pts);
+            List<Point3> p = new List<Point3>(pts);
             int d = p.Count;
             int c = d - 1;
 
             for (; d > 1; d--, c--)
             {
-                List<Point3d> list = new List<Point3d>();
+                List<Point3> list = new List<Point3>();
                 for (int j = 0; j < c; j++)
                 {
                     var dpt = (p[j + 1] - p[j]) * c;
@@ -336,14 +336,14 @@ namespace GShark.Operation
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Point3d> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
             // Correspond in the book to wDers.
             List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
             List<Vector3d> CK = new List<Vector3d>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
             {
-                Point3d rationalDerivativePoint = rationalDerivativePoints[k];
+                Point3 rationalDerivativePoint = rationalDerivativePoints[k];
 
                 for (int i = 1; i < k + 1; i++)
                 {
@@ -669,11 +669,11 @@ namespace GShark.Operation
         ///// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
         ///// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
         ///// <returns>The evaluated point.</returns>
-        //public static Point3d SurfacePointAt(NurbsSurface surface, double u, double v)
+        //public static Point3 SurfacePointAt(NurbsSurface surface, double u, double v)
         //{
         //    int n = surface.KnotsU.Count - surface.DegreeU - 2;
         //    int m = surface.KnotsV.Count - surface.DegreeV - 2;
-        //    List<List<Point3d>> controlPoints = surface.ControlPoints;
+        //    List<List<Point3>> controlPoints = surface.ControlPoints;
         //    List<List<Point4d>> surfaceHomoPts = surface.HomogenizedPoints;
         //    int dim = 3;//dimension of point
 
@@ -693,12 +693,12 @@ namespace GShark.Operation
         //    List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
         //    List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
         //    int uIndex = knotSpanU - surface.DegreeU;
-        //    Point3d position = new Point3d(0,0,0);
+        //    Point3 position = new Point3(0,0,0);
 
         //    //ToDo refactor to use point coordinate properties instead of inidces. X,Y,Z.
         //    for (int l = 0; l < surface.DegreeV + 1; l++)
         //    {
-        //        var temp = new Point3d(0,0,0);
+        //        var temp = new Point3(0,0,0);
         //        var vIndex = knotSpanV - surface.DegreeV + l;
         //        for (int x = 0; x < surface.DegreeU + 1; x++)
         //        {
@@ -760,12 +760,12 @@ namespace GShark.Operation
         //        span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
         //    }
 
-        //    List<Point3d> ctrlPts = new List<Point3d>();
+        //    List<Point3> ctrlPts = new List<Point3>();
         //    if (!useU)
         //    {
         //        foreach (var row in newSrf.ControlPoints)
         //        {
-        //            ctrlPts.Add(new Point3d(row[span][0], row[span][1], row[span][2]));
+        //            ctrlPts.Add(new Point3(row[span][0], row[span][1], row[span][2]));
         //        }
 
         //        return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);

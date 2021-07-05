@@ -26,7 +26,7 @@ namespace GShark.Geometry
         ///// <param name="controlPoints">Two dimensional array of points</param>
         ///// <param name="weights">Two dimensional array of weight values</param>
         ///// <return>A new NurbsSurface</return>
-        //public NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3d>> controlPoints, List<List<double>>? weights = null)
+        //public NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> controlPoints, List<List<double>>? weights = null)
         //{
 
         //    if (controlPoints == null) throw new ArgumentNullException("Control points array connot be null!");
@@ -58,7 +58,7 @@ namespace GShark.Geometry
         ///// <param name="controlPoints">Control points, as a 2d collection of Vector3.</param>
         ///// <param name="degreeU">Surface degree u</param>
         ///// <param name="degreeV">Surface degree v</param>
-        //public NurbsSurface(List<List<Point3d>> controlPoints, int degreeU, int degreeV)
+        //public NurbsSurface(List<List<Point3>> controlPoints, int degreeU, int degreeV)
         //    : this(degreeU, degreeV, new KnotVector(degreeU, controlPoints.Count), new KnotVector(degreeV, controlPoints[0].Count), controlPoints)
         //{
         //}
@@ -84,19 +84,19 @@ namespace GShark.Geometry
         ///// <param name="p2">The second point</param>
         ///// <param name="p3">The third point</param>
         ///// <param name="p4">The fourth point</param>
-        //public static NurbsSurface ByFourPoints(Point3d p1, Point3d p2, Point3d p3, Point3d p4)
+        //public static NurbsSurface ByFourPoints(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         //{
         //    int degree = 1;
-        //    var pts = new List<List<Point3d>>();
+        //    var pts = new List<List<Point3>>();
         //    for (int i = 0; i < degree + 1; i++)
         //    {
-        //        var row = new List<Point3d>();
+        //        var row = new List<Point3>();
         //        for (int j = 0; j < degree + 1; j++)
         //        {
         //            var l = (1.0d - i / degree);
-        //            var p1p2 = Point3d.Interpolate(p1, p2, l);
-        //            var p4p3 = Point3d.Interpolate(p4, p3, l);
-        //            var res = Point3d.Interpolate(p1p2, p4p3, 1.0d - j / degree);
+        //            var p1p2 = Point3.Interpolate(p1, p2, l);
+        //            var p4p3 = Point3.Interpolate(p4, p3, l);
+        //            var res = Point3.Interpolate(p1p2, p4p3, 1.0d - j / degree);
         //            var res4d = new Point4d(res.X, res.Y, res.Z, 1.0d);
         //            row.Add(res);
         //        }
@@ -172,7 +172,7 @@ namespace GShark.Geometry
         ///// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         ///// and where each control point is an list of length (dim).
         ///// </summary>
-        //public List<List<Point3d>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
+        //public List<List<Point3>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
         ///// <summary>
         /////Two dimensional array of weight values
         ///// </summary>

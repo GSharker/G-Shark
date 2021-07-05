@@ -271,9 +271,9 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3d vector = new Vector3d(-7, 10, -5);
-            Point3d pt1 = new Point3d(3, -1, 2);
-            Point3d pt2 = new Point3d(1, -1, -3);
-            Point3d pt3 = new Point3d(4, -3, 1);
+            Point3 pt1 = new Point3(3, -1, 2);
+            Point3 pt2 = new Point3(1, -1, -3);
+            Point3 pt3 = new Point3(4, -3, 1);
             Vector3d vectorExpected = new Vector3d(-10, -7, 4);
 
             // Act

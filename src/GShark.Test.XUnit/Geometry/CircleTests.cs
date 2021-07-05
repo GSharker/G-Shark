@@ -20,7 +20,7 @@ namespace GShark.Test.XUnit.Geometry
 
             #region example
             // Initializes a circle from a plane and a radius.
-            Point3d center = new Point3d(85.591741, 24.79606, 1.064717);
+            Point3 center = new Point3(85.591741, 24.79606, 1.064717);
             Vector3d xDir = new Vector3d(-0.687455, 0.703828, -0.178976);
             Vector3d yDir = new Vector3d(-0.726183, -0.663492, 0.180104);
             Vector3d normal = new Vector3d(0.008012, 0.253783, 0.967228);
@@ -28,9 +28,9 @@ namespace GShark.Test.XUnit.Geometry
             _circle2D = new Circle(plane, 23);
 
             // Initializes a circle from 3 points.
-            Point3d pt1 = new Point3d(74.264416, 36.39316, -1.884313);
-            Point3d pt2 = new Point3d(97.679126, 13.940616, 3.812853);
-            Point3d pt3 = new Point3d(100.92443, 30.599893, -0.585116);
+            Point3 pt1 = new Point3(74.264416, 36.39316, -1.884313);
+            Point3 pt2 = new Point3(97.679126, 13.940616, 3.812853);
+            Point3 pt3 = new Point3(100.92443, 30.599893, -0.585116);
             _circle3D = new Circle(pt1, pt2, pt3);
             #endregion
         }
@@ -40,7 +40,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Assert
             int radius = 23;
-            Point3d expectedCenter = new Point3d(0.0, 0.0, 0.0);
+            Point3 expectedCenter = new Point3(0.0, 0.0, 0.0);
 
             // Act
             Circle circle = new Circle(radius);
@@ -56,21 +56,21 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle3D;
-            var ptsExpected = new List<Point3d>
+            var ptsExpected = new List<Point3>
             {
-                new Point3d(74.264416, 36.39316, -1.884313),
-                new Point3d(62.298962, 25.460683, 1.083287),
-                new Point3d(73.626287, 13.863582, 4.032316),
-                new Point3d(84.953611, 2.266482, 6.981346),
-                new Point3d(96.919065, 13.198959, 4.013746),
-                new Point3d(108.884519, 24.131437, 1.046146),
-                new Point3d(97.557194, 35.728537, -1.902883),
-                new Point3d(86.22987, 47.325637, -4.851913),
-                new Point3d(74.264416, 36.39316, -1.88431)
+                new Point3(74.264416, 36.39316, -1.884313),
+                new Point3(62.298962, 25.460683, 1.083287),
+                new Point3(73.626287, 13.863582, 4.032316),
+                new Point3(84.953611, 2.266482, 6.981346),
+                new Point3(96.919065, 13.198959, 4.013746),
+                new Point3(108.884519, 24.131437, 1.046146),
+                new Point3(97.557194, 35.728537, -1.902883),
+                new Point3(86.22987, 47.325637, -4.851913),
+                new Point3(74.264416, 36.39316, -1.88431)
             };
 
             // Act
-            List<Point3d> ctrPts = circle.ControlPoints;
+            List<Point3> ctrPts = circle.ControlPoints;
 
             // Assert
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
@@ -99,11 +99,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Point3d expectedPt = new Point3d(pts[0],pts[1],pts[2]);
+            Point3 expectedPt = new Point3(pts[0],pts[1],pts[2]);
             Circle circle = _circle2D;
 
             // Act
-            Point3d pt = circle.PointAt(t);
+            Point3 pt = circle.PointAt(t);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
@@ -119,7 +119,7 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            Point3d tangent = circle.TangentAt(t);
+            Point3 tangent = circle.TangentAt(t);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, GeoSharkMath.MaxTolerance).Should().BeTrue();
@@ -130,8 +130,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle2D;
-            Point3d minCheck = new Point3d(62.592479, 2.549053, -4.7752);
-            Point3d maxCheck = new Point3d(108.591003, 47.043067, 6.904634);
+            Point3 minCheck = new Point3(62.592479, 2.549053, -4.7752);
+            Point3 maxCheck = new Point3(108.591003, 47.043067, 6.904634);
 
             // Act
             BoundingBox bBox = circle.BoundingBox;
@@ -147,12 +147,12 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
         {
             // Arrange
-            Point3d testPt = new Point3d(ptToTest[0], ptToTest[1], ptToTest[2]);
-            Point3d expectedPt = new Point3d(result[0], result[1], result[2]);
+            Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
+            Point3 expectedPt = new Point3(result[0], result[1], result[2]);
 
             // Act
             Circle circle = _circle2D;
-            Point3d pt = circle.ClosestPoint(testPt);
+            Point3 pt = circle.ClosestPoint(testPt);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();

@@ -447,9 +447,9 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_And_A_HomogenizedPoint_Transformed()
         {
             // Arrange
-            var pt1 = new Point3d(5,5,0);
+            var pt1 = new Point3(5,5,0);
             var pt2 = new Point4d(5,5,0,0.2);
-            var pt1Expected = new Point3d(15, 15, 0);
+            var pt1Expected = new Point3(15, 15, 0);
             var pt2Expected = new Point4d(7, 7, 0, 0.2);
             var transform = Transform.Translation(new Vector3d(10, 10, 0));
 

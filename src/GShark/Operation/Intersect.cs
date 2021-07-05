@@ -27,7 +27,7 @@ namespace GShark.Operation
         {
             Vector3d plNormal1 = p1.Normal;
             Vector3d plNormal2 = p2.Normal;
-            line = new Line(new Point3d(0, 0, 0), new Point3d(0, 0, 1));
+            line = new Line(new Point3(0, 0, 0), new Point3(0, 0, 1));
 
             Vector3d directionVec = Vector3d.CrossProduct(plNormal1, plNormal2);
             if (Vector3d.DotProduct(directionVec, directionVec) < GeoSharkMath.Epsilon)
@@ -88,7 +88,7 @@ namespace GShark.Operation
             double corX = (b1 * dot2 - b2 * dot1) / denominator;
             double corY = (a2 * dot1 - a1 * dot2) / denominator;
 
-            Point3d pt = new Point3d();
+            Point3 pt = new Point3();
 
             switch (largeIndex)
             {
@@ -124,10 +124,10 @@ namespace GShark.Operation
         /// <param name="pt">The point representing the unique intersection.</param>
         /// <param name="t">The parameter on the line between 0.0 to 1.0</param>
         /// <returns>True if the intersection success.</returns>
-        public static bool LinePlane(Line line, Plane plane, out Point3d pt, out double t)
+        public static bool LinePlane(Line line, Plane plane, out Point3 pt, out double t)
         {
             Vector3d lnDir = line.Direction;
-            Point3d ptPlane = plane.Origin - line.Start;
+            Point3 ptPlane = plane.Origin - line.Start;
             double segmentLength = line.Length;
 
             double denominator = Vector3d.DotProduct(plane.Normal, lnDir);
@@ -135,7 +135,7 @@ namespace GShark.Operation
 
             if (Math.Abs(denominator) < GeoSharkMath.Epsilon)
             {
-                pt = Point3d.Unset;
+                pt = Point3.Unset;
                 t = 0.0;
                 return false;
             }
@@ -161,7 +161,7 @@ namespace GShark.Operation
         /// <param name="t0">The parameter on the first line between 0.0 to 1.0</param>
         /// <param name="t1">The parameter on the second line between 0.0 to 1.0</param>
         /// <returns>True if the intersection succeed.</returns>
-        public static bool LineLine(Line ln0, Line ln1, out Point3d pt0, out Point3d pt1, out double t0, out double t1)
+        public static bool LineLine(Line ln0, Line ln1, out Point3 pt0, out Point3 pt1, out double t0, out double t1)
         {
             double ln0Length = ln0.Length;
             double ln1Length = ln1.Length;
@@ -203,14 +203,14 @@ namespace GShark.Operation
         /// <param name="poly">The polyline to intersect with.</param>
         /// <param name="pl">The section plane.</param>
         /// <returns>A collection of the unique intersection points.</returns>
-        public static List<Point3d> PolylinePlane(Polyline poly, Plane pl)
+        public static List<Point3> PolylinePlane(Polyline poly, Plane pl)
         {
-            List<Point3d> intersectionPts = new List<Point3d>();
+            List<Point3> intersectionPts = new List<Point3>();
             Line[] segments = poly.Segments;
 
             foreach (Line segment in segments)
             {
-                if (!LinePlane(segment, pl, out Point3d pt, out double t))
+                if (!LinePlane(segment, pl, out Point3 pt, out double t))
                 {
                     continue;
                 }
@@ -234,12 +234,12 @@ namespace GShark.Operation
         /// <param name="ln">The line for intersection.</param>
         /// <param name="pts">Output the intersection points.</param>
         /// <returns>True if intersection is computed.</returns>
-        public static bool LineCircle(Circle cl, Line ln, out Point3d[] pts)
+        public static bool LineCircle(Circle cl, Line ln, out Point3[] pts)
         {
-            Point3d pt0 = ln.Start;
-            Point3d ptCircle = cl.Center;
+            Point3 pt0 = ln.Start;
+            Point3 ptCircle = cl.Center;
             Vector3d lnDir = ln.Direction;
-            Point3d pt0PtCir = pt0 - ptCircle;
+            Point3 pt0PtCir = pt0 - ptCircle;
 
             double a = Vector3d.DotProduct(lnDir, lnDir);
             double b = Vector3d.DotProduct(lnDir, pt0PtCir) * 2;
@@ -250,22 +250,22 @@ namespace GShark.Operation
 
             if ((a <= GeoSharkMath.MaxTolerance) || (det < 0))
             {
-                pts = new Point3d[] { };
+                pts = new Point3[] { };
                 return false;
             }
 
             if (Math.Abs(det) < GeoSharkMath.MaxTolerance)
             {
                 t = -b / (2 * a);
-                Point3d intersection = pt0 + lnDir * t;
+                Point3 intersection = pt0 + lnDir * t;
                 pts = new[] { intersection };
                 return true;
             }
 
             t = (-b + Math.Sqrt(det)) / (2 * a);
             double t1 = (-b - Math.Sqrt(det)) / (2 * a);
-            Point3d intersection0 = pt0 + lnDir * t;
-            Point3d intersection1 = pt0 + lnDir * t1;
+            Point3 intersection0 = pt0 + lnDir * t;
+            Point3 intersection1 = pt0 + lnDir * t1;
             pts = new[] { intersection0, intersection1 };
             return true;
         }
@@ -279,10 +279,10 @@ namespace GShark.Operation
         /// <param name="cl">The circle for intersection.</param>
         /// <param name="pts">Output the intersection points.</param>
         /// <returns>True if intersection is computed.</returns>
-        public static bool PlaneCircle(Plane pl, Circle cl, out Point3d[] pts)
+        public static bool PlaneCircle(Plane pl, Circle cl, out Point3[] pts)
         {
-            pts = new Point3d[] { };
-            Point3d clPt = cl.Center;
+            pts = new Point3[] { };
+            Point3 clPt = cl.Center;
 
             Vector3d cCross = Vector3d.CrossProduct(pl.Origin, clPt);
             if (Math.Abs(cCross.Length) < GeoSharkMath.Epsilon)
@@ -291,12 +291,12 @@ namespace GShark.Operation
             }
 
             bool intersection = PlanePlane(pl, cl.Plane, out Line intersectionLine);
-            Point3d closestPt = intersectionLine.ClosestPoint(clPt);
+            Point3 closestPt = intersectionLine.ClosestPoint(clPt);
             double distance = clPt.DistanceTo(intersectionLine);
 
             if (Math.Abs(distance) < GeoSharkMath.Epsilon)
             {
-                Point3d pt = cl.ClosestPoint(closestPt);
+                Point3 pt = cl.ClosestPoint(closestPt);
                 pts = new[] { pt };
                 return true;
             }

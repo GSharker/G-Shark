@@ -115,7 +115,7 @@ namespace GShark.Core
         /// <param name="angle">Angle in radians of the rotation.</param>
         /// <param name="center">Center point of rotation. Rotation axis is vertical.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public static Transform Rotation(double angle, Point3d center)
+        public static Transform Rotation(double angle, Point3 center)
         {
             return Rotation(Math.Sin(angle), Math.Cos(angle), Vector3d.ZAxis, center);
         }
@@ -128,7 +128,7 @@ namespace GShark.Core
         /// <param name="axis">Axis direction.</param>
         /// <param name="origin">Rotation center.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        private static Transform Rotation(double sinAngle, double cosAngle, Vector3d axis, Point3d origin)
+        private static Transform Rotation(double sinAngle, double cosAngle, Vector3d axis, Point3 origin)
         {
             double sAngle = sinAngle;
             double cAngle = cosAngle;
@@ -150,7 +150,7 @@ namespace GShark.Core
             transform[2][1] = axis[2] * axis[1] * oneMinusCosAngle + axis[0] * sAngle;
             transform[2][2] = axis[2] * axis[2] * oneMinusCosAngle + cAngle;
 
-            if (!origin.Equals(new Point3d(0,0,0)))
+            if (!origin.Equals(new Point3(0,0,0)))
             {
                 transform[0][3] = -((transform[0][0] - 1) * origin[0] + transform[0][1] * origin[1] + transform[0][2] * origin[2]);
                 transform[1][3] = -(transform[1][0] * origin[0] + (transform[1][1] - 1) * origin[1] + transform[1][2] * origin[2]);
@@ -169,7 +169,7 @@ namespace GShark.Core
         /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="scaleFactor">Scale factor.</param>
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
-        public static Transform Scale(Point3d anchorPoint, double scaleFactor)
+        public static Transform Scale(Point3 anchorPoint, double scaleFactor)
         {
             return Scale(anchorPoint, scaleFactor, scaleFactor, scaleFactor);
         }
@@ -182,9 +182,9 @@ namespace GShark.Core
         /// <param name="factorY">Scale factor y direction.</param>
         /// <param name="factorZ">Scale factor z direction.</param>
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
-        public static Transform Scale(Point3d anchorPoint, double factorX, double factorY, double factorZ)
+        public static Transform Scale(Point3 anchorPoint, double factorX, double factorY, double factorZ)
         {
-            var origin = new Point3d(0.0, 0.0, 0.0);
+            var origin = new Point3(0.0, 0.0, 0.0);
             Transform scale = Scale(factorX, factorY, factorZ);
             if(anchorPoint.Equals(origin))
             {
@@ -271,7 +271,7 @@ namespace GShark.Core
         /// <returns>The mirror transformation matrix.</returns>
         public static Transform Reflection(Plane plane)
         {
-            Point3d pt = plane.Origin;
+            Point3 pt = plane.Origin;
             Vector3d normal = plane.Normal;
             Transform transform = Identity();
 
@@ -307,7 +307,7 @@ namespace GShark.Core
             Transform transform = Transform.Identity();
             Vector3d x = plane.XAxis;
             Vector3d y = plane.YAxis;
-            Point3d pt = plane.Origin;
+            Point3 pt = plane.Origin;
             double[] q = new double[3];
 
             for (int i = 0; i < 3; i++)
@@ -344,7 +344,7 @@ namespace GShark.Core
             var y1 = b.YAxis;
             var z1 = b.ZAxis;
 
-            var origin = new Point3d(0,0,0);
+            var origin = new Point3(0,0,0);
 
             // Translating point pt0 to (0,0,0)
             Transform translation0 = Translation(origin - pt0);

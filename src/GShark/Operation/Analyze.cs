@@ -124,7 +124,7 @@ namespace GShark.Operation
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Point3d  CurveClosestPoint(ICurve curve, Point3d  point, out double t)
+        public static Point3  CurveClosestPoint(ICurve curve, Point3  point, out double t)
         {
             t = CurveClosestParameter(curve, point);
             return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, t));
@@ -137,23 +137,23 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
-        public static double CurveClosestParameter(ICurve curve, Point3d point)
+        public static double CurveClosestParameter(ICurve curve, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = default(double);
-            List<Point3d> ctrlPts = curve.ControlPoints;
+            List<Point3> ctrlPts = curve.ControlPoints;
 
-            (List<double> tValues, List<Point3d> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
                 double t0 = tValues[i];
                 double t1 = tValues[i + 1];
 
-                Point3d pt0 = pts[i];
-                Point3d pt1 = pts[i + 1];
+                Point3 pt0 = pts[i];
+                Point3 pt1 = pts[i + 1];
 
-                (double tValue, Point3d pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                (double tValue, Point3 pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
                 double distance = projection.pt.DistanceTo(point);
 
                 if (!(distance < minimumDistance)) continue;

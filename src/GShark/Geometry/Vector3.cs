@@ -309,7 +309,7 @@ namespace GShark.Geometry
         /// <returns>The distance.</returns>
         public double DistanceTo(Line line)
         {
-            var pt = line.ClosestPoint(new Point3d(this[0], this[1], this[2]));
+            var pt = line.ClosestPoint(new Point3(this[0], this[1], this[2]));
             Vector3 projectedPt = new Vector3{pt[0],pt[1],pt[2]};
             Vector3 ptToProjectedPt = projectedPt - this;
             return ptToProjectedPt.Length();
