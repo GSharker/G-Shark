@@ -75,8 +75,6 @@ namespace GShark.Core
             }
 
             return controlPtsHomogenized;
-
-            return controlPtsHomogenized;
         }
 
         /// <summary>
