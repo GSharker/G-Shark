@@ -141,5 +141,63 @@ namespace GShark.Test.XUnit.Geometry
                 Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
             }
         }
+
+        [Fact]
+        public void It_Returns_A_Rectangle()
+        {
+            // Arrange
+            double xDimension = 20;
+            double yDimension = 10;
+            Vector3 expectedPoint = new Vector3 {0.0, -10.0, -5.0};
+
+            // Act
+            Polygon rectangle = Polygon.Rectangle(Plane.PlaneYZ, xDimension, yDimension);
+
+            // Assert
+            rectangle.Count.Should().Be(5);
+            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            rectangle[0].DistanceTo(rectangle[1]).Should().Be(xDimension);
+            rectangle[1].DistanceTo(rectangle[2]).Should().Be(yDimension);
+        }
+
+        [Fact]
+        public void It_Returns_A_Regular_Polygon()
+        {
+            // Arrange
+            int numberOfSegments = 5;
+            double radius = 15;
+            Plane pl = Plane.PlaneYZ;
+
+            // Act
+            Polygon polygon = Polygon.RegularPolygon(pl, radius, numberOfSegments);
+
+            // Assert
+            polygon.Count.Should().Be(numberOfSegments + 1);
+            polygon[0].DistanceTo(pl.Origin).Should().Be(radius);
+        }
+
+        [Theory]
+        [InlineData(0.0)]
+        [InlineData(-1.5)]
+        public void RegularPolygon_Throw_An_Exception_If_The_Radius_Is_Less_Or_Equal_To_Zero(double radius)
+        {
+            // Act
+            Func<Polygon> func = () => Polygon.RegularPolygon(Plane.PlaneYZ, radius, 5);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(0)]
+        public void RegularPolygon_Throw_An_Exception_If_Number_Of_Sides_Is_Less_Than_Three(int numberOfSegments)
+        {
+            // Act
+            Func<Polygon> func = () => Polygon.RegularPolygon(Plane.PlaneYZ, 10.0, numberOfSegments);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
     }
 }
