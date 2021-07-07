@@ -64,7 +64,7 @@ namespace GShark.Core.BoundingBoxTree
 
             while (aTrees.Count > 0)
             {
-                IBoundingBoxTree<T> a = aTrees[^1];
+                IBoundingBoxTree<T> a = aTrees[aTrees.Count - 1];
                 aTrees.RemoveAt(aTrees.Count - 1);
 
                 if (a.IsEmpty())
@@ -75,11 +75,11 @@ namespace GShark.Core.BoundingBoxTree
                 Tuple<IBoundingBoxTree<T>, IBoundingBoxTree<T>> aSplit = a.Split();
 
                 //NurbsCurve crv = a.Yield();
-                //Vector3 pt1 = crv.ControlPoints[0];
-                //Vector3 pt2 = crv.ControlPoints[^1];
+                //Vector3 pt1 = crv.LocationPoints[0];
+                //Vector3 pt2 = crv.LocationPoints[crv.LocationPoints.Count - 1];
                 var pt1 = a.BoundingBox().Max;
                 var pt2 = a.BoundingBox().Min;
-                double pt1pt2Length = pt1.DistanceTo(pt2);
+                //double pt1pt2Length = pt1.DistanceTo(pt2);
                 var ppt1 = pl.ClosestPoint(pt1, out double h1);
                 var ppt2 = pl.ClosestPoint(pt2, out double h2);
 
@@ -125,9 +125,9 @@ namespace GShark.Core.BoundingBoxTree
 
             while (aTrees.Count > 0)
             {
-                IBoundingBoxTree<T1> a = aTrees[^1];
+                IBoundingBoxTree<T1> a = aTrees[aTrees.Count - 1];
                 aTrees.RemoveAt(aTrees.Count - 1);
-                IBoundingBoxTree<T2> b = bTrees[^1];
+                IBoundingBoxTree<T2> b = bTrees[bTrees.Count - 1];
                 bTrees.RemoveAt(bTrees.Count - 1);
 
                 if (a.IsEmpty() || b.IsEmpty())

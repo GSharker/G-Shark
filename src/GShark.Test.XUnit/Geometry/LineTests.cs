@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry;
-using System;
-using System.Linq;
 using GShark.Geometry.Interfaces;
+using System;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -128,7 +126,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_ClosestPoint()
         {
             // Arrange
-            Point3 pt = new Point3 ( 5, 8, 0);
+            Point3 pt = new Point3(5, 8, 0);
             Point3 expectedPt = new Point3(8.692308, 5.538462, 0);
 
             // Act
@@ -164,8 +162,8 @@ namespace GShark.Test.XUnit.Geometry
             Point3 ptEvaluated = _exampleLine.PointAt(t);
 
             // Assert
-           ptEvaluated.EpsilonEquals(expectedPt, GeoSharkMath.Epsilon).Should().BeTrue();
-            
+            ptEvaluated.EpsilonEquals(expectedPt, GeoSharkMath.Epsilon).Should().BeTrue();
+
         }
 
         [Theory]
@@ -239,7 +237,7 @@ namespace GShark.Test.XUnit.Geometry
             ICurve line = _exampleLine;
 
             // Assert
-            line.ControlPoints.Count.Should().Be(2);
+            line.LocationPoints.Count.Should().Be(2);
             line.Degree.Should().Be(1);
         }
     }

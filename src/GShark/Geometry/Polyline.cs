@@ -31,9 +31,9 @@ namespace GShark.Geometry
 
         public int Degree => 1;
 
-        public List<Point3> ControlPoints => this;
+        public List<Point3> LocationPoints => this;
 
-        public List<Point4> HomogenizedPoints { get; private set; }
+        public List<Point4> ControlPoints { get; private set; }
 
         public KnotVector Knots { get; private set; }
 
@@ -48,7 +48,7 @@ namespace GShark.Geometry
         /// Gets true if the polyline is closed.
         /// A polyline is considered closed, if its start and end point are identical.
         /// </summary>
-        public bool IsClosed => this[0] == this[^1];
+        public bool IsClosed => this[0] == this[Count - 1];
 
         /// <summary>
         /// Computes the bounding box of the list of points.
@@ -288,7 +288,7 @@ namespace GShark.Geometry
             knots.Add(lengthSum - 1);
 
             Knots = knots;
-            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(this, weights);
+            ControlPoints = LinearAlgebra.PointsHomogeniser(this, weights);
         }
 
         /// <summary>

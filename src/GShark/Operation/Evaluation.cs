@@ -79,7 +79,7 @@ namespace GShark.Operation
         {
             // Special case at boundaries.
             if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharkMath.MaxTolerance) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharkMath.MaxTolerance)
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[knots.Count - 1]) < GeoSharkMath.MaxTolerance)
             {
                 return 1.0;
             }
@@ -139,7 +139,7 @@ namespace GShark.Operation
         /// <returns>The evaluated point on the curve.</returns>
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             int n = knots.Count - curve.Degree - 2;
@@ -183,7 +183,7 @@ namespace GShark.Operation
         public static Point3 CentroidByVertices(IList<Point3> pts)
         {
             Point3 centroid = new Point3();
-            bool isClosed = pts[0] == pts[^1];
+            bool isClosed = pts[0] == pts[pts.Count - 1];
             int count = pts.Count;
 
             for (int i = 0; i < count && !(i == count - 1 & isClosed); i++)
@@ -204,7 +204,7 @@ namespace GShark.Operation
         /// <returns>The extrema </returns>
         public static Extrema ComputeExtrema(ICurve curve)
         {
-            var derivPts = DerivativeCoordinates(curve.ControlPoints);
+            var derivPts = DerivativeCoordinates(curve.LocationPoints);
             Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Size;
@@ -372,7 +372,7 @@ namespace GShark.Operation
         /// <returns>The derivatives.</returns>
         public static List<Point4> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
         {
-            List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
+            List<Point4> curveHomogenizedPoints = curve.ControlPoints;
 
             int n = curve.Knots.Count - curve.Degree - 2;
             int derivateOrder = numberDerivs < curve.Degree ? numberDerivs : curve.Degree;
@@ -609,7 +609,7 @@ namespace GShark.Operation
         //{
         //    int degreeU = nurbsSurface.DegreeU;
         //    int degreeV = nurbsSurface.DegreeV;
-        //    List<List<Vector3>> ctrlPts = nurbsSurface.HomogenizedPoints;
+        //    List<List<Vector3>> ctrlPts = nurbsSurface.ControlPoints;
         //    KnotVector knotsU = nurbsSurface.KnotsU;
         //    KnotVector knotsV = nurbsSurface.KnotsV;
 
@@ -669,8 +669,8 @@ namespace GShark.Operation
         //{
         //    int n = surface.KnotsU.Count - surface.DegreeU - 2;
         //    int m = surface.KnotsV.Count - surface.DegreeV - 2;
-        //    List<List<Point3d>> controlPoints = surface.ControlPoints;
-        //    List<List<Point4d>> surfaceHomoPts = surface.HomogenizedPoints;
+        //    List<List<Point3d>> controlPoints = surface.LocationPoints;
+        //    List<List<Point4d>> surfaceHomoPts = surface.ControlPoints;
         //    int dim = 3;//dimension of point
 
         //    //ToDo These checks should be in the validity check of surface. Here should check that u and v are in range.
@@ -751,22 +751,22 @@ namespace GShark.Operation
         //        span = 0;
         //    }
 
-        //    if (Math.Abs(t - knots[^1]) < GeoSharkMath.Epsilon)
+        //    if (Math.Abs(t - knots[knots.Count - 1]) < GeoSharkMath.Epsilon)
         //    {
-        //        span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
+        //        span = useU ? newSrf.LocationPoints.Count - 1 : newSrf.LocationPoints[0].Count;
         //    }
 
         //    List<Point3d> ctrlPts = new List<Point3d>();
         //    if (!useU)
         //    {
-        //        foreach (var row in newSrf.ControlPoints)
+        //        foreach (var row in newSrf.LocationPoints)
         //        {
         //            ctrlPts.Add(new Point3d(row[span][0], row[span][1], row[span][2]));
         //        }
 
         //        return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
         //    }
-        //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.ControlPoints[span]);
+        //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.LocationPoints[span]);
         //}
 
     }
