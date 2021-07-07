@@ -66,17 +66,17 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXY => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.ZAxis);
+        public static Plane PlaneXY => new Plane(Point3.Origin, Vector3.XAxis, Vector3.YAxis, Vector3.ZAxis);
 
         /// <summary>
         /// Gets a YZ plane.
         /// </summary>
-        public static Plane PlaneYZ => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.XAxis);
+        public static Plane PlaneYZ => new Plane(Point3.Origin, Vector3.YAxis, Vector3.ZAxis, Vector3.XAxis);
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXZ => new Plane(new Vector3(0.0, 0.0, 0.0), Vector3.YAxis);
+        public static Plane PlaneZX => new Plane(Point3.Origin, Vector3.ZAxis, Vector3.XAxis, Vector3.YAxis);
 
         /// <summary>
         /// Gets the normal of the plan.
@@ -108,15 +108,15 @@ namespace GShark.Geometry
         /// https://www.parametriczoo.com/index.php/2020/02/29/signed-distance-of-a-point-from-a-plane/
         /// </summary>
         /// <param name="pt">The point to get close to plane.</param>
-        /// <param name="length">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
+        /// <param name="distance">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
         /// <returns>The point on the plane that is closest to the sample point.</returns>
-        public Point3 ClosestPoint(Vector3 pt, out double length)
+        public Point3 ClosestPoint(Vector3 pt, out double distance)
         {
             Vector3 ptToOrigin = Origin - pt;
 
             // signed distance.
-            length = Vector3.DotProduct(ptToOrigin, Normal);
-            Point3 projection = pt + Normal * length;
+            distance = Vector3.DotProduct(ptToOrigin, Normal);
+            Point3 projection = pt + Normal * distance;
 
             return projection;
         }

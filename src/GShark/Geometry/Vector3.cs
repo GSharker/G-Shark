@@ -238,46 +238,59 @@ namespace GShark.Geometry
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
         /// <param name="plane">Two-dimensional plane on which to perform the angle measurement.</param>
+        /// <param name="reflexAngle"></param>
         /// <returns>On success, the angle (in radians) between a and b as projected onto the plane; GeoSharkMath.UNSET_VALUE on failure.</returns>
-        public static double VectorAngle(Vector3 a, Vector3 b, Plane plane)
+        public static double VectorAngleOnPlane(Vector3 a, Vector3 b, Plane plane, out double reflexAngle)
         {
-            throw new NotImplementedException();
-            //{ // Project vectors onto plane.
-            //    Point3d pA = plane.Origin + a;
-            //    Point3d pB = plane.Origin + b;
+            // Project vectors onto plane.
+                var pA = plane.Origin + a;
+                var pB = plane.Origin + b;
 
-            //    pA = plane.ClosestPoint(pA);
-            //    pB = plane.ClosestPoint(pB);
+                pA = plane.ClosestPoint(pA, out _);
+                pB = plane.ClosestPoint(pB, out _);
 
-            //    a = pA - plane.Origin;
-            //    b = pB - plane.Origin;
-            //}
+                a = pA - plane.Origin;
+                b = pB - plane.Origin;
+                a = a.Unitize();
+                b = b.Unitize();
+           
 
-            //// Abort on invalid cases.
-            //if (!a.Unitize()) { return GeoSharkMath.UNSET_VALUE; }
-            //if (!b.Unitize()) { return GeoSharkMath.UNSET_VALUE; }
+            // Abort on invalid cases.
+            if (a == Unset || b == Unset)
+            {
+                reflexAngle = GeoSharkMath.UnsetValue;
+                return GeoSharkMath.UnsetValue;
+            }
 
-            //double dot = a * b;
-            //{ // Limit dot product to valid range.
-            //    if (dot >= 1.0)
-            //    { dot = 1.0; }
-            //    else if (dot < -1.0)
-            //    { dot = -1.0; }
-            //}
+            double dot = a * b;
+             // Limit dot product to valid range.
+                if (dot >= 1.0)
+                { dot = 1.0; }
+                else if (dot < -1.0)
+                { dot = -1.0; }
+            
+            double angle = Math.Acos(dot);
+         // Special case (anti)parallel vectors.
+            if (Math.Abs(angle) < 1e-64)
+            {
+                reflexAngle = 0;
+                return 0.0;
+            }
 
-            //double angle = Math.Acos(dot);
-            //{ // Special case (anti)parallel vectors.
-            //    if (Math.Abs(angle) < 1e-64) { return 0.0; }
-            //    if (Math.Abs(angle - Math.PI) < 1e-64) { return Math.PI; }
-            //}
+            if (Math.Abs(angle - Math.PI) < 1e-64)
+            {
+                reflexAngle = Math.PI;
+                return Math.PI;
+            }
 
-            //Vector3d cross = Vector3d.CrossProduct(a, b);
-            //if (plane.ZAxis.IsParallelTo(cross) == +1)
-            //{
-            //    return angle;
-            //}
+            if (angle > Math.PI)
+            {
+                reflexAngle = angle ;
+                return 2 * Math.PI - angle;
+            }
 
-            //return 2.0 * Math.PI - angle;
+            reflexAngle = 2 * Math.PI - angle;
+            return angle;
         }
 
         /// <summary>

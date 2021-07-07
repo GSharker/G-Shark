@@ -36,14 +36,17 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Radian_Angle_Between_Two_Vectors_On_A_Plane()
         {
             // Arrange
-            Vector3 v1 = new Vector3(20d, 0d, 0d);
-            Vector3 v2 = new Vector3(-10d, 15d, 0d);
+            Vector3 v1 = new Vector3(1, 0, 0);
+            Vector3 v2 = new Vector3(3, 0, 4);
+            var expectedAngle = System.Math.Atan2(4,3);
 
             // Act
-            double angle = Vector3.VectorAngle(v1, v2);
+            double reflexAngle;
+            double angle = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneZX, out reflexAngle);
 
             // Assert
-            angle.Should().Be(2.1587989303424644);
+            angle.Should().BeApproximately(expectedAngle, GeoSharkMath.Epsilon);
+            reflexAngle.Should().BeApproximately(2 * Math.PI - expectedAngle, GeoSharkMath.Epsilon);
         }
 
         [Fact]
