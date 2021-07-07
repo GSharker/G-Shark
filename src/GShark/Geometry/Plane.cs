@@ -275,17 +275,10 @@ namespace GShark.Geometry
         /// <returns>The transformed plane.</returns>
         public Plane Transform(Transform transformation)
         {
-            //ToDo Review https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_plane.cpp#L375
-            Point3 tranformedOrigin = Origin.Transform(transformation);
+            Point3 transformedOrigin = Origin.Transform(transformation);
 
-            var xDirPt = ((Point3) XAxis).Transform(transformation);
-            var yDirPt = ((Point3) YAxis).Transform(transformation);
-            var zDirPt = ((Point3) ZAxis).Transform(transformation);
-
-            Transform translation = Core.Transform.Translation(tranformedOrigin);
-
-            var xDir = (Origin + XAxis).Transform(transformation) - tranformedOrigin;
-            var yDir = (Origin + YAxis).Transform(transformation) - tranformedOrigin;
+           var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
+            var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
 
             return new Plane(tranformedOrigin, xDir, yDir);
         }
