@@ -149,7 +149,7 @@ namespace GShark.Geometry
         /// <returns>A point at the given parameter.</returns>
         public Point3 PointAt(double t)
         {
-            return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(this, t));
+            return Evaluation.CurvePointAt(this, t);
         }
 
         /// <summary>
