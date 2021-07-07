@@ -123,7 +123,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the end point of the arc.
         /// </summary>
-        public Vector3 EndPoint => ControlPoints[^1];
+        public Vector3 EndPoint => ControlPoints[ControlPoints.Count - 1];
 
         public int Degree => 2;
 

@@ -79,7 +79,7 @@ namespace GShark.Operation
         {
             // Special case at boundaries.
             if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharkMath.MaxTolerance) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[^1]) < GeoSharkMath.MaxTolerance)
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[knots.Count - 1]) < GeoSharkMath.MaxTolerance)
             {
                 return 1.0;
             }
@@ -183,7 +183,7 @@ namespace GShark.Operation
         public static Point3 CentroidByVertices(IList<Point3> pts)
         {
             Point3 centroid = new Point3();
-            bool isClosed = pts[0] == pts[^1];
+            bool isClosed = pts[0] == pts[pts.Count - 1];
             int count = pts.Count;
 
             for (int i = 0; i < count && !(i == count - 1 & isClosed); i++)
@@ -751,7 +751,7 @@ namespace GShark.Operation
         //        span = 0;
         //    }
 
-        //    if (Math.Abs(t - knots[^1]) < GeoSharkMath.Epsilon)
+        //    if (Math.Abs(t - knots[knots.Count - 1]) < GeoSharkMath.Epsilon)
         //    {
         //        span = useU ? newSrf.ControlPoints.Count - 1 : newSrf.ControlPoints[0].Count;
         //    }

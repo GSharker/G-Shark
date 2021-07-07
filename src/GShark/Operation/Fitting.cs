@@ -50,7 +50,7 @@ namespace GShark.Operation
             // Computes control points, fixing the first and last point from the input points.
             List<Point3> ctrlPts = new List<Point3> { pts[0] };
             ctrlPts.AddRange(SolveCtrlPts(knots, vectorR, matrixNtN));
-            ctrlPts.Add(pts[^1]);
+            ctrlPts.Add(pts[pts.Count - 1]);
             return new NurbsCurve(degree, knots, ctrlPts);
         }
 
@@ -150,7 +150,7 @@ namespace GShark.Operation
         private static List<Point3> ComputesValuesRk(KnotVector knots, List<double> curveParameters, int degree, List<Point3> pts, int numberOfCtrPts)
         {
             Point3 pt0 = pts[0]; // Q0
-            Point3 ptm = pts[^1]; // Qm
+            Point3 ptm = pts[pts.Count - 1]; // Qm
             List<Point3> Rk = new List<Point3>();
             for (int i = 1; i < pts.Count - 1; i++)
             {
@@ -273,7 +273,7 @@ namespace GShark.Operation
                 b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
                 // Equations 9.12
                 b.Add(endTangent[i] * mult1);
-                b.Add(pts[^1][i]);
+                b.Add(pts[pts.Count - 1][i]);
                 
                 Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);

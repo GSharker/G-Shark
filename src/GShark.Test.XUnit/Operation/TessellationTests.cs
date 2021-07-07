@@ -67,7 +67,7 @@ namespace GShark.Test.XUnit.Operation
             result1.Should().NotBeNull();
             result0.pts.Count.Should().BeLessThan(result1.pts.Count);
             result0.tValues[0].Should().Be(result1.tValues[0]).And.Be(0.0);
-            result0.tValues[^1].Should().Be(result1.tValues[^1]).And.Be(1.0);
+            result0.tValues[result0.tValues.Count - 1].Should().Be(result1.tValues[result1.tValues.Count - 1]).And.Be(1.0);
 
             double prev = double.MinValue;
             foreach (var t in result1.tValues)
@@ -128,7 +128,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);
             result.pts[0].DistanceTo(p1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            result.pts[^1].DistanceTo(p5).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            result.pts[result.pts.Count - 1].DistanceTo(p5).Should().BeLessThan(GeoSharkMath.MaxTolerance);
         }
 
         [Fact]

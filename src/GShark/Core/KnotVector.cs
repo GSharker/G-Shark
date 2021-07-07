@@ -100,7 +100,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the domain of the knots, as the max value - min value.
         /// </summary>
-        public double Domain => this[^1] - this[0];
+        public double Domain => this[Count - 1] - this[0];
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
@@ -255,7 +255,7 @@ namespace GShark.Core
             }
 
             double firstKnot = knots[0];
-            double lastKnot = knots[^1];
+            double lastKnot = knots[knots.Count - 1];
             double denominator = lastKnot - firstKnot;
 
             return knots.Select(kv => (kv - firstKnot) / denominator).ToKnot();

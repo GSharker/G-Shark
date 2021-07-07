@@ -116,7 +116,7 @@ namespace GShark.Geometry
                         pts.Add(crv.PointAt(eValue));
                     }
                 }
-                pts.Add(ControlPoints[^1]);
+                pts.Add(ControlPoints[ControlPoints.Count - 1]);
                 return new BoundingBox(pts);
             }
         }

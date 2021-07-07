@@ -30,7 +30,7 @@ namespace GShark.Operation
                 throw new Exception("Number of sample must be at least 1 and not negative.");
 
             double start = curve.Knots[0];
-            double end = curve.Knots[^1];
+            double end = curve.Knots[curve.Knots.Count - 1];
 
             double span = (end - start) / (numSamples - 1);
             List<Point3> pts = new List<Point3>();
@@ -57,7 +57,7 @@ namespace GShark.Operation
         /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
         public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
         {
-            if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[^1], tolerance);
+            if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[curve.Knots.Count - 1], tolerance);
             KnotVector copyKnot = new KnotVector(curve.Knots);
             copyKnot.RemoveAt(0);
             copyKnot.RemoveAt(copyKnot.Count - 1);

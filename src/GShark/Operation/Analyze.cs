@@ -86,7 +86,7 @@ namespace GShark.Operation
             // We compute the whole length, if the curve lengths is not provided.
             double setCurveLength = curveLength < 0 ? BezierCurveLength(curve) : curveLength;
 
-            if (segmentLength > setCurveLength) return curve.Knots[^1];
+            if (segmentLength > setCurveLength) return curve.Knots[curve.Knots.Count - 1];
 
             // Divide and conquer.
             double setTolerance = tolerance <= 0.0 ? GeoSharkMath.Epsilon : tolerance;
@@ -94,7 +94,7 @@ namespace GShark.Operation
             double startT = curve.Knots[0];
             double startLength = 0.0;
 
-            double endT = curve.Knots[^1];
+            double endT = curve.Knots[curve.Knots.Count - 1];
             double endLength = setCurveLength;
 
             while (endLength - startLength > setTolerance)
@@ -167,8 +167,8 @@ namespace GShark.Operation
             double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
-            double tVal1 = curve.Knots[^1];
-            bool isCurveClosed = (ctrlPts[0] - ctrlPts[^1]).SquareLength < GeoSharkMath.Epsilon;
+            double tVal1 = curve.Knots[curve.Knots.Count - 1];
+            bool isCurveClosed = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
             double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
@@ -244,7 +244,7 @@ namespace GShark.Operation
         public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
         {
             if (segmentLength < GeoSharkMath.Epsilon) return curve.Knots[0];
-            if (Math.Abs(curve.Length() - segmentLength) < GeoSharkMath.Epsilon) return curve.Knots[^1];
+            if (Math.Abs(curve.Length() - segmentLength) < GeoSharkMath.Epsilon) return curve.Knots[curve.Knots.Count - 1];
 
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
