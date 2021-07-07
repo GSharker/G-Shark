@@ -219,7 +219,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        //ToDo Create Transform data to represent various canonical transformations to be used in transform tests on all objects.
         public void It_Translates_A_Line()
         {
             // Arrange
