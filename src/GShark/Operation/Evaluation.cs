@@ -136,14 +136,11 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
-        /// <returns>The evaluated point.</returns>
-        //ToDo Return Point3d by dehomogenizing, or add comment so it's clear what is being returned. PointOnCurve is suggestive of a point in 3 dimensions.
+        /// <returns>The evaluated point on the curve.</returns>
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
             List<Point4> curveHomogenizedPoints = curve.HomogenizedPoints;
             KnotVector knots = curve.Knots;
-
-            //ToDo Input validation on t within range.
 
             int n = knots.Count - curve.Degree - 2;
 
@@ -162,7 +159,6 @@ namespace GShark.Operation
                 pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            //ToDo Check if this is correct. Previous implementation was outputting a 4d point, but in unit test checking against 3d point.
             return LinearAlgebra.PointDehomogenizer(pointOnCurve);
         }
 
