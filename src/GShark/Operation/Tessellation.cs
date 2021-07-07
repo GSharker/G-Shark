@@ -61,7 +61,7 @@ namespace GShark.Operation
             KnotVector copyKnot = new KnotVector(curve.Knots);
             copyKnot.RemoveAt(0);
             copyKnot.RemoveAt(copyKnot.Count - 1);
-            return (copyKnot, curve.ControlPoints);
+            return (copyKnot, curve.LocationPoints);
         }
 
         /// <summary>

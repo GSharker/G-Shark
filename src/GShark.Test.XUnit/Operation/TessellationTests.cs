@@ -82,7 +82,7 @@ namespace GShark.Test.XUnit.Operation
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPoints;
+            List<Point3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().LocationPoints;
             NurbsCurve curve = new NurbsCurve(controlPts, 1);
 
             // Act

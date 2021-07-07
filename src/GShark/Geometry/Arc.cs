@@ -113,7 +113,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the start point of the arc.
         /// </summary>
-        public Vector3 StartPoint => ControlPoints[0];
+        public Vector3 StartPoint => LocationPoints[0];
 
         /// <summary>
         /// Gets the mid-point of the arc.
@@ -123,13 +123,13 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the end point of the arc.
         /// </summary>
-        public Vector3 EndPoint => ControlPoints[ControlPoints.Count - 1];
+        public Vector3 EndPoint => LocationPoints[LocationPoints.Count - 1];
 
         public int Degree => 2;
 
-        public List<Point3> ControlPoints { get; private set; }
+        public List<Point3> LocationPoints { get; private set; }
 
-        public List<Point4> HomogenizedPoints { get; private set; }
+        public List<Point4> ControlPoints { get; private set; }
 
         public KnotVector Knots { get; private set; }
 
@@ -382,8 +382,8 @@ namespace GShark.Geometry
             }
 
             Knots = knots;
-            ControlPoints = ctrPts.ToList();
-            HomogenizedPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
+            LocationPoints = ctrPts.ToList();
+            ControlPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>
