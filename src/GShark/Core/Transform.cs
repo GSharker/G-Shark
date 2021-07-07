@@ -99,32 +99,32 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with specified radianceAngle, rotation center and rotation axis.
+        /// Constructs a new rotation transformation with specified radians angle, rotation center and rotation axis.
         /// </summary>
-        /// <param name="radianceAngle">Angle in radians of the rotation.</param>
+        /// <param name="radiansAngle">Angle in radians of the rotation.</param>
         /// <param name="axis">Axis direction.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public Transform Rotation(double radianceAngle, Line axis)
+        public Transform Rotation(double radiansAngle, Line axis)
         {
-            return Rotation(Math.Sin(radianceAngle), Math.Cos(radianceAngle), axis.Direction, axis.Start);
+            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), axis.Direction, axis.Start);
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with specified radianceAngle, rotation center and rotation axis pointing up.
+        /// Constructs a new rotation transformation with specified radians angle, rotation center and rotation axis pointing up.
         /// </summary>
-        /// <param name="radianceAngle">Angle in radians of the rotation.</param>
+        /// <param name="radiansAngle">Angle in radians of the rotation.</param>
         /// <param name="center">Center point of rotation. Rotation axis is vertical.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public static Transform Rotation(double radianceAngle, Point3 center)
+        public static Transform Rotation(double radiansAngle, Point3 center)
         {
-            return Rotation(Math.Sin(radianceAngle), Math.Cos(radianceAngle), Vector3.ZAxis, center);
+            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), Vector3.ZAxis, center);
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with Sin and Cos radianceAngle, rotation center and rotation axis.
+        /// Constructs a new rotation transformation with Sin and Cos radians angle, rotation center and rotation axis.
         /// </summary>
-        /// <param name="sinAngle">Sin radianceAngle.</param>
-        /// <param name="cosAngle">Cos radianceAngle.</param>
+        /// <param name="sinAngle">Sin radians angle.</param>
+        /// <param name="cosAngle">Cos radians angle.</param>
         /// <param name="axis">Axis direction.</param>
         /// <param name="origin">Rotation center.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>

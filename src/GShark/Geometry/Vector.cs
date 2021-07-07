@@ -189,12 +189,12 @@ namespace GShark.Geometry
         /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
         /// </summary>
         /// <param name="axis">Axis of rotation.</param>
-        /// <param name="angle">Angle of rotation (in radians).</param>
+        /// <param name="radiansAngle">Angle of rotation (in radians).</param>
         /// <returns>Rotated vector.</returns>
-        public Vector Rotate(Vector axis, double radianceAngle)
+        public Vector Rotate(Vector axis, double radiansAngle)
         {
-            double cosAngle = Math.Cos(radianceAngle);
-            double sinAngle = Math.Sin(radianceAngle);
+            double cosAngle = Math.Cos(radiansAngle);
+            double sinAngle = Math.Sin(radiansAngle);
 
             GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 
