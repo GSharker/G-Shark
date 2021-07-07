@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
-using Plane = GShark.Geometry.Plane;
-using Vector = GShark.Geometry.Vector;
 
 namespace GShark.Test.XUnit.Geometry
 {
@@ -183,7 +181,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Zero2d_Vector()
         {
             // Act
-            var vec2D = Vector.Zero2d(3,3);
+            var vec2D = Vector.Zero2d(3, 3);
 
             // Assert
             vec2D.Should().HaveCount(3);
@@ -288,7 +286,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var vec = new Vector { -10, 15, 5 };
-            var expectedVec = new Vector{ -1.428571, 2.142857, 0.714286 };
+            var expectedVec = new Vector { -1.428571, 2.142857, 0.714286 };
 
             // Act
             var divisionResult = vec / 7;
@@ -369,7 +367,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var vector = new Vector { -7, 10, -5 };
-            var pt1 = new Vector { 3,-1, 2 };
+            var pt1 = new Vector { 3, -1, 2 };
             var pt2 = new Vector { 1, -1, -3 };
             var pt3 = new Vector { 4, -3, 1 };
             var vectorExpected = new Vector { -10, -7, 4 };
@@ -409,10 +407,10 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(-0.0000125, new [] {-7.0, 10.0, -5.0})]
-        [InlineData(0.0, new [] { -7.0, 10.0, -5.0 })]
-        [InlineData(12.5, new [] { -7.454672, 10.649531, -2.239498 })]
-        [InlineData(450, new [] { -2.867312, 4.09616, 12.206556 })]
+        [InlineData(-0.0000125, new[] { -7.0, 10.0, -5.0 })]
+        [InlineData(0.0, new[] { -7.0, 10.0, -5.0 })]
+        [InlineData(12.5, new[] { -7.454672, 10.649531, -2.239498 })]
+        [InlineData(450, new[] { -2.867312, 4.09616, 12.206556 })]
         public void It_Returns_A_Rotated_Vector_By_An_Angle(double angle, double[] vectorExpected)
         {
             // Arrange
@@ -430,9 +428,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new[] {11.5, 0.0, 0.0}, new[] {10.3, 0.0, 0.0}, 1)]
-        [InlineData(new[] {-7.0, 10.0, -5.0}, new[] {7.0, 15.0, 0.0}, 0)]
-        [InlineData(new[] {7.0, 0.0, 0.0}, new[] {-7.0, 0.0, 0.0}, -1)]
+        [InlineData(new[] { 11.5, 0.0, 0.0 }, new[] { 10.3, 0.0, 0.0 }, 1)]
+        [InlineData(new[] { -7.0, 10.0, -5.0 }, new[] { 7.0, 15.0, 0.0 }, 0)]
+        [InlineData(new[] { 7.0, 0.0, 0.0 }, new[] { -7.0, 0.0, 0.0 }, -1)]
         public void It_Checks_If_Two_Vectors_Are_Parallel(double[] v1, double[] v2, int result)
         {
             // Arrange
@@ -447,8 +445,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_And_A_HomogenizedPoint_Transformed()
         {
             // Arrange
-            var pt1 = new Point3(5,5,0);
-            var pt2 = new Point4(5,5,0,0.2);
+            var pt1 = new Point3(5, 5, 0);
+            var pt2 = new Point4(5, 5, 0, 0.2);
             var pt1Expected = new Point3(15, 15, 0);
             var pt2Expected = new Point4(7, 7, 0, 0.2);
             var transform = Transform.Translation(new Vector3(10, 10, 0));

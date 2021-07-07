@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using GShark.Geometry;
-using System;
 using GShark.Core;
+using GShark.Geometry;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -23,7 +22,7 @@ namespace GShark.Test.XUnit.Geometry
             var testPoint = new Point4(5, 10, 0, 0.5);
             var expectedPoint = new Point4(15, 0, 0, 0.5);
             var translation = Transform.Translation(new Vector3(10, 0, 0));
-            
+
             //Act
             var xFormedPoint = testPoint.Transform(translation);
 
@@ -31,7 +30,7 @@ namespace GShark.Test.XUnit.Geometry
             xFormedPoint.EpsilonEquals(expectedPoint, GeoSharkMath.MaxTolerance);
         }
 
-       [Fact]
+        [Fact]
         public void It_Returns_True_If_Two_Points_Are_Equal()
         {
             // Arrange

@@ -13,7 +13,6 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/VectorTests.cs?name=example)]
     /// </example>
-    [Obsolete("This class will be refactored.", false)]
     public class Vector : List<double>, IEquatable<Vector>
     {
         /// <summary>

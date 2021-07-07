@@ -1,19 +1,16 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using System;
-using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
-using Vector3 = GShark.Geometry.Vector3;
 
 namespace GShark.Test.XUnit.Geometry
 {
-    public class Vector3dTests
+    public class Vector3Tests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public Vector3dTests(ITestOutputHelper testOutput)
+        public Vector3Tests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -38,7 +35,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             Vector3 v1 = new Vector3(1, 0, 0);
             Vector3 v2 = new Vector3(3, 0, 4);
-            var expectedAngle = System.Math.Atan2(4,3);
+            var expectedAngle = System.Math.Atan2(4, 3);
 
             // Act
             double reflexAngle;
@@ -110,7 +107,7 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Squared_Length_Of_A_Vector()
         {
-            
+
             // Arrange
             Vector3 v1 = new Vector3(10d, 15d, 5d);
 
@@ -167,7 +164,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             Vector3 amplifiedVector = vec1.Amplify(amplitude);
-            
+
             // Assert
             amplifiedVector.EpsilonEquals(vec1AmplifiedByAmplitude, GeoSharkMath.MaxTolerance).Should().Be(true);
         }
@@ -219,7 +216,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Divides_A_Vector_By_A_Number()
         {
             // Arrange
-            Vector3 vec = new Vector3( -10, 15, 5);
+            Vector3 vec = new Vector3(-10, 15, 5);
             Vector3 expectedVec = new Vector3(-5, 7.5, 2.5);
 
             // Act
@@ -233,8 +230,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_True_If_Vectors_Are_Equal()
         {
             // Arrange
-            Vector3 vec1 = new Vector3 (5.982099, 5.950299, 0);
-            Vector3 vec2 = new Vector3 (5.982099, 5.950299, 0);
+            Vector3 vec1 = new Vector3(5.982099, 5.950299, 0);
+            Vector3 vec2 = new Vector3(5.982099, 5.950299, 0);
 
             // Assert
             (vec1 == vec2).Should().BeTrue();
@@ -307,7 +304,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 vector = new Vector3(-7, 10, -5);
-            Vector3 expectedVector = vector * (1/vector.Length);
+            Vector3 expectedVector = vector * (1 / vector.Length);
 
             // Act
             Vector3 unitizedVector = vector.Unitize();

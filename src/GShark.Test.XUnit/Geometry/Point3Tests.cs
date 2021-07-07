@@ -1,16 +1,15 @@
 ﻿using FluentAssertions;
 using GShark.Geometry;
-using System;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace GShark.Test.XUnit.Geometry
 {
-    public class Point3dTests
+    public class Point3Tests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public Point3dTests(ITestOutputHelper testOutput)
+        public Point3Tests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -60,16 +59,16 @@ namespace GShark.Test.XUnit.Geometry
 
         [Fact]
         public void It_Returns_The_Linear_Interpolation_Between_Two_Points()
-        { 
+        {
             //Arrange
-           Point3 p1 = new Point3(0d, 0d, 0d);
+            Point3 p1 = new Point3(0d, 0d, 0d);
             Point3 p2 = new Point3(10d, 10d, 10d);
             Point3 expectedPoint = new Point3(5d, 5d, 5d);
             double amount = 0.5;
 
             // Act
             var result = Point3.Interpolate(p1, p2, amount);
-            
+
             // Assert
             result.Equals(expectedPoint).Should().Be(true);
         }
