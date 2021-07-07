@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Test.XUnit.Core;
 using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Operation;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -54,8 +52,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.Should().NotBeNull();
-            nurbsCurve.HomogenizedPoints[2].Should().BeEquivalentTo(new Point4(10, 0, 0, 0.5));
-            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Point3( 20, 0, 0));
+            nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Point4(10, 0, 0, 0.5));
+            nurbsCurve.LocationPoints[2].Should().BeEquivalentTo(new Point3(20, 0, 0));
         }
 
         [Fact]
@@ -98,11 +96,11 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve crv0 = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
             NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadraticBezierPlanar();
 
-            var expectedPtMin0 = new Point3( 0, 0, 0);
-            var expectedPtMax0 = new Point3( 2, 0.444444, 0);
-            
-            var expectedPtMin1 = new Point3( -10, 0, 0);
-            var expectedPtMax1 = new Point3( 20, 15, 5);
+            var expectedPtMin0 = new Point3(0, 0, 0);
+            var expectedPtMax0 = new Point3(2, 0.444444, 0);
+
+            var expectedPtMin1 = new Point3(-10, 0, 0);
+            var expectedPtMax1 = new Point3(20, 15, 5);
 
             // Act
             BoundingBox bBox0 = crv0.BoundingBox;
@@ -123,11 +121,11 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve crv0 = NurbsCurveCollection.NurbsCurve3DExample();
             NurbsCurve crv1 = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
 
-            var expectedPtMin0 = new Point3( 0, 0.5555556, 0);
-            var expectedPtMax0 = new Point3( 4.089468, 5, 5);
+            var expectedPtMin0 = new Point3(0, 0.5555556, 0);
+            var expectedPtMax0 = new Point3(4.089468, 5, 5);
 
-            var expectedPtMin1 = new Point3( 0, 2.5, 0);
-            var expectedPtMax1 = new Point3( 4.545455, 5, 3.333333);
+            var expectedPtMin1 = new Point3(0, 2.5, 0);
+            var expectedPtMax1 = new Point3(4.545455, 5, 3.333333);
 
             // Act
             BoundingBox bBox0 = crv0.BoundingBox;
@@ -184,7 +182,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            
+
             // Act
             var copiedNurbs = nurbsCurve.Clone();
 

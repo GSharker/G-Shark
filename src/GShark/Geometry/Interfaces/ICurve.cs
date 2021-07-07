@@ -11,14 +11,14 @@ namespace GShark.Geometry.Interfaces
         public int Degree { get; }
 
         /// <summary>
-        /// Gets the control points, where each control point is a list like (x,y,z).
+        /// Gets world 3-D, or Euclidean location of the control point.
         /// </summary>
-        public List<Point3> ControlPoints { get; }
+        public List<Point3> LocationPoints { get; }
 
         /// <summary>
-        /// Gets the homogenize points, where represented a set (wi*pi, wi).
+        /// Gets the homogeneous control point, the 4-D representation is (w*x, w*y, w*z, w).
         /// </summary>
-        public List<Point4> HomogenizedPoints { get; }
+        public List<Point4> ControlPoints { get; }
 
         /// <summary>
         /// Gets the collection of non-decreasing knot values.

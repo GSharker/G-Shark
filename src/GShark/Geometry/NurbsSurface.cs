@@ -47,7 +47,7 @@ namespace GShark.Geometry
         //    KnotsU = knotsU;
         //    KnotsV = knotsV;
         //    Weights = weights ?? Sets.RepeatData(Sets.RepeatData(1.0, controlPoints.Count), controlPoints[0].Count);
-        //    HomogenizedPoints = LinearAlgebra.PointsHomogeniser2d(controlPoints, weights);
+        //    ControlPoints = LinearAlgebra.PointsHomogeniser2d(controlPoints, weights);
         //    DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
         //    DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         //}
@@ -71,7 +71,7 @@ namespace GShark.Geometry
         //{
         //    DegreeU = surface.DegreeU;
         //    DegreeV = surface.DegreeV;
-        //    HomogenizedPoints = new List<List<Point4d>>(surface.HomogenizedPoints);
+        //    ControlPoints = new List<List<Point4d>>(surface.ControlPoints);
         //    KnotsU = new KnotVector(surface.KnotsU);
         //    KnotsV = new KnotVector(surface.KnotsV);
         //    Weights = new List<List<double>>(surface.Weights!);
@@ -172,16 +172,16 @@ namespace GShark.Geometry
         ///// 2d list of control points, the vertical direction (u) increases from top to bottom, the v direction from left to right,
         ///// and where each control point is an list of length (dim).
         ///// </summary>
-        //public List<List<Point3d>> ControlPoints => LinearAlgebra.PointDehomogenizer2d(HomogenizedPoints);
+        //public List<List<Point3d>> LocationPoints => LinearAlgebra.PointDehomogenizer2d(ControlPoints);
         ///// <summary>
         /////Two dimensional array of weight values
         ///// </summary>
         //public List<List<double>> Weights { get; }
-        //public List<List<Point4d>> HomogenizedPoints { get; }
+        //public List<List<Point4d>> ControlPoints { get; }
 
         //public bool Equals(NurbsSurface other){
-        //    //var pts = this.ControlPoints;
-        //    //var otherPts = other?.ControlPoints;
+        //    //var pts = this.LocationPoints;
+        //    //var otherPts = other?.LocationPoints;
 
         //    //if (other == null) return false;
         //    //if (pts.Count != otherPts.Count) return false;
