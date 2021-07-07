@@ -24,7 +24,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             Plane pl0 = Plane.PlaneXY;
             Plane pl1 = Plane.PlaneYZ.SetOrigin(new Point3(10, 10, 5));
-            Plane pl2 = Plane.PlaneXZ.SetOrigin(new Point3(10, -10, -5));
+            Plane pl2 = Plane.PlaneZX.SetOrigin(new Point3(10, -10, -5));
 
             // Act
             bool intersection0 = Intersect.PlanePlane(pl0, pl1, out Line lineIntersect0);
@@ -209,7 +209,7 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             Plane pl0 = Plane.PlaneYZ;
             Plane pl1 = Plane.PlaneYZ.SetOrigin(new Point3( 10, 20, 5));
-            Plane pl2 = Plane.PlaneXZ.SetOrigin(new Point3( 10, -10, -5));
+            Plane pl2 = Plane.PlaneZX.SetOrigin(new Point3( 10, -10, -5));
             Circle cl = new Circle(pl1, 20);
 
             // Act
