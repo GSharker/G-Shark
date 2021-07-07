@@ -280,7 +280,7 @@ namespace GShark.Geometry
            var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
             var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
 
-            return new Plane(tranformedOrigin, xDir, yDir);
+            return new Plane(transformedOrigin, xDir, yDir);
         }
 
         /// <summary>
