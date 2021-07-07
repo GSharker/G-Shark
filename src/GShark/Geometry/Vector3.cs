@@ -201,8 +201,8 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compute the angle between two vectors.
-        /// <para>This operation is commutative.</para>
+        /// Compute the angle in radiance between two vectors.<br/>
+        /// This operation is commutative.
         /// </summary>
         /// <param name="a">First vector for angle.</param>
         /// <param name="b">Second vector for angle.</param>
@@ -232,7 +232,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the angle on a plane between two vectors.
+        /// Computes the angle in radiance on a plane between two vectors.
         /// </summary>
         /// <param name="a">First vector.</param>
         /// <param name="b">Second vector.</param>
@@ -608,12 +608,12 @@ namespace GShark.Geometry
         /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
         /// </summary>
         /// <param name="axis">Axis of rotation.</param>
-        /// <param name="angle">Angle of rotation (in radians).</param>
+        /// <param name="radianceAngle">Angle of rotation (in radians).</param>
         /// <returns>Rotated vector.</returns>
-        public Vector3 Rotate(Vector3 axis, double angle)
+        public Vector3 Rotate(Vector3 axis, double radianceAngle)
         {
-            double cosAngle = Math.Cos(angle);
-            double sinAngle = Math.Sin(angle);
+            double cosAngle = Math.Cos(radianceAngle);
+            double sinAngle = Math.Sin(radianceAngle);
 
             GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 

@@ -192,8 +192,8 @@ namespace GShark.Core
         /// <summary>
         /// Finds the Tait-Byran angles (also loosely called Euler angles) for a rotation transformation.<br/>
         /// yaw - angle (in radians) to rotate about the Z axis.<br/>
-        /// pitch -  angle(in radians) to rotate about the Y axis.<br/>
-        /// roll - angle(in radians) to rotate about the X axis.
+        /// pitch -  angle (in radians) to rotate about the Y axis.<br/>
+        /// roll - angle (in radians) to rotate about the X axis.
         /// </summary>
         /// <param name="transform">Transformation to check.</param>
         /// <returns>A dictionary collecting the 3 values.</returns>

@@ -8,7 +8,7 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// Represents the value of a plane, two angles (interval) and a radius (radiance).<br/>
+    /// Represents the value of a plane, two angles (interval in radiance) and a radius (radiance).<br/>
     /// The arc run ccw rotation where Xaxis and Yaxis form a orthonormal frame.
     /// </summary>
     /// <example>
@@ -20,33 +20,32 @@ namespace GShark.Geometry
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.
         /// </summary>
         /// <param name="plane">Base plane.</param>
-        /// <param name="radius">Radius value.</param>
-        /// <param name="angleDomain">Interval defining the angle of the arc. Interval should be between 0.0 to 2Pi</param>
-        //ToDo consider providing overloads for degrees, or make it standard across codebase.
-        public Arc(Plane plane, double radius, Interval angleDomain)
+        /// <param name="radius">Radius value in radiance.</param>
+        /// <param name="angleDomainRadiance">Interval defining the angle in radiance of the arc. Interval should be between 0.0 to 2Pi</param>
+        public Arc(Plane plane, double radius, Interval angleDomainRadiance)
         {
-            if (angleDomain.T1 < angleDomain.T0)
+            if (angleDomainRadiance.T1 < angleDomainRadiance.T0)
             {
                 throw new Exception("Angle domain must never be decreasing.");
             }
 
             Plane = plane;
             Radius = radius;
-            Domain = (angleDomain.Length > Math.PI * 2.0)
-                ? new Interval(AngularDiff(angleDomain.T0, Math.PI * 2.0), AngularDiff(angleDomain.T1, Math.PI * 2.0))
-                : angleDomain;
+            Domain = (angleDomainRadiance.Length > Math.PI * 2.0)
+                ? new Interval(AngularDiff(angleDomainRadiance.T0, Math.PI * 2.0), AngularDiff(angleDomainRadiance.T1, Math.PI * 2.0))
+                : angleDomainRadiance;
 
             ToNurbsCurve();
         }
 
         /// <summary>
-        /// Initializes an arc from a plane, a radius and an angle.
+        /// Initializes an arc from a plane, a radius and an angle in radiance.
         /// </summary>
         /// <param name="plane">Base plane.</param>
         /// <param name="radius">Radius value.</param>
-        /// <param name="angle">Angle of the arc.</param>
-        public Arc(Plane plane, double radius, double angle)
-            : this(plane, radius, new Interval(0.0, angle))
+        /// <param name="angleRadiance">Angle of the arc in radiance.</param>
+        public Arc(Plane plane, double radius, double angleRadiance)
+            : this(plane, radius, new Interval(0.0, angleRadiance))
         {
         }
 
@@ -94,13 +93,13 @@ namespace GShark.Geometry
         public Point3 Center => Plane.Origin;
 
         /// <summary>
-        /// Gets the angle of this arc.
+        /// Gets the angle of this arc.<br/>
         /// Angle value in radians.
         /// </summary>
         public double Angle => Domain.Length;
 
         /// <summary>
-        /// Gets the angle domain of this arc.
+        /// Gets the angle domain of this arc.<br/>
         /// The domain is in radians.
         /// </summary>
         public Interval Domain { get; }
@@ -134,7 +133,7 @@ namespace GShark.Geometry
         public KnotVector Knots { get; private set; }
 
         /// <summary>
-        /// Gets the BoundingBox of this arc.
+        /// Gets the BoundingBox of this arc.<br/>
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
         public BoundingBox BoundingBox
@@ -280,7 +279,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Constructs a nurbs curve representation of this arc.
+        /// Constructs a nurbs curve representation of this arc.<br/>
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
@@ -387,7 +386,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether the arc is equal to another arc.
+        /// Determines whether the arc is equal to another arc.<br/>
         /// The arcs are equal if have the same plane, radius and angle.
         /// </summary>
         /// <param name="other">The arc to compare to.</param>

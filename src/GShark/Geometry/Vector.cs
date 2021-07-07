@@ -191,10 +191,10 @@ namespace GShark.Geometry
         /// <param name="axis">Axis of rotation.</param>
         /// <param name="angle">Angle of rotation (in radians).</param>
         /// <returns>Rotated vector.</returns>
-        public Vector Rotate(Vector axis, double angle)
+        public Vector Rotate(Vector axis, double radianceAngle)
         {
-            double cosAngle = Math.Cos(angle);
-            double sinAngle = Math.Sin(angle);
+            double cosAngle = Math.Cos(radianceAngle);
+            double sinAngle = Math.Sin(radianceAngle);
 
             GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 
