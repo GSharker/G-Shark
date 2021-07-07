@@ -8,8 +8,7 @@ using System.Linq;
 namespace GShark.Operation
 {
     /// <summary>
-    /// ToDo Algorithms are not mutable!
-    /// Contains static, immutable algorithms for tessellation of NURBS curves and sufaces.<br/>
+    /// Contains static algorithms for tessellation of NURBS curves and sufaces.<br/>
     /// Tessellation is the decomposition of the analytical NURBS representation into discrete meshes or polylines that are useful for drawing.<br/>
     /// Some of these algorithms are "adaptive" - using certain heuristics to sample geometry where such samples make sense - while<br/>
     /// others are "regular" in that they sample regularly throughout a parametric domain.There are tradeoffs here.<br/>
