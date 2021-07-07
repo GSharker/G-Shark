@@ -68,24 +68,22 @@ namespace GShark.Test.XUnit.Geometry
             Point3 startPoint = new Point3(0, 0, 0);
             int lineLength = 15;
             Vector3 expectedDirection = new Vector3(1, 0, 0);
-            Point3 expectedEndPoint = new Point3(lineLength, 0, 0);
+            Point3 expectedEndPointLine1 = new Point3(lineLength, 0, 0);
+            Point3 expectedEndPointLine2 = new Point3(-lineLength, 0, 0);
 
             // Act
             Line line1 = new Line(startPoint, Vector3.XAxis, lineLength);
-            
-            //ToDo this should give an error since it is the direction which should be negated/reversed. Length should always be > 0.
-            Line line2 = new Line(startPoint, Vector3.XAxis, -lineLength);
+            Line line2 = new Line(startPoint, Vector3.XAxis.Reverse(), lineLength);
 
             // Assert
             line1.Length.Should().Be(line2.Length).And.Be(lineLength);
             line1.Start.Should().BeEquivalentTo(startPoint);
 
             line1.Direction.Should().BeEquivalentTo(expectedDirection);
-            line1.End.Should().BeEquivalentTo(expectedEndPoint);
+            line1.End.Should().BeEquivalentTo(expectedEndPointLine1);
 
-            //ToDo Review assertion.
-            //line2.Direction.Should().BeEquivalentTo(Vector3.Reverse(expectedDirection));
-            //line2.End.Should().BeEquivalentTo(Vector3.Reverse(expectedEndPoint));
+            line2.Direction.Should().BeEquivalentTo(expectedDirection.Reverse());
+            line2.End.Should().BeEquivalentTo(expectedEndPointLine2);
         }
 
         [Fact]
@@ -97,8 +95,7 @@ namespace GShark.Test.XUnit.Geometry
             Func<Line> func = () => new Line(startPoint, Vector3.XAxis, 0);
 
             // Assert
-            //ToDo Length should always be > 0.
-            func.Should().Throw<Exception>().WithMessage("Length must not be 0.0");
+            func.Should().Throw<Exception>();
         }
 
         [Fact]

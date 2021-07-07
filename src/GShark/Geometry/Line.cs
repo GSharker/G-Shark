@@ -39,9 +39,9 @@ namespace GShark.Geometry
         /// <param name="length">Length of the line.</param>
         public Line(Point3 start, Vector3 direction, double length)
         {
-            if(length >= -GeoSharkMath.Epsilon && length <= GeoSharkMath.Epsilon)
+            if(length <= GeoSharkMath.Epsilon)
             {
-                throw new Exception("Length must not be 0.0");
+                throw new Exception("Length must be bigger than zero");
             }
 
             Start = start;
