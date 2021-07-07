@@ -17,8 +17,7 @@ namespace GShark.Test.XUnit.Core
         {
             _testOutput = testOutput;
         }
-
-        public static IEnumerable<object[]> Homogenized1dData => new List<object[]>
+        public static IEnumerable<object[]> ControlPoints1D => new List<object[]>
         {
             new object[]
             {
@@ -42,8 +41,7 @@ namespace GShark.Test.XUnit.Core
                 }
             },
         };
-
-        public static IEnumerable<object[]> Homogenized2dData => new List<object[]>
+        public static IEnumerable<object[]> ControlPoints2D => new List<object[]>
         {
             new object[]
             {
@@ -123,9 +121,8 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Theory]
-        [MemberData(nameof(Homogenized1dData))]
-        //ToDo Should parameter be called expectedHomogenizedPoints? Confusing interchangeability between control point and homogenized point?
-        public void It_Returns_A_New_Set_Of_Homogenized_Points(List<double> weights, List<Point4> expectedHomogenizedPoints)
+        [MemberData(nameof(ControlPoints1D))]
+        public void It_Returns_A_New_Set_Of_Control_Points(List<double> weights, List<Point4> expectedControlPoints)
         {
             // Arrange
             List<Point3> controlPts = new List<Point3>
@@ -139,20 +136,20 @@ namespace GShark.Test.XUnit.Core
             List<Point4> newControlPts = LinearAlgebra.PointsHomogeniser(controlPts, weights);
 
             // Assert
-            newControlPts.SequenceEqual(expectedHomogenizedPoints).Should().BeTrue();
+            newControlPts.SequenceEqual(expectedControlPoints).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Returns_A_New_Set_Of_Homogenized_Points_By_A_Given_Weight_Value()
+        public void It_Returns_A_New_Set_Of_Control_Points_By_A_Given_Weight_Value()
         {
             // Arrange
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new (0.0, 0.0, 0),
                 new (2.5, -2.5, 0),
                 new (5.0, 0.0, 0)
             };
-            List<Point4> expectedHomogenizedPoints = new List<Point4>
+            List<Point4> expectedControlPoints = new List<Point4>
             {
                 new (0.0, 0.0, 0.0, 1.0),
                 new (2.5, -2.5, 0.0, 1.0),
@@ -160,18 +157,18 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<Point4> homogenizedPoints = LinearAlgebra.PointsHomogeniser(controlPts, 1.0);
+            List<Point4> controlPts = LinearAlgebra.PointsHomogeniser(pts, 1.0);
 
             // Assert
-            homogenizedPoints.SequenceEqual(expectedHomogenizedPoints).Should().BeTrue();
+            controlPts.SequenceEqual(expectedControlPoints).Should().BeTrue();
         }
 
         [Theory]
-        [MemberData(nameof(Homogenized2dData))]
-        public void It_Returns_A_Set_Of_Homogenized_Control_Points(List<List<double>> weights, List<List<Point4>> expectedHomogenizedPoints)
+        [MemberData(nameof(ControlPoints2D))]
+        public void It_Returns_A_Set_Of_Control_Points(List<List<double>> weights, List<List<Point4>> expectedSetOfCtrlPts)
         {
             // Arrange
-            List<List<Point3>> controlPts = new List<List<Point3>>()
+            List<List<Point3>> setOfPts = new List<List<Point3>>()
             {
                 new()
                 {
@@ -188,19 +185,19 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<List<Point4>> homogeneousPoints = LinearAlgebra.PointsHomogeniser2d(controlPts, weights);
+            List<List<Point4>> setOfCtrlPts = LinearAlgebra.PointsHomogeniser2d(setOfPts, weights);
 
             // Assert
-            for (int i = 0; i < homogeneousPoints.Count; i++)
+            for (int i = 0; i < setOfCtrlPts.Count; i++)
             {
-                var homogenousPts = homogeneousPoints[i];
-                var expectedPoints = expectedHomogenizedPoints[i];
+                List<Point4> ctrlPts = setOfCtrlPts[i];
+                List<Point4> expectedCtrlPts = expectedSetOfCtrlPts[i];
 
-                for (int j = 0; j < homogenousPts.Count; j++)
+                for (int j = 0; j < ctrlPts.Count; j++)
                 {
-                    var homogenousPt = homogenousPts[j];
-                    var expectedPt = expectedPoints[j];
-                    homogenousPt.Equals(expectedPt).Should().BeTrue();
+                    Point4 ctrlPt = ctrlPts[j];
+                    Point4 expectedPt = expectedCtrlPts[j];
+                    ctrlPt.Equals(expectedPt).Should().BeTrue();
                 }
             }
         }
@@ -209,16 +206,16 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Set_Of_Weights()
         {
             // Arrange
-            List<Point4> homogeneousPts = new List<Point4>
+            List<Point4> ctrlPts = new List<Point4>
             {
                 new (0.0, 0.0, 0.0, 0.5),
                 new (1.25, -1.25, 0.0, 0.5),
                 new (2.5, 0.0, 0.0, 0.5)
             };
-            List<double> expectedWeights = new List<double> {0.5, 0.5, 0.5};
+            List<double> expectedWeights = new List<double> { 0.5, 0.5, 0.5 };
 
             // Act
-            List<double> weight1d = LinearAlgebra.GetWeights(homogeneousPts);
+            List<double> weight1d = LinearAlgebra.GetWeights(ctrlPts);
 
             // Assert
             weight1d.SequenceEqual(expectedWeights).Should().BeTrue();
@@ -228,7 +225,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Two_Dimensional_Set_Of_Weights()
         {
             // Arrange
-            List<List<Point4>> homogeneousPts = new List<List<Point4>>
+            List<List<Point4>> ctrlPts = new List<List<Point4>>
             {
                 new()
                 {
@@ -251,10 +248,10 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<List<double>> weight2d = LinearAlgebra.GetWeights2d(homogeneousPts);
+            List<List<double>> weight2d = LinearAlgebra.GetWeights2d(ctrlPts);
 
             // Assert
-            for (int i = 0; i < homogeneousPts.Count; i++)
+            for (int i = 0; i < ctrlPts.Count; i++)
             {
                 var expectedWts = expectedWeights[i];
                 var weights = weight2d[i];
@@ -272,28 +269,28 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Dehomogenized_Point()
         {
             // Arrange
-            Point4 homogeneousPts = new Point4(1.25, -1.25, 0.0, 0.5);
-            Point3 expectedDehomogenizedPoint = new Point3(2.5, -2.5, 0 );
+            Point4 ctrlPt = new Point4(1.25, -1.25, 0.0, 0.5);
+            Point3 expectedPt = new Point3(2.5, -2.5, 0);
 
             // Act
-            Point3 dehomogenizedPt = LinearAlgebra.PointDehomogenizer(homogeneousPts);
+            Point3 pt = LinearAlgebra.PointDehomogenizer(ctrlPt);
 
             // Assert
-            dehomogenizedPt.Equals(expectedDehomogenizedPoint).Should().BeTrue();
+            pt.Equals(expectedPt).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Set_Of_Dehomogenized_Points()
         {
             // Arrange
-            List<Point4> homogeneousPts = new List<Point4>
+            List<Point4> ctrlPts = new List<Point4>
             {
                 new (0.0, 0.0, 0.0, 0.5),
                 new (1.25, -1.25, 0.0, 0.5),
                 new (2.5, 0.0, 0.0, 0.5)
             };
 
-            List<Point3> dehomogenizeExpected = new List<Point3>
+            List<Point3> expectedPts = new List<Point3>
             {
                 new (0.0, 0.0, 0),
                 new (2.5, -2.5, 0),
@@ -301,17 +298,17 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<Point3> dehomogenizedPts = LinearAlgebra.PointDehomogenizer1d(homogeneousPts);
+            List<Point3> pts = LinearAlgebra.PointDehomogenizer1d(ctrlPts);
 
             // Assert
-            dehomogenizedPts.SequenceEqual(dehomogenizeExpected).Should().BeTrue();
+            pts.SequenceEqual(expectedPts).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_Two_Dimensional_Set_Of_Dehomogenized_Points()
         {
             // Arrange
-            List<List<Point4>> homogeneousPts = new List<List<Point4>>
+            List<List<Point4>> ctrlPts = new List<List<Point4>>
             {
                 new()
                 {
@@ -327,7 +324,7 @@ namespace GShark.Test.XUnit.Core
                 }
             };
 
-            List<List<Point3>> expectedDehomogenizedPoints = new List<List<Point3>>
+            List<List<Point3>> expectedPts = new List<List<Point3>>
             {
                new()
                {
@@ -344,17 +341,17 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            var dehomogenizedPts = LinearAlgebra.PointDehomogenizer2d(homogeneousPts);
+            var pts = LinearAlgebra.PointDehomogenizer2d(ctrlPts);
 
             // Arrange
-            dehomogenizedPts.Should().BeEquivalentTo(expectedDehomogenizedPoints);
+            pts.Should().BeEquivalentTo(expectedPts);
         }
 
         [Fact]
         public void It_Returns_A_Rationalized_Set_Of_Points()
         {
             // Arrange
-            List<Point4> homogenousPoints = new List<Point4>
+            List<Point4> ctrlPts = new List<Point4>
             {
                 new (0.0, 0.0, 0.0, 0.5),
                 new (2.5, -2.5, 0.0, 1.0),
@@ -369,7 +366,7 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<Point3> rationalPoints = LinearAlgebra.RationalPoints(homogenousPoints);
+            List<Point3> rationalPoints = LinearAlgebra.RationalPoints(ctrlPts);
 
             // Assert
             rationalPoints.SequenceEqual(expectedPts).Should().BeTrue();
@@ -379,7 +376,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Rationalized_Two_Dimensional_Set_Of_Points()
         {
             // Arrange
-            List<List<Point4>> homogenousPoints = new List<List<Point4>>
+            List<List<Point4>> ctrlPts = new List<List<Point4>>
             {
                 new()
                 {
@@ -412,10 +409,10 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<List<Point3>> rationalPoints = LinearAlgebra.Rational2d(homogenousPoints);
+            List<List<Point3>> rationalPoints = LinearAlgebra.Rational2d(ctrlPts);
 
             // Assert
-            for (int i = 0; i < homogenousPoints.Count; i++)
+            for (int i = 0; i < ctrlPts.Count; i++)
             {
                 var expectedPts = expectedPoints[i];
                 var rationalPts = rationalPoints[i];

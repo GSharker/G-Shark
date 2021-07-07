@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
@@ -106,8 +105,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
 
             // Act
-            var ptHomogenized = Analyze.CurveClosestPoint(curve, testPt, out double t);
-            var pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
+            var pt = Analyze.CurveClosestPoint(curve, testPt, out double t);
 
             // Assert
             t.Should().BeApproximately(tValExpected, GeoSharkMath.MaxTolerance);

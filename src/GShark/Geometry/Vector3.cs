@@ -3,7 +3,6 @@ using System;
 
 namespace GShark.Geometry
 {
-    //ToDo Add Operator overload for Vector3d * 4x4 Matrix (represent vector as x,y,z,0 column see https://www.euclideanspace.com/maths/geometry/affine/matrix4x4/index.htm)
     /// <summary>
     /// Defines a Vector in Euclidean space with coordinates X, Y, and Z.
     /// Referenced from https://github.com/mcneel/rhinocommon/blob/master/dotnet/opennurbs/opennurbs_point.cs
@@ -440,7 +439,6 @@ namespace GShark.Geometry
             {
                 // checks for invalid values and returns 0.0 if there are any
                 double length = GetLengthHelper(X, Y, Z);
-                //ToDo Rhino implements this check against SqrtEpsilon. Is it necessary?
                 return Math.Abs(length - 1.0) <= GeoSharkMath.Epsilon;
             }
         }
@@ -880,9 +878,10 @@ namespace GShark.Geometry
             {
                 len = fx; fx = fz; fz = len;
             }
-            //ToDo Substitute with GSharkMath const.
-            const double ON_DBL_MIN = 2.2250738585072014e-308;
-            if (fx > ON_DBL_MIN)
+
+            // Smallest positive normalized DOUBLE 2.2250738585072014E-308
+            // https://github.com/mcneel/rhinocommon/blob/3aebe3553b5e2c78ed4d5ae1c21f3e752a6b7f69/dotnet/opennurbs/opennurbs_point.cs#L3473
+            if (fx > 2.2250738585072014e-308)
             {
                 len = 1.0 / fx;
                 fy *= len;

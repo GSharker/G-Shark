@@ -127,7 +127,7 @@ namespace GShark.Operation
         public static Point3  CurveClosestPoint(ICurve curve, Point3  point, out double t)
         {
             t = CurveClosestParameter(curve, point);
-            return LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, t));
+            return Evaluation.CurvePointAt(curve, t);
         }
 
         /// <summary>
