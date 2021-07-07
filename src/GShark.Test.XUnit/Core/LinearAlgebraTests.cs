@@ -17,8 +17,7 @@ namespace GShark.Test.XUnit.Core
         {
             _testOutput = testOutput;
         }
-
-        public static IEnumerable<object[]> ControlPointsDataSet01 => new List<object[]>
+        public static IEnumerable<object[]> ControlPoints1D => new List<object[]>
         {
             new object[]
             {
@@ -42,8 +41,7 @@ namespace GShark.Test.XUnit.Core
                 }
             },
         };
-
-        public static IEnumerable<object[]> ControlPointsDataSet02 => new List<object[]>
+        public static IEnumerable<object[]> ControlPoints2D => new List<object[]>
         {
             new object[]
             {
@@ -123,7 +121,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Theory]
-        [MemberData(nameof(ControlPointsDataSet01))]
+        [MemberData(nameof(ControlPoints1D))]
         public void It_Returns_A_New_Set_Of_Control_Points(List<double> weights, List<Point4> expectedControlPoints)
         {
             // Arrange
@@ -166,7 +164,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Theory]
-        [MemberData(nameof(ControlPointsDataSet02))]
+        [MemberData(nameof(ControlPoints2D))]
         public void It_Returns_A_Set_Of_Control_Points(List<List<double>> weights, List<List<Point4>> expectedSetOfCtrlPts)
         {
             // Arrange
