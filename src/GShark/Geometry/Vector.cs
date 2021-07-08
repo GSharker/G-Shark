@@ -32,38 +32,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the value of a point at location GeoSharkMath.UNSET_VALUE,GeoSharkMath.UNSET_VALUE,GeoSharkMath.UNSET_VALUE.
-        /// </summary>
-        public static Vector Unset => new Vector
-            {GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue};
-
-        /// <summary>
-        /// Gets the value of the vector with components 1,0,0.
-        /// </summary>
-        public static Vector XAxis => new Vector { 1.0, 0.0, 0.0 };
-
-        /// <summary>
-        /// Gets the value of the vector with components 0,1,0.
-        /// </summary>
-        public static Vector YAxis => new Vector { 0.0, 1.0, 0.0 };
-
-        /// <summary>
-        /// Gets the value of the vector with components 0,0,1.
-        /// </summary>
-        public static Vector ZAxis => new Vector { 0.0, 0.0, 1.0 };
-
-        /// <summary>
-        /// Calculate the angle in radians between two vectors.
-        /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>The angle in radians</returns>
-        public static double AngleBetween(Vector a, Vector b)
-        {
-            return Math.Acos(Dot(a, b) / (a.Length() * b.Length()));
-        }
-
-        /// <summary>
         /// Reverses this vector in place (reverses the direction).
         /// </summary>
         /// <param name="a">The vector to reverse.</param>
@@ -88,7 +56,7 @@ namespace GShark.Geometry
         /// Test a vector to see if it is unitzed.
         /// </summary>
         /// <returns>True if vector is unitized.</returns>
-        public bool IsUnitize()
+        public bool IsUnitized()
         {
             return (GeoSharkMath.IsValidDouble(this[0]) &&
                     GeoSharkMath.IsValidDouble(this[1]) &&
@@ -121,6 +89,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="a">The vector.</param>
         /// <returns>The magnitude of the vector.</returns>
+        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
         public double Length()
         {
             if (!IsValid() || IsZero()) return 0.0;
@@ -129,96 +98,13 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Linearly interpolates between two vectors based on the given weighting.
-        /// </summary>
-        /// <param name="u">The first source vector.</param>
-        /// <param name="v">The second source vector.</param>
-        /// <param name="amount">Value between 0 and 1 indicating the weight of the second source vector.</param>
-        /// <returns>The interpolated vector.</returns>
-        public static Vector Lerp(Vector u, Vector v, double amount) => (u * amount) + (v * (1.0 - amount));
-
-        /// <summary>
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
         /// <returns>The sum of each value squared.</returns>
+        //ToDo Check references. Does not seem relevant if treating like an array of doubles.
         public double SquaredLength()
         {
             return this.Aggregate(0.0, (x, a) => a * a + x);
-        }
-
-        /// <summary>
-        /// Determines if this vector is perpendicular to within one degree of another one.
-        /// </summary>
-        /// <param name="other">Vector to compare to.</param>
-        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
-        /// <returns>True if both vectors are perpendicular.</returns>
-        public bool IsPerpendicularTo(Vector other, double tolerance = -1)
-        {
-            bool result = false;
-            double toleranceSet = (tolerance < 0) ? GeoSharkMath.AngleTolerance : tolerance;
-            double length = this.Length() * other.Length();
-            double dotUnitize = Vector.Dot(this, other) / length;
-            if (length > 0 && dotUnitize <= Math.Sin(toleranceSet)) result = true;
-            return result;
-        }
-
-        /// <summary>
-        /// Determines whether this vector is parallel to another vector, within a provided tolerance.
-        /// </summary>
-        /// <param name="other">Vector to compare to.</param>
-        /// <param name="tolerance">Angle tolerance (in radians), if not set used default one degree, expressed in radians.</param>
-        /// <returns>A parallel indicator:
-        /// 1 vectors are parallel,<br/>
-        /// 0 vectors are not parallel,<br/>
-        /// -1 vectors are parallel but with opposite directions </returns>
-        public int IsParallelTo(Vector other, double tolerance = -1)
-        {
-            int result = 0;
-            double toleranceSet = (tolerance < 0) ? Math.Cos(GeoSharkMath.AngleTolerance) : Math.Cos(tolerance);
-            double length = this.Length() * other.Length();
-            double dotUnitize = Vector.Dot(this, other) / length;
-            if (!(length > 0)) return result;
-            if (dotUnitize >= toleranceSet) result = 1;
-            if (dotUnitize <= -toleranceSet) result = -1;
-            return result;
-        }
-
-        /// <summary>
-        /// Rotates this vector around a given axis.<br/>
-        /// The rotation is computed using Rodrigues Rotation formula.<br/>
-        /// https://handwiki.org/wiki/Rodrigues%27_rotation_formula
-        /// </summary>
-        /// <param name="axis">Axis of rotation.</param>
-        /// <param name="radiansAngle">Angle of rotation (in radians).</param>
-        /// <returns>Rotated vector.</returns>
-        public Vector Rotate(Vector axis, double radiansAngle)
-        {
-            double cosAngle = Math.Cos(radiansAngle);
-            double sinAngle = Math.Sin(radiansAngle);
-
-            GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
-
-            Vector unitizedAxis = axis.Unitize();
-            Vector cross = Vector.Cross(unitizedAxis, this);
-            double dot = Vector.Dot(unitizedAxis, this);
-
-            return (this * cosAngle) + (cross * sinAngle) + (unitizedAxis * dot * (1 - cosAngle));
-        }
-
-        /// <summary>
-        /// Calculates the cross product.
-        /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>The computed cross product.</returns>
-        public static Vector Cross(Vector a, Vector b)
-        {
-            return new Vector
-            {
-                a[1] * b[2] - a[2] * b[1],
-                a[2] * b[0] - a[0] * b[2],
-                a[0] * b[1] - a[1] * b[0]
-            };
         }
 
         /// <summary>
@@ -227,6 +113,7 @@ namespace GShark.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
+        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
         public static double Dot(Vector a, Vector b)
         {
             return a.Select((t, i) => t * b[i]).Sum();
@@ -236,9 +123,10 @@ namespace GShark.Geometry
         /// Unitizes the vector. A unit vector has length 1 unit.
         /// </summary>
         /// <returns>A new vector unitized.</returns>
+        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
         public Vector Unitize()
         {
-            if (IsUnitize()) return this;
+            if (IsUnitized()) return this;
             double l = this.Length();
             if (l <= double.Epsilon)
                 throw new Exception("An invalid or zero length vector cannot be unitized.");
@@ -290,44 +178,7 @@ namespace GShark.Geometry
             return llv;
         }
 
-        /// <summary>
-        /// Calculates the distance from this point to b.
-        /// </summary>
-        /// <param name="v">The target vector.</param>
-        /// <returns>The distance between this vector and the provided vector.</returns>
-        public double DistanceTo(Vector v)
-        {
-            if (Count != v.Count) throw new Exception("The two list doesn't match in length.");
-            return Math.Sqrt(this.Select((val, i) => Math.Pow(val - v[i], 2)).Sum());
-        }
-
-        /// <summary>
-        /// Calculates the distance of a point to a line.
-        /// </summary>
-        /// <param name="line">The line from which to calculate the distance.</param>
-        /// <returns>The distance.</returns>
-        public double DistanceTo(Line line)
-        {
-            var pt = line.ClosestPoint(new Point3(this[0], this[1], this[2]));
-            Vector projectedPt = new Vector{pt[0],pt[1],pt[2]};
-            Vector ptToProjectedPt = projectedPt - this;
-            return ptToProjectedPt.Length();
-        }
-
-        /// <summary>
-        /// Determinate if the provided point lies on the plane.
-        /// </summary>
-        /// <param name="plane">The plane on which to find if the point lies on.</param>
-        /// <param name="tol">If the tolerance is not set, as per default is use 1e-6</param>
-        /// <returns>Whether the point is on the plane.</returns>
-        public bool IsOnPlane(Plane plane, double tol = 1e-6)
-        {
-            var origin = new Vector() { plane.Origin.X, plane.Origin.Y, plane.Origin.Z };
-            var normal = new Vector() { plane.Normal.X, plane.Normal.Y, plane.Normal.Z };
-            return Math.Abs(Dot(this - origin, normal)) < tol;
-        }
-
-        // Note: this is mutable.
+       // Note: this is mutable.
         /// <summary>
         /// Adds to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -502,9 +353,9 @@ namespace GShark.Geometry
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            if (!(obj is Vector vec)) return false;
+            if (!(obj is Vector)) return false;
 
-            return IsEqualRoundingDecimal(vec);
+            return true;
         }
 
         /// <summary>
@@ -515,159 +366,16 @@ namespace GShark.Geometry
         /// <returns>True if are the same, otherwise false.</returns>
         public bool Equals(Vector other)
         {
-            return IsEqualRoundingDecimal(other);
-        }
+            if (other == null) return false;
+            if (!this.IsValid() || !other.IsValid()) return false;
+            if (Count != other.Count) return false;
 
-        /// <summary>
-        /// Determine whether the vector's components are equal to the one to test, rounding the value.
-        /// </summary>
-        /// <param name="v">The vector to compare.</param>
-        /// <param name="numberOfDecimal">The number of rounding.</param>
-        /// <returns>True if are the same, otherwise false.</returns>
-        public bool IsEqualRoundingDecimal(Vector v, int numberOfDecimal = 0)
-        {
-            Vector v1 = this;
-            Vector v2 = v;
-            if (numberOfDecimal != 0)
+            for (var i = 0; i < Count; i++)
             {
-                v1 = this.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
-                v2 = v.Select(val => Math.Round(val, numberOfDecimal)).ToVector();
+                if (!(Math.Abs(this[i] - other[i]) <= GeoSharkMath.Epsilon)) return false;
             }
-
-            return v1.Select((val, i) => Math.Abs(val - v2[i]))
-                .All(val => val < GeoSharkMath.Epsilon);
-        }
-
-        /// <summary>
-        /// Computes the perpendicular to another vector.<br/>
-        /// https://stackoverflow.com/questions/11132681/what-is-a-formula-to-get-a-vector-perpendicular-to-another-vector <br/>
-        /// Result is not unitized.
-        /// </summary>
-        /// <param name="other">Vector to use as guide.</param>
-        /// <returns>The perpendicular vector.</returns>
-        public Vector PerpendicularTo(Vector other)
-        {
-            double[] tempVector = new double[3];
-            int i, j, k;
-            double a, b;
-            k = 2;
-            if (Math.Abs(other[1]) > Math.Abs(other[0]))
-            {
-                if (Math.Abs(other[2]) > Math.Abs(other[1]))
-                {
-                    // |v.z| > |v.y| > |v.x|
-                    i = 2;
-                    j = 1;
-                    k = 0;
-                    a = other[2];
-                    b = -other[1];
-                }
-                else if (Math.Abs(other[2]) > Math.Abs(other[0]))
-                {
-                    // |v.y| >= |v.z| >= |v.x|
-                    i = 1;
-                    j = 2;
-                    k = 0;
-                    a = other[1];
-                    b = -other[2];
-                }
-                else
-                {
-                    // |v.y| > |v.x| > |v.z|
-                    i = 1;
-                    j = 0;
-                    k = 2;
-                    a = other[1];
-                    b = -other[0];
-                }
-            }
-            else if (Math.Abs(other[2]) > Math.Abs(other[0]))
-            {
-                // |v.z| > |v.x| >= |v.y|
-                i = 2;
-                j = 0;
-                k = 1;
-                a = other[2];
-                b = -other[0];
-            }
-            else if (Math.Abs(other[2]) > Math.Abs(other[1]))
-            {
-                // |v.x| >= |v.z| > |v.y|
-                i = 0;
-                j = 2;
-                k = 1;
-                a = other[0];
-                b = -other[2];
-            }
-            else
-            {
-                // |v.x| >= |v.y| >= |v.z|
-                i = 0;
-                j = 1;
-                k = 2;
-                a = other[0];
-                b = -other[1];
-            }
-
-            tempVector[i] = b;
-            tempVector[j] = a;
-            tempVector[k] = 0.0;
-
-            return tempVector.ToVector();
-        }
-
-        /// <summary>
-        /// Computes the perpendicular of a vector given three points.<br/>
-        /// Result is not unitized.
-        /// </summary>
-        /// <param name="pt1">First point.</param>
-        /// <param name="pt2">Second point.</param>
-        /// <param name="pt3">Third point.</param>
-        /// <returns>The perpendicular vector.</returns>
-        public Vector PerpendicularTo(Vector pt1, Vector pt2, Vector pt3)
-        {
-            Vector vec0 = pt3 - pt2;
-            Vector vec1 = pt1 - pt3;
-            Vector vec2 = pt2 - pt1;
-
-            Vector normal0 = Vector.Cross(vec1, vec2);
-            if (normal0.Length() <= double.Epsilon)
-            {
-                return Vector.Unset;
-            }
-            Vector normal1 = Vector.Cross(vec2, vec0);
-            if (normal1.Length() <= double.Epsilon)
-            {
-                return Vector.Unset;
-            }
-            Vector normal2 = Vector.Cross(vec0, vec1);
-            if (normal2.Length() <= double.Epsilon)
-            {
-                return Vector.Unset;
-            }
-
-            double s0 = 1.0 / vec0.Length();
-            double s1 = 1.0 / vec1.Length();
-            double s2 = 1.0 / vec2.Length();
-
-            // choose normal with smallest total error
-            double e0 = s0 * Math.Abs(Vector.Dot(normal0, vec0)) +
-                        s1 * Math.Abs(Vector.Dot(normal0, vec1)) +
-                        s2 * Math.Abs(Vector.Dot(normal0, vec2));
-
-            double e1 = s0 * Math.Abs(Vector.Dot(normal1, vec0)) +
-                        s1 * Math.Abs(Vector.Dot(normal1, vec1)) +
-                        s2 * Math.Abs(Vector.Dot(normal1, vec2));
-
-            double e2 = s0 * Math.Abs(Vector.Dot(normal2, vec0)) +
-                        s1 * Math.Abs(Vector.Dot(normal2, vec1)) +
-                        s2 * Math.Abs(Vector.Dot(normal2, vec2));
-
-            if (e0 <= e1)
-            {
-                return e0 <= e2 ? normal0 : normal2;
-            }
-            return e1 <= e2 ? normal1 : normal2;
+            
+            return true;
         }
 
         /// <summary>

@@ -175,17 +175,19 @@ namespace GShark.Operation
             while (j < maxIterations)
             {
                 List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                Vector diff = e[0] - new Vector{point.X, point.Y, point.Z}; // C(u) - P
+                var diff = e[0] - new Vector3(point.X, point.Y, point.Z); // C(u) - P
+
 
                 // First condition, point coincidence:
                 // |C(u) - p| < e1
-                double c1v = diff.Length();
+                double c1v = diff.Length;
                 bool c1 = c1v <= tol1;
 
                 // Second condition, zero cosine:
                 // C'(u) * (C(u) - P)
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
+                //ToDo Is this just a multiplication between two numbers?
                 double c2n = Vector.Dot(e[1], diff);
                 double c2d = (e[1] * c1v).Length;
                 double c2v = c2n / c2d;
@@ -224,6 +226,7 @@ namespace GShark.Operation
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
             // C(u) is the curve, p is the point, * is a dot product
+            //ToDO Remove if it is infact just a multiplication of a point by difference
             double f = Vector.Dot(derivativePts[1], difference);
 
             //	f' = C"(u) * ( C(u) - p ) + C'(u) * C'(u)
