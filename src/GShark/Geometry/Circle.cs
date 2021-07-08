@@ -50,7 +50,7 @@ namespace GShark.Geometry
             Vector3 xDir = pt1 - center;
             Vector3 yDir = Vector3.CrossProduct(normal, xDir);
 
-            Plane = new Plane(center, xDir, yDir, normal);
+            Plane = new Plane(center, xDir, yDir);
             Radius = xDir.Length;
         }
 

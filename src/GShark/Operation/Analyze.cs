@@ -175,18 +175,19 @@ namespace GShark.Operation
             while (j < maxIterations)
             {
                 List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                Vector diff = e[0] - new Vector{point.X, point.Y, point.Z}; // C(u) - P
+                Vector3 diff = e[0] - new Vector3(point.X, point.Y, point.Z); // C(u) - P
+
 
                 // First condition, point coincidence:
                 // |C(u) - p| < e1
-                double c1v = diff.Length();
+                double c1v = diff.Length;
                 bool c1 = c1v <= tol1;
 
                 // Second condition, zero cosine:
                 // C'(u) * (C(u) - P)
                 // ------------------ < e2
                 // |C'(u)| |C(u) - P|
-                double c2n = Vector.Dot(e[1], diff);
+                double c2n = Vector3.DotProduct(e[1], diff);
                 double c2d = (e[1] * c1v).Length;
                 double c2v = c2n / c2d;
                 bool c2 = Math.Abs(c2v) <= tol2;
@@ -219,16 +220,16 @@ namespace GShark.Operation
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector difference)
+        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
             // C(u) is the curve, p is the point, * is a dot product
-            double f = Vector.Dot(derivativePts[1], difference);
+            double f = Vector3.DotProduct(derivativePts[1], difference);
 
             //	f' = C"(u) * ( C(u) - p ) + C'(u) * C'(u)
-            double s0 = Vector.Dot(derivativePts[2], difference);
-            double s1 = Vector.Dot(derivativePts[1], derivativePts[1]);
+            double s0 = Vector3.DotProduct(derivativePts[2], difference);
+            double s1 = Vector3.DotProduct(derivativePts[1], derivativePts[1]);
             double df = s0 + s1;
 
             return u - f / df;

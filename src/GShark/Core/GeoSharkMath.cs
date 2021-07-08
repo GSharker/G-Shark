@@ -99,8 +99,8 @@ namespace GShark.Core
 
             if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharkMath.MaxTolerance)
             {
-                Vector vec = new Vector { cosAngle, sinAngle };
-                if (vec.Length() > 0.0)
+                var vec = new Vector3(cosAngle, sinAngle, 0);
+                if (vec.Length > 0.0)
                 {
                     Vector vecUnitized = vec.Unitize();
                     cosAngle = vecUnitized[0];
@@ -125,14 +125,6 @@ namespace GShark.Core
                 cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
                 sinAngle = 0.0;
             }
-        }
-
-        /// <summary>
-        /// Delegated function, used to sort a list of numerical value.
-        /// </summary>
-        internal static int NumberSort(double a, double b)
-        {
-            return Math.Sign(a - b);
         }
     }
 }

@@ -419,18 +419,22 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
 
             Transform xForm = Transform.Rotation(0.15, new Point3( 0.0, 0.0, 0.0));
-            Plane pl = Plane.PlaneYZ.SetOrigin(new Point3( 6, 0.0, 0.0)).Transform(xForm);
+            Plane pln = Plane.PlaneYZ;
+            var testPln = pln.SetOrigin(new Point3(6, 0.0, 0.0));
+            var testPlnXformed = testPln.Transform(xForm);
 
             // Act
-            List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, pl);
+            List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, testPlnXformed);
 
-            // Assertintersections.Count.Should().Be(3);
+            // Assert
             foreach (CurvePlaneIntersectionResult curveIntersectionResult in intersections)
             {
                 _testOutput.WriteLine(curveIntersectionResult.ToString());
-                var ptOnPlane = pl.PointAt(curveIntersectionResult.Uv[0], curveIntersectionResult.Uv[1]);
+                var ptOnPlane = testPlnXformed.PointAt(curveIntersectionResult.Uv[0], curveIntersectionResult.Uv[1]);
                 curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
+            //ToDo Review why no intersections
+            intersections.Count.Should().Be(3);
         }
 
         [Fact]
