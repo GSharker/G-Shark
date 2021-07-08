@@ -416,10 +416,10 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             var vector = new Vector { -7, 10, -5 };
             var axis = new Vector { 10, 7, 0 };
-            var radiance = GeoSharkMath.ToRadians(angle);
+            var radians = GeoSharkMath.ToRadians(angle);
 
             // Act
-            var vectorRot = vector.Rotate(axis, radiance);
+            var vectorRot = vector.Rotate(axis, radians);
 
             // Assert
             vectorRot.Should().BeEquivalentTo(vectorExpected, options => options

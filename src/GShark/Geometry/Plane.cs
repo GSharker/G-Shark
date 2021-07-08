@@ -125,7 +125,7 @@ namespace GShark.Geometry
         /// Performs the rotation to align the XAxis of a plane to a given guide vector.
         /// </summary>
         /// <param name="direction">The guide vector.</param>
-        /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
+        /// <returns>The rotated plane (in radians) with XAxis align to the guide vector.</returns>
         public Plane Align(Vector3 direction)
         {
             Point3 tempPt = Origin + direction;
@@ -258,11 +258,11 @@ namespace GShark.Geometry
         /// <summary>
         /// Rotates the plane around is own Z-axis.
         /// </summary>
-        /// <param name="angle">Angle to rotate the plane, expressed in radians.</param>
+        /// <param name="radiansAngle">Angle to rotate the plane, expressed in radians.</param>
         /// <returns>The plan rotated.</returns>
-        public Plane Rotate(double angle)
+        public Plane Rotate(double radiansAngle)
         {
-            Vector3 xRotate = XAxis.Rotate(ZAxis, angle);
+            Vector3 xRotate = XAxis.Rotate(ZAxis, radiansAngle);
             Vector3 yRotate = Vector3.CrossProduct(ZAxis, xRotate);
 
             return new Plane(Origin, xRotate, yRotate, ZAxis);
