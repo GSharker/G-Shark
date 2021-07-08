@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
@@ -25,7 +26,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="degree">The curve degree.</param>
         /// <param name="knots">The knots defining the curve.</param>
-        /// <param name="points">The control points.</param>
+        /// <param name="controlPoints">The control points of the curve.</param>
         /// <param name="weights">The weight values.</param>
         public NurbsCurve(int degree, KnotVector knots, List<Point3> points, List<double>? weights = null)
         {
@@ -64,7 +65,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
-        /// <param name="points">The control points.</param>
+        /// <param name="controlPoints">The control points of the curve.</param>
         /// <param name="degree">The curve degree.</param>
         public NurbsCurve(List<Point3> points, int degree)
             : this(degree, new KnotVector(degree, points.Count), points)
@@ -97,26 +98,73 @@ namespace GShark.Geometry
 
         public KnotVector Knots { get; }
 
-        public Interval Domain => new Interval(Knots.First(), Knots.Last());
+        public Interval Domain
+        {
+            get
+            {
+                if (IsPeriodic())
+                {
+                    return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
+                }
+                return new Interval(Knots[0], Knots[^1]);
+            }
+        }
 
         public BoundingBox BoundingBox
         {
             get
             {
-                List<Point3> pts = new List<Point3> { LocationPoints[0] };
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(this, true);
+                NurbsCurve curve = this;
+
+                if (IsPeriodic())
+                {
+                    curve = ClampEnds();
+                }
+
+                List<Vector3> pts = new List<Vector3> { curve.ControlPoints[0] };
+                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
                 foreach (ICurve crv in beziers)
                 {
                     Extrema e = Evaluation.ComputeExtrema(crv);
                     foreach (double eValue in e.Values)
                     {
-                        if (eValue == 0.0 || Math.Abs(eValue - 1) < GeoSharkMath.MaxTolerance) continue;
                         pts.Add(crv.PointAt(eValue));
                     }
                 }
-                pts.Add(LocationPoints[LocationPoints.Count - 1]);
+
+                pts.Add(curve.ControlPoints[^1]);
+                // ToDo: clean the pts from duplicated points.
                 return new BoundingBox(pts);
             }
+        }
+
+        /// <summary>
+        /// Checks if a NURBS curve is closed.<br/>
+        /// A curve is closed if the first point and the last are the same.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        public bool IsClosed()
+        {
+            return !(ControlPoints[0].DistanceTo(ControlPoints[^1]) > 0);
+        }
+
+        /// <summary>
+        /// Checks if a NURBS curve is periodic.<br/>
+        /// A curve is periodic, where the number of overlapping points is equal the curve degree.
+        /// </summary>
+        /// <returns>True if the curve is periodic.</returns>
+        public bool IsPeriodic()
+        {
+            if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
+            int i, j = 0;
+            for (i = 0, j = ControlPoints.Count - Degree; i < Degree; i++, j++)
+            {
+                if (ControlPoints[i].DistanceTo(ControlPoints[j]) > 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -129,13 +177,39 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Creates a periodic NURBS curve.<br/>
+        /// This method uses the control point wrapping solution.
+        /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
+        /// </summary>
+        /// <returns>A periodic NURBS curve.</returns>
+        public NurbsCurve Close()
+        {
+            // Wrapping control points
+            List<Vector3> copyCtrPts = new List<Vector3>(ControlPoints);
+            for (int i = 0; i < Degree; i++)
+            {
+                copyCtrPts.Add(copyCtrPts[i]);
+            }
+
+            KnotVector knots = KnotVector.UniformPeriodic(Degree, copyCtrPts.Count);
+            return new NurbsCurve(Degree, knots, copyCtrPts);
+        }
+
+        /// <summary>
         /// Transforms a curve with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            List<Point3> pts = LocationPoints.Select(pt => pt.Transform(transformation)).ToList();
+            List<Vector3>? pts = new List<Vector3>(ControlPoints);
+
+            for (int i = 0; i < pts.Count; i++)
+            {
+                Vector3? pt = pts[i];
+                pt.Add(1.0);
+                pts[i] = (pt * transformation).Take(pt.Count - 1).ToVector();
+            }
 
             return new NurbsCurve(Degree, Knots, pts, Weights!);
         }
@@ -207,6 +281,30 @@ namespace GShark.Geometry
         public double LengthParameter(double t)
         {
             return Analyze.CurveLength(this, t);
+        }
+
+        /// <summary>
+        /// Converts a NURBS curve where the knotVector is clamped.
+        /// </summary>
+        /// <returns>A NURBS curve with clamped knots.</returns>
+        public NurbsCurve ClampEnds()
+        {
+            List<Vector3> evalPts = new List<Vector3>(ControlPoints);
+            KnotVector clampedKnots = new KnotVector(Knots);
+            int j = 2;
+
+            while (j-- > 0)
+            {
+                Evaluation.DeBoor(ref evalPts, clampedKnots, Degree, clampedKnots[Degree]);
+                for (int i = 0; i < Degree; i++)
+                {
+                    clampedKnots[i] = clampedKnots[Degree];
+                }
+                evalPts.Reverse();
+                clampedKnots.Reverse();
+            }
+
+            return new NurbsCurve(Degree, clampedKnots, evalPts);
         }
 
         /// <summary>
