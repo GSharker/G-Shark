@@ -132,7 +132,7 @@ namespace GShark.Operation
             {
 
                 KnotVector knotsRange = (normalize)
-                    ? KnotVector.Normalize(knots.GetRange(i, crvKnotLength).ToKnot())
+                    ? knots.GetRange(i, crvKnotLength).ToKnot().Normalize()
                     : knots.GetRange(i, crvKnotLength).ToKnot();
                 List<Point3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 

@@ -57,6 +57,17 @@ namespace GShark.Geometry
         public BoundingBox BoundingBox => new BoundingBox(this);
 
         /// <summary>
+        /// Creates a closed polyline, where the first and last point are the same.
+        /// </summary>
+        /// <returns>A closed polyline.</returns>
+        public Polyline Closed()
+        {
+            List<Point3> copyPts = new List<Point3>(this);
+            copyPts.Add(copyPts[0]);
+            return new Polyline(copyPts);
+        }
+
+        /// <summary>
         /// Calculates the length of the polyline.
         /// </summary>
         /// <value>The total length of the polyline.</value>

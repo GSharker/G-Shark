@@ -83,6 +83,16 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_A_Closed_Polyline()
+        {
+            // Arrange
+            Polyline closedPolyline = _polyline.Closed();
+
+            // Assert
+            closedPolyline[0].DistanceTo(closedPolyline[^1]).Should().BeLessThan(GeoSharkMath.Epsilon);
+        }
+
+        [Fact]
         public void It_Returns_The_Length_Of_A_Polyline()
         {
             // Arrange
