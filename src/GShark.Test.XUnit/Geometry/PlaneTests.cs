@@ -91,15 +91,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Flipped_Plane()
         {
             // Arrange
-            Plane plane = BasePlane;
+            var plane = Plane.PlaneXY;
+            var expectedPlane = new Plane(Plane.PlaneXY.Origin, -plane.XAxis, plane.YAxis);
 
             // Act
             Plane flippedPlane = plane.Flip();
 
             // Assert
-            flippedPlane.XAxis.Equals(plane.YAxis).Should().BeTrue();
-            flippedPlane.YAxis.Equals(plane.XAxis).Should().BeTrue();
-            flippedPlane.ZAxis.Equals(plane.ZAxis.Reverse()).Should().BeTrue();
+            flippedPlane.Equals(expectedPlane).Should().BeTrue();
         }
 
         [Fact]
@@ -165,8 +164,8 @@ namespace GShark.Test.XUnit.Geometry
             Plane translatedPlane = plane.SetOrigin(newOrigin);
 
             // Assert
-            translatedPlane.Origin.Should().BeEquivalentTo(newOrigin);
-            translatedPlane.Normal.Should().BeEquivalentTo(plane.Normal);
+            translatedPlane.Origin.EpsilonEquals(newOrigin, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            translatedPlane.Normal.EpsilonEquals(plane.Normal, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]

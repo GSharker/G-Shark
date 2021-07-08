@@ -7,9 +7,8 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// Vector3 is represented simply by an list of double numbers, Vector3 is also used to represent point.<br/>
-    /// So, you would write simply [1,0,0] to create a Vector3 in the X direction.
-    /// </summary>
+    /// Vector represents list of doubles.
+    ///  </summary>
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/VectorTests.cs?name=example)]
     /// </example>
@@ -53,18 +52,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Test a vector to see if it is unitzed.
-        /// </summary>
-        /// <returns>True if vector is unitized.</returns>
-        public bool IsUnitized()
-        {
-            return (GeoSharkMath.IsValidDouble(this[0]) &&
-                    GeoSharkMath.IsValidDouble(this[1]) &&
-                    GeoSharkMath.IsValidDouble(this[2]) &&
-                    (Math.Abs(Length() - 1.0) <= GeoSharkMath.Epsilon));
-        }
-
-        /// <summary>
         /// Gets a value indicating whether the X, Y, and Z values are all equal to 0.0.
         /// </summary>
         /// <param name="a">The vector to check.</param>
@@ -72,16 +59,6 @@ namespace GShark.Geometry
         public bool IsZero()
         {
             return this.All(value => Math.Abs(value) < GeoSharkMath.Epsilon);
-        }
-
-        /// <summary>
-        /// Gets the vector amplified by a scalar value.
-        /// </summary>
-        /// <param name="amplitude">The scalar value to amplify the vector.</param>
-        /// <returns>The vector amplified.</returns>
-        public Vector Amplify(double amplitude)
-        {
-            return new Vector(this.Unitize() * amplitude);
         }
 
         /// <summary>
@@ -117,20 +94,6 @@ namespace GShark.Geometry
         public static double Dot(Vector a, Vector b)
         {
             return a.Select((t, i) => t * b[i]).Sum();
-        }
-
-        /// <summary>
-        /// Unitizes the vector. A unit vector has length 1 unit.
-        /// </summary>
-        /// <returns>A new vector unitized.</returns>
-        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
-        public Vector Unitize()
-        {
-            if (IsUnitized()) return this;
-            double l = this.Length();
-            if (l <= double.Epsilon)
-                throw new Exception("An invalid or zero length vector cannot be unitized.");
-            return this * (1 / l);
         }
 
         /// <summary>
@@ -178,7 +141,7 @@ namespace GShark.Geometry
             return llv;
         }
 
-       // Note: this is mutable.
+        // Note: this is mutable.
         /// <summary>
         /// Adds to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -246,45 +209,6 @@ namespace GShark.Geometry
             }
 
             return resultVector;
-        }
-
-        /// <summary>
-        /// Multiplies a 4x4 transformation matrix.
-        /// </summary>
-        /// <param name="v">A vector.</param>
-        /// <param name="t">A transformation.</param>
-        /// <returns>The transformed vector.</returns>
-        public static Vector operator *(Vector v, Transform t)
-        {
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
-            double w = 0.0;
-
-            if (v.Count == 4)
-            {
-                x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3] * v[3];
-                y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3] * v[3];
-                z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3] * v[3];
-                w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3] * v[3];
-
-                return new Vector { x, y, z, w };
-            }
-
-            x = t[0][0] * v[0] + t[0][1] * v[1] + t[0][2] * v[2] + t[0][3];
-            y = t[1][0] * v[0] + t[1][1] * v[1] + t[1][2] * v[2] + t[1][3];
-            z = t[2][0] * v[0] + t[2][1] * v[1] + t[2][2] * v[2] + t[2][3];
-            w = t[3][0] * v[0] + t[3][1] * v[1] + t[3][2] * v[2] + t[3][3];
-
-            if (w > 0.0)
-            {
-                double w2 = 1.0 / w;
-                x *= w2;
-                y *= w2;
-                z *= w2;
-            }
-
-            return new Vector { x, y, z };
         }
 
         /// <summary>
@@ -384,6 +308,7 @@ namespace GShark.Geometry
         /// <returns>The vector in string format.</returns>
         public override string ToString()
         {
+            //ToDo Do not replicate the headache that is rhino rounding! :) 
             return this.Count == 4
                 ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}"
                 : $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";

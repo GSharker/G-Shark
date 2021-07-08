@@ -384,6 +384,7 @@ namespace GShark.Geometry
         /// <param name="other"></param>
         /// <param name="epsilon"></param>
         /// <returns></returns>
+        //ToDo Using EpsilonEquals everywhere. Perhaps should be moved into actual Equals method of classes.
         public bool EpsilonEquals(Point3 other, double epsilon)
         {
             return Math.Abs(X - other.X) <= GeoSharkMath.MaxTolerance &&
@@ -545,15 +546,24 @@ namespace GShark.Geometry
         /// <returns>The transformed point as a new instance.</returns>
         public Point3 Transform(Transform t)
         {
-            double x;
-            double y;
-            double z;
+            double num1 = t[3][0] * X + t[3][1] * Y + t[3][2] * Z + t[3][3];
+            if (num1 != 0.0)
+                num1 = 1.0 / num1;
+            double num2 = num1 * (t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3]);
+            double num3 = num1 * (t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3]);
+            double num4 = num1 * (t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3]);
 
-            x = t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3];
-            y = t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3];
-            z = t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3];
+            return new Point3(num2, num3, num4);
 
-            return new Point3(x, y, z);
+            //double x;
+            //double y;
+            //double z;
+
+            //x = t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3];
+            //y = t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3];
+            //z = t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3];
+
+            //return new Point3(x, y, z);
         }
 
         /// <summary>

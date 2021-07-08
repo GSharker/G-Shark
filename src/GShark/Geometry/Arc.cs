@@ -61,7 +61,7 @@ namespace GShark.Geometry
             Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3 xDir = pt1 - center;
             Vector3 yDir = Vector3.CrossProduct(normal, xDir);
-            Plane pl = new Plane(center, xDir, yDir, normal);
+            Plane pl = new Plane(center, xDir, yDir);
 
             (double u, double v) = pl.ClosestParameters(pt3);
             double angle = Math.Atan2(v, u);

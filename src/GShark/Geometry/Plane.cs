@@ -54,29 +54,28 @@ namespace GShark.Geometry
         /// <param name="origin">Point representing the origin.</param>
         /// <param name="xDirection">X direction.</param>
         /// <param name="yDirection">Y direction.</param>
-        /// <param name="zDirection">Z direction.</param>
-        public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
+        public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection)
         {
             Origin = origin;
             XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
             YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
-            ZAxis = zDirection.IsUnitVector ? zDirection : zDirection.Unitize();
+            ZAxis = Vector3.CrossProduct(XAxis, YAxis);
         }
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXY => new Plane(Point3.Origin, Vector3.XAxis, Vector3.YAxis, Vector3.ZAxis);
+        public static Plane PlaneXY => new Plane(Point3.Origin, Vector3.XAxis, Vector3.YAxis);
 
         /// <summary>
         /// Gets a YZ plane.
         /// </summary>
-        public static Plane PlaneYZ => new Plane(Point3.Origin, Vector3.YAxis, Vector3.ZAxis, Vector3.XAxis);
+        public static Plane PlaneYZ => new Plane(Point3.Origin, Vector3.YAxis, Vector3.ZAxis);
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneZX => new Plane(Point3.Origin, Vector3.ZAxis, Vector3.XAxis, Vector3.YAxis);
+        public static Plane PlaneZX => new Plane(Point3.Origin, Vector3.ZAxis, Vector3.XAxis);
 
         /// <summary>
         /// Gets the normal of the plan.
@@ -166,8 +165,8 @@ namespace GShark.Geometry
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-            Vector3 zDir = Normal.Reverse();
-            return  new Plane(Origin, YAxis, XAxis, zDir);
+            //ToDo flip by reversing X, Y, or swapping X and Y.
+            return  new Plane(Origin, -XAxis, YAxis);
         }
 
         /// <summary>
@@ -177,7 +176,7 @@ namespace GShark.Geometry
         /// <returns>The plane with the new origin.</returns>
         public Plane SetOrigin(Point3 origin)
         {
-            return new Plane(origin, XAxis, YAxis, ZAxis);
+            return new Plane(origin, XAxis, YAxis);
         }
 
         /// <summary>
@@ -265,7 +264,7 @@ namespace GShark.Geometry
             Vector3 xRotate = XAxis.Rotate(ZAxis, radiansAngle);
             Vector3 yRotate = Vector3.CrossProduct(ZAxis, xRotate);
 
-            return new Plane(Origin, xRotate, yRotate, ZAxis);
+            return new Plane(Origin, xRotate, yRotate);
         }
 
         /// <summary>
@@ -278,7 +277,7 @@ namespace GShark.Geometry
             Point3 transformedOrigin = Origin.Transform(transformation);
 
            var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
-            var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
+           var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
 
             return new Plane(transformedOrigin, xDir, yDir);
         }

@@ -31,15 +31,6 @@ namespace GShark.Test.XUnit.Geometry
                 new object[] { new Vector { -0d, 0d, 0d }, 0.0}
             };
 
-        public static TheoryData<Vector, double, Vector> AmplifiedVectors =>
-            new TheoryData<Vector, double, Vector>
-            {
-                { new Vector{ 5, 5, 0 }, 0, new Vector{ 0, 0, 0 }},
-                { new Vector{ 10, 10, 0 }, 15, new Vector{ 10.606602,10.606602,0 }},
-                { new Vector{ 20, 15, 0 }, 33, new Vector{ 26.4,19.8,0 }},
-                { new Vector{ 35, 15, 0 }, 46, new Vector{ 42.280671,18.120288,0 }}
-            };
-
         [Fact]
         public void It_Returns_A_Reversed_Vector()
         {
@@ -101,20 +92,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_Normalized_Vector()
-        {
-            // Arrange
-            Vector v1 = new Vector { -18d, -21d, -17d };
-            Vector normalizedExpected = new Vector() { -0.5544369932703277, -0.6468431588153823, -0.5236349380886428 };
-
-            // Act
-            Vector normalizedVector = v1.Unitize();
-
-            // Assert
-            normalizedVector.Should().Equal(normalizedExpected);
-        }
-
-        [Fact]
         public void It_Returns_A_Zero1d_Vector()
         {
             // Act
@@ -147,20 +124,6 @@ namespace GShark.Test.XUnit.Geometry
             vec3D.Should().HaveCount(3);
             vec3D.Select(val => val.Should().HaveCount(4));
             vec3D.Select(val => val.Select(x => x.Should().Contain(0.0)));
-        }
-
-        [Theory]
-        [MemberData(nameof(AmplifiedVectors))]
-        public void It_Returns_An_Amplified_Vector(Vector vector, double amplitude, Vector expected)
-        {
-            // Act
-            var amplifiedVector = vector.Amplify(amplitude);
-
-            // Assert
-            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
-            amplifiedVector.Should().BeEquivalentTo(expected, options => options
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
-                .WhenTypeIs<double>());
         }
 
         [Fact]
@@ -252,22 +215,6 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             (vec1 == vec2).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_A_Unitized_Vector()
-        {
-            // Arrange
-            var vector = new Vector { -7, 10, -5 };
-            var vectorExpected = new Vector { -0.530669, 0.758098, -0.379049 };
-
-            // Act
-            var unitizedVector = vector.Unitize();
-
-            // Assert
-            unitizedVector.Should().BeEquivalentTo(vectorExpected, options => options
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 1e-6))
-                .WhenTypeIs<double>());
         }
     }
 }

@@ -23,8 +23,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 center = new Point3(85.591741, 24.79606, 1.064717);
             Vector3 xDir = new Vector3(-0.687455, 0.703828, -0.178976);
             Vector3 yDir = new Vector3(-0.726183, -0.663492, 0.180104);
-            Vector3 normal = new Vector3(0.008012, 0.253783, 0.967228);
-            Plane plane = new Plane(center, xDir, yDir, normal);
+            Plane plane = new Plane(center, xDir, yDir);
             _circle2D = new Circle(plane, 23);
 
             // Initializes a circle from 3 points.
@@ -130,8 +129,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Circle circle = _circle2D;
-            Point3 minCheck = new Point3(62.592479, 2.549053, -4.7752);
-            Point3 maxCheck = new Point3(108.591003, 47.043067, 6.904634);
+            Point3 minCheck = new Point3(62.592479, 2.549050, -4.77519);
+            Point3 maxCheck = new Point3(108.591002, 47.043069, 6.904624);
 
             // Act
             BoundingBox bBox = circle.BoundingBox;
