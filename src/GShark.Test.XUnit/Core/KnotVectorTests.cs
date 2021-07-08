@@ -66,7 +66,7 @@ namespace GShark.Test.XUnit.Core
             // Assert
             for (int i = 0; i < knots.Count; i++)
             {
-                (expectedKnotVector[i] - knots[i]).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+                (expectedKnotVector[i] - knots[i]).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
         }
 

@@ -78,7 +78,7 @@ namespace GShark.Core
 
             for (int i = 0; i < Count; i++)
             {
-                if (!GeoSharpMath.IsValidDouble(this[i]))
+                if (!GeoSharkMath.IsValidDouble(this[i]))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace GShark.Core
                 {
                     if (i < degree + 1)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
                         {
                             return false;
                         }
@@ -100,7 +100,7 @@ namespace GShark.Core
 
                     if (i > Count - degree - 1 && i < Count)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
                         {
                             return false;
                         }
@@ -125,12 +125,12 @@ namespace GShark.Core
         /// <returns>If true the knot is clamped, if false is unclamped.</returns>
         public bool IsClamped(int degree)
         {
-            if (Math.Abs(this[0] - this[degree]) > GeoSharpMath.EPSILON)
+            if (Math.Abs(this[0] - this[degree]) > GeoSharkMath.Epsilon)
             {
                 return false;
             }
 
-            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharpMath.EPSILON);
+            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -345,8 +345,8 @@ namespace GShark.Core
                 throw new Exception("Input knot vector cannot be empty");
             }
 
-            double firstKnot = knots[0];
-            double lastKnot = knots[knots.Count - 1];
+            double firstKnot = this[0];
+            double lastKnot = this[this.Count - 1];
             double denominator = lastKnot - firstKnot;
 
             return this.Select(kv => (kv - firstKnot) / denominator).ToKnot();

@@ -62,9 +62,9 @@ namespace GShark.Geometry
         /// <returns>A closed polyline.</returns>
         public Polyline Closed()
         {
-            List<Vector3> copyCtrPts = new List<Vector3>(ControlPoints);
-            copyCtrPts.Add(copyCtrPts[0]);
-            return new Polyline(copyCtrPts);
+            List<Point3> copyPts = new List<Point3>(this);
+            copyPts.Add(copyPts[0]);
+            return new Polyline(copyPts);
         }
 
         /// <summary>

@@ -127,12 +127,12 @@ namespace GShark.Geometry
         {
             double xDimHalf = xDimension / 2;
             double yDimHalf = yDimension / 2;
-            Vector3 pt0 = plane.PointAt(-xDimHalf, -yDimHalf);
-            Vector3 pt1 = plane.PointAt(xDimHalf, -yDimHalf);
-            Vector3 pt2 = plane.PointAt(xDimHalf, yDimHalf);
-            Vector3 pt3 = plane.PointAt(-xDimHalf, yDimHalf);
+            Point3 pt0 = plane.PointAt(-xDimHalf, -yDimHalf);
+            Point3 pt1 = plane.PointAt(xDimHalf, -yDimHalf);
+            Point3 pt2 = plane.PointAt(xDimHalf, yDimHalf);
+            Point3 pt3 = plane.PointAt(-xDimHalf, yDimHalf);
 
-            return new Polygon(new List<Vector3> { pt0, pt1, pt2, pt3, pt0 });
+            return new Polygon(new List<Point3> { pt0, pt1, pt2, pt3, pt0 });
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace GShark.Geometry
             {
                 throw new Exception("Polygon radius cannot be less or equal zero.");
             }
-            Vector3[] pts = new Vector3[numberOfSegments + 1];
+            Point3[] pts = new Point3[numberOfSegments + 1];
             double t = 2.0 * Math.PI / (double) numberOfSegments;
             for (int i = 0; i < numberOfSegments; i++)
             {

@@ -111,28 +111,28 @@ namespace GShark.Test.XUnit.Data
         public static NurbsCurve PeriodicClosedNurbsCurve()
         {
             int degree = 3;
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3> pts = new List<Point3>
             {
-                new Vector3 {0, 5, 5},
-                new Vector3 {0, 0, 0},
-                new Vector3 {4, 0, 0},
-                new Vector3 {5, 5, 5},
-                new Vector3 { 0, 5, 0 }
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(4, 0, 0),
+                new Point3(5, 5, 5),
+                new Point3( 0, 5, 0 )
             };
-            return new NurbsCurve(controlPts, degree).Close();
+            return new NurbsCurve(pts, degree).Close();
         }
 
         public static NurbsCurve NurbsCurveWithStartingAndEndPointOverlapping()
         {
             int degree = 2;
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3> pts = new List<Point3>
             {
-                new Vector3 {4.5,2.5,2.5},
-                new Vector3 {5,5,5},
-                new Vector3 {0,5,0},
-                new Vector3 {4.5,2.5,2.5}
+                new Point3 (4.5,2.5,2.5),
+                new Point3 (5,5,5),
+                new Point3 (0,5,0),
+                new Point3 (4.5,2.5,2.5)
             };
-            return new NurbsCurve(controlPts, degree);
+            return new NurbsCurve(pts, degree);
         }
     }
 }

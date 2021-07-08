@@ -157,14 +157,14 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             double xDimension = 20;
             double yDimension = 10;
-            Vector3 expectedPoint = new Vector3 {0.0, -10.0, -5.0};
+            Point3 expectedPoint = new Point3(0.0, -10.0, -5.0);
 
             // Act
             Polygon rectangle = Polygon.Rectangle(Plane.PlaneYZ, xDimension, yDimension);
 
             // Assert
             rectangle.Count.Should().Be(5);
-            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             rectangle[0].DistanceTo(rectangle[1]).Should().Be(xDimension);
             rectangle[1].DistanceTo(rectangle[2]).Should().Be(yDimension);
         }
