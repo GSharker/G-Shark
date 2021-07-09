@@ -30,7 +30,7 @@ namespace GShark.Test.XUnit.Core
             new List<object[]>
             {
                 new object[] { new List<double>(){ 10, 99, 87, 45, 67, 43, 45, 33, 21, 7, 65, 98 }, 92},
-                new object[] { new Vector3(){ 14, -12, 7, 0, -5, -8, 17, -11, 19 }, 31},
+                new object[] { new Vector(){ 14, -12, 7, 0, -5, -8, 17, -11, 19 }, 31},
                 new object[] { new List<double>(){ 2.7, 3.5, 4.9, 5.1, 8.3 }, 5.6000000000000005 }
             };
 
@@ -38,7 +38,7 @@ namespace GShark.Test.XUnit.Core
             new List<object[]>
             {
                 new object[] { 10, 7},
-                new object[] { new Vector3(){ 14, -12, 7}, 5},
+                new object[] { new Vector(){ 14, -12, 7}, 5},
                 new object[] { 2.7, 8 },
                 new object[] { 1.0, 0 }
             };
@@ -201,28 +201,28 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Reversed_BiDimensional_Collection_Of_Points()
         {
             // Arrange
-            List<List<Vector3>> pts = new List<List<Vector3>>
+            List<List<Point3>> pts = new List<List<Point3>>
             {
-                new List<Vector3>
+                new List<Point3>
                 {
-                    new Vector3 { 0d, -10d, 0d },
-                    new Vector3 { 10d, -10d, 10d }
+                    new Point3( 0d, -10d, 0),
+                    new Point3( 10d, -10d, 10)
                 },
-                new List<Vector3>
+                new List<Point3>
                 {                
-                    new Vector3 { 0d, -30d, 0d },
-                    new Vector3 { 10d, -30d, 0d }
+                    new Point3( 0d, -30d, 0),
+                    new Point3( 10d, -30d, 0)
 
                 },
-                new List<Vector3>
+                new List<Point3>
                 {
-                    new Vector3 { 0d, 0d, 50d },
-                    new Vector3 { 10d, 0d, 0d }
+                    new Point3( 0d, 0d, 50),
+                    new Point3( 10d, 0d, 0)
                 }
             };
 
             // Act
-            List<List<Vector3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
+            List<List<Point3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
 
             // Assert
             reversedPts.Count.Should().Be(2);

@@ -27,12 +27,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3> controlPts = new List<Point3>
             {
-                new Vector3 {2,2,0},
-                new Vector3 {4,12,0},
-                new Vector3 {7,12,0},
-                new Vector3 {15,2,0}
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,0)
             };
             KnotVector knots = new KnotVector(degree, controlPts.Count);
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
@@ -46,13 +46,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = curves[0].Knots.Count - (degree + 1);
-                curves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAX_TOLERANCE);
+                curves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharkMath.MaxTolerance);
             }
 
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = 0;
-                curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharpMath.MAX_TOLERANCE);
+                curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharkMath.MaxTolerance);
             }
         }
 
@@ -70,7 +70,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)
-                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
             for (int i = 0; i < steps; i++)
-                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
+                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
         }
     }
 }

@@ -78,7 +78,7 @@ namespace GShark.Core
 
             for (int i = 0; i < Count; i++)
             {
-                if (!GeoSharpMath.IsValidDouble(this[i]))
+                if (!GeoSharkMath.IsValidDouble(this[i]))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace GShark.Core
                 {
                     if (i < degree + 1)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
                         {
                             return false;
                         }
@@ -100,14 +100,14 @@ namespace GShark.Core
 
                     if (i > Count - degree - 1 && i < Count)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharpMath.EPSILON)
+                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
                         {
                             return false;
                         }
                     }
                 }
 
-                if (this[i] < rep - GeoSharpMath.EPSILON)
+                if (this[i] < rep - GeoSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -125,12 +125,12 @@ namespace GShark.Core
         /// <returns>If true the knot is clamped, if false is unclamped.</returns>
         public bool IsClamped(int degree)
         {
-            if (Math.Abs(this[0] - this[degree]) > GeoSharpMath.EPSILON)
+            if (Math.Abs(this[0] - this[degree]) > GeoSharkMath.Epsilon)
             {
                 return false;
             }
 
-            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharpMath.EPSILON);
+            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the domain of the knots, as the max value - min value.
         /// </summary>
-        public double Domain => this[^1] - this[0];
+        public double Domain => this[Count - 1] - this[0];
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
@@ -181,12 +181,12 @@ namespace GShark.Core
         public int Span(int n, int degree, double parameter)
         {
             // special case if parameter == knots[n+1]
-            if (parameter > this[n + 1] - GeoSharpMath.EPSILON)
+            if (parameter > this[n + 1] - GeoSharkMath.Epsilon)
             {
                 return n;
             }
 
-            if (parameter < this[degree] + GeoSharpMath.EPSILON)
+            if (parameter < this[degree] + GeoSharkMath.Epsilon)
             {
                 return degree;
             }
@@ -229,7 +229,7 @@ namespace GShark.Core
             int multiplicity = 1;
             while (index < Count - 1)
             {
-                if (Math.Abs(this[index + 1] - knot) > GeoSharpMath.EPSILON)
+                if (Math.Abs(this[index + 1] - knot) > GeoSharkMath.Epsilon)
                 {
                     break;
                 }
@@ -252,7 +252,7 @@ namespace GShark.Core
 
             foreach (double knot in this)
             {
-                if (Math.Abs(knot - tempKnot) > GeoSharpMath.EPSILON)
+                if (Math.Abs(knot - tempKnot) > GeoSharkMath.Epsilon)
                 {
                     multiplicities.Add(knot, 0);
                     tempKnot = knot;
@@ -346,7 +346,7 @@ namespace GShark.Core
             }
 
             double firstKnot = this[0];
-            double lastKnot = this[^1];
+            double lastKnot = this[this.Count - 1];
             double denominator = lastKnot - firstKnot;
 
             return this.Select(kv => (kv - firstKnot) / denominator).ToKnot();

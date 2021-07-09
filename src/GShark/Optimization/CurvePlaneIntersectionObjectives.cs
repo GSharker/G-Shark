@@ -24,28 +24,28 @@ namespace GShark.Optimization
             _plane = plane;
         }
 
-        public double Value(Vector3 v)
+        public double Value(Vector v)
         {
-            Vector3 p0 = _curve.PointAt(v[0]);
-            Vector3 p1 = _plane.ClosestPoint(p0, out _);
+            var p0 = _curve.PointAt(v[0]);
+            var p1 = _plane.ClosestPoint(p0, out _);
 
-            Vector3 p0P1 = p0 - p1;
+            var p0P1 = p0 - p1;
 
-            return Vector3.Dot(p0P1, p0P1);
+            return Vector3.DotProduct(p0P1, p0P1);
         }
 
-        public Vector3 Gradient(Vector3 v)
+        public Vector Gradient(Vector v)
         {
-            List<Vector3> deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
-            Vector3 r = deriveC0[0] - _plane.Origin;
+            var deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
+            var r = deriveC0[0] - new Vector3(_plane.Origin);
 
-            double f = Vector3.Dot(_plane.Normal, r);
+            double f = Vector3.DotProduct(_plane.Normal, (Vector3)r);
             // Compute the derivative of function.
-            double df = Vector3.Dot(_plane.Normal, deriveC0[1]);
+            double df = Vector3.DotProduct(_plane.Normal, deriveC0[1]);
 
             double value0 = 2 * (f / df);
 
-            return new Vector3{value0, value0};
+            return new Vector{value0, value0};
         }
     }
 }

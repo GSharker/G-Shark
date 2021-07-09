@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
@@ -26,12 +25,12 @@ namespace GShark.Test.XUnit.Operation
             int degree = 3;
             KnotVector knots1 = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             KnotVector knots2 = new KnotVector { 1, 1, 1, 1, 4, 4, 4, 4 };
-            List<Vector3> controlPts = new List<Vector3>
+            List<Point3> controlPts = new List<Point3>
             {
-                new Vector3 {0, 0, 0},
-                new Vector3 {0.5, 0, 0},
-                new Vector3 {2.5, 0, 0},
-                new Vector3 {3, 0, 0}
+                new Point3(0, 0, 0),
+                new Point3(0.5, 0, 0),
+                new Point3(2.5, 0, 0),
+                new Point3(3, 0, 0)
             };
 
             NurbsCurve curve1 = new NurbsCurve(degree, knots1, controlPts);
@@ -43,8 +42,8 @@ namespace GShark.Test.XUnit.Operation
             double curveLength2 = Analyze.BezierCurveLength(curve2, 4);
 
             // Assert
-            curveLength1.Should().BeApproximately(expectedLength, GeoSharpMath.MAX_TOLERANCE);
-            curveLength2.Should().BeApproximately(expectedLength, GeoSharpMath.MAX_TOLERANCE);
+            curveLength1.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
+            curveLength2.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -61,13 +60,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < steps + 1; i++)
             {
                 // Act
-                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharpMath.MAX_TOLERANCE);
+                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharkMath.MaxTolerance);
 
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharpMath.MIN_TOLERANCE);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharpMath.MIN_TOLERANCE);
+                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
+                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MinTolerance);
 
                 sumLengths += length;
             }
@@ -81,11 +80,11 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
-            (List<double> tvalues, List<Vector3> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
+            (List<double> tvalues, List<Point3> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
 
             double length = 0.0;
             for (int j = 0; j < samples.pts.Count - 1; j++)
-                length += (samples.pts[j + 1] - samples.pts[j]).Length();
+                length += (samples.pts[j + 1] - samples.pts[j]).Length;
 
             // Assert
             crvLength.Should().BeApproximately(length, 1e-3);
@@ -102,17 +101,15 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            
+            Point3 testPt = new Point3(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
+            Point3 expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
+
             // Act
-            Vector3 ptHomogenized = Analyze.CurveClosestPoint(curve, ptToCheck.ToVector(), out double t);
-            Vector3 pt = LinearAlgebra.PointDehomogenizer(ptHomogenized);
+            var pt = Analyze.CurveClosestPoint(curve, testPt, out double t);
 
             // Assert
-            t.Should().BeApproximately(tValExpected, GeoSharpMath.MAX_TOLERANCE);
-            // https://stackoverflow.com/questions/36782975/fluent-assertions-approximately-compare-a-classes-properties
-            pt.Should().BeEquivalentTo(ptExpected.ToVector(), options => options
-                .Using<double>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, GeoSharpMath.MAX_TOLERANCE))
-                .WhenTypeIs<double>());
+            t.Should().BeApproximately(tValExpected, GeoSharkMath.MaxTolerance);
+            pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]

@@ -10,11 +10,11 @@ namespace GShark.Optimization
         /// <summary>
         /// Defines the objective function.
         /// </summary>
-        double Value(Vector3 v);
+        double Value(Vector v);
 
         /// <summary>
         /// Defines the gradient function.
         /// </summary>
-        Vector3 Gradient(Vector3 v);
+        Vector Gradient(Vector v);
     }
 }

@@ -22,14 +22,14 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_The_Offset_Of_A_Line()
         {
             // Arrange
-            Line ln = new Line(new Vector3 { 5, 0, 0 }, new Vector3 { 0, 5, 0 });
+            Line ln = new Line(new Point3(5, 0, 0), new Point3(0, 5, 0));
             double offset = 12;
 
             // Act
             Line offsetResult = Offset.Line(ln, offset, Plane.PlaneXY);
 
             // Assert
-            (offsetResult.Start.DistanceTo(ln.Start) - offset).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            (offsetResult.Start.DistanceTo(ln.Start) - offset).Should().BeLessThan(GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -58,8 +58,8 @@ namespace GShark.Test.XUnit.Operation
             Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
 
             // Assert
-            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
-            (offsetResult[^1].DistanceTo(pl[^1]) - offset).Should().BeLessThan(GeoSharpMath.MAX_TOLERANCE);
+            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -72,10 +72,10 @@ namespace GShark.Test.XUnit.Operation
             Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
 
             // Assert
-            offsetResult[0].DistanceTo(offsetResult[^1]).Should().Be(0.0);
-            Vector3 pt = offsetResult.PointAt(0.5);
-            Vector3 closestPt = pl.ClosestPt(pt);
-            pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharpMath.MIN_TOLERANCE);
+            offsetResult[0].DistanceTo(offsetResult[offsetResult.Count - 1]).Should().Be(0.0);
+            Point3 pt = offsetResult.PointAt(0.5);
+            Point3 closestPt = pl.ClosestPoint(pt);
+            pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -91,9 +91,9 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             for (double i = 0; i <= 1; i += 0.1)
             {
-                Vector3 pt = offsetResult.PointAt(i);
-                Vector3 closestPt = crv.ClosestPt(pt);
-                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharpMath.MIN_TOLERANCE);
+                Point3 pt = offsetResult.PointAt(i);
+                Point3 closestPt = crv.ClosestPoint(pt);
+                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GeoSharkMath.MinTolerance);
             }
         }
     }

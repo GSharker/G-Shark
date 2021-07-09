@@ -9,13 +9,13 @@ namespace GShark.ExtendedMethods
     public static class ExtendedEnumerable
     {
         /// <summary>
-        /// Transforms a set of double into a <see cref="Vector3"/>.
+        /// Transforms a set of double into a <see cref="Vector"/>.
         /// </summary>
         /// <param name="enumerable">Sets of values.</param>
-        /// <returns>A <see cref="Vector3"/></returns>
-        public static Vector3 ToVector(this IEnumerable<double> enumerable)
+        /// <returns>A <see cref="Vector"/></returns>
+        public static Vector ToVector(this IEnumerable<double> enumerable)
         {
-            return new Vector3(enumerable.ToList());
+            return new Vector(enumerable.ToList());
         }
 
         /// <summary>
@@ -43,13 +43,13 @@ namespace GShark.ExtendedMethods
                 throw new InvalidOperationException("Cannot compute unique for a empty set.");
             }
 
-            List<T> uniques = new List<T>{ tempCollection[^1] };
+            List<T> uniques = new List<T>{ tempCollection[tempCollection.Count - 1] };
             tempCollection.RemoveAt(tempCollection.Count - 1);
 
             while (tempCollection.Count > 0)
             {
                 bool isUnique = true;
-                T element = tempCollection[^1];
+                T element = tempCollection[tempCollection.Count - 1];
                 tempCollection.RemoveAt(tempCollection.Count - 1);
 
                 foreach (T unique in uniques)
