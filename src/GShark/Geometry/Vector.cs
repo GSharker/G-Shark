@@ -66,7 +66,6 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="a">The vector.</param>
         /// <returns>The magnitude of the vector.</returns>
-        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
         public double Length()
         {
             if (!IsValid() || IsZero()) return 0.0;
@@ -78,7 +77,6 @@ namespace GShark.Geometry
         /// Computes the squared length (or magnitude, or size) of this vector.
         /// </summary>
         /// <returns>The sum of each value squared.</returns>
-        //ToDo Check references. Does not seem relevant if treating like an array of doubles.
         public double SquaredLength()
         {
             return this.Aggregate(0.0, (x, a) => a * a + x);
@@ -90,7 +88,6 @@ namespace GShark.Geometry
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
-        //ToDo Check references. Does not seem relevant if treating like an array of doubles. Length would be length of list??
         public static double Dot(Vector a, Vector b)
         {
             return a.Select((t, i) => t * b[i]).Sum();
@@ -308,10 +305,7 @@ namespace GShark.Geometry
         /// <returns>The vector in string format.</returns>
         public override string ToString()
         {
-            //ToDo Do not replicate the headache that is rhino rounding! :) 
-            return this.Count == 4
-                ? $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}, {this[3]}"
-                : $"{Math.Round(this[0], 6)},{Math.Round(this[1], 6)},{Math.Round(this[2], 6)}";
+            return string.Join(",", this.Select(e => GeoSharkMath.Truncate(e)));
         }
     }
 }

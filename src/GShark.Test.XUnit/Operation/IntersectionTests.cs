@@ -427,14 +427,13 @@ namespace GShark.Test.XUnit.Operation
             List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, testPlnXformed);
 
             // Assert
+            intersections.Count.Should().Be(3);
             foreach (CurvePlaneIntersectionResult curveIntersectionResult in intersections)
             {
                 _testOutput.WriteLine(curveIntersectionResult.ToString());
                 var ptOnPlane = testPlnXformed.PointAt(curveIntersectionResult.Uv[0], curveIntersectionResult.Uv[1]);
                 curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             }
-            //ToDo Review why no intersections
-            intersections.Count.Should().Be(3);
         }
 
         [Fact]

@@ -126,5 +126,29 @@ namespace GShark.Core
                 sinAngle = 0.0;
             }
         }
+
+        /// <summary>
+        /// Truncate decimal places without rounding.<br/>
+        /// https://stackoverflow.com/a/43639947
+        /// </summary>
+        /// <param name="value">Numerical value to truncate.</param>
+        /// <param name="decimals">Number of decimal to keep.</param>
+        /// <returns>The numerical value truncate.</returns>
+        public static decimal Truncate(double value, byte decimals = 6)
+        {
+            decimal d = (decimal) value;
+            decimal r = Math.Round(d, decimals);
+
+            if (d > 0 && r > d)
+            {
+                return r - new decimal(1, 0, 0, false, decimals);
+            }
+            if (d < 0 && r < d)
+            {
+                return r + new decimal(1, 0, 0, false, decimals);
+            }
+
+            return r;
+        }
     }
 }
