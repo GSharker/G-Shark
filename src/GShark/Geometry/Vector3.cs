@@ -580,7 +580,7 @@ namespace GShark.Geometry
         /// <returns>A string with the current location of the point.</returns>
         public override string ToString()
         {
-            return $"Vector3d: ({X},{Y},{Z})";
+            return $"Vector3: ({GeoSharkMath.Truncate(X)},{GeoSharkMath.Truncate(Y)},{GeoSharkMath.Truncate(Z)})";
         }
 
         /// <summary>

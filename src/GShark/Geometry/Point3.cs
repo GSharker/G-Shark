@@ -496,8 +496,7 @@ namespace GShark.Geometry
         /// <returns>The point representation in the form X,Y,Z.</returns>
         public override string ToString()
         {
-            var culture = System.Globalization.CultureInfo.InvariantCulture;
-            return $"{X.ToString(culture)},{Y.ToString(culture)},{Z.ToString(culture)}";
+            return $"Point3: ({GeoSharkMath.Truncate(X)},{GeoSharkMath.Truncate(Y)},{GeoSharkMath.Truncate(Z)})";
         }
 
         /// <summary>

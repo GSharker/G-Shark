@@ -57,6 +57,11 @@ namespace GShark.Geometry
         /// </summary>
         public int Size => 4;
 
+        /// <summary>
+        /// Gets the value of a point with all coordinates set as RhinoMath.UnsetValue.
+        /// </summary>
+        public static Point4 Unset => new Point4(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+
         //Indexer to allow access to properties as array.
         public double this[int i]
         {
@@ -287,8 +292,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the value of a point with all coordinates set as RhinoMath.UnsetValue.
+        /// Constructs the string representation for the current point.
         /// </summary>
-        public static Point4 Unset => new Point4(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+        /// <returns>The point representation in the form X,Y,Z,W.</returns>
+        public override string ToString()
+        {
+            return $"Point4: ({GeoSharkMath.Truncate(X)},{GeoSharkMath.Truncate(Y)},{GeoSharkMath.Truncate(Z)},{GeoSharkMath.Truncate(W)})";
+        }
     }
 }

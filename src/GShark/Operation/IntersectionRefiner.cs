@@ -23,7 +23,8 @@ namespace GShark.Operation
             IObjectiveFunction objectiveFunctions = new CurvesIntersectionObjectives(crv0, crv1);
             Minimizer min = new Minimizer(objectiveFunctions);
             MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { firstGuess, secondGuess }, tolerance * tolerance);
-            //ToDo Output one intersection point and two parameters, t on crv0 and t on crv1
+
+            // These are not the same points, also are used to filter where the intersection is not happening.
             Point3 pt1 = crv0.PointAt(solution.SolutionPoint[0]);
             Point3 pt2 = crv1.PointAt(solution.SolutionPoint[1]);
 

@@ -126,15 +126,12 @@ namespace GShark.Geometry
                 foreach (ICurve crv in beziers)
                 {
                     Extrema e = Evaluation.ComputeExtrema(crv);
-                    foreach (double eValue in e.Values)
-                    {
-                        pts.Add(crv.PointAt(eValue));
-                    }
+                    pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
                 }
 
                 pts.Add(curve.LocationPoints[curve.LocationPoints.Count - 1]);
-                // ToDo: clean the pts from duplicated points.
-                return new BoundingBox(pts);
+                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GeoSharkMath.MaxTolerance);
+                return new BoundingBox(removedDuplicate);
             }
         }
 
