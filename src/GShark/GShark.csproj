@@ -13,9 +13,7 @@
     <LangVersion>8.0</LangVersion>
     <Description>GShark is the nickname for Geometry Shark. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GShark). There are plenty of libraries written in C++, Python and some of them also in C# but we couldn't find a library to rule them all and, most important, free and open source. For this reason we have started this crazy project going back to books, learning from other libraries (which we thank for) and finally provinding our own touch to it.</Description>
     <PackageTags>geometry, kernerl, csharp, net5, net core, nurbs, curves, bezier, polygon, polygons, intersection, intersections, mesh, solid, solid, meshes. linear algebra, vectors</PackageTags>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
