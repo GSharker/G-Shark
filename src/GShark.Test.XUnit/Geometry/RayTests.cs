@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using GShark.Geometry;
 using System.Collections.Generic;
+using verb.core;
 using Xunit;
+using Ray = GShark.Geometry.Ray;
 
 namespace GShark.Test.XUnit.Geometry
 {
@@ -10,19 +12,19 @@ namespace GShark.Test.XUnit.Geometry
         public static IEnumerable<object[]> PointAlongTheRay =>
             new List<object[]>
             {
-                new object[] { new Vector3 { 3.0930734141595426, 11.54653670707977, 6.726731646460115 }, 15},
-                new object[] { new Vector3 { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
+                new object[] { new Vector { 3.0930734141595426, 11.54653670707977, 6.726731646460115 }, 15},
+                new object[] { new Vector { -27.457431218879393, -3.7287156094396963, 14.364357804719848 }, -20}
             };
 
         [Theory]
         [MemberData(nameof(PointAlongTheRay))]
-        public void It_Returns_An_Point_Along_The_Ray(Vector3 expected, double amplitude)
+        public void It_Returns_An_Point_Along_The_Ray(Vector expected, double amplitude)
         {
             // Arrange
-            Ray ray = new Ray(new Vector3 { -10, 5, 10 }, new Vector3 { 20, 10, -5 });
+            Ray ray = new Ray(new Point3( -10, 5, 10), new Vector3(20, 10, -5));
 
             // Act
-            Vector3 pointAlongTheRay = ray.OnRay(amplitude);
+            Vector pointAlongTheRay = ray.OnRay(amplitude);
 
             // Assert
             pointAlongTheRay.Should().BeEquivalentTo(expected);
@@ -32,12 +34,12 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point()
         {
             // Arrange
-            Ray ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 10, 20, 0 };
-            Vector3 expectedPt = new Vector3 { 12.30769230769231, 18.461538461538463, 0 };
+            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3(30, 45, 0));
+            var pt = new Point3( 10, 20, 0);
+            var expectedPt = new Point3( 12.30769230769231, 18.461538461538463, 0);
 
             // Act
-            Vector3 closestPt = ray.ClosestPoint(pt);
+            var closestPt = ray.ClosestPoint(pt);
 
             // Assert
             closestPt.Should().BeEquivalentTo(expectedPt);
@@ -47,8 +49,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Distance_To_A_Point()
         {
             // Arrange
-            Ray ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { 30, 45, 0 });
-            Vector3 pt = new Vector3 { 10, 20, 0 };
+            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3(30, 45, 0));
+            var pt = new Point3( 10, 20, 0);
             const double distanceExpected = 2.7735009811261464;
 
             // Act
@@ -62,13 +64,14 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_At_The_T_Parameter()
         {
             // Arrange
-            Ray ray = new Ray(new Vector3 { 0, 0, 0 }, new Vector3 { -7, 10, -5 });
+            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3( -7, 10, -5));
+            var expectedPt = new Point3(-8.75, 12.5, -6.25);
 
             // Act
-            Vector3 pt = ray.PointAt(1.25);
+            var pt = ray.PointAt(1.25);
 
             // Assert
-            pt.Should().BeEquivalentTo(new Vector3 { -8.75, 12.5, -6.25 });
+            pt.Should().BeEquivalentTo(expectedPt);
         }
     }
 }

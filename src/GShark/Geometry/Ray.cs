@@ -12,13 +12,13 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="position">The vector describing the direction of the ray.</param>
         /// <param name="direction">The point describing the origin of the ray.</param>
-        public Ray(Vector3 position, Vector3 direction)
+        public Ray(Point3 position, Vector3 direction)
         {
-            if (!position.IsValid())
+            if (!position.IsValid)
             {
                 throw new Exception("Point value is not valid.");
             }
-            if (!direction.IsValid())
+            if (!direction.IsValid)
             {
                 throw new Exception("Direction value is not valid.");
             }
@@ -34,7 +34,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the position point of the ray.
         /// </summary>
-        public Vector3 Position { get; }
+        public Point3 Position { get; }
 
         /// <summary>
         /// Calculates the point moved by a scalar value along a direction.
@@ -51,12 +51,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The point.</param>
         /// <returns>The closest point on a ray from a point.</returns>
-        public Vector3 ClosestPoint(Vector3 pt)
+        public Point3 ClosestPoint(Point3 pt)
         {
-            Vector3 rayDirNormalized = Direction!.Unitize();
-            Vector3 rayOriginToPt = pt - Position!;
-            double dotResult = Vector3.Dot(rayOriginToPt, rayDirNormalized);
-            Vector3 projectedPt = Position! + rayDirNormalized * dotResult;
+            var rayDirNormalized = Direction!.Unitize();
+            var rayOriginToPt = pt - Position!;
+            double dotResult = Vector3.DotProduct(rayOriginToPt, rayDirNormalized);
+            Point3 projectedPt = Position! + rayDirNormalized * dotResult;
 
             return projectedPt;
         }
@@ -66,11 +66,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The point to project.</param>
         /// <returns>The distance.</returns>
-        public double DistanceTo(Vector3 pt)
+        public double DistanceTo(Point3 pt)
         {
-            Vector3 projectedPt = ClosestPoint(pt);
-            Vector3 ptToProjectedPt = projectedPt - pt;
-            return ptToProjectedPt.Length();
+            var projectedPt = ClosestPoint(pt);
+            var ptToProjectedPt = projectedPt - pt;
+            return ptToProjectedPt.Length;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The t parameter.</param>
         /// <returns>A point at (Direction*t + Position).</returns>
-        public Vector3 PointAt(double t)
+        public Point3 PointAt(double t)
         {
             return Position + Direction! * t;
         }
@@ -110,7 +110,7 @@ namespace GShark.Geometry
         /// <returns>A unique hashCode of an ray.</returns>
         public override int GetHashCode()
         {
-            return new[] { Position, Direction }.GetHashCode();
+            return Position.GetHashCode() ^ Direction.GetHashCode();
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace GShark.Core.BoundingBoxTree
         internal LazyCurveBBT(ICurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
-            _boundingBox = new BoundingBox(curve.ControlPoints);
+            _boundingBox = new BoundingBox(curve.LocationPoints);
 
             if (double.IsNaN(knotTolerance))
             {
@@ -33,8 +33,8 @@ namespace GShark.Core.BoundingBoxTree
         public Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>> Split()
         {
             Random r = new Random();
-            double t = (_curve.Knots[^1] + _curve.Knots[0]) / 2.0 +
-                       (_curve.Knots[^1] - _curve.Knots[0]) * 0.1 * r.NextDouble();
+            double t = (_curve.Knots[_curve.Knots.Count - 1] + _curve.Knots[0]) / 2.0 +
+                       (_curve.Knots[_curve.Knots.Count - 1] - _curve.Knots[0]) * 0.1 * r.NextDouble();
             List<ICurve> curves = Divide.SplitCurve(_curve, t);
 
             return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>

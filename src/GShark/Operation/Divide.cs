@@ -31,8 +31,8 @@ namespace GShark.Operation
             KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
             KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
 
-            List<Vector3> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
-            List<Vector3> controlPoints1 = refinedCurve.ControlPoints.GetRange(s + 1, refinedCurve.ControlPoints.Count - (s + 1));
+            List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
+            List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
 
             return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
         }
@@ -82,10 +82,10 @@ namespace GShark.Operation
             {
                 sum += curveLengths[i];
 
-                while (segmentLength < sum + GeoSharpMath.EPSILON)
+                while (segmentLength < sum + GeoSharkMath.Epsilon)
                 {
                     double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GeoSharpMath.MAX_TOLERANCE, curveLengths[i]);
+                        GeoSharkMath.MaxTolerance, curveLengths[i]);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);

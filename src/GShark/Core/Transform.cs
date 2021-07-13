@@ -10,6 +10,23 @@ namespace GShark.Core
     /// </summary>
     public class Transform : List<IList<double>>
     {
+        internal readonly double M00;
+        internal readonly double M01;
+        internal readonly double M02;
+        internal readonly double M03;
+        internal readonly double M10;
+        internal readonly double M11;
+        internal readonly double M12;
+        internal readonly double M13;
+        internal readonly double M20;
+        internal readonly double M21;
+        internal readonly double M22;
+        internal readonly double M23;
+        internal readonly double M30;
+        internal readonly double M31;
+        internal readonly double M32;
+        internal readonly double M33;
+
         /// <summary>
         /// Initializes a 4 x 4 transformation matrix.<br/>
         /// All the values are set to zero.
@@ -17,6 +34,23 @@ namespace GShark.Core
         public Transform()
         {
             AddRange(Matrix.Construct(4, 4));
+        M00 = this[0][0];
+        M01 = this[0][1];
+        M02 = this[0][2];
+        M03 = this[0][3];
+        M10 = this[1][0];
+        M11 = this[1][1];
+        M12 = this[1][2];
+        M13 = this[1][3];
+        M20 = this[2][0];
+        M21 = this[2][1];
+        M22 = this[2][2];
+        M23 = this[2][3];
+        M30 = this[3][0];
+        M31 = this[3][1];
+        M32 = this[3][2];
+        M33 = this[3][3];
+
         }
 
         /// <summary>
@@ -65,41 +99,41 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with specified angle, rotation center and rotation axis.
+        /// Constructs a new rotation transformation with specified radians angle, rotation center and rotation axis.
         /// </summary>
-        /// <param name="angle">Angle in radians of the rotation.</param>
+        /// <param name="radiansAngle">Angle in radians of the rotation.</param>
         /// <param name="axis">Axis direction.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public Transform Rotation(double angle, Line axis)
+        public Transform Rotation(double radiansAngle, Line axis)
         {
-            return Rotation(Math.Sin(angle), Math.Cos(angle), axis.Direction, axis.Start);
+            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), axis.Direction, axis.Start);
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with specified angle, rotation center and rotation axis pointing up.
+        /// Constructs a new rotation transformation with specified radians angle, rotation center and rotation axis pointing up.
         /// </summary>
-        /// <param name="angle">Angle in radians of the rotation.</param>
+        /// <param name="radiansAngle">Angle in radians of the rotation.</param>
         /// <param name="center">Center point of rotation. Rotation axis is vertical.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public static Transform Rotation(double angle, Vector3 center)
+        public static Transform Rotation(double radiansAngle, Point3 center)
         {
-            return Rotation(Math.Sin(angle), Math.Cos(angle), Vector3.ZAxis, center);
+            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), Vector3.ZAxis, center);
         }
 
         /// <summary>
-        /// Constructs a new rotation transformation with Sin and Cos angle, rotation center and rotation axis.
+        /// Constructs a new rotation transformation with Sin and Cos radians angle, rotation center and rotation axis.
         /// </summary>
-        /// <param name="sinAngle">Sin angle.</param>
-        /// <param name="cosAngle">Cos angle.</param>
+        /// <param name="sinAngle">Sin radians angle.</param>
+        /// <param name="cosAngle">Cos radians angle.</param>
         /// <param name="axis">Axis direction.</param>
         /// <param name="origin">Rotation center.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        private static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Vector3 origin)
+        private static Transform Rotation(double sinAngle, double cosAngle, Vector3 axis, Point3 origin)
         {
             double sAngle = sinAngle;
             double cAngle = cosAngle;
 
-            GeoSharpMath.KillNoise(ref sAngle, ref cAngle);
+            GeoSharkMath.KillNoise(ref sAngle, ref cAngle);
 
             Transform transform = Identity();
             double oneMinusCosAngle = 1 - cosAngle;
@@ -116,7 +150,7 @@ namespace GShark.Core
             transform[2][1] = axis[2] * axis[1] * oneMinusCosAngle + axis[0] * sAngle;
             transform[2][2] = axis[2] * axis[2] * oneMinusCosAngle + cAngle;
 
-            if (!origin.Equals(new Vector3 {0.0, 0.0, 0.0}))
+            if (!origin.Equals(new Point3(0,0,0)))
             {
                 transform[0][3] = -((transform[0][0] - 1) * origin[0] + transform[0][1] * origin[1] + transform[0][2] * origin[2]);
                 transform[1][3] = -(transform[1][0] * origin[0] + (transform[1][1] - 1) * origin[1] + transform[1][2] * origin[2]);
@@ -135,7 +169,7 @@ namespace GShark.Core
         /// <param name="anchorPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="scaleFactor">Scale factor.</param>
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
-        public static Transform Scale(Vector3 anchorPoint, double scaleFactor)
+        public static Transform Scale(Point3 anchorPoint, double scaleFactor)
         {
             return Scale(anchorPoint, scaleFactor, scaleFactor, scaleFactor);
         }
@@ -148,17 +182,17 @@ namespace GShark.Core
         /// <param name="factorY">Scale factor y direction.</param>
         /// <param name="factorZ">Scale factor z direction.</param>
         /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
-        public static Transform Scale(Vector3 anchorPoint, double factorX, double factorY, double factorZ)
+        public static Transform Scale(Point3 anchorPoint, double factorX, double factorY, double factorZ)
         {
-            Vector3 origin = new Vector3 {0.0, 0.0, 0.0};
+            var origin = new Point3(0.0, 0.0, 0.0);
             Transform scale = Scale(factorX, factorY, factorZ);
             if(anchorPoint.Equals(origin))
             {
                 return scale;
             }
 
-            Vector3 dir = anchorPoint - origin;
-            Transform t0 = Translation(Vector3.Reverse(dir));
+            var dir = anchorPoint - origin;
+            Transform t0 = Translation(-dir);
             Transform t1 = Translation(dir);
 
             return t1 * scale * t0;
@@ -237,9 +271,9 @@ namespace GShark.Core
         /// <returns>The mirror transformation matrix.</returns>
         public static Transform Reflection(Plane plane)
         {
-            Vector3 pt = plane.Origin;
+            Point3 pt = plane.Origin;
             Vector3 normal = plane.Normal;
-            Transform transform = Transform.Identity();
+            Transform transform = Identity();
 
             Vector3 unitizedN = normal.Unitize();
             Vector3 translation = unitizedN * (2.0 * (unitizedN[0]*pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
@@ -273,7 +307,7 @@ namespace GShark.Core
             Transform transform = Transform.Identity();
             Vector3 x = plane.XAxis;
             Vector3 y = plane.YAxis;
-            Vector3 pt = plane.Origin;
+            Point3 pt = plane.Origin;
             double[] q = new double[3];
 
             for (int i = 0; i < 3; i++)
@@ -300,17 +334,17 @@ namespace GShark.Core
         /// <returns>The translation transformation.</returns>
         public static Transform PlaneToPlane(Plane a, Plane b)
         {
-            Vector3 pt0 = a.Origin;
-            Vector3 x0 = a.XAxis;
-            Vector3 y0 = a.YAxis;
-            Vector3 z0 = a.ZAxis;
+            var pt0 = a.Origin;
+            var x0 = a.XAxis;
+            var y0 = a.YAxis;
+            var z0 = a.ZAxis;
+            
+            var pt1 = b.Origin;
+            var x1 = b.XAxis;
+            var y1 = b.YAxis;
+            var z1 = b.ZAxis;
 
-            Vector3 pt1 = b.Origin;
-            Vector3 x1 = b.XAxis;
-            Vector3 y1 = b.YAxis;
-            Vector3 z1 = b.ZAxis;
-
-            Vector3 origin = new Vector3 {0.0, 0.0, 0.0};
+            var origin = new Point3(0,0,0);
 
             // Translating point pt0 to (0,0,0)
             Transform translation0 = Translation(origin - pt0);

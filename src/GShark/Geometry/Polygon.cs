@@ -1,8 +1,8 @@
-﻿using System;
+﻿using GShark.Core;
+using GShark.Operation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Core;
-using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -11,7 +11,7 @@ namespace GShark.Geometry
     /// </summary>
     public class Polygon : Polyline
     {
-        public Polygon(IList<Vector3> vertices) : base(vertices)
+        public Polygon(IList<Point3> vertices) : base(vertices)
         {
             if (vertices.Count < 3)
             {
@@ -20,7 +20,7 @@ namespace GShark.Geometry
 
             Plane fitPlane = Plane.FitPlane(vertices, out double deviation);
 
-            if (!(Math.Abs(deviation) < GeoSharpMath.MIN_TOLERANCE))
+            if (!(Math.Abs(deviation) < GeoSharkMath.MinTolerance))
             {
                 throw new Exception("The points must be co-planar.");
             }
@@ -33,23 +33,23 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the centroid averaging the vertices. 
         /// </summary>
-        public Vector3 CentroidByVertices => Evaluation.CentroidByVertices(this);
+        public Point3 CentroidByVertices => Evaluation.CentroidByVertices(this);
 
         /// <summary>
         /// Gets the centroid of mass of the polygon.<br/>
         /// https://stackoverflow.com/questions/9815699/how-to-calculate-centroid <br/>
         /// http://csharphelper.com/blog/2014/07/find-the-centroid-of-a-polygon-in-c/
         /// </summary>
-        public Vector3 CentroidByArea
+        public Point3 CentroidByArea
         {
             get
             {
-                bool isOnPlaneXY = true;
+                bool isOnPlaneXy = true;
                 Transform transformBack = new Transform();
-                List<Vector3> copiedPts = new List<Vector3>(this);
-                if (Math.Abs(this[0][2]) > GeoSharpMath.MAX_TOLERANCE)
+                List<Point3> copiedPts = new List<Point3>(this);
+                if (Math.Abs(this[0][2]) > GeoSharkMath.MaxTolerance)
                 {
-                    isOnPlaneXY = false;
+                    isOnPlaneXy = false;
                     Plane polygonPlane = new Plane(this[0], this[1], this[2]);
                     Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
                     transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
@@ -60,7 +60,7 @@ namespace GShark.Geometry
                 double valueX = 0.0;
                 double valueY = 0.0;
 
-                for (int i = 0; i < copiedPts.Count-1; i++)
+                for (int i = 0; i < copiedPts.Count - 1; i++)
                 {
                     double x0 = copiedPts[i][0];
                     double y0 = copiedPts[i][1];
@@ -78,11 +78,11 @@ namespace GShark.Geometry
                 valueX /= (6.0 * signedArea);
                 valueY /= (6.0 * signedArea);
 
-                Vector3 centroid = new Vector3 { valueX, valueY, 0.0 };
+                Point3 centroid = new Point3(valueX, valueY, 0.0);
 
-                if (!isOnPlaneXY)
+                if (!isOnPlaneXy)
                 {
-                    return centroid * transformBack;
+                    return centroid.Transform(transformBack);
                 }
 
                 return centroid;
@@ -102,17 +102,68 @@ namespace GShark.Geometry
             get
             {
                 double area = 0.0;
-                Vector3 normal = Vector3.Cross(this[1] - this[0], this[2] - this[0]).Unitize();
+                Vector3 normal = Vector3.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
 
                 for (int i = 0; i < this.Count - 1; i++)
                 {
-                    Vector3 product = Vector3.Cross(this[i] - this[0], this[i + 1] - this[0]);
-                    area += Vector3.Dot(product, normal);
+                    Vector3 product = Vector3.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
+                    area += Vector3.DotProduct(product, normal);
                 }
 
                 area *= 0.5;
                 return Math.Abs(area);
             }
+        }
+
+        /// <summary>
+        /// Creates a rectangle on a plane.<br/>
+        /// The plane is located at the centre of the rectangle.
+        /// </summary>
+        /// <param name="plane">The plane on where the rectangle will be created.</param>
+        /// <param name="xDimension">The value dimension of the rectangle along the x direction of the plane.</param>
+        /// <param name="yDimension">The value dimension of the rectangle along the y direction of the plane.</param>
+        /// <returns></returns>
+        public static Polygon Rectangle(Plane plane, double xDimension, double yDimension)
+        {
+            double xDimHalf = xDimension / 2;
+            double yDimHalf = yDimension / 2;
+            Point3 pt0 = plane.PointAt(-xDimHalf, -yDimHalf);
+            Point3 pt1 = plane.PointAt(xDimHalf, -yDimHalf);
+            Point3 pt2 = plane.PointAt(xDimHalf, yDimHalf);
+            Point3 pt3 = plane.PointAt(-xDimHalf, yDimHalf);
+
+            return new Polygon(new List<Point3> { pt0, pt1, pt2, pt3, pt0 });
+        }
+
+        /// <summary>
+        /// Creates a regular polygon, inscribed into a circle.<br/>
+        /// The plane is located at the centre of the polygon.
+        /// </summary>
+        /// <param name="plane">The plane on where the polygon will be created.</param>
+        /// <param name="radius">The distance from the center to the corners of the polygon.</param>
+        /// <param name="numberOfSegments">Number of segments of the polygon.</param>
+        /// <returns></returns>
+        public static Polygon RegularPolygon(Plane plane, double radius, int numberOfSegments)
+        {
+            if (numberOfSegments < 3)
+            {
+                throw new Exception("Polygon mast have at least 3 sides.");
+            }
+            if (radius <= 0.0)
+            {
+                throw new Exception("Polygon radius cannot be less or equal zero.");
+            }
+            Point3[] pts = new Point3[numberOfSegments + 1];
+            double t = 2.0 * Math.PI / (double) numberOfSegments;
+            for (int i = 0; i < numberOfSegments; i++)
+            {
+                var ty = Math.Sin(t * i) * radius;
+                var tx = Math.Cos(t * i) * radius;
+                pts[i] = plane.PointAt(tx, ty);
+            }
+
+            pts[^1] = pts[0];
+            return new Polygon(pts);
         }
 
         /// <summary>
@@ -122,7 +173,7 @@ namespace GShark.Geometry
         /// <returns>A polygon transformed.</returns>
         public new Polygon Transform(Transform transform)
         {
-            List<Vector3> transformedPts = this.Select(pt => pt * transform).ToList();
+            List<Point3> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
 
             return new Polygon(transformedPts);
         }

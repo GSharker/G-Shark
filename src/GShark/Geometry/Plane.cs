@@ -17,11 +17,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="origin">The point describing the origin of the plane.</param>
         /// <param name="direction">The vector representing the normal of the plane.</param>
-        public Plane(Vector3 origin, Vector3 direction)
+        public Plane(Point3 origin, Vector3 direction)
         {
             ZAxis = direction.Unitize();
             XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
-            YAxis = Vector3.Cross(ZAxis, XAxis).Unitize();
+            YAxis = Vector3.CrossProduct(ZAxis, XAxis).Unitize();
             Origin = origin;
         }
 
@@ -31,7 +31,7 @@ namespace GShark.Geometry
         /// <param name="pt1">Firs point representing the origin.</param>
         /// <param name="pt2">Second point representing the x direction.</param>
         /// <param name="pt3">Third point representing the y direction.</param>
-        public Plane(Vector3 pt1, Vector3 pt2, Vector3 pt3)
+        public Plane(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             if(LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
             {
@@ -40,11 +40,11 @@ namespace GShark.Geometry
 
             Vector3 dir1 = pt2 - pt1;
             Vector3 dir2 = pt3 - pt1;
-            Vector3 normal = Vector3.Cross(dir1, dir2);
+            Vector3 normal = Vector3.CrossProduct(dir1, dir2);
 
             Origin = pt1;
             XAxis = dir1.Unitize();
-            YAxis = Vector3.Cross(normal, dir1).Unitize();
+            YAxis = Vector3.CrossProduct(normal, dir1).Unitize();
             ZAxis = normal.Unitize();
         }
 
@@ -54,29 +54,28 @@ namespace GShark.Geometry
         /// <param name="origin">Point representing the origin.</param>
         /// <param name="xDirection">X direction.</param>
         /// <param name="yDirection">Y direction.</param>
-        /// <param name="zDirection">Z direction.</param>
-        public Plane(Vector3 origin, Vector3 xDirection, Vector3 yDirection, Vector3 zDirection)
+        public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection)
         {
             Origin = origin;
-            XAxis = (xDirection.IsUnitize()) ? xDirection : xDirection.Unitize();
-            YAxis = (yDirection.IsUnitize()) ? yDirection : yDirection.Unitize();
-            ZAxis = (zDirection.IsUnitize()) ? zDirection : zDirection.Unitize();
+            XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
+            YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
+            ZAxis = Vector3.CrossProduct(XAxis, YAxis);
         }
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXY => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.ZAxis);
+        public static Plane PlaneXY => new Plane(Point3.Origin, Vector3.XAxis, Vector3.YAxis);
 
         /// <summary>
         /// Gets a YZ plane.
         /// </summary>
-        public static Plane PlaneYZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.XAxis);
+        public static Plane PlaneYZ => new Plane(Point3.Origin, Vector3.YAxis, Vector3.ZAxis);
 
         /// <summary>
         /// Gets a XY plane.
         /// </summary>
-        public static Plane PlaneXZ => new Plane(new Vector3 { 0.0, 0.0, 0.0 }, Vector3.YAxis);
+        public static Plane PlaneZX => new Plane(Point3.Origin, Vector3.ZAxis, Vector3.XAxis);
 
         /// <summary>
         /// Gets the normal of the plan.
@@ -86,7 +85,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the origin of the plane.
         /// </summary>
-        public Vector3 Origin { get; }
+        public Point3 Origin { get; }
 
         /// <summary>
         /// Gets the XAxis of the plane.
@@ -108,15 +107,15 @@ namespace GShark.Geometry
         /// https://www.parametriczoo.com/index.php/2020/02/29/signed-distance-of-a-point-from-a-plane/
         /// </summary>
         /// <param name="pt">The point to get close to plane.</param>
-        /// <param name="length">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
+        /// <param name="distance">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
         /// <returns>The point on the plane that is closest to the sample point.</returns>
-        public Vector3 ClosestPoint(Vector3 pt, out double length)
+        public Point3 ClosestPoint(Vector3 pt, out double distance)
         {
             Vector3 ptToOrigin = Origin - pt;
 
             // signed distance.
-            length = Vector3.Dot(ptToOrigin, Normal);
-            Vector3 projection = pt + Normal * length;
+            distance = Vector3.DotProduct(ptToOrigin, Normal);
+            Point3 projection = pt + Normal * distance;
 
             return projection;
         }
@@ -125,10 +124,10 @@ namespace GShark.Geometry
         /// Performs the rotation to align the XAxis of a plane to a given guide vector.
         /// </summary>
         /// <param name="direction">The guide vector.</param>
-        /// <returns>The rotated plane with XAxis align to the guide vector.</returns>
+        /// <returns>The rotated plane (in radians) with XAxis align to the guide vector.</returns>
         public Plane Align(Vector3 direction)
         {
-            Vector3 tempPt = Origin + direction;
+            Point3 tempPt = Origin + direction;
 
             (double u, double v) = ClosestParameters(tempPt);
             double angle = -(Math.Atan2(u, v)) + Math.PI / 2.0;
@@ -141,11 +140,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">Test point, the point to get close to.</param>
         /// <returns>The u parameter is along X-direction and v parameter is along the Y-direction.</returns>
-        public (double u, double v) ClosestParameters(Vector3 pt)
+        public (double u, double v) ClosestParameters(Point3 pt)
         {
             Vector3 v1 = pt - Origin;
-            double u = Vector3.Dot(v1, XAxis);
-            double v = Vector3.Dot(v1, YAxis);
+            double u = Vector3.DotProduct(v1, XAxis);
+            double v = Vector3.DotProduct(v1, YAxis);
             return (u, v);
         }
 
@@ -155,7 +154,7 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation parameter.</param>
         /// <param name="v">Evaluation parameter.</param>
         /// <returns>The evaluated point.</returns>
-        public Vector3 PointAt(double u, double v)
+        public Point3 PointAt(double u, double v)
         {
             return Origin + XAxis * u + YAxis * v;
         }
@@ -166,8 +165,8 @@ namespace GShark.Geometry
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-            Vector3 zDir = Vector3.Reverse(Normal);
-            return  new Plane(Origin, YAxis, XAxis, zDir);
+            //ToDo flip by reversing X, Y, or swapping X and Y.
+            return  new Plane(Origin, -XAxis, YAxis);
         }
 
         /// <summary>
@@ -175,9 +174,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="origin">The new origin point of a plane.</param>
         /// <returns>The plane with the new origin.</returns>
-        public Plane SetOrigin(Vector3 origin)
+        public Plane SetOrigin(Point3 origin)
         {
-            return new Plane(origin, XAxis, YAxis, ZAxis);
+            return new Plane(origin, XAxis, YAxis);
         }
 
         /// <summary>
@@ -187,20 +186,20 @@ namespace GShark.Geometry
         /// <param name="pts">Points to fit.</param>
         /// <param name="deviation">Maximum deviation between the points and the plane.</param>
         /// <returns>The defined plane generated.</returns>
-        public static Plane FitPlane(IList<Vector3> pts, out double deviation)
+        public static Plane FitPlane(IList<Point3> pts, out double deviation)
         {
             if (pts.Count < 3)
             {
                 throw new Exception("The collection must have minimum three points.");
             }
 
-            Vector3 centroid = Evaluation.CentroidByVertices(pts);
+            Point3 centroid = Evaluation.CentroidByVertices(pts);
             Vector3 normal = Vector3.Unset;
 
             double xx = 0.0; double xy = 0.0; double xz = 0.0;
             double yy = 0.0; double yz = 0.0; double zz = 0.0;
 
-            foreach (Vector3 pt in pts)
+            foreach (var pt in pts)
             {
                 Vector3 tempDir = pt - centroid;
 
@@ -223,13 +222,13 @@ namespace GShark.Geometry
                 throw new Exception("The points don't span a plane.");
             }
 
-            if (Math.Abs(determinantMax - determinantX) < GeoSharpMath.MAX_TOLERANCE)
+            if (Math.Abs(determinantMax - determinantX) < GeoSharkMath.MaxTolerance)
             {
                 normal[0] = determinantX;
                 normal[1] = xz * yz - xy * zz;
                 normal[2] = xy * yz - xz * yy;
             }
-            else if (Math.Abs(determinantMax - determinantY) < GeoSharpMath.MAX_TOLERANCE)
+            else if (Math.Abs(determinantMax - determinantY) < GeoSharkMath.MaxTolerance)
             {
                 normal[0] = xz * yz - xy * zz;
                 normal[1] = determinantY;
@@ -245,9 +244,9 @@ namespace GShark.Geometry
             Plane plane = new Plane(centroid, normal);
             double maxDeviation = double.MinValue;
 
-            foreach (Vector3 pt in pts)
+            foreach (var pt in pts)
             {
-                Vector3 tempPt = plane.ClosestPoint(pt, out double tempLength);
+                var tempPt = plane.ClosestPoint(pt, out double tempLength);
                 maxDeviation = Math.Max(maxDeviation, tempLength);
             }
 
@@ -258,35 +257,29 @@ namespace GShark.Geometry
         /// <summary>
         /// Rotates the plane around is own Z-axis.
         /// </summary>
-        /// <param name="angle">Angle to rotate the plane, expressed in radians.</param>
+        /// <param name="radiansAngle">Angle to rotate the plane, expressed in radians.</param>
         /// <returns>The plan rotated.</returns>
-        public Plane Rotate(double angle)
+        public Plane Rotate(double radiansAngle)
         {
-            Vector3 xRotate = XAxis.Rotate(ZAxis, angle);
-            Vector3 yRotate = Vector3.Cross(ZAxis, xRotate);
+            Vector3 xRotate = XAxis.Rotate(ZAxis, radiansAngle);
+            Vector3 yRotate = Vector3.CrossProduct(ZAxis, xRotate);
 
-            return new Plane(Origin, xRotate, yRotate, ZAxis);
+            return new Plane(Origin, xRotate, yRotate);
         }
 
         /// <summary>
         /// Transforms the plane by a transformation matrix.
         /// </summary>
-        /// <param name="t">The transformation matrix to apply to the plane.</param>
+        /// <param name="transformation">The transformation matrix to apply to the plane.</param>
         /// <returns>The transformed plane.</returns>
         public Plane Transform(Transform transformation)
         {
-            Vector3 origin = Origin * transformation;
+            Point3 transformedOrigin = Origin.Transform(transformation);
 
-            bool check = (Math.Abs(transformation[3][0]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(transformation[3][1]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(transformation[3][2]) <= GeoSharpMath.MAX_TOLERANCE &&
-                          Math.Abs(1.0 - transformation[3][3]) <= GeoSharpMath.MAX_TOLERANCE);
+           var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
+           var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
 
-            Vector3 xDir = check ? ((Origin + XAxis) * transformation) - origin : XAxis * transformation;
-            Vector3 yDir = check ? ((Origin + YAxis) * transformation) - origin : YAxis * transformation;
-            Vector3 zDir = check ? ((Origin + ZAxis) * transformation) - origin : ZAxis * transformation;
-
-            return new Plane(origin, xDir, yDir, zDir);
+            return new Plane(transformedOrigin, xDir, yDir);
         }
 
         /// <summary>
@@ -330,7 +323,7 @@ namespace GShark.Geometry
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine($"Origin({Origin})");
+            builder.AppendLine($"Default({Origin})");
             builder.AppendLine($"X({XAxis})");
             builder.AppendLine($"Y({YAxis})");
             builder.AppendLine($"Z({ZAxis})");
