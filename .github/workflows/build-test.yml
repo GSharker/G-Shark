@@ -27,7 +27,7 @@ jobs:
           dotnet-version: '2.1'
     # install dependecies will be used when we will have dependencies    
     - name: ⚙️ Install dependencies
-      run: dotnet add package Newtonsoft.Json --version 13.0.1
+      run: dotnet add src/GShark/GShark.csproj package Newtonsoft.Json --version 13.0.1
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
     - name: 🧪 Test
