@@ -14,6 +14,6 @@ jobs:
         with:
           dotnet-version: 5.0.x
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build src/GShark/GShark.csproj
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test src/GShark/GShark.csproj
