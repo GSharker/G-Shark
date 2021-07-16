@@ -8,20 +8,26 @@ jobs:
   build:
 
     runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet: [ '2.1', 3.1', '5.0' ]
+    name: Dotnet Side by Side testing sample
 
     steps:
     - name: 🛎 Checkout repo
       uses: actions/checkout@v2
-    - name: 🚧 Setup .NET Core
+    - name: 🚧 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: '5.0'
+    - name: 🚧 Setup .NET core
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: '3.1'
+    - name: 🚧 Setup standard
+      uses: actions/setup-dotnet@v1
+      with:
+          dotnet-version: '2.1'
     # install dependecies will be used when we will have dependencies    
-    # - name: ⚙️ Install dependencies
-    #  run: dotnet restore
+    - name: ⚙️ Install dependencies
+      run: dotnet add package Newtonsoft.Json --version 13.0.1
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
     - name: 🧪 Test
