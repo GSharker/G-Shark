@@ -1,19 +1,28 @@
 name: Build tests
 
+# we using a matrix testing https://github.com/actions/setup-dotnet
+
 on: [push]
 
 jobs:
   build:
 
     runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet: [ '2.1', 3.1', '5.0' ]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.7.2
-        with:
-          dotnet-version: 5.0.x
-      - name: Build
-        run: dotnet build src/GShark/GShark.csproj
-      - name: Test
-        run: dotnet test src/GShark/GShark.csproj
+    - name: 🛎 Checkout repo
+      uses: actions/checkout@v2
+    - name: 🚧 Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+    # install dependecies will be used when we will have dependencies    
+    # - name: ⚙️ Install dependencies
+    #  run: dotnet restore
+    - name: 🏗 Build
+      run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
+    - name: 🧪 Test
+      run: dotnet test src/GShark/GShark.csproj --no-restore
