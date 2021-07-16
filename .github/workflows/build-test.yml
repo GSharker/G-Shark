@@ -5,7 +5,10 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet: [ '3.1.x', '5.0.x' ]
 
     steps:
     - name: 🛎 Checkout repo
@@ -13,7 +16,7 @@ jobs:
     - name: 🚧 Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: ${{ matrix.dotnet-version }}
     - name: ⚙️ Install dependencies
       run: dotnet restore
     - name: 🏗 Build
