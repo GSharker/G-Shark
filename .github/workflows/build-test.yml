@@ -2,7 +2,9 @@ name: Build tests
 
 # we using a matrix testing https://github.com/actions/setup-dotnet
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
 
 jobs:
   build:
