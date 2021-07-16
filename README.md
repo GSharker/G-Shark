@@ -1,5 +1,9 @@
-[![Publish to Nuget](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml) [![Build docs](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml)[![Build and Test](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml)
-![Target Framework](https://img.shields.io/badge/Target%20Framework-net5.0|.netCore2.1|.NetStandard2.0-blue.svg)
+![Target Framework](https://img.shields.io/badge/Target%20Framework-net5.0 | .netCore2.1 | .NetStandard2.0-blue.svg)
+![GitHub release (latest SemVer)](https://img.shields.io/github.com/v/release/G-Shark?sort=semver)
+
+[![Publish to Nuget](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml) 
+[![Build docs](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml)
+[![Build and Test](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
