@@ -1,0 +1,26 @@
+name: .NET Core
+
+on:[push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🛎 Checkout repo
+      uses: actions/checkout@v2
+    - name: 🚧 Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ['3.1.x', '5.0.x']
+    - name: ⚙️ Install dependencies
+      run: dotnet restore
+    - name: 🏗 Build
+      run: dotnet build --configuration Release --no-restore
+    - name: 🧪 Test
+      run: dotnet test --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=../coverage/opencover.xml
+    - name: 📚 Push to Codecov.io
+      uses: codecov/codecov-action@v1
+      with:
+        file: coverage/opencover.xml
