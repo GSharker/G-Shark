@@ -20,7 +20,7 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: ⚙️ Install dependencies
-      run: dotnet add src/GShark/GShark.csproj restore
+      run: dotnet restore src/GShark/GShark.csproj
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
     - name: 🧪 Test
