@@ -46,7 +46,7 @@ namespace GShark.Core
         /// <param name="pt3">Third point.</param>
         /// <param name="tol">Tolerance ser per default as 1e-6</param>
         /// <returns>True if the three points are collinear.</returns>
-        public static bool AreThreePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = 1e-6)
+        public static bool ArePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = GeoSharkMath.MaxTolerance)
         {
             // Find the area of the triangle without using square root and multiply it for 0.5
             // http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
