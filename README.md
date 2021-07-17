@@ -2,7 +2,9 @@
 
 [![Publish to Nuget](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml) 
 [![Build docs](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml)
-[![Build and Test](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml)
+
+[![Build&Test Master](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml)
+[![Build&Test Develop](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=develop)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-test.yml)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
