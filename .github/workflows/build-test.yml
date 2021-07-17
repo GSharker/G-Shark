@@ -2,9 +2,7 @@ name: Build tests
 
 # we using a matrix testing https://github.com/actions/setup-dotnet
 
-on:
-  push:
-    branches: [ master, develop ]
+on: [push]
 
 jobs:
   build:
@@ -22,7 +20,7 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: ⚙️ Install dependencies
-      run: dotnet add src/GShark/GShark.csproj package Newtonsoft.Json --version 13.0.1
+      run: dotnet add src/GShark/GShark.csproj restore
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
     - name: 🧪 Test
