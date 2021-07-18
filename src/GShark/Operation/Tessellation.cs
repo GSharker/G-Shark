@@ -92,7 +92,7 @@ namespace GShark.Operation
             Vector3 diff2 = pt1 - pt2;
 
             if ((Vector3.DotProduct(diff, diff) < setTolerance && Vector3.DotProduct(diff2, diff2) > setTolerance)
-                || !Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, setTolerance))
+                || !Trigonometry.ArePointsCollinear(pt1, pt2, pt3, setTolerance))
             {
                 // Get the exact middle value or a random value start + (end - start) * (0.45 + 0.1 * random.NextDouble());
                 double tMiddle = start + (end - start) * 0.5;

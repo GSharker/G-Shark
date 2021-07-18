@@ -32,7 +32,7 @@ namespace GShark.Test.XUnit.Core
             Point3 pt3 = new Point3( 51.299, 37.950, 0.0);
 
             // Assert
-            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeTrue();
+            Trigonometry.ArePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace GShark.Test.XUnit.Core
             Point3 pt3 = new Point3( 51.299, 37.950, 0.0);
 
             // Assert
-            Trigonometry.AreThreePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeFalse();
+            Trigonometry.ArePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeFalse();
         }
 
         [Theory]
