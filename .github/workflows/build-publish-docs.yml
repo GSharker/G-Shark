@@ -15,19 +15,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Chekout
+      - name: 🛎 Checkout repo
         uses: actions/checkout@v2
-      - name: Setup dotnet
+      - name: 🚧 Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-      - name: Setup docfx
+      - name: 🚧 Setup docfx
         run: choco install docfx -y
-      - name: DocFX Build
+      - name: 📚 Build Docs
         working-directory: docs
         run: docfx docfx.json
         continue-on-error: false
-      - name: Publish
+      - name: 🚀 Publish
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
