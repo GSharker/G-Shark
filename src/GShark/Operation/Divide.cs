@@ -4,11 +4,12 @@ using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace GShark.Operation
 {
     /// <summary>
-    /// Provides various tools for dividing and splitting NURBS geometry.
+    /// Provides various methods for dividing and splitting NURBS geometry.
     /// </summary>
     public class Divide
     {
@@ -16,17 +17,17 @@ namespace GShark.Operation
 		/// Splits a curve into two parts at a given parameter.
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
-		/// <param name="u">The parameter where to split the curve.</param>
+		/// <param name="t">The parameter where to split the curve.</param>
 		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<ICurve> SplitCurve(ICurve curve, double u)
+		public static List<ICurve> SplitCurve(ICurve curve, double t)
         {
             int degree = curve.Degree;
 
-            List<double> knotsToInsert = Sets.RepeatData(u, degree + 1);
+            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
 
             ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
-            int s = curve.Knots.Span(degree, u);
+            int s = curve.Knots.Span(degree, t);
 
             KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
             KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
@@ -77,7 +78,6 @@ namespace GShark.Operation
             double sum2 = 0.0;
             double segmentLength = length;
 
-
             while (i < curves.Count)
             {
                 sum += curveLengths[i];
@@ -98,6 +98,42 @@ namespace GShark.Operation
             }
 
             return (tValues, divisionLengths);
+        }
+
+        /// <summary>
+        /// Creates rotation minimized perpendicular frames at given t parameters along the curve.
+        /// </summary>
+        public static List<Plane> PerpendicularFrames(ICurve curve, List<double> tValues)
+        {
+            var pointsOnCurve = tValues.Select(t => curve.PointAt(t)).ToList();
+            var pointsOnCurveTan = tValues.Select(t => Evaluation.RationalCurveTangent(curve, t)).ToList();
+            var firstParameter = tValues[0];
+            var origin = curve.PointAt(firstParameter);
+            var crvTan = Evaluation.RationalCurveTangent(curve, firstParameter);
+            var crvNormal = Vector3.PerpendicularTo(crvTan);
+            var yAxis = Vector3.CrossProduct(crvTan, crvNormal);
+            var xAxis = Vector3.CrossProduct(yAxis, crvTan);
+            Plane[] output = new Plane[pointsOnCurve.Count];
+            output[0] = new Plane(origin, xAxis, yAxis);
+
+            //Wang, W., J¨uttler, B., Zheng, D., and Liu, Y. 2008. "Computation of rotation minimizing frame."
+            for (int i = 0; i < pointsOnCurve.Count - 1; i++)
+            {
+                Vector3 v1 = pointsOnCurve[i + 1] - pointsOnCurve[i];
+                double c1 = v1 * v1;
+                Vector3 rLi = output[i].XAxis - (2 / c1) * (v1 * output[i].XAxis) * v1;
+                Vector3 tLi = pointsOnCurveTan[i] - (2 / c1) * (v1 * pointsOnCurveTan[i]) * v1;
+                Vector3 v2 = pointsOnCurveTan[i + 1] - tLi;
+                double c2 = v2 * v2;
+                Vector3 rINext = rLi - (2 / c2) * (v2 * rLi) * v2;
+                var sINext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rINext);
+                var pln = new Plane();
+                pln.Origin = pointsOnCurve[i + 1];
+                pln.XAxis = rINext;
+                pln.YAxis = sINext;
+                pln.ZAxis = pointsOnCurveTan[i + 1];
+                output[i + 1] = pln;
+            }
         }
     }
 }

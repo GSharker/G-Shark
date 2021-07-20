@@ -20,7 +20,7 @@ namespace GShark.Geometry
         public Plane(Point3 origin, Vector3 direction)
         {
             ZAxis = direction.Unitize();
-            XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
+            XAxis = Vector3.PerpendicularTo(ZAxis).Unitize();
             YAxis = Vector3.CrossProduct(ZAxis, XAxis).Unitize();
             Origin = origin;
         }
