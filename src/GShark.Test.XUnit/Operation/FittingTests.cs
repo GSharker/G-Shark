@@ -85,7 +85,7 @@ namespace GShark.Test.XUnit.Operation
             crvs.Count.Should().Be(4);
             for (int i = 0; i < crvs.Count - 1; i++)
             {
-               bool areCollinear = Trigonometry.AreThreePointsCollinear(crvs[i].LocationPoints[2], crvs[i].LocationPoints[3],
+               bool areCollinear = Trigonometry.ArePointsCollinear(crvs[i].LocationPoints[2], crvs[i].LocationPoints[3],
                     crvs[i + 1].LocationPoints[1]);
                areCollinear.Should().BeTrue();
             }
