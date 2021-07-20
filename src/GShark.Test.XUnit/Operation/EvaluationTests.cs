@@ -112,27 +112,6 @@ namespace GShark.Test.XUnit.Operation
             pt[1].Should().BeApproximately(result[1], 0.001);
         }
 
-        //[Fact]
-        //public void It_Returns_A_Point_On_Four_Points_Surface_At_A_Given_U_And_V_Parameter()
-        //{
-        //    // Arrange
-        //    Point3d p1 = new Point3d(6.292d, -3.297d, -1.311d);
-        //    Point3d p2 = new Point3d(4.599d, 4.910d, 5.869d);
-        //    Point3d p3 = new Point3d(-8.032d, -8.329d, -0.556d);
-        //    Point3d p4 = new Point3d(-7.966d, 7.580d, 5.366d);
-
-        //    // Act
-        //    NurbsSurface nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
-
-        //    // Assert
-        //    nurbsSurface.Should().NotBeNull();
-        //    Point3d pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
-
-        //    pt[0].Should().BeApproximately(-1.27675, 0.00001);
-        //    pt[1].Should().BeApproximately(0.216, 0.00001);
-        //    pt[2].Should().BeApproximately(2.342, 0.00001);
-        //}
-
         [Fact]
         public void It_Returns_Extrema_Values()
         {
