@@ -9,7 +9,7 @@ namespace GShark.Geometry
     /// This class represents a NURBS surface.
     /// </summary>
     /// <example>
-    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsCurveCollection.cs?name=example)]
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsSurfaceCollection.cs?name=example)]
     /// </example>
     public class NurbsSurface : IEquatable<NurbsSurface>
     {

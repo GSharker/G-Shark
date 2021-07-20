@@ -2,6 +2,7 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Operation;
+using GShark.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -65,15 +66,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NURBS_Surface_By_Four_Points(double u, double v, double[] pt)
         {
             // Arrange
-            Point3 p1 = new Point3(0.0, 0.0, 0.0);
-            Point3 p2 = new Point3(10.0, 0.0, 0.0);
-            Point3 p3 = new Point3(10.0, 10.0, 2.0);
-            Point3 p4 = new Point3(0.0, 10.0, 4.0);
-
+            NurbsSurface surface = NurbsSurfaceCollection.QuadrilateralSurface();
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
             Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
             // Assert
