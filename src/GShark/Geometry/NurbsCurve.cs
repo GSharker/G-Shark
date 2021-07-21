@@ -193,10 +193,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Transforms a curve with the given transformation matrix.
+        /// Transforms a NURBS curve with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
-        /// <returns>A new curve transformed.</returns>
+        /// <returns>A new NURBS curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
             List<Point3> pts = LocationPoints.Select(pt => pt.Transform(transformation)).ToList();

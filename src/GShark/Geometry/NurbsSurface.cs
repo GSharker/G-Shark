@@ -152,29 +152,48 @@ namespace GShark.Geometry
         //public Vector3d TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
 
         /// <summary>
-        /// Transforms a surface with the given transformation matrix.
+        /// Transforms a NURBS surface with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
-        /// <returns>A new surface transformed.</returns>
+        /// <returns>A new NURBS surface transformed.</returns>
         public NurbsSurface Transform(Transform transformation)
         {
-            var pts = LocationPoints.Select(pts => pts.Select(pt => pt.Transform(transformation)).ToList()).ToList();
-            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, pts, Weights);
+            List<List<Point3>> otherPts = LocationPoints;
+            otherPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
+            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, otherPts, Weights);
         }
 
-        public bool Equals(NurbsSurface other)
+        /// <summary>
+        /// Compares if two NURBS surfaces are the same.<br/>
+        /// Two NURBS curves are equal when the have same degrees, same control points order and dimension, and same knots.
+        /// </summary>
+        /// <param name="other">The NURBS surface.</param>
+        /// <returns>Return true if the NURBS surface are equal.</returns>
+        public bool Equals(NurbsSurface? other)
         {
-            //var pts = this.LocationPoints;
-            //var otherPts = other?.LocationPoints;
+            List<List<Point3>> otherPts = other?.LocationPoints;
 
-            //if (other == null) return false;
-            //if (pts.Count != otherPts.Count) return false;
-            //if (this.KnotsU.Count != other.KnotsU.Count) return false;
-            //if (this.KnotsV.Count != other.KnotsV.Count) return false;
-            //if (this.DegreeU != other.DegreeU) return false;
-            //if (this.DegreeV != other.DegreeV) return false;
-            /////
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (LocationPoints.Count != otherPts?.Count)
+            {
+                return false;
+            }
+
+            if (!LocationPoints.All(otherPts.Contains))
+            {
+                return false;
+            }
+
+            if (KnotsU.Count != other.KnotsU.Count || KnotsV.Count != other.KnotsU.Count)
+            {
+                return false;
+            }
+
+            return DegreeU == other.DegreeU && DegreeV == other.DegreeV && Weights.All(other.Weights.Contains);
         }
 
         /// <summary>
