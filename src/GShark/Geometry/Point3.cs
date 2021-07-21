@@ -602,7 +602,7 @@ namespace GShark.Geometry
         /// <returns>Whether the point is on the plane.</returns>
         public bool IsOnPlane(Plane plane, double tolerance = GeoSharkMath.MaxTolerance)
         {
-            return Math.Abs(Vector3.DotProduct(this - plane.Origin, plane.Normal)) < tolerance;
+            return Math.Abs(Vector3.DotProduct(this - plane.Origin, plane.ZAxis)) < tolerance;
         }
     }
 }
