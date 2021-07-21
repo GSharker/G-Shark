@@ -59,21 +59,26 @@ namespace GShark.Test.XUnit.Geometry
         //    return new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
         //}
 
-        [Theory]
-        [InlineData(0.1, 0.1, new double[] { 1.0, 1.0, 0.38 })]
-        [InlineData(0.5, 0.5, new double[] { 5.0, 5.0, 1.5 })]
-        [InlineData(1.0, 1.0, new double[] { 10.0, 10.0, 2.0 })]
-        public void It_Returns_A_NURBS_Surface_By_Four_Points(double u, double v, double[] pt)
+        [Fact]
+        public void It_Returns_A_NURBS_Surface_By_Four_Points()
         {
             // Arrange
-            NurbsSurface surface = NurbsSurfaceCollection.QuadrilateralSurface();
-            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
+            Point3 p1 = new Point3(0.0, 0.0, 0.0);
+            Point3 p2 = new Point3(10.0, 0.0, 0.0);
+            Point3 p3 = new Point3(10.0, 10.0, 2.0);
+            Point3 p4 = new Point3(0.0, 10.0, 4.0);
+
+            Point3 expectedPt = new Point3(5.0, 5.0, 1.5);
 
             // Act
-            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            NurbsSurface surface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
+            Point3 evalPt = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
 
             // Assert
             surface.Should().NotBeNull();
+            surface.LocationPoints.Count.Should().Be(2);
+            surface.LocationPoints[0].Count.Should().Be(2);
+            surface.LocationPoints[0][1].Equals(p4).Should().BeTrue();
             evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
