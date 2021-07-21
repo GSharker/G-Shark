@@ -2,7 +2,6 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Operation;
-using GShark.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,49 +14,6 @@ namespace GShark.Test.XUnit.Geometry
         {
             _testOutput = testOutput;
         }
-
-        //private NurbsSurface BuildTestNurbsSurface()
-        //{
-        //    int degreeU = 3;
-        //    int degreeV = 3;
-        //    KnotVector knotsU = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
-        //    KnotVector knotsV = new KnotVector() { 0, 0, 0, 0, 1, 1, 1, 1 };
-
-        //    List<Vector3> u1 = new List<Vector3>()
-        //    {
-        //        new Vector3() { 0d, 0d, 0d },
-        //        new Vector3() { 10d, 0d, 0d },
-        //        new Vector3() { 20d, 0d, 0d },
-        //        new Vector3() { 30d, 0d, 0d }
-        //    };
-        //    List<Vector3> u2 = new List<Vector3>()
-        //    {
-        //        new Vector3() { 0d, -10d, 0d },
-        //        new Vector3() { 10d, -10d, 10d },
-        //        new Vector3() { 20d, -10d, 0d },
-        //        new Vector3() { 30d, -10d, 0d }
-        //    };
-        //    List<Vector3> u3 = new List<Vector3>()
-        //    {
-        //        new Vector3() { 0d, -20d, 0d },
-        //        new Vector3() { 10d, -20d, 0d },
-        //        new Vector3() { 20d, -20d, 0d },
-        //        new Vector3() { 30d, -20d, 0d }
-        //    };
-        //    List<Vector3> u4 = new List<Vector3>()
-        //    {
-        //        new Vector3() { 0d, -30d, 0d },
-        //        new Vector3() { 10d, -30d, 0d },
-        //        new Vector3() { 20d, -30d, 0d },
-        //        new Vector3() { 30d, -30d, 0d }
-        //    };
-        //    List<List<Vector3>> controlPoints = new List<List<Vector3>>()
-        //    {
-        //        u1, u2, u3, u4
-        //    };
-
-        //    return new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-        //}
 
         [Fact]
         public void It_Returns_A_NURBS_Surface_By_Four_Points()

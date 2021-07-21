@@ -803,6 +803,5 @@ namespace GShark.Operation
         //    }
         //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.LocationPoints[span]);
         //}
-
     }
 }
