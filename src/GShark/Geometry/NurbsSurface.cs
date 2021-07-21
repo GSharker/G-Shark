@@ -14,7 +14,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsSurfaceCollection.cs?name=example)]
     /// </example>
-    public class NurbsSurface : IEquatable<NurbsSurface>, ITransformable<NurbsCurve>
+    public class NurbsSurface : IEquatable<NurbsSurface>, ITransformable<NurbsSurface>
     {
         /// <summary>
         /// Internal constructor used to validate the NURBS surface.
@@ -156,9 +156,10 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new surface transformed.</returns>
-        public NurbsCurve Transform(Transform transformation)
+        public NurbsSurface Transform(Transform transformation)
         {
-            throw new NotImplementedException();
+            var pts = LocationPoints.Select(pts => pts.Select(pt => pt.Transform(transformation)).ToList()).ToList();
+            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, pts, Weights);
         }
 
         public bool Equals(NurbsSurface other)
