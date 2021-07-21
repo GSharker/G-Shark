@@ -700,61 +700,53 @@ namespace GShark.Operation
         //    return SKL;
         //}
 
-        ///// <summary>
-        ///// Computes a point on a non-uniform, non-rational B spline surface.<br/>
-        ///// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
-        ///// </summary>
-        ///// <param name="surface">The surface.</param>
-        ///// <param name="u">U parameter on the surface at which the point is to be evaluated</param>
-        ///// <param name="v">V parameter on the surface at which the point is to be evaluated</param>
-        ///// <returns>The evaluated point.</returns>
-        //public static Point3d SurfacePointAt(NurbsSurface surface, double u, double v)
-        //{
-        //    int n = surface.KnotsU.Count - surface.DegreeU - 2;
-        //    int m = surface.KnotsV.Count - surface.DegreeV - 2;
-        //    List<List<Point3d>> controlPoints = surface.LocationPoints;
-        //    List<List<Point4d>> surfaceHomoPts = surface.ControlPoints;
-        //    int dim = 3;//dimension of point
+        /// <summary>
+        /// Computes a point on a non-uniform, non-rational B-spline surface.<br/>
+        /// The U and V parameters have to be between 0.0 to 1.0.<br/>
+        /// <em>Corresponds to algorithm 3.5 from The NURBS book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="surface">The NURBS surface.</param>
+        /// <param name="u">The U parameter on the surface at which the point is to be evaluated.</param>
+        /// <param name="v">The V parameter on the surface at which the point is to be evaluated.</param>
+        /// <returns>The evaluated point.</returns>
+        public static Point3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        {
+            if (u < 0.0 || u > 1.0)
+            {
+                throw new ArgumentException("The U parameter is not into the domain 0.0 to 1.0.");
+            }
 
-        //    //ToDo These checks should be in the validity check of surface. Here should check that u and v are in range.
-        //    if (!surface.KnotsU.IsValid(surface.DegreeU, surfaceHomoPts.Count))
-        //    {
-        //        throw new ArgumentException("Invalid relations between control points, knot in u direction");
-        //    }
+            if (v < 0.0 || v > 1.0)
+            {
+                throw new ArgumentException("The V parameter is not into the domain 0.0 to 1.0.");
+            }
 
-        //    if (!surface.KnotsV.IsValid(surface.DegreeV, surfaceHomoPts[0].Count))
-        //    {
-        //        throw new ArgumentException("Invalid relations between control points, knot in v direction");
-        //    }
+            int n = surface.KnotsU.Count - surface.DegreeU - 2;
+            int m = surface.KnotsV.Count - surface.DegreeV - 2;
+            int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
+            int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
+            List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
+            List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
+            int uIndex = knotSpanU - surface.DegreeU;
+            Point3 evaluatedPt = Point3.Origin;
 
-        //    int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
-        //    int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
-        //    List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
-        //    List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
-        //    int uIndex = knotSpanU - surface.DegreeU;
-        //    Point3d position = new Point3d(0,0,0);
+            for (int l = 0; l < surface.DegreeV + 1; l++)
+            {
+                var temp = Point3.Origin;
+                var vIndex = knotSpanV - surface.DegreeV + l;
+                for (int k = 0; k < surface.DegreeU + 1; k++)
+                {
+                    temp.X += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].X;
+                    temp.Y += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Y;
+                    temp.Z += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Z;
+                }
 
-        //    //ToDo refactor to use point coordinate properties instead of inidces. X,Y,Z.
-        //    for (int l = 0; l < surface.DegreeV + 1; l++)
-        //    {
-        //        var temp = new Point3d(0,0,0);
-        //        var vIndex = knotSpanV - surface.DegreeV + l;
-        //        for (int x = 0; x < surface.DegreeU + 1; x++)
-        //        {
-        //            for (int j = 0; j < dim; j++)
-        //            {
-        //                temp[j] = temp[j] + basisUValue[x] * controlPoints[uIndex + x][vIndex][j];
-        //            }
-        //        }
-
-        //        for (int j = 0; j < dim; j++)
-        //        {
-        //            position[j] = position[j] + basisVValue[l] * temp[j];
-        //        }
-        //    }
-        //    return position;
-
-        //}
+                evaluatedPt.X += basisVValue[l] * temp.X;
+                evaluatedPt.Y += basisVValue[l] * temp.Y;
+                evaluatedPt.Z += basisVValue[l] * temp.Z;
+            }
+            return evaluatedPt;
+        }
 
         ///// <summary>
         ///// Extracts the iso-curve in u or v direction at a specified parameter.
@@ -811,6 +803,5 @@ namespace GShark.Operation
         //    }
         //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.LocationPoints[span]);
         //}
-
     }
 }

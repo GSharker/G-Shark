@@ -240,5 +240,25 @@ namespace GShark.Test.XUnit
                 _testOutput.WriteLine($"{{{r}}}");
             }
         }
+
+        [Fact]
+        public void FourPointSurface()
+        {
+            Array<double> pt1 = new Array<double>(new double[] { 0.0, 0.0, 0.0 });
+            Array<double> pt2 = new Array<double>(new double[] { 10.0, 0.0, 0.0 });
+            Array<double> pt3 = new Array<double>(new double[] { 10.0, 10.0, 2.0 });
+            Array<double> pt4 = new Array<double>(new double[] { 0.0, 10.0, 4.0 });
+
+            var surface = verb.eval.Make.fourPointSurface(pt1, pt2, pt3, pt4, 1);
+            var p = verb.eval.Eval.rationalSurfacePoint(surface, 0.2, 0.5);
+
+            _testOutput.WriteLine($"{{{p}}}");
+
+            for (int i = 0; i < surface.controlPoints.length; i++)
+            {
+                var r = surface.controlPoints[i];
+                _testOutput.WriteLine($"{{{r}}}");
+            }
+        }
     }
 }

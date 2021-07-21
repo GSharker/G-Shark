@@ -112,27 +112,6 @@ namespace GShark.Test.XUnit.Operation
             pt[1].Should().BeApproximately(result[1], 0.001);
         }
 
-        //[Fact]
-        //public void It_Returns_A_Point_On_Four_Points_Surface_At_A_Given_U_And_V_Parameter()
-        //{
-        //    // Arrange
-        //    Point3d p1 = new Point3d(6.292d, -3.297d, -1.311d);
-        //    Point3d p2 = new Point3d(4.599d, 4.910d, 5.869d);
-        //    Point3d p3 = new Point3d(-8.032d, -8.329d, -0.556d);
-        //    Point3d p4 = new Point3d(-7.966d, 7.580d, 5.366d);
-
-        //    // Act
-        //    NurbsSurface nurbsSurface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
-
-        //    // Assert
-        //    nurbsSurface.Should().NotBeNull();
-        //    Point3d pt = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
-
-        //    pt[0].Should().BeApproximately(-1.27675, 0.00001);
-        //    pt[1].Should().BeApproximately(0.216, 0.00001);
-        //    pt[2].Should().BeApproximately(2.342, 0.00001);
-        //}
-
         [Fact]
         public void It_Returns_Extrema_Values()
         {
@@ -156,61 +135,22 @@ namespace GShark.Test.XUnit.Operation
             e.Values[2].Should().Be(1);
         }
 
-        //[Fact]
-        //public void It_Returns_A_Point_On_Surface_At_A_Given_U_And_V_Parameter()
-        //{
-        //    // Arrange
-        //    List<Point3d> u1 = new List<Point3d>
-        //    {
-        //        new (0d, 0d, 50),
-        //        new (10d, 0d, 0),
-        //        new (20d, 0d, 0),
-        //        new (30d, 0d, 0)
-        //    };
-        //    List<Point3d> u2 = new List<Point3d>
-        //    {
-        //        new (0d, -10d, 0),
-        //        new (10d, -10d, 10),
-        //        new (20d, -10d, 10),
-        //        new (30d, -10d, 0)
-        //    };
-        //    List<Point3d> u3 = new List<Point3d>
-        //    {
-        //        new (0d, -20d, 0),
-        //        new (10d, -20d, 10),
-        //        new (20d, -20d, 10),
-        //        new (30d, -20d, 0)
-        //    };
-        //    List<Point3d> u4 = new List<Point3d>
-        //    {
-        //        new (0d, -30d, 0),
-        //        new (10d, -30d, 0),
-        //        new (20d, -30d, 0),
-        //        new (30d, -30d, 0)
-        //    };
-        //    List<List<Point3d>> controlPoints = new List<List<Point3d>>
-        //    {
-        //        u1, u2, u3, u4
-        //    };
-        //    int degreeU = 3; int degreeV = degreeU;
-        //    KnotVector knotsU = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
-        //    KnotVector knotsV = knotsU;
+        [Theory]
+        [InlineData(0.1, 0.1, new double[] { 1.0, 1.0, 0.38 })]
+        [InlineData(0.5, 0.5, new double[] { 5.0, 5.0, 1.5 })]
+        [InlineData(1.0, 1.0, new double[] { 10.0, 10.0, 2.0 })]
+        public void It_Returns_A_Point_On_Surface_At_A_Given_U_And_V_Parameter(double u, double v, double[] pt)
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.QuadrilateralSurface();
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
-        //    // Act
-        //    NurbsSurface nurbsSurface = new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-        //    Point3d pt1 = Evaluation.SurfacePointAt(nurbsSurface, 0, 0);
+            // Act
+            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
-        //    // Assert
-        //    //ToDo Break out into arrange as expected results.
-        //    pt1[0].Should().BeApproximately(u1[0][0], 0.00001);
-        //    pt1[1].Should().BeApproximately(u1[0][1], 0.00001);
-        //    pt1[2].Should().BeApproximately(u1[0][2], 0.00001);
-
-        //    Point3d ptMid = Evaluation.SurfacePointAt(nurbsSurface, 0.5, 0.5);
-        //    ptMid[0].Should().BeApproximately(15d, 0.00001);
-        //    ptMid[1].Should().BeApproximately(-15d, 0.00001);
-        //    ptMid[2].Should().BeApproximately(6.40625d, 0.00001);
-        //}
+            // Assert
+            evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
 
         //[Fact]
         //public void It_Return_Surface_Derivatives_At_Given_NM()

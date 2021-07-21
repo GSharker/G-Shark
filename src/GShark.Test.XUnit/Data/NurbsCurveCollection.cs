@@ -1,7 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
-using Xunit;
 
 namespace GShark.Test.XUnit.Data
 {
