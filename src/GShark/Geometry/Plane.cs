@@ -12,6 +12,11 @@ namespace GShark.Geometry
     /// </summary>
     public class Plane : IEquatable<Plane>, ITransformable<Plane>
     {
+        public Plane()
+        {
+
+        }
+
         /// <summary>
         /// Constructs a plane from a origin and a direction.
         /// </summary>
@@ -19,10 +24,10 @@ namespace GShark.Geometry
         /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Point3 origin, Vector3 direction)
         {
-            var normal = direction.Unitize();
-            XAxis = Vector3.XAxis.PerpendicularTo(normal).Unitize();
-            YAxis = Vector3.CrossProduct(normal, XAxis).Unitize();
             Origin = origin;
+            XAxis = Vector3.PerpendicularTo(direction.Unitize()).Unitize();
+            YAxis = Vector3.CrossProduct(direction.Unitize(), XAxis).Unitize();
+            ZAxis = Normal;
         }
 
         /// <summary>
@@ -45,6 +50,7 @@ namespace GShark.Geometry
             Origin = pt1;
             XAxis = dir1.Unitize();
             YAxis = Vector3.CrossProduct(normal, dir1).Unitize();
+            ZAxis = normal;
         }
 
         /// <summary>
@@ -58,7 +64,8 @@ namespace GShark.Geometry
             Origin = origin;
             XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
             YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
-            
+            ZAxis = Normal;
+
         }
 
         /// <summary>
@@ -70,7 +77,7 @@ namespace GShark.Geometry
             Origin = plane.Origin;
             XAxis = plane.XAxis;
             YAxis = plane.YAxis;
-
+            ZAxis = plane.Normal;
         }
 
         /// <summary>
@@ -96,7 +103,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the normal of the plane.
         /// </summary>
-        public Vector3 Normal => ZAxis;
+        public Vector3 Normal => Vector3.CrossProduct(XAxis, YAxis).Unitize();
 
         /// <summary>
         /// Gets the origin of the plane.
@@ -116,7 +123,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the ZAxis of the plane.
         /// </summary>
-        public Vector3 ZAxis => Vector3.CrossProduct(XAxis, YAxis).Unitize();
+        public Vector3 ZAxis { get; set; }
 
         /// <summary>
         /// Returns true if origin and axis vectors are valid and orthogonal.

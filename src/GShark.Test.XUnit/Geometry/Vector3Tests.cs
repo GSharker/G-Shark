@@ -260,7 +260,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 vectorExpected = new Vector3(10, 7, 0);
 
             // Act
-            Vector3 perpVector = vector.PerpendicularTo(vectorGuide);
+            Vector3 perpVector = Vector3.PerpendicularTo(vectorGuide);
 
             // Assert
             perpVector.Equals(vectorExpected).Should().BeTrue();

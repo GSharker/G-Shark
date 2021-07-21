@@ -733,7 +733,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vector">The other vector.</param>
         /// <returns>The perpendicular vector.</returns>
-        public Vector3 PerpendicularTo(Vector3 vector)
+        public static Vector3 PerpendicularTo(Vector3 vector)
             {
                 double[] vectorComponents = {vector.X, vector.Y, vector.Z};
                 double[] tempVector = new double[3];
