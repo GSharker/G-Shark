@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using GShark.Geometry.Interfaces;
+using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -11,7 +14,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsSurfaceCollection.cs?name=example)]
     /// </example>
-    public class NurbsSurface : IEquatable<NurbsSurface>
+    public class NurbsSurface : IEquatable<NurbsSurface>, ITransformable<NurbsCurve>
     {
         /// <summary>
         /// Internal constructor used to validate the NURBS surface.
@@ -47,28 +50,6 @@ namespace GShark.Geometry
             ControlPoints = LinearAlgebra.PointsHomogeniser2d(pts, weights);
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
-        }
-
-        /// <summary>
-        /// Constructs a NURBS surface from four perimeter points in counter-clockwise order.<br/>
-        /// The surface is defined with degree 1.
-        /// </summary>
-        /// <param name="p1">The first point.</param>
-        /// <param name="p2">The second point.</param>
-        /// <param name="p3">The third point.</param>
-        /// <param name="p4">The fourth point.</param>
-        public static NurbsSurface ByFourPoints(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
-        {
-            List<List<Point3>> pts = new List<List<Point3>>
-            {
-                new List<Point3>{p1, p4},
-                new List<Point3>{p2, p3},
-            };
-
-            KnotVector knotU = new KnotVector { 0, 0, 1, 1 };
-            KnotVector knotV = new KnotVector { 0, 0, 1, 1 };
-
-            return new NurbsSurface(1, 1, knotU, knotV, pts);
         }
 
         /// <summary>
@@ -117,6 +98,36 @@ namespace GShark.Geometry
         internal List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
+        /// Constructs a NURBS surface from four perimeter points in counter-clockwise order.<br/>
+        /// The surface is defined with degree 1.
+        /// </summary>
+        /// <param name="p1">The first point.</param>
+        /// <param name="p2">The second point.</param>
+        /// <param name="p3">The third point.</param>
+        /// <param name="p4">The fourth point.</param>
+        public static NurbsSurface ByFourPoints(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
+        {
+            List<List<Point3>> pts = new List<List<Point3>>
+            {
+                new List<Point3>{p1, p4},
+                new List<Point3>{p2, p3},
+            };
+
+            KnotVector knotU = new KnotVector { 0, 0, 1, 1 };
+            KnotVector knotV = new KnotVector { 0, 0, 1, 1 };
+
+            return new NurbsSurface(1, 1, knotU, knotV, pts);
+        }
+
+        /// <summary>
+        /// Evaluates a point at a given U and V parameters.
+        /// </summary>
+        /// <param name="u">Evaluation U parameter.</param>
+        /// <param name="v">Evaluation V parameter.</param>
+        /// <returns>A evaluated point.</returns>
+        public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
+
+        /// <summary>
         /// Obtain the surface normal at the given u and v parameters
         /// </summary>
         /// <param name="u">u parameter</param>
@@ -140,6 +151,16 @@ namespace GShark.Geometry
         /// <returns></returns>
         //public Vector3d TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
 
+        /// <summary>
+        /// Transforms a surface with the given transformation matrix.
+        /// </summary>
+        /// <param name="transformation">The transformation matrix.</param>
+        /// <returns>A new surface transformed.</returns>
+        public NurbsCurve Transform(Transform transformation)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Equals(NurbsSurface other)
         {
             //var pts = this.LocationPoints;
@@ -153,6 +174,25 @@ namespace GShark.Geometry
             //if (this.DegreeV != other.DegreeV) return false;
             /////
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Implements the override method to string.
+        /// </summary>
+        /// <returns>The representation of a NURBS surface in string.</returns>
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            string controlPts = string.Join("\n", LocationPoints.Select(first => $"({string.Join(",", first)})"));
+            string degreeU = $"DegreeU = {DegreeU}";
+            string degreeV = $"DegreeV = {DegreeV}";
+
+            stringBuilder.AppendLine(controlPts);
+            stringBuilder.AppendLine(degreeU);
+            stringBuilder.AppendLine(degreeV);
+
+            return stringBuilder.ToString();
         }
     }
 }
