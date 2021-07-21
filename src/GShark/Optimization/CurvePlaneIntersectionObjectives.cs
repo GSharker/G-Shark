@@ -39,9 +39,9 @@ namespace GShark.Optimization
             var deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
             var r = deriveC0[0] - new Vector3(_plane.Origin);
 
-            double f = Vector3.DotProduct(_plane.Normal, (Vector3)r);
+            double f = Vector3.DotProduct(_plane.ZAxis, (Vector3)r);
             // Compute the derivative of function.
-            double df = Vector3.DotProduct(_plane.Normal, deriveC0[1]);
+            double df = Vector3.DotProduct(_plane.ZAxis, deriveC0[1]);
 
             double value0 = 2 * (f / df);
 

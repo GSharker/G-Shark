@@ -272,7 +272,7 @@ namespace GShark.Core
         public static Transform Reflection(Plane plane)
         {
             Point3 pt = plane.Origin;
-            Vector3 normal = plane.Normal;
+            Vector3 normal = plane.ZAxis;
             Transform transform = Identity();
 
             Vector3 unitizedN = normal.Unitize();

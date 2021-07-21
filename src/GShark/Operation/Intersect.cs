@@ -25,8 +25,8 @@ namespace GShark.Operation
         /// <returns>True if the intersection success.</returns>
         public static bool PlanePlane(Plane p1, Plane p2, out Line line)
         {
-            Vector3 plNormal1 = p1.Normal;
-            Vector3 plNormal2 = p2.Normal;
+            Vector3 plNormal1 = p1.ZAxis;
+            Vector3 plNormal2 = p2.ZAxis;
             line = new Line(new Point3(0, 0, 0), new Point3(0, 0, 1));
 
             Vector3 directionVec = Vector3.CrossProduct(plNormal1, plNormal2);
@@ -130,8 +130,8 @@ namespace GShark.Operation
             Point3 ptPlane = plane.Origin - line.Start;
             double segmentLength = line.Length;
 
-            double denominator = Vector3.DotProduct(plane.Normal, lnDir);
-            double numerator = Vector3.DotProduct(plane.Normal, ptPlane);
+            double denominator = Vector3.DotProduct(plane.ZAxis, lnDir);
+            double numerator = Vector3.DotProduct(plane.ZAxis, ptPlane);
 
             if (Math.Abs(denominator) < GeoSharkMath.Epsilon)
             {

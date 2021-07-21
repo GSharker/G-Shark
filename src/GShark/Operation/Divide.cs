@@ -153,7 +153,6 @@ namespace GShark.Operation
                 frameNext.Origin = pointsOnCurve[i + 1];
                 frameNext.XAxis = rNext;
                 frameNext.YAxis = sNext;
-                frameNext.ZAxis = pointsOnCurveTan[i + 1];
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
