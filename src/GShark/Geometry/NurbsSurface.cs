@@ -133,7 +133,7 @@ namespace GShark.Geometry
         /// <param name="u">u parameter</param>
         /// <param name="v">v parameter</param>
         /// <returns></returns>
-        //public Vector3d Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+        //public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
 
         /// <summary>
         /// Obtain the surface tangent at the given u and v parameters in the u direction

@@ -189,7 +189,7 @@ namespace GShark.Operation
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4 pointOnCurve = new Point4(0,0,0,0);
+            Point4 pointOnCurve = new Point4(0, 0, 0, 0);
 
             for (int i = 0; i <= curve.Degree; i++)
             {
@@ -561,59 +561,59 @@ namespace GShark.Operation
             return ders;
         }
 
-        ///// <summary>
-        ///// Computes the normal vector at uv parameter on a NURBS surface.
-        ///// </summary>
-        ///// <param name="nurbsSurface">The surface.</param>
-        ///// <param name="u">The u parameter.</param>
-        ///// <param name="v">the v parameter.</param>
-        ///// <returns>The normal vector at the given uv of the surface.</returns>
-        //public static Vector3 RationalSurfaceNormal(NurbsSurface nurbsSurface, double u, double v)
+        /// <summary>
+        /// Computes the normal vector at uv parameter on a NURBS surface.
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        /// <param name="u">The u parameter.</param>
+        /// <param name="v">the v parameter.</param>
+        /// <returns>The normal vector at the given uv of the surface.</returns>
+        //public static Vector3 RationalSurfaceNormal(NurbsSurface surface, double u, double v)
         //{
-        //    List<List<Vector3>> derivs = RationalSurfaceDerivatives(nurbsSurface, u, v);
+        //    List<List<Vector3>> derivs = RationalSurfaceDerivatives(surface, u, v);
         //    return Vector3.Cross(derivs[1][0], derivs[0][1]);
         //}
 
 
-        ///// <summary>
-        ///// Computes the derivatives at a point on a NURBS surface.
-        ///// </summary>
-        ///// <param name="nurbsSurface">The surface.</param>
-        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        ///// <param name="numDerivs">Number of derivatives to evaluate (default is 1)</param>
-        ///// <returns>The derivatives.</returns>
-        //public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs = 1)
+        /// <summary>
+        /// Computes the derivatives at the given U and V parameters on a NURBS surface.
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        /// <param name="u">The u parameter at which to evaluate the derivatives.</param>
+        /// <param name="v">The v parameter at which to evaluate the derivatives.</param>
+        /// <param name="numDerivs">Number of derivatives to evaluate, set as default to 1.</param>
+        /// <returns>The derivatives.</returns>
+        //public static List<List<Vector3>> RationalSurfaceDerivatives(NurbsSurface surface, double u, double v, int numDerivs = 1)
         //{
-        //    List<List<Vector3>> ders = SurfaceDerivatives(nurbsSurface, u, v, numDerivs);
-        //    List<List<Vector3>> Aders = LinearAlgebra.Rational2d(ders);
+        //    List<List<Vector>> ders = SurfaceDerivatives(surface, u, v, numDerivs);
+        //    List<List<Vector>> Aders = LinearAlgebra.Rational2d(ders);
         //    List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
-        //    List<List<Vector3>> SKL = new List<List<Vector3>>();
+        //    List<List<Vector>> SKL = new List<List<Vector>>();
         //    int dim = Aders[0][0].Count;
 
         //    for (int k = 0; k < numDerivs + 1; k++)
         //    {
-        //        SKL.Add(new List<Vector3>());
+        //        SKL.Add(new List<Vector>());
         //        for (int l = 0; l < numDerivs - k + 1; l++)
         //        {
-        //            Vector3 t1 = Aders[k][l];
+        //            Vector t1 = Aders[k][l];
         //            for (int j = 1; j < l + 1; j++)
         //            {
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
         //            }
 
         //            for (int i = 1; i < k + 1; i++)
         //            {
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
-        //                Vector3 t2 = Vector3.Zero1d(dim);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
+        //                Vector3 t2 = Vector.Zero1d(dim);
         //                for (int j = 1; j < l + 1; j++)
         //                {
-        //                    Vector3.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
+        //                    Vector.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
         //                }
 
-        //                Vector3.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
+        //                Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
         //            }
-        //            Vector3 t = t1 * (1 / wders[0][0]);
+        //            Vector t = t1 * (1 / wders[0][0]);
         //            SKL[k].Add(t); //demogenize
         //        }
         //    }
@@ -621,84 +621,69 @@ namespace GShark.Operation
         //    return SKL;
         //}
 
-        ///// <summary>
-        ///// Computes the derivatives on a NURBS surface.
-        ///// </summary>
-        ///// <param name="nurbsSurface">Object representing the surface.</param>
-        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        ///// <param name="numDerivs">Number of derivatives to evaluate.</param>
-        ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        //public static List<List<Vector3>> SurfaceDerivatives(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
-        //{
-        //    int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
-        //    int m = nurbsSurface.KnotsV.Count - nurbsSurface.DegreeV - 2;
-        //    return SurfaceDerivativesGivenNM(nurbsSurface, n, m, u, v, numDerivs);
-        //}
+        /// <summary>
+        /// Computes the derivatives on a non-uniform, non-rational B spline surface.<br/>
+        /// SKL is the derivative S(u,v) with respect to U K-times and V L-times.<br/>
+        /// <em>Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="surface">The surface.</param>
+        /// <param name="u">The U parameter at which to evaluate the derivatives.</param>
+        /// <param name="v">The V parameter at which to evaluate the derivatives.</param>
+        /// <param name="numDerivs">Number of derivatives to evaluate, set as default to 1.</param>
+        /// <returns>A 2d collection representing the derivatives: U derivatives increase by row, V by column.</returns>
+        public static Vector3[,] SurfaceDerivatives(NurbsSurface surface, double u, double v, int numDerivs = 1)
+        {
+            if (u < 0.0 || u > 1.0)
+            {
+                throw new ArgumentException("The U parameter is not into the domain 0.0 to 1.0.");
+            }
 
-        ///// <summary>
-        ///// Computes the derivatives on a non-uniform, non-rational B spline surface.<br/>
-        ///// SKL is the derivative S(u,v) with respect to u K-times and v L-times.<br/>
-        ///// <em>Corresponds to algorithm 3.6 from The NURBS Book by Piegl and Tiller.</em>
-        ///// </summary>
-        ///// <param name="nurbsSurface">The surface.</param>
-        ///// <param name="n">Integer number of basis functions in u dir - 1 = knotsU.length - degreeU - 2.</param>
-        ///// <param name="m">Integer number of basis functions in v dir - 1 = knotsU.length - degreeU - 2.</param>
-        ///// <param name="u">The u parameter at which to evaluate the derivatives.</param>
-        ///// <param name="v">The v parameter at which to evaluate the derivatives.</param>
-        ///// <param name="numDerivs">The number of derivatives to evaluate.</param>
-        ///// <returns>A 2d collection representing the derivatives - u derivatives increase by row, v by column</returns>
-        //public static List<List<Vector3>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, int n, int m, double u, double v, int numDerivs)
-        //{
-        //    int degreeU = nurbsSurface.DegreeU;
-        //    int degreeV = nurbsSurface.DegreeV;
-        //    List<List<Vector3>> ctrlPts = nurbsSurface.ControlPoints;
-        //    KnotVector knotsU = nurbsSurface.KnotsU;
-        //    KnotVector knotsV = nurbsSurface.KnotsV;
+            if (v < 0.0 || v > 1.0)
+            {
+                throw new ArgumentException("The V parameter is not into the domain 0.0 to 1.0.");
+            }
 
-        //    if (!knotsU.IsValid(degreeU, ctrlPts.Count) || !knotsV.IsValid(degreeV, ctrlPts[0].Count))
-        //    {
-        //        throw new ArgumentException("Invalid relations between control points, knot vector, and n");
-        //    }
+            // number of basis function.
+            int n = surface.KnotsU.Count - surface.DegreeU - 2;
+            int m = surface.KnotsV.Count - surface.DegreeV - 2;
 
-        //    //This should be always 3 
-        //    int dim = ctrlPts[0][0].Count;
-        //    int du = numDerivs < degreeU ? numDerivs : degreeU;
-        //    int dv = numDerivs < degreeV ? numDerivs : degreeV;
+            // number of derivatives.
+            int du = Math.Min(numDerivs, surface.DegreeU);
+            int dv = Math.Min(numDerivs, surface.DegreeV);
 
-        //    List<List<Vector3>> SKL = Vector3.Zero3d(numDerivs + 1, numDerivs + 1, dim);
-        //    int knotSpanU = knotsU.Span(n, degreeU, u);
-        //    int knotSpanV = knotsV.Span(m, degreeV, v);
+            int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
+            int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
 
-        //    List<Vector3> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
-        //    List<Vector3> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
+            List<Vector> uDerivs = DerivativeBasisFunctionsGivenNI(knotSpanU, u, surface.DegreeU, n, surface.KnotsU);
+            List<Vector> vDerivs = DerivativeBasisFunctionsGivenNI(knotSpanV, v, surface.DegreeV, m, surface.KnotsV);
 
-        //    List<Vector3> temp = Vector3.Zero2d(degreeV + 1, dim);
+            Vector3[,] SKL = new Vector3[numDerivs + 1, numDerivs + 1];
+            Vector3[] temp = new Vector3[surface.DegreeV + 1];
 
-        //    for (int k = 0; k < du + 1; k++)
-        //    {
-        //        for (int s = 0; s < degreeV + 1; s++)
-        //        {
-        //            temp[s] = Vector3.Zero1d(dim);
-        //            for (int r = 0; r < degreeU + 1; r++)
-        //            {
-        //                Vector3.AddMulMutate(temp[s], uders[k][r], ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s]);
-        //            }
-        //        }
-        //        int nk = numDerivs - k;
-        //        var dd = nk < dv ? nk : dv;
+            for (int k = 0; k < du + 1; k++)
+            {
+                for (int s = 0; s < surface.DegreeV + 1; s++)
+                {
+                    temp[s] = Vector3.Zero;
+                    for (int r = 0; r < surface.DegreeU + 1; r++)
+                    {
+                        temp[s] += uDerivs[k][r] * surface.LocationPoints[knotSpanU - surface.DegreeU + r][knotSpanV - surface.DegreeV + s];
+                    }
+                }
 
-        //        for (int l = 0; l < dd + 1; l++)
-        //        {
-        //            SKL[k][l] = Vector3.Zero1d(dim);
-        //            for (int s = 0; s < degreeV + 1; s++)
-        //            {
-        //                Vector3.AddMulMutate(SKL[k][l], vders[l][s], temp[s]);
-        //            }
-        //        }
-        //    }
-        //    return SKL;
-        //}
+                int dd = Math.Min(numDerivs - k, dv);
+
+                for (int l = 0; l < dd + 1; l++)
+                {
+                    SKL[k, l] = Vector3.Zero;
+                    for (int s = 0; s < surface.DegreeV + 1; s++)
+                    {
+                        SKL[k,l] += vDerivs[l][s] * temp[s];
+                    }
+                }
+            }
+            return SKL;
+        }
 
         /// <summary>
         /// Computes a point on a non-uniform, non-rational B-spline surface.<br/>
@@ -751,14 +736,14 @@ namespace GShark.Operation
         ///// <summary>
         ///// Extracts the iso-curve in u or v direction at a specified parameter.
         ///// </summary>
-        ///// <param name="nurbsSurface">The surface to be evaluated</param>
+        ///// <param name="surface">The surface to be evaluated</param>
         ///// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
         ///// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
         ///// <returns>Curve representing the iso-curve of the surface.</returns>
-        //public static ICurve SurfaceIsoCurve(NurbsSurface nurbsSurface, double t = 0, bool useU = true)
+        //public static ICurve SurfaceIsoCurve(NurbsSurface surface, double t = 0, bool useU = true)
         //{
-        //    KnotVector knots = useU ? nurbsSurface.KnotsU : nurbsSurface.KnotsV;
-        //    int degree = useU ? nurbsSurface.DegreeU : nurbsSurface.DegreeV;
+        //    KnotVector knots = useU ? surface.KnotsU : surface.KnotsV;
+        //    int degree = useU ? surface.DegreeU : surface.DegreeV;
         //    Dictionary<double, int> knotMults = knots.Multiplicities();
 
         //    int reqKnotIndex = -1;
@@ -778,7 +763,7 @@ namespace GShark.Operation
         //    }
 
         //    //Insert the knots
-        //    NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(nurbsSurface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : nurbsSurface;
+        //    NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(surface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : surface;
         //    int span = knots.Span(degree, t);
 
         //    if (Math.Abs(t - knots[0]) < GeoSharkMath.Epsilon)

@@ -152,39 +152,23 @@ namespace GShark.Test.XUnit.Operation
             evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
-        //[Fact]
-        //public void It_Return_Surface_Derivatives_At_Given_NM()
-        //{
-        //    // Arrange
-        //    NurbsSurface nurbsSurface = ConstructNurbsSurface();
-        //    int n = 3;
-        //    int m = 3;
-        //    int numDers = 1;
+        [Fact]
+        public void It_Return_Surface_Derivatives()
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.QuadrilateralSurface();
+            Vector3 zeroDerivative = new Vector3(3, 5, 1.7); // 0th derivative with respect to U and V
+            Vector3 expectedDerivativeU = new Vector3(0, 10, 3.4);
+            Vector3 expectedDerivativeV = new Vector3(10, 0, -1);
 
-        //    // Act
-        //    var res = Evaluation.SurfaceDerivativesGivenNM(nurbsSurface, n, m, 0, 0, numDers);
+            // Act
+            Vector3[,] derivatives = Evaluation.SurfaceDerivatives(surface, 0.3, 0.5, 1);
 
-        //    // Assert
-        //    // 0th derivative with respect to u & v
-        //    res[0][0][0].Should().Be(0d);
-        //    res[0][0][1].Should().Be(0d);
-        //    res[0][0][2].Should().Be(0d);
-
-        //    // d/du
-        //    (res[0][1][0] / res[0][1][0]).Should().Be(1d);
-        //    res[0][1][2].Should().Be(0d);
-
-        //    // d/dv
-        //    res[1][0][0].Should().Be(0d);
-        //    res[1][0][1].Should().Be(-30d);
-        //    res[1][0][2].Should().Be(0d);
-
-        //    // dd/dudv
-        //    res[1][1][0].Should().Be(0d);
-        //    res[1][1][1].Should().Be(0d);
-        //    res[1][1][2].Should().Be(0d);
-
-        //}
+            // Assert
+            derivatives[0, 0].Equals(zeroDerivative).Should().BeTrue();
+            derivatives[0, 1].Equals(expectedDerivativeU).Should().BeTrue();
+            derivatives[1, 0].Equals(expectedDerivativeV).Should().BeTrue();
+        }
 
         //[Fact]
         //public void It_Return_Surface_Derivatives()
