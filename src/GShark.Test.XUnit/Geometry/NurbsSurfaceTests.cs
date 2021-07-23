@@ -2,6 +2,7 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Operation;
+using GShark.Test.XUnit.Data;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,25 +39,22 @@ namespace GShark.Test.XUnit.Geometry
             evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
-        //[Fact]
-        //public void It_Returns_The_Surface_Normal_At_A_Given_U_And_V_Parameter()
-        //{
-        //    var nurbsSurface = BuildTestNurbsSurface();
-        //    var res1 = nurbsSurface.Normal(0.5, 0.5).Unitize();
-        //    res1.Should().NotBeNullOrEmpty();
-        //    res1[0].Should().BeApproximately(0.093d, 3);
-        //    res1[1].Should().BeApproximately(-0.093d, 3);
-        //    res1[2].Should().BeApproximately(0.991d, 3);
+        [Theory]
+        [InlineData(0.1, 0.1, new double[] { -0.020397, -0.392974, 0.919323 })]
+        [InlineData(0.5, 0.5, new double[] { 0.091372, -0.395944, 0.913717 })]
+        [InlineData(1.0, 1.0, new double[] { 0.507093, -0.169031, 0.845154 })]
+        public void It_Returns_The_Surface_Normal_At_A_Given_U_And_V_Parameter(double u, double v, double[] pt)
+        {
+            // Assert
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Vector3 expectedNormal = new Vector3(pt[0], pt[1], pt[2]);
 
-        //    var res2 = nurbsSurface.Normal(0.2, 0.7).Unitize();
-        //    res2.Should().NotBeNullOrEmpty();
-        //    res2[0].Should().BeApproximately(0.125d, 3);
-        //    res2[1].Should().BeApproximately(0.060d, 3);
-        //    res2[2].Should().BeApproximately(0.990d, 3);
+            // Act
+            Vector3 normal = surface.Normal(u,v);
 
-        //    _testOutput.WriteLine($"Vector1[0.5,0.5]: {res1}\nVector2[0.2,0.7]: {res2}\n");
-
-        //}
+            // Assert
+            normal.EpsilonEquals(expectedNormal, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
 
         //[Fact]
         //public void It_Returns_The_Surface_Tange_At_A_Given_U_And_V_Parameter_Along_U_Direction()

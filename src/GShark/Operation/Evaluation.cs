@@ -583,39 +583,29 @@ namespace GShark.Operation
             }
 
             var derivatives = SurfaceDerivatives(surface, u, v, numDerivs);
-            //List<List<Vector>> Aders = LinearAlgebra.Rational2d(ders);
-            //List<List<double>> wders = LinearAlgebra.GetWeights2d(ders);
             Vector3[,] SKL = new Vector3[numDerivs + 1, numDerivs + 1];
-            //int dim = Aders[0][0].Count;
 
             for (int k = 0; k < numDerivs + 1; k++)
             {
-                //SKL.Add(new List<Vector>());
                 for (int l = 0; l < numDerivs - k + 1; l++)
                 {
                     Vector3 t = derivatives.Item1[k,l];
                     for (int j = 1; j < l + 1; j++)
                     {
                         t -= SKL[k, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[0, j]);
-                        //Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(l, j) * wders[0][j], SKL[k][l - j]);
                     }
 
                     for (int i = 1; i < k + 1; i++)
                     {
                         t -= SKL[k - i, l] * (LinearAlgebra.GetBinomial(k, i) * derivatives.Item2[i, 0]);
                         Vector3 t2 = Vector3.Zero;
-                        //Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i) * wders[i][0], SKL[k - i][l]);
-                        //Vector3 t2 = Vector.Zero1d(dim);
                         for (int j = 1; j < l + 1; j++)
                         {
                             t2 += SKL[k - i,l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
-                            //Vector.AddMulMutate(t2, LinearAlgebra.GetBinomial(l, j) * wders[i][j], SKL[k - i][l - j]);
                         }
 
                         t -= t2 * LinearAlgebra.GetBinomial(k, i);
-                        //Vector.SubMulMutate(t1, LinearAlgebra.GetBinomial(k, i), t2);
                     }
-                    //Vector t = t1 * (1 / wders[0][0]);
                     SKL[k, l] = t / derivatives.Item2[0, 0];
                 }
             }
@@ -676,8 +666,8 @@ namespace GShark.Operation
                         Vector.AddMulMutate(SKLw[k][l], vDerivs[l][s], temp[s]);
                     }
 
-                    SKL[k, l] = new Vector3(SKLw[k][l][0], SKLw[k][l][1], SKLw[k][l][2]);
-                    weights[k, l] = SKLw[k][l][3];
+                    SKL[k, l] = new Vector3(SKLw[k][l][0], SKLw[k][l][1], SKLw[k][l][2]); // Extracting the derivatives.
+                    weights[k, l] = SKLw[k][l][3]; // Extracting the weights.
                 }
             }
 
