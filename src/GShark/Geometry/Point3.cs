@@ -185,7 +185,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether two Point3d have equal values.
+        /// Determines whether two Point3 have equal values.
         /// </summary>
         /// <param name="a">The first point.</param>
         /// <param name="b">The second point.</param>
@@ -196,7 +196,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether two Point3d have different values.
+        /// Determines whether two Point3 have different values.
         /// </summary>
         /// <param name="a">The first point.</param>
         /// <param name="b">The second point.</param>
@@ -220,7 +220,7 @@ namespace GShark.Geometry
         /// Converts a point in a vector, without needing casting.
         /// </summary>
         /// <param name="point">A point.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <returns>The resulting vector3.</returns>
         public static implicit operator Vector3(Point3 point)
         {
             return new Vector3(point);
@@ -229,13 +229,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Converts a point in a vector, without needing casting.
         /// </summary>
-        /// <param name="point3d">A point.</param>
-        /// <returns>The resulting Vector3.</returns>
-        public static implicit operator Vector(Point3 point3d)
+        /// <param name="point">A point.</param>
+        /// <returns>The resulting Vector.</returns>
+        public static implicit operator Vector(Point3 point)
         {
-            return new Vector{ point3d.X, point3d.Y, point3d.Z};
+            return new Vector{ point.X, point.Y, point.Z};
         }
-
 
         /// <summary>
         /// Determines whether the first specified point comes before (has inferior sorting value than) the second point.
@@ -372,7 +371,7 @@ namespace GShark.Geometry
         /// Determines whether the specified <see cref="object"/> is a <see cref="Point3"/> and has the same values as the present point.
         /// </summary>
         /// <param name="obj">The specified object.</param>
-        /// <returns>true if obj is a Point3d and has the same coordinates as this; otherwise false.</returns>
+        /// <returns>true if obj is a Point3 and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
             return (obj is Point3 && this == (Point3)obj);
@@ -426,10 +425,10 @@ namespace GShark.Geometry
 
         int IComparable.CompareTo(object obj)
         {
-            if (obj is Point3 point3d)
-                return CompareTo(point3d);
+            if (obj is Point3 Point3)
+                return CompareTo(Point3);
 
-            throw new ArgumentException("Input must be of type Point3d", nameof(obj));
+            throw new ArgumentException("Input must be of type Point3", nameof(obj));
         }
 
         /// <summary>

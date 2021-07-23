@@ -238,7 +238,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether two Point4d have different values.
+        /// Determines whether two Point4 have different values.
         /// </summary>
         /// <param name="a">The first point.</param>
         /// <param name="b">The second point.</param>
@@ -246,6 +246,16 @@ namespace GShark.Geometry
         public static bool operator !=(Point4 a, Point4 b)
         {
             return !(a == b);
+        }
+
+        /// <summary>
+        /// Converts a point4 in a vector, without needing casting.
+        /// </summary>
+        /// <param name="point4">A point.</param>
+        /// <returns>The resulting Vector3.</returns>
+        public static implicit operator Vector(Point4 point4)
+        {
+            return new Vector { point4.X, point4.Y, point4.Z, point4.W };
         }
 
         /// <summary>

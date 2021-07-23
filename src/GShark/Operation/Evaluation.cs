@@ -685,39 +685,43 @@ namespace GShark.Operation
         //    return SKL;
         //}
 
-        public static List<List<Vector>> SurfaceDerivativesGivenNM(NurbsSurface nurbsSurface, double u, double v, int numDerivs)
+        public static List<List<Vector>> SurfaceDerivatives(NurbsSurface surface, double u, double v, int numDerivs)
         {
-            int degreeU = nurbsSurface.DegreeU;
-            int degreeV = nurbsSurface.DegreeV;
-            List<List<Point4>> ctrlPts = nurbsSurface.ControlPoints;
-            KnotVector knotsU = nurbsSurface.KnotsU;
-            KnotVector knotsV = nurbsSurface.KnotsV;
+            if (u < 0.0 || u > 1.0)
+            {
+                throw new ArgumentException("The U parameter is not into the domain 0.0 to 1.0.");
+            }
 
-            int n = nurbsSurface.KnotsU.Count - nurbsSurface.DegreeU - 2;
-            int m = nurbsSurface.KnotsV.Count - nurbsSurface.DegreeV - 2;
+            if (v < 0.0 || v > 1.0)
+            {
+                throw new ArgumentException("The V parameter is not into the domain 0.0 to 1.0.");
+            }
 
-            //This should be always 3 
-            int dim = ctrlPts[0][0].Size;
-            int du = numDerivs < degreeU ? numDerivs : degreeU;
-            int dv = numDerivs < degreeV ? numDerivs : degreeV;
+            // number of basis function.
+            int n = surface.KnotsU.Count - surface.DegreeU - 2;
+            int m = surface.KnotsV.Count - surface.DegreeV - 2;
+
+            // number of derivatives.
+            int du = Math.Min(numDerivs, surface.DegreeU);
+            int dv = Math.Min(numDerivs, surface.DegreeV);
 
             List<List<Vector>> SKL = Vector.Zero3d(numDerivs + 1, numDerivs + 1, dim);
-            int knotSpanU = knotsU.Span(n, degreeU, u);
-            int knotSpanV = knotsV.Span(m, degreeV, v);
+            int knotSpanU = surface.KnotsU.Span(n, surface.DegreeU, u);
+            int knotSpanV = surface.KnotsV.Span(m, surface.DegreeV, v);
 
-            List<Vector> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, degreeU, n, knotsU);
-            List<Vector> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, degreeV, m, knotsV);
+            List<Vector> uders = DerivativeBasisFunctionsGivenNI(knotSpanU, u, surface.DegreeU, n, surface.KnotsU);
+            List<Vector> vders = DerivativeBasisFunctionsGivenNI(knotSpanV, v, surface.DegreeV, m, surface.KnotsV);
 
-            List<Vector> temp = Vector.Zero2d(degreeV + 1, dim);
+            List<Vector> temp = Vector.Zero2d(surface.DegreeV + 1, dim);
 
             for (int k = 0; k < du + 1; k++)
             {
-                for (int s = 0; s < degreeV + 1; s++)
+                for (int s = 0; s < surface.DegreeV + 1; s++)
                 {
                     temp[s] = Vector.Zero1d(dim);
-                    for (int r = 0; r < degreeU + 1; r++)
+                    for (int r = 0; r < surface.DegreeU + 1; r++)
                     {
-                        var pt = ctrlPts[knotSpanU - degreeU + r][knotSpanV - degreeV + s];
+                        var pt = ctrlPts[knotSpanU - surface.DegreeU + r][knotSpanV - surface.DegreeV + s];
                         Vector convert = new Vector {pt.X, pt.Y, pt.Z, pt.W};
                         Vector.AddMulMutate(temp[s], uders[k][r], convert);
                     }
