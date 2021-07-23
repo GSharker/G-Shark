@@ -58,9 +58,14 @@ namespace GShark.Geometry
         public int Size => 4;
 
         /// <summary>
-        /// Gets the value of a point with all coordinates set as RhinoMath.UnsetValue.
+        /// Gets the value of a point4 with all coordinates set as RhinoMath.UnsetValue.
         /// </summary>
         public static Point4 Unset => new Point4(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+
+        /// <summary>
+        /// Gets the value of a point4 with all coordinates set as zero.
+        /// </summary>
+        public static Point4 Zero => new Point4(0, 0, 0, 0);
 
         //Indexer to allow access to properties as array.
         public double this[int i]
@@ -252,7 +257,7 @@ namespace GShark.Geometry
         /// Converts a point4 in a vector, without needing casting.
         /// </summary>
         /// <param name="point4">A point.</param>
-        /// <returns>The resulting Vector3.</returns>
+        /// <returns>The resulting Vector.</returns>
         public static implicit operator Vector(Point4 point4)
         {
             return new Vector { point4.X, point4.Y, point4.Z, point4.W };

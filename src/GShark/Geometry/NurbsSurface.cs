@@ -144,12 +144,17 @@ namespace GShark.Geometry
         public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
 
         /// <summary>
-        /// Obtain the surface normal at the given u and v parameters
+        /// Computes the surface normal at the given U and V parameters.
         /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3 Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+        /// <param name="u">U parameter.</param>
+        /// <param name="v">V parameter.</param>
+        /// <returns>The unitized vector at the given parameters.</returns>
+        public Vector3 Normal(double u, double v)
+        {
+            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
+            Vector3 normal = Vector3.CrossProduct(derivatives[1,0], derivatives[0,1]);
+            return normal.Unitize();
+        }
 
         /// <summary>
         /// Obtain the surface tangent at the given u and v parameters in the u direction
