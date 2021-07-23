@@ -27,7 +27,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(5.0, 5.0, 1.5);
 
             // Act
-            NurbsSurface surface = NurbsSurface.ByFourPoints(p1, p2, p3, p4);
+            NurbsSurface surface = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
             Point3 evalPt = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
 
             // Assert

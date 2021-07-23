@@ -25,7 +25,7 @@ namespace GShark.Geometry
         /// <param name="knotsV">The knotVector in the V direction.</param>
         /// <param name="pts">Two dimensional array of points.</param>
         /// <param name="weights">Two dimensional array of weight values.</param>
-        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>>? weights = null)
+        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>> weights = null)
         {
             if (pts == null) throw new ArgumentNullException("Control points array connot be null!");
             if (degreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
@@ -88,7 +88,7 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2d collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2D collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
@@ -98,14 +98,14 @@ namespace GShark.Geometry
         internal List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
-        /// Constructs a NURBS surface from four perimeter points in counter-clockwise order.<br/>
+        /// Constructs a NURBS surface from four corners in counter-clockwise order.<br/>
         /// The surface is defined with degree 1.
         /// </summary>
         /// <param name="p1">The first point.</param>
         /// <param name="p2">The second point.</param>
         /// <param name="p3">The third point.</param>
         /// <param name="p4">The fourth point.</param>
-        public static NurbsSurface ByFourPoints(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
+        public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
             List<List<Point3>> pts = new List<List<Point3>>
             {
@@ -117,6 +117,22 @@ namespace GShark.Geometry
             KnotVector knotV = new KnotVector { 0, 0, 1, 1 };
 
             return new NurbsSurface(1, 1, knotU, knotV, pts);
+        }
+
+        /// <summary>
+        /// Constructs a NURBS surface from a 2D grid of points.<br/>
+        /// The grid of points should be organized as, U direction increases from bottom to top, the V direction from left to right.
+        /// </summary>
+        /// <param name="degreeU">Degree of surface in U direction.</param>
+        /// <param name="degreeV">Degree of surface in V direction.</param>
+        /// <param name="points">Points locations.</param>
+        /// <param name="weight">A 2D collection of weights.</param>
+        /// <returns>A NURBS surface.</returns>
+        public static NurbsSurface CreateFromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
+        {
+            KnotVector knotU = new KnotVector(degreeU, points.Count);
+            KnotVector knotV = new KnotVector(degreeV, points[0].Count);
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points, weight);
         }
 
         /// <summary>
