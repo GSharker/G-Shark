@@ -148,7 +148,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="u">U parameter.</param>
         /// <param name="v">V parameter.</param>
-        /// <returns>The unitized vector at the given parameters.</returns>
+        /// <returns>The unitized normal vector at the given parameters.</returns>
         public Vector3 Normal(double u, double v)
         {
             Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
@@ -157,20 +157,20 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Obtain the surface tangent at the given u and v parameters in the u direction
+        /// Computes the surface tangent at the given U and V parameters in the U direction.
         /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3d TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
+        /// <param name="u">U parameter.</param>
+        /// <param name="v">V parameter.</param>
+        /// <returns>The unitized tangent vector in the U direction.</returns>
+        public Vector3 UDirectionAtPoint(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1,0].Unitize();
 
         /// <summary>
-        /// Obtain the surface tangent at the given u and v parameters in the v direction
+        /// Computes the surface tangent at the given U and V parameters in the V direction.
         /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3d TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
+        /// <param name="u">U parameter.</param>
+        /// <param name="v">V parameter.</param>
+        /// <returns>The unitized tangent vector in the V direction.</returns>
+        public Vector3 VDirectionAtPoint(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0,1].Unitize();
 
         /// <summary>
         /// Transforms a NURBS surface with the given transformation matrix.
