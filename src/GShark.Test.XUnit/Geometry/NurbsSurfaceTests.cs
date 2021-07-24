@@ -56,44 +56,32 @@ namespace GShark.Test.XUnit.Geometry
             normal.EpsilonEquals(expectedNormal, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
-        //[Fact]
-        //public void It_Returns_The_Surface_Tange_At_A_Given_U_And_V_Parameter_Along_U_Direction()
-        //{
-        //    var nurbsSurface = BuildTestNurbsSurface();
-        //    var res1 = nurbsSurface.TangentAtU(0.5, 0.5).Unitize();
+        [Fact]
+        public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter_Along_U_Direction()
+        {
+            // Assert
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Vector3 expectedUDirection = new Vector3(0.985802, 0.152837, 0.069541);
 
-        //    res1.Should().NotBeNullOrEmpty();
-        //    res1[0].Should().BeApproximately(0d, 3);
-        //    res1[1].Should().BeApproximately(-0.996d, 3);
-        //    res1[2].Should().BeApproximately(0.093d, 3);
+            // Act
+            Vector3 uDirection = surface.UDirectionAtPoint(0.3, 0.5);
 
-        //    var res2 = nurbsSurface.TangentAtU(0.2, 0.7).Unitize();
-        //    res2.Should().NotBeNullOrEmpty();
-        //    res2[0].Should().BeApproximately(0d, 3);
-        //    res2[1].Should().BeApproximately(-0.998d, 3);
-        //    res2[2].Should().BeApproximately(0.060d, 3);
+            // Assert
+            uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
 
-        //    _testOutput.WriteLine($"Vector1[0.5,0.5]: {res1}\nVector2[0.2,0.7]: {res2}\n");
-        //}
+        [Fact]
+        public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter_Along_V_Direction()
+        {
+            // Assert
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Vector3 expectedVDirection = new Vector3(0.053937, 0.911792, 0.407096);
 
-        //[Fact]
-        //public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter_Along_V_Direction()
-        //{
-        //    var nurbsSurface = BuildTestNurbsSurface();
-        //    var res1 = nurbsSurface.TangentAtV(0.5, 0.5).Unitize();
+            // Act
+            Vector3 vDirection = surface.VDirectionAtPoint(0.3, 0.5);
 
-        //    res1.Should().NotBeNullOrEmpty();
-        //    res1[0].Should().BeApproximately(0.996d, 3);
-        //    res1[1].Should().BeApproximately(0d, 3);
-        //    res1[2].Should().BeApproximately(-0.093d, 3);
-
-        //    var res2 = nurbsSurface.TangentAtV(0.2, 0.7).Unitize();
-        //    res2.Should().NotBeNullOrEmpty();
-        //    res2[0].Should().BeApproximately(0.992d, 3);
-        //    res2[1].Should().BeApproximately(0d, 3);
-        //    res2[2].Should().BeApproximately(-0.126d, 3);
-
-        //    _testOutput.WriteLine($"Vector1[0.5,0.5]: {res1}\nVector2[0.2,0.7]: {res2}\n");
-        //}
+            // Assert
+            vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
     }
 }
