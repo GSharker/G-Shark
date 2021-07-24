@@ -563,6 +563,9 @@ namespace GShark.Operation
 
         /// <summary>
         /// Computes the derivatives at the given U and V parameters on a NURBS surface.<br/>
+        /// <para>Returns a two dimensional array containing the derivative vectors.<br/>
+        /// Increasing U partial derivatives are increasing row-wise.Increasing V partial derivatives are increasing column-wise.<br/>
+        /// Therefore, the[0,0] position is a point on the surface, [n,0] is the nth V partial derivative, the[n,n] position is twist vector or mixed partial derivative UV.</para>
         /// <em>Corresponds to algorithm 4.4 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="surface">The surface.</param>
