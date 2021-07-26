@@ -63,7 +63,17 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
+            double[] tValuesExpected = {
+                    0,
+                    0.12294074023135007,
+                    0.26515583503755935,
+                    0.4202931617987752,
+                    0.5797068382012247,
+                    0.7348441649624406,
+                    0.87705925976865,
+                    1
+                };
+
             var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int segments = 7;
 
@@ -74,6 +84,7 @@ namespace GShark.Test.XUnit.Operation
             divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
             for (int i = 0; i < tValuesExpected.Length; i++)
             {
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
                 divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
@@ -83,7 +94,16 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
+            double[] tValuesExpected = {
+                0,
+                0.12294074023135007,
+                0.26515583503755935,
+                0.4202931617987752,
+                0.5797068382012247,
+                0.7348441649624406,
+                0.87705925976865,
+                1
+            };
             var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int steps = 7;
             double length = curve.Length() / steps;
@@ -95,9 +115,8 @@ namespace GShark.Test.XUnit.Operation
             divideResult.Parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
             for (int i = 0; i < pointsExpected.Count; i++)
             {
-                _testOutput.WriteLine($"{divideResult.Points[i]} | {pointsExpected[i]}");
                 divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                //divisions.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 

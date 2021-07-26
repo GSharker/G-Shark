@@ -93,9 +93,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Decompose a curve into a collection of bezier's.<br/>
-        /// Useful as each Bezier curve fits into it's convex hull.<br/>
-        /// This is a useful starting point for intersection, closest point, divide and conquer algorithms.
+        /// Decompose a curve into a collection of bezier curves.<br/>
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>

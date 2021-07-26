@@ -78,6 +78,7 @@ namespace GShark.Operation
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <param name="curveLength">The length of curve if computer, if not will be computed.</param>
         /// <returns>The parameter at the given length.</returns>
+        //ToDo Refactor to remove curveLength parameter.
         public static double BezierCurveParamAtLength(ICurve curve, double segmentLength, double tolerance,
             double curveLength = -1)
         {

@@ -86,7 +86,7 @@ namespace GShark.Operation
                 while (segmentLength < sum + GeoSharkMath.Epsilon)
                 {
                     double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GeoSharkMath.MaxTolerance, curveLengths[i]);
+                        GeoSharkMath.MaxTolerance, curveLengths[i]); //***this is getting the parameter on the next curve. does this mean decompose into bezier maintains original params?
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);
