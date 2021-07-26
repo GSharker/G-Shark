@@ -4,9 +4,7 @@
     <TargetFrameworks>net5.0;netcoreapp3.1;netstandard2.1</TargetFrameworks>
     <PackageId>GShark</PackageId>
     <Authors>Cesare Caoduro and Mirco Bianchini</Authors>
-    <Company></Company>
-    <Product />
-    <RepositoryUrl>https://github.com/cesarecaoduro/G-Shark</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
