@@ -58,7 +58,7 @@ namespace GShark.ExtendedMethods
 
         /// <summary>
         /// Creates rotation minimized perpendicular frames (RMF) at given t parameters along the curve.
-        /// <para>//Double reflection method taken from Wang, W., J¨uttler, B., Zheng, D., and Liu, Y. 2008. "Computation of rotation minimizing frame."</para>
+        /// <para>//Double reflection method taken from Wang, W., J¨uttler, B., Zheng, D., and Liu, Y. 2008. "Computation of rotation minimizing frame."  https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/Computation-of-rotation-minimizing-frames.pdf </para>
         /// </summary>
         ///<param name="curve">The input curve.</param>
         /// ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
