@@ -27,7 +27,6 @@ namespace GShark.Geometry
             Origin = origin;
             XAxis = Vector3.PerpendicularTo(direction.Unitize()).Unitize();
             YAxis = Vector3.CrossProduct(direction.Unitize(), XAxis).Unitize();
-            ZAxis = Normal;
         }
 
         /// <summary>
@@ -50,7 +49,6 @@ namespace GShark.Geometry
             Origin = pt1;
             XAxis = dir1.Unitize();
             YAxis = Vector3.CrossProduct(normal, dir1).Unitize();
-            ZAxis = normal;
         }
 
         /// <summary>
@@ -64,8 +62,6 @@ namespace GShark.Geometry
             Origin = origin;
             XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
             YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
-            ZAxis = Normal;
-
         }
 
         /// <summary>
@@ -77,7 +73,6 @@ namespace GShark.Geometry
             Origin = plane.Origin;
             XAxis = plane.XAxis;
             YAxis = plane.YAxis;
-            ZAxis = plane.Normal;
         }
 
         /// <summary>
@@ -103,7 +98,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the normal of the plane.
         /// </summary>
-        public Vector3 Normal => Vector3.CrossProduct(XAxis, YAxis).Unitize();
+        public Vector3 ZAxis => Vector3.CrossProduct(XAxis, YAxis).Unitize();
 
         /// <summary>
         /// Gets the origin of the plane.
@@ -119,11 +114,6 @@ namespace GShark.Geometry
         /// Gets the YAxis of the plane.
         /// </summary>
         public Vector3 YAxis { get; set; }
-
-        /// <summary>
-        /// Gets the ZAxis of the plane.
-        /// </summary>
-        public Vector3 ZAxis { get; set; }
 
         /// <summary>
         /// Returns true if origin and axis vectors are valid and orthogonal.
@@ -156,8 +146,8 @@ namespace GShark.Geometry
             Vector3 ptToOrigin = Origin - pt;
 
             // signed distance.
-            distance = Vector3.DotProduct(ptToOrigin, Normal);
-            Point3 projection = pt + Normal * distance;
+            distance = Vector3.DotProduct(ptToOrigin, ZAxis);
+            Point3 projection = pt + ZAxis * distance;
 
             return projection;
         }
@@ -207,9 +197,9 @@ namespace GShark.Geometry
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-                var xAxis = YAxis;
-                var yAxis = XAxis;
-                return  new Plane(Origin, xAxis, yAxis);
+            var xAxis = YAxis;
+            var yAxis = XAxis;
+            return  new Plane(Origin, xAxis, yAxis);
         }
 
         /// <summary>
@@ -355,7 +345,7 @@ namespace GShark.Geometry
         /// <returns>The hash code of the plane.</returns>
         public override int GetHashCode()
         {
-            return Origin.GetHashCode() + Normal.GetHashCode();
+            return Origin.GetHashCode() + ZAxis.GetHashCode();
         }
 
         /// <summary>

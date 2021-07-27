@@ -178,7 +178,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             translatedPlane.Origin.EpsilonEquals(newOrigin, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            translatedPlane.Normal.EpsilonEquals(plane.Normal, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            translatedPlane.ZAxis.EpsilonEquals(plane.ZAxis, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             fitPlane.Origin.EpsilonEquals(originCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            fitPlane.Normal.EpsilonEquals(normalCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            fitPlane.ZAxis.EpsilonEquals(normalCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

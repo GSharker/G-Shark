@@ -26,4 +26,4 @@ jobs:
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
     - name: 🧪 Test
-      run: dotnet test src/GShark/GShark.csproj --no-restore
+      run: dotnet test src/GShark.Test.XUnit/GShark.Test.XUnit.csproj --no-restore
