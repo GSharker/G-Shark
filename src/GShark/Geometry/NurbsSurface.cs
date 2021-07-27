@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
@@ -157,20 +158,18 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the surface tangent at the given U and V parameters in the U direction.
+        /// Computes the surface tangent at the given U and V parameters.
         /// </summary>
         /// <param name="u">U parameter.</param>
         /// <param name="v">V parameter.</param>
-        /// <returns>The unitized tangent vector in the U direction.</returns>
-        public Vector3 UDirectionAtPoint(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1,0].Unitize();
-
-        /// <summary>
-        /// Computes the surface tangent at the given U and V parameters in the V direction.
-        /// </summary>
-        /// <param name="u">U parameter.</param>
-        /// <param name="v">V parameter.</param>
-        /// <returns>The unitized tangent vector in the V direction.</returns>
-        public Vector3 VDirectionAtPoint(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0,1].Unitize();
+        /// <param name="direction">The direction of the tangent required.</param>
+        /// <returns>The unitized tangent vector in the direction selected.</returns>
+        public Vector3 TangentAt(double u, double v, SurfaceDirection direction)
+        {
+            return (direction == SurfaceDirection.UDirection) 
+                ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
+                : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
+        }
 
         /// <summary>
         /// Transforms a NURBS surface with the given transformation matrix.

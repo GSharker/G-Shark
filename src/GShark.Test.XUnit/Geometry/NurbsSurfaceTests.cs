@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using GShark.Geometry.Enum;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using Xunit;
@@ -57,30 +58,19 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter_Along_U_Direction()
+        public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter()
         {
             // Assert
             NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
             Vector3 expectedUDirection = new Vector3(0.985802, 0.152837, 0.069541);
-
-            // Act
-            Vector3 uDirection = surface.UDirectionAtPoint(0.3, 0.5);
-
-            // Assert
-            uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Surface_Tangent_At_A_Given_U_And_V_Parameter_Along_V_Direction()
-        {
-            // Assert
-            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
             Vector3 expectedVDirection = new Vector3(0.053937, 0.911792, 0.407096);
 
             // Act
-            Vector3 vDirection = surface.VDirectionAtPoint(0.3, 0.5);
+            Vector3 uDirection = surface.TangentAt(0.3, 0.5, SurfaceDirection.UDirection);
+            Vector3 vDirection = surface.TangentAt(0.3, 0.5, SurfaceDirection.VDirection);
 
             // Assert
+            uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
             vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
     }
