@@ -99,7 +99,7 @@ namespace GShark.Geometry
         internal List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
-        /// Constructs a NURBS surface from four corners in counter-clockwise order.<br/>
+        /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
         /// The surface is defined with degree 1.
         /// </summary>
         /// <param name="p1">The first point.</param>
@@ -145,30 +145,22 @@ namespace GShark.Geometry
         public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
 
         /// <summary>
-        /// Computes the surface normal at the given U and V parameters.
+        /// Evaluate the surface at the given U and V parameters.
         /// </summary>
         /// <param name="u">U parameter.</param>
         /// <param name="v">V parameter.</param>
-        /// <returns>The unitized normal vector at the given parameters.</returns>
-        public Vector3 Normal(double u, double v)
-        {
-            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
-            Vector3 normal = Vector3.CrossProduct(derivatives[1,0], derivatives[0,1]);
-            return normal.Unitize();
-        }
-
-        /// <summary>
-        /// Computes the surface tangent at the given U and V parameters.
-        /// </summary>
-        /// <param name="u">U parameter.</param>
-        /// <param name="v">V parameter.</param>
-        /// <param name="direction">The direction of the tangent required.</param>
+        /// <param name="direction">The evaluate direction required as result.</param>
         /// <returns>The unitized tangent vector in the direction selected.</returns>
-        public Vector3 TangentAt(double u, double v, SurfaceDirection direction)
+        public Vector3 EvaluateAt(double u, double v, SurfaceDirection direction)
         {
-            return (direction == SurfaceDirection.UDirection) 
-                ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
-                : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
+            if (direction != SurfaceDirection.Normal)
+                return (direction == SurfaceDirection.U)
+                    ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
+                    : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
+
+            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
+            Vector3 normal = Vector3.CrossProduct(derivatives[1, 0], derivatives[0, 1]);
+            return normal.Unitize();
         }
 
         /// <summary>

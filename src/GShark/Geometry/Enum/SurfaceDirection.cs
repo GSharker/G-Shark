@@ -10,12 +10,12 @@
         /// <summary>
         /// The U direction of a surface.
         /// </summary>
-        UDirection, 
+        U, 
 
         /// <summary>
         /// The V direction fo a surface.
         /// </summary>
-        VDirection,
+        V,
 
         /// <summary>
         /// The normal direction of a surface.
