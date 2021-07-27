@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using verb.core;
 using Xunit;
 using Xunit.Abstractions;
@@ -249,16 +250,78 @@ namespace GShark.Test.XUnit
             Array<double> pt3 = new Array<double>(new double[] { 10.0, 10.0, 2.0 });
             Array<double> pt4 = new Array<double>(new double[] { 0.0, 10.0, 4.0 });
 
-            var surface = verb.eval.Make.fourPointSurface(pt1, pt2, pt3, pt4, 1);
-            var p = verb.eval.Eval.rationalSurfacePoint(surface, 0.2, 0.5);
+            var s1 = verb.eval.Make.fourPointSurface(pt1, pt2, pt3, pt4, 1);
+            var p = verb.eval.Eval.rationalSurfacePoint(s1, 0.2, 0.5);
 
             _testOutput.WriteLine($"{{{p}}}");
 
-            for (int i = 0; i < surface.controlPoints.length; i++)
+            for (int i = 0; i < s1.controlPoints.length; i++)
             {
-                var r = surface.controlPoints[i];
+                var r = s1.controlPoints[i];
                 _testOutput.WriteLine($"{{{r}}}");
             }
+        }
+
+        [Fact]
+        public void SurfaceFromPoints()
+        {
+            Array<double> pt1 = new Array<double>(new double[] { 0.0, 0.0, 0.0 });
+            Array<double> pt2 = new Array<double>(new double[] { 10.0, 0.0, 0.0 });
+            Array<double> pt3 = new Array<double>(new double[] { 10.0, 10.0, 2.0 });
+            Array<double> pt4 = new Array<double>(new double[] { 0.0, 10.0, 4.0 });
+            Array<double> pt5 = new Array<double>(new double[] { 5.0, 0.0, 0.0 });
+            Array<double> pt6 = new Array<double>(new double[] { 5.0, 10.0, 5.0 });
+
+            Array<object> pts = new Array<object>();
+            Array<object> c1 = new Array<object>();
+            c1.push(pt1);
+            c1.push(pt4);
+
+            Array<object> c2 = new Array<object>();
+            c2.push(pt5);
+            c2.push(pt6);
+
+            Array<object> c3 = new Array<object>();
+            c3.push(pt2);
+            c3.push(pt3);
+
+            pts.push(c1);
+            pts.push(c2);
+            pts.push(c3);
+
+            Array<object> weight = new Array<object>();
+            Array<object> w1 = new Array<object>();
+            w1.push(1);
+            w1.push(1);
+
+            Array<object> w2 = new Array<object>();
+            w2.push(1);
+            w2.push(2);
+
+            Array<object> w3 = new Array<object>();
+            w3.push(1);
+            w3.push(1);
+
+            weight.push(w1);
+            weight.push(w2);
+            weight.push(w3);
+
+            Array<double> knotsU = new Array<double>(new double[] { 0, 0, 0, 1, 1, 1 });
+            Array<double> knotsV = new Array<double>(new double[] { 0, 0, 1, 1 });
+
+            var surface = verb.geom.NurbsSurface.byKnotsControlPointsWeights(2, 1, knotsU, knotsV, pts, weight);
+
+            var derivatives = verb.eval.Eval.rationalSurfaceDerivatives(surface._data, 0.3, 0.5, 1);
+
+            var rational = verb.eval.Eval.dehomogenize2d(derivatives);
+
+            _testOutput.WriteLine($"{{{rational}}}");
+
+            //for (int i = 0; i < s1.controlPoints.length; i++)
+            //{
+            //    var r = s1.controlPoints[i];
+            //    _testOutput.WriteLine($"{{{r}}}");
+            //}
         }
     }
 }

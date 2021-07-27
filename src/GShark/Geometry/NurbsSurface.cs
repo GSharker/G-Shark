@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
@@ -25,7 +26,7 @@ namespace GShark.Geometry
         /// <param name="knotsV">The knotVector in the V direction.</param>
         /// <param name="pts">Two dimensional array of points.</param>
         /// <param name="weights">Two dimensional array of weight values.</param>
-        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>>? weights = null)
+        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>> weights = null)
         {
             if (pts == null) throw new ArgumentNullException("Control points array connot be null!");
             if (degreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
@@ -88,7 +89,7 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2d collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2D collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
@@ -98,14 +99,14 @@ namespace GShark.Geometry
         internal List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
-        /// Constructs a NURBS surface from four perimeter points in counter-clockwise order.<br/>
+        /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
         /// The surface is defined with degree 1.
         /// </summary>
         /// <param name="p1">The first point.</param>
         /// <param name="p2">The second point.</param>
         /// <param name="p3">The third point.</param>
         /// <param name="p4">The fourth point.</param>
-        public static NurbsSurface ByFourPoints(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
+        public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
             List<List<Point3>> pts = new List<List<Point3>>
             {
@@ -120,6 +121,22 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Constructs a NURBS surface from a 2D grid of points.<br/>
+        /// The grid of points should be organized as, U direction increases from bottom to top, the V direction from left to right.
+        /// </summary>
+        /// <param name="degreeU">Degree of surface in U direction.</param>
+        /// <param name="degreeV">Degree of surface in V direction.</param>
+        /// <param name="points">Points locations.</param>
+        /// <param name="weight">A 2D collection of weights.</param>
+        /// <returns>A NURBS surface.</returns>
+        public static NurbsSurface CreateFromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
+        {
+            KnotVector knotU = new KnotVector(degreeU, points.Count);
+            KnotVector knotV = new KnotVector(degreeV, points[0].Count);
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points, weight);
+        }
+
+        /// <summary>
         /// Evaluates a point at a given U and V parameters.
         /// </summary>
         /// <param name="u">Evaluation U parameter.</param>
@@ -128,28 +145,23 @@ namespace GShark.Geometry
         public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
 
         /// <summary>
-        /// Obtain the surface normal at the given u and v parameters
+        /// Evaluate the surface at the given U and V parameters.
         /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3d Normal(double u, double v) => Evaluation.RationalSurfaceNormal(this, u, v).Unitize();
+        /// <param name="u">U parameter.</param>
+        /// <param name="v">V parameter.</param>
+        /// <param name="direction">The evaluate direction required as result.</param>
+        /// <returns>The unitized tangent vector in the direction selected.</returns>
+        public Vector3 EvaluateAt(double u, double v, SurfaceDirection direction)
+        {
+            if (direction != SurfaceDirection.Normal)
+                return (direction == SurfaceDirection.U)
+                    ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
+                    : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
 
-        /// <summary>
-        /// Obtain the surface tangent at the given u and v parameters in the u direction
-        /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3d TangentAtU(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[1][0].Unitize();
-
-        /// <summary>
-        /// Obtain the surface tangent at the given u and v parameters in the v direction
-        /// </summary>
-        /// <param name="u">u parameter</param>
-        /// <param name="v">v parameter</param>
-        /// <returns></returns>
-        //public Vector3d TangentAtV(double u, double v) => Evaluation.RationalSurfaceDerivatives(this, u, v)[0][1].Unitize();
+            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
+            Vector3 normal = Vector3.CrossProduct(derivatives[1, 0], derivatives[0, 1]);
+            return normal.Unitize();
+        }
 
         /// <summary>
         /// Transforms a NURBS surface with the given transformation matrix.
