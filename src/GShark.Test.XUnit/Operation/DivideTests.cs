@@ -6,6 +6,7 @@ using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -58,42 +59,64 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Fact]
-        public void RationalCurveByDivisions_Returns_The_Curve_Divided_By_A_Count()
+        public void Divide_By_Number_Of_Segments_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
+            double[] tValuesExpected = {
+                    0,
+                    0.12294074023135007,
+                    0.26515583503755935,
+                    0.4202931617987752,
+                    0.5797068382012247,
+                    0.7348441649624406,
+                    0.87705925976865,
+                    1
+                };
+
+            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int segments = 7;
 
             // Act
-            var divisions = Divide.CurveByCount(curve, segments);
+            var divideResult = curve.Divide(segments);
 
             // Assert
-            divisions.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
+            divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
             for (int i = 0; i < tValuesExpected.Length; i++)
             {
-                divisions[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
         [Fact]
-        public void RationalCurveByEqualLength_Returns_The_Curve_Divided_By_A_Length()
+        public void Divide_By_Length_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
-            double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
-
+            double[] tValuesExpected = {
+                0,
+                0.12294074023135007,
+                0.26515583503755935,
+                0.4202931617987752,
+                0.5797068382012247,
+                0.7348441649624406,
+                0.87705925976865,
+                1
+            };
+            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int steps = 7;
             double length = curve.Length() / steps;
 
             // Act
-            (List<double> tValues, List<double> lengths) divisions = Divide.CurveByLength(curve, length);
+            var divideResult = curve.Divide(length);
 
             // Assert
-            divisions.tValues.Count.Should().Be(divisions.lengths.Count).And.Be(steps + 1);
-            for (int i = 0; i < steps; i++)
+            divideResult.Parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
+            for (int i = 0; i < pointsExpected.Count; i++)
             {
-                divisions.tValues[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -196,14 +219,14 @@ namespace GShark.Test.XUnit.Operation
             };
 
             //Act
-            List<double> uValues = Divide.CurveByCount(curve, 10);
+            List<double> uValues = curve.Divide(10).Parameters;
 
             foreach (var uValue in uValues)
             {
                 _testOutput.WriteLine(uValue.ToString());
             }
 
-            List<Plane> perpFrames = Divide.PerpendicularFrames(curve, uValues);
+            List<Plane> perpFrames = curve.PerpendicularFrames(uValues);
 
             foreach (var perpFrame in perpFrames)
             {
