@@ -162,7 +162,7 @@ namespace GShark.Geometry
                 pts[i] = plane.PointAt(tx, ty);
             }
 
-            pts[^1] = pts[0];
+            pts[pts.Length - 1] = pts[0];
             return new Polygon(pts);
         }
 

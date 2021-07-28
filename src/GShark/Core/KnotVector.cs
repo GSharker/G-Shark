@@ -130,7 +130,7 @@ namespace GShark.Core
                 return false;
             }
 
-            return !(Math.Abs(this[^1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
+            return !(Math.Abs(this[Count - 1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace GShark.Core
                 return false;
             }
 
-            return this[Count - degree - 1] < this[^1] && !(this[Count - degree - 1] < 1);
+            return this[Count - degree - 1] < this[Count - 1] && !(this[Count - degree - 1] < 1);
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace GShark.Core
             KnotVector reversedKnots = new KnotVector { knots[0] };
             for (int i = 1; i < knots.Count; i++)
             {
-                reversedKnots.Add(reversedKnots[i - 1] + (knots[^i] - knots[knots.Count - i - 1]));
+                reversedKnots.Add(reversedKnots[i - 1] + (knots[knots.Count - i] - knots[knots.Count - i - 1]));
             }
 
             return reversedKnots;

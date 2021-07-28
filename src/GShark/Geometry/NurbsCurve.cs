@@ -106,7 +106,7 @@ namespace GShark.Geometry
                 {
                     return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
                 }
-                return new Interval(Knots[0], Knots[^1]);
+                return new Interval(Knots[0], Knots[Knots.Count - 1]);
             }
         }
 

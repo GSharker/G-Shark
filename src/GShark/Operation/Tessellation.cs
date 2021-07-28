@@ -4,6 +4,7 @@ using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace GShark.Operation
 {
@@ -101,8 +102,10 @@ namespace GShark.Operation
                 (List<double> tValues, List<Point3> pts) leftHalves = CurveAdaptiveSampleRange(curve, start, tMiddle, tolerance);
                 (List<double> tValues, List<Point3> pts) rightHalves = CurveAdaptiveSampleRange(curve, tMiddle, end, tolerance);
 
-                List<double> tMerged = leftHalves.tValues.SkipLast(1).Concat(rightHalves.tValues).ToList();
-                List<Point3> ptsMerged = leftHalves.pts.SkipLast(1).Concat(rightHalves.pts).ToList();
+                leftHalves.tValues.RemoveAt(leftHalves.tValues.Count - 1);
+                List<double> tMerged = leftHalves.tValues.Concat(rightHalves.tValues).ToList();
+                leftHalves.pts.RemoveAt(leftHalves.pts.Count - 1);
+                List<Point3> ptsMerged = leftHalves.pts.Concat(rightHalves.pts).ToList();
 
                 return (tMerged, ptsMerged);
             }

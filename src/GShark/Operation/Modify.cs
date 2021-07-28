@@ -110,16 +110,14 @@ namespace GShark.Operation
             int reqMultiplicity = degree + 1;
 
             // Insert the knots.
-            foreach ((double key, int value) in knotMultiplicities)
+            foreach (KeyValuePair<double, int> kvp in knotMultiplicities)
             {
-                if (value < reqMultiplicity)
-                {
-                    List<double> knotsToInsert = Sets.RepeatData(key, reqMultiplicity - value);
-                    NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
-                    ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
-                    knots = curveResult.Knots;
-                    controlPoints = curveResult.LocationPoints;
-                }
+                if (kvp.Value >= reqMultiplicity) continue;
+                List<double> knotsToInsert = Sets.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
+                NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
+                ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                knots = curveResult.Knots;
+                controlPoints = curveResult.LocationPoints;
             }
 
             int crvKnotLength = reqMultiplicity * 2;
