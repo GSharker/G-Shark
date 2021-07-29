@@ -2,14 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>GShark</PackageId>
-    <Authors>Cesare Caoduro and Mirco Bianchini</Authors>
-    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
     <LangVersion>8.0</LangVersion>
-    <Description>GShark is the nickname for Geometry Shark. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GShark). There are plenty of libraries written in C++, Python and some of them also in C# but we couldn't find a library to rule them all and, most important, free and open source. For this reason we have started this crazy project going back to books, learning from other libraries (which we thank for) and finally provinding our own touch to it.</Description>
-    <PackageTags>geometry, kernerl, csharp, net5, net core, nurbs, curves, bezier, polygon, polygons, intersection, intersections, mesh, solid, solid, meshes. linear algebra, vectors</PackageTags>
+    <Authors>Cesare Caoduro and Mirco Bianchini</Authors>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
+    <PackageId>GShark</PackageId>
+    <PackageTitle>GShark</PackageTitle>
+    <PackageProjectUrl>https://github.com/Sharker/G-Shark</PackageProjectUrl>
+    <PackageDescription>GShark is the nickname for Geometry Shark a light geometry library.</PackageDescription>
+    <Summary>GShark library provides operation for generating and manipulating basic geometry like, curves, surfaces, meshes.</Summary>
+    <PackageTags>geometry, kernerl, csharp, nurbs, curves, bezier, polygons, intersections, mesh, solid, linear algebra, vectors</PackageTags>
     <Version>$(Version)</Version>
   </PropertyGroup>
 </Project>
