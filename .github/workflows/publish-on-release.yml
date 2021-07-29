@@ -1,0 +1,41 @@
+name: Publish on Release
+
+on:
+  release:
+    types: [published]
+    
+env:
+  PROJECT_PATH: 'src/GShark/GShark.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
+  TAG_VERSION: ${{ github.event.release.tag_name }}
+  NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
+
+jobs:
+  build:
+    environment:
+      name: 'NuGet'
+      url: https://www.nuget.org/packages/GShark
+    runs-on: windows-latest
+
+    steps:
+      - name: 🛎 Checkout repo
+        uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+
+      - name: 🚧 Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      
+      - name: 🔧 Restore nuget with dotnet
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: 🧱 Build project
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=${{ env.TAG_VERSION }}
+
+      - name: 📦 Create the package
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release -p:PackageVersion=${{ env.TAG_VERSION }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+        
+      - name: 🚀 Publish the package
+        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}\*.nupkg --skip-duplicate -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }}
