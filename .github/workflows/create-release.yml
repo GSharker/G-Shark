@@ -67,10 +67,9 @@ jobs:
           tag_name: ${{ steps.bump-with-alpha.outputs.result }}
           release_name: ${{ steps.bump-with-alpha.outputs.result }}
           body: |
-            ### Title
+            ### PR Title
             ${{ github.event.pull_request.title }}
             
-            ### Description
             ${{ github.event.pull_request.body }}
           draft: true
           prerelease: false

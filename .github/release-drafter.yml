@@ -33,10 +33,10 @@ version-resolver:
       - 'patch'
 
 template: |
-  ## What’s Changed
+  ### What’s Changed
   $CHANGES
 
-  ### 🦈 Contributors
+  #### 🦈 Contributors
   $CONTRIBUTORS
 autolabeler:
   - label: 'documentation'
