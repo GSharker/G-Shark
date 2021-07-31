@@ -1,29 +1,27 @@
-name: Build tests
-
-# we using a matrix testing https://github.com/actions/setup-dotnet
+name: Build and Test on PR
 
 on:
-  push:
-    branches: [ master, develop ]
+  pull_request:
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet: [ '2.1', '3.1', '5.0' ]
 
     steps:
     - name: 🛎 Checkout repo
       uses: actions/checkout@v2
+
     - name: 🚧 Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: 3.1.x
+
     - name: ⚙️ Install dependencies
       run: dotnet restore src/GShark/GShark.csproj
+
     - name: 🏗 Build
       run: dotnet build src/GShark/GShark.csproj --configuration Release --no-restore
+
     - name: 🧪 Test
-      run: dotnet test src/GShark.Test.XUnit/GShark.Test.XUnit.csproj --no-restore
+      run: dotnet test src/GShark.Test.XUnit/GShark.Test.XUnit.csproj --configuration Release --no-restore
