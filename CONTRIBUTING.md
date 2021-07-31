@@ -29,7 +29,7 @@ If the issues is approved, you will be assigned to the issue.
 Once you get assegned to an issue you can start coding!
 
 ### All Code Changes Happen Through Pull Requests.
-1. **Fork the repo** and create your branch from `master`.
+1. **Fork the repo** and create your branch from `develop`, we use `develop` for continuous development, so it will be always the most updated, `master` is only for releases.
 2. **Create a topic branch** using the tags `feature`, `bug`, `refactor` based on the type if issue.
 	* This should usally branch of from master.
 	* Please avoid working directly on the `master` branch.
