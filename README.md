@@ -1,7 +1,6 @@
-![Target Framework](https://img.shields.io/badge/Target%20Framework-.NetStandard2.1-blue.svg)
-[![Publish to Nuget](https://github.com/GSharker/G-Shark/actions/workflows/publish-on-release.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/publish-on-release.yml)
+![Target Framework](https://img.shields.io/badge/Target%20Framework-.NetStandard2.0-blue.svg)
 ![Nuget](https://img.shields.io/nuget/v/GShark)
-![](https://github.com/GSharker/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master&branch=develop)
+[![Build and Test](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml/badge.svg?branch=develop&event=pull_request)](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml)
 [![Build docs](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
