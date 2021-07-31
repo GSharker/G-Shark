@@ -1,33 +1,32 @@
 name: Build docs
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push only for the master branch
   push:
-    branches: [ master ]
+    branches:
+        - master
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build-docs:
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Chekout
+      - name: 🛎 Checkout repo
         uses: actions/checkout@v2
-      - name: Setup dotnet
+
+      - name: 🚧 Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
-      - name: Setup docfx
+          dotnet-version: 3.1.x
+
+      - name: 🚧 Setup docfx
         run: choco install docfx -y
-      - name: DocFX Build
+
+      - name: 📚 Build Docs
         working-directory: docs
         run: docfx docfx.json
         continue-on-error: false
-      - name: Publish
+        
+      - name: 🚀 Publish
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:

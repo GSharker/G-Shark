@@ -38,6 +38,19 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Checks_If_Plane_Is_Valid()
+        {
+            //Arrange
+            var validPlane = new Plane(new Point3(5, 5, 5), new Vector3(10, 0, 0), new Vector3(0, 5, 0));
+            var invalidPlane = new Plane(validPlane);
+            invalidPlane.XAxis = new Vector3(5,5,5);
+
+            //Assert
+            validPlane.IsValid.Should().BeTrue();
+            invalidPlane.IsValid.Should().BeFalse();
+        }
+
+        [Fact]
         public void It_Trows_An_Exception_If_The_Three_Point_Are_Collinear()
         {
             // Arrange
@@ -54,7 +67,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Creates_A_Plane_By_Tree_Points()
+        public void It_Creates_A_Plane_By_Three_Points()
         {
             // Arrange
             var pt1 = new Point3(20, 20, 0);
@@ -92,7 +105,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             var plane = Plane.PlaneXY;
-            var expectedPlane = new Plane(Plane.PlaneXY.Origin, -plane.XAxis, plane.YAxis);
+            var expectedPlane = new Plane(Plane.PlaneXY.Origin, plane.YAxis, plane.XAxis);
 
             // Act
             Plane flippedPlane = plane.Flip();
@@ -165,7 +178,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             translatedPlane.Origin.EpsilonEquals(newOrigin, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            translatedPlane.Normal.EpsilonEquals(plane.Normal, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            translatedPlane.ZAxis.EpsilonEquals(plane.ZAxis, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -186,7 +199,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             fitPlane.Origin.EpsilonEquals(originCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            fitPlane.Normal.EpsilonEquals(normalCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            fitPlane.ZAxis.EpsilonEquals(normalCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

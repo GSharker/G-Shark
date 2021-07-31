@@ -1,43 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netcoreapp3.1;netstandard2.1</TargetFrameworks>
-    <PackageId>GShark</PackageId>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>GShark</Title>
     <Authors>Cesare Caoduro and Mirco Bianchini</Authors>
-    <Company></Company>
-    <Product />
-    <RepositoryUrl>https://github.com/cesarecaoduro/G-Shark</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
     <LangVersion>8.0</LangVersion>
-    <Description>GShark is the nickname for Geometry Shark. It all started with the need of finding a geometry kernel able to handle curves, surfaces, mesh and solid in a C# (hence the first name was actually GShark). There are plenty of libraries written in C++, Python and some of them also in C# but we couldn't find a library to rule them all and, most important, free and open source. For this reason we have started this crazy project going back to books, learning from other libraries (which we thank for) and finally provinding our own touch to it.</Description>
-    <PackageTags>geometry, kernerl, csharp, net5, net core, nurbs, curves, bezier, polygon, polygons, intersection, intersections, mesh, solid, solid, meshes. linear algebra, vectors</PackageTags>
-    <Version>1.0.4</Version>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
+    <PackageId>GShark</PackageId>
+    <PackageTitle>GShark</PackageTitle>
+    <PackageIcon>gshark-logo.png</PackageIcon>
+    <PackageProjectUrl>https://gsharker.github.io/G-Shark</PackageProjectUrl>
+    <PackageDescription>G-Shark is the nickname for Geometry Shark a light geometry library.</PackageDescription>
+    <Summary>G-Shark library provides operation for generating and manipulating basic geometry like, curves, surfaces, meshes.</Summary>
+    <PackageTags>geometry, kernerl, csharp, nurbs, curves, bezier, polygons, intersections, mesh, solid, linear algebra, vectors</PackageTags>
+    <Version>$(Version)</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../media/gshark-logo.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net5'))">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('netcore'))">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
-    </PackageReference>
-  </ItemGroup>
 </Project>

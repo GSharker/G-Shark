@@ -21,7 +21,7 @@ namespace GShark.Operation
         public static Line Line(Line ln, double distance, Plane pln)
         {
             if (distance == 0.0) return ln;
-            Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.Normal).Amplify(distance);
+            Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.ZAxis).Amplify(distance);
             return new Line(ln.Start + vecOffset, ln.End + vecOffset);
         }
 
@@ -54,7 +54,7 @@ namespace GShark.Operation
             for (int i = 0; i < subdivision.pts.Count; i++)
             {
                 Vector3 tangent = Evaluation.RationalCurveTangent(crv, subdivision.tValues[i]);
-                Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.Normal).Amplify(distance);
+                Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.ZAxis).Amplify(distance);
                 offsetPts.Add(subdivision.pts[i] + vecOffset);
             }
 
@@ -86,7 +86,7 @@ namespace GShark.Operation
                     goto Intersection;
                 }
 
-                Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.Normal).Amplify(distance);
+                Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.ZAxis).Amplify(distance);
                 Transform xForm = Transform.Translation(vecOffset);
                 offsetSegments[k] = segments[k].Transform(xForm);
 

@@ -12,6 +12,11 @@ namespace GShark.Geometry
     /// </summary>
     public class Plane : IEquatable<Plane>, ITransformable<Plane>
     {
+        public Plane()
+        {
+
+        }
+
         /// <summary>
         /// Constructs a plane from a origin and a direction.
         /// </summary>
@@ -19,10 +24,9 @@ namespace GShark.Geometry
         /// <param name="direction">The vector representing the normal of the plane.</param>
         public Plane(Point3 origin, Vector3 direction)
         {
-            ZAxis = direction.Unitize();
-            XAxis = Vector3.XAxis.PerpendicularTo(ZAxis).Unitize();
-            YAxis = Vector3.CrossProduct(ZAxis, XAxis).Unitize();
             Origin = origin;
+            XAxis = Vector3.PerpendicularTo(direction.Unitize()).Unitize();
+            YAxis = Vector3.CrossProduct(direction.Unitize(), XAxis).Unitize();
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace GShark.Geometry
         /// <param name="pt3">Third point representing the y direction.</param>
         public Plane(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            if(LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
+            if(Trigonometry.ArePointsCollinear(pt1, pt2, pt3))
             {
                 throw new Exception("Plane cannot be created, the tree points must not be collinear");
             }
@@ -45,7 +49,6 @@ namespace GShark.Geometry
             Origin = pt1;
             XAxis = dir1.Unitize();
             YAxis = Vector3.CrossProduct(normal, dir1).Unitize();
-            ZAxis = normal.Unitize();
         }
 
         /// <summary>
@@ -59,7 +62,17 @@ namespace GShark.Geometry
             Origin = origin;
             XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
             YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
-            ZAxis = Vector3.CrossProduct(XAxis, YAxis);
+        }
+
+        /// <summary>
+        /// Constructs a plane from another plane.
+        /// </summary>
+        /// <param name="plane">Input plane.</param>
+        public Plane(Plane plane)
+        {
+            Origin = plane.Origin;
+            XAxis = plane.XAxis;
+            YAxis = plane.YAxis;
         }
 
         /// <summary>
@@ -78,29 +91,48 @@ namespace GShark.Geometry
         public static Plane PlaneZX => new Plane(Point3.Origin, Vector3.ZAxis, Vector3.XAxis);
 
         /// <summary>
-        /// Gets the normal of the plan.
+        /// Gets a plane whose components are Unset.
         /// </summary>
-        public Vector3 Normal => ZAxis;
+        public static Plane Unset => new Plane(Point3.Unset, Vector3.Unset, Vector3.Unset);
+
+        /// <summary>
+        /// Gets the normal of the plane.
+        /// </summary>
+        public Vector3 ZAxis => Vector3.CrossProduct(XAxis, YAxis).Unitize();
 
         /// <summary>
         /// Gets the origin of the plane.
         /// </summary>
-        public Point3 Origin { get; }
+        public Point3 Origin { get; set; }
 
         /// <summary>
         /// Gets the XAxis of the plane.
         /// </summary>
-        public Vector3 XAxis { get; }
+        public Vector3 XAxis { get; set; }
 
         /// <summary>
         /// Gets the YAxis of the plane.
         /// </summary>
-        public Vector3 YAxis { get; }
+        public Vector3 YAxis { get; set; }
 
         /// <summary>
-        /// Gets the ZAxis of the plane.
+        /// Returns true if origin and axis vectors are valid and orthogonal.
         /// </summary>
-        public Vector3 ZAxis { get; }
+        public bool IsValid
+        {
+            get
+            {
+                //check all axes and origin are valid
+                var areAxesValid = Origin.IsValid && XAxis.IsValid && YAxis.IsValid && ZAxis.IsValid;
+
+                //check that vectors are orthogonal
+                var areAxesOrthogonal = Vector3.DotProduct(XAxis, YAxis) == 0 && Vector3.DotProduct(YAxis, ZAxis) == 0;
+
+                if (areAxesValid && areAxesOrthogonal) return true;
+                
+                return false;
+            }
+        }
 
         /// <summary>
         /// Finds the closest point on a plane.
@@ -114,8 +146,8 @@ namespace GShark.Geometry
             Vector3 ptToOrigin = Origin - pt;
 
             // signed distance.
-            distance = Vector3.DotProduct(ptToOrigin, Normal);
-            Point3 projection = pt + Normal * distance;
+            distance = Vector3.DotProduct(ptToOrigin, ZAxis);
+            Point3 projection = pt + ZAxis * distance;
 
             return projection;
         }
@@ -160,13 +192,14 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Swapping out the X and Y axes and inverting the Z axis.
+        /// Flip plane by swapping X and Y axes.
         /// </summary>
         /// <returns>The flipped plane.</returns>
         public Plane Flip()
         {
-            //ToDo flip by reversing X, Y, or swapping X and Y.
-            return  new Plane(Origin, -XAxis, YAxis);
+            var xAxis = YAxis;
+            var yAxis = XAxis;
+            return  new Plane(Origin, xAxis, yAxis);
         }
 
         /// <summary>
@@ -312,7 +345,7 @@ namespace GShark.Geometry
         /// <returns>The hash code of the plane.</returns>
         public override int GetHashCode()
         {
-            return Origin.GetHashCode() + Normal.GetHashCode();
+            return Origin.GetHashCode() + ZAxis.GetHashCode();
         }
 
         /// <summary>

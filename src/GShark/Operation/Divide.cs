@@ -4,11 +4,12 @@ using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace GShark.Operation
 {
     /// <summary>
-    /// Provides various tools for dividing and splitting NURBS geometry.
+    /// Provides various methods for dividing and splitting NURBS geometry.
     /// </summary>
     public class Divide
     {
@@ -16,17 +17,17 @@ namespace GShark.Operation
 		/// Splits a curve into two parts at a given parameter.
 		/// </summary>
 		/// <param name="curve">The curve object.</param>
-		/// <param name="u">The parameter where to split the curve.</param>
+		/// <param name="t">The parameter where to split the curve.</param>
 		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<ICurve> SplitCurve(ICurve curve, double u)
+		public static List<ICurve> SplitCurve(ICurve curve, double t)
         {
             int degree = curve.Degree;
 
-            List<double> knotsToInsert = Sets.RepeatData(u, degree + 1);
+            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
 
             ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
-            int s = curve.Knots.Span(degree, u);
+            int s = curve.Knots.Span(degree, t);
 
             KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
             KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
@@ -45,12 +46,13 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="divisions">The number of parts to split the curve into.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        public static (List<double> tValues, List<double> lengths) CurveByCount(ICurve curve, int divisions)
+        internal static List<double> CurveByCount(ICurve curve, int divisions)
         {
             double approximatedLength = Analyze.CurveLength(curve);
             double arcLengthSeparation = approximatedLength / divisions;
-
-            return CurveByLength(curve, arcLengthSeparation);
+            var divisionByLength = CurveByLength(curve, arcLengthSeparation);
+            var tValues = divisionByLength.tValues;
+            return tValues;
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="length">The length separating the resultant samples.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        public static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
+        internal static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
         {
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
@@ -77,7 +79,6 @@ namespace GShark.Operation
             double sum2 = 0.0;
             double segmentLength = length;
 
-
             while (i < curves.Count)
             {
                 sum += curveLengths[i];
@@ -85,7 +86,7 @@ namespace GShark.Operation
                 while (segmentLength < sum + GeoSharkMath.Epsilon)
                 {
                     double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GeoSharkMath.MaxTolerance, curveLengths[i]);
+                        GeoSharkMath.MaxTolerance, curveLengths[i]); //***this is getting the parameter on the next curve. does this mean decompose into bezier maintains original params?
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);

@@ -1,4 +1,8 @@
-[![Publish to Nuget](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/nuget.yml) [![Build docs](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml/badge.svg?branch=master)](https://github.com/cesarecaoduro/G-Shark/actions/workflows/build-publish-docs.yml)
+![Target Framework](https://img.shields.io/badge/Target%20Framework-.NetStandard2.1-blue.svg)
+[![Publish to Nuget](https://github.com/GSharker/G-Shark/actions/workflows/nuget.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/publish-on-release.yml)
+![Nuget](https://img.shields.io/nuget/v/GShark)
+![](https://github.com/GSharker/G-Shark/actions/workflows/build-test.yml/badge.svg?branch=master&branch=develop)
+[![Build docs](https://github.com/GSharker/G-Shark/actions/workflows/build-publish-docs.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project

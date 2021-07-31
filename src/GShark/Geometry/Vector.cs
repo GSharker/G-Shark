@@ -138,7 +138,6 @@ namespace GShark.Geometry
             return llv;
         }
 
-        // Note: this is mutable.
         /// <summary>
         /// Adds to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -152,7 +151,6 @@ namespace GShark.Geometry
                 a[i] = a[i] + s * b[i];
         }
 
-        // Note: this is mutable.
         /// <summary>
         /// Subtracts to each component of the first vector the respective component of the second vector multiplied by a scalar.
         /// </summary>
@@ -273,10 +271,7 @@ namespace GShark.Geometry
         /// <returns>True if are the same, otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
-            if (!(obj is Vector)) return false;
-
-            return true;
+            return obj is Vector _;
         }
 
         /// <summary>

@@ -93,9 +93,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Decompose a curve into a collection of bezier's.<br/>
-        /// Useful as each Bezier curve fits into it's convex hull.<br/>
-        /// This is a useful starting point for intersection, closest point, divide and conquer algorithms.
+        /// Decompose a curve into a collection of bezier curves.<br/>
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
@@ -112,16 +110,14 @@ namespace GShark.Operation
             int reqMultiplicity = degree + 1;
 
             // Insert the knots.
-            foreach ((double key, int value) in knotMultiplicities)
+            foreach (KeyValuePair<double, int> kvp in knotMultiplicities)
             {
-                if (value < reqMultiplicity)
-                {
-                    List<double> knotsToInsert = Sets.RepeatData(key, reqMultiplicity - value);
-                    NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
-                    ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
-                    knots = curveResult.Knots;
-                    controlPoints = curveResult.LocationPoints;
-                }
+                if (kvp.Value >= reqMultiplicity) continue;
+                List<double> knotsToInsert = Sets.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
+                NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
+                ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                knots = curveResult.Knots;
+                controlPoints = curveResult.LocationPoints;
             }
 
             int crvKnotLength = reqMultiplicity * 2;

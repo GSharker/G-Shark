@@ -106,7 +106,7 @@ namespace GShark.Geometry
                 {
                     return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
                 }
-                return new Interval(Knots[0], Knots[^1]);
+                return new Interval(Knots[0], Knots[Knots.Count - 1]);
             }
         }
 
@@ -193,10 +193,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Transforms a curve with the given transformation matrix.
+        /// Transforms a NURBS curve with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
-        /// <returns>A new curve transformed.</returns>
+        /// <returns>A new NURBS curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
             List<Point3> pts = LocationPoints.Select(pt => pt.Transform(transformation)).ToList();
