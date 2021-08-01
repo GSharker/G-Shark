@@ -137,6 +137,22 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Constructs a NURBS surface from a set of NURBS curves.<br/>
+        /// </summary>
+        /// <param name="crvs">Set of curves to create the surface.</param>
+        /// <param name="degreeU">Degree of surface in U direction.</param>
+        /// <returns>A NURBS surface.</returns>
+        public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvs, int degreeU)
+        {
+            int degreeV = crvs[0].Degree;
+            KnotVector knotU = new KnotVector(degreeU, crvs.Count);
+            KnotVector knotV = crvs[0].Knots;
+            List<List<Point3>> points = crvs.Select(x => x.LocationPoints).ToList();
+
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points);
+        }
+
+        /// <summary>
         /// Evaluates a point at a given U and V parameters.
         /// </summary>
         /// <param name="u">Evaluation U parameter.</param>

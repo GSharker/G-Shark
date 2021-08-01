@@ -4,6 +4,7 @@ using GShark.Geometry;
 using GShark.Geometry.Enum;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -72,6 +73,40 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
             vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_NURBS_Lofted_Surface()
+        {
+            // Arrange
+            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0) };
+
+            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 2.0, 0.0),
+                                                   new Point3(0.0, 2.0, 5.0),
+                                                   new Point3(20.0, 2.0, 1.0) };
+
+            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 7.0, 0.0),
+                                                   new Point3(0.0, 7.0, 20.0),
+                                                   new Point3(10.0, 7.0, 0.0) };
+
+            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 10.0, -2.0),
+                                                   new Point3(0.0, 10.0, 20.0),
+                                                   new Point3(5.0, 10.0, 0.0) };
+
+            NurbsCurve c1 = new NurbsCurve(pts1, 2);
+            NurbsCurve c2 = new NurbsCurve(pts2, 2);
+            NurbsCurve c3 = new NurbsCurve(pts3, 2);
+            NurbsCurve c4 = new NurbsCurve(pts4, 2);
+
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4}, 2);
+
+            // Assert
+            surface.Should().NotBeNull();
+            surface.LocationPoints.Count.Should().Be(4);
+            surface.LocationPoints[0].Count.Should().Be(3);
         }
     }
 }
