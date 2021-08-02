@@ -24,31 +24,31 @@ namespace GShark.Geometry
         /// <param name="degreeV">The degree in the V direction.</param>
         /// <param name="knotsU">The knotVector in the U direction.</param>
         /// <param name="knotsV">The knotVector in the V direction.</param>
-        /// <param name="pts">Two dimensional array of points.</param>
+        /// <param name="controlPts">Two dimensional array of points.</param>
         /// <param name="weights">Two dimensional array of weight values.</param>
-        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>> weights = null)
+        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point4>> controlPts)
         {
-            if (pts == null) throw new ArgumentNullException("Control points array connot be null!");
+            if (controlPts == null) throw new ArgumentNullException("Control points array connot be null!");
             if (degreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
             if (degreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
             if (knotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
             if (knotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
-            if (knotsU.Count != pts.Count + degreeU + 1)
+            if (knotsU.Count != controlPts.Count + degreeU + 1)
                 throw new ArgumentException("Points count + degreeU + 1 must equal knotsU count!");
-            if (knotsV.Count != pts[0].Count + degreeV + 1)
+            if (knotsV.Count != controlPts[0].Count + degreeV + 1)
                 throw new ArgumentException("Points count + degreeV + 1 must equal knotsV count!");
-            if (!knotsU.IsValid(degreeU, pts.Count))
+            if (!knotsU.IsValid(degreeU, controlPts.Count))
                 throw new ArgumentException("Invalid knotsU!");
-            if (!knotsV.IsValid(degreeV, pts[0].Count))
+            if (!knotsV.IsValid(degreeV, controlPts[0].Count))
                 throw new ArgumentException("Invalid knotsV!");
 
             DegreeU = degreeU;
             DegreeV = degreeV;
             KnotsU = knotsU;
             KnotsV = knotsV;
-            Weights = weights ?? Sets.RepeatData(Sets.RepeatData(1.0, pts.Count), pts[0].Count);
-            LocationPoints = pts;
-            ControlPoints = LinearAlgebra.PointsHomogeniser2d(pts, weights);
+            Weights = LinearAlgebra.GetWeights2d(controlPts);
+            LocationPoints = LinearAlgebra.PointDehomogenizer2d(controlPts);
+            ControlPoints = controlPts;
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         }
@@ -108,10 +108,10 @@ namespace GShark.Geometry
         /// <param name="p4">The fourth point.</param>
         public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
-            List<List<Point3>> pts = new List<List<Point3>>
+            List<List<Point4>> pts = new List<List<Point4>>
             {
-                new List<Point3>{p1, p4},
-                new List<Point3>{p2, p3},
+                new List<Point4>{p1, p4},
+                new List<Point4>{p2, p3},
             };
 
             KnotVector knotU = new KnotVector { 0, 0, 1, 1 };
@@ -133,7 +133,8 @@ namespace GShark.Geometry
         {
             KnotVector knotU = new KnotVector(degreeU, points.Count);
             KnotVector knotV = new KnotVector(degreeV, points[0].Count);
-            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points, weight);
+            var controlPts = points.Select((pts, i) => pts.Select((pt, j) => weight != null ? new Point4(pt, weight[i][j]) : new Point4(pt)).ToList()).ToList();
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, controlPts);
         }
 
         /// <summary>
@@ -170,9 +171,9 @@ namespace GShark.Geometry
         /// <returns>A new NURBS surface transformed.</returns>
         public NurbsSurface Transform(Transform transformation)
         {
-            List<List<Point3>> otherPts = LocationPoints;
-            otherPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
-            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, otherPts, Weights);
+            List<List<Point4>> transformedControlPts = ControlPoints;
+            transformedControlPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
+            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, transformedControlPts);
         }
 
         /// <summary>

@@ -222,7 +222,7 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<List<Point3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
+            List<List<Point3>> reversedPts = Sets.Reverse2DMatrixData(pts);
 
             // Assert
             reversedPts.Count.Should().Be(2);

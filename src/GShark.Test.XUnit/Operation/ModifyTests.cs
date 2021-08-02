@@ -40,18 +40,18 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < insertion; i++)
                 newKnots.Add(val);
 
-            List<Point3> controlPts = new List<Point3>();
+            List<Point3> pts = new List<Point3>();
             for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Point3( i, 0.0, 0.0));
+                pts.Add(new Point3( i, 0.0, 0.0));
 
-            ICurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(degree, knots, pts);
 
             // Act
             ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
 
             // Assert
             (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
-            (controlPts.Count + insertion).Should().Be(curveAfterRefine.LocationPoints.Count);
+            (pts.Count + insertion).Should().Be(curveAfterRefine.LocationPoints.Count);
 
             Point3 p0 = curve.PointAt(2.5);
             Point3 p1 = curveAfterRefine.PointAt(2.5);

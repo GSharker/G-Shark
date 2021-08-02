@@ -26,7 +26,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="degree">The curve degree.</param>
         /// <param name="knots">The knots defining the curve.</param>
-        /// <param name="controlPoints">The control points of the curve.</param>
+        /// <param name="points">The points of the curve.</param>
         /// <param name="weights">The weight values.</param>
         public NurbsCurve(int degree, KnotVector knots, List<Point3> points, List<double>? weights = null)
         {
@@ -69,6 +69,18 @@ namespace GShark.Geometry
         /// <param name="degree">The curve degree.</param>
         public NurbsCurve(List<Point3> points, int degree)
             : this(degree, new KnotVector(degree, points.Count), points)
+        {
+        }
+
+        // Note: This constructor has to be discussed. Maybe we can follow the same logic that we have for the surface.
+        /// <summary>
+        /// Internal constructor used for internal operations.
+        /// </summary>
+        /// <param name="degree">The curve degree.</param>
+        /// <param name="knots">The knots defining the curve.</param>
+        /// <param name="controlPts">The control points of the curve.</param>
+        internal NurbsCurve(int degree, KnotVector knots, List<Point4> controlPts)
+        : this(degree, knots, LinearAlgebra.PointDehomogenizer1d(controlPts), LinearAlgebra.GetWeights(controlPts))
         {
         }
 

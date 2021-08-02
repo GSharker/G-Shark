@@ -73,5 +73,15 @@ namespace GShark.Test.XUnit.Geometry
             uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
             vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_The_Surface_Split_At_The_Given_Parameter_And_Direction()
+        {
+            // Assert
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+
+            // Act
+            var surfaces = Divide.SplitSurface(surface, 0.5, SplitDirection.U);
+        }
     }
 }

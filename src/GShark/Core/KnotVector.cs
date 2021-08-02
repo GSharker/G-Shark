@@ -369,6 +369,16 @@ namespace GShark.Core
         }
 
         /// <summary>
+        /// Creates a copy of the knotVector.
+        /// </summary>
+        /// <returns>The copy of the knotVector.</returns>
+        public KnotVector Copy()
+        {
+            List<double> knotVectorCopy = new List<double>(this);
+            return knotVectorCopy.ToKnot();
+        }
+
+        /// <summary>
         /// Creates a text representation of the knot vector.
         /// </summary>
         /// <returns>Knots in a string version.</returns>
