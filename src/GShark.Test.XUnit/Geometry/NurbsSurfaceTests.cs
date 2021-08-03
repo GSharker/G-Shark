@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using GShark.Core;
@@ -183,6 +184,21 @@ namespace GShark.Test.XUnit.Geometry
                 pt.EpsilonEquals(surfacePtsTop[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
             surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsBottom[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
+        }
+
+        [Theory]
+        [InlineData(-0.2)]
+        [InlineData(1.3)]
+        public void Split_Surface_Throws_An_Exception_If_Parameter_Is_Outside_The_Domain(double parameter)
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+
+            // Act
+            Func<object> func = () => surface.Split(parameter, SplitDirection.U);
+
+            // Assert
+            func.Should().Throw<ArgumentOutOfRangeException>();
         }
     }
 }

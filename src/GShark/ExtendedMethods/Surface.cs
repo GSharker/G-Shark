@@ -19,7 +19,7 @@ namespace GShark.ExtendedMethods
         {
             if (parameter < 0.0 || parameter > 1.0)
             {
-                throw new ArgumentException("The parameter is not into the domain 0.0 to 1.0.", nameof(parameter));
+                throw new ArgumentOutOfRangeException(nameof(parameter), "The parameter is not into the domain 0.0 to 1.0.");
             }
 
             if (surface == null)
