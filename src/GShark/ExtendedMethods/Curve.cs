@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.ExtendedMethods
 {
     public static class Curve
     {
+        /// <summary>
+        /// Divides a curve for a given number of time, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="numberOfSegments">The number of parts to split the curve into.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         public static (List<Point3> Points, List<double> Parameters) Divide(this ICurve curve, int numberOfSegments)
         {
             if (numberOfSegments < 2)
@@ -22,13 +28,22 @@ namespace GShark.ExtendedMethods
             {
                 throw new ArgumentNullException(nameof(curve));
             }
-            
+
             var divideResult = Operation.Divide.CurveByCount(curve, numberOfSegments);
             var points = divideResult.Select(curve.PointAt).ToList();
             return (points, divideResult);
         }
 
-        public static (List<Point3> Points, List<double> Parameters ) Divide(this ICurve curve, double maxSegmentLength, bool equalSegmentLengths = false)
+        /// <summary>
+        /// Divides a curve for a given max segment length, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="maxSegmentLength">The maximum length the segments have to be split in.</param>
+        /// <param name="equalSegmentLengths">Force to have all the segments of the same lengths.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        public static (List<Point3> Points, List<double> Parameters) Divide(this ICurve curve, double maxSegmentLength, bool equalSegmentLengths = false)
         {
             if (maxSegmentLength <= 0)
             {

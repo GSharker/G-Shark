@@ -1,12 +1,11 @@
-﻿using System;
-using GShark.Core;
+﻿using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using GShark.Geometry.Enum;
 
 namespace GShark.Operation
 {
@@ -48,7 +47,7 @@ namespace GShark.Operation
         /// <param name="direction">Where to split in the U or V direction of the surface.</param>
         /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
         /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.</returns>
-        public static NurbsSurface[] SplitSurface(NurbsSurface surface, double parameter, SplitDirection direction)
+        internal static NurbsSurface[] SplitSurface(NurbsSurface surface, double parameter, SplitDirection direction)
         {
             KnotVector knots = surface.KnotsV;
             int degree = surface.DegreeV;

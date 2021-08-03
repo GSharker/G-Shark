@@ -1,11 +1,11 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
+using GShark.Geometry.Interfaces;
+using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
-using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -25,7 +25,6 @@ namespace GShark.Geometry
         /// <param name="knotsU">The knotVector in the U direction.</param>
         /// <param name="knotsV">The knotVector in the V direction.</param>
         /// <param name="controlPts">Two dimensional array of points.</param>
-        /// <param name="weights">Two dimensional array of weight values.</param>
         internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point4>> controlPts)
         {
             if (controlPts == null) throw new ArgumentNullException("Control points array connot be null!");

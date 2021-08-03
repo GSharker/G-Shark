@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Enum;
 using GShark.Operation;
@@ -113,7 +114,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPtRight = new Point3(5.0, 8.181818, 3.545455);
 
             // Act
-            NurbsSurface[] surfaces = Divide.SplitSurface(surface, 0.5, SplitDirection.V);
+            NurbsSurface[] surfaces = surface.Split(0.5, SplitDirection.V);
             Point3 evaluatePtLeft = surfaces[0].PointAt(0.5, 0.5);
             Point3 evaluatePtRight = surfaces[1].PointAt(0.5, 0.5);
 
@@ -167,7 +168,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPtBottom = new Point3(7.105263, 5.789474, 2.157895);
 
             // Act
-            NurbsSurface[] surfaces = Divide.SplitSurface(surface, 0.5, SplitDirection.U);
+            NurbsSurface[] surfaces = surface.Split(0.5, SplitDirection.U);
             Point3 evaluatePtTop = surfaces[0].PointAt(0.5, 0.5);
             Point3 evaluatePtBottom = surfaces[1].PointAt(0.5, 0.5);
 
