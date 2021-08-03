@@ -93,8 +93,8 @@ namespace GShark.Operation
 
             return new NurbsSurface[]
             {
-                new NurbsSurface(surface.DegreeU, degree, knotLeft, surface.KnotsU.Copy(), surfPtsLeft),
-                new NurbsSurface(surface.DegreeU, degree, knotRight, surface.KnotsU.Copy(), surfPtsRight)
+                new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotLeft, surfPtsLeft),
+                new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotRight, surfPtsRight)
             };
         }
 

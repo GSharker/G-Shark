@@ -19,49 +19,6 @@ namespace GShark.Test.XUnit.Operation
             _testOutput = testOutput;
         }
 
-        //private NurbsSurface ConstructNurbsSurface()
-        //{
-        //    int degreeU = 3;
-        //    int degreeV = 3;
-        //    KnotVector knotsU = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
-        //    KnotVector knotsV = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
-
-        //    List<Point3d> u1 = new List<Point3d>
-        //    {
-        //        new (0d, 0d, 0d),
-        //        new (10d, 0d, 0d),
-        //        new (20d, 0d, 0d),
-        //        new (30d, 0d, 0d)
-        //    };
-        //    List<Point3d> u2 = new List<Point3d>
-        //    {
-        //        new (0d, -10d, 0d),
-        //        new (10d, -10d, 10d),
-        //        new (20d, -10d, 0d),
-        //        new (30d, -10d, 0d)
-        //    };
-        //    List<Point3d> u3 = new List<Point3d>
-        //    {
-        //        new (0d, -20d, 0d),
-        //        new (10d, -20d, 0d),
-        //        new (20d, -20d, 0d),
-        //        new (30d, -20d, 0d)
-        //    };
-        //    List<Point3d> u4 = new List<Point3d>
-        //    {
-        //        new (0d, -30d, 0d),
-        //        new (10d, -30d, 0d),
-        //        new (20d, -30d, 0d),
-        //        new (30d, -30d, 0d)
-        //    };
-        //    List<List<Point3d>> controlPoints = new List<List<Point3d>>
-        //    {
-        //        u1, u2, u3, u4
-        //    };
-
-        //    return new NurbsSurface(degreeU, degreeV, knotsU, knotsV, controlPoints);
-        //}
-
         [Fact]
         public void It_Tests_A_Basic_Function()
         {
@@ -146,7 +103,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            Point3 evalPt = new Point3(Evaluation.SurfacePointAt(surface, u, v));
 
             // Assert
             evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
@@ -169,70 +126,6 @@ namespace GShark.Test.XUnit.Operation
             derivatives[0, 1].Equals(expectedDerivativeU).Should().BeTrue();
             derivatives[1, 0].Equals(expectedDerivativeV).Should().BeTrue();
         }
-
-        //[Fact]
-        //public void It_Return_Surface_Derivatives()
-        //{
-        //    // Arrange
-        //    NurbsSurface nurbsSurface = ConstructNurbsSurface();
-        //    int numDers = 1;
-
-        //    // Act
-        //    List<List<Vector3>> res = Evaluation.SurfaceDerivatives(nurbsSurface, 0, 0, numDers);
-
-        //    // Assert
-        //    // 0th derivative with respect to u & v
-        //    res[0][0][0].Should().Be(0d);
-        //    res[0][0][1].Should().Be(0d);
-        //    res[0][0][2].Should().Be(0d);
-
-        //    // d/du
-        //    (res[0][1][0] / res[0][1][0]).Should().Be(1d);
-        //    res[0][1][2].Should().Be(0d);
-
-        //    // d/dv
-        //    res[1][0][0].Should().Be(0d);
-        //    res[1][0][1].Should().Be(-30d);
-        //    res[1][0][2].Should().Be(0d);
-
-        //    // dd/dudv
-        //    res[1][1][0].Should().Be(0d);
-        //    res[1][1][1].Should().Be(0d);
-        //    res[1][1][2].Should().Be(0d);
-
-        //}
-
-        //[Fact]
-        //public void It_Return_Surface_IsoCurve_At_A_Given_Parameter_Along_A_Given_Direction()
-        //{
-        //    //ToDo Reorganise sections. 
-        //    // Arrange
-        //    NurbsSurface nurbsSurface = ConstructNurbsSurface();
-        //    double t = 0.2;
-        //    double v = 0.3;
-
-        //    // Act
-        //    ICurve res = Evaluation.SurfaceIsoCurve(nurbsSurface, 0.2);
-
-        //    // Assert
-        //    Point3d p1 = Evaluation.CurvePointAt(res, 0.5);
-        //    p1[0].Should().BeApproximately(6d, 5);
-        //    p1[1].Should().BeApproximately(-15d, 5);
-        //    p1[2].Should().BeApproximately(-1.44d, 5);
-
-        //    Point3d p2 = Evaluation.CurvePointAt(res, 0.2);
-        //    p2[0].Should().BeApproximately(6d, 5);
-        //    p2[1].Should().BeApproximately(-6d, 5);
-        //    p2[2].Should().BeApproximately(-1.47456d, 5);
-
-        //    ICurve res1 = Evaluation.SurfaceIsoCurve(nurbsSurface, t, false);
-        //    Point3d p3 = Evaluation.CurvePointAt(res1, v);
-        //    p3[0].Should().BeApproximately(9d, 3);
-        //    p3[1].Should().BeApproximately(-6d, 3);
-        //    p3[2].Should().BeApproximately(1.69344d, 3);
-        //}
-
-
 
         [Fact]
         public void It_Returns_A_Derive_Basic_Function_Given_NI()

@@ -686,7 +686,7 @@ namespace GShark.Operation
         /// <param name="u">The U parameter on the surface at which the point is to be evaluated.</param>
         /// <param name="v">The V parameter on the surface at which the point is to be evaluated.</param>
         /// <returns>The evaluated point.</returns>
-        public static Point3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        public static Point4 SurfacePointAt(NurbsSurface surface, double u, double v)
         {
             if (u < 0.0 || u > 1.0)
             {
@@ -705,22 +705,24 @@ namespace GShark.Operation
             List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
             List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             int uIndex = knotSpanU - surface.DegreeU;
-            Point3 evaluatedPt = Point3.Origin;
+            Point4 evaluatedPt = Point4.Zero;
 
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Point3.Origin;
+                var temp = Point4.Zero;
                 var vIndex = knotSpanV - surface.DegreeV + l;
                 for (int k = 0; k < surface.DegreeU + 1; k++)
                 {
-                    temp.X += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].X;
-                    temp.Y += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Y;
-                    temp.Z += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Z;
+                    temp.X += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].X;
+                    temp.Y += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Y;
+                    temp.Z += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Z;
+                    temp.W += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].W;
                 }
 
                 evaluatedPt.X += basisVValue[l] * temp.X;
                 evaluatedPt.Y += basisVValue[l] * temp.Y;
                 evaluatedPt.Z += basisVValue[l] * temp.Z;
+                evaluatedPt.W += basisVValue[l] * temp.W;
             }
             return evaluatedPt;
         }

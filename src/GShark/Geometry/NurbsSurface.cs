@@ -44,8 +44,8 @@ namespace GShark.Geometry
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = knotsU;
-            KnotsV = knotsV;
+            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = LinearAlgebra.GetWeights2d(controlPts);
             LocationPoints = LinearAlgebra.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
@@ -143,7 +143,7 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation U parameter.</param>
         /// <param name="v">Evaluation V parameter.</param>
         /// <returns>A evaluated point.</returns>
-        public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
+        public Point3 PointAt(double u, double v) => new Point3(Evaluation.SurfacePointAt(this, u, v));
 
         /// <summary>
         /// Evaluate the surface at the given U and V parameters.
