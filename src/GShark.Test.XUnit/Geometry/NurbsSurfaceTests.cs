@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Specialized;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Enum;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
+using System;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
@@ -75,38 +77,181 @@ namespace GShark.Test.XUnit.Geometry
             vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
+
         [Fact]
-        public void It_Returns_A_NURBS_Lofted_Surface()
+        public void It_Returns_A_NURBS_Lofted_Surface_AllOpenedCurves()
         {
             // Arrange
             List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
                                                    new Point3(0.0, 0.0, 10.0),
                                                    new Point3(10.0, 0.0, 0.0) };
 
-            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 2.0, 0.0),
-                                                   new Point3(0.0, 2.0, 5.0),
-                                                   new Point3(20.0, 2.0, 1.0) };
+            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
+                                                   new Point3(0.0, 10.0, 5.0),
+                                                   new Point3(20.0, 10.0, 1.0) };
 
-            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 7.0, 0.0),
-                                                   new Point3(0.0, 7.0, 20.0),
-                                                   new Point3(10.0, 7.0, 0.0) };
+            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
+                                                   new Point3(0.0, 25.0, 20.0),
+                                                   new Point3(10.0, 25.0, 0.0) };
 
-            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 10.0, -2.0),
-                                                   new Point3(0.0, 10.0, 20.0),
-                                                   new Point3(5.0, 10.0, 0.0) };
+            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
+                                                   new Point3(0.0, 35.0, 20.0),
+                                                   new Point3(5.0, 35.0, 0.0) };
 
             NurbsCurve c1 = new NurbsCurve(pts1, 2);
             NurbsCurve c2 = new NurbsCurve(pts2, 2);
             NurbsCurve c3 = new NurbsCurve(pts3, 2);
             NurbsCurve c4 = new NurbsCurve(pts4, 2);
 
+            Point3 expectedPt1 = new Point3( 0.625, 17.5, 6.59375 );
+            Point3 expectedPt2 = new Point3( -14.7514, 3.14, 1.63251);
+            Point3 expectedPt3 = new Point3( 5, 35, 0 );
+
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4}, 2);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4 });
+            Point3 evalPt1 = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
+            Point3 evalPt2 = Evaluation.SurfacePointAt(surface, 0.1, 0.1);
+            Point3 evalPt3 = Evaluation.SurfacePointAt(surface, 1.0, 1.0);
+
+            // Assert
+            surface.Should().NotBeNull();
+            surface.LocationPoints.Count.Should().Be(3);
+            surface.LocationPoints[0].Count.Should().Be(4);
+            evalPt1.EpsilonEquals(expectedPt1, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt2.EpsilonEquals(expectedPt2, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt3.EpsilonEquals(expectedPt3, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_NURBS_Lofted_Surface_AllClosedCurves()
+        {
+            // Arrange
+            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0),
+                                                   new Point3(-20.0, 0.0, 0.0)};
+
+            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
+                                                   new Point3(0.0, 10.0, 5.0),
+                                                   new Point3(20.0, 10.0, 1.0),
+                                                   new Point3(-15.0, 10.0, 0.0)};
+
+            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
+                                                   new Point3(0.0, 25.0, 20.0),
+                                                   new Point3(10.0, 25.0, 0.0),
+                                                   new Point3(-5.0, 25.0, 0.0)};
+
+            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
+                                                   new Point3(0.0, 35.0, 20.0),
+                                                   new Point3(5.0, 35.0, 0.0),
+                                                   new Point3(-5.0, 35.0, -2.0)};
+
+            NurbsCurve c1 = new NurbsCurve(pts1, 2);
+            NurbsCurve c2 = new NurbsCurve(pts2, 2);
+            NurbsCurve c3 = new NurbsCurve(pts3, 2);
+            NurbsCurve c4 = new NurbsCurve(pts4, 2);
+
+            Point3 expectedPt1 = new Point3(6.5625, 17.5, 6.75);
+            Point3 expectedPt2 = new Point3(-11.5051, 3.14, 3.08568);
+            Point3 expectedPt3 = new Point3(-5, 35, -2);
+
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4 });
+            Point3 evalPt1 = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
+            Point3 evalPt2 = Evaluation.SurfacePointAt(surface, 0.1, 0.1);
+            Point3 evalPt3 = Evaluation.SurfacePointAt(surface, 1.0, 1.0);
 
             // Assert
             surface.Should().NotBeNull();
             surface.LocationPoints.Count.Should().Be(4);
-            surface.LocationPoints[0].Count.Should().Be(3);
+            surface.LocationPoints[0].Count.Should().Be(4);
+            evalPt1.EpsilonEquals(expectedPt1, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt2.EpsilonEquals(expectedPt2, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt3.EpsilonEquals(expectedPt3, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_Error_InitialCurves_NURBS_Lofted_Surface()
+        {
+            // Arange
+            List<NurbsCurve> crvs = new List<NurbsCurve>();
+            List<NurbsCurve> crvs2 = null;
+
+            // Act
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
+            Func<NurbsSurface> func2 = () => NurbsSurface.CreateLoftedSurface(crvs2);
+
+            // Assert
+            func.Should().Throw<Exception>()
+                         .WithMessage("Invalid initial curves! You should select at least 2 curves");
+            func2.Should().Throw<Exception>()
+                         .WithMessage("Invalid initial curves! You should select at least 2 curves");
+        }
+
+        [Fact]
+        public void It_Returns_Error_AllCurvesShouldBeClosedOrOpened_NURBS_Lofted_Surface()
+        {
+            // Arrange
+            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0) };
+
+            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
+                                                   new Point3(0.0, 10.0, 5.0),
+                                                   new Point3(20.0, 10.0, 1.0),
+                                                   new Point3(-15.0, 10.0, 0.0)};
+
+            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
+                                                   new Point3(0.0, 25.0, 20.0),
+                                                   new Point3(10.0, 25.0, 0.0) };
+
+            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
+                                                   new Point3(0.0, 35.0, 20.0),
+                                                   new Point3(5.0, 35.0, 0.0) };
+
+            NurbsCurve crv1 = new NurbsCurve(pts1, 2);
+            NurbsCurve crv2 = new NurbsCurve(pts2, 2);
+            NurbsCurve crv3 = new NurbsCurve(pts3, 2);
+            NurbsCurve crv4 = new NurbsCurve(pts4, 2);
+
+            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2, crv3, crv4 };
+
+            // Act
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
+
+            // Assert
+            crv1.IsClosed().Should().BeFalse();
+            crv2.IsClosed().Should().BeTrue();
+            func.Should().Throw<Exception>()
+                         .WithMessage("Loft only works if all curves are open, or all curves are closed!");
+
+        }
+
+        [Fact]
+        public void It_Returns_Error_CleanInputCurves_NURBS_Lofted_Surface()
+        {
+            // Arrange
+            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0) };
+
+            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
+                                                   new Point3(0.0, 10.0, 5.0),
+                                                   new Point3(20.0, 10.0, 1.0) };
+
+            NurbsCurve crv1 = new NurbsCurve(pts1, 2);
+            NurbsCurve crv2 = new NurbsCurve(pts2, 2);
+            NurbsCurve crv3 = null;
+
+            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2, crv3 };
+
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs);
+
+            // Assert
+            surface.Should().NotBeNull();
+            surface.LocationPoints.Count.Should().Be(2);
+        }
+
     }
 }

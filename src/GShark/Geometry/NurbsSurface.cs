@@ -140,17 +140,38 @@ namespace GShark.Geometry
         /// Constructs a NURBS surface from a set of NURBS curves.<br/>
         /// </summary>
         /// <param name="crvs">Set of curves to create the surface.</param>
-        /// <param name="degreeU">Degree of surface in U direction.</param>
+        /// <param name="degreeV">Degree of surface in V direction.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvs, int degreeU)
+        public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvsInput, int degreeV = 3)
         {
-            int degreeV = crvs[0].Degree;
-            KnotVector knotU = new KnotVector(degreeU, crvs.Count);
-            KnotVector knotV = crvs[0].Knots;
-            List<List<Point3>> points = crvs.Select(x => x.LocationPoints).ToList();
+            List<NurbsCurve> crvs = crvsInput.Where(x => x != null).Select(x => x).ToList();
 
-            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points);
+            if(crvs == null || crvs.Count < 1)
+                throw new ArgumentException("Invalid initial curves! You should select at least 2 curves");
+            
+            HashSet<bool> set = new HashSet<bool>( crvs.Select( x => x.IsClosed() == true ).ToList() );
+            if(set.Count != 1)
+                throw new ArgumentException("Loft only works if all curves are open, or all curves are closed!");
+            
+            if (degreeV > crvs.Count - 1)
+                degreeV = crvs.Count - 1;
+
+            int degreeU = crvs[0].Degree;
+            KnotVector knotU = crvs[0].Knots;
+            KnotVector knotV = new KnotVector();
+
+            List<List<Point3>> ptsSurf = new List<List<Point3>>();
+            for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
+            {
+                List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
+                NurbsCurve crv = new NurbsCurve(pts, degreeV);
+                ptsSurf.Add(crv.LocationPoints);
+                knotV = crv.Knots;
+            }
+
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, ptsSurf);
         }
+
 
         /// <summary>
         /// Evaluates a point at a given U and V parameters.
