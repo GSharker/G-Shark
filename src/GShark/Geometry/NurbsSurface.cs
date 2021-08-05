@@ -142,36 +142,61 @@ namespace GShark.Geometry
         /// <param name="crvs">Set of curves to create the surface.</param>
         /// <param name="degreeV">Degree of surface in V direction.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvsInput, int degreeV = 3)
+        public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvsInput, int degreeV = 3, LoftType loftType = LoftType.Normal)
         {
-            List<NurbsCurve> crvs = crvsInput.Where(x => x != null).Select(x => x).ToList();
+            if (crvsInput == null)
+                throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            if(crvs == null || crvs.Count < 1)
-                throw new ArgumentException("Invalid initial curves! You should select at least 2 curves");
-            
-            HashSet<bool> set = new HashSet<bool>( crvs.Select( x => x.IsClosed() == true ).ToList() );
-            if(set.Count != 1)
+            List<NurbsCurve> crvs = crvsInput.Where(x => x != null).Select(x => x).ToList();
+            if(crvs.Count < 2)
+                throw new ArgumentException("An invalid number of curves to perform the loft.");
+
+            //Replace IsPerdiodic() with IsClosed() when the issue is solved
+            if (crvs.Any(x => x.IsPeriodic()) && crvs.Any(x => !x.IsPeriodic()))
                 throw new ArgumentException("Loft only works if all curves are open, or all curves are closed!");
-            
+
             if (degreeV > crvs.Count - 1)
                 degreeV = crvs.Count - 1;
 
             int degreeU = crvs[0].Degree;
             KnotVector knotU = crvs[0].Knots;
             KnotVector knotV = new KnotVector();
-
             List<List<Point3>> ptsSurf = new List<List<Point3>>();
-            for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
-            {
-                List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
-                NurbsCurve crv = new NurbsCurve(pts, degreeV);
-                ptsSurf.Add(crv.LocationPoints);
-                knotV = crv.Knots;
-            }
 
+            switch (loftType)
+            {
+                case LoftType.Normal:
+                    for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
+                    {
+                        List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
+                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV, null, null, true);
+                        ptsSurf.Add(crv.LocationPoints);
+                        knotV = crv.Knots;
+                    }
+                    break;
+
+                case LoftType.Loose:
+                    for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
+                    {
+                        List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
+                        NurbsCurve crv = new NurbsCurve(pts, degreeV);
+                        ptsSurf.Add(crv.LocationPoints);
+                        knotV = crv.Knots;
+                    }
+                    break;
+
+                case LoftType.Tight:
+                    for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
+                    {
+                        List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
+                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV, null, null, false);
+                        ptsSurf.Add(crv.LocationPoints);
+                        knotV = crv.Knots;
+                    }
+                    break;
+            }
             return new NurbsSurface(degreeU, degreeV, knotU, knotV, ptsSurf);
         }
-
 
         /// <summary>
         /// Evaluates a point at a given U and V parameters.

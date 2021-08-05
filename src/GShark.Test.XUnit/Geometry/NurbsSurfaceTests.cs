@@ -77,101 +77,65 @@ namespace GShark.Test.XUnit.Geometry
             vDirection.EpsilonEquals(expectedVDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
-
-        [Fact]
-        public void It_Returns_A_NURBS_Lofted_Surface_AllOpenedCurves()
+        [Theory]
+        [InlineData(0.5, 0.5, new double[] { 1.869341, 16.120771, 5.624456 })]
+        [InlineData(0.1, 0.1, new double[] { -14.877755, 3.332963, 1.228809})]
+        [InlineData(1.0, 1.0, new double[] { 5, 35, 0 })]
+        public void It_Returns_A_Normal_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
-                                                   new Point3(0.0, 0.0, 10.0),
-                                                   new Point3(10.0, 0.0, 0.0) };
-
-            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
-                                                   new Point3(0.0, 10.0, 5.0),
-                                                   new Point3(20.0, 10.0, 1.0) };
-
-            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
-                                                   new Point3(0.0, 25.0, 20.0),
-                                                   new Point3(10.0, 25.0, 0.0) };
-
-            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
-                                                   new Point3(0.0, 35.0, 20.0),
-                                                   new Point3(5.0, 35.0, 0.0) };
-
-            NurbsCurve c1 = new NurbsCurve(pts1, 2);
-            NurbsCurve c2 = new NurbsCurve(pts2, 2);
-            NurbsCurve c3 = new NurbsCurve(pts3, 2);
-            NurbsCurve c4 = new NurbsCurve(pts4, 2);
-
-            Point3 expectedPt1 = new Point3( 0.625, 17.5, 6.59375 );
-            Point3 expectedPt2 = new Point3( -14.7514, 3.14, 1.63251);
-            Point3 expectedPt3 = new Point3( 5, 35, 0 );
+            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4 });
-            Point3 evalPt1 = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
-            Point3 evalPt2 = Evaluation.SurfacePointAt(surface, 0.1, 0.1);
-            Point3 evalPt3 = Evaluation.SurfacePointAt(surface, 1.0, 1.0);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Normal);
+            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
             // Assert
             surface.Should().NotBeNull();
-            surface.LocationPoints.Count.Should().Be(3);
-            surface.LocationPoints[0].Count.Should().Be(4);
-            evalPt1.EpsilonEquals(expectedPt1, GeoSharkMath.MinTolerance).Should().BeTrue();
-            evalPt2.EpsilonEquals(expectedPt2, GeoSharkMath.MinTolerance).Should().BeTrue();
-            evalPt3.EpsilonEquals(expectedPt3, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
-        [Fact]
-        public void It_Returns_A_NURBS_Lofted_Surface_AllClosedCurves()
+        [Theory]
+        [InlineData(0.5, 0.5, new double[] { 0.625, 17.5, 6.59375 })]
+        [InlineData(0.1, 0.1, new double[] { -14.7514, 3.14, 1.63251 })]
+        [InlineData(1.0, 1.0, new double[] { 5, 35, 0 })]
+        public void It_Returns_A_Loose_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
-                                                   new Point3(0.0, 0.0, 10.0),
-                                                   new Point3(10.0, 0.0, 0.0),
-                                                   new Point3(-20.0, 0.0, 0.0)};
-
-            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
-                                                   new Point3(0.0, 10.0, 5.0),
-                                                   new Point3(20.0, 10.0, 1.0),
-                                                   new Point3(-15.0, 10.0, 0.0)};
-
-            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
-                                                   new Point3(0.0, 25.0, 20.0),
-                                                   new Point3(10.0, 25.0, 0.0),
-                                                   new Point3(-5.0, 25.0, 0.0)};
-
-            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
-                                                   new Point3(0.0, 35.0, 20.0),
-                                                   new Point3(5.0, 35.0, 0.0),
-                                                   new Point3(-5.0, 35.0, -2.0)};
-
-            NurbsCurve c1 = new NurbsCurve(pts1, 2);
-            NurbsCurve c2 = new NurbsCurve(pts2, 2);
-            NurbsCurve c3 = new NurbsCurve(pts3, 2);
-            NurbsCurve c4 = new NurbsCurve(pts4, 2);
-
-            Point3 expectedPt1 = new Point3(6.5625, 17.5, 6.75);
-            Point3 expectedPt2 = new Point3(-11.5051, 3.14, 3.08568);
-            Point3 expectedPt3 = new Point3(-5, 35, -2);
+            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            Point3 expectedPt = new Point3( pt[0], pt[1], pt[2] );
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(new List<NurbsCurve> { c1, c2, c3, c4 });
-            Point3 evalPt1 = Evaluation.SurfacePointAt(surface, 0.5, 0.5);
-            Point3 evalPt2 = Evaluation.SurfacePointAt(surface, 0.1, 0.1);
-            Point3 evalPt3 = Evaluation.SurfacePointAt(surface, 1.0, 1.0);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Loose);
+            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
             // Assert
             surface.Should().NotBeNull();
-            surface.LocationPoints.Count.Should().Be(4);
-            surface.LocationPoints[0].Count.Should().Be(4);
-            evalPt1.EpsilonEquals(expectedPt1, GeoSharkMath.MinTolerance).Should().BeTrue();
-            evalPt2.EpsilonEquals(expectedPt2, GeoSharkMath.MinTolerance).Should().BeTrue();
-            evalPt3.EpsilonEquals(expectedPt3, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0.5, 0.5, new double[] { 1.712285, 16.695322, 5.871882 })]
+        [InlineData(0.1, 0.1, new double[] { -14.991489, 3.061132, 1.234882 })]
+        [InlineData(1.0, 1.0, new double[] { 5, 35, 0 })]
+        public void It_Returns_A_Tight_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
+        {
+            // Arrange
+            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
+
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Tight);
+            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+
+            // Assert
+            surface.Should().NotBeNull();
+            evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Returns_Error_InitialCurves_NURBS_Lofted_Surface()
+        public void Lofted_Surface_Throws_An_Exception_If_The_Curves_Are_Empty_Or_Null()
         {
             // Arange
             List<NurbsCurve> crvs = new List<NurbsCurve>();
@@ -183,52 +147,30 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             func.Should().Throw<Exception>()
-                         .WithMessage("Invalid initial curves! You should select at least 2 curves");
+                         .WithMessage("An invalid number of curves to perform the loft.");
             func2.Should().Throw<Exception>()
-                         .WithMessage("Invalid initial curves! You should select at least 2 curves");
+                         .WithMessage("An invalid number of curves to perform the loft.");
         }
 
         [Fact]
-        public void It_Returns_Error_AllCurvesShouldBeClosedOrOpened_NURBS_Lofted_Surface()
+        public void Lofted_Surface_Throws_An_Exception_If_The_All_Curves_Are_Not_Closed_Or_Open()
         {
             // Arrange
-            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
-                                                   new Point3(0.0, 0.0, 10.0),
-                                                   new Point3(10.0, 0.0, 0.0) };
-
-            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
-                                                   new Point3(0.0, 10.0, 5.0),
-                                                   new Point3(20.0, 10.0, 1.0),
-                                                   new Point3(-15.0, 10.0, 0.0)};
-
-            List<Point3> pts3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
-                                                   new Point3(0.0, 25.0, 20.0),
-                                                   new Point3(10.0, 25.0, 0.0) };
-
-            List<Point3> pts4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
-                                                   new Point3(0.0, 35.0, 20.0),
-                                                   new Point3(5.0, 35.0, 0.0) };
-
-            NurbsCurve crv1 = new NurbsCurve(pts1, 2);
-            NurbsCurve crv2 = new NurbsCurve(pts2, 2);
-            NurbsCurve crv3 = new NurbsCurve(pts3, 2);
-            NurbsCurve crv4 = new NurbsCurve(pts4, 2);
-
-            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2, crv3, crv4 };
+            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            crvs[1] = crvs[1].Close();
 
             // Act
             Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
 
             // Assert
-            crv1.IsClosed().Should().BeFalse();
-            crv2.IsClosed().Should().BeTrue();
+            crvs[0].IsClosed().Should().BeFalse();
+            crvs[1].IsPeriodic().Should().BeTrue();
             func.Should().Throw<Exception>()
                          .WithMessage("Loft only works if all curves are open, or all curves are closed!");
-
         }
 
         [Fact]
-        public void It_Returns_Error_CleanInputCurves_NURBS_Lofted_Surface()
+        public void Lofted_Surface_Throws_An_Exception_After_Cleaning_Curves()
         {
             // Arrange
             List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
@@ -240,18 +182,16 @@ namespace GShark.Test.XUnit.Geometry
                                                    new Point3(20.0, 10.0, 1.0) };
 
             NurbsCurve crv1 = new NurbsCurve(pts1, 2);
-            NurbsCurve crv2 = new NurbsCurve(pts2, 2);
-            NurbsCurve crv3 = null;
+            NurbsCurve crv2 = null;
 
-            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2, crv3 };
+            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2 };
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs);
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
 
             // Assert
-            surface.Should().NotBeNull();
-            surface.LocationPoints.Count.Should().Be(2);
+            func.Should().Throw<Exception>()
+                         .WithMessage("An invalid number of curves to perform the loft.");
         }
-
     }
 }
