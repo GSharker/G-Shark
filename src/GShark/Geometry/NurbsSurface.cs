@@ -147,13 +147,15 @@ namespace GShark.Geometry
             if (crvsInput == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            List<NurbsCurve> crvs = crvsInput.Where(x => x != null).Select(x => x).ToList();
+            List<NurbsCurve> crvs = crvsInput.Where(x => x != null).ToList();
             if(crvs.Count < 2)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
             //Replace IsPerdiodic() with IsClosed() when the issue is solved
-            if (crvs.Any(x => x.IsPeriodic()) && crvs.Any(x => !x.IsPeriodic()))
-                throw new ArgumentException("Loft only works if all curves are open, or all curves are closed!");
+            bool isClosed = crvs[0].IsPeriodic();
+            foreach (NurbsCurve c in crvs)
+                if (isClosed != c.IsPeriodic())
+                    throw new ArgumentException("Loft only works if all curves are open, or all curves are closed!");
 
             if (degreeV > crvs.Count - 1)
                 degreeV = crvs.Count - 1;
@@ -179,9 +181,8 @@ namespace GShark.Geometry
                     for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
                     {
                         List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
-                        NurbsCurve crv = new NurbsCurve(pts, degreeV);
-                        ptsSurf.Add(crv.LocationPoints);
-                        knotV = crv.Knots;
+                        ptsSurf.Add(pts);
+                        knotV = new KnotVector(degreeV, pts.Count);
                     }
                     break;
 
