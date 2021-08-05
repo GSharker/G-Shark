@@ -65,10 +65,10 @@ namespace GShark.ExtendedMethods
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
             }
 
-            var divideResult = Operation.Divide.CurveByLength(curve, len);
-            var points = divideResult.tValues.Select(curve.PointAt).ToList();
+            var (tValues, lengths) = Operation.Divide.CurveByLength(curve, len);
+            var points = tValues.Select(curve.PointAt).ToList();
 
-            return (points, divideResult.tValues);
+            return (points, tValues);
         }
 
         /// <summary>
@@ -119,10 +119,7 @@ namespace GShark.ExtendedMethods
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane();
-                frameNext.Origin = pointsOnCurve[i + 1];
-                frameNext.XAxis = rNext;
-                frameNext.YAxis = sNext;
+                var frameNext = new Plane {Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext};
                 perpFrames[i + 1] = frameNext; //output frame
             }
 

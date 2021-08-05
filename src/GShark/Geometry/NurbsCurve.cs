@@ -149,7 +149,7 @@ namespace GShark.Geometry
         public bool IsPeriodic()
         {
             if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
-            int i, j = 0;
+            int i, j;
             for (i = 0, j = LocationPoints.Count - Degree; i < Degree; i++, j++)
             {
                 if (LocationPoints[i].DistanceTo(LocationPoints[j]) > 0)

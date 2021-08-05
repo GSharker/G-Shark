@@ -141,7 +141,7 @@ namespace GShark.Operation
         public static double CurveClosestParameter(ICurve curve, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
-            double tParameter = default(double);
+            double tParameter = 0D;
             List<Point3> ctrlPts = curve.LocationPoints;
 
             (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
@@ -154,12 +154,12 @@ namespace GShark.Operation
                 Point3 pt0 = pts[i];
                 Point3 pt1 = pts[i + 1];
 
-                (double tValue, Point3 pt) projection = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
-                double distance = projection.pt.DistanceTo(point);
+                var (tValue, pt) = Trigonometry.ClosestPointToSegment(point, pt0, pt1, t0, t1);
+                double distance = pt.DistanceTo(point);
 
                 if (!(distance < minimumDistance)) continue;
                 minimumDistance = distance;
-                tParameter = projection.tValue;
+                tParameter = tValue;
             }
 
             int maxIterations = 5;

@@ -75,11 +75,11 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
-            (List<double> tvalues, List<Point3> pts) samples = Tessellation.CurveRegularSample(curve, 10000);
+            var (_, pts) = Tessellation.CurveRegularSample(curve, 10000);
 
             double length = 0.0;
-            for (int j = 0; j < samples.pts.Count - 1; j++)
-                length += (samples.pts[j + 1] - samples.pts[j]).Length;
+            for (int j = 0; j < pts.Count - 1; j++)
+                length += (pts[j + 1] - pts[j]).Length;
 
             // Assert
             crvLength.Should().BeApproximately(length, 1e-3);

@@ -68,11 +68,11 @@ namespace GShark.Operation
             }
 
             List<NurbsCurve> beziers = new List<NurbsCurve>();
-            (List<Point3> ptsA, List<Point3> ptsB) ctrlPts = SolveBezierCtrlPts(pts);
+            var (ptsA, ptsB) = SolveBezierCtrlPts(pts);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
-                beziers.Add(new NurbsCurve(new List<Point3> { pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1] },
+                beziers.Add(new NurbsCurve(new List<Point3> { pts[i], ptsA[i], ptsB[i], pts[i + 1] },
                     3));
             }
 
@@ -266,11 +266,9 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < 3; i++)
             {
-                Vector b = new Vector();
+                Vector b = new Vector {pts[0][i], startTangent[i] * mult0};
                 // Insert the tangents at the second and second to last index.
-                b.Add(pts[0][i]);
                 // Equations 9.11
-                b.Add(startTangent[i] * mult0);
                 b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
                 // Equations 9.12
                 b.Add(endTangent[i] * mult1);
