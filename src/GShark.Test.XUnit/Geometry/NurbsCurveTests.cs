@@ -242,7 +242,7 @@ namespace GShark.Test.XUnit.Geometry
             var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
 
             // Act
-            NurbsCurve nurbsCurveCopy = nurbsCurve.Clone();
+            NurbsCurve nurbsCurveCopy = nurbsCurve.Copy();
 
             // Assert
             nurbsCurveCopy.Should().NotBeNull();

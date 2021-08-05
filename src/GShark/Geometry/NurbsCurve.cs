@@ -180,7 +180,7 @@ namespace GShark.Geometry
         /// Gets a copy of the curve.
         /// </summary>
         /// <returns>The copied curve.</returns>
-        public NurbsCurve Clone()
+        public NurbsCurve Copy()
         {
             return new NurbsCurve(this);
         }
