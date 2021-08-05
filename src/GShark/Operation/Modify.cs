@@ -101,7 +101,7 @@ namespace GShark.Operation
         public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
-            List<Point3> controlPoints = curve.LocationPoints;
+            List<Point4> controlPoints = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             // Find all of the unique knot values and their multiplicity.
@@ -117,7 +117,7 @@ namespace GShark.Operation
                 NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
                 ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
                 knots = curveResult.Knots;
-                controlPoints = curveResult.LocationPoints;
+                controlPoints = curveResult.ControlPoints;
             }
 
             int crvKnotLength = reqMultiplicity * 2;
@@ -130,7 +130,7 @@ namespace GShark.Operation
                 KnotVector knotsRange = (normalize)
                     ? knots.GetRange(i, crvKnotLength).ToKnot().Normalize()
                     : knots.GetRange(i, crvKnotLength).ToKnot();
-                List<Point3> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
+                List<Point4> ptsRange = controlPoints.GetRange(i, reqMultiplicity);
 
                 NurbsCurve tempCrv = new NurbsCurve(degree, knotsRange, ptsRange);
                 curves.Add(tempCrv);
@@ -148,15 +148,12 @@ namespace GShark.Operation
         /// <returns>A curve with a reversed parametrization.</returns>
         public static ICurve ReverseCurve(ICurve curve)
         {
-            List<Point3> pts = new List<Point3>(curve.LocationPoints);
-            pts.Reverse();
-
-            List<double> weights = LinearAlgebra.GetWeights(curve.ControlPoints);
-            weights.Reverse();
+            List<Point4> controlPts = new List<Point4>(curve.ControlPoints);
+            controlPts.Reverse();
 
             KnotVector knots = KnotVector.Reverse(curve.Knots);
 
-            return new NurbsCurve(curve.Degree, knots, pts, weights);
+            return new NurbsCurve(curve.Degree, knots, controlPts);
         }
     }
 }

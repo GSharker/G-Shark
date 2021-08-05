@@ -48,9 +48,10 @@ namespace GShark.Operation
             var vectorR = ComputeValuesR(knots, uk, Rk, degree, numberCpts);
 
             // Computes control points, fixing the first and last point from the input points.
-            List<Point3> ctrlPts = new List<Point3> { pts[0] };
-            ctrlPts.AddRange(SolveCtrlPts(knots, vectorR, matrixNtN));
+            List<Point4> ctrlPts = new List<Point4> { pts[0] };
+            ctrlPts.AddRange(SolveCtrlPts(vectorR, matrixNtN));
             ctrlPts.Add(pts[pts.Count - 1]);
+
             return new NurbsCurve(degree, knots, ctrlPts);
         }
 
@@ -107,9 +108,9 @@ namespace GShark.Operation
             // Build matrix of basis function coefficients.
             Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
             // Solve for each points.
-            List<Point3> ctrlPts = (hasTangents)
+            List<Point4> ctrlPts = (hasTangents)
                 ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3(startTangent.Value), new Vector3(endTangent.Value))
-                : SolveCtrlPts(knots, pts, coeffMatrix);
+                : SolveCtrlPts(pts, coeffMatrix);
 
             return new NurbsCurve(degree, knots, ctrlPts);
         }
@@ -233,7 +234,7 @@ namespace GShark.Operation
         /// <summary>
         /// Defines the control points.
         /// </summary>
-        private static List<Point3> SolveCtrlPts(KnotVector knots, List<Point3> pts, Matrix coeffMatrix)
+        private static List<Point4> SolveCtrlPts(List<Point3> pts, Matrix coeffMatrix)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -246,13 +247,13 @@ namespace GShark.Operation
                 Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
-            return ptsSolved.Transpose().Select(pt => new Point3(pt[0], pt[1], pt[2])).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point4(pt[0], pt[1], pt[2], 1)).ToList();
         }
 
         /// <summary>
         /// Defines the control points defining the tangent values for the first and last points.
         /// </summary>
-        private static List<Point3> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
+        private static List<Point4> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -279,7 +280,7 @@ namespace GShark.Operation
                 ptsSolved.Add(solution);
             }
 
-            return ptsSolved.Transpose().Select(pt => new Point3(pt[0], pt[1], pt[2])).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point4(pt[0], pt[1], pt[2], 1)).ToList();
         }
 
         /// <summary>

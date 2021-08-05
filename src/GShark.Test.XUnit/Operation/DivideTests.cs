@@ -29,15 +29,14 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(2,2,0),
                 new Point3(4,12,0),
                 new Point3(7,12,0),
                 new Point3(15,2,0)
             };
-            KnotVector knots = new KnotVector(degree, controlPts.Count);
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
             List<ICurve> curves = Divide.SplitCurve(curve, parameter);
@@ -65,12 +64,12 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = {
                     0,
-                    0.12294074023135007,
-                    0.26515583503755935,
-                    0.4202931617987752,
-                    0.5797068382012247,
-                    0.7348441649624406,
-                    0.87705925976865,
+                    0.12294081350167592,
+                    0.26515588164329529,
+                    0.4202931821346283,
+                    0.5797068178653717,
+                    0.73484411835670471,
+                    0.877059186498324,
                     1
                 };
 
@@ -96,12 +95,12 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = {
                 0,
-                0.12294074023135007,
-                0.26515583503755935,
-                0.4202931617987752,
-                0.5797068382012247,
-                0.7348441649624406,
-                0.87705925976865,
+                0.12294081350167592,
+                0.26515588164329529,
+                0.4202931821346283,
+                0.5797068178653717,
+                0.73484411835670471,
+                0.877059186498324,
                 1
             };
             var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();

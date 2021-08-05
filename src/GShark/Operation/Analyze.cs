@@ -46,7 +46,7 @@ namespace GShark.Operation
         /// Computes the approximate length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
-        /// <param name="u">The parameter at which to approximate the length.</param>
+        /// <param name="u">The parameter at which to approximate the length, it should be between 0.0 and 1.0.</param>
         /// <param name="gaussDegIncrease">
         /// the degree of gaussian quadrature to perform.
         /// A higher number yields a more exact result, default set to 16.
@@ -54,7 +54,7 @@ namespace GShark.Operation
         /// <returns>The approximate length of a bezier.</returns>
         public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
         {
-            double uSet = u < 0.0 ? curve.Knots.Last() : u;
+            double uSet = (u < 0.0 || u > 1.0) ? curve.Knots.Last() : u;
             double z = (uSet - curve.Knots[0]) / 2;
             double sum = 0.0;
             int gaussDegree = curve.Degree + gaussDegIncrease;

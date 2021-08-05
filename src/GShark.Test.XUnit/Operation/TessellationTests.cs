@@ -24,18 +24,17 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 2;
-            KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weights1 = new List<double> { 1, 1, 1 };
             List<double> weights2 = new List<double> { 1, 1, 2 };
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(1, 0, 0),
                 new Point3(1, 1, 0),
                 new Point3(0, 2, 0)
             };
 
-            NurbsCurve curve1 = new NurbsCurve(degree, knots, controlPts, weights1);
-            NurbsCurve curve2 = new NurbsCurve(degree, knots, controlPts, weights2);
+            NurbsCurve curve1 = new NurbsCurve(pts, weights1, degree);
+            NurbsCurve curve2 = new NurbsCurve(pts, weights2, degree);
 
             // Act
             (List<double> tvalues, List<Point3> pts) curveLength1 = Tessellation.CurveRegularSample(curve1, 10);
@@ -82,15 +81,15 @@ namespace GShark.Test.XUnit.Operation
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().LocationPoints;
-            NurbsCurve curve = new NurbsCurve(controlPts, 1);
+            List<Point3> locationPts = NurbsCurveCollection.NurbsCurvePlanarExample().LocationPoints;
+            NurbsCurve curve = new NurbsCurve(locationPts, 1);
 
             // Act
             (List<double> tValues, List<Point3> pts) = Tessellation.CurveAdaptiveSample(curve, 0.1);
 
             // Assert
             tValues.Count.Should().Be(pts.Count).And.Be(6);
-            pts.Should().BeEquivalentTo(controlPts);
+            pts.Should().BeEquivalentTo(locationPts);
         }
 
         [Fact]

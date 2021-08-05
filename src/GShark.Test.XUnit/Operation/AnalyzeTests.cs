@@ -23,9 +23,7 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots1 = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
-            KnotVector knots2 = new KnotVector { 1, 1, 1, 1, 4, 4, 4, 4 };
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(0, 0, 0),
                 new Point3(0.5, 0, 0),
@@ -33,17 +31,14 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(3, 0, 0)
             };
 
-            NurbsCurve curve1 = new NurbsCurve(degree, knots1, controlPts);
-            NurbsCurve curve2 = new NurbsCurve(degree, knots2, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
             double expectedLength = 3.0;
 
             // Act
-            double curveLength1 = Analyze.BezierCurveLength(curve1, 1);
-            double curveLength2 = Analyze.BezierCurveLength(curve2, 4);
+            double curveLength = Analyze.BezierCurveLength(curve, 1);
 
             // Assert
-            curveLength1.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
-            curveLength2.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
+            curveLength.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
         }
 
         [Fact]
