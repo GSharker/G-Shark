@@ -140,7 +140,7 @@ namespace GShark.Operation
         /// <param name="knots">The knot vector of the curve.</param>
         /// <param name="degree">The value degree of the curve.</param>
         /// <param name="t">The parameter value where the curve is evaluated.</param>
-        internal static void DeBoor(ref List<Point3> controlPts, KnotVector knots, int degree, double t)
+        internal static void DeBoor(ref List<Point4> controlPts, KnotVector knots, int degree, double t)
         {
             if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharkMath.Epsilon)
             {
@@ -165,8 +165,8 @@ namespace GShark.Operation
                     double alpha0 = deltaT[j] / (k1 - k0);
                     double alpha1 = 1.0 - alpha0;
 
-                    Point3 cv1 = controlPts[j + 1];
-                    Point3 cv0 = controlPts[j];
+                    Point4 cv1 = controlPts[j + 1];
+                    Point4 cv0 = controlPts[j];
 
                     controlPts[j] = (cv0 * alpha0) + (cv1 * alpha1);
                 }
@@ -182,19 +182,19 @@ namespace GShark.Operation
         /// <returns>The evaluated point on the curve.</returns>
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4> curveHomogenizedPoints = curve.ControlPoints;
+            List<Point4> controlPts = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             int n = knots.Count - curve.Degree - 2;
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4 pointOnCurve = new Point4(0, 0, 0, 0);
+            Point4 pointOnCurve = Point4.Zero;
 
             for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+                Point4 pt = controlPts[knotSpan - curve.Degree + i];
 
                 pointOnCurve.X += valToMultiply * pt.X;
                 pointOnCurve.Y += valToMultiply * pt.Y;
@@ -202,7 +202,7 @@ namespace GShark.Operation
                 pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            return LinearAlgebra.PointDehomogenizer(pointOnCurve);
+            return new Point3(pointOnCurve);
         }
 
 

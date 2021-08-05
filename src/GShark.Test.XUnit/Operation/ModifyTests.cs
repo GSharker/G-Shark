@@ -20,37 +20,36 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Theory]
-        [InlineData(2.5, 1)]
-        [InlineData(2.5, 2)]
-        [InlineData(2.5, 3)]
-        [InlineData(2.5, 4)]
-        [InlineData(0.5, 1)]
-        [InlineData(0.5, 2)]
-        [InlineData(0.5, 3)]
-        [InlineData(0.5, 4)]
-        [InlineData(3.0, 1)]
-        [InlineData(3.0, 2)]
+        [InlineData(0.3, 1)]
+        [InlineData(0.3, 2)]
+        [InlineData(0.3, 3)]
+        [InlineData(0.3, 4)]
+        [InlineData(0.45, 1)]
+        [InlineData(0.45, 2)]
+        [InlineData(0.45, 3)]
+        [InlineData(0.45, 4)]
+        [InlineData(0.7, 1)]
+        [InlineData(0.7, 2)]
         public void It_Refines_The_Curve_Knot(double val, int insertion)
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
 
             List<double> newKnots = new List<double>();
             for (int i = 0; i < insertion; i++)
                 newKnots.Add(val);
 
             List<Point3> pts = new List<Point3>();
-            for (int i = 0; i <= knots.Count - degree - 2; i++)
+            for (int i = 0; i <= 12 - degree - 2; i++)
                 pts.Add(new Point3( i, 0.0, 0.0));
 
-            ICurve curve = new NurbsCurve(degree, knots, pts);
+            ICurve curve = new NurbsCurve(pts, degree);
 
             // Act
             ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
 
             // Assert
-            (knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
+            (curve.Knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
             (pts.Count + insertion).Should().Be(curveAfterRefine.LocationPoints.Count);
 
             Point3 p0 = curve.PointAt(2.5);
@@ -66,13 +65,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 };
+ 
+            List<Point3> pts = new List<Point3>();
+            for (int i = 0; i <= 12 - degree - 2; i++)
+                pts.Add(new Point3( i, 0.0, 0.0));
 
-            List<Point3> controlPts = new List<Point3>();
-            for (int i = 0; i <= knots.Count - degree - 2; i++)
-                controlPts.Add(new Point3( i, 0.0, 0.0));
-
-            ICurve curve = new NurbsCurve(degree, knots, controlPts);
+            ICurve curve = new NurbsCurve(pts, degree);
 
             // Act
             List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);

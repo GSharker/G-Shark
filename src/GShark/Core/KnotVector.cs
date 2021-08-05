@@ -315,7 +315,7 @@ namespace GShark.Core
 
             double[] knot = new double[degree + numberOfControlPts + 1];
 
-            double k = 0.0;
+            double k;
             int i, knotCount = numberOfControlPts + degree + 1;
 
             double delta = 1.0 / (numberOfControlPts - degree);

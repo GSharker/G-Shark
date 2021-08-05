@@ -41,16 +41,15 @@ namespace GShark.Test.XUnit.Operation
 
         [Theory]
         [InlineData(0.0, new[] { 5.0, 5.0, 0.0 })]
-        [InlineData(0.3, new[] { 18.617, 13.377, 0.0 })]
-        [InlineData(0.5, new[] { 27.645, 14.691, 0.0 })]
-        [InlineData(0.6, new[] { 32.143, 14.328, 0.0 })]
+        [InlineData(0.3, new[] { 18.5, 13.33625, 0.0 })]
+        [InlineData(0.5, new[] { 27.5, 14.6875, 0.0 })]
+        [InlineData(0.6, new[] { 32.0, 14.35, 0.0 })]
         [InlineData(1.0, new[] { 50.0, 5.0, 0.0 })]
         public void It_Returns_A_Point_At_A_Given_Parameter(double parameter, double[] result)
         {
             // Arrange
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.33, 0.66, 1.0, 1.0, 1.0, 1.0 };
             int degree = 3;
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new (5,5,0),
                 new (10, 10, 0),
@@ -59,7 +58,7 @@ namespace GShark.Test.XUnit.Operation
                 new (45, 10, 0),
                 new (50, 5, 0)
             };
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
             Point3 pt = Evaluation.CurvePointAt(curve, parameter);
@@ -165,9 +164,8 @@ namespace GShark.Test.XUnit.Operation
             // Arrange
             int degree = 3;
             int parameter = 0;
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 1, 1 };
             int numberDerivs = 2;
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new (10, 0, 0),
                 new (20, 10, 0),
@@ -175,7 +173,7 @@ namespace GShark.Test.XUnit.Operation
                 new (50, 50, 0)
             };
 
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
             List<Point4> p = Evaluation.CurveDerivatives(curve, parameter, numberDerivs);
@@ -193,15 +191,14 @@ namespace GShark.Test.XUnit.Operation
             // Example at page 126.
             // Arrange
             int degree = 2;
-            KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weight = new List<double> { 1, 1, 2 };
-            List<Point3> controlPts = new List<Point3>()
+            List<Point3> pts = new List<Point3>()
             {
                 new Point3(1, 0, 0),
                 new Point3(1, 1, 0),
                 new Point3(0, 1, 0)
             };
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts, weight);
+            NurbsCurve curve = new NurbsCurve(pts, weight, degree);
             int derivativesOrder = 2;
 
             // Act
@@ -249,7 +246,6 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 0.5, 1, 1, 1, 1 };
             List<Point3> pts = new List<Point3>
             {
                 new (0, 0, 0),
@@ -259,7 +255,7 @@ namespace GShark.Test.XUnit.Operation
                 new (4, 0, 0)
             };
             List<double> weights = new List<double> { 1, 1, 1, 1, 1 };
-            NurbsCurve curve = new NurbsCurve(degree, knots, pts, weights);
+            NurbsCurve curve = new NurbsCurve(pts, weights, degree);
             Vector3 tangentExpectedLinearCurve = new Vector3(3, 0, 0);
             Vector3 tangentExpectedPlanarCurve = new Vector3(tangentData[0], tangentData[1], tangentData[2]);
 
