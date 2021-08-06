@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -141,28 +142,39 @@ namespace GShark.ExtendedMethods
         }
 
         /// <summary>
-        /// Splits a curve into segments at given parameters.
+        /// Extract sub-curve defined by domain.
         /// </summary>
-        /// <param name="curve">The curve object.</param>
-        /// <param name="t">The parameters at which to split the curve.</param>
-        /// <returns>The new curves, defined by degree, knots, and control points.</returns>
-        //public static List<ICurve> SplitCurve(this ICurve curve, IEnumerable<double> t)
-        //{
-        //    int degree = curve.Degree;
+        /// <param name="curve">The curve from which to extract the sub-curve.</param>
+        /// <param name="domain">Domain of sub-curve</param>
+        /// <returns>NurbsCurve.</returns>
+        public static ICurve SubCurve(this ICurve curve, Interval domain)
+        {
+            int degree = curve.Degree;
 
-        //    List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
+            List<double> knotsToInsert = Sets.RepeatData(domain.T0, degree + 1);
+            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            knotsToInsert = Sets.RepeatData(domain.T1, degree + 1);
+            refinedCurve = Modify.CurveKnotRefine(refinedCurve, knotsToInsert);
+            int span0 = refinedCurve.Knots.Span(degree, domain.T0);
+            int span1 = refinedCurve.Knots.Span(degree, domain.T1);
 
-        //    ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            var multiplicity0 = refinedCurve.Knots.Multiplicity(span0);
+            var multiplicity1 = refinedCurve.Knots.Multiplicity(span1);
+            KnotVector knotVector = new KnotVector();
 
-        //    int s = curve.Knots.Span(degree, t);
+            for (int i = span0 - (multiplicity0 - 1); i <= span0; i++)
+            {
+                knotVector.Add(refinedCurve.Knots[i]);
+            }
 
-        //    KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
-        //    KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
 
-        //    List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
-        //    List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
+            //KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
+            //KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
 
-        //    return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
-        //}
+            //    List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
+            //    List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
+
+            return new NurbsCurve();
+        }
     }
 }

@@ -22,9 +22,11 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Theory]
+        [InlineData(0.0)]
         [InlineData(0.25)]
         [InlineData(0.5)]
         [InlineData(0.75)]
+        [InlineData(1.0)]
         public void It_Returns_Two_Curves_Splitting_One_Curve(double parameter)
         {
             // Arrange
@@ -56,6 +58,30 @@ namespace GShark.Test.XUnit.Operation
                 int d = 0;
                 curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharkMath.MaxTolerance);
             }
+        }
+
+        [Fact]
+        public void It_Returns_A_Subcurve_Defined_By_Domain()
+        {
+            // Arrange
+            var domain = new Interval(0.25, 0.5);
+            int degree = 3;
+            List<Point3> controlPts = new List<Point3>
+            {
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,0)
+            };
+            KnotVector knots = new KnotVector(degree, controlPts.Count);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+
+            // Act
+            var subcurve = curve.SubCurve(domain);
+
+
+            // Assert
+
         }
 
         [Fact]
