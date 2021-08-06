@@ -80,36 +80,6 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void It_Returns_A_Set_Of_Opened_Curves(int n)
-        {
-            // Assert
-            NurbsCurveCollection.SetOfOpenedNurbsCurves().Count.Should().Be(4);
-            NurbsCurveCollection.SetOfOpenedNurbsCurves()[n].Knots.Count.Should().Be(6);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void It_Returns_A_Set_Of_Closed_Curves(int n)
-        {
-            // Assert
-            NurbsCurveCollection.SetOfClosedNurbsCurves().Count.Should().Be(4);
-            NurbsCurveCollection.SetOfClosedNurbsCurves()[n].Knots.Count.Should().Be(8);
-            NurbsCurveCollection.SetOfClosedNurbsCurves()[n].IsPeriodic().Should().BeTrue();
-            NurbsCurveCollection.SetOfClosedNurbsCurves()[n]
-                .PointAt(0.0)
-                .DistanceTo(NurbsCurveCollection.SetOfClosedNurbsCurves()[n].PointAt(1.0))
-                .Should()
-                .BeLessThan(GeoSharkMath.Epsilon);
-        }
-
         [Fact]
         public void It_Returns_True_If_A_NurbsCurve_Is_Periodic()
         {
