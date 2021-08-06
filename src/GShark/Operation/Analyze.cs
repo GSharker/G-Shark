@@ -2,8 +2,12 @@
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using GShark.ExtendedMethods;
+using GShark.Operation.Enum;
 
 namespace GShark.Operation
 {
@@ -223,8 +227,50 @@ namespace GShark.Operation
         /// <returns>The closest parameter on the surface.</returns>
         public static double SurfaceClosestParameter(NurbsSurface surface, Point3 point)
         {
+            double minimumDistance = double.PositiveInfinity;
+            double uParam, vParam = 0D;
+            NurbsSurface splitSrf = surface;
+            double param = 0.5;
+
+            for (int i = 0; i < 5; i++)
+            {
+                var surfaces = splitSrf.Split(0.5, SplitDirection.Both);
+                var pts = surfaces.Select(s => s.PointAt(0.5, 0.5)).ToArray();
+                var srfUV = DefiningUV(param);
+
+                for (int j = 0; j < pts.Length; j++)
+                {
+                    double distance = pts[i].DistanceTo(point);
+
+                    if (!(distance < minimumDistance)) continue;
+                    minimumDistance = distance;
+                    uParam = srfUV.u[i];
+                    vParam = srfUV.v[i];
+                    splitSrf = surfaces[i];
+                }
+
+                param /= 2;
+            }
 
         }
+
+        private static (double[] u, double[] v) DefiningUV(double parameter)
+        {
+            double halfParameter = parameter / 2;
+
+            double[] u = new[]
+            {
+                parameter + halfParameter, parameter - halfParameter, parameter + halfParameter, parameter - halfParameter
+            };
+
+            double[] v = new[]
+            {
+                parameter - halfParameter, parameter - halfParameter, parameter + halfParameter, parameter + halfParameter
+            };
+
+            return (u, v);
+        }
+
 
         /// <summary>
         /// Newton iteration to minimize the distance between a point and a curve.
