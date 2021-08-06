@@ -159,20 +159,6 @@ namespace GShark.Test.XUnit.Core
             result.Should().Be(expectedValue);
         }
 
-        [Fact]
-        public void KnotMultiplicity_Throws_An_Exception_If_Index_Out_Of_Range()
-        {
-            // Arrange
-            KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3 };
-
-            // Act
-            Func<object> funcResult = () => knots.Multiplicity(12);
-
-            // Assert
-            funcResult.Should().Throw<Exception>()
-                .WithMessage("Input values must be in the dimension of the knot set.");
-        }
-
         [Theory]
         [InlineData(0, 4)]
         [InlineData(1, 2)]
