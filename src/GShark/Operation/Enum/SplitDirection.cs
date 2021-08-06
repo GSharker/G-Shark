@@ -1,4 +1,6 @@
-﻿namespace GShark.Geometry.Enum
+﻿using GShark.Geometry.Enum;
+
+namespace GShark.Operation.Enum
 {
     /// <summary>
     /// Enum defining the direction where a surface will be spitted.
@@ -15,6 +17,11 @@
         /// <summary>
         /// The V direction of a surface.
         /// </summary>
-        V = SurfaceDirection.V
+        V = SurfaceDirection.V,
+
+        /// <summary>
+        /// The both direction U and V of a surface.
+        /// </summary>
+        Both
     }
 }

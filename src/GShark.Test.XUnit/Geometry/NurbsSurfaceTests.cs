@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Enum;
 using GShark.Operation;
+using GShark.Operation.Enum;
 using GShark.Test.XUnit.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -184,6 +185,28 @@ namespace GShark.Test.XUnit.Geometry
                 pt.EpsilonEquals(surfacePtsTop[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
             _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsBottom[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
+        }
+
+        [Fact]
+        public void It_Returns_The_Surface_Split_At_The_Given_Parameter_At_Both_Direction()
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            List<Point3> expectedPts = new List<Point3>
+            {
+                new Point3(2.714286, 3.142857, 1.4),
+                new Point3(7.285714, 3.142857, 1.171429),
+                new Point3(3.04878, 8.04878, 3.585366),
+                new Point3(6.95122, 8.04878, 3)
+            };
+
+            // Act
+            NurbsSurface[] splitSrf = surface.Split(0.5, SplitDirection.Both);
+            var ptsAt = splitSrf.Select(s => s.PointAt(0.5, 0.5));
+
+            // Assert
+            splitSrf.Length.Should().Be(4);
+            _ = ptsAt.Select((pt, i) => pt.DistanceTo(expectedPts[i]).Should().BeLessThan(GeoSharkMath.MaxTolerance));
         }
 
         [Theory]

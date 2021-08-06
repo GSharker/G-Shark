@@ -1,8 +1,8 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
-using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
+using GShark.Operation.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +46,8 @@ namespace GShark.Operation
         /// <param name="parameter">The parameter at which to split the surface, parameter should be between 0 and 1.</param>
         /// <param name="direction">Where to split in the U or V direction of the surface.</param>
         /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
-        /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.</returns>
+        /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.<br/>
+        /// If the spit direction selected is both, the split computes first a U direction split and on the result a V direction split.</returns>
         internal static NurbsSurface[] SplitSurface(NurbsSurface surface, double parameter, SplitDirection direction)
         {
             KnotVector knots = surface.KnotsV;
@@ -80,21 +81,42 @@ namespace GShark.Operation
 
             KnotVector knotLeft = result.Knots.GetRange(0, span + degree + 2).ToKnot();
             KnotVector knotRight = result.Knots.GetRange(span + 1, span + degree + 2).ToKnot();
+            NurbsSurface[] surfaceResult = new NurbsSurface[] { };
 
-            if (direction != SplitDirection.V)
+            switch (direction)
             {
-                return new NurbsSurface[]
+                case SplitDirection.U:
                 {
-                    new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft)),
-                    new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight))
-                };
+                    surfaceResult =  new NurbsSurface[]
+                    {
+                        new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft)),
+                        new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight))
+                    };
+                    break;
+                }
+                case SplitDirection.V:
+                {
+                    surfaceResult = new NurbsSurface[]
+                    {
+                        new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotLeft, surfPtsLeft),
+                        new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotRight, surfPtsRight)
+                    };
+                    break;
+                }
+                case SplitDirection.Both:
+                {
+                    NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft));
+                    NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight));
+
+                    NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
+                    NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);
+
+                    surfaceResult = split2.Concat(split1).ToArray();
+                    break;
+                }
             }
 
-            return new NurbsSurface[]
-            {
-                new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotLeft, surfPtsLeft),
-                new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotRight, surfPtsRight)
-            };
+            return surfaceResult;
         }
 
         /// <summary>

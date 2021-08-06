@@ -1,7 +1,7 @@
-﻿using System;
-using GShark.Geometry;
-using GShark.Geometry.Enum;
+﻿using GShark.Geometry;
 using GShark.Operation;
+using GShark.Operation.Enum;
+using System;
 
 namespace GShark.ExtendedMethods
 {
