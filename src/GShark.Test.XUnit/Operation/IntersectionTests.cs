@@ -103,7 +103,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptCheck1 = new Point3(output1[0], output1[1], output1[2]);
 
             // Act
-            bool intersection = Intersect.LineLine(ln0, ln1, out Point3 pt0, out Point3 pt1, out _, out _);
+            _ = Intersect.LineLine(ln0, ln1, out Point3 pt0, out Point3 pt1, out _, out _);
 
             // Assert
             pt0.EpsilonEquals(ptCheck0, GeoSharkMath.MaxTolerance).Should().BeTrue();
@@ -176,8 +176,8 @@ namespace GShark.Test.XUnit.Operation
             Point3 intersectionCheck = new Point3( 10, 40, 5);
 
             // Act
-            bool intersection0 = Intersect.LineCircle(cl, ln0, out Point3[] pts0);
-            bool intersection1 = Intersect.LineCircle(cl, ln1, out Point3[] pts1);
+            _ = Intersect.LineCircle(cl, ln0, out Point3[] pts0);
+            _ = Intersect.LineCircle(cl, ln1, out Point3[] pts1);
 
             // Assert
             for (int i = 0; i < intersectionChecks.Length; i++)
@@ -197,7 +197,7 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(new Point3( -15, 45, 17), new Point3(15, 45, 25));
 
             // Act
-            bool intersection = Intersect.LineCircle(cl, ln, out Point3[] pts);
+            bool intersection = Intersect.LineCircle(cl, ln, out _);
 
             // Assert
             intersection.Should().BeFalse();
@@ -236,7 +236,7 @@ namespace GShark.Test.XUnit.Operation
             };
 
             // Act
-            bool intersection = Intersect.PlaneCircle(plSec, cl, out Point3[] pts);
+            _ = Intersect.PlaneCircle(plSec, cl, out Point3[] pts);
 
             // Assert
             for (int i = 0; i < intersectionChecks.Length; i++)

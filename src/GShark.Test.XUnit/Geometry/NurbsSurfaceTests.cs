@@ -126,9 +126,9 @@ namespace GShark.Test.XUnit.Geometry
             surfaces[0].Weights.Should().BeEquivalentTo(weightsLeft);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsRight);
 
-            surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsLeft[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
-            surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsRight[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
         }
 
@@ -180,9 +180,9 @@ namespace GShark.Test.XUnit.Geometry
             surfaces[0].Weights.Should().BeEquivalentTo(weightsTop);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsBottom);
 
-            surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsTop[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
-            surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsBottom[i][j], GeoSharkMath.MaxTolerance).Should().BeTrue()));
         }
 
