@@ -171,7 +171,7 @@ namespace GShark.Geometry
                     for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
                     {
                         List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
-                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV, null, null, true);
+                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
                         ptsSurf.Add(crv.LocationPoints);
                         knotV = crv.Knots;
                     }
@@ -186,15 +186,6 @@ namespace GShark.Geometry
                     }
                     break;
 
-                case LoftType.Tight:
-                    for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
-                    {
-                        List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
-                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV, null, null, false);
-                        ptsSurf.Add(crv.LocationPoints);
-                        knotV = crv.Knots;
-                    }
-                    break;
             }
             return new NurbsSurface(degreeU, degreeV, knotU, knotV, ptsSurf);
         }
