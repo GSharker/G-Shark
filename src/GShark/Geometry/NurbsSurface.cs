@@ -155,7 +155,7 @@ namespace GShark.Geometry
             bool isClosed = crvs[0].IsPeriodic();
             foreach (NurbsCurve c in crvs)
                 if (isClosed != c.IsPeriodic())
-                    throw new ArgumentException("Loft only works if all curves are open, or all curves are closed!");
+                    throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
             if (degreeV > crvs.Count - 1)
                 degreeV = crvs.Count - 1;

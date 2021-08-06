@@ -134,7 +134,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static List<NurbsCurve> SetOfOpenedNurbsCurves()
+        public static List<NurbsCurve> OpenCurves()
         {
             int degree = 2;
             List<Point3> points1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
@@ -161,9 +161,9 @@ namespace GShark.Test.XUnit.Data
             return new List<NurbsCurve>() { c1, c2, c3, c4 };
         }
         
-        public static List<NurbsCurve> SetOfClosedNurbsCurves()
+        public static List<NurbsCurve> ClosedCurves()
         {
-            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             for (int i = 0; i < crvs.Count; i++)
                 crvs[i] = crvs[i].Close();
 

@@ -11,23 +11,8 @@
         Normal,
 
         /// <summary>
-        /// The surface control points are created at the same locations as the control points of the loft input curves
+        /// The surface control points are created at the same locations as the control points of the loft input curves.
         /// </summary>
         Loose,
-
-        /// <summary>
-        /// Uses square root of chord-length parameterization in the loft direction.
-        /// </summary>
-        Tight,
-
-        /// <summary>
-        /// The sections between the curves are straight
-        /// </summary>
-        Straight,
-
-        /// <summary>
-        /// The object knot vectors will be uniform.
-        /// </summary>
-        Uniform
     }
 }

@@ -84,7 +84,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Normal_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
@@ -103,7 +103,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Loose_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             Point3 expectedPt = new Point3( pt[0], pt[1], pt[2] );
 
             // Act
@@ -137,7 +137,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Lofted_Surface_Throws_An_Exception_If_The_All_Curves_Are_Not_Closed_Or_Open()
         {
             // Arrange
-            List<NurbsCurve> crvs = NurbsCurveCollection.SetOfOpenedNurbsCurves();
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             crvs[1] = crvs[1].Close();
 
             // Act
