@@ -175,29 +175,31 @@ namespace GShark.Test.XUnit.Core
 
         [Theory]
         [InlineData(0, 4)]
-        [InlineData(4, 2)]
-        [InlineData(6, 3)]
-        [InlineData(9, 1)]
-        [InlineData(10, 1)]
-        [InlineData(11, 3)]
-        public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(int index, int result)
+        [InlineData(1, 2)]
+        [InlineData(2, 3)]
+        [InlineData(3, 1)]
+        [InlineData(3.3, 1)]
+        [InlineData(4, 3)]
+        [InlineData(987, 0)]
+        [InlineData(-15657.65, 0)]
+        public void KnotMultiplicity_Returns_Knot_Multiplicity_At_The_Given_Index(double knot, int expectedMultiplicity)
         {
             // Arrange
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
             // Act
-            int knotMult = knots.Multiplicity(index);
+            int multiplicity = knots.Multiplicity(knot);
 
             // Assert
-            knotMult.Should().Be(result);
+            multiplicity.Should().Be(expectedMultiplicity);
         }
 
         [Fact]
         public void Multiplicities_Returns_A_Dictionary_Of_Knot_Values_And_Multiplicity()
         {
             // Arrange
-            double[] knotsValue = new double[] { 0, 1, 2, 3, 3.3, 4 };
-            int[] multiplicityResult = new int[] { 4, 2, 3, 1, 1, 3 };
+            double[] knotsValue = { 0, 1, 2, 3, 3.3, 4 };
+            int[] multiplicityResult = { 4, 2, 3, 1, 1, 3 };
             int count = 0;
             KnotVector knots = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
 
