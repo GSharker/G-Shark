@@ -215,6 +215,18 @@ namespace GShark.Operation
         }
 
         /// <summary>
+        /// Computes the closest parameters on a surface to a given point.<br/>
+        /// <em>Corresponds to page 244 chapter six from The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="surface">The surface object.</param>
+        /// <param name="point">Point to search from.</param>
+        /// <returns>The closest parameter on the surface.</returns>
+        public static double SurfaceClosestParameter(NurbsSurface surface, Point3 point)
+        {
+
+        }
+
+        /// <summary>
         /// Newton iteration to minimize the distance between a point and a curve.
         /// </summary>
         /// <param name="u">The parameter obtained at the ith Newton iteration.</param>
