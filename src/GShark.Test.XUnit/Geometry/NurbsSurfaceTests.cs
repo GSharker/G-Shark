@@ -147,7 +147,7 @@ namespace GShark.Test.XUnit.Geometry
             crvs[0].IsClosed().Should().BeFalse();
             crvs[1].IsPeriodic().Should().BeTrue();
             func.Should().Throw<Exception>()
-                         .WithMessage("Loft only works if all curves are open, or all curves are closed!");
+                         .WithMessage("Loft only works if all curves are open, or all curves are closed.");
         }
 
         [Fact]

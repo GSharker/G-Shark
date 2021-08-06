@@ -139,8 +139,9 @@ namespace GShark.Geometry
         /// <summary>
         /// Constructs a NURBS surface from a set of NURBS curves.<br/>
         /// </summary>
-        /// <param name="crvs">Set of curves to create the surface.</param>
+        /// <param name="crvsInput">Set of curves to create the surface.</param>
         /// <param name="degreeV">Degree of surface in V direction.</param>
+        /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
         public static NurbsSurface CreateLoftedSurface(List<NurbsCurve> crvsInput, int degreeV = 3, LoftType loftType = LoftType.Normal)
         {
@@ -178,14 +179,9 @@ namespace GShark.Geometry
                     break;
 
                 case LoftType.Loose:
-                    for (int n = 0; n < crvs[0].LocationPoints.Count; n++)
-                    {
-                        List<Point3> pts = crvs.Select(c => c.LocationPoints[n]).ToList();
-                        ptsSurf.Add(pts);
-                        knotV = new KnotVector(degreeV, pts.Count);
-                    }
+                    ptsSurf = Sets.Reverse2DMatrixPoints(crvs.Select(c => c.LocationPoints).ToList());
+                    knotV = new KnotVector(degreeV, crvs.Count);
                     break;
-
             }
             return new NurbsSurface(degreeU, degreeV, knotU, knotV, ptsSurf);
         }
