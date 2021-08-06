@@ -173,7 +173,7 @@ namespace GShark.Operation
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
             double tVal1 = curve.Knots[curve.Knots.Count - 1];
-            bool isCurveClosed = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
+            bool closedCurve = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
             double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
@@ -198,14 +198,14 @@ namespace GShark.Operation
                 bool c2 = Math.Abs(c2v) <= tol2;
 
                 // If at least one of these conditions is not satisfied,
-                // a new value, ui+l> is computed using the NewtonIteration.
+                // a new value, ui+l> is computed using the NewtonIterationCurve.
                 // Then two more conditions are checked.
                 if (c1 && c2) return Cu;
-                double ct = NewtonIteration(Cu, e, diff);
+                double ct = NewtonIterationCurve(Cu, e, diff);
 
                 // Ensure that the parameter stays within the boundary of the curve.
-                if (ct < tVal0) ct = isCurveClosed ? tVal1 - (ct - tVal0) : tVal0;
-                if (ct > tVal1) ct = isCurveClosed ? tVal0 + (ct - tVal1) : tVal1;
+                if (ct < tVal0) ct = closedCurve ? tVal1 - (ct - tVal0) : tVal0;
+                if (ct > tVal1) ct = closedCurve ? tVal0 + (ct - tVal1) : tVal1;
 
                 // the parameter does not change significantly, the point is off the end of the curve.
                 double c3v = (e[1] * (ct - Cu)).Length;
@@ -249,23 +249,74 @@ namespace GShark.Operation
                     splitSrf = surfaces[i];
                 }
 
-                param /= 2;
+                param *= 0.5;
             }
 
+            int maxIterations = 5;
+            int j = 0;
+            // Two zero tolerances can be used to indicate convergence:
+            double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
+            double tol2 = 0.0005; // a zero cosine measure.
+            double minU = surface.KnotsU[0];
+            double maxU = surface.KnotsU.Last();
+            double minV = surface.KnotsV[0];
+            double maxV = surface.KnotsV.Last();
+            bool closedDirectionU = curve.Knots[curve.Knots.Count - 1];
+            bool closedDirectionV = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
+            double Suv, difference;
+
+
+        }
+
+        /// <summary>
+        /// Newton iteration to minimize the distance between a point and a surface.
+        /// <em>Corresponds to Eq. 6.5 at page 232 from The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="uv">The parameter uv obtained at the ith Newton iteration.</param>
+        /// <param name="pts">Point on surface identify as S(u,v).</param>
+        /// <param name="r">Representing the difference from S(u,v) - P.</param>
+        /// <returns>The minimized parameter.</returns>
+        private static (double u, double v) NewtonIterationSurface((double u, double v) uv, List<List<Point3>> pts, Vector3 r)
+        {
+            Vector Su = pts[1][0];
+            Vector Sv = pts[0][1];
+
+            Vector Suu = pts[2][0];
+            Vector Svv = pts[0][2];
+
+            Vector Suv = pts[1][1];
+            Vector Svu = pts[1][1];
+
+            double f = Vector.Dot(Su, r);
+            double g = Vector.Dot(Sv, r);
+
+            // Eq. 6.5
+            Vector k = new Vector {-f, -g};
+
+            Matrix J = new Matrix()
+            {
+                new List<double> {Vector.Dot(Su, Su) + Vector.Dot(Suu, r), Vector.Dot(Su, Sv) + Vector.Dot(Suv, r)},
+                new List<double> {Vector.Dot(Su, Sv) + Vector.Dot(Svu, r), Vector.Dot(Sv, Sv) + Vector.Dot(Svv, r)}
+            };
+
+            // Eq. 6.6
+            Matrix.Decompose(J, out int[] permutation);
+            Vector d = Matrix.Solve(J, permutation, k);
+
+            // Eq. 6.7
+            return (d[0] + uv.u, d[1] + uv.v);
         }
 
         private static (double[] u, double[] v) DefiningUV(double parameter)
         {
-            double halfParameter = parameter / 2;
-
             double[] u = new[]
             {
-                parameter + halfParameter, parameter - halfParameter, parameter + halfParameter, parameter - halfParameter
+                parameter * 1.5, parameter * 0.5, parameter * 1.5, parameter * 0.5
             };
 
             double[] v = new[]
             {
-                parameter - halfParameter, parameter - halfParameter, parameter + halfParameter, parameter + halfParameter
+                parameter * 0.5, parameter * 0.5, parameter * 1.5, parameter * 1.5
             };
 
             return (u, v);
@@ -279,7 +330,7 @@ namespace GShark.Operation
         /// <param name="derivativePts">Point on curve identify as C'(u)</param>
         /// <param name="difference">Representing the difference from C(u) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static double NewtonIteration(double u, List<Vector3> derivativePts, Vector3 difference)
+        private static double NewtonIterationCurve(double u, List<Vector3> derivativePts, Vector3 difference)
         {
             // The distance from P to C(u) is minimum when f(u) = 0, whether P is on the curve or not.
             // C'(u) * ( C(u) - P ) = 0 = f(u)
