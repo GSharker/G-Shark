@@ -40,7 +40,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
 
             // Act
-            List<ICurve> curves = Divide.SplitCurve(curve, parameter);
+            List<ICurve> curves = curve.SplitAt(parameter);
 
             // Assert
             curves.Should().HaveCount(2);

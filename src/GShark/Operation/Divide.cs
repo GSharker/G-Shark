@@ -14,31 +14,6 @@ namespace GShark.Operation
     public class Divide
     {
         /// <summary>
-		/// Splits a curve into two parts at a given parameter.
-		/// </summary>
-		/// <param name="curve">The curve object.</param>
-		/// <param name="t">The parameter where to split the curve.</param>
-		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<ICurve> SplitCurve(ICurve curve, double t)
-        {
-            int degree = curve.Degree;
-
-            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
-
-            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
-
-            int s = curve.Knots.Span(degree, t);
-
-            KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
-            KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
-
-            List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
-            List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
-
-            return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
-        }
-
-        /// <summary>
         /// Divides a curve for a given number of time, including the end points.<br/>
         /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
         /// As with all arc length methods, the result is an approximation.

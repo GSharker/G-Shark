@@ -2,6 +2,7 @@
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
+using GShark.ExtendedMethods;
 using GShark.Geometry.Interfaces;
 
 namespace GShark.Core.BoundingBoxTree
@@ -35,7 +36,7 @@ namespace GShark.Core.BoundingBoxTree
             Random r = new Random();
             double t = (_curve.Knots[_curve.Knots.Count - 1] + _curve.Knots[0]) / 2.0 +
                        (_curve.Knots[_curve.Knots.Count - 1] - _curve.Knots[0]) * 0.1 * r.NextDouble();
-            List<ICurve> curves = Divide.SplitCurve(_curve, t);
+            List<ICurve> curves = _curve.SplitAt(t);
 
             return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>
                 ( new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
