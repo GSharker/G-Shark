@@ -142,6 +142,51 @@ namespace GShark.ExtendedMethods
         }
 
         /// <summary>
+        /// Splits a curve at given parameters and returns the segments as curves.
+        /// </summary>
+        /// <param name="curve">The curve to split.</param>
+        /// <param name="parameters">The parameters at which to split the curve. Values should be between 0 and 1.</param>
+        /// <returns>Collection of curve segments.</returns>
+        //TODO: Should input parameters be between 0 and 1, or should we have a normalization function on ICurve?
+        public static List<ICurve> SplitAt(this ICurve curve, double[] parameters)
+        {
+            var curves = new List<ICurve>();
+            if (parameters.Length == 0)
+            {
+                curves.Add(curve);
+                return curves;
+            }
+
+            //TODO: sort in increasing order or throw if not?
+            var sortedParameters = parameters.OrderBy(x => x).ToArray();
+
+            //TODO: Always including ends of domain if not included. Could also just ignore and assume they are in input parameters.
+            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GeoSharkMath.MaxTolerance)
+            {
+                var tempParams = new double[sortedParameters.Length + 1];
+                tempParams[0] = curve.Domain.T0;
+                for (var i = 0; i < sortedParameters.Length; i++)
+                {
+                    tempParams[i+1] = sortedParameters[i];
+                }
+                sortedParameters = tempParams;
+            }
+
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GeoSharkMath.MaxTolerance)
+            {
+                Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
+                sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
+            }
+
+            for (int i = 0; i < sortedParameters.Length - 1; i++)
+            {
+                curves.Add(SubCurve(curve, new Interval(sortedParameters[i], sortedParameters[i+1])));
+            }
+
+            return curves;
+        }
+
+        /// <summary>
         /// Extract sub-curve defined by domain.
         /// </summary>
         /// <param name="curve">The curve from which to extract the sub-curve.</param>

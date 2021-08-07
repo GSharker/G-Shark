@@ -6,6 +6,7 @@ using GShark.Geometry.Interfaces;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -90,6 +91,29 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             subCurve.Equals(expectedSubCurve).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Splits_A_Curve_Into_Semgments_At_Given_Parameters()
+        {
+            // Arrange
+            var parameters = new[]{0.25, 0.5, 0.75};
+            int degree = 3;
+            List<Point3> controlPts = new List<Point3>
+            {
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,5)
+            };
+            KnotVector knots = new KnotVector(degree, controlPts.Count);
+            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+
+            // Act
+            var segments = curve.SplitAt(parameters.ToArray());
+
+            // Assert
+            segments.Count.Should().Be(4);
         }
 
         [Fact]
