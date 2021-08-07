@@ -23,13 +23,26 @@ namespace GShark.Geometry
         /// <summary>
         /// Initializes a new instance of the <see cref="Point4"/> class from the coordinates of a point.
         /// </summary>
-        /// <param name="point">.</param>
+        /// <param name="point">Coordinates of the control point.</param>
         public Point4(Point3 point)
         {
             X = point.X;
             Y = point.Y;
             Z = point.Z;
             W = 1.0;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point4"/> class from the coordinates of a point and a weight.
+        /// </summary>
+        /// <param name="point">Coordinates of the control point.</param>
+        /// <param name="weight">Weight factor of the control point. You should not use weights less than or equal to zero.</param>
+        public Point4(Point3 point, double weight)
+        {
+            W = (weight <= 0.0) ? 1.0 : weight;
+            X = point.X * W;
+            Y = point.Y * W;
+            Z = point.Z * W;
         }
 
         /// <summary>
@@ -122,9 +135,25 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point1">First point.</param>
         /// <param name="point2">Second point.</param>
+        /// <returns>A new point that result of the addition of point1 and point2.</returns>
+        public static Point4 operator +(Point4 point1, Point4 point2)
+        {
+            Point4 result = point1; //copy of the value
+            result.X += point2.X;
+            result.Y += point2.Y;
+            result.Z += point2.Z;
+            result.W += point2.W;
+            return result;
+        }
+
+        /// <summary>
+        /// Calculates the weighted addition of two <see cref="Point4"/> together.
+        /// </summary>
+        /// <param name="point1">First point.</param>
+        /// <param name="point2">Second point.</param>
         /// <returns>A new point that results from the weighted addition of point1 and point2.</returns>
 
-        public static Point4 operator +(Point4 point1, Point4 point2)
+        public static Point4 WeightedAddiction(Point4 point1, Point4 point2)
         {
             Point4 result = point1; //copy of the value
             if (point2.W == point1.W)
@@ -161,12 +190,28 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Sums two <see cref="Point4"/> together.
+        /// </summary>
+        /// <param name="point1">First point.</param>
+        /// <param name="point2">Second point.</param>
+        /// <returns>A new point that result of the subtraction of point1 and point2.</returns>
+        public static Point4 operator -(Point4 point1, Point4 point2)
+        {
+            Point4 result = point1; //copy of the value
+            result.X -= point2.X;
+            result.Y -= point2.Y;
+            result.Z -= point2.Z;
+            result.W -= point2.W;
+            return result;
+        }
+
+        /// <summary>
         /// Subtracts the second point from the first point.
         /// </summary>
         /// <param name="point1">First point.</param>
         /// <param name="point2">Second point.</param>
         /// <returns>A new point that results from the weighted subtraction of point2 from point1.</returns>
-        public static Point4 operator -(Point4 point1, Point4 point2)
+        public static Point4 WeightedSubtraction(Point4 point1, Point4 point2)
         {
             Point4 result = point1; //copy of the value
             if (point2.W == point1.W)
@@ -270,7 +315,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is Point4d and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return obj is Point4 && this == (Point4)obj;
+            return obj is Point4 point4 && this == point4;
         }
 
         /// <summary>

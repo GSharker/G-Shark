@@ -293,7 +293,7 @@ namespace GShark.Core
 
             double[] knot = new double[degree + numberOfControlPts + 1];
 
-            double k = 0.0;
+            double k;
             int i, knotCount = numberOfControlPts + degree + 1;
 
             double delta = 1.0 / (numberOfControlPts - degree);
@@ -344,6 +344,16 @@ namespace GShark.Core
             }
 
             return reversedKnots;
+        }
+
+        /// <summary>
+        /// Creates a copy of the knotVector.
+        /// </summary>
+        /// <returns>The copy of the knotVector.</returns>
+        public KnotVector Copy()
+        {
+            List<double> knotVectorCopy = new List<double>(this);
+            return knotVectorCopy.ToKnot();
         }
 
         /// <summary>

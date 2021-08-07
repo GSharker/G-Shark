@@ -103,7 +103,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptCheck1 = new Point3(output1[0], output1[1], output1[2]);
 
             // Act
-            bool intersection = Intersect.LineLine(ln0, ln1, out Point3 pt0, out Point3 pt1, out _, out _);
+            _ = Intersect.LineLine(ln0, ln1, out Point3 pt0, out Point3 pt1, out _, out _);
 
             // Assert
             pt0.EpsilonEquals(ptCheck0, GeoSharkMath.MaxTolerance).Should().BeTrue();
@@ -176,8 +176,8 @@ namespace GShark.Test.XUnit.Operation
             Point3 intersectionCheck = new Point3( 10, 40, 5);
 
             // Act
-            bool intersection0 = Intersect.LineCircle(cl, ln0, out Point3[] pts0);
-            bool intersection1 = Intersect.LineCircle(cl, ln1, out Point3[] pts1);
+            _ = Intersect.LineCircle(cl, ln0, out Point3[] pts0);
+            _ = Intersect.LineCircle(cl, ln1, out Point3[] pts1);
 
             // Assert
             for (int i = 0; i < intersectionChecks.Length; i++)
@@ -197,7 +197,7 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(new Point3( -15, 45, 17), new Point3(15, 45, 25));
 
             // Act
-            bool intersection = Intersect.LineCircle(cl, ln, out Point3[] pts);
+            bool intersection = Intersect.LineCircle(cl, ln, out _);
 
             // Assert
             intersection.Should().BeFalse();
@@ -236,7 +236,7 @@ namespace GShark.Test.XUnit.Operation
             };
 
             // Act
-            bool intersection = Intersect.PlaneCircle(plSec, cl, out Point3[] pts);
+            _ = Intersect.PlaneCircle(plSec, cl, out Point3[] pts);
 
             // Assert
             for (int i = 0; i < intersectionChecks.Length; i++)
@@ -250,15 +250,13 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree0 = 1;
-            KnotVector crvKnots0 = new KnotVector { 0, 0, 1, 1 };
-            var crvCtrPts0 = new List<Point3> {new Point3(0, 0, 0), new Point3(2, 0, 0)};
+            var crvPts0 = new List<Point3> {new Point3(0, 0, 0), new Point3(2, 0, 0)};
 
             int crvDegree1 = 1;
-            KnotVector crvKnots1 = new KnotVector { 0, 0, 1, 1 };
-            var crvCtrPts1 = new List<Point3> { new Point3(0.5, 0.5, 0), new Point3(0.5, -1.5, 0)};
+            var crvPts1 = new List<Point3> { new Point3(0.5, 0.5, 0), new Point3(0.5, -1.5, 0)};
 
-            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
-            NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+            NurbsCurve crv0 = new NurbsCurve(crvPts0, crvDegree0);
+            NurbsCurve crv1 = new NurbsCurve(crvPts1, crvDegree1);
 
             // Act
             List<CurvesIntersectionResult> intersection = Intersect.CurveCurve(crv0, crv1, GeoSharkMath.MaxTolerance);
@@ -278,9 +276,8 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(p1, p2);
 
             int crvDegree1 = 2;
-            KnotVector crvKnots1 = new KnotVector { 0, 0, 0, 1, 1, 1 };
-            var crvCtrPts1 = new List<Point3> { new Point3( 0.5, 0.5, 0), new Point3(0.7, 0, 0), new Point3(0.5, -1.5, 0)};
-            ICurve crv = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+            var crvPts1 = new List<Point3> { new Point3( 0.5, 0.5, 0), new Point3(0.7, 0, 0), new Point3(0.5, -1.5, 0)};
+            ICurve crv = new NurbsCurve(crvPts1, crvDegree1);
             
             // Act
             List<CurvesIntersectionResult> intersection = Intersect.CurveLine(crv, ln);
@@ -296,15 +293,13 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree0 = 2;
-            KnotVector crvKnots0 = new KnotVector { 0, 0, 0, 1, 1, 1 };
-            var crvCtrPts0 = new List<Point3> { new Point3( 0, 0, 0), new Point3(0.5, 0.1, 0), new Point3 (2, 0, 0) };
+            var crvPts0 = new List<Point3> { new Point3( 0, 0, 0), new Point3(0.5, 0.1, 0), new Point3 (2, 0, 0) };
 
             int crvDegree1 = 2;
-            KnotVector crvKnots1 = new KnotVector { 0, 0, 0, 1, 1, 1 };
-            var crvCtrPts1 = new List<Point3> { new Point3(0.5, 0.5, 0), new Point3(0.7, 0, 0), new Point3(0.5, -1.5, 0)};
+            var crvPts1 = new List<Point3> { new Point3(0.5, 0.5, 0), new Point3(0.7, 0, 0), new Point3(0.5, -1.5, 0)};
 
-            NurbsCurve crv0 = new NurbsCurve(crvDegree0, crvKnots0, crvCtrPts0);
-            NurbsCurve crv1 = new NurbsCurve(crvDegree1, crvKnots1, crvCtrPts1);
+            NurbsCurve crv0 = new NurbsCurve(crvPts0, crvDegree0);
+            NurbsCurve crv1 = new NurbsCurve(crvPts1, crvDegree1);
 
             // Act
             List<CurvesIntersectionResult> intersection = Intersect.CurveCurve(crv0, crv1);
@@ -320,21 +315,20 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
-            List<Point3> crvCtrPts0 = new List<Point3>
+            List<Point3> crvPts0 = new List<Point3>
             {
                 new Point3( -5, 0, 0), new Point3( 10, 0, 0), new Point3( 10, 10, 0),
                 new Point3(0, 10, 0) , new Point3(5, 5, 0)
             };
 
-            List<Point3> crvCtrPts1 = new List<Point3>
+            List<Point3> crvPts1 = new List<Point3>
             {
                 new Point3( -5, 0, 0), new Point3(5, -1, 0), new Point3(10, 5, 0),
                 new Point3( 3, 10, 0), new Point3(5, 12, 0)
             };
 
-            NurbsCurve crv0 = new NurbsCurve(degree, knots, crvCtrPts0);
-            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+            NurbsCurve crv0 = new NurbsCurve(crvPts0, degree);
+            NurbsCurve crv1 = new NurbsCurve(crvPts1, degree);
 
             // Act
             List<CurvesIntersectionResult> intersections = Intersect.CurveCurve(crv0, crv1);
@@ -353,21 +347,20 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
-            List<Point3> crvCtrPts0 = new List<Point3>
+            List<Point3> crvPts0 = new List<Point3>
             {
                 new Point3( 0, 0, 0), new Point3 (5, 2.5, 5), new Point3 (5, 5, 0),
                 new Point3( 7.5, 10, 5), new Point3 (10, 10, 0)
             };
 
-            List<Point3> crvCtrPts1 = new List<Point3>
+            List<Point3> crvPts1 = new List<Point3>
             {
                 new Point3( 2.225594, 1.226218, 2.01283), new Point3( 8.681402, 4.789645, 5.010206), new Point3(6.181402, 4.789645, 0.010206),
                 new Point3( 1.181402, 7.289645, 5.010206), new Point3(8.496731, 9.656647, 2.348212)
             };
 
-            NurbsCurve crv0 = new NurbsCurve(degree, knots, crvCtrPts0);
-            NurbsCurve crv1 = new NurbsCurve(degree, knots, crvCtrPts1);
+            NurbsCurve crv0 = new NurbsCurve(crvPts0, degree);
+            NurbsCurve crv1 = new NurbsCurve(crvPts1, degree);
 
             // Act
             List<CurvesIntersectionResult> intersections = Intersect.CurveCurve(crv0, crv1);
@@ -390,9 +383,8 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int crvDegree = 2;
-            KnotVector crvKnots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             var crvCtrPts = new List<Point3> {new Point3( 0, 0, 0), new Point3( 0.5, 0.5, 0), new Point3(2, 0, 0)};
-            NurbsCurve crv = new NurbsCurve(crvDegree, crvKnots, crvCtrPts);
+            NurbsCurve crv = new NurbsCurve(crvCtrPts, crvDegree);
             Plane pl = Plane.PlaneYZ.SetOrigin(new Point3( xValue, 0.0, 0.0));
 
             // Act
@@ -410,13 +402,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Point3> crvCtrPts = new List<Point3>
             {
                 new Point3( 2.225594, 1.226218, 2.01283), new Point3( 8.681402, 4.789645, 5.010206), new Point3(6.181402, 4.789645, 0.010206),
                 new Point3( 1.181402, 7.289645, 5.010206), new Point3(8.496731, 9.656647, 2.348212)
             };
-            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+            NurbsCurve crv = new NurbsCurve(crvCtrPts, degree);
 
             Transform xForm = Transform.Rotation(0.15, new Point3( 0.0, 0.0, 0.0));
             Plane pln = Plane.PlaneYZ;
@@ -441,13 +432,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0 };
             List<Point3> crvCtrPts = new List<Point3>
             {
                 new Point3(0,5,5), new Point3(2.5,0,0), new Point3(5,5,2.5),
                 new Point3(2.5,5,5), new Point3(0,0,0)
             };
-            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+            NurbsCurve crv = new NurbsCurve(crvCtrPts, degree);
 
             // Act
             List<CurvesIntersectionResult> intersections = Intersect.CurveSelf(crv);
@@ -464,13 +454,12 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            KnotVector knots = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.25, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0 };
             List<Point3> crvCtrPts = new List<Point3>
             {
                 new Point3(0,5,0), new Point3(2.5,0,0), new Point3(5,2.5,0),
                 new Point3(2.5,5,0), new Point3(0,0,0), new Point3(5,0,0), new Point3(2.5,5,0)
             };
-            NurbsCurve crv = new NurbsCurve(degree, knots, crvCtrPts);
+            NurbsCurve crv = new NurbsCurve(crvCtrPts, degree);
 
             // Act
             List<CurvesIntersectionResult> intersections = Intersect.CurveSelf(crv);

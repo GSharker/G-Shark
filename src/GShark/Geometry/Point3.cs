@@ -374,7 +374,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Point3 and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Point3 && this == (Point3)obj);
+            return obj is Point3 point3 && this == point3;
         }
 
         /// <summary>

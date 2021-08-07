@@ -1,25 +1,27 @@
-﻿namespace GShark.Geometry.Enum
+﻿using GShark.Geometry.Enum;
+
+namespace GShark.Operation.Enum
 {
     /// <summary>
-    /// Enum defining the direction of a surface.
+    /// Enum defining the direction where a surface will be spitted.
     /// </summary>
-    public enum SurfaceDirection
+    public enum SplitDirection
     {
         Unknown = 0,
 
         /// <summary>
         /// The U direction of a surface.
         /// </summary>
-        U, 
+        U = SurfaceDirection.U,
 
         /// <summary>
         /// The V direction of a surface.
         /// </summary>
-        V,
+        V = SurfaceDirection.V,
 
         /// <summary>
-        /// The normal direction of a surface.
+        /// The both direction U and V of a surface.
         /// </summary>
-        Normal
+        Both
     }
 }

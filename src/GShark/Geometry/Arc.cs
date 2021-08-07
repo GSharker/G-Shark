@@ -341,7 +341,7 @@ namespace GShark.Geometry
                 Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
                 Line ln0 = new Line(p0, t0.Unitize() + p0);
                 Line ln1 = new Line(p2, t2.Unitize() + p2);
-                bool intersect = Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out double u1);
+                Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out _);
                 Vector3 p1 = p0 + (t0 * u0);
 
                 weights[index + 1] = weight1;

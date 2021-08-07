@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
 using verb.core;
+using verb.eval;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -310,6 +311,7 @@ namespace GShark.Test.XUnit
             Array<double> knotsV = new Array<double>(new double[] { 0, 0, 1, 1 });
 
             var surface = verb.geom.NurbsSurface.byKnotsControlPointsWeights(2, 1, knotsU, knotsV, pts, weight);
+            var surfaces = Divide.surfaceSplit(surface._data, 0.5, false);
 
             var derivatives = verb.eval.Eval.rationalSurfaceDerivatives(surface._data, 0.3, 0.5, 1);
 
@@ -322,6 +324,46 @@ namespace GShark.Test.XUnit
             //    var r = s1.controlPoints[i];
             //    _testOutput.WriteLine($"{{{r}}}");
             //}
+        }
+
+        [Fact]
+        public void CurveKnotRefine()
+        {
+            Array<object> pts = new Array<object>();
+
+            pts.push(new Array<double>(new double[] { 0.0, 10.0, 4.0 }));
+            pts.push(new Array<double>(new double[] { 5.0, 10.0, 5.0 }));
+            pts.push(new Array<double>(new double[] { 10.0, 10.0, 2.0 }));
+
+            Array<double> knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 1.0, 1.0, 1.0 });
+            Array<double> weights = new Array<double>(new double[] { 1.0, 2.0, 1.0});
+            Array<double> knotsToInsert = new Array<double>(new double[] { 0.5, 0.5, 0.5 });
+
+            verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(2, knots, pts, weights);
+            var after = verb.eval.Modify.curveKnotRefine(curve._data, knotsToInsert);
+
+            _testOutput.WriteLine($"{after.controlPoints}");
+        }
+
+        [Fact]
+        public void CurveKnotRefine2()
+        {
+            Array<object> pts = new Array<object>();
+
+            for (int i = 0; i < 8; i++)
+            {
+                pts.push(new Array<double>(new double[] { i, 0, 0 }));
+            }
+
+            Array<double> knots = new Array<double>(new double[] { 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5 });
+            Array<double> weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+            Array<double> newKnots = new Array<double>(new double[] { 0.5 });
+
+            verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
+            var curveData = new verb.core.NurbsCurveData(3, knots, pts);
+            var after = verb.eval.Modify.curveKnotRefine(curve._data, newKnots);
+
+            _testOutput.WriteLine($"{after.controlPoints}");
         }
     }
 }

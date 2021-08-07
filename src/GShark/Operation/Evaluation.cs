@@ -140,7 +140,7 @@ namespace GShark.Operation
         /// <param name="knots">The knot vector of the curve.</param>
         /// <param name="degree">The value degree of the curve.</param>
         /// <param name="t">The parameter value where the curve is evaluated.</param>
-        internal static void DeBoor(ref List<Point3> controlPts, KnotVector knots, int degree, double t)
+        internal static void DeBoor(ref List<Point4> controlPts, KnotVector knots, int degree, double t)
         {
             if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharkMath.Epsilon)
             {
@@ -165,8 +165,8 @@ namespace GShark.Operation
                     double alpha0 = deltaT[j] / (k1 - k0);
                     double alpha1 = 1.0 - alpha0;
 
-                    Point3 cv1 = controlPts[j + 1];
-                    Point3 cv0 = controlPts[j];
+                    Point4 cv1 = controlPts[j + 1];
+                    Point4 cv0 = controlPts[j];
 
                     controlPts[j] = (cv0 * alpha0) + (cv1 * alpha1);
                 }
@@ -182,19 +182,19 @@ namespace GShark.Operation
         /// <returns>The evaluated point on the curve.</returns>
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4> curveHomogenizedPoints = curve.ControlPoints;
+            List<Point4> controlPts = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             int n = knots.Count - curve.Degree - 2;
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4 pointOnCurve = new Point4(0, 0, 0, 0);
+            Point4 pointOnCurve = Point4.Zero;
 
             for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+                Point4 pt = controlPts[knotSpan - curve.Degree + i];
 
                 pointOnCurve.X += valToMultiply * pt.X;
                 pointOnCurve.Y += valToMultiply * pt.Y;
@@ -202,7 +202,7 @@ namespace GShark.Operation
                 pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            return LinearAlgebra.PointDehomogenizer(pointOnCurve);
+            return new Point3(pointOnCurve);
         }
 
 
@@ -686,7 +686,7 @@ namespace GShark.Operation
         /// <param name="u">The U parameter on the surface at which the point is to be evaluated.</param>
         /// <param name="v">The V parameter on the surface at which the point is to be evaluated.</param>
         /// <returns>The evaluated point.</returns>
-        public static Point3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        public static Point4 SurfacePointAt(NurbsSurface surface, double u, double v)
         {
             if (u < 0.0 || u > 1.0)
             {
@@ -705,22 +705,24 @@ namespace GShark.Operation
             List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
             List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             int uIndex = knotSpanU - surface.DegreeU;
-            Point3 evaluatedPt = Point3.Origin;
+            Point4 evaluatedPt = Point4.Zero;
 
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Point3.Origin;
+                var temp = Point4.Zero;
                 var vIndex = knotSpanV - surface.DegreeV + l;
                 for (int k = 0; k < surface.DegreeU + 1; k++)
                 {
-                    temp.X += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].X;
-                    temp.Y += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Y;
-                    temp.Z += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Z;
+                    temp.X += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].X;
+                    temp.Y += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Y;
+                    temp.Z += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Z;
+                    temp.W += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].W;
                 }
 
                 evaluatedPt.X += basisVValue[l] * temp.X;
                 evaluatedPt.Y += basisVValue[l] * temp.Y;
                 evaluatedPt.Z += basisVValue[l] * temp.Z;
+                evaluatedPt.W += basisVValue[l] * temp.W;
             }
             return evaluatedPt;
         }
