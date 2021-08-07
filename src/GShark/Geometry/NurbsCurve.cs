@@ -304,29 +304,27 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
-            List<Point3>? otherPts = other?.LocationPoints;
-
             if (other == null)
             {
                 return false;
             }
 
-            if (LocationPoints.Count != otherPts?.Count)
+            if (!LocationPoints.SequenceEqual(other.LocationPoints))
             {
                 return false;
             }
 
-            if (Knots.Count != other.Knots.Count)
+            if (!Knots.SequenceEqual(other.Knots))
             {
                 return false;
             }
 
-            if (LocationPoints.Where((t, i) => !t.Equals(otherPts[i])).Any())
+            if (!Weights.SequenceEqual(other.Weights))
             {
                 return false;
             }
 
-            return Degree == other.Degree && Knots.All(other.Knots.Contains) && Weights.All(other.Weights.Contains);
+            return Degree == other.Degree;
         }
 
         /// <summary>
