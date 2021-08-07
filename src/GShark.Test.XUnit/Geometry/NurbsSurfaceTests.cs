@@ -116,20 +116,65 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void Lofted_Surface_Throws_An_Exception_If_The_Curves_Are_Empty_Or_Null()
+        public void Lofted_Surface_Throws_An_Exception_If_The_Curves_Are_Null()
         {
             // Arange
-            List<NurbsCurve> crvs = new List<NurbsCurve>();
-            List<NurbsCurve> crvs2 = null;
+            List<NurbsCurve> curves = null;
 
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
-            Func<NurbsSurface> func2 = () => NurbsSurface.CreateLoftedSurface(crvs2);
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(curves);
 
             // Assert
             func.Should().Throw<Exception>()
                          .WithMessage("An invalid number of curves to perform the loft.");
-            func2.Should().Throw<Exception>()
+        }
+
+        [Fact]
+        public void Lofted_Surface_Throws_An_Exception_If_The_DegreeV_Is_Greater_Than_Curves_Minus_One()
+        {
+            // Arange
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
+
+            // Act
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs, 4, LoftType.Loose);
+
+            // Assert
+            func.Should().Throw<Exception>()
+                         .WithMessage("The degreeV of the surface cannot be greater than the number of curves minus one.");
+        }
+
+        [Fact]
+        public void Lofted_Surface_Throws_An_Exception_If_There_Are_Null_Curves()
+        {
+            // Arange
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
+            crvs.Add(null);
+
+            // Act
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Loose);
+
+            // Assert
+            func.Should().Throw<Exception>()
+                         .WithMessage("The input set contains null curves.");
+        }
+
+        [Fact]
+        public void Lofted_Surface_Throws_An_Exception_If_Curves_Count_Are_Less_Than_Two()
+        {
+            // Arrange
+            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0) };
+
+            NurbsCurve crv = new NurbsCurve(pts1, 2);
+
+            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv };
+
+            // Act
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs, 0);
+
+            // Assert
+            func.Should().Throw<Exception>()
                          .WithMessage("An invalid number of curves to perform the loft.");
         }
 
@@ -148,31 +193,6 @@ namespace GShark.Test.XUnit.Geometry
             crvs[1].IsPeriodic().Should().BeTrue();
             func.Should().Throw<Exception>()
                          .WithMessage("Loft only works if all curves are open, or all curves are closed.");
-        }
-
-        [Fact]
-        public void Lofted_Surface_Throws_An_Exception_After_Cleaning_Curves()
-        {
-            // Arrange
-            List<Point3> pts1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
-                                                   new Point3(0.0, 0.0, 10.0),
-                                                   new Point3(10.0, 0.0, 0.0) };
-
-            List<Point3> pts2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
-                                                   new Point3(0.0, 10.0, 5.0),
-                                                   new Point3(20.0, 10.0, 1.0) };
-
-            NurbsCurve crv1 = new NurbsCurve(pts1, 2);
-            NurbsCurve crv2 = null;
-
-            List<NurbsCurve> crvs = new List<NurbsCurve>() { crv1, crv2 };
-
-            // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
-
-            // Assert
-            func.Should().Throw<Exception>()
-                         .WithMessage("An invalid number of curves to perform the loft.");
         }
     }
 }
