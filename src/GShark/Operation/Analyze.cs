@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using GShark.ExtendedMethods;
+using GShark.Geometry.Enum;
 using GShark.Operation.Enum;
 
 namespace GShark.Operation
@@ -180,7 +181,7 @@ namespace GShark.Operation
             while (j < maxIterations)
             {
                 List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
-                Vector3 diff = e[0] - new Vector3(point.X, point.Y, point.Z); // C(u) - P
+                Vector3 diff = e[0] - new Vector3(point); // C(u) - P
 
 
                 // First condition, point coincidence:
@@ -225,10 +226,10 @@ namespace GShark.Operation
         /// <param name="surface">The surface object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the surface.</returns>
-        public static double SurfaceClosestParameter(NurbsSurface surface, Point3 point)
+        public static (double u, double v) SurfaceClosestParameter(NurbsSurface surface, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
-            double uParam, vParam = 0D;
+            (double u, double v) selectedUV = (0D, 0D);
             NurbsSurface splitSrf = surface;
             double param = 0.5;
 
@@ -240,20 +241,19 @@ namespace GShark.Operation
 
                 for (int j = 0; j < pts.Length; j++)
                 {
-                    double distance = pts[i].DistanceTo(point);
+                    double distance = pts[j].DistanceTo(point);
 
                     if (!(distance < minimumDistance)) continue;
                     minimumDistance = distance;
-                    uParam = srfUV.u[i];
-                    vParam = srfUV.v[i];
-                    splitSrf = surfaces[i];
+                    selectedUV = srfUV[j];
+                    splitSrf = surfaces[j];
                 }
 
                 param *= 0.5;
             }
 
             int maxIterations = 5;
-            int j = 0;
+            int t = 0;
             // Two zero tolerances can be used to indicate convergence:
             double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
@@ -261,11 +261,86 @@ namespace GShark.Operation
             double maxU = surface.KnotsU.Last();
             double minV = surface.KnotsV[0];
             double maxV = surface.KnotsV.Last();
-            bool closedDirectionU = curve.Knots[curve.Knots.Count - 1];
-            bool closedDirectionV = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
-            double Suv, difference;
+            bool closedDirectionU = surface.IsClosed(SurfaceDirection.U);
+            bool closedDirectionV = surface.IsClosed(SurfaceDirection.V);
 
+            // To avoid infinite loop we limited the interaction.
+            while (t < maxIterations)
+            {
+                // Get derivatives.
+                var eval = Evaluation.RationalSurfaceDerivatives(surface, selectedUV.u, selectedUV.v, 2);
 
+                // Convergence criteria:
+                // First condition, point coincidence:
+                // |S(u,v) - p| < e1
+                Vector3 diff = eval[0, 0] - new Vector3(point);
+                double c1v = diff.Length;
+                bool c1 = c1v <= tol1;
+
+                // Second condition, zero cosine:
+                // |Su(u,v)*(S(u,v) - P)|
+                // ----------------------  < e2
+                // |Su(u,v)| |S(u,v) - P|
+                //
+                // |Sv(u,v)*(S(u,v) - P)|
+                // ----------------------  < e2
+                // |Sv(u,v)| |S(u,v) - P|
+                double c2an = Vector3.DotProduct(eval[1, 0], diff);
+                double c2ad = (eval[1, 0] * c1v).Length;
+
+                double c2bn = Vector3.DotProduct(eval[0, 1], diff);
+                double c2bd = (eval[0, 1] * c1v).Length;
+
+                double c2av = c2an / c2ad;
+                double c2bv = c2bn / c2bd;
+
+                bool c2a = c2av <= tol2;
+                bool c2b = c2bv <= tol2;
+
+                // If all the criteria are satisfied we are done.
+                if (c1 && c2a && c2b)
+                {
+                    return selectedUV;
+                }
+
+                // Otherwise a new value ( Ui + 1, Vi + 1) is computed using Eq. 6.7
+                var ct = NewtonIterationSurface(selectedUV, eval, diff);
+
+                // Ensure the parameters stay in range (Ui+1 E [minU, maxU] and Vi+1 E [minV, maxV]).
+                if (ct.u < minU)
+                {
+                    ct = (closedDirectionU) ? (maxU - (minU - ct.u), ct.v) : (minU, ct.v);
+                }
+
+                if (ct.u > maxU)
+                {
+                    ct = (closedDirectionU) ? (minU + (ct.u - maxU), ct.v) : (maxU, ct.v);
+                }
+
+                if (ct.v < minV)
+                {
+                    ct = (closedDirectionV) ? (ct.u, maxV - (minV - ct.v)) : (ct.u, minV);
+                }
+
+                if (ct.v > maxV)
+                {
+                    ct = (closedDirectionV) ? (ct.u, minV + (ct.v - maxV)) : (ct.u, maxV);
+                }
+
+                // Parameters do not change significantly.
+                double c3u = (eval[1, 0] * (ct.u - selectedUV.u)).Length;
+                double c3v = (eval[0, 1] * (ct.v - selectedUV.v)).Length;
+
+                if (c3u + c3v < tol1)
+                {
+                    return selectedUV;
+                }
+
+                selectedUV = ct;
+                t++;
+            }
+
+            return selectedUV;
         }
 
         /// <summary>
@@ -273,30 +348,30 @@ namespace GShark.Operation
         /// <em>Corresponds to Eq. 6.5 at page 232 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="uv">The parameter uv obtained at the ith Newton iteration.</param>
-        /// <param name="pts">Point on surface identify as S(u,v).</param>
+        /// <param name="derivatives">Derivatives of the surface identify as S(u,v).</param>
         /// <param name="r">Representing the difference from S(u,v) - P.</param>
         /// <returns>The minimized parameter.</returns>
-        private static (double u, double v) NewtonIterationSurface((double u, double v) uv, List<List<Point3>> pts, Vector3 r)
+        private static (double u, double v) NewtonIterationSurface((double u, double v) uv, Vector3[,] derivatives, Vector3 r)
         {
-            Vector Su = pts[1][0];
-            Vector Sv = pts[0][1];
+            Vector3 Su = derivatives[1,0];
+            Vector3 Sv = derivatives[0,1];
 
-            Vector Suu = pts[2][0];
-            Vector Svv = pts[0][2];
+            Vector3 Suu = derivatives[2,0];
+            Vector3 Svv = derivatives[0,2];
 
-            Vector Suv = pts[1][1];
-            Vector Svu = pts[1][1];
+            Vector3 Suv = derivatives[1,1];
+            Vector3 Svu = derivatives[1,1];
 
-            double f = Vector.Dot(Su, r);
-            double g = Vector.Dot(Sv, r);
+            double f = Su * r;
+            double g = Sv * r;
 
             // Eq. 6.5
-            Vector k = new Vector {-f, -g};
+            Vector3 k = new Vector3 (-f, -g, 1);
 
-            Matrix J = new Matrix()
+            Matrix J = new Matrix
             {
-                new List<double> {Vector.Dot(Su, Su) + Vector.Dot(Suu, r), Vector.Dot(Su, Sv) + Vector.Dot(Suv, r)},
-                new List<double> {Vector.Dot(Su, Sv) + Vector.Dot(Svu, r), Vector.Dot(Sv, Sv) + Vector.Dot(Svv, r)}
+                new List<double> {Su * Su + Suu * r, Su * Sv + Suv * r},
+                new List<double> {Su * Sv + Svu * r, Sv * Sv + Svv * r}
             };
 
             // Eq. 6.6
@@ -307,19 +382,17 @@ namespace GShark.Operation
             return (d[0] + uv.u, d[1] + uv.v);
         }
 
-        private static (double[] u, double[] v) DefiningUV(double parameter)
+        private static (double u, double v)[] DefiningUV(double parameter)
         {
-            double[] u = new[]
+            var UV = new (double u, double v)[4]
             {
-                parameter * 1.5, parameter * 0.5, parameter * 1.5, parameter * 0.5
+                (parameter * 1.5, parameter * 0.5),
+                (parameter * 0.5, parameter * 0.5),
+                (parameter * 1.5, parameter * 1.5),
+                (parameter * 0.5, parameter * 1.5)
             };
 
-            double[] v = new[]
-            {
-                parameter * 0.5, parameter * 0.5, parameter * 1.5, parameter * 1.5
-            };
-
-            return (u, v);
+            return UV;
         }
 
 

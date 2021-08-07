@@ -98,6 +98,23 @@ namespace GShark.Geometry
         internal List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
+        /// Checks if a NURBS surface is closed.<br/>
+        /// A surface is closed if the first points and the lasts in a direction are coincident.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        // ToDo: Add test using lofts.
+        public bool IsClosed(SurfaceDirection direction)
+        {
+            KnotVector knot = (direction == SurfaceDirection.U) ? KnotsU : KnotsV;
+            int degree = (direction == SurfaceDirection.U) ? DegreeU : DegreeV;
+
+            if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
+
+            var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
+            return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GeoSharkMath.Epsilon);
+        }
+
+        /// <summary>
         /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
         /// The surface is defined with degree 1.
         /// </summary>
