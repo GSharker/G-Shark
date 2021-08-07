@@ -365,5 +365,95 @@ namespace GShark.Test.XUnit
 
             _testOutput.WriteLine($"{after.controlPoints}");
         }
+
+        [Fact]
+        public void SurfaceClosestPt()
+        {
+            Array<double> pt1 = new Array<double>(new double[] { 0.0, 0.0, 0.0 });
+            Array<double> pt2 = new Array<double>(new double[] { 10.0, 0.0, 0.0 });
+            Array<double> pt3 = new Array<double>(new double[] { 10.0, 10.0, 2.0 });
+            Array<double> pt4 = new Array<double>(new double[] { 0.0, 10.0, 4.0 });
+            Array<double> pt5 = new Array<double>(new double[] { 5.0, 0.0, 0.0 });
+            Array<double> pt6 = new Array<double>(new double[] { 5.0, 10.0, 5.0 });
+
+            Array<object> pts = new Array<object>();
+            Array<object> c1 = new Array<object>();
+            c1.push(pt1);
+            c1.push(pt4);
+
+            Array<object> c2 = new Array<object>();
+            c2.push(pt5);
+            c2.push(pt6);
+
+            Array<object> c3 = new Array<object>();
+            c3.push(pt2);
+            c3.push(pt3);
+
+            pts.push(c1);
+            pts.push(c2);
+            pts.push(c3);
+
+            Array<object> weight = new Array<object>();
+            Array<object> w1 = new Array<object>();
+            w1.push(1);
+            w1.push(1);
+
+            Array<object> w2 = new Array<object>();
+            w2.push(1);
+            w2.push(2);
+
+            Array<object> w3 = new Array<object>();
+            w3.push(1);
+            w3.push(1);
+
+            weight.push(w1);
+            weight.push(w2);
+            weight.push(w3);
+
+            Array<double> knotsU = new Array<double>(new double[] { 0, 0, 0, 1, 1, 1 });
+            Array<double> knotsV = new Array<double>(new double[] { 0, 0, 1, 1 });
+
+            var surface = verb.geom.NurbsSurface.byKnotsControlPointsWeights(2, 1, knotsU, knotsV, pts, weight);
+            Array<object> derivatives = verb.eval.Eval.rationalSurfaceDerivatives(surface._data, 0.25, 0.25, 2);
+
+            var pt = new Array<double>(new double[] {2.5, 1.5, 2});
+
+            var rational =
+                verb.eval.Analyze.rationalSurfaceClosestParam(surface._data, pt);
+
+            var ptd = (Array<object>) derivatives.__a[0];
+            var diff = verb.core.Vec.sub((Array<double>)ptd.__a[0], pt);
+
+            var Su = (Array<object>)derivatives.__a[1];
+            var Sv = (Array<object>)derivatives.__a[0];
+
+            var Suu = (Array<object>)derivatives.__a[2];
+            var Svv = (Array<object>)derivatives.__a[0];
+
+            var Suv = (Array<object>)derivatives.__a[1];
+            var Svu = (Array<object>)derivatives.__a[1];
+
+            var f = verb.core.Vec.dot((Array<double>) Su.__a[0], diff);
+            var g = verb.core.Vec.dot((Array<double>)Sv.__a[1], diff);
+
+            var k = new Array<double>(new double[] { -f, -g });
+            var uv = new Array<double>(new double[] { 0.25, 0.25 });
+
+            var J00 = Vec.dot((Array<double>)Su.__a[0], (Array<double>)Su.__a[0]) + Vec.dot((Array<double>)Suu.__a[0], diff);
+            var J01 = Vec.dot((Array<double>)Su.__a[0], (Array<double>)Sv.__a[1]) + Vec.dot((Array<double>)Suv.__a[1], diff);
+            var J10 = Vec.dot((Array<double>)Su.__a[0], (Array<double>)Sv.__a[1]) + Vec.dot((Array<double>)Svu.__a[1], diff);
+            var J11 = Vec.dot((Array<double>)Sv.__a[1], (Array<double>)Sv.__a[1]) + Vec.dot((Array<double>)Svv.__a[2], diff);
+
+            Array<object> matrix = new Array<object>();
+            matrix.push(new Array<object>(new object[] { J00, J01 }));
+            matrix.push(new Array<object>(new object[] { J10, J11 }));
+
+            verb.core._Mat.LUDecomp matrixLU = Mat.LU(matrix);
+
+            var d = verb.core.Mat.solve(matrix, k);
+            var res = Vec.add(d, uv);
+
+            //_testOutput.WriteLine($"{{{rational}}}");
+        }
     }
 }

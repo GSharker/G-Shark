@@ -233,7 +233,7 @@ namespace GShark.Operation
             NurbsSurface splitSrf = surface;
             double param = 0.5;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var surfaces = splitSrf.Split(0.5, SplitDirection.Both);
                 var pts = surfaces.Select(s => s.PointAt(0.5, 0.5)).ToArray();
@@ -252,7 +252,7 @@ namespace GShark.Operation
                 param *= 0.5;
             }
 
-            int maxIterations = 5;
+            int maxIterations = 6;
             int t = 0;
             // Two zero tolerances can be used to indicate convergence:
             double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
@@ -285,11 +285,11 @@ namespace GShark.Operation
                 // |Sv(u,v)*(S(u,v) - P)|
                 // ----------------------  < e2
                 // |Sv(u,v)| |S(u,v) - P|
-                double c2an = Vector3.DotProduct(eval[1, 0], diff);
-                double c2ad = (eval[1, 0] * c1v).Length;
+                double c2an = eval[1, 0] * diff;
+                double c2ad = eval[1, 0].Length * c1v;
 
-                double c2bn = Vector3.DotProduct(eval[0, 1], diff);
-                double c2bd = (eval[0, 1] * c1v).Length;
+                double c2bn = eval[0, 1] * diff;
+                double c2bd = eval[0, 1].Length * c1v;
 
                 double c2av = c2an / c2ad;
                 double c2bv = c2bn / c2bd;
@@ -353,20 +353,20 @@ namespace GShark.Operation
         /// <returns>The minimized parameter.</returns>
         private static (double u, double v) NewtonIterationSurface((double u, double v) uv, Vector3[,] derivatives, Vector3 r)
         {
-            Vector3 Su = derivatives[1,0];
-            Vector3 Sv = derivatives[0,1];
+            Vector3 Su = derivatives[1, 0];
+            Vector3 Sv = derivatives[0, 1];
 
-            Vector3 Suu = derivatives[2,0];
-            Vector3 Svv = derivatives[0,2];
+            Vector3 Suu = derivatives[2, 0];
+            Vector3 Svv = derivatives[0, 2];
 
-            Vector3 Suv = derivatives[1,1];
-            Vector3 Svu = derivatives[1,1];
+            Vector3 Suv = derivatives[1, 1];
+            Vector3 Svu = derivatives[1, 1];
 
             double f = Su * r;
             double g = Sv * r;
 
             // Eq. 6.5
-            Vector3 k = new Vector3 (-f, -g, 1);
+            Vector k = new Vector { -f, -g };
 
             Matrix J = new Matrix
             {
@@ -375,26 +375,28 @@ namespace GShark.Operation
             };
 
             // Eq. 6.6
-            Matrix.Decompose(J, out int[] permutation);
-            Vector d = Matrix.Solve(J, permutation, k);
+            Matrix matrixLu = Matrix.Decompose(J, out int[] permutation);
+            Vector d = Matrix.Solve(matrixLu, permutation, k);
 
             // Eq. 6.7
             return (d[0] + uv.u, d[1] + uv.v);
         }
 
+        /// <summary>
+        /// Defines the U and V parameters for a surface split in both direction, subtracting or adding half of the input parameter based on the quadrant.
+        /// </summary>
         private static (double u, double v)[] DefiningUV(double parameter)
         {
             var UV = new (double u, double v)[4]
             {
                 (parameter * 1.5, parameter * 0.5),
-                (parameter * 0.5, parameter * 0.5),
                 (parameter * 1.5, parameter * 1.5),
+                (parameter * 0.5, parameter * 0.5),
                 (parameter * 0.5, parameter * 1.5)
             };
 
             return UV;
         }
-
 
         /// <summary>
         /// Newton iteration to minimize the distance between a point and a curve.
