@@ -150,31 +150,29 @@ namespace GShark.ExtendedMethods
         public static ICurve SubCurve(this ICurve curve, Interval domain)
         {
             int degree = curve.Degree;
-
-            List<double> knotsToInsert = Sets.RepeatData(domain.T0, degree + 1);
-            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
-            knotsToInsert = Sets.RepeatData(domain.T1, degree + 1);
-            refinedCurve = Modify.CurveKnotRefine(refinedCurve, knotsToInsert);
-            int span0 = refinedCurve.Knots.Span(degree, domain.T0);
-            int span1 = refinedCurve.Knots.Span(degree, domain.T1);
-
-            var multiplicity0 = refinedCurve.Knots.Multiplicity(span0);
-            var multiplicity1 = refinedCurve.Knots.Multiplicity(span1);
-            KnotVector knotVector = new KnotVector();
-
-            for (int i = span0 - (multiplicity0 - 1); i <= span0; i++)
+            int order = degree + 1;
+            Interval subCurveDomain = domain;
+            
+            //NOTE: Handling decreasing domain by flipping it to maintain direction of original curve in sub-curve. Is this what we want?
+            if (domain.IsDecreasing)
             {
-                knotVector.Add(refinedCurve.Knots[i]);
+                subCurveDomain = new Interval(domain.T1, domain.T0);
             }
 
+            KnotVector subCurveKnotVector = new KnotVector();
+            List<double> knotsToInsert = Sets.RepeatData(domain.T0, order).Concat(Sets.RepeatData(domain.T1, degree + 1)).ToList();
+            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
+            var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);
+            var t0Idx = refinedCurve.Knots.IndexOf(subCurveDomain.T0);
+            
+            subCurveKnotVector.AddRange(refinedCurve.Knots.GetRange(t0Idx, multiplicityAtT0 + multiplicityAtT1));
 
-            //KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
-            //KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
+            var subCurveControlPoints = refinedCurve.LocationPoints.GetRange(order, order);
 
-            //    List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
-            //    List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
+            var subCurve = new NurbsCurve(curve.Degree, subCurveKnotVector, subCurveControlPoints);
 
-            return new NurbsCurve();
+            return subCurve;
         }
     }
 }
