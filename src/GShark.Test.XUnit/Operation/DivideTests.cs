@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
-using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -61,10 +60,10 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Fact]
-        public void It_Returns_A_Subcurve_Defined_By_Domain()
+        public void It_Returns_A_SubCurve_Defined_By_Domain()
         {
             // Arrange
-            var domain = new Interval(0.65, 0.85);
+            Interval domain = new Interval(0.65, 0.85);
             int degree = 3;
             List<Point3> controlPts = new List<Point3>
             {
@@ -87,12 +86,10 @@ namespace GShark.Test.XUnit.Operation
                 });
 
             // Act
-            var subCurve = curve.SubCurve(domain);
-
+            ICurve subCurve = curve.SubCurve(domain);
 
             // Assert
             subCurve.Equals(expectedSubCurve).Should().BeTrue();
-
         }
 
         [Fact]
@@ -111,11 +108,11 @@ namespace GShark.Test.XUnit.Operation
                     1
                 };
 
-            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
+            List<Point3> pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int segments = 7;
 
             // Act
-            var divideResult = curve.Divide(segments);
+            (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(segments);
 
             // Assert
             divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
@@ -141,12 +138,12 @@ namespace GShark.Test.XUnit.Operation
                 0.87705925976865,
                 1
             };
-            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
+            List<Point3> pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int steps = 7;
             double length = curve.Length() / steps;
 
             // Act
-            var divideResult = curve.Divide(length);
+            (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(length);
 
             // Assert
             divideResult.Parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
@@ -258,23 +255,23 @@ namespace GShark.Test.XUnit.Operation
             //Act
             List<double> uValues = curve.Divide(10).Parameters;
 
-            foreach (var uValue in uValues)
+            foreach (double uValue in uValues)
             {
                 _testOutput.WriteLine(uValue.ToString());
             }
 
             List<Plane> perpFrames = curve.PerpendicularFrames(uValues);
 
-            foreach (var perpFrame in perpFrames)
+            foreach (Plane perpFrame in perpFrames)
             {
                 _testOutput.WriteLine(perpFrame.ToString());
             }
             
             //Assert
-            for (var i = 0; i < perpFrames.Count; i++)
+            for (int i = 0; i < perpFrames.Count; i++)
             {
-                var perpFrame = perpFrames[i];
-                var expectedPerpFrame = expectedPerpFrames[i];
+                Plane perpFrame = perpFrames[i];
+                Plane expectedPerpFrame = expectedPerpFrames[i];
                 perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GeoSharkMath.MaxTolerance);
                 perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GeoSharkMath.MaxTolerance);
                 perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GeoSharkMath.MaxTolerance);

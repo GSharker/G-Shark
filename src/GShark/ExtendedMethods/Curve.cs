@@ -159,6 +159,19 @@ namespace GShark.ExtendedMethods
                 subCurveDomain = new Interval(domain.T1, domain.T0);
             }
 
+            var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GeoSharkMath.MaxTolerance;
+            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GeoSharkMath.MaxTolerance;
+
+            if (isT0AtStart && isT1AtEnd)
+            {
+                return curve;
+            }
+
+            if (isT0AtStart || isT1AtEnd)
+            {
+               return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
+            }
+
             KnotVector subCurveKnotVector = new KnotVector();
             List<double> knotsToInsert = Sets.RepeatData(domain.T0, order).Concat(Sets.RepeatData(domain.T1, degree + 1)).ToList();
             ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
