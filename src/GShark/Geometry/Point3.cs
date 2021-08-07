@@ -192,7 +192,9 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3 a, Point3 b)
         {
-             return (a.X == b.X && a.Y == b.Y && a.Z == b.Z);
+             return (Math.Abs(a.X - b.X) < GeoSharkMath.MaxTolerance
+                     && Math.Abs(a.Y - b.Y) < GeoSharkMath.MaxTolerance
+                     && Math.Abs(a.Z - b.Z) < GeoSharkMath.MaxTolerance);
         }
 
         /// <summary>
@@ -203,7 +205,9 @@ namespace GShark.Geometry
         /// <returns>true if the two points differ in any coordinate; false otherwise.</returns>
         public static bool operator !=(Point3 a, Point3 b)
         {
-            return (a.X != b.X || a.Y != b.Y || a.Z != b.Z);
+            return (Math.Abs(a.X - b.X) > GeoSharkMath.MaxTolerance
+                    || Math.Abs(a.Y - b.Y) > GeoSharkMath.MaxTolerance
+                    || Math.Abs(a.Z - b.Z) > GeoSharkMath.MaxTolerance);
         }
 
         /// <summary>
