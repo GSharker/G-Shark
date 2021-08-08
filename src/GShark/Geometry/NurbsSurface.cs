@@ -168,8 +168,8 @@ namespace GShark.Geometry
         /// <returns>The closest point on the surface.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
-            var param = Analyze.SurfaceClosestParameter(this, point);
-            return new Point3(Evaluation.SurfacePointAt(this, param.u, param.v));
+            var (u, v) = Analyze.SurfaceClosestParameter(this, point);
+            return new Point3(Evaluation.SurfacePointAt(this, u, v));
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">The NURBS surface.</param>
         /// <returns>Return true if the NURBS surface are equal.</returns>
-        public bool Equals(NurbsSurface? other)
+        public bool Equals(NurbsSurface other)
         {
             List<List<Point3>> otherPts = other?.LocationPoints;
 

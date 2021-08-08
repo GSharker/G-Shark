@@ -1,14 +1,12 @@
 ﻿using GShark.Core;
-using GShark.Geometry;
-using GShark.Geometry.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using GShark.ExtendedMethods;
+using GShark.Geometry;
 using GShark.Geometry.Enum;
+using GShark.Geometry.Interfaces;
 using GShark.Operation.Enum;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.Operation
 {
@@ -130,7 +128,7 @@ namespace GShark.Operation
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Point3  CurveClosestPoint(ICurve curve, Point3  point, out double t)
+        public static Point3 CurveClosestPoint(ICurve curve, Point3 point, out double t)
         {
             t = CurveClosestParameter(curve, point);
             return Evaluation.CurvePointAt(curve, t);
@@ -232,19 +230,21 @@ namespace GShark.Operation
             (double u, double v) selectedUV = (0D, 0D);
             NurbsSurface splitSrf = surface;
             double param = 0.5;
+            int maxIterations = 6;
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < maxIterations; i++)
             {
-                var surfaces = splitSrf.Split(0.5, SplitDirection.Both);
-                var pts = surfaces.Select(s => s.PointAt(0.5, 0.5)).ToArray();
-                var srfUV = DefiningUV(param);
+                NurbsSurface[] surfaces = splitSrf.Split(0.5, SplitDirection.Both);
+                Point3[] pts = surfaces.Select(s => s.PointAt(0.5, 0.5)).ToArray();
+                double[] distanceBetweenPts = pts.Select(point.DistanceTo).ToArray();
+                if (distanceBetweenPts.All(d => d > minimumDistance)) break;
 
-                for (int j = 0; j < pts.Length; j++)
+                (double, double)[] srfUV = DefiningUV(param);
+
+                for (int j = 0; j < distanceBetweenPts.Length; j++)
                 {
-                    double distance = pts[j].DistanceTo(point);
-
-                    if (!(distance < minimumDistance)) continue;
-                    minimumDistance = distance;
+                    if (!(distanceBetweenPts[j] < minimumDistance)) continue;
+                    minimumDistance = distanceBetweenPts[j];
                     selectedUV = srfUV[j];
                     splitSrf = surfaces[j];
                 }
@@ -252,7 +252,6 @@ namespace GShark.Operation
                 param *= 0.5;
             }
 
-            int maxIterations = 6;
             int t = 0;
             // Two zero tolerances can be used to indicate convergence:
             double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
