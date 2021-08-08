@@ -88,14 +88,31 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2D collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2D collection of points, U direction increases from left to right, the V direction from bottom to top.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
         /// <summary>
-        /// A 2d collection of control points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2d collection of control points, U direction increases from left to right, the V direction from bottom to top.
         /// </summary>
         internal List<List<Point4>> ControlPoints { get; }
+
+        /// <summary>
+        /// Checks if a NURBS surface is closed.<br/>
+        /// A surface is closed if the first points and the lasts in a direction are coincident.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        // ToDo: Add test using lofts.
+        public bool IsClosed(SurfaceDirection direction)
+        {
+            KnotVector knot = (direction == SurfaceDirection.U) ? KnotsU : KnotsV;
+            int degree = (direction == SurfaceDirection.U) ? DegreeU : DegreeV;
+
+            if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
+
+            var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
+            return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GeoSharkMath.Epsilon);
+        }
 
         /// <summary>
         /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
@@ -145,6 +162,24 @@ namespace GShark.Geometry
         public Point3 PointAt(double u, double v) => new Point3(Evaluation.SurfacePointAt(this, u, v));
 
         /// <summary>
+        /// Computes the point on the surface that is closest to the test point.
+        /// </summary>
+        /// <param name="point">The point to test against.</param>
+        /// <returns>The closest point on the surface.</returns>
+        public Point3 ClosestPoint(Point3 point)
+        {
+            var (u, v) = Analyze.SurfaceClosestParameter(this, point);
+            return new Point3(Evaluation.SurfacePointAt(this, u, v));
+        }
+
+        /// <summary>
+        /// Computes the U and V parameters of the surface that is closest to the test point.
+        /// </summary>
+        /// <param name="point">The point to test against.</param>
+        /// <returns>The U and V parameters of the surface that are closest to the test point.</returns>
+        public (double U, double V) ClosestParameters(Point3 point) => Analyze.SurfaceClosestParameter(this, point);
+
+        /// <summary>
         /// Evaluate the surface at the given U and V parameters.
         /// </summary>
         /// <param name="u">U parameter.</param>
@@ -181,7 +216,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">The NURBS surface.</param>
         /// <returns>Return true if the NURBS surface are equal.</returns>
-        public bool Equals(NurbsSurface? other)
+        public bool Equals(NurbsSurface other)
         {
             List<List<Point3>> otherPts = other?.LocationPoints;
 

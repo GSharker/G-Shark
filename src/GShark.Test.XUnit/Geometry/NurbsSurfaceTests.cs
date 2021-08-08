@@ -223,5 +223,24 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             func.Should().Throw<ArgumentOutOfRangeException>();
         }
+
+        [Theory]
+        [InlineData(new double[] { 2.60009, 7.69754, 3.408162 }, new double[] { 2.5, 7, 5 })]
+        [InlineData(new double[] { 2.511373, 1.994265, 0.887211 }, new double[] { 2.5, 1.5, 2 })]
+        [InlineData(new double[] { 8.952827, 2.572942, 0.735217 }, new double[] { 9, 2.5, 1 })]
+        [InlineData(new double[] { 5.073733, 4.577509, 1.978153 }, new double[] { 5, 5, 1 })]
+        public void Returns_The_Closest_Point_On_The_Surface(double[] expectedPt, double[] testPt)
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Point3 pt = new Point3(testPt[0], testPt[1], testPt[2]);
+            Point3 expectedClosestPt = new Point3(expectedPt[0], expectedPt[1], expectedPt[2]);
+
+            // Act
+            Point3 closestPt = surface.ClosestPoint(pt);
+
+            // Assert
+            closestPt.DistanceTo(expectedClosestPt).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+        }
     }
 }

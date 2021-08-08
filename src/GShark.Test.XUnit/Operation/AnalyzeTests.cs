@@ -124,5 +124,25 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             t.Should().BeApproximately(tValueExpected, 1e-5);
         }
+
+        [Theory]
+        [InlineData(0.204157623157292, 0.716170472509343, new double[] { 2.5, 7, 5 })]
+        [InlineData(0.237211551442712, 0.154628316784507, new double[] { 2.5, 1.5, 2 })]
+        [InlineData(0.910119163727208, 0.229417610613794, new double[] { 9, 2.5, 1 })]
+        [InlineData(0.50870054333679, 0.360138133269618, new double[] { 5, 5, 1 })]
+        public void RationalSurfaceClosestParam_Returns_Parameters_U_V_Of_A_Closest_Point(double u, double v, double[] testPt)
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Point3 pt = new Point3(testPt[0], testPt[1], testPt[2]);
+            (double u, double v) expectedUV = (u, v);
+
+            // Act
+            var closestParameter = Analyze.SurfaceClosestParameter(surface, pt);
+
+            // Assert
+            (closestParameter.u - expectedUV.u).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            (closestParameter.v - expectedUV.v).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+        }
     }
 }

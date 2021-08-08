@@ -692,8 +692,8 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the dot product between two vectors.
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <param name="vector1">The first vector.</param>
+        /// <param name="vector2">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
         public static double DotProduct(Vector3 vector1, Vector3 vector2)
         {
