@@ -26,6 +26,6 @@ This is an example of using the [repo-visualizer](https://github.com/githubocto/
 
 We've included the generated diagram by adding it to the README:
 
-![Visualization of this repo](.media/diagram.svg)
+![Visualization of this repo](media/diagram.svg)
 
-You can check out the whole GitHub Action at [diagram.yml](/.github/workflows/diagram.yml). Notice that we're excluding the `ignore` and `.github` folders, using the `excluded_paths` config.
+You can check out the whole GitHub Action at [diagram.yml](/.github/workflows/generate_diagram.yml). Notice that we're excluding the `ignore` and `.github` folders, using the `excluded_paths` config.
