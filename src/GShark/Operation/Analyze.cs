@@ -448,5 +448,35 @@ namespace GShark.Operation
 
             return -1;
         }
+
+        public static ICurve Isocurve(NurbsSurface surface, double parameter, SurfaceDirection direction)
+        {
+            KnotVector knots = (direction == SurfaceDirection.V) ? surface.KnotsV : surface.KnotsU;
+            int degree = (direction == SurfaceDirection.V) ? surface.DegreeV : surface.DegreeU;
+
+            Dictionary<double, int> knotMultiplicity = knots.Multiplicities();
+            // If the knotVector already exists in the array, don't make duplicates.
+            double knotKey = -1;
+            foreach (KeyValuePair<double, int> keyValuePair in knotMultiplicity)
+            {
+                if (!(Math.Abs(parameter - keyValuePair.Key) < GeoSharkMath.Epsilon)) continue;
+                knotKey = keyValuePair.Key;
+                break;
+            }
+
+            int knotsToInsert = degree + 1;
+            if (knotKey >= 0)
+            {
+                knotsToInsert = knotsToInsert - knotMultiplicity[knotKey];
+            }
+
+            // Insert knots
+            // Add SurfaceKnotRefine
+
+            // Obtain the correct index of control points to extract
+            int span = knots.Span(degree, parameter);
+
+
+        }
     }
 }
