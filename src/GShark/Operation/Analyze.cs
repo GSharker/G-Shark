@@ -224,12 +224,13 @@ namespace GShark.Operation
         /// <param name="surface">The surface object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the surface.</returns>
-        public static (double u, double v) SurfaceClosestParameter(NurbsSurface surface, Point3 point, int maxIterations = 10)
+        public static (double u, double v) SurfaceClosestParameter(NurbsSurface surface, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
-            (double u, double v) selectedUV = (0D, 0D);
+            (double u, double v) selectedUV = (0.5, 0.5);
             NurbsSurface splitSrf = surface;
             double param = 0.5;
+            int maxIterations = 5;
 
             for (int i = 0; i < maxIterations; i++)
             {
@@ -238,7 +239,7 @@ namespace GShark.Operation
                 double[] distanceBetweenPts = pts.Select(point.DistanceTo).ToArray();
                 if (distanceBetweenPts.All(d => d > minimumDistance)) break;
 
-                (double, double)[] srfUV = DefiningUV(param);
+                (double, double)[] srfUV = DefiningUV(selectedUV, param);
 
                 for (int j = 0; j < distanceBetweenPts.Length; j++)
                 {
@@ -383,14 +384,15 @@ namespace GShark.Operation
         /// <summary>
         /// Defines the U and V parameters for a surface split in both direction, subtracting or adding half of the input parameter based on the quadrant.
         /// </summary>
-        private static (double u, double v)[] DefiningUV(double parameter)
+        private static (double u, double v)[] DefiningUV((double u, double v) surfaceUV, double parameter)
         {
+            double halfParameter = parameter * 0.5;
             var UV = new (double u, double v)[4]
             {
-                (parameter * 1.5, parameter * 0.5),
-                (parameter * 1.5, parameter * 1.5),
-                (parameter * 0.5, parameter * 0.5),
-                (parameter * 0.5, parameter * 1.5)
+                (surfaceUV.u + halfParameter, surfaceUV.v - halfParameter),
+                (surfaceUV.u + halfParameter, surfaceUV.v + halfParameter),
+                (surfaceUV.u - halfParameter, surfaceUV.v - halfParameter),
+                (surfaceUV.u - halfParameter, surfaceUV.v + halfParameter)
             };
 
             return UV;

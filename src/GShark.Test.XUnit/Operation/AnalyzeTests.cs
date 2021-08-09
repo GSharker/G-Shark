@@ -60,8 +60,8 @@ namespace GShark.Test.XUnit.Operation
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MinTolerance);
+                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MaxTolerance);
 
                 sumLengths += length;
             }

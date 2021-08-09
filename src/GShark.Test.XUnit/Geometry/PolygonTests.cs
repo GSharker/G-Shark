@@ -94,7 +94,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             poly2DArea.Should().Be(45);
-            poly3DArea.Should().BeApproximately(480.580633, GeoSharkMath.MinTolerance);
+            poly3DArea.Should().BeApproximately(480.580630021221, GeoSharkMath.MinTolerance);
         }
 
         [Fact]
