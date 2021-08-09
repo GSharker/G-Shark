@@ -290,7 +290,7 @@ namespace GShark.Geometry
             {
                 if (!(Math.Abs(this[i] - other[i]) <= GeoSharkMath.Epsilon)) return false;
             }
-            
+
             return true;
         }
 

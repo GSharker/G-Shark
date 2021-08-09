@@ -53,10 +53,10 @@ namespace GShark.Geometry
                 throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             }
 
-            Weights = LinearAlgebra.GetWeights(controlPoints);
+            Weights = Point4.GetWeights(controlPoints);
             Degree = degree;
             Knots = knots;
-            LocationPoints = LinearAlgebra.PointDehomogenizer1d(controlPoints);
+            LocationPoints = Point4.PointDehomogenizer1d(controlPoints);
             ControlPoints = controlPoints;
         }
 
@@ -235,7 +235,7 @@ namespace GShark.Geometry
         /// <returns>The closest point on the curve.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
-            return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+            return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
 
         /// <summary>

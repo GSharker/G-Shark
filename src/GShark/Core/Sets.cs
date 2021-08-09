@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Geometry;
 
 namespace GShark.Core
 {
@@ -58,9 +57,9 @@ namespace GShark.Core
         /// <returns>A collection of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.T0 - domain.T1) <= GeoSharkMath.Epsilon)
+            if (Math.Abs(domain.T0 - domain.T1) <= GeoSharkMath.Epsilon)
             {
-                return new List<double>(){ domain.T0 };
+                return new List<double>() { domain.T0 };
             }
 
             List<double> linearSpace = new List<double>();
@@ -157,7 +156,7 @@ namespace GShark.Core
         /// <returns>The set difference.</returns>
         public static List<double> SetDifference(IList<double> a, IList<double> b)
         {
-            if(a.Count == 0)
+            if (a.Count == 0)
             {
                 throw new Exception("Set difference can't be computed, the first set is empty.");
             }

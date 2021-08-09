@@ -86,34 +86,34 @@ namespace GShark.Operation
             switch (direction)
             {
                 case SplitDirection.U:
-                {
-                    surfaceResult =  new NurbsSurface[]
                     {
+                        surfaceResult = new NurbsSurface[]
+                        {
                         new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft)),
                         new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight))
-                    };
-                    break;
-                }
+                        };
+                        break;
+                    }
                 case SplitDirection.V:
-                {
-                    surfaceResult = new NurbsSurface[]
                     {
+                        surfaceResult = new NurbsSurface[]
+                        {
                         new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotLeft, surfPtsLeft),
                         new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotRight, surfPtsRight)
-                    };
-                    break;
-                }
+                        };
+                        break;
+                    }
                 case SplitDirection.Both:
-                {
-                    NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft));
-                    NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight));
+                    {
+                        NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft));
+                        NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight));
 
-                    NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
-                    NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);
+                        NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
+                        NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);
 
-                    surfaceResult = split2.Concat(split1).ToArray();
-                    break;
-                }
+                        surfaceResult = split2.Concat(split1).ToArray();
+                        break;
+                    }
             }
 
             return surfaceResult;

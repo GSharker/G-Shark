@@ -95,7 +95,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Act
             Func<object> resultFunction = () => Sets.Range(maxValue);
-            
+
             // Assert
             resultFunction.Should().Throw<Exception>().WithMessage("T1 value range can not be negative or zero.");
         }
@@ -172,8 +172,8 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Theory]
-        [InlineData(new double[]{ 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
-        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] {}, new double[] { 3, 5, 7, 9, 11 })]
+        [InlineData(new double[] { 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
+        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { }, new double[] { 3, 5, 7, 9, 11 })]
         public void It_Returns_A_SetDifference_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
             // Act
@@ -209,7 +209,7 @@ namespace GShark.Test.XUnit.Core
                     new Point3( 10d, -10d, 10)
                 },
                 new List<Point3>
-                {                
+                {
                     new Point3( 0d, -30d, 0),
                     new Point3( 10d, -30d, 0)
 

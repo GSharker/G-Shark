@@ -136,7 +136,7 @@ namespace GShark.Core
         /// <returns>The numerical value truncate.</returns>
         public static decimal Truncate(double value, byte decimals = 6)
         {
-            decimal d = (decimal) value;
+            decimal d = (decimal)value;
             decimal r = Math.Round(d, decimals);
 
             if (d > 0 && r > d)

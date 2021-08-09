@@ -375,9 +375,9 @@ namespace GShark.Operation
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3> rationalDerivativePoints = Point4.RationalPoints(derivatives);
             // Correspond in the book to wDers.
-            List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
+            List<double> weightDers = Point4.GetWeights(derivatives);
             List<Vector3> CK = new List<Vector3>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
@@ -592,7 +592,7 @@ namespace GShark.Operation
             {
                 for (int l = 0; l < numDerivs - k + 1; l++)
                 {
-                    Vector3 t = derivatives.Item1[k,l];
+                    Vector3 t = derivatives.Item1[k, l];
                     for (int j = 1; j < l + 1; j++)
                     {
                         t -= SKL[k, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[0, j]);
@@ -604,7 +604,7 @@ namespace GShark.Operation
                         Vector3 t2 = Vector3.Zero;
                         for (int j = 1; j < l + 1; j++)
                         {
-                            t2 += SKL[k - i,l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
+                            t2 += SKL[k - i, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
                         }
 
                         t -= t2 * LinearAlgebra.GetBinomial(k, i);

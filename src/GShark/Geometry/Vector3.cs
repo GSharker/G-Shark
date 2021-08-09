@@ -41,7 +41,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of the vector with components 0,0,0.
         /// </summary>
-        public static Vector3 Zero => new Vector3(0,0,0);
+        public static Vector3 Zero => new Vector3(0, 0, 0);
 
         /// <summary>
         /// Gets the value of the vector with components 1,0,0.
@@ -172,7 +172,7 @@ namespace GShark.Geometry
         /// <returns>The resulting Vector3.</returns>
         public static implicit operator Vector(Vector3 vector3d)
         {
-            return new Vector{vector3d.X, vector3d.Y, vector3d.Z};
+            return new Vector { vector3d.X, vector3d.Y, vector3d.Z };
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace GShark.Geometry
 
             //compute dot product
             double dot = DotProduct(a.Unitize(), b.Unitize());
-            
+
             if (dot > 1.0)
             {
                 dot = 1.0;
@@ -242,17 +242,17 @@ namespace GShark.Geometry
         public static double VectorAngleOnPlane(Vector3 a, Vector3 b, Plane plane, out double reflexAngle)
         {
             // Project vectors onto plane.
-                var pA = plane.Origin + a;
-                var pB = plane.Origin + b;
+            var pA = plane.Origin + a;
+            var pB = plane.Origin + b;
 
-                pA = plane.ClosestPoint(pA, out _);
-                pB = plane.ClosestPoint(pB, out _);
+            pA = plane.ClosestPoint(pA, out _);
+            pB = plane.ClosestPoint(pB, out _);
 
-                a = pA - plane.Origin;
-                b = pB - plane.Origin;
-                a = a.Unitize();
-                b = b.Unitize();
-           
+            a = pA - plane.Origin;
+            b = pB - plane.Origin;
+            a = a.Unitize();
+            b = b.Unitize();
+
 
             // Abort on invalid cases.
             if (a == Unset || b == Unset)
@@ -262,14 +262,14 @@ namespace GShark.Geometry
             }
 
             double dot = a * b;
-             // Limit dot product to valid range.
-                if (dot >= 1.0)
-                { dot = 1.0; }
-                else if (dot < -1.0)
-                { dot = -1.0; }
-            
+            // Limit dot product to valid range.
+            if (dot >= 1.0)
+            { dot = 1.0; }
+            else if (dot < -1.0)
+            { dot = -1.0; }
+
             double angle = Math.Acos(dot);
-         // Special case (anti)parallel vectors.
+            // Special case (anti)parallel vectors.
             if (Math.Abs(angle) < 1e-64)
             {
                 reflexAngle = 0;
@@ -284,7 +284,7 @@ namespace GShark.Geometry
 
             if (angle > Math.PI)
             {
-                reflexAngle = angle ;
+                reflexAngle = angle;
                 return 2 * Math.PI - angle;
             }
 
@@ -734,75 +734,75 @@ namespace GShark.Geometry
         /// <param name="vector">The other vector.</param>
         /// <returns>The perpendicular vector.</returns>
         public static Vector3 PerpendicularTo(Vector3 vector)
+        {
+            double[] vectorComponents = { vector.X, vector.Y, vector.Z };
+            double[] tempVector = new double[3];
+            int i, j, k;
+            double a, b;
+            if (Math.Abs(vectorComponents[1]) > Math.Abs(vectorComponents[0]))
             {
-                double[] vectorComponents = {vector.X, vector.Y, vector.Z};
-                double[] tempVector = new double[3];
-                int i, j, k;
-                double a, b;
-                if (Math.Abs(vectorComponents[1]) > Math.Abs(vectorComponents[0]))
+                if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
                 {
-                    if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
-                    {
-                        // |v.z| > |v.y| > |v.x|
-                        i = 2;
-                        j = 1;
-                        k = 0;
-                        a = vectorComponents[2];
-                        b = -vectorComponents[1];
-                    }
-                    else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
-                    {
-                        // |v.y| >= |v.z| >= |v.x|
-                        i = 1;
-                        j = 2;
-                        k = 0;
-                        a = vectorComponents[1];
-                        b = -vectorComponents[2];
-                    }
-                    else
-                    {
-                        // |v.y| > |v.x| > |v.z|
-                        i = 1;
-                        j = 0;
-                        k = 2;
-                        a = vectorComponents[1];
-                        b = -vectorComponents[0];
-                    }
+                    // |v.z| > |v.y| > |v.x|
+                    i = 2;
+                    j = 1;
+                    k = 0;
+                    a = vectorComponents[2];
+                    b = -vectorComponents[1];
                 }
                 else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
                 {
-                    // |v.z| > |v.x| >= |v.y|
-                    i = 2;
-                    j = 0;
-                    k = 1;
-                    a = vectorComponents[2];
-                    b = -vectorComponents[0];
-                }
-                else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
-                {
-                    // |v.x| >= |v.z| > |v.y|
-                    i = 0;
+                    // |v.y| >= |v.z| >= |v.x|
+                    i = 1;
                     j = 2;
-                    k = 1;
-                    a = vectorComponents[0];
+                    k = 0;
+                    a = vectorComponents[1];
                     b = -vectorComponents[2];
                 }
                 else
                 {
-                    // |v.x| >= |v.y| >= |v.z|
-                    i = 0;
-                    j = 1;
+                    // |v.y| > |v.x| > |v.z|
+                    i = 1;
+                    j = 0;
                     k = 2;
-                    a = vectorComponents[0];
-                    b = -vectorComponents[1];
+                    a = vectorComponents[1];
+                    b = -vectorComponents[0];
                 }
-
-                tempVector[i] = b;
-                tempVector[j] = a;
-                tempVector[k] = 0.0;
-
-                return new Vector3(tempVector[0], tempVector[1], tempVector[2]);
             }
+            else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
+            {
+                // |v.z| > |v.x| >= |v.y|
+                i = 2;
+                j = 0;
+                k = 1;
+                a = vectorComponents[2];
+                b = -vectorComponents[0];
+            }
+            else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
+            {
+                // |v.x| >= |v.z| > |v.y|
+                i = 0;
+                j = 2;
+                k = 1;
+                a = vectorComponents[0];
+                b = -vectorComponents[2];
+            }
+            else
+            {
+                // |v.x| >= |v.y| >= |v.z|
+                i = 0;
+                j = 1;
+                k = 2;
+                a = vectorComponents[0];
+                b = -vectorComponents[1];
+            }
+
+            tempVector[i] = b;
+            tempVector[j] = a;
+            tempVector[k] = 0.0;
+
+            return new Vector3(tempVector[0], tempVector[1], tempVector[2]);
+        }
 
         /// <summary>
         /// Computes the perpendicular of a vector given three points.<br/>

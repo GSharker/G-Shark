@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using verb.core;
+﻿using verb.core;
 using verb.eval;
 using Xunit;
 using Xunit.Abstractions;
@@ -86,7 +80,7 @@ namespace GShark.Test.XUnit
             Array<object> pts0 = new Array<object>();
             Array<object> pts1 = new Array<object>();
 
-            pts0.push(new Array<double>(new double[] { -5,0,0 }));
+            pts0.push(new Array<double>(new double[] { -5, 0, 0 }));
             pts0.push(new Array<double>(new double[] { 10, 0, 0 }));
             pts0.push(new Array<double>(new double[] { 10, 10, 0 }));
             pts0.push(new Array<double>(new double[] { 0, 10, 0 }));
@@ -105,7 +99,7 @@ namespace GShark.Test.XUnit
             verb.geom.NurbsCurve curve1 = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts1, weights);
 
             Array<object> intersections = verb.eval.Intersect.curves(curve0._data, curve1._data, verb.core.Constants.TOLERANCE);
-            
+
             _testOutput.WriteLine(intersections.length.ToString());
             for (int i = 0; i < intersections.length; i++)
             {
@@ -128,7 +122,7 @@ namespace GShark.Test.XUnit
             pts.push(new Array<double>(new double[] { 50, 5, 0 }));
 
             Array<double> knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 0.0, 0.333333, 0.666667, 1.0, 1.0, 1.0, 1.0 });
-            Array<double> knots2 = new Array<double>(new double[] { 0.0, 0.2, 0.4, 0.6, 0.8, 1.0});
+            Array<double> knots2 = new Array<double>(new double[] { 0.0, 0.2, 0.4, 0.6, 0.8, 1.0 });
             Array<double> weights = new Array<double>(new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
 
             verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(3, knots, pts, weights);
@@ -168,15 +162,15 @@ namespace GShark.Test.XUnit
         [Fact]
         public void decomposeMatrix()
         {
-            Array<object> matrix = new Array<object> ();
+            Array<object> matrix = new Array<object>();
 
             //matrix.push(new Array<object>(new object[] {10, -7, 0}));
             //matrix.push(new Array<object>(new object[] { -3, 2, 6 }));
             //matrix.push(new Array<object>(new object[] { 5, -1, 5 }));
 
-            matrix.push(new Array<object>(new object[] { 1,2,3 }));
-            matrix.push(new Array<object>(new object[] { 2,4,5 }));
-            matrix.push(new Array<object>(new object[] { 1,3,4 }));
+            matrix.push(new Array<object>(new object[] { 1, 2, 3 }));
+            matrix.push(new Array<object>(new object[] { 2, 4, 5 }));
+            matrix.push(new Array<object>(new object[] { 1, 3, 4 }));
 
             //matrix.push(new Array<object>(new object[] { 4,3 }));
             //matrix.push(new Array<object>(new object[] { 6,3 }));
@@ -185,7 +179,7 @@ namespace GShark.Test.XUnit
             verb.core._Mat.LUDecomp matrixLU = Mat.LU(matrix);
 
             //var vector = new Array<double>(new double[] {3,13,4});
-            Array<double> vector = new Array<double>(new double[] { 0,4,17});
+            Array<double> vector = new Array<double>(new double[] { 0, 4, 17 });
 
             Array<double> solved = Mat.LUsolve(matrixLU, vector);
 
@@ -336,7 +330,7 @@ namespace GShark.Test.XUnit
             pts.push(new Array<double>(new double[] { 10.0, 10.0, 2.0 }));
 
             Array<double> knots = new Array<double>(new double[] { 0.0, 0.0, 0.0, 1.0, 1.0, 1.0 });
-            Array<double> weights = new Array<double>(new double[] { 1.0, 2.0, 1.0});
+            Array<double> weights = new Array<double>(new double[] { 1.0, 2.0, 1.0 });
             Array<double> knotsToInsert = new Array<double>(new double[] { 0.5, 0.5, 0.5 });
 
             verb.geom.NurbsCurve curve = verb.geom.NurbsCurve.byKnotsControlPointsWeights(2, knots, pts, weights);
@@ -416,12 +410,12 @@ namespace GShark.Test.XUnit
             var surface = verb.geom.NurbsSurface.byKnotsControlPointsWeights(2, 1, knotsU, knotsV, pts, weight);
             Array<object> derivatives = verb.eval.Eval.rationalSurfaceDerivatives(surface._data, 0.25, 0.25, 2);
 
-            var pt = new Array<double>(new double[] {2.5, 1.5, 2});
+            var pt = new Array<double>(new double[] { 2.5, 1.5, 2 });
 
             var rational =
                 verb.eval.Analyze.rationalSurfaceClosestParam(surface._data, pt);
 
-            var ptd = (Array<object>) derivatives.__a[0];
+            var ptd = (Array<object>)derivatives.__a[0];
             var diff = verb.core.Vec.sub((Array<double>)ptd.__a[0], pt);
 
             var Su = (Array<object>)derivatives.__a[1];
@@ -433,7 +427,7 @@ namespace GShark.Test.XUnit
             var Suv = (Array<object>)derivatives.__a[1];
             var Svu = (Array<object>)derivatives.__a[1];
 
-            var f = verb.core.Vec.dot((Array<double>) Su.__a[0], diff);
+            var f = verb.core.Vec.dot((Array<double>)Su.__a[0], diff);
             var g = verb.core.Vec.dot((Array<double>)Sv.__a[1], diff);
 
             var k = new Array<double>(new double[] { -f, -g });

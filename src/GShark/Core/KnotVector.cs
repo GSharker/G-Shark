@@ -219,7 +219,7 @@ namespace GShark.Core
         /// <returns>The multiplicity of the knot, or 0 if the knot is not part of the knot vector.</returns>
         public int Multiplicity(double knot)
         {
-            return this.Count(x => Math.Abs(x-knot) <= GeoSharkMath.MinTolerance);
+            return this.Count(x => Math.Abs(x - knot) <= GeoSharkMath.MinTolerance);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace GShark.Core
             Dictionary<double, int> multiplicities = new Dictionary<double, int>(Count);
             foreach (double knot in this)
             {
-                var multiplicity =  Multiplicity(knot);
+                var multiplicity = Multiplicity(knot);
                 if (!multiplicities.Keys.Contains(knot))
                 {
                     multiplicities.Add(knot, multiplicity);

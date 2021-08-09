@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using GShark.Core;
+﻿using GShark.Core;
+using System.Collections.Generic;
 
 namespace GShark.Geometry.Interfaces
 {

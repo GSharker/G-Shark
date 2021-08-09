@@ -1,5 +1,7 @@
 ﻿using GShark.Core;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.Geometry
 {
@@ -306,6 +308,188 @@ namespace GShark.Geometry
         public static implicit operator Vector(Point4 point4)
         {
             return new Vector { point4.X, point4.Y, point4.Z, point4.W };
+        }
+
+        /// <summary>
+        /// Transforms a collection of points into their homogeneous equivalents.<br/>
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
+        /// </summary>
+        /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
+        /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
+        /// <returns>A set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<Point4> PointsHomogeniser(List<Point3> controlPoints, List<double> weights)
+        {
+            if (controlPoints.Count < weights.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(weights),
+                    "The weights set is bigger than the control points, it must be the same dimension");
+            }
+
+            if (controlPoints.Count > weights.Count)
+            {
+                int diff = controlPoints.Count - weights.Count;
+                List<double> dataFilled = Sets.RepeatData(1.0, diff);
+                weights.AddRange(dataFilled);
+            }
+
+            List<Point4> controlPtsHomogenized = new List<Point4>();
+
+            for (int i = 0; i < controlPoints.Count; i++)
+            {
+                Point4 tempPt = new Point4
+                {
+                    X = controlPoints[i].X * weights[i],
+                    Y = controlPoints[i].Y * weights[i],
+                    Z = controlPoints[i].Z * weights[i],
+                    W = weights[i]
+                };
+
+
+                controlPtsHomogenized.Add(tempPt);
+            }
+
+            return controlPtsHomogenized;
+        }
+
+        /// <summary>
+        /// Transforms a collection of points into their homogeneous equivalents, by a given weight value.<br/>
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
+        /// </summary>
+        /// <param name="controlPoints">Control points, a set of size (points count x points dimension).</param>
+        /// <param name="weight">Weight value for each point.</param>
+        /// <returns>A set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<Point4> PointsHomogeniser(List<Point3> controlPoints, double weight)
+        {
+            List<Point4> controlPtsHomogenized = new List<Point4>();
+
+            foreach (var pt in controlPoints)
+            {
+                Point4 tempPt = new Point4
+                {
+                    X = pt.X * weight,
+                    Y = pt.Y * weight,
+                    Z = pt.Z * weight,
+                    W = weight
+                };
+
+                controlPtsHomogenized.Add(tempPt);
+            }
+
+            return controlPtsHomogenized;
+        }
+
+        /// <summary>
+        /// Transforms a two-dimension collection of points into their homogeneous equivalents.<br/>
+        /// http://deltaorange.com/2012/03/08/the-truth-behind-homogenous-coordinates/
+        /// </summary>
+        /// <param name="controlPoints">Control points, a two-dimensional set of size (points count x points dimension).</param>
+        /// <param name="weights">Control point weights, the same size as the set of control points (points count x 1).</param>
+        /// <returns>A two-dimensional set of control points where each point is (wi*pi, wi)<br/>
+        /// where wi the ith control point weight and pi is the ith control point, hence the dimension of the point is dim + 1.</returns>
+        public static List<List<Point4>> PointsHomogeniser2d(List<List<Point3>> controlPoints, List<List<double>> weights = null)
+        {
+            int rows = controlPoints.Count;
+            List<List<Point4>> controlPtsHomogenized = new List<List<Point4>>();
+            List<List<double>> usedWeights = weights;
+            if (weights == null || weights.Count == 0)
+            {
+                usedWeights = new List<List<double>>();
+                for (int i = 0; i < rows; i++)
+                {
+                    usedWeights.Add(Sets.RepeatData(1.0, controlPoints[i].Count));
+                }
+            }
+            if (controlPoints.Count < usedWeights.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(weights), "The weights set is bigger than the control points, it must be the same dimension");
+            }
+
+            for (int i = 0; i < rows; i++)
+            {
+                controlPtsHomogenized.Add(PointsHomogeniser(controlPoints[i], usedWeights[i]));
+            }
+
+            return controlPtsHomogenized;
+        }
+
+        /// <summary>
+        /// Obtains the weight from a collection of points in homogeneous space, assuming all are the same dimension.
+        /// </summary>
+        /// <param name="homogenizedPoints">Points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>A set of values, represented by a set pi with length (dim).</returns>
+        public static List<double> GetWeights(List<Point4> homogenizedPoints)
+        {
+            return homogenizedPoints.Select(pt => pt.W).ToList();
+        }
+
+        /// <summary>
+        /// Obtains the weight from a two-dimensional collection of points in homogeneous space, assuming all are the same dimension.
+        /// </summary>
+        /// <param name="homogenizedPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of values, each represented by an array pi with length (dim)</returns>
+        public static List<List<double>> GetWeights2d(List<List<Point4>> homogenizedPoints)
+        {
+            return homogenizedPoints.Select(pts => GetWeights(pts).ToList()).ToList();
+        }
+
+        /// <summary>
+        /// Gets a dehomogenized point from a homogenized curve point.
+        /// </summary>
+        /// <param name="homogenizedCurvePoint">A point represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>A dehomogenized point.</returns>
+        public static Point3 PointDehomogenizer(Point4 homogenizedCurvePoint)
+        {
+            Point3 point = new Point3
+            {
+                X = homogenizedCurvePoint.X / homogenizedCurvePoint.W,
+                Y = homogenizedCurvePoint.Y / homogenizedCurvePoint.W,
+                Z = homogenizedCurvePoint.Z / homogenizedCurvePoint.W
+            };
+
+            return point;
+        }
+
+        /// <summary>
+        /// Gets a set of dehomogenized points.
+        /// </summary>
+        /// <param name="homogenizedPoints">A collection of points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>Set of dehomogenized points.</returns>
+        public static List<Point3> PointDehomogenizer1d(List<Point4> homogenizedPoints)
+        {
+            return homogenizedPoints.Select(PointDehomogenizer).ToList();
+        }
+
+        /// <summary>
+        /// Gets a two-dimensional set of dehomogenized points.
+        /// </summary>
+        /// <param name="homogenizedPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of dehomogenized points.</returns>
+        public static List<List<Point3>> PointDehomogenizer2d(List<List<Point4>> homogenizedPoints)
+        {
+            return homogenizedPoints.Select(PointDehomogenizer1d).ToList();
+        }
+
+        /// <summary>
+        /// Obtains the point from homogeneous point without dehomogenization, assuming all are the same length.
+        /// </summary>
+        /// <param name="homogenizedPoints">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
+        /// <returns>Set of rational points.</returns>
+        public static List<Point3> RationalPoints(List<Point4> homogenizedPoints)
+        {
+
+            return homogenizedPoints.Select(pt => new Point3(pt.X, pt.Y, pt.Z)).ToList();
+        }
+
+        /// <summary>
+        /// Obtains the point from a two-dimensional set of homogeneous points without dehomogenization, assuming all are the same length.
+        /// </summary>
+        /// <param name="homogenizedPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
+        /// <returns>Two-dimensional set of rational points.</returns>
+        public static List<List<Point3>> Rational2d(List<List<Point4>> homogenizedPoints)
+        {
+            return homogenizedPoints.Select(hpts => RationalPoints(hpts)).ToList();
         }
 
         /// <summary>

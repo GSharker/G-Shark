@@ -64,7 +64,7 @@ namespace GShark.Test.XUnit.Core
             interval.IsIncreasing.Should().Be(false);
             interval.IsSingleton.Should().Be(false);
         }
-        
+
         [Fact]
         public void It_Returns_True_If_Interval_Is_Increasing()
         {

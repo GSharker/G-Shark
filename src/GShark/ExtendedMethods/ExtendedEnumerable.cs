@@ -43,7 +43,7 @@ namespace GShark.ExtendedMethods
                 throw new InvalidOperationException("Cannot compute unique for a empty set.");
             }
 
-            List<T> uniques = new List<T>{ tempCollection[tempCollection.Count - 1] };
+            List<T> uniques = new List<T> { tempCollection[tempCollection.Count - 1] };
             tempCollection.RemoveAt(tempCollection.Count - 1);
 
             while (tempCollection.Count > 0)

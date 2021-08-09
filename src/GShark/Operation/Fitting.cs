@@ -3,7 +3,6 @@ using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GShark.Operation
@@ -266,14 +265,14 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < 3; i++)
             {
-                Vector b = new Vector {pts[0][i], startTangent[i] * mult0};
+                Vector b = new Vector { pts[0][i], startTangent[i] * mult0 };
                 // Insert the tangents at the second and second to last index.
                 // Equations 9.11
                 b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
                 // Equations 9.12
                 b.Add(endTangent[i] * mult1);
                 b.Add(pts[pts.Count - 1][i]);
-                
+
                 Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }

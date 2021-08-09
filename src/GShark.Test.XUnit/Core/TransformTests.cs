@@ -31,7 +31,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Creates_A_Transform_By_Copying_Another_Transform()
         {
             // Arrange
-            Transform transform = new Transform {[0] = {[0] = 2}, [1] = {[0] = 2}};
+            Transform transform = new Transform { [0] = { [0] = 2 }, [1] = { [0] = 2 } };
 
             // Act
             Transform copyTransform = Transform.Copy(transform);
@@ -76,7 +76,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Rotated_Transformed_Matrix()
         {
             // Arrange
-            var center = new Point3(5,5,0);
+            var center = new Point3(5, 5, 0);
             double angleInRadians = GeoSharkMath.ToRadians(30);
 
             // Act
@@ -97,7 +97,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Act
             Transform scale1 = Transform.Scale(new Point3(0, 0, 0), 0.5);
-            Transform scale2 = Transform.Scale(new Point3( 10, 10, 0), 0.5);
+            Transform scale2 = Transform.Scale(new Point3(10, 10, 0), 0.5);
 
             // Assert
             scale1[0][0].Should().Be(0.5); scale2[0][0].Should().Be(0.5);
@@ -113,7 +113,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Mirrored_Transformation_Matrix()
         {
             // Arrange
-            var pt = new Point3(10,10,0);
+            var pt = new Point3(10, 10, 0);
             Plane plane = new Plane(pt, Vector3.XAxis);
 
             // Act
@@ -121,8 +121,8 @@ namespace GShark.Test.XUnit.Core
 
             // Assert
             transform[0][0].Should().Be(-1.0);
-            transform[1][1].Should().Be(1.0); 
-            transform[2][2].Should().Be(1.0); 
+            transform[1][1].Should().Be(1.0);
+            transform[2][2].Should().Be(1.0);
             transform[3][3].Should().Be(1.0);
             transform[0][3].Should().Be(20);
         }
@@ -152,7 +152,7 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
         {
             // Arrange
-            var origin = new Point3( 5, 0, 0);
+            var origin = new Point3(5, 0, 0);
             var dir = new Vector3(-10, -15, 0);
             Plane plane = new Plane(origin, dir);
 

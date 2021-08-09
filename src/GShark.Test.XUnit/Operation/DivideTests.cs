@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -230,7 +230,7 @@ namespace GShark.Test.XUnit.Operation
             {
                 _testOutput.WriteLine(perpFrame.ToString());
             }
-            
+
             //Assert
             for (var i = 0; i < perpFrames.Count; i++)
             {

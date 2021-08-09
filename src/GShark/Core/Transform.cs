@@ -34,22 +34,22 @@ namespace GShark.Core
         public Transform()
         {
             AddRange(Matrix.Construct(4, 4));
-        M00 = this[0][0];
-        M01 = this[0][1];
-        M02 = this[0][2];
-        M03 = this[0][3];
-        M10 = this[1][0];
-        M11 = this[1][1];
-        M12 = this[1][2];
-        M13 = this[1][3];
-        M20 = this[2][0];
-        M21 = this[2][1];
-        M22 = this[2][2];
-        M23 = this[2][3];
-        M30 = this[3][0];
-        M31 = this[3][1];
-        M32 = this[3][2];
-        M33 = this[3][3];
+            M00 = this[0][0];
+            M01 = this[0][1];
+            M02 = this[0][2];
+            M03 = this[0][3];
+            M10 = this[1][0];
+            M11 = this[1][1];
+            M12 = this[1][2];
+            M13 = this[1][3];
+            M20 = this[2][0];
+            M21 = this[2][1];
+            M22 = this[2][2];
+            M23 = this[2][3];
+            M30 = this[3][0];
+            M31 = this[3][1];
+            M32 = this[3][2];
+            M33 = this[3][3];
 
         }
 
@@ -150,7 +150,7 @@ namespace GShark.Core
             transform[2][1] = axis[2] * axis[1] * oneMinusCosAngle + axis[0] * sAngle;
             transform[2][2] = axis[2] * axis[2] * oneMinusCosAngle + cAngle;
 
-            if (!origin.Equals(new Point3(0,0,0)))
+            if (!origin.Equals(new Point3(0, 0, 0)))
             {
                 transform[0][3] = -((transform[0][0] - 1) * origin[0] + transform[0][1] * origin[1] + transform[0][2] * origin[2]);
                 transform[1][3] = -(transform[1][0] * origin[0] + (transform[1][1] - 1) * origin[1] + transform[1][2] * origin[2]);
@@ -186,7 +186,7 @@ namespace GShark.Core
         {
             var origin = new Point3(0.0, 0.0, 0.0);
             Transform scale = Scale(factorX, factorY, factorZ);
-            if(anchorPoint.Equals(origin))
+            if (anchorPoint.Equals(origin))
             {
                 return scale;
             }
@@ -243,22 +243,22 @@ namespace GShark.Core
         {
             Transform t = new Transform
             {
-                [0] = {[0] = t0[0][0] * t1[0][0] + t0[0][1] * t1[1][0] + t0[0][2] * t1[2][0] + t0[0][3] * t1[3][0]},
-                [0] = {[1] = t0[0][0] * t1[0][1] + t0[0][1] * t1[1][1] + t0[0][2] * t1[2][1] + t0[0][3] * t1[3][1]},
-                [0] = {[2] = t0[0][0] * t1[0][2] + t0[0][1] * t1[1][2] + t0[0][2] * t1[2][2] + t0[0][3] * t1[3][2]},
-                [0] = {[3] = t0[0][0] * t1[0][3] + t0[0][1] * t1[1][3] + t0[0][2] * t1[2][3] + t0[0][3] * t1[3][3]},
-                [1] = {[0] = t0[1][0] * t1[0][0] + t0[1][1] * t1[1][0] + t0[1][2] * t1[2][0] + t0[1][3] * t1[3][0]},
-                [1] = {[1] = t0[1][0] * t1[0][1] + t0[1][1] * t1[1][1] + t0[1][2] * t1[2][1] + t0[1][3] * t1[3][1]},
-                [1] = {[2] = t0[1][0] * t1[0][2] + t0[1][1] * t1[1][2] + t0[1][2] * t1[2][2] + t0[1][3] * t1[3][2]},
-                [1] = {[3] = t0[1][0] * t1[0][3] + t0[1][1] * t1[1][3] + t0[1][2] * t1[2][3] + t0[1][3] * t1[3][3]},
-                [2] = {[0] = t0[2][0] * t1[0][0] + t0[2][1] * t1[1][0] + t0[2][2] * t1[2][0] + t0[2][3] * t1[3][0]},
-                [2] = {[1] = t0[2][0] * t1[0][1] + t0[2][1] * t1[1][1] + t0[2][2] * t1[2][1] + t0[2][3] * t1[3][1]},
-                [2] = {[2] = t0[2][0] * t1[0][2] + t0[2][1] * t1[1][2] + t0[2][2] * t1[2][2] + t0[2][3] * t1[3][2]},
-                [2] = {[3] = t0[2][0] * t1[0][3] + t0[2][1] * t1[1][3] + t0[2][2] * t1[2][3] + t0[2][3] * t1[3][3]},
-                [3] = {[0] = t0[3][0] * t1[0][0] + t0[3][1] * t1[1][0] + t0[3][2] * t1[2][0] + t0[3][3] * t1[3][0]},
-                [3] = {[1] = t0[3][0] * t1[0][1] + t0[3][1] * t1[1][1] + t0[3][2] * t1[2][1] + t0[3][3] * t1[3][1]},
-                [3] = {[2] = t0[3][0] * t1[0][2] + t0[3][1] * t1[1][2] + t0[3][2] * t1[2][2] + t0[3][3] * t1[3][2]},
-                [3] = {[3] = t0[3][0] * t1[0][3] + t0[3][1] * t1[1][3] + t0[3][2] * t1[2][3] + t0[3][3] * t1[3][3]}
+                [0] = { [0] = t0[0][0] * t1[0][0] + t0[0][1] * t1[1][0] + t0[0][2] * t1[2][0] + t0[0][3] * t1[3][0] },
+                [0] = { [1] = t0[0][0] * t1[0][1] + t0[0][1] * t1[1][1] + t0[0][2] * t1[2][1] + t0[0][3] * t1[3][1] },
+                [0] = { [2] = t0[0][0] * t1[0][2] + t0[0][1] * t1[1][2] + t0[0][2] * t1[2][2] + t0[0][3] * t1[3][2] },
+                [0] = { [3] = t0[0][0] * t1[0][3] + t0[0][1] * t1[1][3] + t0[0][2] * t1[2][3] + t0[0][3] * t1[3][3] },
+                [1] = { [0] = t0[1][0] * t1[0][0] + t0[1][1] * t1[1][0] + t0[1][2] * t1[2][0] + t0[1][3] * t1[3][0] },
+                [1] = { [1] = t0[1][0] * t1[0][1] + t0[1][1] * t1[1][1] + t0[1][2] * t1[2][1] + t0[1][3] * t1[3][1] },
+                [1] = { [2] = t0[1][0] * t1[0][2] + t0[1][1] * t1[1][2] + t0[1][2] * t1[2][2] + t0[1][3] * t1[3][2] },
+                [1] = { [3] = t0[1][0] * t1[0][3] + t0[1][1] * t1[1][3] + t0[1][2] * t1[2][3] + t0[1][3] * t1[3][3] },
+                [2] = { [0] = t0[2][0] * t1[0][0] + t0[2][1] * t1[1][0] + t0[2][2] * t1[2][0] + t0[2][3] * t1[3][0] },
+                [2] = { [1] = t0[2][0] * t1[0][1] + t0[2][1] * t1[1][1] + t0[2][2] * t1[2][1] + t0[2][3] * t1[3][1] },
+                [2] = { [2] = t0[2][0] * t1[0][2] + t0[2][1] * t1[1][2] + t0[2][2] * t1[2][2] + t0[2][3] * t1[3][2] },
+                [2] = { [3] = t0[2][0] * t1[0][3] + t0[2][1] * t1[1][3] + t0[2][2] * t1[2][3] + t0[2][3] * t1[3][3] },
+                [3] = { [0] = t0[3][0] * t1[0][0] + t0[3][1] * t1[1][0] + t0[3][2] * t1[2][0] + t0[3][3] * t1[3][0] },
+                [3] = { [1] = t0[3][0] * t1[0][1] + t0[3][1] * t1[1][1] + t0[3][2] * t1[2][1] + t0[3][3] * t1[3][1] },
+                [3] = { [2] = t0[3][0] * t1[0][2] + t0[3][1] * t1[1][2] + t0[3][2] * t1[2][2] + t0[3][3] * t1[3][2] },
+                [3] = { [3] = t0[3][0] * t1[0][3] + t0[3][1] * t1[1][3] + t0[3][2] * t1[2][3] + t0[3][3] * t1[3][3] }
             };
 
             return t;
@@ -276,14 +276,14 @@ namespace GShark.Core
             Transform transform = Identity();
 
             Vector3 unitizedN = normal.Unitize();
-            Vector3 translation = unitizedN * (2.0 * (unitizedN[0]*pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
+            Vector3 translation = unitizedN * (2.0 * (unitizedN[0] * pt[0] + unitizedN[1] * pt[1] + unitizedN[1] * pt[1]));
 
             transform[0][0] = 1 - 2.0 * unitizedN[0] * unitizedN[0];
-            transform[0][1] = - 2.0 * unitizedN[0] * unitizedN[1];
-            transform[0][2] = - 2.0 * unitizedN[0] * unitizedN[2];
+            transform[0][1] = -2.0 * unitizedN[0] * unitizedN[1];
+            transform[0][2] = -2.0 * unitizedN[0] * unitizedN[2];
             transform[0][3] = translation[0];
 
-            transform[1][0] = - 2.0 * unitizedN[1] * unitizedN[0];
+            transform[1][0] = -2.0 * unitizedN[1] * unitizedN[0];
             transform[1][1] = 1 - 2.0 * unitizedN[1] * unitizedN[1];
             transform[1][2] = -2.0 * unitizedN[1] * unitizedN[2];
             transform[1][3] = translation[1];
@@ -338,13 +338,13 @@ namespace GShark.Core
             var x0 = a.XAxis;
             var y0 = a.YAxis;
             var z0 = a.ZAxis;
-            
+
             var pt1 = b.Origin;
             var x1 = b.XAxis;
             var y1 = b.YAxis;
             var z1 = b.ZAxis;
 
-            var origin = new Point3(0,0,0);
+            var origin = new Point3(0, 0, 0);
 
             // Translating point pt0 to (0,0,0)
             Transform translation0 = Translation(origin - pt0);
