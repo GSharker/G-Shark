@@ -382,7 +382,7 @@ namespace GShark.Geometry
 
             Knots = knots;
             LocationPoints = ctrPts.ToList();
-            ControlPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
+            ControlPoints = Point4.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>

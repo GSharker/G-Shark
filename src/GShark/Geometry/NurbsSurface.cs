@@ -45,8 +45,8 @@ namespace GShark.Geometry
             DegreeV = degreeV;
             KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
             KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
-            Weights = LinearAlgebra.GetWeights2d(controlPts);
-            LocationPoints = LinearAlgebra.PointDehomogenizer2d(controlPts);
+            Weights = Point4.GetWeights2d(controlPts);
+            LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());

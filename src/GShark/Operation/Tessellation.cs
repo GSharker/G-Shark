@@ -84,9 +84,9 @@ namespace GShark.Operation
             double t = 0.5 + 0.2 * random.NextDouble();
             double mid = start + (end - start) * t;
 
-            Point3 pt1 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
-            Point3 pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
-            Point3 pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
+            Point3 pt1 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
+            Point3 pt2 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
+            Point3 pt3 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
 
             Vector3 diff = pt1 - pt3;
             Vector3 diff2 = pt1 - pt2;

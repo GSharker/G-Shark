@@ -375,9 +375,9 @@ namespace GShark.Operation
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3> rationalDerivativePoints = Point4.RationalPoints(derivatives);
             // Correspond in the book to wDers.
-            List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
+            List<double> weightDers = Point4.GetWeights(derivatives);
             List<Vector3> CK = new List<Vector3>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
