@@ -151,7 +151,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            tol = tol < -0.5 ? GeoSharkMath.MaxTolerance : tol;
+            tol = tol < -0.5 ? GeoSharkMath.MinTolerance : tol;
             int count = 0;
             for (int i = 0; i < 3; i++)
             {

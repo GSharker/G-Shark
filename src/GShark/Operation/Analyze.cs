@@ -224,13 +224,12 @@ namespace GShark.Operation
         /// <param name="surface">The surface object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the surface.</returns>
-        public static (double u, double v) SurfaceClosestParameter(NurbsSurface surface, Point3 point)
+        public static (double u, double v) SurfaceClosestParameter(NurbsSurface surface, Point3 point, int maxIterations = 10)
         {
             double minimumDistance = double.PositiveInfinity;
             (double u, double v) selectedUV = (0D, 0D);
             NurbsSurface splitSrf = surface;
             double param = 0.5;
-            int maxIterations = 6;
 
             for (int i = 0; i < maxIterations; i++)
             {
