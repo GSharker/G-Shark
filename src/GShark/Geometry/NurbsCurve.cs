@@ -126,7 +126,7 @@ namespace GShark.Geometry
                 }
 
                 pts.Add(curve.LocationPoints[curve.LocationPoints.Count - 1]);
-                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GeoSharkMath.MaxTolerance);
+                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GeoSharkMath.MinTolerance);
                 return new BoundingBox(removedDuplicate);
             }
         }

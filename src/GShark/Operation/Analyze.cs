@@ -230,7 +230,7 @@ namespace GShark.Operation
             (double u, double v) selectedUV = (0D, 0D);
             NurbsSurface splitSrf = surface;
             double param = 0.5;
-            int maxIterations = 6;
+            int maxIterations = 7;
 
             for (int i = 0; i < maxIterations; i++)
             {

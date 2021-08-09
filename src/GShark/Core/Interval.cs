@@ -32,7 +32,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the value between the interval's min and max values.
         /// </summary>
-        public double Mid => Math.Abs(T0 - T1) > GeoSharkMath.MaxTolerance ? 0.5 * (T0 + T1) : T0;
+        public double Mid => Math.Abs(T0 - T1) > GeoSharkMath.MinTolerance ? 0.5 * (T0 + T1) : T0;
 
         /// <summary>
         /// Gets the length of the interval.<br/>

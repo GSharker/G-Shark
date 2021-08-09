@@ -219,7 +219,7 @@ namespace GShark.Core
         /// <returns>The multiplicity of the knot, or 0 if the knot is not part of the knot vector.</returns>
         public int Multiplicity(double knot)
         {
-            return this.Count(x => Math.Abs(x-knot) <= GeoSharkMath.MaxTolerance);
+            return this.Count(x => Math.Abs(x-knot) <= GeoSharkMath.MinTolerance);
         }
 
         /// <summary>
