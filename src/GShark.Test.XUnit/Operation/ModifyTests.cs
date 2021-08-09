@@ -41,7 +41,7 @@ namespace GShark.Test.XUnit.Operation
 
             List<Point3> pts = new List<Point3>();
             for (int i = 0; i <= 12 - degree - 2; i++)
-                pts.Add(new Point3( i, 0.0, 0.0));
+                pts.Add(new Point3(i, 0.0, 0.0));
 
             ICurve curve = new NurbsCurve(pts, degree);
 
@@ -65,10 +65,10 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
- 
+
             List<Point3> pts = new List<Point3>();
             for (int i = 0; i <= 12 - degree - 2; i++)
-                pts.Add(new Point3( i, 0.0, 0.0));
+                pts.Add(new Point3(i, 0.0, 0.0));
 
             ICurve curve = new NurbsCurve(pts, degree);
 

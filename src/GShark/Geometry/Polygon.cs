@@ -154,7 +154,7 @@ namespace GShark.Geometry
                 throw new Exception("Polygon radius cannot be less or equal zero.");
             }
             Point3[] pts = new Point3[numberOfSegments + 1];
-            double t = 2.0 * Math.PI / (double) numberOfSegments;
+            double t = 2.0 * Math.PI / (double)numberOfSegments;
             for (int i = 0; i < numberOfSegments; i++)
             {
                 var ty = Math.Sin(t * i) * radius;

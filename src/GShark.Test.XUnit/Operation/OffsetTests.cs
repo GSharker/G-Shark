@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;

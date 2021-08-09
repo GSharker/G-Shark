@@ -36,8 +36,8 @@ namespace GShark.Geometry
                 copyPt = pts.Select(pt => pt.Transform(transform)).ToList();
             }
 
-            Point3 min = new Point3 (double.MaxValue, double.MaxValue, double.MaxValue);
-            Point3 max = new Point3 (double.MinValue, double.MinValue, double.MinValue);
+            Point3 min = new Point3(double.MaxValue, double.MaxValue, double.MaxValue);
+            Point3 max = new Point3(double.MinValue, double.MinValue, double.MinValue);
 
             foreach (var pt in copyPt)
             {
@@ -299,7 +299,7 @@ namespace GShark.Geometry
         /// <returns>A BoundingBox made valid.</returns>
         public BoundingBox MakeItValid()
         {
-            if(!Min.IsValid || !Max.IsValid)
+            if (!Min.IsValid || !Max.IsValid)
             {
                 return Unset;
             }

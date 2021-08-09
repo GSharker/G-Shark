@@ -29,7 +29,7 @@ namespace GShark.Test.XUnit.Core
             int degree = 4;
             int ctrlPts = 12;
             KnotVector expectedKnotVector = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 };
-            
+
             // Act
             KnotVector knots = new KnotVector(degree, ctrlPts);
 

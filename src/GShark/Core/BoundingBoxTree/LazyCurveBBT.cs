@@ -1,8 +1,8 @@
 ﻿using GShark.Geometry;
+using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
-using GShark.Geometry.Interfaces;
 
 namespace GShark.Core.BoundingBoxTree
 {
@@ -38,7 +38,7 @@ namespace GShark.Core.BoundingBoxTree
             List<ICurve> curves = Divide.SplitCurve(_curve, t);
 
             return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>
-                ( new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
+                (new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
         }
 
         public ICurve Yield()

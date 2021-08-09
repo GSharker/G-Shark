@@ -19,11 +19,11 @@ namespace GShark.Test.XUnit.Operation
 
         public static List<Point3> pts => new()
         {
-            new (0, 0, 0),
-            new (3, 4, 0),
-            new (-1, 4, 0),
-            new (-4, 0, 0),
-            new (-4, -3, 0),
+            new(0, 0, 0),
+            new(3, 4, 0),
+            new(-1, 4, 0),
+            new(-4, 0, 0),
+            new(-4, -3, 0),
         };
 
         [Theory]
@@ -55,7 +55,7 @@ namespace GShark.Test.XUnit.Operation
 
             var newPts = new List<Point3>(pts);
             newPts.Insert(1, v1);
-            newPts.Insert(newPts.Count-1, v2);
+            newPts.Insert(newPts.Count - 1, v2);
             // Act
             NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
 
@@ -85,9 +85,9 @@ namespace GShark.Test.XUnit.Operation
             crvs.Count.Should().Be(4);
             for (int i = 0; i < crvs.Count - 1; i++)
             {
-               bool areCollinear = Trigonometry.ArePointsCollinear(crvs[i].LocationPoints[2], crvs[i].LocationPoints[3],
-                    crvs[i + 1].LocationPoints[1]);
-               areCollinear.Should().BeTrue();
+                bool areCollinear = Trigonometry.ArePointsCollinear(crvs[i].LocationPoints[2], crvs[i].LocationPoints[3],
+                     crvs[i + 1].LocationPoints[1]);
+                areCollinear.Should().BeTrue();
             }
         }
 

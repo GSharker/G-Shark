@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Geometry;
 using System.Collections.Generic;
-using verb.core;
 using Xunit;
 using Ray = GShark.Geometry.Ray;
 
@@ -21,7 +20,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_An_Point_Along_The_Ray(Vector expected, double amplitude)
         {
             // Arrange
-            Ray ray = new Ray(new Point3( -10, 5, 10), new Vector3(20, 10, -5));
+            Ray ray = new Ray(new Point3(-10, 5, 10), new Vector3(20, 10, -5));
 
             // Act
             Vector pointAlongTheRay = ray.OnRay(amplitude);
@@ -34,9 +33,9 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Closest_Point()
         {
             // Arrange
-            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3(30, 45, 0));
-            var pt = new Point3( 10, 20, 0);
-            var expectedPt = new Point3( 12.30769230769231, 18.461538461538463, 0);
+            Ray ray = new Ray(new Point3(0, 0, 0), new Vector3(30, 45, 0));
+            var pt = new Point3(10, 20, 0);
+            var expectedPt = new Point3(12.30769230769231, 18.461538461538463, 0);
 
             // Act
             var closestPt = ray.ClosestPoint(pt);
@@ -49,8 +48,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Distance_To_A_Point()
         {
             // Arrange
-            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3(30, 45, 0));
-            var pt = new Point3( 10, 20, 0);
+            Ray ray = new Ray(new Point3(0, 0, 0), new Vector3(30, 45, 0));
+            var pt = new Point3(10, 20, 0);
             const double distanceExpected = 2.7735009811261464;
 
             // Act
@@ -64,7 +63,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_At_The_T_Parameter()
         {
             // Arrange
-            Ray ray = new Ray(new Point3( 0, 0, 0), new Vector3( -7, 10, -5));
+            Ray ray = new Ray(new Point3(0, 0, 0), new Vector3(-7, 10, -5));
             var expectedPt = new Point3(-8.75, 12.5, -6.25);
 
             // Act

@@ -2,9 +2,7 @@
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace GShark.Core
 {
@@ -89,7 +87,7 @@ namespace GShark.Core
             int j = column;
             for (int i = row; i < this.Count; i++)
             {
-                if(j > this[0].Count-1) break;
+                if (j > this[0].Count - 1) break;
                 copyMatrix[i][j] = valueToFill;
                 j++;
             }
@@ -160,7 +158,7 @@ namespace GShark.Core
             int bRows = b.Count;
             int bCols = b[0].Count;
 
-            if(aCols != bRows)
+            if (aCols != bRows)
             {
                 throw new Exception("Non-conformable matrices.");
             }
@@ -404,7 +402,7 @@ namespace GShark.Core
             int rows = m.Count;
             int cols = m[0].Count;
 
-            if(rows != cols)
+            if (rows != cols)
             {
                 throw new Exception("Attempt to decompose a non-squared matrix");
             }
@@ -490,7 +488,7 @@ namespace GShark.Core
         {
             Matrix matrixLu = Decompose(matrix, out int[] permutation);
 
-            if(!IsNonSingular(matrixLu))
+            if (!IsNonSingular(matrixLu))
             {
                 throw new Exception("Matrix is singular");
             }

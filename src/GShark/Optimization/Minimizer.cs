@@ -1,7 +1,7 @@
 ﻿using GShark.Core;
+using GShark.Geometry;
 using System;
 using System.Linq;
-using GShark.Geometry;
 
 namespace GShark.Optimization
 {

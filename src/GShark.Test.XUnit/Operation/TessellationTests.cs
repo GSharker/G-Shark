@@ -4,7 +4,6 @@ using GShark.Geometry;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -113,11 +112,11 @@ namespace GShark.Test.XUnit.Operation
         public void Return_Adaptive_Sample_Subdivision_Of_A_Polyline()
         {
             // Arrange
-            var p1 = new Point3( 0, 0, 0);
-            var p2 = new Point3( 10, 10, 0);
-            var p3 = new Point3( 14, 20, 0);
-            var p4 = new Point3( 10, 32, 4);
-            var p5 = new Point3( 12, 16, 22);
+            var p1 = new Point3(0, 0, 0);
+            var p2 = new Point3(10, 10, 0);
+            var p3 = new Point3(14, 20, 0);
+            var p4 = new Point3(10, 32, 4);
+            var p5 = new Point3(12, 16, 22);
             List<Point3> pts = new List<Point3> { p1, p2, p3, p4, p5 };
             Polyline poly = new Polyline(pts);
 

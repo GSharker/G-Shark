@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System.Collections.Generic;
 using Xunit;
@@ -13,11 +12,11 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_True_If_Points_Are_Planar()
         {
             // Arrange
-            Point3 pt1 = new Point3( 0.0, 0.0, 0.0);
-            Point3 pt2 = new Point3( 10.0, 0.0, 0.0);
-            Point3 pt3 = new Point3( 5.0, 5.0, 0.0);
-            Point3 pt4 = new Point3( -5.0, -15.0, 0.0);
-            List<Point3> points = new List<Point3>{pt1,pt2,pt3,pt4};
+            Point3 pt1 = new Point3(0.0, 0.0, 0.0);
+            Point3 pt2 = new Point3(10.0, 0.0, 0.0);
+            Point3 pt3 = new Point3(5.0, 5.0, 0.0);
+            Point3 pt4 = new Point3(-5.0, -15.0, 0.0);
+            List<Point3> points = new List<Point3> { pt1, pt2, pt3, pt4 };
 
             // Arrange
             Trigonometry.ArePointsCoplanar(points).Should().BeTrue();
@@ -27,9 +26,9 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_True_If_Three_Points_Are_Collinear()
         {
             // Arrange
-            Point3 pt1 = new Point3( 25.923, 27.057, 0.0);
-            Point3 pt2 = new Point3( 35.964, 31.367, 0.0);
-            Point3 pt3 = new Point3( 51.299, 37.950, 0.0);
+            Point3 pt1 = new Point3(25.923, 27.057, 0.0);
+            Point3 pt2 = new Point3(35.964, 31.367, 0.0);
+            Point3 pt3 = new Point3(51.299, 37.950, 0.0);
 
             // Assert
             Trigonometry.ArePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeTrue();
@@ -39,9 +38,9 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_False_If_Three_Points_Are_Not_Collinear()
         {
             // Arrange
-            Point3 pt1 = new Point3( 25.923, 27.057, 0.0);
-            Point3 pt2 = new Point3( 35.964, 20.451, 0.0);
-            Point3 pt3 = new Point3( 51.299, 37.950, 0.0);
+            Point3 pt1 = new Point3(25.923, 27.057, 0.0);
+            Point3 pt2 = new Point3(35.964, 20.451, 0.0);
+            Point3 pt3 = new Point3(51.299, 37.950, 0.0);
 
             // Assert
             Trigonometry.ArePointsCollinear(pt1, pt2, pt3, GeoSharkMath.MinTolerance).Should().BeFalse();
@@ -58,8 +57,8 @@ namespace GShark.Test.XUnit.Core
             // t values [0 and 1] and start and end point.
             var testPt = new Point3(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
             var expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
-            Point3 pt0 = new Point3( 5, 5, 0);
-            Point3 pt1 = new Point3( 10, 10, 0);
+            Point3 pt0 = new Point3(5, 5, 0);
+            Point3 pt1 = new Point3(10, 10, 0);
 
             // Act
             (double tValue, Point3 pt) closestPt = Trigonometry.ClosestPointToSegment(testPt, pt0, pt1, 0, 1);

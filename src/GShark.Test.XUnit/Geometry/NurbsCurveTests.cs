@@ -2,10 +2,8 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -56,8 +54,8 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3 (5,5,5),
                 new Point3 (0,5,0)
             };
-            Point3 expectedPt00 = new Point3 ( 3.25, 3.28125, 1.875);
-            Point3 expectedPt01 = new Point3 ( 4.75, 3.75, 3.75 );
+            Point3 expectedPt00 = new Point3(3.25, 3.28125, 1.875);
+            Point3 expectedPt01 = new Point3(4.75, 3.75, 3.75);
 
             // Act
             NurbsCurve nurbsCurve = new NurbsCurve(controlPts, degree).Close();
@@ -167,8 +165,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_Periodic_Curve()
         {
             // Arrange 
-            Point3 expectedPtMin = new Point3 ( 0, 0.208333, 0.208333 );
-            Point3 expectedPtMax = new Point3 ( 4.354648, 5, 3.333333 );
+            Point3 expectedPtMin = new Point3(0, 0.208333, 0.208333);
+            Point3 expectedPtMax = new Point3(4.354648, 5, 3.333333);
 
             // Act
             BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsCurve().BoundingBox;

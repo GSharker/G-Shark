@@ -592,7 +592,7 @@ namespace GShark.Operation
             {
                 for (int l = 0; l < numDerivs - k + 1; l++)
                 {
-                    Vector3 t = derivatives.Item1[k,l];
+                    Vector3 t = derivatives.Item1[k, l];
                     for (int j = 1; j < l + 1; j++)
                     {
                         t -= SKL[k, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[0, j]);
@@ -604,7 +604,7 @@ namespace GShark.Operation
                         Vector3 t2 = Vector3.Zero;
                         for (int j = 1; j < l + 1; j++)
                         {
-                            t2 += SKL[k - i,l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
+                            t2 += SKL[k - i, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
                         }
 
                         t -= t2 * LinearAlgebra.GetBinomial(k, i);

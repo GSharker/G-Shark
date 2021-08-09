@@ -2,7 +2,6 @@
 using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GShark.Geometry
