@@ -5,6 +5,7 @@ using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Geometry.Enum;
 
 namespace GShark.Operation
 {
@@ -154,6 +155,49 @@ namespace GShark.Operation
             KnotVector knots = KnotVector.Reverse(curve.Knots);
 
             return new NurbsCurve(curve.Degree, knots, controlPts);
+        }
+
+        /// <summary>
+        /// Performs a knot refinement on a NURBS surface by inserting knots at various parameters.<br/>
+        /// <em>Implementation of Algorithm A5.5 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="surface">The surface object to insert the knots.</param>
+        /// <param name="knotsToInsert">The set of knots to insert.</param>
+        /// <param name="direction">Whether to insert in the U or V direction of the surface.</param>
+        /// <returns>A NURBS surface with the knots inserted.</returns>
+        public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert, SurfaceDirection direction)
+        {
+            List<List<Point4>> modifiedControlPts = new List<List<Point4>>();
+            List<List<Point4>> controlPts = surface.ControlPoints;
+            KnotVector knots = surface.KnotsV;
+            int degree = surface.DegreeV;
+
+            if (direction != SurfaceDirection.V)
+            {
+                controlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                knots = surface.KnotsU;
+                degree = surface.DegreeU;
+            }
+
+            ICurve curve = null;
+            foreach (List<Point4> pts in controlPts)
+            {
+                curve = CurveKnotRefine(new NurbsCurve(degree, knots, pts), knotsToInsert);
+                modifiedControlPts.Add(curve.ControlPoints);
+            }
+
+            if (curve == null)
+            {
+                throw new Exception("The refinement was not be able to be completed. A problem occur refining the internal curves.");
+            }
+
+            if (direction != SurfaceDirection.V)
+            {
+                var reversedControlPts = Sets.Reverse2DMatrixData(modifiedControlPts);
+                return new NurbsSurface(surface.DegreeU, surface.DegreeV, curve.Knots, surface.KnotsV.Copy(), reversedControlPts);
+            }
+
+            return new NurbsSurface(surface.DegreeU, surface.DegreeV, surface.KnotsU.Copy(), curve.Knots, modifiedControlPts);
         }
 
         /// <summary>

@@ -446,5 +446,60 @@ namespace GShark.Operation
 
             return -1;
         }
+
+        /// <summary>
+        /// Extracts the isoparametric curves (isocurves) at the given parameter and surface direction.
+        /// </summary>
+        /// <param name="surface">The surface object to extract the isocurve.</param>
+        /// <param name="parameter">The parameter between 0.0 to 1.0 whether the isocurve will be extracted.</param>
+        /// <param name="direction">The U or V direction whether the isocurve will be extracted.</param>
+        /// <returns>The isocurve extracted.</returns>
+        public static ICurve Isocurve(NurbsSurface surface, double parameter, SurfaceDirection direction)
+        {
+            KnotVector knots = (direction == SurfaceDirection.V) ? surface.KnotsV : surface.KnotsU;
+            int degree = (direction == SurfaceDirection.V) ? surface.DegreeV : surface.DegreeU;
+
+            Dictionary<double, int> knotMultiplicity = knots.Multiplicities();
+            // If the knotVector already exists in the array, don't make duplicates.
+            double knotKey = -1;
+            foreach (KeyValuePair<double, int> keyValuePair in knotMultiplicity)
+            {
+                if (!(Math.Abs(parameter - keyValuePair.Key) < GeoSharkMath.Epsilon)) continue;
+                knotKey = keyValuePair.Key;
+                break;
+            }
+
+            int knotToInsert = degree + 1;
+            if (knotKey >= 0)
+            {
+                knotToInsert = knotToInsert - knotMultiplicity[knotKey];
+            }
+
+            // Insert knots
+            NurbsSurface refinedSurface = surface;
+            if (knotToInsert > 0)
+            {
+                List<Double> knotsToInsert = Sets.RepeatData(parameter, knotToInsert);
+                refinedSurface = Modify.SurfaceKnotRefine(surface, knotsToInsert, direction);
+            }
+
+            // Obtain the correct index of control points to extract.
+            int span = knots.Span(degree, parameter);
+
+            if (Math.Abs(parameter - knots[0]) < GeoSharkMath.Epsilon)
+            {
+                span = 0;
+            }
+            if (Math.Abs(parameter - knots.Last()) < GeoSharkMath.Epsilon)
+            {
+                span = (direction == SurfaceDirection.V)
+                    ? refinedSurface.ControlPoints[0].Count - 1
+                    : refinedSurface.ControlPoints.Count - 1;
+            }
+
+            return direction == SurfaceDirection.U 
+                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, Sets.Reverse2DMatrixData(refinedSurface.ControlPoints)[span]) 
+                : new NurbsCurve(refinedSurface.DegreeV, refinedSurface.KnotsV, refinedSurface.ControlPoints[span]);
+        }
     }
 }
