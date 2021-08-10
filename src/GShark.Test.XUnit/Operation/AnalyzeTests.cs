@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using GShark.Geometry.Enum;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
+using GShark.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -60,8 +62,8 @@ namespace GShark.Test.XUnit.Operation
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MinTolerance);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MinTolerance);
+                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MaxTolerance);
 
                 sumLengths += length;
             }
@@ -143,6 +145,39 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             (closestParameter.u - expectedUV.u).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             (closestParameter.v - expectedUV.v).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+        }
+
+        // ToDo: this should be V Direction.
+        [Fact]
+        public void Returns_The_Surface_Isocurve_At_U_Direction()
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Point3 expectedPt = new Point3(3.591549, 10, 4.464789);
+
+            // Act
+            ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
+
+            // Assert
+            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
+
+        // ToDo: this should be U Direction.
+        [Fact]
+        public void Returns_The_Surface_Isocurve_At_V_Direction()
+        {
+            // Arrange
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
+            Point3 expectedPt = new Point3(5, 4.615385, 2.307692);
+            Point3 expectedPtAt = new Point3(5, 3.913043, 1.695652);
+
+            // Act
+            ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.V);
+            Point3 ptAt = Isocurve.PointAt(0.5);
+
+            // Assert
+            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            ptAt.DistanceTo(expectedPtAt).Should().BeLessThan(GeoSharkMath.MinTolerance);
         }
     }
 }

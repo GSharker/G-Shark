@@ -449,8 +449,7 @@ namespace GShark.Operation
         /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="knots">Sets of non-decreasing knot values.</param>
         /// <returns>The derivatives at the given parameter.</returns>
-        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
-            int order, KnotVector knots)
+        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree, int order, KnotVector knots)
         {
             Vector left = Vector.Zero1d(degree + 1);
             Vector right = Vector.Zero1d(degree + 1);

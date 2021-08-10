@@ -186,10 +186,10 @@ namespace GShark.Geometry
         /// <param name="v">V parameter.</param>
         /// <param name="direction">The evaluate direction required as result.</param>
         /// <returns>The unitized tangent vector in the direction selected.</returns>
-        public Vector3 EvaluateAt(double u, double v, SurfaceDirection direction)
+        public Vector3 EvaluateAt(double u, double v, EvaluateSurfaceDirection direction)
         {
-            if (direction != SurfaceDirection.Normal)
-                return (direction == SurfaceDirection.U)
+            if (direction != EvaluateSurfaceDirection.Normal)
+                return (direction == EvaluateSurfaceDirection.U)
                     ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
                     : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
 
