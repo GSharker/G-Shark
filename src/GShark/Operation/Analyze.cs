@@ -499,7 +499,7 @@ namespace GShark.Operation
                     : refinedSurface.ControlPoints.Count - 1;
             }
 
-            return direction == SurfaceDirection.U 
+            return direction == SurfaceDirection.V 
                 ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, Sets.Reverse2DMatrixData(refinedSurface.ControlPoints)[span]) 
                 : new NurbsCurve(refinedSurface.DegreeV, refinedSurface.KnotsV, refinedSurface.ControlPoints[span]);
         }
