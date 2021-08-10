@@ -56,7 +56,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedNormal = new Vector3(pt[0], pt[1], pt[2]);
 
             // Act
-            Vector3 normal = surface.EvaluateAt(u, v, SurfaceDirection.Normal);
+            Vector3 normal = surface.EvaluateAt(u, v, EvaluateSurfaceDirection.Normal);
 
             // Assert
             normal.EpsilonEquals(expectedNormal, GeoSharkMath.MinTolerance).Should().BeTrue();
@@ -71,8 +71,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedVDirection = new Vector3(0.053937, 0.911792, 0.407096);
 
             // Act
-            Vector3 uDirection = surface.EvaluateAt(0.3, 0.5, SurfaceDirection.U);
-            Vector3 vDirection = surface.EvaluateAt(0.3, 0.5, SurfaceDirection.V);
+            Vector3 uDirection = surface.EvaluateAt(0.3, 0.5, EvaluateSurfaceDirection.U);
+            Vector3 vDirection = surface.EvaluateAt(0.3, 0.5, EvaluateSurfaceDirection.V);
 
             // Assert
             uDirection.EpsilonEquals(expectedUDirection, GeoSharkMath.MinTolerance).Should().BeTrue();
