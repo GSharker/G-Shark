@@ -268,7 +268,7 @@ namespace GShark.Operation
                         int s = mul + j;
                         for (int k = p; k >= s; k--)
                         {
-                            bpts[k] = bpts[k] * alphas[k - s] + bpts[k - 1] * (1.0 - alphas[k - s]);
+                            bpts[k] = Point4.Interpolate(bpts[k], bpts[k - 1], alphas[k - s]);
                         }
                         nextbpts[save] = bpts[p];
                     }
@@ -306,7 +306,7 @@ namespace GShark.Operation
                             if (ii < cind)
                             {
                                 double alf = (ub - Uh[ii]) / (ua - Uh[ii]);
-                                Qw.Add(Qw[ii] * alf + Qw[ii - 1] * (1.0 - alf));
+                                Qw.Add(Point4.Interpolate(Qw[ii], Qw[ii - 1], alf));
                             }
 
                             if (jj >= lbz)
@@ -314,11 +314,11 @@ namespace GShark.Operation
                                 if (jj - tr <= kind - ph + oldr)
                                 {
                                     double gam = (ub - Uh[jj - tr]) / den;
-                                    ebpts[kj] = ebpts[kj] * gam + ebpts[kj + 1] * (1.0 - gam);
+                                    ebpts[kj] = Point4.Interpolate(ebpts[kj], ebpts[kj + 1], gam);
                                 }
                                 else
                                 {
-                                    ebpts[kj] = ebpts[kj] * bet + ebpts[kj + 1] * (1.0 - bet);
+                                    ebpts[kj] = Point4.Interpolate(ebpts[kj], ebpts[kj + 1], bet);
                                 }
                             }
 

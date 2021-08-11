@@ -493,6 +493,34 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Interpolate between two control points returning a new control points at the given interpolation parameter.
+        /// </summary>
+        /// <param name="pA">First point.</param>
+        /// <param name="pB">Second point.</param>
+        /// <param name="t">Interpolation parameter. 
+        /// If t=0 then this point is set to pA. 
+        /// If t=1 then this point is set to pB. 
+        /// Values of t in between 0.0 and 1.0 result in control point between pA and pB.</param>
+        public static Point4 Interpolate(Point4 pA, Point4 pB, double t)
+        {
+            if (t < 0 || t > 1) throw new ArgumentException($"{nameof(t)} must be between 0 and 1.");
+            switch (t)
+            {
+                case 0:
+                    return pA;
+                case 1:
+                    return pB;
+            }
+
+            var x = pA.X + t * (pB.X - pA.X);
+            var y = pA.Y + t * (pB.Y - pA.Y);
+            var z = pA.Z + t * (pB.Z - pA.Z);
+            var w = pA.W + t * (pB.W - pA.W);
+
+            return new Point4(x, y, z, w);
+        }
+
+        /// <summary>
         /// Determines whether the specified System.Object is Point4d and has same coordinates as the present point.
         /// </summary>
         /// <param name="obj">The specified object.</param>
