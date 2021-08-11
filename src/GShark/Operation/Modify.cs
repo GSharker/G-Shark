@@ -258,10 +258,9 @@ namespace GShark.Operation
                 {
                     // Inserts knot to get Bezier segment.
                     double numer = ub - ua;
-                    List<double> alfs = new List<double>();
                     for (int k = p; k > mul; k--)
                     {
-                        alfs.Add(numer / (U[a + k] - ua));
+                        alphas[k - mul - 1] = (numer / (U[a + k] - ua));
                     }
                     for (int j = 1; j <= r; j++)
                     {
@@ -269,7 +268,7 @@ namespace GShark.Operation
                         int s = mul + j;
                         for (int k = p; k >= s; k--)
                         {
-                            bpts[k] = bpts[k] * alfs[k - s] + bpts[k - 1] * (1.0 - alfs[k - s]);
+                            bpts[k] = bpts[k] * alphas[k - s] + bpts[k - 1] * (1.0 - alphas[k - s]);
                         }
                         nextbpts[save] = bpts[p];
                     }
@@ -339,7 +338,7 @@ namespace GShark.Operation
                     // Load the knot ua.
                     for (int j = 0; j < ph - oldr; j++)
                     {
-                        Uh[kind] = ua;
+                        Uh.Add(ua);
                         kind += 1;
                     }
                 }
@@ -347,7 +346,7 @@ namespace GShark.Operation
                 for (int j = lbz; j <= rbz; j++)
                 {
                     // Load control points into Qw.
-                    Qw[cind] = ebpts[j];
+                    Qw.Add(ebpts[j]);
                     cind += 1;
                 }
 
@@ -373,7 +372,7 @@ namespace GShark.Operation
                     // End knot.
                     for (int j = 0; j <= ph; j++)
                     {
-                        Uh[kind + j] = ub;
+                        Uh.Add(ub);
                     }
                 }
             }

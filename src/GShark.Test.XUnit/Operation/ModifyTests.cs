@@ -140,5 +140,53 @@ namespace GShark.Test.XUnit.Operation
             // Checks at reference level are different.
             curve.Should().NotBeSameAs(crvRev2);
         }
+
+        [Theory]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void It_Returns_A_Curve_Where_Degree_Is_Elevated_From_2_To_Elevated_Degree_Value(int finalDegree)
+        {
+            // Arrange
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(5.2, 5.2, 5),
+                new Point3(5.4, 4.8, 0),
+                new Point3(5.2, 5.2, -5),
+            };
+            NurbsCurve curve = new NurbsCurve(pts, 2);
+            Point3 ptOnCurve = curve.PointAt(0.5);
+
+            // Act
+            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
+
+            // Assert
+            elevatedDegreeCurve.Degree.Should().Be(finalDegree);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void It_Returns_A_Curve_Where_Degree_Is_Elevated_From_1_To_Elevated_Degree_Value(int finalDegree)
+        {
+            // Arrange
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0.0, 0.0, 1.0),
+                new Point3(7.0, 3.0, -10),
+                new Point3(5.2, 5.2, -5),
+            };
+            NurbsCurve curve = new NurbsCurve(pts, 1);
+            Point3 ptOnCurve = curve.PointAt(0.5);
+
+            // Act
+            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
+
+            // Assert
+            elevatedDegreeCurve.Degree.Should().Be(finalDegree);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
     }
 }
