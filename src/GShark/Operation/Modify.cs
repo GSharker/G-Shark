@@ -160,6 +160,7 @@ namespace GShark.Operation
         /// <summary>
         /// Performs a knot refinement on a NURBS surface by inserting knots at various parameters.<br/>
         /// <em>Implementation of Algorithm A5.5 of The NURBS Book by Piegl and Tiller.</em>
+        /// ToDo: refactor this algo following the book.
         /// </summary>
         /// <param name="surface">The surface object to insert the knots.</param>
         /// <param name="knotsToInsert">The set of knots to insert.</param>
