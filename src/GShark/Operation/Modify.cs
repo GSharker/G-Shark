@@ -691,5 +691,21 @@ namespace GShark.Operation
 
             return new NurbsCurve(p - 1, Uh, Pw);
         }
+
+        public static ICurve JoinCurve(IEnumerable<ICurve> curves)
+        {
+            if (curves == null)
+            {
+                throw new Exception("The set of curves is empty.");
+            }
+
+            if (!curves.Any())
+            {
+                throw new Exception("Insufficient curves for join operation.");
+            }
+
+
+
+        }
     }
 }
