@@ -449,5 +449,24 @@ namespace GShark.Test.XUnit
 
             //_testOutput.WriteLine($"{{{rational}}}");
         }
+
+        [Fact]
+        public void ElevateDegree()
+        {
+            Array<object> pts = new Array<object>();
+
+            pts.push(new Array<double>(new double[] { 0, 0, 0 }));
+            pts.push(new Array<double>(new double[] { 10, 10, 0 }));
+
+            var polyline = verb.eval.Make.polyline(pts);
+
+            var elevatePoly = verb.eval.Modify.curveElevateDegree(polyline, 3);
+
+            _testOutput.WriteLine($"{elevatePoly.controlPoints.length}");
+            for (int i = 0; i < elevatePoly.controlPoints.length; i++)
+            {
+                _testOutput.WriteLine($"{elevatePoly.controlPoints[i]}");
+            }
+        }
     }
 }

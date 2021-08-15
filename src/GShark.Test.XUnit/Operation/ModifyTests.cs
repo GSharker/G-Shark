@@ -140,5 +140,87 @@ namespace GShark.Test.XUnit.Operation
             // Checks at reference level are different.
             curve.Should().NotBeSameAs(crvRev2);
         }
+
+        [Theory]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void It_Returns_A_Curve_Where_Degree_Is_Elevated_From_2_To_Elevated_Degree_Value(int finalDegree)
+        {
+            // Arrange
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(5.2, 5.2, 5),
+                new Point3(5.4, 4.8, 0),
+                new Point3(5.2, 5.2, -5),
+            };
+            int degree = 2;
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Point3 ptOnCurve = curve.PointAt(0.5);
+
+            // Act
+            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
+
+            // Assert
+            elevatedDegreeCurve.Degree.Should().Be(finalDegree);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void It_Returns_A_Curve_Where_Degree_Is_Elevated_From_1_To_Elevated_Degree_Value(int finalDegree)
+        {
+            // Arrange
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0.0, 0.0, 1.0),
+                new Point3(7.0, 3.0, -10),
+                new Point3(5.2, 5.2, -5),
+            };
+            int degree = 1;
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Point3 ptOnCurve = curve.PointAt(0.5);
+
+            // Act
+            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
+
+            // Assert
+            elevatedDegreeCurve.Degree.Should().Be(finalDegree);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
+
+        [Fact]
+        public void It_Returns_A_Curve_Where_Degree_Is_Reduced_From_5_To_4()
+        {
+            // Arrange
+            // Followed example Under C1 constrain condition https://www.hindawi.com/journals/mpe/2016/8140427/tab1/
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(-5.0, 0.0, 0.0),
+                new Point3(-7.0, 2.0, 0.0),
+                new Point3(-3.0, 5.0, 0.0),
+                new Point3(2.0, 6.0, 0.0),
+                new Point3(5.0, 3.0, 0.0),
+                new Point3(3.0, 0.0, 0.0)
+            };
+            int degree = 5;
+            double tolerance = 10e-2;
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Point3 ptOnCurve0 = curve.PointAt(0.5);
+            Point3 ptOnCurve1 = curve.PointAt(0.25);
+
+            // Act
+            ICurve reducedCurve = Modify.ReduceDegree(curve, tolerance);
+            Point3 ptOnReducedDegreeCurve0 = reducedCurve.PointAt(0.5);
+            Point3 ptOnReducedDegreeCurve1 = reducedCurve.PointAt(0.25);
+
+            // Assert
+            reducedCurve.Degree.Should().Be(degree - 1);
+
+            ptOnCurve0.DistanceTo(ptOnReducedDegreeCurve0).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            ptOnCurve1.DistanceTo(ptOnReducedDegreeCurve1).Should().BeLessThan(tolerance);
+        }
     }
 }

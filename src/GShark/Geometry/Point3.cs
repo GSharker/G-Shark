@@ -498,11 +498,6 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">Other point for distance measurement.</param>
         /// <returns>The length of the line between this and the other point; or 0 if any of the points is not valid.</returns>
-        /// <example>
-        /// <code source='examples\vbnet\ex_intersectcurves.vb' lang='vbnet'/>
-        /// <code source='examples\cs\ex_intersectcurves.cs' lang='cs'/>
-        /// <code source='examples\py\ex_intersectcurves.py' lang='py'/>
-        /// </example>
         public double DistanceTo(Point3 other)
         {
             double d;
