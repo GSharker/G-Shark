@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Specialized;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Enum;
@@ -79,7 +78,7 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [InlineData(0.5, 0.5, new double[] { 1.901998, 16.685193, 5.913446 })]
-        [InlineData(0.1, 0.1, new double[] { -15.044280, 3.808873, 0.968338})]
+        [InlineData(0.1, 0.1, new double[] { -15.044280, 3.808873, 0.968338 })]
         [InlineData(1.0, 1.0, new double[] { 5, 35, 0 })]
         public void It_Returns_A_Normal_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
@@ -104,7 +103,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
-            Point3 expectedPt = new Point3( pt[0], pt[1], pt[2] );
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
             NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Loose);
