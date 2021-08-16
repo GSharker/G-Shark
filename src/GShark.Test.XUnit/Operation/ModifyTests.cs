@@ -1,10 +1,12 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
+using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -222,5 +224,101 @@ namespace GShark.Test.XUnit.Operation
             ptOnCurve0.DistanceTo(ptOnReducedDegreeCurve0).Should().BeLessThan(GeoSharkMath.MinTolerance);
             ptOnCurve1.DistanceTo(ptOnReducedDegreeCurve1).Should().BeLessThan(tolerance);
         }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
+        {
+            // Arrange
+            ICurve[] curves = {NurbsCurveCollection.NurbsCurvePlanarExample()};
+
+            // Act
+            Func<object> func = () => Modify.JoinCurve(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
+        {
+            // Arrange
+            ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample(), NurbsCurveCollection.NurbsCurveQuadratic3DBezier() };
+
+            // Act
+            Func<object> func = () => Modify.JoinCurve(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Different_Types_Of_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(5, 0, 0),
+                new Point3(5, 0, 5),
+                new Point3(5, 5, 5),
+                new Point3(5, 5, 0)
+            };
+
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0,0,-1));
+            Point3 expectedPt1 = new Point3(3.34125, 0.005, 0.6125 );
+            Point3 expectedPt2 = new Point3(5, 2.363281, 4.570313 );
+            Point3 expectedPt3 = new Point3(5.351058, 5, -4.340474);
+            ICurve[] curves = {curve, ln, arc};
+
+            // Act
+            ICurve joinedCurve = Modify.JoinCurve(curves);
+            Point3 pt1 = joinedCurve.PointAt(0.1);
+            Point3 pt2 = joinedCurve.PointAt(0.25);
+            Point3 pt3 = joinedCurve.PointAt(0.75);
+
+            // Arrange
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Lines()
+        {
+            // Arrange
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(5, 0, 0),
+                new Point3(5, 0, 5),
+                new Point3(5, 5, 5),
+                new Point3(5, 5, 0)
+            };
+
+            Polyline poly = new Polyline(pts);
+            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
+            Point3 expectedPt2 = new Point3(2.5, 0, 0);
+            Point3 expectedPt3 = new Point3(5, 5.0, 4.0);
+            ICurve[] curves = { poly, ln };
+
+            // Act
+            ICurve joinedCurve = Modify.JoinCurve(curves);
+            Point3 pt1 = joinedCurve.PointAt(0.1);
+            Point3 pt2 = joinedCurve.PointAt(0.25);
+            Point3 pt3 = joinedCurve.PointAt(0.70);
+
+            // Arrange
+            joinedCurve.Degree.Should().Be(1);
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GeoSharkMath.MinTolerance);
+        }
     }
 }
+

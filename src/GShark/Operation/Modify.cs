@@ -691,5 +691,62 @@ namespace GShark.Operation
 
             return new NurbsCurve(p - 1, Uh, Pw);
         }
+
+        /// <summary>
+        /// Joins all the curves, if it is possible.
+        /// </summary>
+        /// <param name="curves">Curves to join.</param>
+        /// <returns>A curve that is the result of joining all the curves.</returns>
+        public static ICurve JoinCurves(IList<ICurve> curves)
+        {
+            if (curves == null)
+            {
+                throw new Exception("The set of curves is empty.");
+            }
+
+            if (curves.Count <= 1)
+            {
+                throw new Exception("Insufficient curves for join operation.");
+            }
+
+            for (int i = 0; i < curves.Count - 1; i++)
+            {
+                if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GeoSharkMath.MinTolerance)
+                {
+                    throw new Exception($"Curve at {i} and curve at {i + 1} don't touch each other.");
+                }
+            }
+
+            // Extract the biggest degree between the curves.
+            int finalDegree = curves.Max(c => c.Degree);
+
+            // Homogenized degree curves.
+            IEnumerable<ICurve> homogenizedCurves = curves.Select(curve => curve.Degree != finalDegree ? ElevateDegree(curve, finalDegree) : curve);
+
+            // Join curves.
+            List<double> joinedKnots = new List<double>();
+            List<Point4> joinedControlPts = new List<Point4>();
+            double endDomain = 0;
+
+            foreach (ICurve curve in homogenizedCurves)
+            {
+                if (joinedKnots.Count == 0)
+                {
+                    joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)));
+                    joinedControlPts.AddRange(curve.ControlPoints);
+                }
+                else
+                {
+                    joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)).Skip(1).Select(k => k + endDomain));
+                    joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
+                }
+
+                endDomain += curve.Knots.Last();
+            }
+
+            // Appending the last knot to the end.
+            joinedKnots.AddRange(Sets.RepeatData(endDomain, finalDegree + 1));
+            return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
+        }
     }
 }

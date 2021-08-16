@@ -118,7 +118,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the orientation between tree points in the plane.<br/>
         /// The order can be: collinear (result 0), clockwise (result 1), counterclockwise (result 2)<br/>
-        /// https://www.geeksforgeeks.org/orientation-3-ordered-points/
+        /// https://math.stackexchange.com/questions/2386810/orientation-of-three-points-in-3d-space
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
@@ -126,14 +126,16 @@ namespace GShark.Core
         /// <returns>The result expressed as a value between 0 and 2.</returns>
         public static int Orientation(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            double result = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
+            Plane pl = new Plane(pt1, pt2, pt3);
+            Vector3 n = Vector3.CrossProduct(pt2 - pt1, pt3 - pt1);
+            double result = Vector3.DotProduct(pl.ZAxis, n.Unitize());
 
             if (Math.Abs(result) < GeoSharkMath.Epsilon)
             {
                 return 0;
             }
 
-            return (result > 0) ? 1 : 2;
+            return (result < 0) ? 1 : 2;
         }
 
         /// <summary>
