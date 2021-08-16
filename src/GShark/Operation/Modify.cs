@@ -693,10 +693,10 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// 
+        /// Joins all the curves, if it is possible.
         /// </summary>
-        /// <param name="curves"></param>
-        /// <returns></returns>
+        /// <param name="curves">Curves to join.</param>
+        /// <returns>A curve that is the result of joining all the curves.</returns>
         public static ICurve JoinCurve(IList<ICurve> curves)
         {
             if (curves == null)
@@ -737,7 +737,7 @@ namespace GShark.Operation
                 }
                 else
                 {
-                    joinedKnots.AddRange(Sets.RepeatData(endDomain, finalDegree));
+                    joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)).Skip(1).Select(k => k + endDomain));
                     joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
                 }
 
@@ -746,7 +746,7 @@ namespace GShark.Operation
 
             // Appending the last knot to the end.
             joinedKnots.AddRange(Sets.RepeatData(endDomain, finalDegree + 1));
-            return new NurbsCurve(finalDegree, joinedKnots.ToKnot(), joinedControlPts);
+            return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
         }
     }
 }
