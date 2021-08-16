@@ -91,7 +91,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Normal);
-            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            Point4 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
             // Assert
             surface.Should().NotBeNull();
@@ -110,7 +110,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Loose);
-            Point3 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            Point4 evalPt = Evaluation.SurfacePointAt(surface, u, v);
 
             // Assert
             surface.Should().NotBeNull();
@@ -195,38 +195,40 @@ namespace GShark.Test.XUnit.Geometry
             crvs[1].IsPeriodic().Should().BeTrue();
             func.Should().Throw<Exception>()
                          .WithMessage("Loft only works if all curves are open, or all curves are closed.");
+        }
+
         [Fact]
         public void It_Returns_The_Surface_Split_At_The_Given_Parameter_At_V_Direction()
         {
             // Arrange
             NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints();
             List<List<Point3>> surfacePtsLeft = new List<List<Point3>>
-            {
-                new List<Point3>{ new Point3(0.0, 0.0, 0.0), new Point3(0.0, 5.0, 2.0)},
-                new List<Point3>{ new Point3(5.0, 0.0, 0.0), new Point3(5.0,6.666666,3.333333)},
-                new List<Point3>{ new Point3(10.0, 0.0, 0.0), new Point3(10.0, 5.0, 1.0)}
-            };
+                    {
+                        new List<Point3>{ new Point3(0.0, 0.0, 0.0), new Point3(0.0, 5.0, 2.0)},
+                        new List<Point3>{ new Point3(5.0, 0.0, 0.0), new Point3(5.0,6.666666,3.333333)},
+                        new List<Point3>{ new Point3(10.0, 0.0, 0.0), new Point3(10.0, 5.0, 1.0)}
+                    };
 
             List<List<Point3>> surfacePtsRight = new List<List<Point3>>
-            {
-                new List<Point3>{ new Point3(0.0, 5.0, 2.0), new Point3(0.0, 10.0, 4.0)},
-                new List<Point3>{ new Point3(5.0, 6.666666, 3.333333), new Point3(5.0,10.0,5.0)},
-                new List<Point3>{ new Point3(10.0, 5.0, 1.0), new Point3(10.0, 10.0, 2.0)}
-            };
+                    {
+                        new List<Point3>{ new Point3(0.0, 5.0, 2.0), new Point3(0.0, 10.0, 4.0)},
+                        new List<Point3>{ new Point3(5.0, 6.666666, 3.333333), new Point3(5.0,10.0,5.0)},
+                        new List<Point3>{ new Point3(10.0, 5.0, 1.0), new Point3(10.0, 10.0, 2.0)}
+                    };
 
             List<List<double>> weightsLeft = new List<List<double>>
-            {
-                new List<double>{ 1, 1},
-                new List<double>{ 1, 1.5},
-                new List<double>{ 1, 1}
-            };
+                    {
+                        new List<double>{ 1, 1},
+                        new List<double>{ 1, 1.5},
+                        new List<double>{ 1, 1}
+                    };
 
             List<List<double>> weightsRight = new List<List<double>>
-            {
-                new List<double>{ 1, 1},
-                new List<double>{ 1.5, 2},
-                new List<double>{ 1, 1}
-            };
+                    {
+                        new List<double>{ 1, 1},
+                        new List<double>{ 1.5, 2},
+                        new List<double>{ 1, 1}
+                    };
 
             Point3 expectedPtLeft = new Point3(5.0, 3.333333, 1.444444);
             Point3 expectedPtRight = new Point3(5.0, 8.181818, 3.545455);

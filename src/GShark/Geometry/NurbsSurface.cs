@@ -183,7 +183,7 @@ namespace GShark.Geometry
             int degreeU = curves[0].Degree;
             KnotVector knotVectorU = curves[0].Knots;
             KnotVector knotVectorV = new KnotVector();
-            List<List<Point3>> surfaceControlPoints = new List<List<Point3>>();
+            List<List<Point4>> surfaceControlPoints = new List<List<Point4>>();
 
             switch (loftType)
             {
@@ -192,13 +192,13 @@ namespace GShark.Geometry
                     {
                         List<Point3> pts = curves.Select(c => c.LocationPoints[n]).ToList();
                         NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
-                        surfaceControlPoints.Add(crv.LocationPoints);
+                        surfaceControlPoints.Add(crv.ControlPoints);
                         knotVectorV = crv.Knots;
                     }
                     break;
 
                 case LoftType.Loose:
-                    surfaceControlPoints = Sets.Reverse2DMatrixPoints(curves.Select(c => c.LocationPoints).ToList());
+                    surfaceControlPoints = Sets.Reverse2DMatrixData(curves.Select(c => c.ControlPoints).ToList());
                     knotVectorV = new KnotVector(degreeV, curves.Count);
                     break;
             }
