@@ -1,10 +1,12 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
+using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -221,6 +223,66 @@ namespace GShark.Test.XUnit.Operation
 
             ptOnCurve0.DistanceTo(ptOnReducedDegreeCurve0).Should().BeLessThan(GeoSharkMath.MinTolerance);
             ptOnCurve1.DistanceTo(ptOnReducedDegreeCurve1).Should().BeLessThan(tolerance);
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
+        {
+            // Arrange
+            ICurve[] curves = {NurbsCurveCollection.NurbsCurvePlanarExample()};
+
+            // Act
+            Func<object> func = () => Modify.JoinCurve(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
+        {
+            // Arrange
+            ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample(), NurbsCurveCollection.NurbsCurveQuadratic3DBezier() };
+
+            // Act
+            Func<object> func = () => Modify.JoinCurve(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Multiple_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            List<Point3> pts0 = new List<Point3>
+            {
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(5, 0, 0),
+                new Point3(5, 0, 5),
+                new Point3(5, 5, 5),
+                new Point3(5, 5, 0)
+            };
+
+            List<Point3> pts1 = new List<Point3>
+            {
+                new Point3(5, 5, -2.5),
+                new Point3(5, 5, -7.5),
+                new Point3(10, 5, -7.5)
+            };
+
+            NurbsCurve curve0 = new NurbsCurve(pts0, degree);
+            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            NurbsCurve curve1 = new NurbsCurve(pts1, 2);
+            ICurve[] curves = {curve0, ln, curve1};
+
+            // Act
+            var joinedCurve = Modify.JoinCurve(curves);
+
+            // Arrange
+
         }
     }
 }
