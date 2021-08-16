@@ -697,7 +697,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curves">Curves to join.</param>
         /// <returns>A curve that is the result of joining all the curves.</returns>
-        public static ICurve JoinCurve(IList<ICurve> curves)
+        public static ICurve JoinCurves(IList<ICurve> curves)
         {
             if (curves == null)
             {
