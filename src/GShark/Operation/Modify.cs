@@ -692,7 +692,7 @@ namespace GShark.Operation
             return new NurbsCurve(p - 1, Uh, Pw);
         }
 
-        public static ICurve JoinCurve(IEnumerable<ICurve> curves)
+        public static ICurve JoinCurve(IList<ICurve> curves)
         {
             if (curves == null)
             {
@@ -704,8 +704,45 @@ namespace GShark.Operation
                 throw new Exception("Insufficient curves for join operation.");
             }
 
+            for (int i = 0; i < curves.Count - 1; i++)
+            {
+                if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GeoSharkMath.MinTolerance)
+                {
+                    throw new Exception($"Curve at {i} and curve at {i + 1} don't touch each other.");
+                }
+            }
 
+            // Extract the biggest degree between the curves.
+            int finalDegree = curves.Max(c => c.Degree);
 
+            // Homogenized degree curves.
+            IList<ICurve> homogenizedCurves = new List<ICurve>();
+            foreach (ICurve curve in curves)
+            {
+                if (curve.Degree != finalDegree)
+                {
+                    homogenizedCurves.Add(ElevateDegree(curve, finalDegree));
+                }
+                homogenizedCurves.Add(curve);
+            }
+
+            // Join curves.
+            List<double> joinedKnots = new List<double>();
+            List<Point4> joinedControlPts = new List<Point4>();
+
+            foreach (ICurve curve in homogenizedCurves)
+            {
+                if (joinedKnots.Count == 0)
+                {
+                    joinedKnots.AddRange(curve.Knots);
+                    joinedControlPts.AddRange(curve.ControlPoints);
+                }
+
+                joinedKnots.AddRange(curve.Knots.Skip(finalDegree + 1).Select(kv => kv + joinedKnots.Last()));
+                joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
+            }
+
+            return new NurbsCurve(finalDegree, joinedKnots.ToKnot(), joinedControlPts);
         }
     }
 }
