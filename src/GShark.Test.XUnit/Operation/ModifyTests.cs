@@ -276,13 +276,22 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve0 = new NurbsCurve(pts0, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             NurbsCurve curve1 = new NurbsCurve(pts1, 2);
+            Point3 expectedPt1 = new Point3(0.57375, 1.715, 1.7375);
+            Point3 expectedPt2 = new Point3(2.636719, 0.078125, 0.429687);
+            Point3 expectedPt3 = new Point3(5, 1.65875, 4.3875);
             ICurve[] curves = {curve0, ln, curve1};
 
             // Act
-            var joinedCurve = Modify.JoinCurve(curves);
+            ICurve joinedCurve = Modify.JoinCurve(curves);
+            Point3 pt1 = joinedCurve.PointAt(0.1);
+            Point3 pt2 = joinedCurve.PointAt(0.25);
+            Point3 pt3 = joinedCurve.PointAt(0.70);
 
             // Arrange
-
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GeoSharkMath.MinTolerance);
         }
     }
 }
+
