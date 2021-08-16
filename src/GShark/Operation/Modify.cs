@@ -704,7 +704,7 @@ namespace GShark.Operation
                 throw new Exception("The set of curves is empty.");
             }
 
-            if (!curves.Any())
+            if (curves.Count <= 1)
             {
                 throw new Exception("Insufficient curves for join operation.");
             }
