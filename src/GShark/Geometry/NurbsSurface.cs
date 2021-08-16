@@ -1,11 +1,11 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
+using GShark.Geometry.Interfaces;
+using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
-using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -24,31 +24,30 @@ namespace GShark.Geometry
         /// <param name="degreeV">The degree in the V direction.</param>
         /// <param name="knotsU">The knotVector in the U direction.</param>
         /// <param name="knotsV">The knotVector in the V direction.</param>
-        /// <param name="pts">Two dimensional array of points.</param>
-        /// <param name="weights">Two dimensional array of weight values.</param>
-        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point3>> pts, List<List<double>> weights = null)
+        /// <param name="controlPts">Two dimensional array of points.</param>
+        internal NurbsSurface(int degreeU, int degreeV, KnotVector knotsU, KnotVector knotsV, List<List<Point4>> controlPts)
         {
-            if (pts == null) throw new ArgumentNullException("Control points array connot be null!");
+            if (controlPts == null) throw new ArgumentNullException("Control points array connot be null!");
             if (degreeU < 1) throw new ArgumentException("DegreeU must be greater than 1!");
             if (degreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
             if (knotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
             if (knotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
-            if (knotsU.Count != pts.Count + degreeU + 1)
+            if (knotsU.Count != controlPts.Count + degreeU + 1)
                 throw new ArgumentException("Points count + degreeU + 1 must equal knotsU count!");
-            if (knotsV.Count != pts[0].Count + degreeV + 1)
+            if (knotsV.Count != controlPts[0].Count + degreeV + 1)
                 throw new ArgumentException("Points count + degreeV + 1 must equal knotsV count!");
-            if (!knotsU.IsValid(degreeU, pts.Count))
+            if (!knotsU.IsValid(degreeU, controlPts.Count))
                 throw new ArgumentException("Invalid knotsU!");
-            if (!knotsV.IsValid(degreeV, pts[0].Count))
+            if (!knotsV.IsValid(degreeV, controlPts[0].Count))
                 throw new ArgumentException("Invalid knotsV!");
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = knotsU;
-            KnotsV = knotsV;
-            Weights = weights ?? Sets.RepeatData(Sets.RepeatData(1.0, pts.Count), pts[0].Count);
-            LocationPoints = pts;
-            ControlPoints = LinearAlgebra.PointsHomogeniser2d(pts, weights);
+            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
+            Weights = Point4.GetWeights2d(controlPts);
+            LocationPoints = Point4.PointDehomogenizer2d(controlPts);
+            ControlPoints = controlPts;
             DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
             DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
         }
@@ -89,14 +88,31 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2D collection of points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2D collection of points, U direction increases from left to right, the V direction from bottom to top.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
         /// <summary>
-        /// A 2d collection of control points, the vertical U direction increases from bottom to top, the V direction from left to right.
+        /// A 2d collection of control points, U direction increases from left to right, the V direction from bottom to top.
         /// </summary>
         internal List<List<Point4>> ControlPoints { get; }
+
+        /// <summary>
+        /// Checks if a NURBS surface is closed.<br/>
+        /// A surface is closed if the first points and the lasts in a direction are coincident.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        // ToDo: Add test using lofts.
+        public bool IsClosed(SurfaceDirection direction)
+        {
+            KnotVector knot = (direction == SurfaceDirection.U) ? KnotsU : KnotsV;
+            int degree = (direction == SurfaceDirection.U) ? DegreeU : DegreeV;
+
+            if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
+
+            var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
+            return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GeoSharkMath.Epsilon);
+        }
 
         /// <summary>
         /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
@@ -108,10 +124,10 @@ namespace GShark.Geometry
         /// <param name="p4">The fourth point.</param>
         public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
-            List<List<Point3>> pts = new List<List<Point3>>
+            List<List<Point4>> pts = new List<List<Point4>>
             {
-                new List<Point3>{p1, p4},
-                new List<Point3>{p2, p3},
+                new List<Point4>{p1, p4},
+                new List<Point4>{p2, p3},
             };
 
             KnotVector knotU = new KnotVector { 0, 0, 1, 1 };
@@ -133,7 +149,8 @@ namespace GShark.Geometry
         {
             KnotVector knotU = new KnotVector(degreeU, points.Count);
             KnotVector knotV = new KnotVector(degreeV, points[0].Count);
-            return new NurbsSurface(degreeU, degreeV, knotU, knotV, points, weight);
+            var controlPts = points.Select((pts, i) => pts.Select((pt, j) => weight != null ? new Point4(pt, weight[i][j]) : new Point4(pt)).ToList()).ToList();
+            return new NurbsSurface(degreeU, degreeV, knotU, knotV, controlPts);
         }
 
         /// <summary>
@@ -194,7 +211,25 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation U parameter.</param>
         /// <param name="v">Evaluation V parameter.</param>
         /// <returns>A evaluated point.</returns>
-        public Point3 PointAt(double u, double v) => Evaluation.SurfacePointAt(this, u, v);
+        public Point3 PointAt(double u, double v) => new Point3(Evaluation.SurfacePointAt(this, u, v));
+
+        /// <summary>
+        /// Computes the point on the surface that is closest to the test point.
+        /// </summary>
+        /// <param name="point">The point to test against.</param>
+        /// <returns>The closest point on the surface.</returns>
+        public Point3 ClosestPoint(Point3 point)
+        {
+            var (u, v) = Analyze.SurfaceClosestParameter(this, point);
+            return new Point3(Evaluation.SurfacePointAt(this, u, v));
+        }
+
+        /// <summary>
+        /// Computes the U and V parameters of the surface that is closest to the test point.
+        /// </summary>
+        /// <param name="point">The point to test against.</param>
+        /// <returns>The U and V parameters of the surface that are closest to the test point.</returns>
+        public (double U, double V) ClosestParameters(Point3 point) => Analyze.SurfaceClosestParameter(this, point);
 
         /// <summary>
         /// Evaluate the surface at the given U and V parameters.
@@ -203,10 +238,10 @@ namespace GShark.Geometry
         /// <param name="v">V parameter.</param>
         /// <param name="direction">The evaluate direction required as result.</param>
         /// <returns>The unitized tangent vector in the direction selected.</returns>
-        public Vector3 EvaluateAt(double u, double v, SurfaceDirection direction)
+        public Vector3 EvaluateAt(double u, double v, EvaluateSurfaceDirection direction)
         {
-            if (direction != SurfaceDirection.Normal)
-                return (direction == SurfaceDirection.U)
+            if (direction != EvaluateSurfaceDirection.Normal)
+                return (direction == EvaluateSurfaceDirection.U)
                     ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
                     : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
 
@@ -222,9 +257,9 @@ namespace GShark.Geometry
         /// <returns>A new NURBS surface transformed.</returns>
         public NurbsSurface Transform(Transform transformation)
         {
-            List<List<Point3>> otherPts = LocationPoints;
-            otherPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
-            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, otherPts, Weights);
+            List<List<Point4>> transformedControlPts = ControlPoints;
+            transformedControlPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
+            return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, transformedControlPts);
         }
 
         /// <summary>
@@ -233,7 +268,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">The NURBS surface.</param>
         /// <returns>Return true if the NURBS surface are equal.</returns>
-        public bool Equals(NurbsSurface? other)
+        public bool Equals(NurbsSurface other)
         {
             List<List<Point3>> otherPts = other?.LocationPoints;
 

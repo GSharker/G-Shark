@@ -1,8 +1,8 @@
 using FluentAssertions;
+using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
-using GShark.Core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -36,8 +36,8 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Plane orientedPlane = Plane.PlaneXY.Rotate(GeoSharkMath.ToRadians(30));
-            var expectedMin = new Point3( 45.662928, 59.230957, -4.22451);
-            var expectedMax = new Point3( 77.622297, 78.520011, 3.812853);
+            var expectedMin = new Point3(45.662928, 59.230957, -4.22451);
+            var expectedMax = new Point3(77.622297, 78.520011, 3.812853);
 
             // Act
             var bBox = new BoundingBox(BoundingBoxCollection.BoundingBox3D(), orientedPlane);
@@ -98,7 +98,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             var pt1 = new Point3(5d, 5d, 0);
             var pt2 = new Point3(-15d, -13d, -5);
-            var pts = new List<Point3> {pt1, pt2};
+            var pts = new List<Point3> { pt1, pt2 };
             var pMax = new Point3(10, 10, 0);
             var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts);
@@ -136,7 +136,7 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             var pt1 = new Point3(5d, 5d, 0);
             var pt2 = new Point3(15d, 15d, 0);
-            var pts2 = new List<Point3> {pt1, pt2};
+            var pts2 = new List<Point3> { pt1, pt2 };
             var bBox1 = new BoundingBox(BoundingBoxCollection.BoundingBox2D());
             var bBox2 = new BoundingBox(pts2);
 
@@ -194,7 +194,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_BoundingBox_In_Ascending_Way()
         {
             // Arrange
-            var bBox = new BoundingBox(new Point3(15,15,0), new Point3(5,0,0));
+            var bBox = new BoundingBox(new Point3(15, 15, 0), new Point3(5, 0, 0));
 
             // Act
             var bBoxMadeValid = bBox.MakeItValid();

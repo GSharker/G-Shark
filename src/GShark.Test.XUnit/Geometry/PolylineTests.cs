@@ -48,7 +48,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Polyline_Throws_An_Exception_If_Vertex_Count_Is_Less_Than_Two()
         {
             // Arrange
-            Point3[] pts = new Point3[]{ new Point3(5, 0, 0) };
+            Point3[] pts = new Point3[] { new Point3(5, 0, 0) };
 
             // Act
             Func<Polyline> func = () => new Polyline(pts);

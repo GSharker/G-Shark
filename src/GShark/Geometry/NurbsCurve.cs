@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
@@ -26,13 +25,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="degree">The curve degree.</param>
         /// <param name="knots">The knots defining the curve.</param>
-        /// <param name="controlPoints">The control points of the curve.</param>
-        /// <param name="weights">The weight values.</param>
-        public NurbsCurve(int degree, KnotVector knots, List<Point3> points, List<double>? weights = null)
+        /// <param name="controlPoints">The controlPoints of the curve.</param>
+        internal NurbsCurve(int degree, KnotVector knots, List<Point4> controlPoints)
         {
-            if (points is null)
+            if (controlPoints is null)
             {
-                throw new ArgumentNullException(nameof(points));
+                throw new ArgumentNullException(nameof(controlPoints));
             }
 
             if (knots is null)
@@ -45,44 +43,42 @@ namespace GShark.Geometry
                 throw new ArgumentException("Degree must be greater than 1!");
             }
 
-            if (knots.Count != points.Count + degree + 1)
+            if (knots.Count != controlPoints.Count + degree + 1)
             {
-                throw new ArgumentException("Number of points + degree + 1 must equal knots length!");
+                throw new ArgumentException("Number of controlPoints + degree + 1 must equal knots length!");
             }
 
-            if (!knots.IsValid(degree, points.Count))
+            if (!knots.IsValid(degree, controlPoints.Count))
             {
                 throw new ArgumentException("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
             }
 
-            Weights = weights ?? Sets.RepeatData(1.0, points.Count);
+            Weights = Point4.GetWeights(controlPoints);
             Degree = degree;
             Knots = knots;
-            LocationPoints = points;
-            ControlPoints = LinearAlgebra.PointsHomogeniser(points, Weights);
+            LocationPoints = Point4.PointDehomogenizer1d(controlPoints);
+            ControlPoints = controlPoints;
         }
 
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
-        /// <param name="points">The control points of the curve.</param>
+        /// <param name="points">The points of the curve.</param>
         /// <param name="degree">The curve degree.</param>
-        public NurbsCurve(List<Point3> points, int degree)
-            : this(degree, new KnotVector(degree, points.Count), points)
+        public NurbsCurve(List<Point3>? points, int degree)
+            : this(degree, new KnotVector(degree, points!.Count), points.Select(p => new Point4(p)).ToList())
         {
         }
 
         /// <summary>
-        /// Copy constructor.
+        /// Creates a NURBS curve.
         /// </summary>
-        /// <param name="curve">The curve object.</param>
-        private NurbsCurve(NurbsCurve curve)
+        /// <param name="points">The points of the curve.</param>
+        /// <param name="weights">The weights of each point.</param>
+        /// <param name="degree">The curve degree.</param>
+        public NurbsCurve(List<Point3>? points, List<double> weights, int degree)
+            : this(degree, new KnotVector(degree, points!.Count), points.Select((p, i) => new Point4(p, weights[i])).ToList())
         {
-            Degree = curve.Degree;
-            LocationPoints = new List<Point3>(curve.LocationPoints);
-            ControlPoints = new List<Point4>(curve.ControlPoints);
-            Knots = new KnotVector(curve.Knots);
-            Weights = new List<double>(curve.Weights!);
         }
 
         /// <summary>
@@ -130,7 +126,7 @@ namespace GShark.Geometry
                 }
 
                 pts.Add(curve.LocationPoints[curve.LocationPoints.Count - 1]);
-                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GeoSharkMath.MaxTolerance);
+                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GeoSharkMath.MinTolerance);
                 return new BoundingBox(removedDuplicate);
             }
         }
@@ -153,7 +149,7 @@ namespace GShark.Geometry
         public bool IsPeriodic()
         {
             if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
-            int i, j = 0;
+            int i, j;
             for (i = 0, j = LocationPoints.Count - Degree; i < Degree; i++, j++)
             {
                 if (LocationPoints[i].DistanceTo(LocationPoints[j]) > 0)
@@ -165,15 +161,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets a copy of the curve.
-        /// </summary>
-        /// <returns>The copied curve.</returns>
-        public NurbsCurve Clone()
-        {
-            return new NurbsCurve(this);
-        }
-
-        /// <summary>
         /// Creates a periodic NURBS curve.<br/>
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
@@ -182,7 +169,7 @@ namespace GShark.Geometry
         public NurbsCurve Close()
         {
             // Wrapping control points
-            List<Point3> pts = new List<Point3>(LocationPoints);
+            List<Point4> pts = new List<Point4>(ControlPoints);
             for (int i = 0; i < Degree; i++)
             {
                 pts.Add(pts[i]);
@@ -199,8 +186,8 @@ namespace GShark.Geometry
         /// <returns>A new NURBS curve transformed.</returns>
         public NurbsCurve Transform(Transform transformation)
         {
-            List<Point3> pts = LocationPoints.Select(pt => pt.Transform(transformation)).ToList();
-            return new NurbsCurve(Degree, Knots, pts, Weights!);
+            List<Point4> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
+            return new NurbsCurve(Degree, Knots, pts);
         }
 
         /// <summary>
@@ -248,7 +235,7 @@ namespace GShark.Geometry
         /// <returns>The closest point on the curve.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
-            return LinearAlgebra.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+            return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
 
         /// <summary>
@@ -278,7 +265,7 @@ namespace GShark.Geometry
         /// <returns>A NURBS curve with clamped knots.</returns>
         public NurbsCurve ClampEnds()
         {
-            List<Point3> evalPts = new List<Point3>(LocationPoints);
+            List<Point4> evalPts = new List<Point4>(ControlPoints);
             KnotVector clampedKnots = new KnotVector(Knots);
             int j = 2;
 
@@ -302,9 +289,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">The NURBS curve.</param>
         /// <returns>Return true if the NURBS curves are equal.</returns>
-        public bool Equals(NurbsCurve? other)
+        public bool Equals(NurbsCurve other)
         {
-            List<Point3>? otherPts = other?.LocationPoints;
+            List<Point3> otherPts = other?.LocationPoints;
 
             if (other == null)
             {
@@ -335,7 +322,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="obj">The curve object.</param>
         /// <returns>Return true if the NURBS curves are equal.</returns>
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is NurbsCurve curve)
                 return Equals(curve);

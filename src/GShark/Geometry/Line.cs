@@ -20,7 +20,7 @@ namespace GShark.Geometry
         /// <param name="end">End point.</param>
         public Line(Point3 start, Point3 end)
         {
-            if(start == end || !start.IsValid || !end.IsValid)
+            if (start == end || !start.IsValid || !end.IsValid)
             {
                 throw new Exception("Start or end point is not valid, or they are equal");
             }
@@ -39,7 +39,7 @@ namespace GShark.Geometry
         /// <param name="length">Length of the line.</param>
         public Line(Point3 start, Vector3 direction, double length)
         {
-            if(length <= GeoSharkMath.Epsilon)
+            if (length <= GeoSharkMath.Epsilon)
             {
                 throw new Exception("Length must be bigger than zero");
             }
@@ -72,11 +72,11 @@ namespace GShark.Geometry
 
         public int Degree => 1;
 
-        public List<Point3> LocationPoints => new List<Point3>{Start, End};
+        public List<Point3> LocationPoints => new List<Point3> { Start, End };
 
-        public List<Point4> ControlPoints => LinearAlgebra.PointsHomogeniser(LocationPoints, 1.0);
+        public List<Point4> ControlPoints => Point4.PointsHomogeniser(LocationPoints, 1.0);
 
-        public KnotVector Knots => new KnotVector {0, 0, 1, 1};
+        public KnotVector Knots => new KnotVector { 0, 0, 1, 1 };
 
         public Interval Domain => new Interval(0.0, 1.0);
 

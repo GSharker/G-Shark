@@ -3,7 +3,6 @@ using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GShark.Operation
@@ -48,9 +47,10 @@ namespace GShark.Operation
             var vectorR = ComputeValuesR(knots, uk, Rk, degree, numberCpts);
 
             // Computes control points, fixing the first and last point from the input points.
-            List<Point3> ctrlPts = new List<Point3> { pts[0] };
-            ctrlPts.AddRange(SolveCtrlPts(knots, vectorR, matrixNtN));
+            List<Point4> ctrlPts = new List<Point4> { pts[0] };
+            ctrlPts.AddRange(SolveCtrlPts(vectorR, matrixNtN));
             ctrlPts.Add(pts[pts.Count - 1]);
+
             return new NurbsCurve(degree, knots, ctrlPts);
         }
 
@@ -67,11 +67,11 @@ namespace GShark.Operation
             }
 
             List<NurbsCurve> beziers = new List<NurbsCurve>();
-            (List<Point3> ptsA, List<Point3> ptsB) ctrlPts = SolveBezierCtrlPts(pts);
+            var (ptsA, ptsB) = SolveBezierCtrlPts(pts);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
-                beziers.Add(new NurbsCurve(new List<Point3> { pts[i], ctrlPts.ptsA[i], ctrlPts.ptsB[i], pts[i + 1] },
+                beziers.Add(new NurbsCurve(new List<Point3> { pts[i], ptsA[i], ptsB[i], pts[i + 1] },
                     3));
             }
 
@@ -107,9 +107,9 @@ namespace GShark.Operation
             // Build matrix of basis function coefficients.
             Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
             // Solve for each points.
-            List<Point3> ctrlPts = (hasTangents)
+            List<Point4> ctrlPts = (hasTangents)
                 ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3(startTangent.Value), new Vector3(endTangent.Value))
-                : SolveCtrlPts(knots, pts, coeffMatrix);
+                : SolveCtrlPts(pts, coeffMatrix);
 
             return new NurbsCurve(degree, knots, ctrlPts);
         }
@@ -233,7 +233,7 @@ namespace GShark.Operation
         /// <summary>
         /// Defines the control points.
         /// </summary>
-        private static List<Point3> SolveCtrlPts(KnotVector knots, List<Point3> pts, Matrix coeffMatrix)
+        private static List<Point4> SolveCtrlPts(List<Point3> pts, Matrix coeffMatrix)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -246,13 +246,13 @@ namespace GShark.Operation
                 Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
-            return ptsSolved.Transpose().Select(pt => new Point3(pt[0], pt[1], pt[2])).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point4(pt[0], pt[1], pt[2], 1)).ToList();
         }
 
         /// <summary>
         /// Defines the control points defining the tangent values for the first and last points.
         /// </summary>
-        private static List<Point3> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
+        private static List<Point4> SolveCtrlPtsWithTangents(KnotVector knots, List<Point3> pts, Matrix coeffMatrix, int degree, Vector3 startTangent, Vector3 endTangent)
         {
             Matrix matrixLu = Matrix.Decompose(coeffMatrix, out int[] permutation);
             Matrix ptsSolved = new Matrix();
@@ -265,21 +265,19 @@ namespace GShark.Operation
             // Solve for each dimension.
             for (int i = 0; i < 3; i++)
             {
-                Vector b = new Vector();
+                Vector b = new Vector { pts[0][i], startTangent[i] * mult0 };
                 // Insert the tangents at the second and second to last index.
-                b.Add(pts[0][i]);
                 // Equations 9.11
-                b.Add(startTangent[i] * mult0);
                 b.AddRange(pts.Skip(1).Take(pts.Count - 2).Select(pt => pt[i]));
                 // Equations 9.12
                 b.Add(endTangent[i] * mult1);
                 b.Add(pts[pts.Count - 1][i]);
-                
+
                 Vector solution = Matrix.Solve(matrixLu, permutation, b);
                 ptsSolved.Add(solution);
             }
 
-            return ptsSolved.Transpose().Select(pt => new Point3(pt[0], pt[1], pt[2])).ToList();
+            return ptsSolved.Transpose().Select(pt => new Point4(pt[0], pt[1], pt[2], 1)).ToList();
         }
 
         /// <summary>

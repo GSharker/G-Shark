@@ -19,3 +19,10 @@ There's a tonne of work to be done and we appreciate all the help we can get! If
 
 ## Documentation
 [G-Shark Doc](https://gsharker.github.io/G-Shark/)
+
+## Our Codebase
+We've included the generated diagram by adding it to the README:
+
+![Visualization of this repo](media/diagram.svg)
+
+You can check out the whole GitHub Action at [diagram.yml](/.github/workflows/generate_diagram.yml). Notice that we're excluding the `ignore` and `.github` folders, using the `excluded_paths` config.

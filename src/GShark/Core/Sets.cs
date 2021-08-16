@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Geometry;
 
 namespace GShark.Core
 {
@@ -58,9 +57,9 @@ namespace GShark.Core
         /// <returns>A collection of equally spaced numbers.</returns>
         public static IList<double> LinearSpace(Interval domain, int step)
         {
-            if(Math.Abs(domain.T0 - domain.T1) <= GeoSharkMath.Epsilon)
+            if (Math.Abs(domain.T0 - domain.T1) <= GeoSharkMath.Epsilon)
             {
-                return new List<double>(){ domain.T0 };
+                return new List<double>() { domain.T0 };
             }
 
             List<double> linearSpace = new List<double>();
@@ -157,7 +156,7 @@ namespace GShark.Core
         /// <returns>The set difference.</returns>
         public static List<double> SetDifference(IList<double> a, IList<double> b)
         {
-            if(a.Count == 0)
+            if (a.Count == 0)
             {
                 throw new Exception("Set difference can't be computed, the first set is empty.");
             }
@@ -188,33 +187,32 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Reverses a bi-dimensional collection of control points.<br/>
-        /// A control point has a dimension of three.
+        /// Reverses a bi-dimensional collection of T data.<br/>
         /// </summary>
-        /// <param name="pts">The bi-dimensional collection of points.</param>
+        /// <param name="data">The bi-dimensional collection of data.</param>
         /// <returns>The bi-dimensional collection reversed.</returns>
-        public static List<List<Point3>> Reverse2DMatrixPoints(List<List<Point3>> pts)
+        public static List<List<T>> Reverse2DMatrixData<T>(List<List<T>> data)
         {
-            List<List<Point3>> reversedPts = new List<List<Point3>>();
+            List<List<T>> reverseData = new List<List<T>>();
             //Reverse the points matrix
-            if (pts.Count == 0)
+            if (data.Count == 0)
             {
                 return null;
             }
 
-            int rows = pts.Count;
-            int columns = pts[0].Count;
+            int rows = data.Count;
+            int columns = data[0].Count;
             for (int c = 0; c < columns; c++)
             {
-                List<Point3> rr = new List<Point3>();
+                List<T> rr = new List<T>();
                 for (int r = 0; r < rows; r++)
                 {
-                    rr.Add(pts[r][c]);
+                    rr.Add(data[r][c]);
                 }
-                reversedPts.Add(rr);
+                reverseData.Add(rr);
             }
 
-            return reversedPts;
+            return reverseData;
         }
 
 

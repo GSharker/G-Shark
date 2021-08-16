@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
@@ -45,7 +44,7 @@ namespace GShark.Optimization
 
             double value0 = 2 * (f / df);
 
-            return new Vector{value0, value0};
+            return new Vector { value0, value0 };
         }
     }
 }

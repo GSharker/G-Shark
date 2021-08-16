@@ -51,7 +51,7 @@ namespace GShark.Test.XUnit.Core
             IList<double> range = Sets.Range(interval, step);
 
             // Act
-            string st = string.Join(',', range);
+            _ = string.Join(',', range);
 
             // Assert
             range.Should().NotBeNull();
@@ -66,7 +66,7 @@ namespace GShark.Test.XUnit.Core
             IList<double> linearSpace = Sets.LinearSpace(interval, step);
 
             // Act
-            string st = string.Join(',', linearSpace);
+            _ = string.Join(',', linearSpace);
 
             // Assert
             linearSpace.Should().NotBeNull();
@@ -80,7 +80,7 @@ namespace GShark.Test.XUnit.Core
             IList<double> range = Sets.Range(12);
 
             // Act
-            string st = string.Join(',', range);
+            _ = string.Join(',', range);
 
             // Assert
             range.Should().NotBeNull();
@@ -95,7 +95,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Act
             Func<object> resultFunction = () => Sets.Range(maxValue);
-            
+
             // Assert
             resultFunction.Should().Throw<Exception>().WithMessage("T1 value range can not be negative or zero.");
         }
@@ -110,7 +110,7 @@ namespace GShark.Test.XUnit.Core
             IList<double> series = Sets.Span(start, step, count);
 
             // Act
-            string st = string.Join(',', series);
+            _ = string.Join(',', series);
 
             // Assert
             series.Should().NotBeNull();
@@ -165,19 +165,19 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_SetUnion_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
             // Act
-            List<double> setSub = Sets.SetUnion(set1, set2);
+            _ = Sets.SetUnion(set1, set2);
 
             // Assert
             setExpected.Should().BeEquivalentTo(setExpected);
         }
 
         [Theory]
-        [InlineData(new double[]{ 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
-        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] {}, new double[] { 3, 5, 7, 9, 11 })]
+        [InlineData(new double[] { 3, 5, 7 }, new double[] { 5, 6 }, new double[] { 3, 7 })]
+        [InlineData(new double[] { 3, 5, 7, 9, 11 }, new double[] { }, new double[] { 3, 5, 7, 9, 11 })]
         public void It_Returns_A_SetDifference_From_Two_Collections_Of_Numbers(double[] set1, double[] set2, double[] setExpected)
         {
             // Act
-            List<double> setSub = Sets.SetDifference(set1, set2);
+            _ = Sets.SetDifference(set1, set2);
 
             // Assert
             setExpected.Should().BeEquivalentTo(setExpected);
@@ -209,7 +209,7 @@ namespace GShark.Test.XUnit.Core
                     new Point3( 10d, -10d, 10)
                 },
                 new List<Point3>
-                {                
+                {
                     new Point3( 0d, -30d, 0),
                     new Point3( 10d, -30d, 0)
 
@@ -222,7 +222,7 @@ namespace GShark.Test.XUnit.Core
             };
 
             // Act
-            List<List<Point3>> reversedPts = Sets.Reverse2DMatrixPoints(pts);
+            List<List<Point3>> reversedPts = Sets.Reverse2DMatrixData(pts);
 
             // Assert
             reversedPts.Count.Should().Be(2);

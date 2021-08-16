@@ -4,7 +4,6 @@ using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -37,11 +36,11 @@ namespace GShark.Test.XUnit.Core
 
         public static TheoryData<Matrix, Matrix, int[]> DecomposedMatrixLuData => new TheoryData<Matrix, Matrix, int[]>
         {
-            {new Matrix {new List<double> {2,1}, new List<double> {-4,-6}}, 
+            {new Matrix {new List<double> {2,1}, new List<double> {-4,-6}},
                 new Matrix {new List<double> {-4,-6}, new List<double> {-0.5,-2}},
                 new []{1,0}
             },
-            {new Matrix {new List<double> {2,1,-4}, new List<double> {2,2,-2}, new List<double> {6,3,11}}, 
+            {new Matrix {new List<double> {2,1,-4}, new List<double> {2,2,-2}, new List<double> {6,3,11}},
                 new Matrix {new List<double> {6,3,11}, new List<double> { 0.33333333333333, 1, -5.6666666666667 }, new List<double> { 0.33333333333333, 0, -7.6666666666667 }},
                 new []{2,1,0}
             },
@@ -91,13 +90,13 @@ namespace GShark.Test.XUnit.Core
             matrix[0].Count.Should().Be(3);
             matrix.Select(x => x.Sum()).Sum().Should().Be(0.0);
         }
-        
+
         [Fact]
         public void It_Creates_An_Identity_Matrix()
         {
             // Act
             Matrix matrix = Matrix.Identity(3);
-            
+
             // Assert
             matrix.Should().BeEquivalentTo(IdentityMatrix);
         }
@@ -106,8 +105,8 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_A_Transpose_Matrix()
         {
             // Arrange
-            Matrix matrix = new Matrix {new List<double> {1, 2}, new List<double> {3, 4}, new List<double> {5, 6}};
-            Matrix expectedMatrix = new Matrix {new List<double> {1, 3, 5}, new List<double> {2, 4, 6}};
+            Matrix matrix = new Matrix { new List<double> { 1, 2 }, new List<double> { 3, 4 }, new List<double> { 5, 6 } };
+            Matrix expectedMatrix = new Matrix { new List<double> { 1, 3, 5 }, new List<double> { 2, 4, 6 } };
 
             // Act
             Matrix transposedMatrix = matrix.Transpose();
@@ -149,7 +148,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             Matrix matrixA = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };
-            Matrix matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }};
+            Matrix matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 } };
 
             // Act
             Func<Matrix> func = () => matrixA * matrixB;
@@ -162,9 +161,9 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_The_Product_Between_Two_Matrices()
         {
             // Arrange
-            Matrix matrixA = new Matrix {new List<double> {1, 2, 3}, new List<double> {4, 5, 6}};
-            Matrix matrixB = new Matrix {new List<double> { 7, 8 }, new List<double> { 9, 10 }, new List<double> { 11, 12 }};
-            Matrix matrixExpected = new Matrix { new List<double> { 58,64 }, new List<double> { 139,154 } };
+            Matrix matrixA = new Matrix { new List<double> { 1, 2, 3 }, new List<double> { 4, 5, 6 } };
+            Matrix matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }, new List<double> { 11, 12 } };
+            Matrix matrixExpected = new Matrix { new List<double> { 58, 64 }, new List<double> { 139, 154 } };
 
             // Act
             Matrix productMatrix = matrixA * matrixB;
@@ -192,7 +191,7 @@ namespace GShark.Test.XUnit.Core
         {
             // Arrange
             Matrix matrixA = new Matrix { new List<double> { 1, 2 }, new List<double> { 4, 5 } };
-            Matrix matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 }};
+            Matrix matrixB = new Matrix { new List<double> { 7, 8 }, new List<double> { 9, 10 } };
             Matrix matrixExpected = new Matrix { new List<double> { 8, 10 }, new List<double> { 13, 15 } };
 
             // Act
@@ -261,9 +260,9 @@ namespace GShark.Test.XUnit.Core
         public void Solve_Returns_An_Exception_If_The_Matrix_Is_Singular()
         {
             // Arrange
-            Matrix matrix = new Matrix { new List<double> { 2,4,6 }, new List<double> { 2,0,2 }, new List<double> { 6,8,14 } };
-            Vector vector = new Vector {3, 13, 4};
-            int[] pivot = new[] {1, 1, 1};
+            Matrix matrix = new Matrix { new List<double> { 2, 4, 6 }, new List<double> { 2, 0, 2 }, new List<double> { 6, 8, 14 } };
+            Vector vector = new Vector { 3, 13, 4 };
+            int[] pivot = new[] { 1, 1, 1 };
 
             // Act
             Func<object> func = () => Matrix.Solve(matrix, pivot, vector);
@@ -276,8 +275,8 @@ namespace GShark.Test.XUnit.Core
         public void Solve_Returns_An_Exception_If_The_Decomposition_Value_Dimension_Is_Different_Of_Matrix_Row_Dimension()
         {
             // Arrange
-            Matrix matrix = new Matrix {new List<double> {1, 2, 4}, new List<double> {3, 8, 14}, new List<double> {2, 6, 13}};
-            Vector vector = new Vector { 3, 13};
+            Matrix matrix = new Matrix { new List<double> { 1, 2, 4 }, new List<double> { 3, 8, 14 }, new List<double> { 2, 6, 13 } };
+            Vector vector = new Vector { 3, 13 };
             int[] pivot = new[] { 1, 1, 1 };
 
             // Act
@@ -295,8 +294,8 @@ namespace GShark.Test.XUnit.Core
             Matrix matrix = new Matrix { new List<double> { 1, 2, 4 }, new List<double> { 3, 8, 14 }, new List<double> { 2, 6, 13 } };
             Matrix matrixExpected = new Matrix
             {
-                new List<double> { 3.333333333333334, -0.33333333333333304, -0.6666666666666671 }, 
-                new List<double> { -1.8333333333333337, 0.8333333333333331, -0.333333333333333 }, 
+                new List<double> { 3.333333333333334, -0.33333333333333304, -0.6666666666666671 },
+                new List<double> { -1.8333333333333337, 0.8333333333333331, -0.333333333333333 },
                 new List<double> { 0.3333333333333334, -0.33333333333333326, 0.3333333333333332 }
             };
 
@@ -311,8 +310,8 @@ namespace GShark.Test.XUnit.Core
         public void Fill_Diagonal_Throw_An_Exception_If_The_Matrix_Is_Less_Than_2D()
         {
             // Arrange
-            Matrix matrix0 = new Matrix { new List<double> { 1}, new List<double> { 3, 8}, new List<double> { 2 } };
-            Matrix matrix1 = new Matrix { new List<double> { 1}, new List<double> { 3, 8}};
+            Matrix matrix0 = new Matrix { new List<double> { 1 }, new List<double> { 3, 8 }, new List<double> { 2 } };
+            Matrix matrix1 = new Matrix { new List<double> { 1 }, new List<double> { 3, 8 } };
 
             // Act
             Func<object> func0 = () => matrix0.FillDiagonal(0, 0, 0);

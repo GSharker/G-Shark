@@ -11,12 +11,12 @@ namespace GShark.Core
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
-        public const double MinTolerance = 1e-3;
+        public const double MaxTolerance = 1e-3;
 
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
-        public const double MaxTolerance = 1e-6;
+        public const double MinTolerance = 1e-6;
 
         /// <summary>
         /// The minimum value to determine whether two floating point numbers are the same.
@@ -136,7 +136,7 @@ namespace GShark.Core
         /// <returns>The numerical value truncate.</returns>
         public static decimal Truncate(double value, byte decimals = 6)
         {
-            decimal d = (decimal) value;
+            decimal d = (decimal)value;
             decimal r = Math.Round(d, decimals);
 
             if (d > 0 && r > d)
