@@ -232,7 +232,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve[] curves = {NurbsCurveCollection.NurbsCurvePlanarExample()};
 
             // Act
-            Func<object> func = () => Modify.JoinCurve(curves);
+            Func<object> func = () => Modify.JoinCurves(curves);
 
             // Assert
             func.Should().Throw<Exception>();
@@ -245,7 +245,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample(), NurbsCurveCollection.NurbsCurveQuadratic3DBezier() };
 
             // Act
-            Func<object> func = () => Modify.JoinCurve(curves);
+            Func<object> func = () => Modify.JoinCurves(curves);
 
             // Assert
             func.Should().Throw<Exception>();
@@ -275,7 +275,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve[] curves = {curve, ln, arc};
 
             // Act
-            ICurve joinedCurve = Modify.JoinCurve(curves);
+            ICurve joinedCurve = Modify.JoinCurves(curves);
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
             Point3 pt3 = joinedCurve.PointAt(0.75);
@@ -308,7 +308,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve[] curves = { poly, ln };
 
             // Act
-            ICurve joinedCurve = Modify.JoinCurve(curves);
+            ICurve joinedCurve = Modify.JoinCurves(curves);
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
             Point3 pt3 = joinedCurve.PointAt(0.70);

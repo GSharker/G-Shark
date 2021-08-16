@@ -128,5 +128,41 @@ namespace GShark.Test.XUnit.Data
             };
             return new NurbsCurve(pts, degree);
         }
+
+        public static List<NurbsCurve> OpenCurves()
+        {
+            int degree = 2;
+            List<Point3> points1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
+                                                   new Point3(0.0, 0.0, 10.0),
+                                                   new Point3(10.0, 0.0, 0.0) };
+
+            List<Point3> points2 = new List<Point3> { new Point3(-15.0, 10.0, 0.0),
+                                                   new Point3(0.0, 10.0, 5.0),
+                                                   new Point3(20.0, 10.0, 1.0) };
+
+            List<Point3> points3 = new List<Point3> { new Point3(-5.0, 25.0, 0.0),
+                                                   new Point3(0.0, 25.0, 20.0),
+                                                   new Point3(10.0, 25.0, 0.0) };
+
+            List<Point3> points4 = new List<Point3> { new Point3(-5.0, 35.0, -2.0),
+                                                   new Point3(0.0, 35.0, 20.0),
+                                                   new Point3(5.0, 35.0, 0.0) };
+
+            NurbsCurve c1 = new NurbsCurve(points1, degree);
+            NurbsCurve c2 = new NurbsCurve(points2, degree);
+            NurbsCurve c3 = new NurbsCurve(points3, degree);
+            NurbsCurve c4 = new NurbsCurve(points4, degree);
+
+            return new List<NurbsCurve>() { c1, c2, c3, c4 };
+        }
+        
+        public static List<NurbsCurve> ClosedCurves()
+        {
+            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
+            for (int i = 0; i < crvs.Count; i++)
+                crvs[i] = crvs[i].Close();
+
+            return crvs;
+        }
     }
 }
