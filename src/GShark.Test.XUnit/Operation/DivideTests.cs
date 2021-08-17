@@ -6,7 +6,6 @@ using GShark.Geometry.Interfaces;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -31,15 +30,14 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(2,2,0),
                 new Point3(4,12,0),
                 new Point3(7,12,0),
                 new Point3(15,2,0)
             };
-            KnotVector knots = new KnotVector(degree, controlPts.Count);
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
             List<ICurve> curves = curve.SplitAt(parameter);
@@ -73,28 +71,29 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(7,12,0),
                 new Point3(15,2,5)
             };
-            KnotVector knots = new KnotVector(degree, controlPts.Count);
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            var expectedKnotVector = new KnotVector(new List<double> {0.65, 0.65, 0.65, 0.65, 0.85, 0.85, 0.85, 0.85});
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
             NurbsCurve expectedSubCurve = new NurbsCurve(
-                degree: 3,
-                new KnotVector(new List<double> {0.65, 0.65, 0.65, 0.65, 0.85, 0.85, 0.85, 0.85}),
                 new List<Point3>
                 {
-                    new Point3(8.266,8.825,1.373125),
-                    new Point3(9.264,8.225,1.795625),
-                    new Point3(10.406,7.225,2.348125),
-                    new Point3(11.724,5.825,3.070625)
-                });
+                    new (8.266,8.825,1.373125),
+                    new (9.264,8.225,1.795625),
+                    new (10.406,7.225,2.348125),
+                    new (11.724,5.825,3.070625)
+                },
+                degree:3);
 
             // Act
             ICurve subCurve = curve.SubCurve(domain);
 
             // Assert
-            subCurve.Equals(expectedSubCurve).Should().BeTrue();
+            subCurve.LocationPoints.SequenceEqual(expectedSubCurve.LocationPoints).Should().BeTrue();
+            subCurve.ControlPoints.SequenceEqual(expectedSubCurve.ControlPoints).Should().BeTrue();
+            subCurve.Knots.SequenceEqual(expectedKnotVector).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Splits_A_Curve_Into_Semgments_At_Given_Parameters()
+        public void It_Splits_A_Curve_Into_Segments_At_Given_Parameters()
         {
             // Arrange
             var parameters = new[]{0.25, 0.5, 0.75};
@@ -107,7 +106,7 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(15,2,5)
             };
             KnotVector knots = new KnotVector(degree, controlPts.Count);
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
 
             // Act
             var segments = curve.SplitAt(parameters.ToArray());
@@ -192,7 +191,6 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(-0.354248010530259,7.14708134218695,4.20008044306221)
             };
             int curveDegree = 3;
-            List<double> curveKnots = new List<double>() {0, 0, 0, 286.968460470094, 573.936920940188, 573.936920940188, 573.936920940188};
 
             NurbsCurve curve = new NurbsCurve(curvePoints, curveDegree);
             List<Plane> expectedPerpFrames = new List<Plane>()
@@ -290,7 +288,7 @@ namespace GShark.Test.XUnit.Operation
             {
                 _testOutput.WriteLine(perpFrame.ToString());
             }
-            
+
             //Assert
             for (int i = 0; i < perpFrames.Count; i++)
             {

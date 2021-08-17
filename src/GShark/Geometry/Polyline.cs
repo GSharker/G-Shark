@@ -299,7 +299,7 @@ namespace GShark.Geometry
             knots.Add(lengthSum - 1);
 
             Knots = knots;
-            ControlPoints = LinearAlgebra.PointsHomogeniser(this, weights);
+            ControlPoints = Point4.PointsHomogeniser(this, weights);
         }
 
         /// <summary>

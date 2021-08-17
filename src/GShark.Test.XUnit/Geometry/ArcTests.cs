@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
@@ -89,7 +88,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             bBox2D.Min.EpsilonEquals(new Vector3(11.490667, 0, 0), 6).Should().BeTrue();
             bBox2D.Max.EpsilonEquals(new Vector3(15, 9.641814, 0), 6).Should().BeTrue();
-                       
+
             bBox3D.Min.EpsilonEquals(new Vector3(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
             bBox3D.Max.EpsilonEquals(new Vector3(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
         }
@@ -111,7 +110,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new double[]{ 82.248292, 15.836914, 3.443127 }, new double[] { 80.001066, 9.815219, 5.041724 })]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 80.001066, 9.815219, 5.041724 })]
         [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 74.264416, 36.39316, -1.884313 })]
         public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
         {
@@ -164,7 +163,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Is_A_Curve_Representation_Of_The_Arc_From_0_To_90_Deg()
         {
             // Arrange
-            double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
+            double[] weightChecks = new[] { 1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0 };
             Point3[] ptChecks = new[] {
                 new Point3(0, 20, 0),
                 new Point3(0, 20, 9.661101312331581),
@@ -229,7 +228,7 @@ namespace GShark.Test.XUnit.Geometry
                     arc.Knots[i].Should().Be(0);
                     arc.Knots[i + 7].Should().Be(1);
                 }
-                else if(i<5)
+                else if (i < 5)
                 {
                     arc.Knots[i].Should().Be(0.3333333333333333);
                 }

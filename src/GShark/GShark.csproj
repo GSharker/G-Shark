@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../../media/gshark-logo.png" Pack="true" PackagePath=""/>
+    <None Include="../../media/gshark-logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

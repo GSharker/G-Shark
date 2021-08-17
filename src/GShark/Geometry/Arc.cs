@@ -57,6 +57,19 @@ namespace GShark.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Arc(Point3 pt1, Point3 pt2, Point3 pt3)
         {
+            if (!pt1.IsValid)
+            {
+                throw new Exception("The first point is not valid.");
+            }
+            if (!pt2.IsValid)
+            {
+                throw new Exception("The second point is not valid.");
+            }
+            if (!pt3.IsValid)
+            {
+                throw new Exception("The third point is not valid.");
+            }
+
             Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
             Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3 xDir = pt1 - center;
@@ -180,11 +193,29 @@ namespace GShark.Geometry
         /// <returns>An arc.</returns>
         public static Arc ByStartEndDirection(Point3 ptStart, Point3 ptEnd, Vector3 dir)
         {
+            if (!ptStart.IsValid)
+            {
+                throw new Exception("The first point is not valid.");
+            }
+            if (!ptEnd.IsValid)
+            {
+                throw new Exception("The second point is not valid.");
+            }
+            if (!dir.IsValid)
+            {
+                throw new Exception("The tangent is not valid.");
+            }
+
             Vector3 vec0 = dir.Unitize();
             Vector3 vec1 = (ptEnd - ptStart).Unitize();
-            if (vec1.Length == 0.0)
+            if (vec1.Length.Equals(0.0))
             {
-                throw new Exception("Points must not be coincident.");
+                throw new Exception("Start and End point of the arc are coincident. Enable to create an arc");
+            }
+
+            if (vec0.IsParallelTo(vec1) != 0)
+            {
+                throw new Exception("Tangent is parallel with the endpoints. Enable to create an arc");
             }
 
             Vector3 vec2 = (vec0 + vec1).Unitize();
@@ -233,7 +264,7 @@ namespace GShark.Geometry
             double twoPi = 2.0 * Math.PI;
 
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharkMath.MaxTolerance && Math.Abs(v) < GeoSharkMath.MaxTolerance)
+            if (Math.Abs(u) < GeoSharkMath.MinTolerance && Math.Abs(v) < GeoSharkMath.MinTolerance)
             {
                 return PointAt(0.0);
             }
@@ -293,19 +324,19 @@ namespace GShark.Geometry
 
             // Number of arcs.
             double piNum = 0.5 * Math.PI;
-            if (Angle <= piNum)
+            if ((Angle - piNum) <= GeoSharkMath.Epsilon)
             {
                 numberOfArc = 1;
                 ctrPts = new Point3[3];
                 weights = new double[3];
             }
-            else if (Angle <= piNum * 2)
+            else if ((Angle - piNum * 2) <= GeoSharkMath.Epsilon)
             {
                 numberOfArc = 2;
                 ctrPts = new Point3[5];
                 weights = new double[5];
             }
-            else if (Angle <= piNum * 3)
+            else if ((Angle - piNum * 3) <= GeoSharkMath.Epsilon)
             {
                 numberOfArc = 3;
                 ctrPts = new Point3[7];
@@ -341,7 +372,7 @@ namespace GShark.Geometry
                 Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
                 Line ln0 = new Line(p0, t0.Unitize() + p0);
                 Line ln1 = new Line(p2, t2.Unitize() + p2);
-                bool intersect = Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out double u1);
+                Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out _);
                 Vector3 p1 = p0 + (t0 * u0);
 
                 weights[index + 1] = weight1;
@@ -382,7 +413,7 @@ namespace GShark.Geometry
 
             Knots = knots;
             LocationPoints = ctrPts.ToList();
-            ControlPoints = LinearAlgebra.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
+            ControlPoints = Point4.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
         /// <summary>
@@ -403,8 +434,8 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MaxTolerance &&
-                   Math.Abs(Angle - other.Angle) < GeoSharkMath.MaxTolerance &&
+            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MinTolerance &&
+                   Math.Abs(Angle - other.Angle) < GeoSharkMath.MinTolerance &&
                    Plane == other.Plane;
         }
 

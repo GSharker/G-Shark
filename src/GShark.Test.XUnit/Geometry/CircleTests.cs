@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -98,7 +97,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
-            Point3 expectedPt = new Point3(pts[0],pts[1],pts[2]);
+            Point3 expectedPt = new Point3(pts[0], pts[1], pts[2]);
             Circle circle = _circle2D;
 
             // Act

@@ -2,7 +2,6 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -55,8 +54,8 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3 (5,5,5),
                 new Point3 (0,5,0)
             };
-            Point3 expectedPt00 = new Point3 ( 3.25, 3.28125, 1.875);
-            Point3 expectedPt01 = new Point3 ( 4.75, 3.75, 3.75 );
+            Point3 expectedPt00 = new Point3(3.25, 3.28125, 1.875);
+            Point3 expectedPt01 = new Point3(4.75, 3.75, 3.75);
 
             // Act
             NurbsCurve nurbsCurve = new NurbsCurve(controlPts, degree).Close();
@@ -65,7 +64,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
-            nurbsCurve.LocationPoints[1].DistanceTo(nurbsCurve.LocationPoints[nurbsCurve.LocationPoints.Count-1]).Should().BeLessThan(GeoSharkMath.Epsilon);
+            nurbsCurve.LocationPoints[1].DistanceTo(nurbsCurve.LocationPoints[^1]).Should().BeLessThan(GeoSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
             nurbsCurve.Domain.T0.Should().Be(0.0);
             nurbsCurve.Domain.T1.Should().Be(1.0);
@@ -110,26 +109,6 @@ namespace GShark.Test.XUnit.Geometry
             nurbsCurve.Degree.Should().Be(2);
             nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, CurveData.pts.Count));
             nurbsCurve.Knots.Should().BeEquivalentTo(new KnotVector(CurveData.degree, CurveData.pts.Count));
-        }
-
-        [Fact]
-        public void NurbsCurve_Throws_An_Exception_If_ControlPoints_Are_Null()
-        {
-            // Act
-            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, CurveData.knots, null, CurveData.weights);
-
-            // Assert
-            curve.Should().Throw<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Null()
-        {
-            // Act
-            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, null, CurveData.pts, CurveData.weights);
-
-            // Assert
-            curve.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -186,8 +165,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_Periodic_Curve()
         {
             // Arrange 
-            Point3 expectedPtMin = new Point3 ( 0, 0.208333, 0.208333 );
-            Point3 expectedPtMax = new Point3 ( 4.354648, 5, 3.333333 );
+            Point3 expectedPtMin = new Point3(0, 0.208333, 0.208333);
+            Point3 expectedPtMax = new Point3(4.354648, 5, 3.333333);
 
             // Act
             BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsCurve().BoundingBox;
@@ -195,61 +174,6 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GeoSharkMath.MaxTolerance);
             bBox.Min.DistanceTo(expectedPtMin).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-        }
-
-        [Fact]
-        public void NurbsCurve_Throws_An_Exception_If_Degree_Is_Less_Than_One()
-        {
-            // Act
-            Func<NurbsCurve> curve = () => new NurbsCurve(0, CurveData.knots, CurveData.pts, CurveData.weights);
-
-            // Assert
-            curve.Should().Throw<ArgumentException>()
-                .WithMessage("Degree must be greater than 1!");
-        }
-
-        // Confirm the relations between degree(p), number of control points(n+1), and the number of knots(m+1).
-        // m = p + n + 1
-        [Fact]
-        public void NurbsCurve_Throws_An_Exception_If_Is_Not_Valid_The_Relation_Between_Pts_Degree_Knots()
-        {
-            // Act
-            Func<NurbsCurve> curve = () => new NurbsCurve(1, CurveData.knots, CurveData.pts, CurveData.weights);
-
-            // Assert
-            curve.Should().Throw<ArgumentException>()
-                .WithMessage("Number of points + degree + 1 must equal knots length!");
-        }
-
-        [Fact]
-        public void NurbsCurve_Throws_An_Exception_If_Knots_Are_Not_Valid()
-        {
-            // Arrange
-            KnotVector knots = new KnotVector { 0, 0, 1, 1, 2, 2 };
-
-            // Act
-            Func<NurbsCurve> curve = () => new NurbsCurve(CurveData.degree, knots, CurveData.pts, CurveData.weights);
-
-            // Assert
-            curve.Should().Throw<ArgumentException>()
-                .WithMessage("Invalid knot format! Should begin with degree + 1 repeats and end with degree + 1 repeats!");
-        }
-
-        [Fact]
-        public void It_Returns_A_Copy_Of_A_NurbsCurve()
-        {
-            // Arrange
-            var nurbsCurve = NurbsCurveCollection.NurbsCurvePlanarExample();
-
-            // Act
-            NurbsCurve nurbsCurveCopy = nurbsCurve.Clone();
-
-            // Assert
-            nurbsCurveCopy.Should().NotBeNull();
-            nurbsCurveCopy.Equals(nurbsCurve).Should().BeTrue();
-            nurbsCurveCopy.Should().NotBeSameAs(nurbsCurve); // Checks at reference level are different.
-            nurbsCurveCopy.Degree.Should().Be(nurbsCurve.Degree);
-            nurbsCurveCopy.Weights.Should().BeEquivalentTo(nurbsCurve.Weights);
         }
 
         [Fact]
@@ -292,10 +216,10 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             curveClamped.Knots.IsClamped(curveClamped.Degree).Should().BeTrue();
             curveClamped.ControlPoints[0]
-                .EpsilonEquals(curveClamped.ControlPoints[curveClamped.ControlPoints.Count - 1], GeoSharkMath.MaxTolerance)
+                .EpsilonEquals(curveClamped.ControlPoints[^1], GeoSharkMath.MaxTolerance)
                 .Should().BeTrue();
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
-            curve.ControlPoints[curve.ControlPoints.Count - 3].Should().BeEquivalentTo(curveClamped.ControlPoints[curveClamped.ControlPoints.Count - 3]);
+            curve.ControlPoints[^3].Should().BeEquivalentTo(curveClamped.ControlPoints[^3]);
         }
     }
 }

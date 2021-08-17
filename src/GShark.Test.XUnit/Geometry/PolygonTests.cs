@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using System;
 using GShark.Geometry.Interfaces;
+using System;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,10 +18,10 @@ namespace GShark.Test.XUnit.Geometry
 
         public static Point3[] Planar2D => new[]
         {
-            new Point3(1d, 1d, 0d), 
+            new Point3(1d, 1d, 0d),
             new Point3(10d, 1d, 0d),
-            new Point3(2d, 10d, 0d), 
-            new Point3(1d, 10d, 0d), 
+            new Point3(2d, 10d, 0d),
+            new Point3(1d, 10d, 0d),
             new Point3(1d, 1d, 0)
         };
 
@@ -94,7 +94,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             poly2DArea.Should().Be(45);
-            poly3DArea.Should().BeApproximately(480.580633, GeoSharkMath.MinTolerance);
+            poly3DArea.Should().BeApproximately(480.580630021221, GeoSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -104,8 +104,8 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Point3 centroid2DExpected = new Point3( 3.5, 5.5, 0.0);
-            Point3 centroid3DExpected = new Point3( 86.266409, 29.701102, -0.227864);
+            Point3 centroid2DExpected = new Point3(3.5, 5.5, 0.0);
+            Point3 centroid3DExpected = new Point3(86.266409, 29.701102, -0.227864);
 
             // Act
             Point3 poly2DCentroid = poly2D.CentroidByVertices;
@@ -123,8 +123,8 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Point3 centroid2DExpected = new Point3( 4.033333, 4.3, 0);
-            Point3 centroid3DExpected = new Point3( 87.620479, 29.285305, -0.129984);
+            Point3 centroid2DExpected = new Point3(4.033333, 4.3, 0);
+            Point3 centroid3DExpected = new Point3(87.620479, 29.285305, -0.129984);
 
             // Act
             Point3 poly2DCentroid = poly2D.CentroidByArea;

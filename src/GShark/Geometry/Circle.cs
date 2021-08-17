@@ -2,7 +2,6 @@
 using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -101,7 +100,7 @@ namespace GShark.Geometry
                 List<double> weights = Sets.RepeatData(1.0, 9);
                 weights[1] = weights[3] = weights[5] = weights[7] = 1.0 / Math.Sqrt(2.0);
 
-                return LinearAlgebra.PointsHomogeniser(LocationPoints, weights.ToList());
+                return Point4.PointsHomogeniser(LocationPoints, weights.ToList());
             }
         }
 
@@ -174,7 +173,7 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharkMath.MaxTolerance && Math.Abs(v) < GeoSharkMath.MaxTolerance)
+            if (Math.Abs(u) < GeoSharkMath.MinTolerance && Math.Abs(v) < GeoSharkMath.MinTolerance)
             {
                 return PointAt(0.0);
             }
@@ -217,7 +216,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MaxTolerance && Plane == other.Plane;
+            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MinTolerance && Plane == other.Plane;
         }
 
         /// <summary>

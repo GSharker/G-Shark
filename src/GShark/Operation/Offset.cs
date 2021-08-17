@@ -100,7 +100,7 @@ namespace GShark.Operation
                     continue;
                 }
 
-                Intersection:
+            Intersection:
                 bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
                 if (!ccx) continue;
                 offsetPts[k] = pt;
