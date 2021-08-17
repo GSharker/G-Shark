@@ -29,7 +29,7 @@ namespace GShark.Test.XUnit.Core
             int degree = 4;
             int ctrlPts = 12;
             KnotVector expectedKnotVector = new KnotVector { 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.0, 1.0, 1.0, 1.0 };
-            
+
             // Act
             KnotVector knots = new KnotVector(degree, ctrlPts);
 
@@ -242,6 +242,20 @@ namespace GShark.Test.XUnit.Core
 
             // Arrange
             reversedKnots.Should().BeEquivalentTo(expectedKnotVector);
+        }
+
+        [Fact]
+        public void It_Creates_A_Copy_Of_The_Knot_Vector()
+        {
+            // Assert
+            KnotVector knotVector = new KnotVector { 0, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3.3, 4, 4, 4 };
+
+            // Act
+            KnotVector knotVectorCopy = knotVector.Copy();
+
+            // Arrange
+            knotVectorCopy.Should().NotBeSameAs(knotVector);
+            knotVectorCopy.Should().BeEquivalentTo(knotVector);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace GShark.Geometry
         /// <param name="pt3">Third point representing the y direction.</param>
         public Plane(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            if(Trigonometry.ArePointsCollinear(pt1, pt2, pt3))
+            if (Trigonometry.ArePointsCollinear(pt1, pt2, pt3))
             {
                 throw new Exception("Plane cannot be created, the tree points must not be collinear");
             }
@@ -129,7 +129,7 @@ namespace GShark.Geometry
                 var areAxesOrthogonal = Vector3.DotProduct(XAxis, YAxis) == 0 && Vector3.DotProduct(YAxis, ZAxis) == 0;
 
                 if (areAxesValid && areAxesOrthogonal) return true;
-                
+
                 return false;
             }
         }
@@ -199,7 +199,7 @@ namespace GShark.Geometry
         {
             var xAxis = YAxis;
             var yAxis = XAxis;
-            return  new Plane(Origin, xAxis, yAxis);
+            return new Plane(Origin, xAxis, yAxis);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace GShark.Geometry
 
             double determinantMax = Math.Max(determinantX, Math.Max(determinantY, determinantZ));
 
-            if(determinantMax <= 0.0)
+            if (determinantMax <= 0.0)
             {
                 throw new Exception("The points don't span a plane.");
             }
@@ -309,8 +309,8 @@ namespace GShark.Geometry
         {
             Point3 transformedOrigin = Origin.Transform(transformation);
 
-           var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
-           var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
+            var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
+            var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
 
             return new Plane(transformedOrigin, xDir, yDir);
         }

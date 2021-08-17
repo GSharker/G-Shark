@@ -1,7 +1,7 @@
-﻿using GShark.Geometry;
+﻿using FluentAssertions;
+using GShark.Geometry;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,12 +10,12 @@ namespace GShark.Test.XUnit.Geometry
     public class ConvexHullTests
     {
         private readonly ITestOutputHelper _testOutput;
-        
+
         public ConvexHullTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
-        
+
         [Fact]
         public void It_Generates_A_Convex_Hull_For_A_3d_Set_Of_Points()
         {
@@ -52,7 +52,7 @@ namespace GShark.Test.XUnit.Geometry
 
             //Act
             ConvexHull hull = new ConvexHull();
-            hull.GenerateHull(pointSet,true, ref vertices, ref triangles, ref normals);
+            hull.GenerateHull(pointSet, true, ref vertices, ref triangles, ref normals);
 
             //Assert
             vertices.ForEach(x => _testOutput.WriteLine(x.ToString()));

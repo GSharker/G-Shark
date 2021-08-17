@@ -6,7 +6,6 @@ using GShark.Geometry.Interfaces;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -31,15 +30,14 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 3;
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(2,2,0),
                 new Point3(4,12,0),
                 new Point3(7,12,0),
                 new Point3(15,2,0)
             };
-            KnotVector knots = new KnotVector(degree, controlPts.Count);
-            NurbsCurve curve = new NurbsCurve(degree, knots, controlPts);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
             List<ICurve> curves = curve.SplitAt(parameter);
@@ -139,11 +137,11 @@ namespace GShark.Test.XUnit.Operation
             (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(segments);
 
             // Assert
-            divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
+            parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
             for (int i = 0; i < tValuesExpected.Length; i++)
             {
-                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -192,7 +190,6 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(-0.354248010530259,7.14708134218695,4.20008044306221)
             };
             int curveDegree = 3;
-            List<double> curveKnots = new List<double>() {0, 0, 0, 286.968460470094, 573.936920940188, 573.936920940188, 573.936920940188};
 
             NurbsCurve curve = new NurbsCurve(curvePoints, curveDegree);
             List<Plane> expectedPerpFrames = new List<Plane>()
@@ -290,7 +287,7 @@ namespace GShark.Test.XUnit.Operation
             {
                 _testOutput.WriteLine(perpFrame.ToString());
             }
-            
+
             //Assert
             for (int i = 0; i < perpFrames.Count; i++)
             {

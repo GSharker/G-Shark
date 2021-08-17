@@ -1,11 +1,6 @@
-﻿using System;
+﻿using GShark.Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
-using GShark.Core;
 
 namespace GShark.Geometry
 {
@@ -53,7 +48,7 @@ namespace GShark.Geometry
         public Point3(Point4 point)
         {
             double w = (Math.Abs(point.W - 1.0) > GeoSharkMath.Epsilon && point.W != 0.0) ? 1.0 / point.W : 1.0;
-            
+
             X = point.X * w;
             Y = point.Y * w;
             Z = point.Z * w;
@@ -237,7 +232,7 @@ namespace GShark.Geometry
         /// <returns>The resulting Vector.</returns>
         public static implicit operator Vector(Point3 point)
         {
-            return new Vector{ point.X, point.Y, point.Z};
+            return new Vector { point.X, point.Y, point.Z };
         }
 
         /// <summary>
@@ -507,11 +502,6 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other">Other point for distance measurement.</param>
         /// <returns>The length of the line between this and the other point; or 0 if any of the points is not valid.</returns>
-        /// <example>
-        /// <code source='examples\vbnet\ex_intersectcurves.vb' lang='vbnet'/>
-        /// <code source='examples\cs\ex_intersectcurves.cs' lang='cs'/>
-        /// <code source='examples\py\ex_intersectcurves.py' lang='py'/>
-        /// </example>
         public double DistanceTo(Point3 other)
         {
             double d;

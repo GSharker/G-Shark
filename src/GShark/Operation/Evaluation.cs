@@ -140,7 +140,7 @@ namespace GShark.Operation
         /// <param name="knots">The knot vector of the curve.</param>
         /// <param name="degree">The value degree of the curve.</param>
         /// <param name="t">The parameter value where the curve is evaluated.</param>
-        internal static void DeBoor(ref List<Point3> controlPts, KnotVector knots, int degree, double t)
+        internal static void DeBoor(ref List<Point4> controlPts, KnotVector knots, int degree, double t)
         {
             if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharkMath.Epsilon)
             {
@@ -165,8 +165,8 @@ namespace GShark.Operation
                     double alpha0 = deltaT[j] / (k1 - k0);
                     double alpha1 = 1.0 - alpha0;
 
-                    Point3 cv1 = controlPts[j + 1];
-                    Point3 cv0 = controlPts[j];
+                    Point4 cv1 = controlPts[j + 1];
+                    Point4 cv0 = controlPts[j];
 
                     controlPts[j] = (cv0 * alpha0) + (cv1 * alpha1);
                 }
@@ -182,19 +182,19 @@ namespace GShark.Operation
         /// <returns>The evaluated point on the curve.</returns>
         public static Point3 CurvePointAt(ICurve curve, double t)
         {
-            List<Point4> curveHomogenizedPoints = curve.ControlPoints;
+            List<Point4> controlPts = curve.ControlPoints;
             KnotVector knots = curve.Knots;
 
             int n = knots.Count - curve.Degree - 2;
 
             int knotSpan = knots.Span(n, curve.Degree, t);
             List<double> basisValue = BasisFunction(curve.Degree, knots, knotSpan, t);
-            Point4 pointOnCurve = new Point4(0, 0, 0, 0);
+            Point4 pointOnCurve = Point4.Zero;
 
             for (int i = 0; i <= curve.Degree; i++)
             {
                 double valToMultiply = basisValue[i];
-                Point4 pt = curveHomogenizedPoints[knotSpan - curve.Degree + i];
+                Point4 pt = controlPts[knotSpan - curve.Degree + i];
 
                 pointOnCurve.X += valToMultiply * pt.X;
                 pointOnCurve.Y += valToMultiply * pt.Y;
@@ -202,7 +202,7 @@ namespace GShark.Operation
                 pointOnCurve.W += valToMultiply * pt.W;
             }
 
-            return LinearAlgebra.PointDehomogenizer(pointOnCurve);
+            return new Point3(pointOnCurve);
         }
 
 
@@ -375,9 +375,9 @@ namespace GShark.Operation
             // Where A(t) is the vector - valued function whose coordinates are the first three coordinates
             // of an homogenized pts.
             // Correspond in the book to Aders.
-            List<Point3> rationalDerivativePoints = LinearAlgebra.RationalPoints(derivatives);
+            List<Point3> rationalDerivativePoints = Point4.RationalPoints(derivatives);
             // Correspond in the book to wDers.
-            List<double> weightDers = LinearAlgebra.GetWeights(derivatives);
+            List<double> weightDers = Point4.GetWeights(derivatives);
             List<Vector3> CK = new List<Vector3>();
 
             for (int k = 0; k < numberOfDerivatives + 1; k++)
@@ -449,8 +449,7 @@ namespace GShark.Operation
         /// <param name="order">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <param name="knots">Sets of non-decreasing knot values.</param>
         /// <returns>The derivatives at the given parameter.</returns>
-        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree,
-            int order, KnotVector knots)
+        public static List<Vector> DerivativeBasisFunctionsGivenNI(int span, double parameter, int degree, int order, KnotVector knots)
         {
             Vector left = Vector.Zero1d(degree + 1);
             Vector right = Vector.Zero1d(degree + 1);
@@ -592,7 +591,7 @@ namespace GShark.Operation
             {
                 for (int l = 0; l < numDerivs - k + 1; l++)
                 {
-                    Vector3 t = derivatives.Item1[k,l];
+                    Vector3 t = derivatives.Item1[k, l];
                     for (int j = 1; j < l + 1; j++)
                     {
                         t -= SKL[k, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[0, j]);
@@ -604,7 +603,7 @@ namespace GShark.Operation
                         Vector3 t2 = Vector3.Zero;
                         for (int j = 1; j < l + 1; j++)
                         {
-                            t2 += SKL[k - i,l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
+                            t2 += SKL[k - i, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
                         }
 
                         t -= t2 * LinearAlgebra.GetBinomial(k, i);
@@ -686,7 +685,7 @@ namespace GShark.Operation
         /// <param name="u">The U parameter on the surface at which the point is to be evaluated.</param>
         /// <param name="v">The V parameter on the surface at which the point is to be evaluated.</param>
         /// <returns>The evaluated point.</returns>
-        public static Point3 SurfacePointAt(NurbsSurface surface, double u, double v)
+        public static Point4 SurfacePointAt(NurbsSurface surface, double u, double v)
         {
             if (u < 0.0 || u > 1.0)
             {
@@ -705,80 +704,26 @@ namespace GShark.Operation
             List<double> basisUValue = BasisFunction(surface.DegreeU, surface.KnotsU, knotSpanU, u);
             List<double> basisVValue = BasisFunction(surface.DegreeV, surface.KnotsV, knotSpanV, v);
             int uIndex = knotSpanU - surface.DegreeU;
-            Point3 evaluatedPt = Point3.Origin;
+            Point4 evaluatedPt = Point4.Zero;
 
             for (int l = 0; l < surface.DegreeV + 1; l++)
             {
-                var temp = Point3.Origin;
+                var temp = Point4.Zero;
                 var vIndex = knotSpanV - surface.DegreeV + l;
                 for (int k = 0; k < surface.DegreeU + 1; k++)
                 {
-                    temp.X += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].X;
-                    temp.Y += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Y;
-                    temp.Z += basisUValue[k] * surface.LocationPoints[uIndex + k][vIndex].Z;
+                    temp.X += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].X;
+                    temp.Y += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Y;
+                    temp.Z += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].Z;
+                    temp.W += basisUValue[k] * surface.ControlPoints[uIndex + k][vIndex].W;
                 }
 
                 evaluatedPt.X += basisVValue[l] * temp.X;
                 evaluatedPt.Y += basisVValue[l] * temp.Y;
                 evaluatedPt.Z += basisVValue[l] * temp.Z;
+                evaluatedPt.W += basisVValue[l] * temp.W;
             }
             return evaluatedPt;
         }
-
-        ///// <summary>
-        ///// Extracts the iso-curve in u or v direction at a specified parameter.
-        ///// </summary>
-        ///// <param name="surface">The surface to be evaluated</param>
-        ///// <param name="t">The parameter to be evaluated. Default value is 0.0 and will return the edge curve in the u direction</param>
-        ///// <param name="useU">Direction of the surface to be evaluated. Default value will consider the u direction.</param>
-        ///// <returns>Curve representing the iso-curve of the surface.</returns>
-        //public static ICurve SurfaceIsoCurve(NurbsSurface surface, double t = 0, bool useU = true)
-        //{
-        //    KnotVector knots = useU ? surface.KnotsU : surface.KnotsV;
-        //    int degree = useU ? surface.DegreeU : surface.DegreeV;
-        //    Dictionary<double, int> knotMults = knots.Multiplicities();
-
-        //    int reqKnotIndex = -1;
-        //    foreach (double i in knotMults.Keys)
-        //    {
-        //        if (Math.Abs(t - i) < GeoSharkMath.Epsilon)
-        //        {
-        //            reqKnotIndex = knotMults.GetValueOrDefault(i);
-        //            break;
-        //        }
-        //    }
-
-        //    int numKnotsToInsert = degree + 1;
-        //    if (reqKnotIndex >= 0)
-        //    {
-        //        numKnotsToInsert -= knotMults.GetValueOrDefault(reqKnotIndex);
-        //    }
-
-        //    //Insert the knots
-        //    NurbsSurface newSrf = numKnotsToInsert > 0 ? Modify.SurfaceKnotRefine(surface, new KnotVector(Sets.RepeatData(t, numKnotsToInsert)), useU) : surface;
-        //    int span = knots.Span(degree, t);
-
-        //    if (Math.Abs(t - knots[0]) < GeoSharkMath.Epsilon)
-        //    {
-        //        span = 0;
-        //    }
-
-        //    if (Math.Abs(t - knots[knots.Count - 1]) < GeoSharkMath.Epsilon)
-        //    {
-        //        span = useU ? newSrf.LocationPoints.Count - 1 : newSrf.LocationPoints[0].Count;
-        //    }
-
-        //    List<Point3d> ctrlPts = new List<Point3d>();
-        //    if (!useU)
-        //    {
-        //        foreach (var row in newSrf.LocationPoints)
-        //        {
-        //            ctrlPts.Add(new Point3d(row[span][0], row[span][1], row[span][2]));
-        //        }
-
-        //        return new NurbsCurve(newSrf.DegreeU, newSrf.KnotsU, ctrlPts);
-        //    }
-        //    return new NurbsCurve(newSrf.DegreeV, newSrf.KnotsV, newSrf.LocationPoints[span]);
-        //}
     }
 }

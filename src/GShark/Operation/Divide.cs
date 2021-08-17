@@ -2,9 +2,10 @@
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
+using GShark.Operation.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace GShark.Operation
 {
