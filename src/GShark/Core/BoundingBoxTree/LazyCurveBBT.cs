@@ -40,7 +40,7 @@ namespace GShark.Core.BoundingBoxTree
             List<ICurve> curves = _curve.SplitAt(t);
 
             return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>
-                ( new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
+                (new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
         }
 
         public ICurve Yield()
