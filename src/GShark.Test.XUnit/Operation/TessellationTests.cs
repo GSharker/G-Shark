@@ -104,8 +104,8 @@ namespace GShark.Test.XUnit.Operation
 
             // Arrange
             pts.Count.Should().Be(tValues.Count).And.Be(2);
-            pts[0].DistanceTo(p1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            pts[1].DistanceTo(p2).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            pts[1].DistanceTo(p2).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -125,8 +125,8 @@ namespace GShark.Test.XUnit.Operation
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);
-            result.pts[0].DistanceTo(p1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            result.pts[^1].DistanceTo(p5).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            result.pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            result.pts[^1].DistanceTo(p5).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]

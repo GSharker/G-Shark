@@ -43,8 +43,8 @@ namespace GShark.Geometry
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
-            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GeoSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
+            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
@@ -111,7 +111,7 @@ namespace GShark.Geometry
             if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
 
             var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
-            return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GeoSharkMath.Epsilon);
+            return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
         /// <summary>

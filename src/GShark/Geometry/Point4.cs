@@ -75,12 +75,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of a control point with all coordinates set as RhinoMath.UnsetValue.
         /// </summary>
-        public static Point4 Unset => new Point4(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+        public static Point4 Unset => new Point4(GSharkMath.UnsetValue, GSharkMath.UnsetValue, GSharkMath.UnsetValue, GSharkMath.UnsetValue);
 
         /// <summary>
-        /// Each coordinate of the a control point must pass the <see cref="GeoSharkMath.IsValidDouble"/> test.
+        /// Each coordinate of the a control point must pass the <see cref="GSharkMath.IsValidDouble"/> test.
         /// </summary>
-        public bool IsValid => GeoSharkMath.IsValidDouble(X) && GeoSharkMath.IsValidDouble(Y) && GeoSharkMath.IsValidDouble(Z);
+        public bool IsValid => GSharkMath.IsValidDouble(X) && GSharkMath.IsValidDouble(Y) && GSharkMath.IsValidDouble(Z);
 
         /// <summary>
         /// Gets the value of a control point with all coordinates set as zero.
@@ -311,10 +311,10 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two control points are equal; otherwise false.</returns>
         public static bool operator ==(Point4 a, Point4 b)
         {
-            return Math.Abs(a.X - b.X) <= GeoSharkMath.Epsilon &&
-                   Math.Abs(a.Y - b.Y) <= GeoSharkMath.Epsilon &&
-                   Math.Abs(a.Z - b.Z) <= GeoSharkMath.Epsilon &&
-                   Math.Abs(a.W - b.W) <= GeoSharkMath.Epsilon;
+            return Math.Abs(a.X - b.X) <= GSharkMath.Epsilon &&
+                   Math.Abs(a.Y - b.Y) <= GSharkMath.Epsilon &&
+                   Math.Abs(a.Z - b.Z) <= GSharkMath.Epsilon &&
+                   Math.Abs(a.W - b.W) <= GSharkMath.Epsilon;
         }
 
         /// <summary>
@@ -597,7 +597,7 @@ namespace GShark.Geometry
         /// <returns>The point representation in the form X,Y,Z,W.</returns>
         public override string ToString()
         {
-            return $"Point4: ({GeoSharkMath.Truncate(X)},{GeoSharkMath.Truncate(Y)},{GeoSharkMath.Truncate(Z)},{GeoSharkMath.Truncate(W)})";
+            return $"Point4: ({GSharkMath.Truncate(X)},{GSharkMath.Truncate(Y)},{GSharkMath.Truncate(Z)},{GSharkMath.Truncate(W)})";
         }
     }
 }

@@ -40,7 +40,7 @@ namespace GShark.Test.XUnit.Operation
             double curveLength = Analyze.BezierCurveLength(curve, 1);
 
             // Assert
-            curveLength.Should().BeApproximately(expectedLength, GeoSharkMath.MaxTolerance);
+            curveLength.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -57,13 +57,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < steps + 1; i++)
             {
                 // Act
-                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GeoSharkMath.MaxTolerance);
+                double t = Analyze.BezierCurveParamAtLength(curve, sumLengths, GSharkMath.MaxTolerance);
 
                 double segmentLength = Analyze.BezierCurveLength(curve, t);
 
                 // Assert
-                t.Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                segmentLength.Should().BeApproximately(sumLengths, GeoSharkMath.MaxTolerance);
+                t.Should().BeApproximately(tValuesExpected[i], GSharkMath.MaxTolerance);
+                segmentLength.Should().BeApproximately(sumLengths, GSharkMath.MaxTolerance);
 
                 sumLengths += length;
             }
@@ -105,8 +105,8 @@ namespace GShark.Test.XUnit.Operation
             var pt = Analyze.CurveClosestPoint(curve, testPt, out double t);
 
             // Assert
-            t.Should().BeApproximately(tValExpected, GeoSharkMath.MaxTolerance);
-            pt.EpsilonEquals(expectedPt, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            t.Should().BeApproximately(tValExpected, GSharkMath.MaxTolerance);
+            pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -143,8 +143,8 @@ namespace GShark.Test.XUnit.Operation
             var closestParameter = Analyze.SurfaceClosestParameter(surface, pt);
 
             // Assert
-            (closestParameter.u - expectedUV.u).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            (closestParameter.v - expectedUV.v).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            (closestParameter.u - expectedUV.u).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (closestParameter.v - expectedUV.v).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         // ToDo: this should be V Direction.
@@ -159,7 +159,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
 
             // Assert
-            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
         }
 
         // ToDo: this should be U Direction.
@@ -176,8 +176,8 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptAt = Isocurve.PointAt(0.5);
 
             // Assert
-            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GeoSharkMath.MinTolerance);
-            ptAt.DistanceTo(expectedPtAt).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
+            ptAt.DistanceTo(expectedPtAt).Should().BeLessThan(GSharkMath.MinTolerance);
         }
     }
 }

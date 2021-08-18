@@ -35,7 +35,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Creates_An_Aligned_BoundingBox()
         {
             // Arrange
-            Plane orientedPlane = Plane.PlaneXY.Rotate(GeoSharkMath.ToRadians(30));
+            Plane orientedPlane = Plane.PlaneXY.Rotate(GSharkMath.ToRadians(30));
             var expectedMin = new Point3(45.662928, 59.230957, -4.22451);
             var expectedMax = new Point3(77.622297, 78.520011, 3.812853);
 
@@ -45,8 +45,8 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             _testOutput.WriteLine(bBox.ToString());
             bBox.Should().NotBeNull();
-            bBox.Min.DistanceTo(expectedMin).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox.Max.DistanceTo(expectedMax).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox.Min.DistanceTo(expectedMin).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox.Max.DistanceTo(expectedMax).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]

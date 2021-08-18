@@ -175,7 +175,7 @@ namespace GShark.ExtendedMethods
 
             var sortedParameters = parameters.OrderBy(x => x).ToArray();
 
-            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GeoSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GSharkMath.MaxTolerance)
             {
                 var tempParams = new double[sortedParameters.Length + 1];
                 tempParams[0] = curve.Domain.T0;
@@ -186,7 +186,7 @@ namespace GShark.ExtendedMethods
                 sortedParameters = tempParams;
             }
 
-            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GeoSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GSharkMath.MaxTolerance)
             {
                 Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
                 sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
@@ -218,8 +218,8 @@ namespace GShark.ExtendedMethods
                 subCurveDomain = new Interval(domain.T1, domain.T0);
             }
 
-            var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GeoSharkMath.MaxTolerance;
-            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GeoSharkMath.MaxTolerance;
+            var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GSharkMath.MaxTolerance;
+            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GSharkMath.MaxTolerance;
 
             if (isT0AtStart && isT1AtEnd)
             {

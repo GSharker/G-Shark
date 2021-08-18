@@ -255,13 +255,13 @@ namespace GShark.Geometry
                 throw new Exception("The points don't span a plane.");
             }
 
-            if (Math.Abs(determinantMax - determinantX) < GeoSharkMath.MaxTolerance)
+            if (Math.Abs(determinantMax - determinantX) < GSharkMath.MaxTolerance)
             {
                 normal[0] = determinantX;
                 normal[1] = xz * yz - xy * zz;
                 normal[2] = xy * yz - xz * yy;
             }
-            else if (Math.Abs(determinantMax - determinantY) < GeoSharkMath.MaxTolerance)
+            else if (Math.Abs(determinantMax - determinantY) < GSharkMath.MaxTolerance)
             {
                 normal[0] = xz * yz - xy * zz;
                 normal[1] = determinantY;

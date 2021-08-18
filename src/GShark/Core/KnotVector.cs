@@ -78,7 +78,7 @@ namespace GShark.Core
 
             for (int i = 0; i < Count; i++)
             {
-                if (!GeoSharkMath.IsValidDouble(this[i]))
+                if (!GSharkMath.IsValidDouble(this[i]))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace GShark.Core
                 {
                     if (i < degree + 1)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
+                        if (Math.Abs(this[i] - rep) > GSharkMath.Epsilon)
                         {
                             return false;
                         }
@@ -100,14 +100,14 @@ namespace GShark.Core
 
                     if (i > Count - degree - 1 && i < Count)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
+                        if (Math.Abs(this[i] - rep) > GSharkMath.Epsilon)
                         {
                             return false;
                         }
                     }
                 }
 
-                if (this[i] < rep - GeoSharkMath.Epsilon)
+                if (this[i] < rep - GSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -125,12 +125,12 @@ namespace GShark.Core
         /// <returns>If true the knot is clamped, if false is unclamped.</returns>
         public bool IsClamped(int degree)
         {
-            if (Math.Abs(this[0] - this[degree]) > GeoSharkMath.Epsilon)
+            if (Math.Abs(this[0] - this[degree]) > GSharkMath.Epsilon)
             {
                 return false;
             }
 
-            return !(Math.Abs(this[Count - 1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
+            return !(Math.Abs(this[Count - 1] - this[Count - degree - 1]) > GSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -181,12 +181,12 @@ namespace GShark.Core
         public int Span(int n, int degree, double parameter)
         {
             // special case if parameter == knots[n+1]
-            if (parameter > this[n + 1] - GeoSharkMath.Epsilon)
+            if (parameter > this[n + 1] - GSharkMath.Epsilon)
             {
                 return n;
             }
 
-            if (parameter < this[degree] + GeoSharkMath.Epsilon)
+            if (parameter < this[degree] + GSharkMath.Epsilon)
             {
                 return degree;
             }
@@ -219,7 +219,7 @@ namespace GShark.Core
         /// <returns>The multiplicity of the knot, or 0 if the knot is not part of the knot vector.</returns>
         public int Multiplicity(double knot)
         {
-            return this.Count(x => Math.Abs(x - knot) <= GeoSharkMath.MinTolerance);
+            return this.Count(x => Math.Abs(x - knot) <= GSharkMath.MinTolerance);
         }
 
         /// <summary>

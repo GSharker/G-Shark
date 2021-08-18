@@ -119,7 +119,7 @@ namespace GShark.Test.XUnit.Geometry
             var xFormedPoint = testPoint.Transform(translation);
 
             //Assert
-            xFormedPoint.EpsilonEquals(expectedPoint, GeoSharkMath.MaxTolerance);
+            xFormedPoint.EpsilonEquals(expectedPoint, GSharkMath.MaxTolerance);
         }
 
         [Fact]

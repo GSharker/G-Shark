@@ -29,7 +29,7 @@ namespace GShark.Test.XUnit.Core
             double valToCheck = LinearAlgebra.GetBinomial(n, k);
 
             // Assert
-            (System.Math.Abs(valToCheck - resultValue) < GeoSharkMath.Epsilon).Should().BeTrue();
+            (System.Math.Abs(valToCheck - resultValue) < GSharkMath.Epsilon).Should().BeTrue();
         }
     }
 }

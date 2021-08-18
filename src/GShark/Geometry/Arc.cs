@@ -264,7 +264,7 @@ namespace GShark.Geometry
             double twoPi = 2.0 * Math.PI;
 
             (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GeoSharkMath.MinTolerance && Math.Abs(v) < GeoSharkMath.MinTolerance)
+            if (Math.Abs(u) < GSharkMath.MinTolerance && Math.Abs(v) < GSharkMath.MinTolerance)
             {
                 return PointAt(0.0);
             }
@@ -324,19 +324,19 @@ namespace GShark.Geometry
 
             // Number of arcs.
             double piNum = 0.5 * Math.PI;
-            if ((Angle - piNum) <= GeoSharkMath.Epsilon)
+            if ((Angle - piNum) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 1;
                 ctrPts = new Point3[3];
                 weights = new double[3];
             }
-            else if ((Angle - piNum * 2) <= GeoSharkMath.Epsilon)
+            else if ((Angle - piNum * 2) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 2;
                 ctrPts = new Point3[5];
                 weights = new double[5];
             }
-            else if ((Angle - piNum * 3) <= GeoSharkMath.Epsilon)
+            else if ((Angle - piNum * 3) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 3;
                 ctrPts = new Point3[7];
@@ -434,8 +434,8 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Math.Abs(Radius - other.Radius) < GeoSharkMath.MinTolerance &&
-                   Math.Abs(Angle - other.Angle) < GeoSharkMath.MinTolerance &&
+            return Math.Abs(Radius - other.Radius) < GSharkMath.MinTolerance &&
+                   Math.Abs(Angle - other.Angle) < GSharkMath.MinTolerance &&
                    Plane == other.Plane;
         }
 
@@ -454,7 +454,7 @@ namespace GShark.Geometry
         /// <returns>Text value.</returns>
         public override string ToString()
         {
-            return $"Arc(R:{Radius} - A:{GeoSharkMath.ToDegrees(Angle)})";
+            return $"Arc(R:{Radius} - A:{GSharkMath.ToDegrees(Angle)})";
         }
 
 
