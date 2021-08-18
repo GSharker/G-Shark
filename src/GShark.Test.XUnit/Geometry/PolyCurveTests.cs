@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using GShark.Operation;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -110,9 +111,19 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
 
             // Act            
+            var intervals = PolyCurve.CurveDomainsFromLengths(_polycurve);
 
             // Arrange
-            _polycurve.GetCurveDomainsFromLength();
+            intervals.Count.Should().Be(3);
+            intervals.First().Min.Should().Be(0);
+            intervals.Last().Max.Should().Be(1);
+        }
+
+        [Fact]
+        public void It_Returns_A_Point_At_Length()
+        {
+            var p1 = _polycurve.PointAtLength(15);
+            var p2 = _polycurve.PointAtLength(22);
         }
     }
 }

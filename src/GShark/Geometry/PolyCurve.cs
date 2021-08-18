@@ -1,5 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Interfaces;
+using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,8 @@ namespace GShark.Geometry
         /// <summary>
         /// Initializes a new polycurve from an existing curve.
         /// </summary>
-        public PolyCurve(ICurve curve) {
+        public PolyCurve(ICurve curve)
+        {
             this.Segments.Add(curve);
         }
 
@@ -96,7 +98,7 @@ namespace GShark.Geometry
         /// Explodes this PolyCurve into a list of Curve segments.
         /// </summary>
         /// <returns></returns>
-        public ICollection<ICurve> Explode()
+        public IList<ICurve> Explode()
         {
             return this.Segments.Select(crv => crv).ToList();
         }
@@ -106,7 +108,12 @@ namespace GShark.Geometry
         /// <summary>
         /// The segments of the PolyCurve
         /// </summary>
-        public ICollection<ICurve> Segments { get; set; } = new List<ICurve>();
+        public IList<ICurve> Segments { get; set; } = new List<ICurve>();
+
+        /// <summary>
+        /// Ordered list of segment lengths
+        /// </summary>
+        public IList<double> SegmentsLengths => GetSegmentLength();
 
         /// <summary>
         /// Returns the start point of the polycurve
@@ -164,6 +171,54 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Returns a point at a given length along the polycurve
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
+        public Point3 PointAtLength(double l)
+        {
+            double progressiveLength = 0;
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if(l > this.Length)
+            {
+                throw new InvalidOperationException("Length value is bigger than the polycurve total length");
+            }
+            else
+            {
+                for (int i = 0; i < this.SegmentCount; i++)
+                {
+                    var segment = this.Segments[i];
+                    progressiveLength += this.SegmentsLengths[i];
+                    if (l <= progressiveLength) // This is the right segment
+                    {
+                        double segmentsLength = i == 0 ? l : l - this.SegmentsLengths[i-1];
+                        var t = segment.GetType().Name;
+                        switch (t)
+                        {
+                            case "NurbsCurve":
+                                var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentsLength, GSharkMath.Epsilon);
+                                return ((NurbsCurve)segment).PointAt(par);
+                            case "Line":
+                                var line = ((Line)segment);
+                                var dir = (line.End - line.Start).Amplify(segmentsLength);
+                                return ((Line)segment).Start.Transform(Transform.Translation(dir));
+                            case "Arc":
+                                l = ((Arc)segment).Length;
+                                break;
+                            case "PolyCurve":
+                                l = ((PolyCurve)segment).Length;
+                                break;
+                        }
+                    }
+                }
+            }
+            return new Point3();
+        }
+
+        /// <summary>
         /// It calculates the total length of a polycurve based on the different segments.
         /// If there is a polycurve a segment il will recoursively calculate the length of the nested segments.
         /// </summary>
@@ -174,29 +229,71 @@ namespace GShark.Geometry
             foreach (ICurve segment in this.Segments)
             {
                 var t = segment.GetType().Name;
+                double l = 0;
                 switch (t)
                 {
                     case "NurbsCurve":
-                        length += ((NurbsCurve)segment).Length();
+                        l = ((NurbsCurve)segment).Length();
                         break;
                     case "Line":
-                        length += ((Line)segment).Length;
+                        l = ((Line)segment).Length;
                         break;
                     case "Arc":
-                        length += ((Arc)segment).Length;
+                        l = ((Arc)segment).Length;
                         break;
                     case "PolyCurve":
-                        length += ((PolyCurve)segment).Length;
+                        l = ((PolyCurve)segment).Length;
                         break;
                 }
+                length += l;
+                this.SegmentsLengths.Add(l);
             }
             return length;
         }
 
-        public List<Interval> GetCurveDomainsFromLength()
+        /// <summary>
+        /// Returns a list of progressive curve lengths
+        /// If there is a polycurve a segment il will recoursively calculate the length of the nested segments.
+        /// </summary>
+        /// <returns></returns>
+        private List<double> GetSegmentLength()
+        {
+            var segmentLengths = new List<double>();
+            foreach (ICurve segment in this.Segments)
+            {
+                var t = segment.GetType().Name;
+                double l = 0;
+                switch (t)
+                {
+                    case "NurbsCurve":
+                        l = ((NurbsCurve)segment).Length();
+                        break;
+                    case "Line":
+                        l = ((Line)segment).Length;
+                        break;
+                    case "Arc":
+                        l = ((Arc)segment).Length;
+                        break;
+                    case "PolyCurve":
+                        l = ((PolyCurve)segment).Length;
+                        break;
+                }
+                segmentLengths.Add(l);
+            }
+            return segmentLengths;
+        }
+
+        public static List<Interval> CurveDomainsFromLengths(PolyCurve curve)
         {
             var intervals = new List<Interval>();
-            
+            double min = 0, max = 0;
+            foreach (double length in curve.SegmentsLengths)
+            {
+                double proportion = length / curve.Length;
+                max = min + proportion;
+                intervals.Add(new Interval(min, max));
+                min = max;
+            }
             return intervals;
         }
 
