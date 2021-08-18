@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
-using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -36,21 +32,39 @@ namespace GShark.Test.XUnit.Geometry
 
             _nurbs = new NurbsCurve(pts, degree);
             _line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            _arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));            
+            _arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
+
+            _polycurve = new PolyCurve();
+            _polycurve.Append(_nurbs);
+            _polycurve.Append(_line);
+            _polycurve.Append(_arc);
         }
 
         [Fact]
-        public void It_Returns_A_PolyCurve()
+        public void It_Returns_A_PolyCurve_With_Three_Segments()
         {
             // Arrange
-            int numberOfExpectedSegments = 1;
+            int numberOfExpectedSegments = 3;
 
-            // Act
-            _polycurve = new PolyCurve(_nurbs);
+            // Act            
 
             // Arrange
             _polycurve.Should().NotBeNull();
             _polycurve.SegmentCount.Should().Be(numberOfExpectedSegments);
+        }
+
+        [Fact]
+        public void It_Returns_A_PolyCurve_Start_And_End_Points()
+        {
+            // Arrange
+            var startPoint = _nurbs.PointAt(0);
+            var endPoint = _arc.PointAt(1);
+
+            // Act            
+
+            // Arrange
+            _polycurve.StartPoint.Should().Be(startPoint);
+            _polycurve.EndPoint.Should().Be(endPoint);
         }
     }
 }

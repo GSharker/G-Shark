@@ -18,22 +18,13 @@ namespace GShark.Geometry
         public PolyCurve() { }
 
         /// <summary>
-        /// Initializes a new polycurve from a curve.
-        /// </summary>
-        public PolyCurve(ICurve curve)
-        {
-            this.Segments.Add(curve);
-        }
-
-        /// <summary>
         /// Appends and matches the start of the line to the end of polycurve.
         /// </summary>
         /// <param name="curve"></param>
         /// <returns></returns>
-        public PolyCurve Append(Line line)
+        public void Append(Line line)
         {
             this.Segments.Add(line);
-            return this;
         }
 
         /// <summary>
@@ -41,10 +32,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="curve"></param>
         /// <returns></returns>
-        public PolyCurve Append(Arc arc)
+        public void Append(Arc arc)
         {
             this.Segments.Add(arc);
-            return this;
         }
 
         /// <summary>
@@ -52,10 +42,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="curve"></param>
         /// <returns></returns>
-        public PolyCurve Append(NurbsCurve nurbs)
+        public void Append(NurbsCurve nurbs)
         {
             this.Segments.Add(nurbs);
-            return this;
         }
 
         /// <summary>
@@ -70,7 +59,17 @@ namespace GShark.Geometry
         /// <summary>
         /// The segments of the PolyCurve
         /// </summary>
-        public ICollection<ICurve> Segments => Explode();
+        public ICollection<ICurve> Segments { get; set; } = new List<ICurve>();
+
+        /// <summary>
+        /// Returns the start point of the polycurve
+        /// </summary>
+        public Point3 StartPoint => this.Segments.First().PointAt(0);
+
+        /// <summary>
+        /// Returns the end point of the polycurve
+        /// </summary>
+        public Point3 EndPoint => this.Segments.Last().PointAt(1);
 
         /// <summary>
         /// Number of segments
