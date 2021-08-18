@@ -91,12 +91,16 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Length_Of_The_PolyCurve()
         {
             // Arrange
+            var nested = new PolyCurve(_polycurve);
 
             // Act            
             var length = _polycurve.Length;
+            var lengthNested = nested.Length;
 
             // Arrange
             length.Should().BeApproximately(30.623806269249716, GSharkMath.Epsilon);
+            lengthNested.Should().BeApproximately(30.623806269249716, GSharkMath.Epsilon);
+
             _testOutput.WriteLine(string.Format("Length: {0}", length));
         }
 

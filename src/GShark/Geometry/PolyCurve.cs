@@ -17,6 +17,13 @@ namespace GShark.Geometry
         public PolyCurve() { }
 
         /// <summary>
+        /// Initializes a new polycurve from an existing curve.
+        /// </summary>
+        public PolyCurve(ICurve curve) {
+            this.Segments.Add(curve);
+        }
+
+        /// <summary>
         /// Appends and matches the start of the line to the end of polycurve.
         /// </summary>
         /// <param name="curve"></param>
@@ -66,6 +73,24 @@ namespace GShark.Geometry
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
         }
+
+        /// <summary>
+        /// Appends and matches the start of the nurbs to the end of polycurve.
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <returns></returns>
+        public void Append(PolyCurve polycurve)
+        {
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.LocationPoints.First()) <= GSharkMath.Epsilon)
+            {
+                this.Segments.Add(polycurve);
+            }
+            else
+            {
+                throw new InvalidOperationException("The two curves can not be connected.");
+            }
+        }
+
 
         /// <summary>
         /// Explodes this PolyCurve into a list of Curve segments.
