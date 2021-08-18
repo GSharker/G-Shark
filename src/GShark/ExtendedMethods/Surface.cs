@@ -26,7 +26,7 @@ namespace GShark.ExtendedMethods
             {
                 throw new ArgumentNullException(nameof(surface));
             }
-
+            
             return Divide.SplitSurface(surface, parameter, direction);
         }
     }

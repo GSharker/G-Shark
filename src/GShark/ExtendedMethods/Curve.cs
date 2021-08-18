@@ -1,9 +1,13 @@
-﻿using GShark.Geometry;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GShark.Core;
+using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GShark.ExtendedMethods
 {
@@ -119,11 +123,131 @@ namespace GShark.ExtendedMethods
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };
+                var frameNext = new Plane();
+                frameNext.Origin = pointsOnCurve[i + 1];
+                frameNext.XAxis = rNext;
+                frameNext.YAxis = sNext;
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
             return perpFrames.ToList();
+        }
+
+        /// <summary>
+        /// Splits a curve into two parts at a given parameter.
+        /// </summary>
+        /// <param name="curve">The curve object.</param>
+        /// <param name="t">The parameter at which to split the curve.</param>
+        /// <returns>Two NurbsCurve objects.</returns>
+        public static List<ICurve> SplitAt(this ICurve curve, double t)
+        {
+            int degree = curve.Degree;
+
+            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
+
+            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+
+            int s = curve.Knots.Span(degree, t);
+
+            KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
+            KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
+
+            List<Point4> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+            List<Point4> controlPoints1 = refinedCurve.ControlPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
+
+            return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
+        }
+
+        /// <summary>
+        /// Splits a curve at given parameters and returns the segments as curves.
+        /// </summary>
+        /// <param name="curve">The curve to split.</param>
+        /// <param name="parameters">The parameters at which to split the curve. Values should be between 0 and 1.</param>
+        /// <returns>Collection of curve segments.</returns>
+        //TODO: Should input parameters be between 0 and 1, or should we have a normalization function on ICurve?
+        public static List<ICurve> SplitAt(this ICurve curve, double[] parameters)
+        {
+            var curves = new List<ICurve>();
+            if (parameters.Length == 0)
+            {
+                curves.Add(curve);
+                return curves;
+            }
+
+            //TODO: sort in increasing order or throw if not?
+            var sortedParameters = parameters.OrderBy(x => x).ToArray();
+
+            //TODO: Always including ends of domain if not included. Could also just ignore and assume they are in input parameters.
+            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GeoSharkMath.MaxTolerance)
+            {
+                var tempParams = new double[sortedParameters.Length + 1];
+                tempParams[0] = curve.Domain.T0;
+                for (var i = 0; i < sortedParameters.Length; i++)
+                {
+                    tempParams[i+1] = sortedParameters[i];
+                }
+                sortedParameters = tempParams;
+            }
+
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GeoSharkMath.MaxTolerance)
+            {
+                Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
+                sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
+            }
+
+            for (int i = 0; i < sortedParameters.Length - 1; i++)
+            {
+                curves.Add(SubCurve(curve, new Interval(sortedParameters[i], sortedParameters[i+1])));
+            }
+
+            return curves;
+        }
+
+        /// <summary>
+        /// Extract sub-curve defined by domain.
+        /// </summary>
+        /// <param name="curve">The curve from which to extract the sub-curve.</param>
+        /// <param name="domain">Domain of sub-curve</param>
+        /// <returns>NurbsCurve.</returns>
+        public static ICurve SubCurve(this ICurve curve, Interval domain)
+        {
+            int degree = curve.Degree;
+            int order = degree + 1;
+            Interval subCurveDomain = domain;
+            
+            //NOTE: Handling decreasing domain by flipping it to maintain direction of original curve in sub-curve. Is this what we want?
+            if (domain.IsDecreasing)
+            {
+                subCurveDomain = new Interval(domain.T1, domain.T0);
+            }
+
+            var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GeoSharkMath.MaxTolerance;
+            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GeoSharkMath.MaxTolerance;
+
+            if (isT0AtStart && isT1AtEnd)
+            {
+                return curve;
+            }
+
+            if (isT0AtStart || isT1AtEnd)
+            {
+               return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
+            }
+
+            KnotVector subCurveKnotVector = new KnotVector();
+            List<double> knotsToInsert = Sets.RepeatData(domain.T0, order).Concat(Sets.RepeatData(domain.T1, degree + 1)).ToList();
+            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
+            var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);
+            var t0Idx = refinedCurve.Knots.IndexOf(subCurveDomain.T0);
+            
+            subCurveKnotVector.AddRange(refinedCurve.Knots.GetRange(t0Idx, multiplicityAtT0 + multiplicityAtT1));
+
+            var subCurveControlPoints = refinedCurve.ControlPoints.GetRange(order, order);
+
+            var subCurve = new NurbsCurve(curve.Degree, subCurveKnotVector, subCurveControlPoints);
+
+            return subCurve;
         }
     }
 }

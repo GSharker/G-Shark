@@ -3,7 +3,6 @@ using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
-using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +21,11 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Theory]
+        [InlineData(0.0)]
         [InlineData(0.25)]
         [InlineData(0.5)]
         [InlineData(0.75)]
+        [InlineData(1.0)]
         public void It_Returns_Two_Curves_Splitting_One_Curve(double parameter)
         {
             // Arrange
@@ -39,7 +40,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
-            List<ICurve> curves = Divide.SplitCurve(curve, parameter);
+            List<ICurve> curves = curve.SplitAt(parameter);
 
             // Assert
             curves.Should().HaveCount(2);
@@ -58,33 +59,90 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Fact]
+        public void It_Returns_A_SubCurve_Defined_By_Domain()
+        {
+            // Arrange
+            Interval domain = new Interval(0.65, 0.85);
+            int degree = 3;
+            List<Point3> controlPts = new List<Point3>
+            {
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,5)
+            };
+            var expectedKnotVector = new KnotVector(new List<double> {0.65, 0.65, 0.65, 0.65, 0.85, 0.85, 0.85, 0.85});
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
+            NurbsCurve expectedSubCurve = new NurbsCurve(
+                new List<Point3>
+                {
+                    new (8.266,8.825,1.373125),
+                    new (9.264,8.225,1.795625),
+                    new (10.406,7.225,2.348125),
+                    new (11.724,5.825,3.070625)
+                },
+                degree:3);
+
+            // Act
+            ICurve subCurve = curve.SubCurve(domain);
+
+            // Assert
+            subCurve.LocationPoints.SequenceEqual(expectedSubCurve.LocationPoints).Should().BeTrue();
+            subCurve.ControlPoints.SequenceEqual(expectedSubCurve.ControlPoints).Should().BeTrue();
+            subCurve.Knots.SequenceEqual(expectedKnotVector).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Splits_A_Curve_Into_Segments_At_Given_Parameters()
+        {
+            // Arrange
+            var parameters = new[]{0.25, 0.5, 0.75};
+            int degree = 3;
+            List<Point3> controlPts = new List<Point3>
+            {
+                new Point3(2,2,0),
+                new Point3(4,12,0),
+                new Point3(7,12,0),
+                new Point3(15,2,5)
+            };
+            KnotVector knots = new KnotVector(degree, controlPts.Count);
+            NurbsCurve curve = new NurbsCurve(controlPts, degree);
+
+            // Act
+            var segments = curve.SplitAt(parameters.ToArray());
+
+            // Assert
+            segments.Count.Should().Be(4);
+        }
+
+        [Fact]
         public void Divide_By_Number_Of_Segments_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = {
                     0,
-                    0.12294081350167592,
-                    0.26515588164329529,
-                    0.4202931821346283,
-                    0.5797068178653717,
-                    0.73484411835670471,
-                    0.877059186498324,
+                    0.12294074023135007,
+                    0.26515583503755935,
+                    0.4202931617987752,
+                    0.5797068382012247,
+                    0.7348441649624406,
+                    0.87705925976865,
                     1
                 };
 
-            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
+            List<Point3> pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int segments = 7;
 
             // Act
-            var (points, parameters) = curve.Divide(segments);
+            (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(segments);
 
             // Assert
-            parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
+            divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
             for (int i = 0; i < tValuesExpected.Length; i++)
             {
-                parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -95,27 +153,27 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
             double[] tValuesExpected = {
                 0,
-                0.12294081350167592,
-                0.26515588164329529,
-                0.4202931821346283,
-                0.5797068178653717,
-                0.73484411835670471,
-                0.877059186498324,
+                0.12294074023135007,
+                0.26515583503755935,
+                0.4202931617987752,
+                0.5797068382012247,
+                0.7348441649624406,
+                0.87705925976865,
                 1
             };
-            var pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
+            List<Point3> pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int steps = 7;
             double length = curve.Length() / steps;
 
             // Act
-            var (points, parameters) = curve.Divide(length);
+            (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(length);
 
             // Assert
-            parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
+            divideResult.Parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
             for (int i = 0; i < pointsExpected.Count; i++)
             {
-                parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -219,23 +277,23 @@ namespace GShark.Test.XUnit.Operation
             //Act
             List<double> uValues = curve.Divide(10).Parameters;
 
-            foreach (var uValue in uValues)
+            foreach (double uValue in uValues)
             {
                 _testOutput.WriteLine(uValue.ToString());
             }
 
             List<Plane> perpFrames = curve.PerpendicularFrames(uValues);
 
-            foreach (var perpFrame in perpFrames)
+            foreach (Plane perpFrame in perpFrames)
             {
                 _testOutput.WriteLine(perpFrame.ToString());
             }
 
             //Assert
-            for (var i = 0; i < perpFrames.Count; i++)
+            for (int i = 0; i < perpFrames.Count; i++)
             {
-                var perpFrame = perpFrames[i];
-                var expectedPerpFrame = expectedPerpFrames[i];
+                Plane perpFrame = perpFrames[i];
+                Plane expectedPerpFrame = expectedPerpFrames[i];
                 perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GeoSharkMath.MaxTolerance);
                 perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GeoSharkMath.MaxTolerance);
                 perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GeoSharkMath.MaxTolerance);

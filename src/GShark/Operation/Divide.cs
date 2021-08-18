@@ -15,31 +15,6 @@ namespace GShark.Operation
     public class Divide
     {
         /// <summary>
-		/// Splits a curve into two parts at a given parameter.
-		/// </summary>
-		/// <param name="curve">The curve object.</param>
-		/// <param name="t">The parameter where to split the curve.</param>
-		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<ICurve> SplitCurve(ICurve curve, double t)
-        {
-            int degree = curve.Degree;
-
-            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
-
-            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
-
-            int s = curve.Knots.Span(degree, t);
-
-            KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
-            KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
-
-            List<Point4> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
-            List<Point4> controlPoints1 = refinedCurve.ControlPoints.GetRange(s + 1, refinedCurve.ControlPoints.Count - (s + 1));
-
-            return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
-        }
-
-        /// <summary>
         /// Splits (divides) the surface into two parts at the specified parameter
         /// </summary>
         /// <param name="surface">The NURBS surface to split.</param>
@@ -52,11 +27,11 @@ namespace GShark.Operation
         {
             KnotVector knots = surface.KnotsV;
             int degree = surface.DegreeV;
-            List<List<Point4>> pts2d = surface.ControlPoints;
+            List<List<Point4>> srfCtrlPts = surface.ControlPoints;
 
             if (direction != SplitDirection.V)
             {
-                pts2d = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                srfCtrlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
                 knots = surface.KnotsU;
                 degree = surface.DegreeU;
             }
@@ -68,7 +43,7 @@ namespace GShark.Operation
             List<List<Point4>> surfPtsRight = new List<List<Point4>>();
             ICurve result = null;
 
-            foreach (List<Point4> pts in pts2d)
+            foreach (List<Point4> pts in srfCtrlPts)
             {
                 NurbsCurve tempCurve = new NurbsCurve(degree, knots, pts);
                 result = Modify.CurveKnotRefine(tempCurve, knotsToInsert);
@@ -77,11 +52,11 @@ namespace GShark.Operation
                 surfPtsRight.Add(result.ControlPoints.GetRange(span + 1, span + 1));
             }
 
-            if (result == null) throw new Exception("Could not solve the split.");
+            if (result == null) throw new Exception($"Could not split {nameof(surface)}.");
 
             KnotVector knotLeft = result.Knots.GetRange(0, span + degree + 2).ToKnot();
             KnotVector knotRight = result.Knots.GetRange(span + 1, span + degree + 2).ToKnot();
-            NurbsSurface[] surfaceResult = new NurbsSurface[] { };
+            NurbsSurface[] surfaceResult = Array.Empty<NurbsSurface>();
 
             switch (direction)
             {
