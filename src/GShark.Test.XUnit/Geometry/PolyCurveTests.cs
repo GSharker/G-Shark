@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GShark.Geometry;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -54,11 +55,29 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_If_PolyCurve_Is_Closed()
+        {
+            // Arrange
+
+            // Act            
+
+            // Arrange
+            _polycurve.Should().NotBeNull();
+            _polycurve.IsClosed.Should().BeFalse();
+
+            var closedPolyCurve = _polycurve;
+            closedPolyCurve.Close();
+            closedPolyCurve.IsClosed.Should().BeTrue();
+            closedPolyCurve.SegmentCount.Should().Be(4);
+        }
+
+
+        [Fact]
         public void It_Returns_A_PolyCurve_Start_And_End_Points()
         {
             // Arrange
-            var startPoint = _nurbs.PointAt(0);
-            var endPoint = _arc.PointAt(1);
+            var startPoint = _nurbs.LocationPoints.First();
+            var endPoint = _arc.LocationPoints.Last();
 
             // Act            
 

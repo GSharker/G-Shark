@@ -64,12 +64,17 @@ namespace GShark.Geometry
         /// <summary>
         /// Returns the start point of the polycurve
         /// </summary>
-        public Point3 StartPoint => this.Segments.First().PointAt(0);
+        public Point3 StartPoint => this.Segments.First().LocationPoints.First();
 
         /// <summary>
         /// Returns the end point of the polycurve
         /// </summary>
-        public Point3 EndPoint => this.Segments.Last().PointAt(1);
+        public Point3 EndPoint => this.Segments.Last().LocationPoints.Last();
+
+        /// <summary>
+        /// First and last point of the PolyCurve are coincident
+        /// </summary>
+        public bool IsClosed => this.StartPoint.DistanceTo(this.EndPoint) <= GSharkMath.Epsilon;
 
         /// <summary>
         /// Number of segments
@@ -87,6 +92,14 @@ namespace GShark.Geometry
         public List<Point4> ControlPoints => this.GetControlPoints();
 
         public int Degree => throw new NotImplementedException();
+
+        public void Close()
+        {
+            if (!this.IsClosed)
+            {
+                this.Segments.Add(new Line(this.EndPoint, this.StartPoint));
+            }
+        }
 
         /// <summary>
         /// Returns the location points for each segment
