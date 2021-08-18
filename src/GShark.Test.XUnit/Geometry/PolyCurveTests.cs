@@ -66,5 +66,15 @@ namespace GShark.Test.XUnit.Geometry
             _polycurve.StartPoint.Should().Be(startPoint);
             _polycurve.EndPoint.Should().Be(endPoint);
         }
+
+        [Fact]
+        public void It_Returns_Segment_Domains_Reparametrized()
+        {
+            // Arrange
+
+            // Act            
+
+            // Arrange
+        }
     }
 }

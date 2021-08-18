@@ -76,11 +76,45 @@ namespace GShark.Geometry
         /// </summary>
         public int SegmentCount => this.Segments.Count;
 
+        /// <summary>
+        /// Returns the location points for each segment
+        /// </summary>
+        public List<Point3> LocationPoints => this.GetLocationPoints();
+
+        /// <summary>
+        /// Returns the controls points for each segment
+        /// </summary>
+        public List<Point4> ControlPoints => this.GetControlPoints();
+
         public int Degree => throw new NotImplementedException();
 
-        public List<Point3> LocationPoints => throw new NotImplementedException();
+        /// <summary>
+        /// Returns the location points for each segment
+        /// </summary>
+        /// <returns></returns>
+        private List<Point3> GetLocationPoints()
+        {
+            List<Point3> locPts = new List<Point3>();
+            foreach (var segm in Segments)
+            {
+                locPts.AddRange(segm.LocationPoints.Select(pts => pts));
+            }
+            return locPts;
+        }
 
-        public List<Point4> ControlPoints => throw new NotImplementedException();
+        /// <summary>
+        /// Returns the location points for each segment
+        /// </summary>
+        /// <returns></returns>
+        private List<Point4> GetControlPoints()
+        {
+            List<Point4> ctrlPts = new List<Point4>();
+            foreach (var segm in Segments)
+            {
+                ctrlPts.AddRange(segm.ControlPoints.Select(pts => pts));
+            }
+            return ctrlPts;
+        }
 
         public KnotVector Knots => throw new NotImplementedException();
 
