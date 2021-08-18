@@ -3,7 +3,6 @@ using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GShark.Geometry
 {
@@ -24,7 +23,14 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(Line line)
         {
-            this.Segments.Add(line);
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(line.Start) <= GSharkMath.Epsilon)
+            {
+                this.Segments.Add(line);
+            }
+            else
+            {
+                throw new InvalidOperationException("The two curves can not be connected.");
+            }
         }
 
         /// <summary>
@@ -34,7 +40,14 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(Arc arc)
         {
-            this.Segments.Add(arc);
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(arc.StartPoint) <= GSharkMath.Epsilon)
+            {
+                this.Segments.Add(arc);
+            }
+            else
+            {
+                throw new InvalidOperationException("The two curves can not be connected.");
+            }
         }
 
         /// <summary>
@@ -44,7 +57,14 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(NurbsCurve nurbs)
         {
-            this.Segments.Add(nurbs);
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(nurbs.LocationPoints.First()) <= GSharkMath.Epsilon)
+            {
+                this.Segments.Add(nurbs);
+            }
+            else
+            {
+                throw new InvalidOperationException("The two curves can not be connected.");
+            }
         }
 
         /// <summary>
@@ -55,6 +75,8 @@ namespace GShark.Geometry
         {
             return this.Segments.Select(crv => crv).ToList();
         }
+
+        public double Length => GetLength();
 
         /// <summary>
         /// The segments of the PolyCurve
@@ -93,12 +115,64 @@ namespace GShark.Geometry
 
         public int Degree => throw new NotImplementedException();
 
+        /// <summary>
+        /// Closes the polycurve with a line segment
+        /// </summary>
         public void Close()
         {
-            if (!this.IsClosed)
+            if (!this.IsClosed && this.SegmentCount > 0)
             {
-                this.Segments.Add(new Line(this.EndPoint, this.StartPoint));
+                if (this.SegmentCount > 0)
+                {
+
+                    this.Segments.Add(new Line(this.EndPoint, this.StartPoint));
+                }
+                else
+                {
+                    throw new InvalidOperationException("The polycurve is empty");
+                }
             }
+            else
+            {
+                throw new InvalidOperationException("The polycurve is already closed");
+            }
+        }
+
+        /// <summary>
+        /// It calculates the total length of a polycurve based on the different segments.
+        /// If there is a polycurve a segment il will recoursively calculate the length of the nested segments.
+        /// </summary>
+        /// <returns></returns>
+        private double GetLength()
+        {
+            double length = 0;
+            foreach (ICurve segment in this.Segments)
+            {
+                var t = segment.GetType().Name;
+                switch (t)
+                {
+                    case "NurbsCurve":
+                        length += ((NurbsCurve)segment).Length();
+                        break;
+                    case "Line":
+                        length += ((Line)segment).Length;
+                        break;
+                    case "Arc":
+                        length += ((Arc)segment).Length;
+                        break;
+                    case "PolyCurve":
+                        length += ((PolyCurve)segment).Length;
+                        break;
+                }
+            }
+            return length;
+        }
+
+        public List<Interval> GetCurveDomainsFromLength()
+        {
+            var intervals = new List<Interval>();
+            
+            return intervals;
         }
 
         /// <summary>

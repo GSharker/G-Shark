@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,19 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_The_Length_Of_The_PolyCurve()
+        {
+            // Arrange
+
+            // Act            
+            var length = _polycurve.Length;
+
+            // Arrange
+            length.Should().BeApproximately(30.623806269249716, GSharkMath.Epsilon);
+            _testOutput.WriteLine(string.Format("Length: {0}", length));
+        }
+
+        [Fact]
         public void It_Returns_Segment_Domains_Reparametrized()
         {
             // Arrange
@@ -94,6 +108,7 @@ namespace GShark.Test.XUnit.Geometry
             // Act            
 
             // Arrange
+            _polycurve.GetCurveDomainsFromLength();
         }
     }
 }
