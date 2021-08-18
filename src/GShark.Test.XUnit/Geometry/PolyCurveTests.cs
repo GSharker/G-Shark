@@ -122,8 +122,13 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Point_At_Length()
         {
-            var p1 = _polycurve.PointAtLength(15);
-            var p2 = _polycurve.PointAtLength(22);
+            // Act
+            var p1 = new Point3(5, 3.042501, 4.519036);
+            var p2 = new Point3(5, 5, -1.730175);
+
+            // Arrange
+            _polycurve.PointAtLength(15).Should().Be(p1);
+            _polycurve.PointAtLength(22).Should().Be(p2);
         }
     }
 }
