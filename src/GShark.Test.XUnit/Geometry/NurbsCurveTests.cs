@@ -77,6 +77,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Assert
             NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.PeriodicClosedNurbsCurve().IsClosed().Should().BeTrue();
         }
 
         [Fact]

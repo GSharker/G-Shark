@@ -138,7 +138,9 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed()
         {
-            return !(LocationPoints[0].DistanceTo(LocationPoints[LocationPoints.Count - 1]) > 0);
+            Point3 pt0 = Evaluation.CurvePointAt(this,0.0);
+            Point3 pt1 = Evaluation.CurvePointAt(this, 1.0);
+            return !(pt0.DistanceTo(pt1) - GSharkMath.Epsilon > 0);
         }
 
         /// <summary>
