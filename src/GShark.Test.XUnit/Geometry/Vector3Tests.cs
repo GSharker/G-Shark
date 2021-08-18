@@ -42,8 +42,8 @@ namespace GShark.Test.XUnit.Geometry
             double angle = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneZX, out reflexAngle);
 
             // Assert
-            angle.Should().BeApproximately(expectedAngle, GeoSharkMath.Epsilon);
-            reflexAngle.Should().BeApproximately(2 * Math.PI - expectedAngle, GeoSharkMath.Epsilon);
+            angle.Should().BeApproximately(expectedAngle, GSharkMath.Epsilon);
+            reflexAngle.Should().BeApproximately(2 * Math.PI - expectedAngle, GSharkMath.Epsilon);
         }
 
         [Fact]
@@ -166,7 +166,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 amplifiedVector = vec1.Amplify(amplitude);
 
             // Assert
-            amplifiedVector.EpsilonEquals(vec1AmplifiedByAmplitude, GeoSharkMath.MaxTolerance).Should().Be(true);
+            amplifiedVector.EpsilonEquals(vec1AmplifiedByAmplitude, GSharkMath.MaxTolerance).Should().Be(true);
         }
 
         [Fact]
@@ -318,13 +318,13 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 vector = new Vector3(-7, 10, -5);
-            double rotationAngle1 = GeoSharkMath.ToRadians(-0.0000125);
+            double rotationAngle1 = GSharkMath.ToRadians(-0.0000125);
             Vector3 expectedResult1 = new Vector3(-7.0, 10.0, -5.0);
-            double rotationAngle2 = GeoSharkMath.ToRadians(0.0);
+            double rotationAngle2 = GSharkMath.ToRadians(0.0);
             Vector3 expectedResult2 = new Vector3(-7.0, 10.0, -5.0);
-            double rotationAngle3 = GeoSharkMath.ToRadians(12.5);
+            double rotationAngle3 = GSharkMath.ToRadians(12.5);
             Vector3 expectedResult3 = new Vector3(-7.454672, 10.649531, -2.239498);
-            double rotationAngle4 = GeoSharkMath.ToRadians(450);
+            double rotationAngle4 = GSharkMath.ToRadians(450);
             Vector3 expectedResult4 = new Vector3(-2.867312, 4.09616, 12.206556);
 
             Vector3 axis = new Vector3(10, 7, 0);

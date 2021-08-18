@@ -48,7 +48,7 @@ namespace GShark.Geometry
         /// <returns>True if the vector is valid.</returns>
         public bool IsValid()
         {
-            return this.Any(GeoSharkMath.IsValidDouble);
+            return this.Any(GSharkMath.IsValidDouble);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace GShark.Geometry
         /// <returns>True if all the component are less than Epsilon.</returns>
         public bool IsZero()
         {
-            return this.All(value => Math.Abs(value) < GeoSharkMath.Epsilon);
+            return this.All(value => Math.Abs(value) < GSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace GShark.Geometry
 
             for (var i = 0; i < Count; i++)
             {
-                if (!(Math.Abs(this[i] - other[i]) <= GeoSharkMath.Epsilon)) return false;
+                if (!(Math.Abs(this[i] - other[i]) <= GSharkMath.Epsilon)) return false;
             }
 
             return true;
@@ -300,7 +300,7 @@ namespace GShark.Geometry
         /// <returns>The vector in string format.</returns>
         public override string ToString()
         {
-            return string.Join(",", this.Select(e => GeoSharkMath.Truncate(e)));
+            return string.Join(",", this.Select(e => GSharkMath.Truncate(e)));
         }
     }
 }

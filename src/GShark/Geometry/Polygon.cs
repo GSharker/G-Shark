@@ -20,7 +20,7 @@ namespace GShark.Geometry
 
             Plane fitPlane = Plane.FitPlane(vertices, out double deviation);
 
-            if (!(Math.Abs(deviation) < GeoSharkMath.MinTolerance))
+            if (!(Math.Abs(deviation) < GSharkMath.MinTolerance))
             {
                 throw new Exception("The points must be co-planar.");
             }
@@ -47,7 +47,7 @@ namespace GShark.Geometry
                 bool isOnPlaneXy = true;
                 Transform transformBack = new Transform();
                 List<Point3> copiedPts = new List<Point3>(this);
-                if (Math.Abs(this[0][2]) > GeoSharkMath.MaxTolerance)
+                if (Math.Abs(this[0][2]) > GSharkMath.MaxTolerance)
                 {
                     isOnPlaneXy = false;
                     Plane polygonPlane = new Plane(this[0], this[1], this[2]);

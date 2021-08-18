@@ -29,7 +29,7 @@ namespace GShark.Core
             {
                 var vec3 = points[i] - points[0];
                 double tripleProduct = Vector3.DotProduct(Vector3.CrossProduct(vec3, vec2), vec1);
-                if (Math.Abs(tripleProduct) > GeoSharkMath.Epsilon)
+                if (Math.Abs(tripleProduct) > GSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -48,7 +48,7 @@ namespace GShark.Core
         /// <param name="pt3">Third point.</param>
         /// <param name="tol">Tolerance set per default as 1e-3</param>
         /// <returns>True if the three points are collinear.</returns>
-        public static bool ArePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = GeoSharkMath.MaxTolerance)
+        public static bool ArePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = GSharkMath.MaxTolerance)
         {
             Vector3 pt1ToPt2 = pt2 - pt1;
             Vector3 pt1ToPt3 = pt3 - pt1;
@@ -74,7 +74,7 @@ namespace GShark.Core
             Vector3 direction = segmentPt1 - segmentPt0;
             double length = direction.Length;
 
-            if (length < GeoSharkMath.Epsilon)
+            if (length < GSharkMath.Epsilon)
             {
                 return (tValue: valueT0, pt: segmentPt0);
             }

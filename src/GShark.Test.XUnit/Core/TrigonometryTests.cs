@@ -64,8 +64,8 @@ namespace GShark.Test.XUnit.Core
             (double tValue, Point3 pt) closestPt = Trigonometry.ClosestPointToSegment(testPt, pt0, pt1, 0, 1);
 
             // Assert
-            closestPt.tValue.Should().BeApproximately(tValExpected, GeoSharkMath.MaxTolerance);
-            closestPt.pt.EpsilonEquals(expectedPt, GeoSharkMath.Epsilon).Should().BeTrue();
+            closestPt.tValue.Should().BeApproximately(tValExpected, GSharkMath.MaxTolerance);
+            closestPt.pt.EpsilonEquals(expectedPt, GSharkMath.Epsilon).Should().BeTrue();
         }
     }
 }

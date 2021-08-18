@@ -48,13 +48,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = curves[0].Knots.Count - (degree + 1);
-                curves[0].Knots[d + i].Should().BeApproximately(parameter, GeoSharkMath.MaxTolerance);
+                curves[0].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MaxTolerance);
             }
 
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = 0;
-                curves[1].Knots[d + i].Should().BeApproximately(parameter, GeoSharkMath.MaxTolerance);
+                curves[1].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MaxTolerance);
             }
         }
 
@@ -141,8 +141,8 @@ namespace GShark.Test.XUnit.Operation
             divideResult.Parameters.Count.Should().Be(tValuesExpected.Length).And.Be(segments + 1);
             for (int i = 0; i < tValuesExpected.Length; i++)
             {
-                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -172,8 +172,8 @@ namespace GShark.Test.XUnit.Operation
             divideResult.Parameters.Count.Should().Be(pointsExpected.Count).And.Be(steps + 1);
             for (int i = 0; i < pointsExpected.Count; i++)
             {
-                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GeoSharkMath.MaxTolerance);
-                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                divideResult.Parameters[i].Should().BeApproximately(tValuesExpected[i], GSharkMath.MaxTolerance);
+                divideResult.Points[i].EpsilonEquals(pointsExpected[i], GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -294,10 +294,10 @@ namespace GShark.Test.XUnit.Operation
             {
                 Plane perpFrame = perpFrames[i];
                 Plane expectedPerpFrame = expectedPerpFrames[i];
-                perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GeoSharkMath.MaxTolerance);
-                perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GeoSharkMath.MaxTolerance);
-                perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GeoSharkMath.MaxTolerance);
-                perpFrame.ZAxis.EpsilonEquals(expectedPerpFrame.ZAxis, GeoSharkMath.MaxTolerance);
+                perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GSharkMath.MaxTolerance);
+                perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GSharkMath.MaxTolerance);
+                perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GSharkMath.MaxTolerance);
+                perpFrame.ZAxis.EpsilonEquals(expectedPerpFrame.ZAxis, GSharkMath.MaxTolerance);
             }
         }
     }

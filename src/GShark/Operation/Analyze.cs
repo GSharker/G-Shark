@@ -34,7 +34,7 @@ namespace GShark.Operation
             double sum = 0.0;
             ICurve tempCrv = crvs[0];
 
-            while (i < crvs.Count && tempCrv.Knots[0] + GeoSharkMath.Epsilon < uSet)
+            while (i < crvs.Count && tempCrv.Knots[0] + GSharkMath.Epsilon < uSet)
             {
                 tempCrv = crvs[i];
                 double param = Math.Min(tempCrv.Knots.Last(), uSet);
@@ -93,7 +93,7 @@ namespace GShark.Operation
             if (segmentLength > setCurveLength) return curve.Knots[curve.Knots.Count - 1];
 
             // Divide and conquer.
-            double setTolerance = tolerance <= 0.0 ? GeoSharkMath.Epsilon : tolerance;
+            double setTolerance = tolerance <= 0.0 ? GSharkMath.Epsilon : tolerance;
 
             double startT = curve.Knots[0];
             double startLength = 0.0;
@@ -168,11 +168,11 @@ namespace GShark.Operation
             int maxIterations = 5;
             int j = 0;
             // Two zero tolerances can be used to indicate convergence:
-            double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
+            double tol1 = GSharkMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double tVal0 = curve.Knots[0];
             double tVal1 = curve.Knots[curve.Knots.Count - 1];
-            bool closedCurve = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GeoSharkMath.Epsilon;
+            bool closedCurve = (ctrlPts[0] - ctrlPts[ctrlPts.Count - 1]).SquareLength < GSharkMath.Epsilon;
             double Cu = tParameter;
 
             // To avoid infinite loop we limited the interaction.
@@ -254,7 +254,7 @@ namespace GShark.Operation
 
             int t = 0;
             // Two zero tolerances can be used to indicate convergence:
-            double tol1 = GeoSharkMath.MaxTolerance; // a measure of Euclidean distance;
+            double tol1 = GSharkMath.MaxTolerance; // a measure of Euclidean distance;
             double tol2 = 0.0005; // a zero cosine measure.
             double minU = surface.KnotsU[0];
             double maxU = surface.KnotsU.Last();
@@ -429,19 +429,19 @@ namespace GShark.Operation
         /// <returns>The parameter on the curve.</returns>
         public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
         {
-            if (segmentLength < GeoSharkMath.Epsilon) return curve.Knots[0];
-            if (Math.Abs(curve.Length() - segmentLength) < GeoSharkMath.Epsilon) return curve.Knots[curve.Knots.Count - 1];
+            if (segmentLength < GSharkMath.Epsilon) return curve.Knots[0];
+            if (Math.Abs(curve.Length() - segmentLength) < GSharkMath.Epsilon) return curve.Knots[curve.Knots.Count - 1];
 
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
-            double curveLength = -GeoSharkMath.Epsilon;
+            double curveLength = -GSharkMath.Epsilon;
 
             while (curveLength < segmentLength && i < curves.Count)
             {
                 double bezierLength = BezierCurveLength(curve);
                 curveLength += bezierLength;
 
-                if (segmentLength < curveLength + GeoSharkMath.Epsilon)
+                if (segmentLength < curveLength + GSharkMath.Epsilon)
                     return BezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
                 i++;
             }
@@ -466,7 +466,7 @@ namespace GShark.Operation
             double knotKey = -1;
             foreach (KeyValuePair<double, int> keyValuePair in knotMultiplicity)
             {
-                if (!(Math.Abs(parameter - keyValuePair.Key) < GeoSharkMath.Epsilon)) continue;
+                if (!(Math.Abs(parameter - keyValuePair.Key) < GSharkMath.Epsilon)) continue;
                 knotKey = keyValuePair.Key;
                 break;
             }
@@ -488,11 +488,11 @@ namespace GShark.Operation
             // Obtain the correct index of control points to extract.
             int span = knots.Span(degree, parameter);
 
-            if (Math.Abs(parameter - knots[0]) < GeoSharkMath.Epsilon)
+            if (Math.Abs(parameter - knots[0]) < GSharkMath.Epsilon)
             {
                 span = 0;
             }
-            if (Math.Abs(parameter - knots.Last()) < GeoSharkMath.Epsilon)
+            if (Math.Abs(parameter - knots.Last()) < GSharkMath.Epsilon)
             {
                 span = (direction == SurfaceDirection.V)
                     ? refinedSurface.ControlPoints[0].Count - 1

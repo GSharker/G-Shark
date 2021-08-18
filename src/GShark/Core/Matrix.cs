@@ -302,7 +302,7 @@ namespace GShark.Core
         {
             for (int i = 0; i < matrix.Count; i++)
             {
-                if (Math.Abs(matrix[i][i]) < GeoSharkMath.Epsilon)
+                if (Math.Abs(matrix[i][i]) < GSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -432,7 +432,7 @@ namespace GShark.Core
                     j++;
                 }
 
-                if (maxColumnValue < GeoSharkMath.Epsilon)
+                if (maxColumnValue < GSharkMath.Epsilon)
                 {
                     throw new Exception("Failed, matrix is degenerate.");
                 }

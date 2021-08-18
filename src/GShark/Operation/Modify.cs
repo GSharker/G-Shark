@@ -77,7 +77,7 @@ namespace GShark.Operation
                     int ind = k - degree + l;
                     double alfa = knotsPost[k + l] - knotsToInsert[j];
 
-                    if (Math.Abs(alfa) < GeoSharkMath.Epsilon)
+                    if (Math.Abs(alfa) < GSharkMath.Epsilon)
                         controlPointsPost[ind - 1] = controlPointsPost[ind];
                     else
                     {
@@ -289,7 +289,7 @@ namespace GShark.Operation
             while (b < m)
             {
                 int i = b;
-                while (b < m && Math.Abs(U[b] - U[b + 1]) < GeoSharkMath.Epsilon)
+                while (b < m && Math.Abs(U[b] - U[b + 1]) < GSharkMath.Epsilon)
                 {
                     b += 1;
                 }
@@ -544,7 +544,7 @@ namespace GShark.Operation
             {
                 // First compute knot multiplicity.
                 int i = b;
-                while (b < m && Math.Abs(U[b] - U[b + 1]) < GeoSharkMath.Epsilon)
+                while (b < m && Math.Abs(U[b] - U[b + 1]) < GSharkMath.Epsilon)
                 {
                     b += 1;
                 }
@@ -711,7 +711,7 @@ namespace GShark.Operation
 
             for (int i = 0; i < curves.Count - 1; i++)
             {
-                if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GeoSharkMath.MinTolerance)
+                if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
                 {
                     throw new Exception($"Curve at {i} and curve at {i + 1} don't touch each other.");
                 }

@@ -6,7 +6,7 @@ namespace GShark.Core
     /// <summary>
     /// A collection of default constants and methods used throughout the library.
     /// </summary>
-    public class GeoSharkMath
+    public class GSharkMath
     {
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
@@ -83,21 +83,21 @@ namespace GShark.Core
         /// <param name="cosAngle">Cos angle value in radians.</param>
         internal static void KillNoise(ref double sinAngle, ref double cosAngle)
         {
-            if (Math.Abs(sinAngle) >= 1.0 - GeoSharkMath.MaxTolerance &&
-                Math.Abs(cosAngle) <= GeoSharkMath.MaxTolerance)
+            if (Math.Abs(sinAngle) >= 1.0 - GSharkMath.MaxTolerance &&
+                Math.Abs(cosAngle) <= GSharkMath.MaxTolerance)
             {
                 cosAngle = 0.0;
                 sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
             }
 
-            if (Math.Abs(cosAngle) >= 1.0 - GeoSharkMath.MaxTolerance &&
-                Math.Abs(sinAngle) <= GeoSharkMath.MaxTolerance)
+            if (Math.Abs(cosAngle) >= 1.0 - GSharkMath.MaxTolerance &&
+                Math.Abs(sinAngle) <= GSharkMath.MaxTolerance)
             {
                 cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
                 sinAngle = 0.0;
             }
 
-            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GeoSharkMath.MaxTolerance)
+            if (Math.Abs(cosAngle * cosAngle + sinAngle * sinAngle - 1.0) > GSharkMath.MaxTolerance)
             {
                 var vec = new Vector3(cosAngle, sinAngle, 0);
                 if (vec.Length > 0.0)
@@ -112,15 +112,15 @@ namespace GShark.Core
                 }
             }
 
-            if (Math.Abs(sinAngle) > 1.0 - GeoSharkMath.Epsilon &&
-                Math.Abs(cosAngle) < GeoSharkMath.Epsilon)
+            if (Math.Abs(sinAngle) > 1.0 - GSharkMath.Epsilon &&
+                Math.Abs(cosAngle) < GSharkMath.Epsilon)
             {
                 cosAngle = 0.0;
                 sinAngle = (sinAngle < 0.0) ? -1.0 : 1.0;
             }
 
-            if (Math.Abs(cosAngle) > 1.0 - GeoSharkMath.Epsilon &&
-                Math.Abs(sinAngle) < GeoSharkMath.Epsilon)
+            if (Math.Abs(cosAngle) > 1.0 - GSharkMath.Epsilon &&
+                Math.Abs(sinAngle) < GSharkMath.Epsilon)
             {
                 cosAngle = (cosAngle < 0.0) ? -1.0 : 1.0;
                 sinAngle = 0.0;

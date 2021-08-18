@@ -105,7 +105,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 evalPt = new Point3(Evaluation.SurfacePointAt(surface, u, v));
 
             // Assert
-            evalPt.EpsilonEquals(expectedPt, GeoSharkMath.MinTolerance).Should().BeTrue();
+            evalPt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -142,17 +142,17 @@ namespace GShark.Test.XUnit.Operation
             List<Vector> resultToCheck = Evaluation.DerivativeBasisFunctionsGivenNI(span, parameter, degree, order, knots);
 
             // Assert
-            resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GeoSharkMath.MaxTolerance);
-            resultToCheck[0][1].Should().BeApproximately(expectedResult[0, 1], GeoSharkMath.MaxTolerance);
-            resultToCheck[0][2].Should().BeApproximately(expectedResult[0, 2], GeoSharkMath.MaxTolerance);
+            resultToCheck[0][0].Should().BeApproximately(expectedResult[0, 0], GSharkMath.MaxTolerance);
+            resultToCheck[0][1].Should().BeApproximately(expectedResult[0, 1], GSharkMath.MaxTolerance);
+            resultToCheck[0][2].Should().BeApproximately(expectedResult[0, 2], GSharkMath.MaxTolerance);
 
-            resultToCheck[1][0].Should().BeApproximately(expectedResult[1, 0], GeoSharkMath.MaxTolerance);
-            resultToCheck[1][1].Should().BeApproximately(expectedResult[1, 1], GeoSharkMath.MaxTolerance);
-            resultToCheck[1][2].Should().BeApproximately(expectedResult[1, 2], GeoSharkMath.MaxTolerance);
+            resultToCheck[1][0].Should().BeApproximately(expectedResult[1, 0], GSharkMath.MaxTolerance);
+            resultToCheck[1][1].Should().BeApproximately(expectedResult[1, 1], GSharkMath.MaxTolerance);
+            resultToCheck[1][2].Should().BeApproximately(expectedResult[1, 2], GSharkMath.MaxTolerance);
 
-            resultToCheck[2][0].Should().BeApproximately(expectedResult[2, 0], GeoSharkMath.MaxTolerance);
-            resultToCheck[2][1].Should().BeApproximately(expectedResult[2, 1], GeoSharkMath.MaxTolerance);
-            resultToCheck[2][2].Should().BeApproximately(expectedResult[2, 2], GeoSharkMath.MaxTolerance);
+            resultToCheck[2][0].Should().BeApproximately(expectedResult[2, 0], GSharkMath.MaxTolerance);
+            resultToCheck[2][1].Should().BeApproximately(expectedResult[2, 1], GSharkMath.MaxTolerance);
+            resultToCheck[2][2].Should().BeApproximately(expectedResult[2, 2], GSharkMath.MaxTolerance);
 
             resultToCheck.Count.Should().Be(order + 1);
             resultToCheck[0].Count.Should().Be(degree + 1);
@@ -267,7 +267,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             tangentLinearCurve.Should().BeEquivalentTo(tangentExpectedLinearCurve);
-            tangentNormalized.EpsilonEquals(tangentExpectedPlanarCurve, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            tangentNormalized.EpsilonEquals(tangentExpectedPlanarCurve, GSharkMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

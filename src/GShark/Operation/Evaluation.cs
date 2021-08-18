@@ -78,8 +78,8 @@ namespace GShark.Operation
         public static double OneBasisFunction(int degree, KnotVector knots, int span, double knot)
         {
             // Special case at boundaries.
-            if ((span == 0 && Math.Abs(knot - knots[0]) < GeoSharkMath.MaxTolerance) ||
-                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[knots.Count - 1]) < GeoSharkMath.MaxTolerance)
+            if ((span == 0 && Math.Abs(knot - knots[0]) < GSharkMath.MaxTolerance) ||
+                (span == knots.Count - degree - 2) && Math.Abs(knot - knots[knots.Count - 1]) < GSharkMath.MaxTolerance)
             {
                 return 1.0;
             }
@@ -142,7 +142,7 @@ namespace GShark.Operation
         /// <param name="t">The parameter value where the curve is evaluated.</param>
         internal static void DeBoor(ref List<Point4> controlPts, KnotVector knots, int degree, double t)
         {
-            if (Math.Abs(knots[degree] - knots[degree - 1]) < GeoSharkMath.Epsilon)
+            if (Math.Abs(knots[degree] - knots[degree - 1]) < GSharkMath.Epsilon)
             {
                 throw new Exception($"DeBoor evaluation failed: {knots[degree]} == {knots[degree + 1]}");
             }
@@ -338,7 +338,7 @@ namespace GShark.Operation
                     double v2 = -(-m1 + m2) / d;
                     return new[] { v1, v2 };
                 }
-                if (Math.Abs(b - c) > GeoSharkMath.Epsilon && Math.Abs(d) * double.Epsilon == 0.0)
+                if (Math.Abs(b - c) > GSharkMath.Epsilon && Math.Abs(d) * double.Epsilon == 0.0)
                 {
                     return new[] { (2 * b - c) / (2 * (b - c)) };
                 }

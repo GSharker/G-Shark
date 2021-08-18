@@ -57,9 +57,9 @@ namespace GShark.Test.XUnit.Operation
             Point3 p0 = curve.PointAt(2.5);
             Point3 p1 = curveAfterRefine.PointAt(2.5);
 
-            p0[0].Should().BeApproximately(p1[0], GeoSharkMath.MaxTolerance);
-            p0[1].Should().BeApproximately(p1[1], GeoSharkMath.MaxTolerance);
-            p0[2].Should().BeApproximately(p1[2], GeoSharkMath.MaxTolerance);
+            p0[0].Should().BeApproximately(p1[0], GSharkMath.MaxTolerance);
+            p0[1].Should().BeApproximately(p1[1], GSharkMath.MaxTolerance);
+            p0[2].Should().BeApproximately(p1[2], GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace GShark.Test.XUnit.Operation
 
                 double pt0_pt1 = (pt0 - pt1).Length;
 
-                pt0_pt1.Should().BeApproximately(0.0, GeoSharkMath.MaxTolerance);
+                pt0_pt1.Should().BeApproximately(0.0, GSharkMath.MaxTolerance);
             }
         }
 
@@ -119,7 +119,7 @@ namespace GShark.Test.XUnit.Operation
 
                 double pt0_pt1 = (pt0 - pt1).Length;
 
-                pt0_pt1.Should().BeApproximately(0.0, GeoSharkMath.MaxTolerance);
+                pt0_pt1.Should().BeApproximately(0.0, GSharkMath.MaxTolerance);
             }
         }
 
@@ -165,7 +165,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             elevatedDegreeCurve.Degree.Should().Be(finalDegree);
-            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GSharkMath.MinTolerance);
         }
 
         [Theory]
@@ -190,7 +190,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             elevatedDegreeCurve.Degree.Should().Be(finalDegree);
-            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            ptOnElevatedDegreeCurve.DistanceTo(ptOnCurve).Should().BeLessThan(GSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -221,7 +221,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             reducedCurve.Degree.Should().Be(degree - 1);
 
-            ptOnCurve0.DistanceTo(ptOnReducedDegreeCurve0).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            ptOnCurve0.DistanceTo(ptOnReducedDegreeCurve0).Should().BeLessThan(GSharkMath.MinTolerance);
             ptOnCurve1.DistanceTo(ptOnReducedDegreeCurve1).Should().BeLessThan(tolerance);
         }
 
@@ -281,9 +281,9 @@ namespace GShark.Test.XUnit.Operation
             Point3 pt3 = joinedCurve.PointAt(0.75);
 
             // Arrange
-            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GeoSharkMath.MinTolerance);
-            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GeoSharkMath.MinTolerance);
-            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -315,9 +315,9 @@ namespace GShark.Test.XUnit.Operation
 
             // Arrange
             joinedCurve.Degree.Should().Be(1);
-            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GeoSharkMath.MinTolerance);
-            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GeoSharkMath.MinTolerance);
-            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GeoSharkMath.MinTolerance);
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
         }
     }
 }

@@ -503,7 +503,7 @@ namespace GShark.Geometry
                     Vector3 p0 = points[i0];
                     Vector3 p1 = points[i1];
 
-                    if (p0.EpsilonEquals(p1, GeoSharkMath.MinTolerance))
+                    if (p0.EpsilonEquals(p1, GSharkMath.MinTolerance))
                     {
                         continue;
                     }

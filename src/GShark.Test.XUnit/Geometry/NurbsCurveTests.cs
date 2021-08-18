@@ -64,12 +64,12 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
-            nurbsCurve.LocationPoints[1].DistanceTo(nurbsCurve.LocationPoints[^1]).Should().BeLessThan(GeoSharkMath.Epsilon);
+            nurbsCurve.LocationPoints[1].DistanceTo(nurbsCurve.LocationPoints[^1]).Should().BeLessThan(GSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
             nurbsCurve.Domain.T0.Should().Be(0.0);
             nurbsCurve.Domain.T1.Should().Be(1.0);
-            expectedPt00.DistanceTo(ptAt00).Should().BeLessThan(GeoSharkMath.Epsilon);
-            expectedPt01.DistanceTo(ptAt01).Should().BeLessThan(GeoSharkMath.Epsilon);
+            expectedPt00.DistanceTo(ptAt00).Should().BeLessThan(GSharkMath.Epsilon);
+            expectedPt01.DistanceTo(ptAt01).Should().BeLessThan(GSharkMath.Epsilon);
         }
 
         [Fact]
@@ -129,11 +129,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox1 = crv1.BoundingBox;
 
             // Assert
-            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GSharkMath.MaxTolerance);
 
-            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -154,11 +154,11 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox1 = crv1.BoundingBox;
 
             // Assert
-            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox0.Min.DistanceTo(expectedPtMin0).Should().BeLessThan(GSharkMath.MaxTolerance);
 
-            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox1.Max.DistanceTo(expectedPtMax1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox1.Min.DistanceTo(expectedPtMin1).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -172,8 +172,8 @@ namespace GShark.Test.XUnit.Geometry
             BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsCurve().BoundingBox;
 
             // Assert
-            bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            bBox.Min.DistanceTo(expectedPtMin).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GSharkMath.MaxTolerance);
+            bBox.Min.DistanceTo(expectedPtMin).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -216,7 +216,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             curveClamped.Knots.IsClamped(curveClamped.Degree).Should().BeTrue();
             curveClamped.ControlPoints[0]
-                .EpsilonEquals(curveClamped.ControlPoints[^1], GeoSharkMath.MaxTolerance)
+                .EpsilonEquals(curveClamped.ControlPoints[^1], GSharkMath.MaxTolerance)
                 .Should().BeTrue();
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
             curve.ControlPoints[^3].Should().BeEquivalentTo(curveClamped.ControlPoints[^3]);
