@@ -25,7 +25,7 @@ namespace GShark.Operation
         /// A higher number yields a more exact result, default set to 16.
         /// </param>
         /// <returns>The approximate length.</returns>
-        public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 20)
         {
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
@@ -55,7 +55,7 @@ namespace GShark.Operation
         /// A higher number yields a more exact result, default set to 16.
         /// </param>
         /// <returns>The approximate length of a bezier.</returns>
-        public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 16)
+        public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 17)
         {
             double uSet = (u < 0.0 || u > 1.0) ? curve.Knots.Last() : u;
             double z = (uSet - curve.Knots[0]) / 2;

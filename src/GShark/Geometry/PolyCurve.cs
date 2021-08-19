@@ -177,7 +177,9 @@ namespace GShark.Geometry
         /// <returns></returns>
         public Point3 PointAtLength(double l)
         {
-            double progressiveLength = 0;
+            double progressiveEndLength = 0;
+            double progressiveStartLength = 0;
+            
             if (this.SegmentCount == 0)
             {
                 throw new InvalidOperationException("The polycurve is empty");
@@ -191,23 +193,29 @@ namespace GShark.Geometry
                 for (int i = 0; i < this.SegmentCount; i++)
                 {
                     var segment = this.Segments[i];
-                    progressiveLength += this.SegmentsLengths[i];
-                    if (l <= progressiveLength) // This is the right segment
-                    {
-                        double segmentsLength = i == 0 ? l : l - this.SegmentsLengths[i-1];
+                    progressiveStartLength = progressiveEndLength;
+                    progressiveEndLength += this.SegmentsLengths[i];
+                    if (l <= progressiveEndLength) // This is the right segment
+                    {                        
+                        double segmentLength = i == 0 ? l : l - progressiveStartLength;
                         var t = segment.GetType().Name;
                         switch (t)
                         {
                             case "NurbsCurve":
-                                var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentsLength, GSharkMath.Epsilon);
+                                var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
+                                var par1 = GSharkMath.RemapValue(
+                                    segmentLength, 
+                                    new Interval(0, this.SegmentsLengths[i]), 
+                                    new Interval(0, 1)
+                                    );
+
                                 return ((NurbsCurve)segment).PointAt(par);
                             case "Line":
-                                var line = ((Line)segment);
-                                var dir = (line.End - line.Start).Amplify(segmentsLength);
-                                return ((Line)segment).Start.Transform(Transform.Translation(dir));
+                                //var line = ((Line)segment);
+                                //var dir = (line.End - line.Start).Amplify(segmentLength);
+                                return ((Line)segment).PointAt(segmentLength / this.SegmentsLengths[i]);
                             case "Arc":
-                                l = ((Arc)segment).Length;
-                                break;
+                                return ((Arc)segment).PointAt(segmentLength);
                             case "PolyCurve":
                                 l = ((PolyCurve)segment).Length;
                                 break;

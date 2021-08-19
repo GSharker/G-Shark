@@ -123,12 +123,22 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Point_At_Length()
         {
             // Act
-            var p1 = new Point3(5, 3.042501, 4.519036);
-            var p2 = new Point3(5, 5, -1.730175);
+            var p1 = new Point3(5.0, 3.042501, 4.519036);
+            var p2 = new Point3(5.0, 5.0, -1.730175);
+            var p3 = new Point3(6.007615, 5.0, -5.510126);
+
+            var pl1 = _polycurve.PointAtLength(15);
+            var pl2 = _polycurve.PointAtLength(22);
+            var pl3 = _polycurve.PointAtLength(26);
 
             // Arrange
-            _polycurve.PointAtLength(15).Should().Be(p1);
-            _polycurve.PointAtLength(22).Should().Be(p2);
+            pl1.DistanceTo(p1).Should().BeLessOrEqualTo(1e-4);
+            pl2.DistanceTo(p2).Should().BeLessOrEqualTo(1e-4);
+            pl3.DistanceTo(p3).Should().BeLessOrEqualTo(1e-4);
+
+            _testOutput.WriteLine(string.Format("Point 1 on the nurbs: {0} - Deviation: {1}", pl1, pl1.DistanceTo(p1)));
+            _testOutput.WriteLine(string.Format("Point 2 on the line: {0} - Deviation: {1}", pl2, pl2.DistanceTo(p2)));
+            _testOutput.WriteLine(string.Format("Point 3 on the arc: {0} - Deviation: {1}", pl3, pl3.DistanceTo(p3)));
         }
     }
 }
