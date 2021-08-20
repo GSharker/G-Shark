@@ -37,8 +37,8 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             crv.Degree.Should().Be(degree);
-            crv.LocationPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
-            crv.LocationPoints[crv.LocationPoints.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[crv.ControlPointLocations.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
 
             foreach (var pt in pts)
             {
@@ -60,10 +60,10 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
 
             // Assert
-            crv.LocationPoints[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
-            crv.LocationPoints[crv.LocationPoints.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[crv.ControlPointLocations.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
 
-            foreach (var crvControlPoint in crv.LocationPoints)
+            foreach (var crvControlPoint in crv.ControlPointLocations)
             {
                 _testOutput.WriteLine($"{{{crvControlPoint}}}");
             }
@@ -85,8 +85,8 @@ namespace GShark.Test.XUnit.Operation
             crvs.Count.Should().Be(4);
             for (int i = 0; i < crvs.Count - 1; i++)
             {
-                bool areCollinear = Trigonometry.ArePointsCollinear(crvs[i].LocationPoints[2], crvs[i].LocationPoints[3],
-                     crvs[i + 1].LocationPoints[1]);
+                bool areCollinear = Trigonometry.ArePointsCollinear(crvs[i].ControlPointLocations[2], crvs[i].ControlPointLocations[3],
+                     crvs[i + 1].ControlPointLocations[1]);
                 areCollinear.Should().BeTrue();
             }
         }
@@ -107,10 +107,10 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve approximateCurve = Fitting.ApproximateCurve(pts, 3);
 
             // Assert
-            approximateCurve.LocationPoints.Count.Should().Be(4);
-            for (int i = 0; i < approximateCurve.LocationPoints.Count; i++)
+            approximateCurve.ControlPointLocations.Count.Should().Be(4);
+            for (int i = 0; i < approximateCurve.ControlPointLocations.Count; i++)
             {
-                approximateCurve.LocationPoints[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GSharkMath.MaxTolerance);
+                approximateCurve.ControlPointLocations[i].DistanceTo(expectedCtrlPts[i]).Should().BeLessThan(GSharkMath.MaxTolerance);
             }
         }
     }

@@ -246,7 +246,7 @@ namespace GShark.Operation
         /// <returns>The extrema.</returns>
         public static Extrema ComputeExtrema(ICurve curve)
         {
-            var derivPts = DerivativeCoordinates(curve.LocationPoints);
+            var derivPts = DerivativeCoordinates(curve.ControlPointLocations);
             Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Size;

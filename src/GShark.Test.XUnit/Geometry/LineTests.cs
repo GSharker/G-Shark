@@ -237,7 +237,7 @@ namespace GShark.Test.XUnit.Geometry
             ICurve line = _exampleLine;
 
             // Assert
-            line.LocationPoints.Count.Should().Be(2);
+            line.ControlPointLocations.Count.Should().Be(2);
             line.Degree.Should().Be(1);
         }
     }

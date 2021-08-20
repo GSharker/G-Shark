@@ -187,9 +187,9 @@ namespace GShark.Geometry
             switch (loftType)
             {
                 case LoftType.Normal:
-                    for (int n = 0; n < curves[0].LocationPoints.Count; n++)
+                    for (int n = 0; n < curves[0].ControlPointLocations.Count; n++)
                     {
-                        List<Point3> pts = curves.Select(c => c.LocationPoints[n]).ToList();
+                        List<Point3> pts = curves.Select(c => c.ControlPointLocations[n]).ToList();
                         NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
                         surfaceControlPoints.Add(crv.ControlPoints);
                         knotVectorV = crv.Knots;

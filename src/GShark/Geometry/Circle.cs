@@ -75,7 +75,7 @@ namespace GShark.Geometry
 
         public int Degree => 2;
 
-        public List<Point3> LocationPoints
+        public List<Point3> ControlPointLocations
         {
             get
             {
@@ -100,7 +100,7 @@ namespace GShark.Geometry
                 List<double> weights = Sets.RepeatData(1.0, 9);
                 weights[1] = weights[3] = weights[5] = weights[7] = 1.0 / Math.Sqrt(2.0);
 
-                return Point4.PointsHomogeniser(LocationPoints, weights.ToList());
+                return Point4.PointsHomogeniser(ControlPointLocations, weights.ToList());
             }
         }
 

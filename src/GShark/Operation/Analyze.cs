@@ -145,7 +145,7 @@ namespace GShark.Operation
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = 0D;
-            List<Point3> ctrlPts = curve.LocationPoints;
+            List<Point3> ctrlPts = curve.ControlPointLocations;
 
             (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 

@@ -212,12 +212,12 @@ namespace GShark.Test.XUnit.Geometry
             ICurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
 
             // Assert
-            arc.LocationPoints.Count.Should().Be(5);
+            arc.ControlPointLocations.Count.Should().Be(5);
             arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.LocationPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.ControlPointLocations[i].Equals(ptChecks[i]).Should().BeTrue();
                 arc.ControlPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
@@ -251,12 +251,12 @@ namespace GShark.Test.XUnit.Geometry
             ICurve arc = _exampleArc3D;
 
             // Assert
-            arc.LocationPoints.Count.Should().Be(7);
+            arc.ControlPointLocations.Count.Should().Be(7);
             arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.LocationPoints[i].EpsilonEquals(ptChecks[i], GSharkMath.MaxTolerance).Should().BeTrue();
+                arc.ControlPointLocations[i].EpsilonEquals(ptChecks[i], GSharkMath.MaxTolerance).Should().BeTrue();
                 arc.ControlPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
