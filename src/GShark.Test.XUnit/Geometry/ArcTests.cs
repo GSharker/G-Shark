@@ -94,8 +94,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(1.2, new double[] { 70.334926, 18.808863, 2.762032 })]
-        [InlineData(2.5, new double[] { 87.505564, 8.962333, 5.203339 })]
+        [InlineData(0.15, new double[] { 69.334566, 27.421862, 0.510428 })]
+        [InlineData(0.5, new double[] { 82.012463, 9.246222, 5.174356 })]
+        [InlineData(0.72, new double[] { 96.621782, 12.93396, 4.08574 })]
         public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
         {
             // Arrange
@@ -107,6 +108,40 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(10, new double[] { 69.463068, 28.087104, 0.334816 })]
+        [InlineData(17.5, new double[] { 69.624396, 20.896489, 2.220164 })]
+        [InlineData(22.5, new double[] { 71.568605, 16.456984, 3.368902 })]
+        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Length(double length, double[] pts)
+        {
+            // Arrange
+            var expectedPt = new Point3(pts[0], pts[1], pts[2]);
+            Arc arc = _exampleArc3D;
+
+            // Act
+            var pt = arc.PointAtLength(length);
+
+            // Assert
+            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(10, new double[] { -0.20443, -0.946415, 0.250015 })]
+        [InlineData(17.5, new double[] { 0.246705, -0.937861, 0.244034 })]
+        [InlineData(22.5, new double[] { 0.525002, -0.824293, 0.21193 })]
+        public void It_Returns_A_Tangent_On_The_Arc_At_The_Given_Length(double length, double[] tangent)
+        {
+            // Arrange
+            var expectedTan = new Vector3(tangent[0], tangent[1], tangent[2]);
+            Arc arc = _exampleArc3D;
+
+            // Act
+            var tan = arc.TangentAtLength(length);
+
+            // Assert
+            tan.EpsilonEquals(expectedTan, 1e-6).Should().BeTrue();
         }
 
         [Theory]
@@ -144,8 +179,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.0, new double[] { -0.726183, -0.663492, 0.180104 })]
-        [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
+        [InlineData(0.15, new double[] { -0.162674, -0.954043, 0.251671 })]
+        [InlineData(0.5, new double[] { 0.976088, -0.212106, 0.047567 })]
+        [InlineData(0.72, new double[] { 0.742847, 0.646006, -0.175654 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
         {
             // Arrange
