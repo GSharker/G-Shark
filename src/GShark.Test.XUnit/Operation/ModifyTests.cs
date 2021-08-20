@@ -52,7 +52,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             (curve.Knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
-            (pts.Count + insertion).Should().Be(curveAfterRefine.LocationPoints.Count);
+            (pts.Count + insertion).Should().Be(curveAfterRefine.ControlPointLocations.Count);
 
             Point3 p0 = curve.PointAt(2.5);
             Point3 p1 = curveAfterRefine.PointAt(2.5);

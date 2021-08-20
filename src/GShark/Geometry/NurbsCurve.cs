@@ -56,7 +56,7 @@ namespace GShark.Geometry
             Weights = Point4.GetWeights(controlPoints);
             Degree = degree;
             Knots = knots;
-            LocationPoints = Point4.PointDehomogenizer1d(controlPoints);
+            ControlPointLocations = Point4.PointDehomogenizer1d(controlPoints);
             ControlPoints = controlPoints;
         }
 
@@ -88,7 +88,7 @@ namespace GShark.Geometry
 
         public int Degree { get; }
 
-        public List<Point3> LocationPoints { get; }
+        public List<Point3> ControlPointLocations { get; }
 
         public List<Point4> ControlPoints { get; }
 
@@ -117,7 +117,7 @@ namespace GShark.Geometry
                     curve = ClampEnds();
                 }
 
-                List<Point3> pts = new List<Point3> { curve.LocationPoints[0] };
+                List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
                 List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
                 foreach (ICurve crv in beziers)
                 {
@@ -125,7 +125,7 @@ namespace GShark.Geometry
                     pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
                 }
 
-                pts.Add(curve.LocationPoints[curve.LocationPoints.Count - 1]);
+                pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
                 Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
                 return new BoundingBox(removedDuplicate);
             }
@@ -152,9 +152,9 @@ namespace GShark.Geometry
         {
             if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
             int i, j;
-            for (i = 0, j = LocationPoints.Count - Degree; i < Degree; i++, j++)
+            for (i = 0, j = ControlPointLocations.Count - Degree; i < Degree; i++, j++)
             {
-                if (LocationPoints[i].DistanceTo(LocationPoints[j]) > 0)
+                if (ControlPointLocations[i].DistanceTo(ControlPointLocations[j]) > 0)
                 {
                     return false;
                 }
@@ -298,7 +298,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            if (!LocationPoints.SequenceEqual(other.LocationPoints))
+            if (!ControlPointLocations.SequenceEqual(other.ControlPointLocations))
             {
                 return false;
             }
@@ -337,7 +337,7 @@ namespace GShark.Geometry
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            string controlPts = string.Join("\n", LocationPoints.Select(first => $"({string.Join(",", first)})"));
+            string controlPts = string.Join("\n", ControlPointLocations.Select(first => $"({string.Join(",", first)})"));
             string knots = $"Knots = ({string.Join(",", Knots)})";
             string degree = $"CurveDegree = {Degree}";
 

@@ -68,7 +68,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            List<Point3> ctrPts = circle.LocationPoints;
+            List<Point3> ctrPts = circle.ControlPointLocations;
 
             // Assert
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)

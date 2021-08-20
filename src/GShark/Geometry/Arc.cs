@@ -3,6 +3,7 @@ using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -125,7 +126,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the start point of the arc.
         /// </summary>
-        public Vector3 StartPoint => LocationPoints[0];
+        public Vector3 StartPoint => ControlPointLocations[0];
 
         /// <summary>
         /// Gets the mid-point of the arc.
@@ -135,11 +136,11 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the end point of the arc.
         /// </summary>
-        public Vector3 EndPoint => LocationPoints[LocationPoints.Count - 1];
+        public Vector3 EndPoint => ControlPointLocations[ControlPointLocations.Count - 1];
 
         public int Degree => 2;
 
-        public List<Point3> LocationPoints { get; private set; }
+        public List<Point3> ControlPointLocations { get; private set; }
 
         public List<Point4> ControlPoints { get; private set; }
 
@@ -224,30 +225,81 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns the point at the parameter t on the arc.
+        /// Evaluates the point at the parameter t on the arc.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
         /// <returns>Point on the arc.</returns>
         public Point3 PointAt(double t)
         {
-            Vector3 xDir = Plane.XAxis * Math.Cos(t) * Radius;
-            Vector3 yDir = Plane.YAxis * Math.Sin(t) * Radius;
+            if (t > 1.0 || t < 0.0)
+            {
+                throw new ArgumentOutOfRangeException($"The value provided for parameter t, {t}, must be between 0.0 and 1.0.");
+            }
+
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
+            Vector3 xDir = Plane.XAxis * Math.Cos(theta) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(theta) * Radius;
 
             return Plane.Origin + xDir + yDir;
         }
 
         /// <summary>
-        /// Returns the tangent at the parameter t on the arc.
+        /// Evaluates the point at the specific length.
         /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.</param>
+        /// <param name="length">The length where to evaluate the point.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtLength(double length)
+        {
+            if (length < 0)
+            {
+                throw new Exception("Length factor cannot be less than zero.");
+            }
+
+            if (length > Length)
+            {
+                throw new Exception("Length factor cannot be larger than the length of the curve.");
+            }
+
+            double angleLength = GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
+
+            Vector3 xDir = Plane.XAxis * Math.Cos(angleLength) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(angleLength) * Radius;
+
+            return Plane.Origin + xDir + yDir;
+        }
+
+        /// <summary>
+        /// Evaluates the tangent at the specific length.
+        /// </summary>
+        /// <param name="length">The length where to evaluate the tangent.</param>
+        /// <returns>The unitize tangent at the length.</returns>
+        public Vector3 TangentAtLength(double length)
+        {
+            Point3 pt = PointAtLength(length);
+            (double u, double v) = Plane.ClosestParameters(pt);
+            double t = EvaluateParameter(u, v, true);
+            return TangentAt(t);
+        }
+
+        /// <summary>
+        /// Calculates the tangent at the parameter t on the arc.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 to 1.0.</param>
         /// <returns>Tangent vector at the t parameter.</returns>
         public Vector3 TangentAt(double t)
         {
+            if (t > 1.0 || t < 0.0)
+            {
+                throw new ArgumentOutOfRangeException($"The value provided, {t}, must be between 0.0 and 1.0.");
+            }
+
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
+
             double r1 = Radius;
             double r2 = Radius;
 
-            r1 *= -Math.Sin(t);
-            r2 *= Math.Cos(t);
+            r1 *= -Math.Sin(theta);
+            r2 *= Math.Cos(theta);
 
             Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
@@ -261,39 +313,15 @@ namespace GShark.Geometry
         /// <returns>The point on the arc that is close to the test point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
-            double twoPi = 2.0 * Math.PI;
-
             (double u, double v) = Plane.ClosestParameters(pt);
             if (Math.Abs(u) < GSharkMath.MinTolerance && Math.Abs(v) < GSharkMath.MinTolerance)
             {
                 return PointAt(0.0);
             }
 
-            double t = Math.Atan2(v, u);
-            if (t < 0.0)
-            {
-                t += twoPi;
-            }
+            double t = EvaluateParameter(u, v, true);
 
-            t -= Domain.T0;
-
-            while (t < 0.0)
-            {
-                t += twoPi;
-            }
-
-            while (t >= twoPi)
-            {
-                t -= twoPi;
-            }
-
-            double t1 = Domain.Length;
-            if (t > t1)
-            {
-                t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
-            }
-
-            return PointAt(Domain.T0 + t);
+            return PointAt(t);
         }
 
         /// <summary>
@@ -412,7 +440,7 @@ namespace GShark.Geometry
             }
 
             Knots = knots;
-            LocationPoints = ctrPts.ToList();
+            ControlPointLocations = ctrPts.ToList();
             ControlPoints = Point4.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
         }
 
@@ -477,6 +505,37 @@ namespace GShark.Geometry
             }
 
             return dif;
+        }
+
+        private double EvaluateParameter(double u, double v, bool parametrize = false)
+        {
+            double twoPi = 2.0 * Math.PI;
+
+            double t = Math.Atan2(v, u);
+            if (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            t -= Domain.T0;
+
+            while (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            while (t >= twoPi)
+            {
+                t -= twoPi;
+            }
+
+            double t1 = Domain.Length;
+            if (t > t1)
+            {
+                t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
+            }
+
+            return (parametrize) ? (t - Domain.T0) / (Domain.T1 - Domain.T0) : t;
         }
     }
 }

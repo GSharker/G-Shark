@@ -31,7 +31,7 @@ namespace GShark.Geometry
 
         public int Degree => 1;
 
-        public List<Point3> LocationPoints => this;
+        public List<Point3> ControlPointLocations => this;
 
         public List<Point4> ControlPoints { get; private set; }
 

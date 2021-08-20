@@ -17,7 +17,7 @@ namespace GShark.Core.BoundingBoxTree
         internal LazyCurveBBT(ICurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
-            _boundingBox = new BoundingBox(curve.LocationPoints);
+            _boundingBox = new BoundingBox(curve.ControlPointLocations);
 
             if (double.IsNaN(knotTolerance))
             {
