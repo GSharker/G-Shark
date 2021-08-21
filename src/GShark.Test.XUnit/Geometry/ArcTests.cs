@@ -66,7 +66,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
-
+            var pt = arc.EndPoint;
+            var pt5 = arc.StartPoint;
             // Assert
             arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
             arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();

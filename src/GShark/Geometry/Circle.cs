@@ -15,6 +15,8 @@ namespace GShark.Geometry
     /// </example>
     public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
+        internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
+
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
         /// </summary>
@@ -44,6 +46,19 @@ namespace GShark.Geometry
         /// <param name="pt3">End point of the arc.</param>
         public Circle(Point3 pt1, Point3 pt2, Point3 pt3)
         {
+            if (!pt1.IsValid)
+            {
+                throw new Exception("The first point is not valid.");
+            }
+            if (!pt2.IsValid)
+            {
+                throw new Exception("The second point is not valid.");
+            }
+            if (!pt3.IsValid)
+            {
+                throw new Exception("The third point is not valid.");
+            }
+
             Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
             Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3 xDir = pt1 - center;
@@ -71,7 +86,22 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the circumference of the circle.
         /// </summary>
-        public double Circumference => Math.Abs(2.0 * Math.PI * Radius);
+        public double Length => Math.Abs(2.0 * Math.PI * Radius);
+
+        /// <summary>
+        /// Gets the start point of the circle.
+        /// </summary>
+        public Point3 StartPoint => PointAt(0.0);
+
+        /// <summary>
+        /// Gets the mid-point of the arc.
+        /// </summary>
+        public Point3 MidPoint => PointAt(Domain.Mid);
+
+        /// <summary>
+        /// Gets the end point of the arc.
+        /// </summary>
+        public Point3 EndPoint => PointAt(1.0);
 
         public int Degree => 2;
 
@@ -141,24 +171,72 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Calculates the point on a circle at the given parameter.
+        /// Evaluates the point at the parameter t on the circle.
         /// </summary>
-        /// <param name="t">Parameter of point to evaluate.</param>
-        /// <returns>The point on the circle at the given parameter.</returns>
+        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
+        /// <returns>Point on the circle.</returns>
         public Point3 PointAt(double t)
         {
-            return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
+            if (t < 0.0)
+            {
+                return StartPoint;
+            }
+
+            if (t > 1.0)
+            {
+                return EndPoint;
+            }
+
+            double theta = _domain.T0 + (_domain.T1 - _domain.T0) * t;
+            return Plane.PointAt(Math.Cos(theta) * Radius, Math.Sin(theta) * Radius);
         }
 
         /// <summary>
-        /// Calculates the vector tangent of a circle at the given parameter.
+        /// Evaluates the point at the specific length.
         /// </summary>
-        /// <param name="t">Parameter of tangent ot evaluate.</param>
-        /// <returns></returns>
+        /// <param name="length">The length where to evaluate the point.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtLength(double length)
+        {
+            if (length < 0)
+            {
+                return StartPoint;
+            }
+
+            if (length > Length)
+            {
+                return EndPoint;
+            }
+
+            double angleLength = GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
+
+            Vector3 xDir = Plane.XAxis * Math.Cos(angleLength) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(angleLength) * Radius;
+
+            return Plane.Origin + xDir + yDir;
+        }
+
+        /// <summary>
+        /// Calculates the tangent at the parameter t on the circle curve.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 to 1.0.</param>
+        /// <returns>Unitized tangent vector at the t parameter.</returns>
         public Vector3 TangentAt(double t)
         {
-            double r1 = Radius * (-Math.Sin(t));
-            double r2 = Radius * (Math.Cos(t));
+            if (t < 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t > 1.0)
+            {
+                t = 1.0;
+            }
+
+            double theta = _domain.T0 + (_domain.T1 - _domain.T0) * t;
+
+            double r1 = Radius * (-Math.Sin(theta));
+            double r2 = Radius * (Math.Cos(theta));
 
             Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
 
@@ -166,10 +244,23 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the point on the circle which is closest to the test point.
+        /// Evaluates the tangent at the specific length.
         /// </summary>
-        /// <param name="pt">The test point to project onto the circle.</param>
-        /// <returns>The point on the circle that is close to the test point.</returns>
+        /// <param name="length">The length where to evaluate the tangent.</param>
+        /// <returns>The unitize tangent at the length.</returns>
+        public Vector3 TangentAtLength(double length)
+        {
+            Point3 pt = PointAtLength(length);
+            (double u, double v) = Plane.ClosestParameters(pt);
+            double t = EvaluateParameter(u, v, true);
+            return TangentAt(t);
+        }
+
+        /// <summary>
+        /// Gets the point on the circular curve which is closest to the test point.
+        /// </summary>
+        /// <param name="pt">The test point to project onto the circular curve.</param>
+        /// <returns>The point on the circular curve that is close to the test point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
             (double u, double v) = Plane.ClosestParameters(pt);
@@ -178,11 +269,7 @@ namespace GShark.Geometry
                 return PointAt(0.0);
             }
 
-            double t = Math.Atan2(v, u);
-            if (t < 0.0)
-            {
-                t += 2.0 * Math.PI;
-            }
+            double t = EvaluateParameter(u, v, true);
 
             return PointAt(t);
         }
@@ -260,6 +347,37 @@ namespace GShark.Geometry
             }
 
             return num1;
+        }
+
+        private double EvaluateParameter(double u, double v, bool parametrize = false)
+        {
+            double twoPi = 2.0 * Math.PI;
+
+            double t = Math.Atan2(v, u);
+            if (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            t -= _domain.T0;
+
+            while (t < 0.0)
+            {
+                t += twoPi;
+            }
+
+            while (t >= twoPi)
+            {
+                t -= twoPi;
+            }
+
+            double t1 = _domain.Length;
+            if (t > t1)
+            {
+                t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
+            }
+
+            return (parametrize) ? (t - _domain.T0) / (_domain.T1 - _domain.T0) : t;
         }
     }
 }
