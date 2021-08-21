@@ -126,19 +126,17 @@ namespace GShark.Geometry
         /// <returns>The point at the specific parameter.</returns>
         public Point3 PointAt(double t)
         {
-            var parameter = t;
-
             if (t < 0)
             {
-                parameter = 0;
+               return StartPoint;
             }
 
-            else if (t > 1)
+            if (t > 1)
             {
-                parameter = 1;
+                return EndPoint;
             }
 
-            return StartPoint + Direction * (Length * parameter);
+            return StartPoint + Direction * (Length * t);
         }
 
         /// <summary>
@@ -148,19 +146,17 @@ namespace GShark.Geometry
         /// <returns>The point.</returns>
         public Point3 PointAtLength(double length)
         {
-            var len = length;
-
             if (length < 0)
             {
-                len = 0;
+                return  StartPoint;
             }
 
             if (length > Length)
             {
-                len = Length;
+                return EndPoint;
             }
 
-            return StartPoint + Direction * len;
+            return StartPoint + Direction * length;
         }
 
         /// <summary>
@@ -180,19 +176,17 @@ namespace GShark.Geometry
         /// <returns>The curve length at t.</returns>
         public double LengthAt(double t)
         {
-            var parameter = t;
-
             if (t < 0)
             {
-                parameter = 0;
+                return 0;
             }
 
-            else if (t > 1)
+            if (t > 1)
             {
-                parameter = 1;
+                return Length;
             }
 
-            return Length * parameter;
+            return Length * t;
         }
 
         /// <summary>
@@ -202,19 +196,7 @@ namespace GShark.Geometry
         /// <returns>The tangent vector.</returns>
         public Vector3 TangentAtLength(double length)
         {
-            var len = length;
-
-            if (length < 0)
-            {
-                len = 0;
-            }
-
-            if (length > Length)
-            {
-                len = Length;
-            }
-
-            return TangentAt(ParameterAt(len));
+            return Direction;
         }
 
         /// <summary>
@@ -224,19 +206,18 @@ namespace GShark.Geometry
         /// <returns>The evaluated parameter.</returns>
         public double ParameterAt(double length)
         {
-            var len = length;
 
             if (length < 0)
             {
-                len = 0;
+                return 0;
             }
 
             if (length > Length)
             {
-                len = Length;
+                return 1;
             }
 
-            return len / Length;
+            return length / Length;
         }
 
 
