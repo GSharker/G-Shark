@@ -28,7 +28,7 @@ namespace GShark.Test.XUnit.Operation
             Line offsetResult = Offset.Line(ln, offset, Plane.PlaneXY);
 
             // Assert
-            (offsetResult.Start.DistanceTo(ln.Start) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (offsetResult.StartPoint.DistanceTo(ln.StartPoint) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]

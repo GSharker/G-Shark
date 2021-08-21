@@ -100,7 +100,7 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(p1, p2);
 
             // Act
-            var (tValues, pts) = Tessellation.CurveAdaptiveSample(ln);
+            var (tValues, pts) = Tessellation.CurveAdaptiveSample(ln.ToNurbs());
 
             // Arrange
             pts.Count.Should().Be(tValues.Count).And.Be(2);
