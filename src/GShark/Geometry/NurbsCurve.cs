@@ -5,6 +5,7 @@ using GShark.Operation;
 using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -18,8 +19,6 @@ namespace GShark.Geometry
     /// </example>
     public class NurbsCurve : ICurve, IEquatable<NurbsCurve>, ITransformable<NurbsCurve>
     {
-        public NurbsCurve() { }
-
         /// <summary>
         /// Creates a NURBS curve.
         /// </summary>
@@ -286,10 +285,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares if two NURBS curves are the same.<br/>
-        /// Two NURBS curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// Compares two NURBS curves for equality.<br/>
+        /// Two NURBS curves are equal when the have same control points, weights, knots and degree.
         /// </summary>
-        /// <param name="other">The NURBS curve.</param>
+        /// <param name="other">The other NURBS curve.</param>
         /// <returns>Return true if the NURBS curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
@@ -308,12 +307,12 @@ namespace GShark.Geometry
                 return false;
             }
 
-            if (!Weights.SequenceEqual(other.Weights))
+            if (Degree != other.Degree)
             {
                 return false;
             }
 
-            return Degree == other.Degree;
+            return Weights.SequenceEqual(other.Weights);
         }
 
         /// <summary>
@@ -346,6 +345,25 @@ namespace GShark.Geometry
             stringBuilder.AppendLine(degree);
 
             return stringBuilder.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            var sBldr = new StringBuilder();
+            sBldr.Append(Degree);
+            sBldr.Append(Knots);
+
+            foreach (var ptStr in ControlPointLocations.Select(p => p.ToString().ToList()))
+            {
+                sBldr.Append(ptStr);
+            }
+
+            foreach (var wtStr in Weights.Select(w => w.ToString(CultureInfo.InvariantCulture).ToList()))
+            {
+                sBldr.Append(wtStr);
+            }
+
+            return sBldr.ToString().GetHashCode();
         }
     }
 }
