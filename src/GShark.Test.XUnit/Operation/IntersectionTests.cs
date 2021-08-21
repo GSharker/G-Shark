@@ -32,11 +32,11 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             intersection0.Should().BeTrue();
-            lineIntersect0.Start.Should().BeEquivalentTo(new Point3(10, 0, 0));
+            lineIntersect0.StartPoint.Should().BeEquivalentTo(new Point3(10, 0, 0));
             lineIntersect0.Direction.Should().BeEquivalentTo(new Vector3(0, 1, 0));
 
             intersection1.Should().BeTrue();
-            lineIntersect1.Start.Should().BeEquivalentTo(new Point3(10, -10, 0));
+            lineIntersect1.StartPoint.Should().BeEquivalentTo(new Point3(10, -10, 0));
             lineIntersect1.Direction.Should().BeEquivalentTo(new Vector3(0, 0, 1));
         }
 

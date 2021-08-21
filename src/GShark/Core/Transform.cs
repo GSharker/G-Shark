@@ -106,7 +106,7 @@ namespace GShark.Core
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
         public Transform Rotation(double radiansAngle, Line axis)
         {
-            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), axis.Direction, axis.Start);
+            return Rotation(Math.Sin(radiansAngle), Math.Cos(radiansAngle), axis.Direction, axis.StartPoint);
         }
 
         /// <summary>

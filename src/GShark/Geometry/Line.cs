@@ -11,54 +11,54 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
     /// </example>
-    public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
+    public class Line : IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Initializes a line by start point and end point.
         /// </summary>
-        /// <param name="start">Start point.</param>
-        /// <param name="end">End point.</param>
-        public Line(Point3 start, Point3 end)
+        /// <param name="startPoint">Start point.</param>
+        /// <param name="endPoint">End point.</param>
+        public Line(Point3 startPoint, Point3 endPoint)
         {
-            if (start == end || !start.IsValid || !end.IsValid)
+            if (startPoint == endPoint || !startPoint.IsValid || !endPoint.IsValid)
             {
                 throw new Exception("Start or end point is not valid, or they are equal");
             }
 
-            Start = start;
-            End = end;
-            Length = Start.DistanceTo(End);
-            Direction = (End - Start).Unitize();
+            StartPoint = startPoint;
+            EndPoint = endPoint;
+            Length = StartPoint.DistanceTo(EndPoint);
+            Direction = (EndPoint - StartPoint).Unitize();
         }
 
         /// <summary>
         /// Initializes a line from a starting point, direction and length.
         /// </summary>
-        /// <param name="start">Starting point of the line.</param>
+        /// <param name="startPoint">Starting point of the line.</param>
         /// <param name="direction">Direction of the line.</param>
         /// <param name="length">Length of the line.</param>
-        public Line(Point3 start, Vector3 direction, double length)
+        public Line(Point3 startPoint, Vector3 direction, double length)
         {
             if (length <= GSharkMath.Epsilon)
             {
                 throw new Exception("Length must be bigger than zero");
             }
 
-            Start = start;
-            End = start + direction.Amplify(length);
+            StartPoint = startPoint;
+            EndPoint = startPoint + direction.Amplify(length);
             Length = Math.Abs(length);
-            Direction = (End - Start).Unitize();
+            Direction = (EndPoint - StartPoint).Unitize();
         }
 
         /// <summary>
         /// Start point of the line.
         /// </summary>
-        public Point3 Start { get; }
+        public Point3 StartPoint { get; }
 
         /// <summary>
         /// End point of the line.
         /// </summary>
-        public Point3 End { get; }
+        public Point3 EndPoint { get; }
 
         /// <summary>
         /// Length of the line.
@@ -70,27 +70,14 @@ namespace GShark.Geometry
         /// </summary>
         public Vector3 Direction { get; }
 
-        public int Degree => 1;
-
-        public List<Point3> ControlPointLocations => new List<Point3> { Start, End };
-
-        public List<Point4> ControlPoints => Point4.PointsHomogeniser(ControlPointLocations, 1.0);
-
-        public KnotVector Knots => new KnotVector { 0, 0, 1, 1 };
-
-        public Interval Domain => new Interval(0.0, 1.0);
-
         /// <summary>
         /// Gets the BoundingBox in ascending fashion.
         /// </summary>
-        public BoundingBox BoundingBox
+        public BoundingBox GetBoundingBox()
         {
-            get
-            {
-                BoundingBox bBox = new BoundingBox(Start, End);
-                BoundingBox validBBox = bBox.MakeItValid();
-                return validBBox;
-            }
+            BoundingBox bBox = new BoundingBox(StartPoint, EndPoint);
+            BoundingBox validBBox = bBox.MakeItValid();
+            return validBBox;
         }
 
         /// <summary>
@@ -101,13 +88,13 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 pt)
         {
             Vector3 dir = Direction;
-            Vector3 v = pt - Start;
+            Vector3 v = pt - StartPoint;
             double d = Vector3.DotProduct(v, dir);
 
             d = Math.Min(Length, d);
             d = Math.Max(d, 0);
 
-            return Start + dir * d;
+            return StartPoint + dir * d;
         }
 
         /// <summary>
@@ -117,12 +104,12 @@ namespace GShark.Geometry
         /// <returns>The parameter on the line closest to the test point.</returns>
         public double ClosestParameter(Point3 pt)
         {
-            Vector3 dir = End - Start;
+            Vector3 dir = EndPoint - StartPoint;
             double dirLength = dir.SquareLength;
 
             if (!(dirLength > 0.0)) return 0.0;
-            Vector3 ptToStart = pt - Start;
-            Vector3 ptToEnd = pt - End;
+            Vector3 ptToStart = pt - StartPoint;
+            Vector3 ptToEnd = pt - EndPoint;
 
             if (ptToStart.SquareLength <= ptToEnd.SquareLength)
             {
@@ -139,13 +126,99 @@ namespace GShark.Geometry
         /// <returns>The point at the specific parameter.</returns>
         public Point3 PointAt(double t)
         {
-            if (t > 1.0 || t < 0.0)
+            if (t < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(t), "Parameter is outside the domain 0.0 to 1.0");
+               return StartPoint;
             }
 
-            return Start + Direction * (Length * t);
+            if (t > 1)
+            {
+                return EndPoint;
+            }
+
+            return StartPoint + Direction * (Length * t);
         }
+
+        /// <summary>
+        /// Evaluates the point on the curve at a given length.
+        /// </summary>
+        /// <param name="length">Length, between 0 and the length of the curve.</param>
+        /// <returns>The point.</returns>
+        public Point3 PointAtLength(double length)
+        {
+            if (length < 0)
+            {
+                return  StartPoint;
+            }
+
+            if (length > Length)
+            {
+                return EndPoint;
+            }
+
+            return StartPoint + Direction * length;
+        }
+
+        /// <summary>
+        /// Returns the tangent at the given parameter.
+        /// </summary>
+        /// <param name="t">Parameter, between 0 and 1.</param>
+        /// <returns>The tangent vector.</returns>
+        public Vector3 TangentAt(double t)
+        {
+            return Direction;
+        }
+
+        /// <summary>
+        /// Returns the tangent at the given length.
+        /// </summary>
+        /// <param name="length">Length, between 0 and the length of the line.</param>
+        /// <returns>The tangent vector.</returns>
+        public Vector3 TangentAtLength(double length)
+        {
+            return Direction;
+        }
+
+        /// <summary>
+        /// Returns the length at a given parameter.
+        /// </summary>
+        /// <param name="t">Parameter, between 0 and 1.</param>
+        /// <returns>The curve length at t.</returns>
+        public double LengthAt(double t)
+        {
+            if (t < 0)
+            {
+                return 0;
+            }
+
+            if (t > 1)
+            {
+                return Length;
+            }
+
+            return Length * t;
+        }
+
+        /// <summary>
+        /// Evaluates the parameter of the line at a given length.
+        /// </summary>
+        /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
+        /// <returns>The evaluated parameter.</returns>
+        public double ParameterAt(double length)
+        {
+            if (length < 0)
+            {
+                return 0;
+            }
+
+            if (length > Length)
+            {
+                return 1;
+            }
+
+            return length / Length;
+        }
+
 
         /// <summary>
         /// Flip the endpoint of the line.
@@ -153,7 +226,7 @@ namespace GShark.Geometry
         /// <returns>The line flipped.</returns>
         public Line Flip()
         {
-            return new Line(End, Start);
+            return new Line(EndPoint, StartPoint);
         }
 
         /// <summary>
@@ -164,22 +237,30 @@ namespace GShark.Geometry
         /// <returns>The extended line.</returns>
         public Line Extend(double startLength, double endLength)
         {
-            Point3 start = Start;
-            Point3 end = End;
+            Point3 start = StartPoint;
+            Point3 end = EndPoint;
 
             if (startLength >= -GSharkMath.Epsilon || startLength <= GSharkMath.Epsilon)
             {
-                start = Start - (Direction * startLength);
+                start = StartPoint - (Direction * startLength);
             }
 
             if (endLength >= -GSharkMath.Epsilon || endLength <= GSharkMath.Epsilon)
             {
-                end = End + (Direction * endLength);
+                end = EndPoint + (Direction * endLength);
             }
 
             return new Line(start, end);
         }
 
+        /// <summary>
+        /// Gets the NURBS form of the curve.
+        /// </summary>
+        /// <returns>A NURBS curve.</returns>
+        public NurbsCurve ToNurbs()
+        {
+            return new NurbsCurve(new List<Point3> {StartPoint, EndPoint}, 1);
+        }
 
         /// <summary>
         /// Transforms the line using the transformation matrix.
@@ -188,8 +269,8 @@ namespace GShark.Geometry
         /// <returns>A line transformed.</returns>
         public Line Transform(Transform transform)
         {
-            Point3 pt1 = Start.Transform(transform);
-            Point3 pt2 = End.Transform(transform);
+            Point3 pt1 = StartPoint.Transform(transform);
+            Point3 pt2 = EndPoint.Transform(transform);
             return new Line(pt1, pt2);
         }
 
@@ -211,7 +292,7 @@ namespace GShark.Geometry
                 return false;
             }
 
-            return Start.Equals(other.Start) && End.Equals(other.End);
+            return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
         }
 
         /// <summary>
@@ -238,7 +319,7 @@ namespace GShark.Geometry
         /// <returns>A unique hashCode of an line.</returns>
         public override int GetHashCode()
         {
-            return new[] { Start, End }.GetHashCode();
+            return new[] { StartPoint, EndPoint }.GetHashCode();
         }
 
         /// <summary>
@@ -247,7 +328,7 @@ namespace GShark.Geometry
         /// <returns>A text string.</returns>
         public override string ToString()
         {
-            return $"{Start} - {End} - L:{Length}";
+            return $"{StartPoint} - {EndPoint} - L:{Length}";
         }
     }
 }

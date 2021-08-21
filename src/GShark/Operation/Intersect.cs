@@ -127,7 +127,7 @@ namespace GShark.Operation
         public static bool LinePlane(Line line, Plane plane, out Point3 pt, out double t)
         {
             Vector3 lnDir = line.Direction;
-            Point3 ptPlane = plane.Origin - line.Start;
+            Point3 ptPlane = plane.Origin - line.StartPoint;
             double segmentLength = line.Length;
 
             double denominator = Vector3.DotProduct(plane.ZAxis, lnDir);
@@ -142,7 +142,7 @@ namespace GShark.Operation
 
             // Compute the intersect parameter.
             double s = numerator / denominator;
-            pt = line.Start + lnDir * s;
+            pt = line.StartPoint + lnDir * s;
             // Parametrize the t value between 0.0 to 1.0.
             t = s / segmentLength;
             return true;
@@ -167,7 +167,7 @@ namespace GShark.Operation
             double ln1Length = ln1.Length;
             Vector3 lnDir0 = ln0.Direction;
             Vector3 lnDir1 = ln1.Direction;
-            Vector3 ln0Ln1Dir = ln0.Start - ln1.Start;
+            Vector3 ln0Ln1Dir = ln0.StartPoint - ln1.StartPoint;
 
             double a = Vector3.DotProduct(lnDir0, lnDir0);
             double b = Vector3.DotProduct(lnDir0, lnDir1);
@@ -188,8 +188,8 @@ namespace GShark.Operation
             double s = (b * e - c * d) / div;
             double t = (a * e - b * d) / div;
 
-            pt0 = ln0.Start + lnDir0 * s;
-            pt1 = ln1.Start + lnDir1 * t;
+            pt0 = ln0.StartPoint + lnDir0 * s;
+            pt1 = ln1.StartPoint + lnDir1 * t;
             t0 = s / ln0Length;
             t1 = t / ln1Length;
             return true;
@@ -236,7 +236,7 @@ namespace GShark.Operation
         /// <returns>True if intersection is computed.</returns>
         public static bool LineCircle(Circle cl, Line ln, out Point3[] pts)
         {
-            Point3 pt0 = ln.Start;
+            Point3 pt0 = ln.StartPoint;
             Point3 ptCircle = cl.Center;
             Vector3 lnDir = ln.Direction;
             Point3 pt0PtCir = pt0 - ptCircle;
@@ -312,7 +312,7 @@ namespace GShark.Operation
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
         public static List<CurvesIntersectionResult> CurveLine(ICurve crv, Line ln)
         {
-            return CurveCurve(crv, ln);
+            return CurveCurve(crv, ln.ToNurbs());
         }
 
         /// <summary>
