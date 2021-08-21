@@ -2,7 +2,9 @@
 using GShark.ExtendedMethods;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace GShark.Geometry
 {
@@ -292,6 +294,13 @@ namespace GShark.Geometry
             }
 
             return true;
+        }
+
+        public override int GetHashCode()
+        {
+            var sBldr = new StringBuilder();
+            this.Select(d => sBldr.Append(d.ToString(CultureInfo.InvariantCulture)));
+            return sBldr.ToString().GetHashCode();
         }
 
         /// <summary>

@@ -301,8 +301,13 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="obj">The curve object.</param>
         /// <returns>Return true if the nurbs curves are equal.</returns>
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
             if (obj is Line curve)
                 return Equals(curve);
             return false;
