@@ -8,6 +8,7 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
+    /// An arc is any portion (other than the entire curve) of the circumference of a circle.<br/>
     /// Represents the value of a plane, two angles (interval in radians) and a radius (radians).<br/>
     /// The arc run ccw rotation where Xaxis and Yaxis form a orthonormal frame.
     /// </summary>
