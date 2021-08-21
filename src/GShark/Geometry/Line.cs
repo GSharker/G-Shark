@@ -206,7 +206,6 @@ namespace GShark.Geometry
         /// <returns>The evaluated parameter.</returns>
         public double ParameterAt(double length)
         {
-
             if (length < 0)
             {
                 return 0;
