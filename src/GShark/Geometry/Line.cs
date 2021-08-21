@@ -170,6 +170,16 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Returns the tangent at the given length.
+        /// </summary>
+        /// <param name="length">Length, between 0 and the length of the line.</param>
+        /// <returns>The tangent vector.</returns>
+        public Vector3 TangentAtLength(double length)
+        {
+            return Direction;
+        }
+
+        /// <summary>
         /// Returns the length at a given parameter.
         /// </summary>
         /// <param name="t">Parameter, between 0 and 1.</param>
@@ -187,16 +197,6 @@ namespace GShark.Geometry
             }
 
             return Length * t;
-        }
-
-        /// <summary>
-        /// Returns the tangent at the given length.
-        /// </summary>
-        /// <param name="length">Length, between 0 and the length of the line.</param>
-        /// <returns>The tangent vector.</returns>
-        public Vector3 TangentAtLength(double length)
-        {
-            return Direction;
         }
 
         /// <summary>
