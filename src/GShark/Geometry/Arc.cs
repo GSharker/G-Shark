@@ -15,7 +15,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/ArcTests.cs?name=example)]
     /// </example>
-    public class Arc : Circle, ICurve, IEquatable<Arc>, ITransformable<Arc>
+    public class Arc : Circle, IEquatable<Arc>, ITransformable<Arc>
     {
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.
@@ -30,7 +30,7 @@ namespace GShark.Geometry
                 throw new Exception("Angle domain must never be decreasing.");
             }
 
-            _domain = (angleDomainRadians.Length > Math.PI * 2.0)
+            Domain = (angleDomainRadians.Length > Math.PI * 2.0)
                 ? new Interval(AngularDiff(angleDomainRadians.T0, Math.PI * 2.0), AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
                 : angleDomainRadians;
 
@@ -64,7 +64,7 @@ namespace GShark.Geometry
                 angle += 2 * Math.PI;
             }
 
-            _domain = new Interval(0.0, angle);
+            Domain = new Interval(0.0, angle);
             ToNurbsCurve();
         }
 
@@ -72,56 +72,47 @@ namespace GShark.Geometry
         /// Gets the angle of this arc.<br/>
         /// Angle value in radians.
         /// </summary>
-        public double Angle => _domain.Length;
+        public double Angle => Domain.Length;
 
         /// <summary>
         /// Calculates the length of the arc.
         /// </summary>
         public new double Length => Math.Abs(Angle * Radius);
 
-        public new List<Point3> ControlPointLocations { get; private set; }
-
-        public new List<Point4> ControlPoints { get; private set; }
-
-        public new KnotVector Knots { get; private set; }
-
         /// <summary>
         /// Gets the BoundingBox of this arc.<br/>
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
-        public new BoundingBox BoundingBox
+        public BoundingBox BoundingBox()
         {
-            get
+            Plane orientedPlane = Plane.Align(Vector3.XAxis);
+            Point3 pt0 = StartPoint;
+            Point3 pt1 = EndPoint;
+            Point3 ptC = orientedPlane.Origin;
+
+            double theta0 = Math.Atan2(pt0[1] - ptC[1], pt0[0] - ptC[0]);
+            double theta1 = Math.Atan2(pt1[1] - ptC[1], pt1[0] - ptC[0]);
+
+            List<Point3> pts = new List<Point3> { pt0, pt1 };
+
+            if (AnglesSequence(theta0, 0, theta1))
             {
-                Plane orientedPlane = Plane.Align(Vector3.XAxis);
-                Point3 pt0 = StartPoint;
-                Point3 pt1 = EndPoint;
-                Point3 ptC = orientedPlane.Origin;
-
-                double theta0 = Math.Atan2(pt0[1] - ptC[1], pt0[0] - ptC[0]);
-                double theta1 = Math.Atan2(pt1[1] - ptC[1], pt1[0] - ptC[0]);
-
-                List<Point3> pts = new List<Point3> { pt0, pt1 };
-
-                if (AnglesSequence(theta0, 0, theta1))
-                {
-                    pts.Add(ptC + orientedPlane.XAxis * Radius);
-                }
-                if (AnglesSequence(theta0, Math.PI / 2, theta1))
-                {
-                    pts.Add(ptC + orientedPlane.YAxis * Radius);
-                }
-                if (AnglesSequence(theta0, Math.PI, theta1))
-                {
-                    pts.Add(ptC - orientedPlane.XAxis * Radius);
-                }
-                if (AnglesSequence(theta0, Math.PI * 3 / 2, theta1))
-                {
-                    pts.Add(ptC - orientedPlane.YAxis * Radius);
-                }
-
-                return new BoundingBox(pts);
+                pts.Add(ptC + orientedPlane.XAxis * Radius);
             }
+            if (AnglesSequence(theta0, Math.PI / 2, theta1))
+            {
+                pts.Add(ptC + orientedPlane.YAxis * Radius);
+            }
+            if (AnglesSequence(theta0, Math.PI, theta1))
+            {
+                pts.Add(ptC - orientedPlane.XAxis * Radius);
+            }
+            if (AnglesSequence(theta0, Math.PI * 3 / 2, theta1))
+            {
+                pts.Add(ptC - orientedPlane.YAxis * Radius);
+            }
+
+            return new BoundingBox(pts);
         }
 
         /// <summary>
@@ -171,7 +162,7 @@ namespace GShark.Geometry
         public new Arc Transform(Transform transformation)
         {
             Plane plane = Plane.Transform(transformation);
-            Interval angleDomain = new Interval(_domain.T0, _domain.T1);
+            Interval angleDomain = new Interval(Domain.T0, Domain.T1);
 
             return new Arc(plane, Radius, angleDomain);
         }
@@ -181,12 +172,12 @@ namespace GShark.Geometry
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
-        private void ToNurbsCurve()
+        public NurbsCurve ToNurbsCurve()
         {
             Vector3 axisX = Plane.XAxis;
             Vector3 axisY = Plane.YAxis;
             int numberOfArc;
-            Point3[] ctrPts;
+            Point4[] ctrPts;
             double[] weights;
 
             // Number of arcs.
@@ -194,56 +185,53 @@ namespace GShark.Geometry
             if ((Angle - piNum) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 1;
-                ctrPts = new Point3[3];
+                ctrPts = new Point4[3];
                 weights = new double[3];
             }
             else if ((Angle - piNum * 2) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 2;
-                ctrPts = new Point3[5];
+                ctrPts = new Point4[5];
                 weights = new double[5];
             }
             else if ((Angle - piNum * 3) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 3;
-                ctrPts = new Point3[7];
+                ctrPts = new Point4[7];
                 weights = new double[7];
             }
             else
             {
                 numberOfArc = 4;
-                ctrPts = new Point3[9];
+                ctrPts = new Point4[9];
                 weights = new double[9];
             }
 
             double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(_domain.T0)) + axisY * (Radius * Math.Sin(_domain.T0)));
-            Vector3 t0 = axisY * Math.Cos(_domain.T0) - axisX * Math.Sin(_domain.T0);
+            Point3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
             KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
-            double angle = _domain.T0;
+            double angle = Domain.T0;
 
-            ctrPts[0] = p0;
-            weights[0] = 1.0;
+            ctrPts[0] = new Point4(p0);
 
             for (int i = 1; i < numberOfArc + 1; i++)
             {
                 angle += detTheta;
-                Vector3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
+                Point3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
 
-                weights[index + 2] = 1;
-                ctrPts[index + 2] = p2;
+                ctrPts[index + 2] = new Point4(p2);
 
                 Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
                 Line ln0 = new Line(p0, t0.Unitize() + p0);
                 Line ln1 = new Line(p2, t2.Unitize() + p2);
                 Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out _);
-                Vector3 p1 = p0 + (t0 * u0);
+                Point3 p1 = p0 + (t0 * u0);
 
-                weights[index + 1] = weight1;
-                ctrPts[index + 1] = p1;
+                ctrPts[index + 1] = new Point4(p1, weight1);
                 index += 2;
 
                 if (i >= numberOfArc)
@@ -278,13 +266,11 @@ namespace GShark.Geometry
                     break;
             }
 
-            Knots = knots;
-            ControlPointLocations = ctrPts.ToList();
-            ControlPoints = Point4.PointsHomogeniser(ctrPts.ToList(), weights.ToList());
+            return new NurbsCurve(2, knots, ctrPts.ToList());
         }
 
         /// <summary>
-        /// Determines whether the arc is equal to another arc.<br/>
+        /// Determines whether the arc is equal to another.<br/>
         /// The arcs are equal if have the same plane, radius and angle.
         /// </summary>
         /// <param name="other">The arc to compare to.</param>

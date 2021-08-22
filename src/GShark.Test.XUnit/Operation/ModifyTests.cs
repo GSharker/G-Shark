@@ -1,12 +1,11 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Bson;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -229,7 +228,7 @@ namespace GShark.Test.XUnit.Operation
         public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
         {
             // Arrange
-            ICurve[] curves = {NurbsCurveCollection.NurbsCurvePlanarExample()};
+            ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample() };
 
             // Act
             Func<object> func = () => Modify.JoinCurves(curves);
@@ -268,11 +267,11 @@ namespace GShark.Test.XUnit.Operation
 
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0,0,-1));
-            Point3 expectedPt1 = new Point3(3.34125, 0.005, 0.6125 );
-            Point3 expectedPt2 = new Point3(5, 2.363281, 4.570313 );
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
+            Point3 expectedPt1 = new Point3(3.34125, 0.005, 0.6125);
+            Point3 expectedPt2 = new Point3(5, 2.363281, 4.570313);
             Point3 expectedPt3 = new Point3(5.351058, 5, -4.340474);
-            ICurve[] curves = {curve, ln.ToNurbs(), arc};
+            ICurve[] curves = { curve, ln.ToNurbs(), arc.ToNurbsCurve() };
 
             // Act
             ICurve joinedCurve = Modify.JoinCurves(curves);

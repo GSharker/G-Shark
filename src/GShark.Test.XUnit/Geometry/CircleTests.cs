@@ -53,7 +53,6 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Circle3D_With_Its_Nurbs_Representation()
         {
             // Arrange
-            Circle circle = _circle3D;
             var ptsExpected = new List<Point3>
             {
                 new Point3(74.264416, 36.39316, -1.884313),
@@ -68,12 +67,12 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            List<Point3> ctrPts = circle.ControlPointLocations;
+            NurbsCurve circleNurbs = _circle3D.ToNurbs();
 
             // Assert
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
-                ctrPts[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);
+                circleNurbs.ControlPointLocations[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);
             }
         }
 
@@ -159,6 +158,38 @@ namespace GShark.Test.XUnit.Geometry
             tangent.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
+        [Theory]
+        [InlineData(0.202075814453784, 29.202635)]
+        [InlineData(0.636170371459934, 91.935056)]
+        [InlineData(0.815184783236304, 117.805012)]
+        public void It_Returns_The_Length_At_The_Give_Parameter(double parameter, double expectedLength)
+        {
+            // Arrange
+            Circle circle = _circle2D;
+
+            // Act
+            double length = circle.LengthAt(parameter);
+
+            // Assert
+            length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
+        }
+
+        [Theory]
+        [InlineData(0.202075814453784, 29.202635)]
+        [InlineData(0.636170371459934, 91.935056)]
+        [InlineData(0.815184783236304, 117.805012)]
+        public void It_Returns_The_Parameter_At_The_Give_Length(double expectedParameter, double length)
+        {
+            // Arrange
+            Circle circle = _circle2D;
+
+            // Act
+            double parameter = circle.ParameterAt(length);
+
+            // Assert
+            parameter.Should().BeApproximately(expectedParameter, GSharkMath.MinTolerance);
+        }
+
         [Fact]
         public void It_Returns_The_Bounding_Box_Of_The_Circle()
         {
@@ -168,7 +199,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 maxCheck = new Point3(108.591002, 47.043069, 6.904624);
 
             // Act
-            BoundingBox bBox = circle.BoundingBox;
+            BoundingBox bBox = circle.GetBoundingBox();
 
             // Assert
             bBox.Min.EpsilonEquals(minCheck, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -176,8 +207,8 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 77.787894, 3.884764, 6.616100 })]
-        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 69.780281, 40.984098, -3.051729 })]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 80.001065, 9.815219, 5.041723 })]
+        [InlineData(new double[] { 89.12029, 34.989032, -1.63896 }, new double[] { 90.82015, 39.899444, -2.941443 })]
         public void It_Returns_The_Closest_Point_On_A_Circle(double[] ptToTest, double[] result)
         {
             // Arrange
@@ -185,11 +216,27 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(result[0], result[1], result[2]);
 
             // Act
-            Circle circle = _circle2D;
+            Circle circle = _circle3D;
             Point3 pt = circle.ClosestPoint(testPt);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, 0.324263)]
+        [InlineData(new double[] { 89.12029, 34.989032, -1.63896 }, 0.827967)]
+        public void It_Returns_The_Closest_Parameter_On_A_Circle(double[] ptToTest, double expectedParameter)
+        {
+            // Arrange
+            Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
+
+            // Act
+            Circle circle = _circle3D;
+            double parameter = circle.ClosestParameter(testPt);
+
+            // Assert
+            parameter.Should().BeApproximately(expectedParameter, GSharkMath.MaxTolerance);
         }
     }
 }
