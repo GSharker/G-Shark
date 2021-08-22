@@ -13,9 +13,9 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
     /// </example>
-    public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : IEquatable<Circle>, ITransformable<Circle>
     {
-        internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
+        internal Interval Domain = new Interval(0.0, 2.0 * Math.PI);
 
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
@@ -103,71 +103,25 @@ namespace GShark.Geometry
         /// </summary>
         public Point3 EndPoint => PointAt(1.0);
 
-        public int Degree => 2;
-
-        public List<Point3> ControlPointLocations
-        {
-            get
-            {
-                Point3[] ctrPts = new Point3[9];
-                ctrPts[0] = Plane.PointAt(Radius, 0.0);
-                ctrPts[1] = Plane.PointAt(Radius, Radius);
-                ctrPts[2] = Plane.PointAt(0.0, Radius);
-                ctrPts[3] = Plane.PointAt(-Radius, Radius);
-                ctrPts[4] = Plane.PointAt(-Radius, 0.0);
-                ctrPts[5] = Plane.PointAt(-Radius, -Radius);
-                ctrPts[6] = Plane.PointAt(0.0, -Radius);
-                ctrPts[7] = Plane.PointAt(Radius, -Radius);
-                ctrPts[8] = ctrPts[0];
-                return ctrPts.ToList();
-            }
-        }
-
-        public List<Point4> ControlPoints
-        {
-            get
-            {
-                List<double> weights = Sets.RepeatData(1.0, 9);
-                weights[1] = weights[3] = weights[5] = weights[7] = 1.0 / Math.Sqrt(2.0);
-
-                return Point4.PointsHomogeniser(ControlPointLocations, weights.ToList());
-            }
-        }
-
-        public KnotVector Knots =>
-            new KnotVector
-            {
-                0, 0, 0,
-                0.5 * Math.PI, 0.5 * Math.PI,
-                Math.PI, Math.PI,
-                1.5 * Math.PI, 1.5 * Math.PI,
-                2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
-            };
-
-        public Interval Domain => new Interval(0.0, 2.0 * Math.PI);
-
         /// <summary>
         /// Gets the BoundingBox of this Circle.
         /// </summary>
-        public BoundingBox BoundingBox
+        public virtual BoundingBox GetBoundingBox()
         {
-            get
-            {
-                double val1 = Radius * SelectionLength(Plane.ZAxis[1], Plane.ZAxis[2]);
-                double val2 = Radius * SelectionLength(Plane.ZAxis[2], Plane.ZAxis[0]);
-                double val3 = Radius * SelectionLength(Plane.ZAxis[0], Plane.ZAxis[1]);
+            double val1 = Radius * SelectionLength(Plane.ZAxis[1], Plane.ZAxis[2]);
+            double val2 = Radius * SelectionLength(Plane.ZAxis[2], Plane.ZAxis[0]);
+            double val3 = Radius * SelectionLength(Plane.ZAxis[0], Plane.ZAxis[1]);
 
-                double minX = Plane.Origin[0] - val1;
-                double maxX = Plane.Origin[0] + val1;
-                double minY = Plane.Origin[1] - val2;
-                double maxY = Plane.Origin[1] + val2;
-                double minZ = Plane.Origin[2] - val3;
-                double maxZ = Plane.Origin[2] + val3;
+            double minX = Plane.Origin[0] - val1;
+            double maxX = Plane.Origin[0] + val1;
+            double minY = Plane.Origin[1] - val2;
+            double maxY = Plane.Origin[1] + val2;
+            double minZ = Plane.Origin[2] - val3;
+            double maxZ = Plane.Origin[2] + val3;
 
-                Point3 min = new Point3(minX, minY, minZ);
-                Point3 max = new Point3(maxX, maxY, maxZ);
-                return new BoundingBox(min, max);
-            }
+            Point3 min = new Point3(minX, minY, minZ);
+            Point3 max = new Point3(maxX, maxY, maxZ);
+            return new BoundingBox(min, max);
         }
 
         /// <summary>
@@ -187,7 +141,7 @@ namespace GShark.Geometry
                 return EndPoint;
             }
 
-            double theta = _domain.T0 + (_domain.T1 - _domain.T0) * t;
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
             return Plane.PointAt(Math.Cos(theta) * Radius, Math.Sin(theta) * Radius);
         }
 
@@ -233,7 +187,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            double theta = _domain.T0 + (_domain.T1 - _domain.T0) * t;
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
 
             double r1 = Radius * (-Math.Sin(theta));
             double r2 = Radius * (Math.Cos(theta));
@@ -272,6 +226,35 @@ namespace GShark.Geometry
             double t = EvaluateParameter(u, v, true);
 
             return PointAt(t);
+        }
+
+        /// <summary>
+        /// Gets the NURBS form of the circle.
+        /// </summary>
+        /// <returns>A NURBS curve.</returns>
+        public virtual NurbsCurve ToNurbs()
+        {
+            Point4[] ctrPts = new Point4[9];
+            ctrPts[0] = new Point4(Plane.PointAt(Radius, 0.0));
+            ctrPts[1] = new Point4(Plane.PointAt(Radius, Radius), 1.0 / Math.Sqrt(2.0));
+            ctrPts[2] = new Point4(Plane.PointAt(0.0, Radius));
+            ctrPts[3] = new Point4(Plane.PointAt(-Radius, Radius), 1.0 / Math.Sqrt(2.0));
+            ctrPts[4] = new Point4(Plane.PointAt(-Radius, 0.0));
+            ctrPts[5] = new Point4(Plane.PointAt(-Radius, -Radius), 1.0 / Math.Sqrt(2.0));
+            ctrPts[6] = new Point4(Plane.PointAt(0.0, -Radius));
+            ctrPts[7] = new Point4(Plane.PointAt(Radius, -Radius), 1.0 / Math.Sqrt(2.0));
+            ctrPts[8] = ctrPts[0];
+
+            KnotVector knots = new KnotVector
+            {
+                0, 0, 0,
+                0.5 * Math.PI, 0.5 * Math.PI,
+                Math.PI, Math.PI,
+                1.5 * Math.PI, 1.5 * Math.PI,
+                2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
+            };
+
+            return new NurbsCurve(2, knots, ctrPts.ToList());
         }
 
         /// <summary>
@@ -359,7 +342,7 @@ namespace GShark.Geometry
                 t += twoPi;
             }
 
-            t -= _domain.T0;
+            t -= Domain.T0;
 
             while (t < 0.0)
             {
@@ -371,13 +354,13 @@ namespace GShark.Geometry
                 t -= twoPi;
             }
 
-            double t1 = _domain.Length;
+            double t1 = Domain.Length;
             if (t > t1)
             {
                 t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
             }
 
-            return (parametrize) ? (t - _domain.T0) / (_domain.T1 - _domain.T0) : t;
+            return (parametrize) ? (t - Domain.T0) / (Domain.T1 - Domain.T0) : t;
         }
     }
 }
