@@ -1,7 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -104,7 +103,7 @@ namespace GShark.Geometry
         public Point3 EndPoint => PointAt(1.0);
 
         /// <summary>
-        /// Gets the BoundingBox of this Circle.
+        /// Gets the bounding box of this circle.
         /// </summary>
         public virtual BoundingBox GetBoundingBox()
         {
@@ -125,10 +124,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Evaluates the point at the parameter t on the circle.
+        /// Evaluates the point at the parameter t on the circular curve.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
-        /// <returns>Point on the circle.</returns>
+        /// <returns>Point on the circular curve.</returns>
         public Point3 PointAt(double t)
         {
             if (t < 0.0)
@@ -171,7 +170,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Calculates the tangent at the parameter t on the circle curve.
+        /// Calculates the tangent at the parameter t on the circular curve.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0.</param>
         /// <returns>Unitized tangent vector at the t parameter.</returns>
@@ -231,6 +230,26 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Evaluates the parameter of the circular curve at a given length.
+        /// </summary>
+        /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
+        /// <returns>The evaluated parameter.</returns>
+        public double ParameterAt(double length)
+        {
+            if (length < 0)
+            {
+                return 0;
+            }
+
+            if (length > Length)
+            {
+                return 1;
+            }
+
+            return length / Length;
+        }
+
+        /// <summary>
         /// Gets the point on the circular curve which is closest to the test point.
         /// </summary>
         /// <param name="pt">The test point to project onto the circular curve.</param>
@@ -246,6 +265,22 @@ namespace GShark.Geometry
             double t = EvaluateParameter(u, v, true);
 
             return PointAt(t);
+        }
+
+        /// <summary>
+        /// Gets the parameter on the circular curve which is closest to the test point.
+        /// </summary>
+        /// <param name="pt">The test point to project onto the circular curve.</param>
+        /// <returns>The parameter on the circular curve that is close to the test point.</returns>
+        public double ClosestParameter(Point3 pt)
+        {
+            (double u, double v) = Plane.ClosestParameters(pt);
+            if (Math.Abs(u) < GSharkMath.MinTolerance && Math.Abs(v) < GSharkMath.MinTolerance)
+            {
+                return 0.0;
+            }
+
+            return EvaluateParameter(u, v, true);
         }
 
         /// <summary>
@@ -289,7 +324,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether the circle is equal to another circle.
+        /// Determines whether the circle is equal to another.
         /// The circles are equal if have the same plane and radius.
         /// </summary>
         /// <param name="other">The circle to compare to.</param>

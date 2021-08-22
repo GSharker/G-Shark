@@ -219,7 +219,6 @@ namespace GShark.Geometry
             return length / Length;
         }
 
-
         /// <summary>
         /// Flip the endpoint of the line.
         /// </summary>

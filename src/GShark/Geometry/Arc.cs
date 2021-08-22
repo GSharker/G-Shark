@@ -270,7 +270,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determines whether the arc is equal to another arc.<br/>
+        /// Determines whether the arc is equal to another.<br/>
         /// The arcs are equal if have the same plane, radius and angle.
         /// </summary>
         /// <param name="other">The arc to compare to.</param>
