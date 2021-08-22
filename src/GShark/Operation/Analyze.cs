@@ -22,10 +22,10 @@ namespace GShark.Operation
         /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">
         /// The degree of gaussian quadrature to perform.
-        /// A higher number yields a more exact result, default set to 16.
+        /// A higher number yields a more exact result, default set to 17.
         /// </param>
         /// <returns>The approximate length.</returns>
-        public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 20)
+        public static double CurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 17)
         {
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
@@ -49,15 +49,15 @@ namespace GShark.Operation
         /// Computes the approximate length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">The curve object.</param>
-        /// <param name="u">The parameter at which to approximate the length, it should be between 0.0 and 1.0.</param>
+        /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">
         /// the degree of gaussian quadrature to perform.
-        /// A higher number yields a more exact result, default set to 16.
+        /// A higher number yields a more exact result, default set to 17.
         /// </param>
         /// <returns>The approximate length of a bezier.</returns>
         public static double BezierCurveLength(ICurve curve, double u = -1.0, int gaussDegIncrease = 17)
         {
-            double uSet = (u < 0.0 || u > 1.0) ? curve.Knots.Last() : u;
+            double uSet = u < 0.0 ? curve.Knots.Last() : u;
             double z = (uSet - curve.Knots[0]) / 2;
             double sum = 0.0;
             int gaussDegree = curve.Degree + gaussDegIncrease;
@@ -145,7 +145,7 @@ namespace GShark.Operation
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = 0D;
-            List<Point3> ctrlPts = curve.LocationPoints;
+            List<Point3> ctrlPts = curve.ControlPointLocations;
 
             (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
 

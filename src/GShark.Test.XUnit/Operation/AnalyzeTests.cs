@@ -159,7 +159,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
 
             // Assert
-            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
+            Isocurve.ControlPointLocations[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
         }
 
         // ToDo: this should be U Direction.
@@ -176,7 +176,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptAt = Isocurve.PointAt(0.5);
 
             // Assert
-            Isocurve.LocationPoints[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
+            Isocurve.ControlPointLocations[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
             ptAt.DistanceTo(expectedPtAt).Should().BeLessThan(GSharkMath.MinTolerance);
         }
     }

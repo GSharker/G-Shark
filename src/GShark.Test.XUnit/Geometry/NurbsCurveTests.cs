@@ -64,7 +64,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
-            nurbsCurve.LocationPoints[1].DistanceTo(nurbsCurve.LocationPoints[^1]).Should().BeLessThan(GSharkMath.Epsilon);
+            nurbsCurve.ControlPointLocations[1].DistanceTo(nurbsCurve.ControlPointLocations[^1]).Should().BeLessThan(GSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
             nurbsCurve.Domain.T0.Should().Be(0.0);
             nurbsCurve.Domain.T1.Should().Be(1.0);
@@ -77,6 +77,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Assert
             NurbsCurveCollection.NurbsCurveWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.PeriodicClosedNurbsCurve().IsClosed().Should().BeTrue();
         }
 
         [Fact]
@@ -95,7 +96,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.ControlPoints[2].Should().BeEquivalentTo(new Point4(10, 0, 0, 0.5));
-            nurbsCurve.LocationPoints[2].Should().BeEquivalentTo(new Point3(20, 0, 0));
+            nurbsCurve.ControlPointLocations[2].Should().BeEquivalentTo(new Point3(20, 0, 0));
         }
 
         [Fact]

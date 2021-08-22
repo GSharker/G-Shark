@@ -13,7 +13,7 @@ namespace GShark.Geometry.Interfaces
         /// <summary>
         /// Gets world 3-D, or Euclidean location of the control point.
         /// </summary>
-        public List<Point3> LocationPoints { get; }
+        public List<Point3> ControlPointLocations { get; }
 
         /// <summary>
         /// Gets the homogeneous control point, the 4-D representation is (w*x, w*y, w*z, w).

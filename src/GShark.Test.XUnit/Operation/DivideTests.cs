@@ -87,7 +87,7 @@ namespace GShark.Test.XUnit.Operation
             ICurve subCurve = curve.SubCurve(domain);
 
             // Assert
-            subCurve.LocationPoints.SequenceEqual(expectedSubCurve.LocationPoints).Should().BeTrue();
+            subCurve.ControlPointLocations.SequenceEqual(expectedSubCurve.ControlPointLocations).Should().BeTrue();
             subCurve.ControlPoints.SequenceEqual(expectedSubCurve.ControlPoints).Should().BeTrue();
             subCurve.Knots.SequenceEqual(expectedKnotVector).Should().BeTrue();
         }

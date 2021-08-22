@@ -22,7 +22,7 @@ namespace GShark.Operation
         {
             if (distance == 0.0) return ln;
             Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.ZAxis).Amplify(distance);
-            return new Line(ln.Start + vecOffset, ln.End + vecOffset);
+            return new Line(ln.StartPoint + vecOffset, ln.EndPoint + vecOffset);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace GShark.Operation
                 }
                 if (k == 0 && !poly.IsClosed)
                 {
-                    offsetPts[k] = offsetSegments[k].Start;
+                    offsetPts[k] = offsetSegments[k].StartPoint;
                     continue;
                 }
 
@@ -107,7 +107,7 @@ namespace GShark.Operation
 
                 if (i == iteration - 1)
                 {
-                    offsetPts[(poly.IsClosed) ? i : i + 1] = (poly.IsClosed) ? offsetPts[0] : offsetSegments[k].End;
+                    offsetPts[(poly.IsClosed) ? i : i + 1] = (poly.IsClosed) ? offsetPts[0] : offsetSegments[k].EndPoint;
                 }
             }
 

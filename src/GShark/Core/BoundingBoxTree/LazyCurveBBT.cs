@@ -1,10 +1,8 @@
 ﻿using GShark.Geometry;
 using GShark.Geometry.Interfaces;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using GShark.ExtendedMethods;
-using GShark.Geometry.Interfaces;
 
 namespace GShark.Core.BoundingBoxTree
 {
@@ -17,7 +15,7 @@ namespace GShark.Core.BoundingBoxTree
         internal LazyCurveBBT(ICurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
-            _boundingBox = new BoundingBox(curve.LocationPoints);
+            _boundingBox = new BoundingBox(curve.ControlPointLocations);
 
             if (double.IsNaN(knotTolerance))
             {

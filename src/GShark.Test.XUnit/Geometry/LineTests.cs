@@ -39,8 +39,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             line.Should().NotBeNull();
-            line.Start.Equals(startPoint).Should().BeTrue();
-            line.End.Equals(endPoint).Should().BeTrue();
+            line.StartPoint.Equals(startPoint).Should().BeTrue();
+            line.EndPoint.Equals(endPoint).Should().BeTrue();
             line.Length.Equals(startPoint.DistanceTo(endPoint));
         }
 
@@ -75,13 +75,13 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             line1.Length.Should().Be(line2.Length).And.Be(lineLength);
-            line1.Start.Should().BeEquivalentTo(startPoint);
+            line1.StartPoint.Should().BeEquivalentTo(startPoint);
 
             line1.Direction.Should().BeEquivalentTo(expectedDirection);
-            line1.End.Should().BeEquivalentTo(expectedEndPointLine1);
+            line1.EndPoint.Should().BeEquivalentTo(expectedEndPointLine1);
 
             line2.Direction.Should().BeEquivalentTo(expectedDirection.Reverse());
-            line2.End.Should().BeEquivalentTo(expectedEndPointLine2);
+            line2.EndPoint.Should().BeEquivalentTo(expectedEndPointLine2);
         }
 
         [Fact]
@@ -136,15 +136,83 @@ namespace GShark.Test.XUnit.Geometry
             closestPt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
         }
 
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(5)]
+        [InlineData(7)]
+        public void It_Returns_A_Point_On_The_Line_At_A_Given_Length(double len)
+        {
+            //Arrange
+            var line =  new Line(new Point3(0,0,0), new Point3(10,0,0));
+            var expectedPoint = line.StartPoint + line.Direction * len;
+
+            //Act
+            var pt = line.PointAtLength(len);
+
+            //Assert
+            pt.Equals(expectedPoint).Should().BeTrue();
+        }
+
         [Fact]
-        public void PointAt_Throw_An_Exception_If_Parameter_Outside_The_Curve_Domain()
+        public void PointAt_Returns_End_Point_If_Parameter_Is_Greater_Than_The_Curve_Domain()
         {
             // Act
-            Func<Point3> func = () => _exampleLine.PointAt(2);
+            var pt = _exampleLine.PointAt(2);
 
             // Assert
-            func.Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Parameter is outside the domain 0.0 to 1.0 *");
+            pt.Equals(_exampleLine.EndPoint).Should().BeTrue();
+        }
+
+        [Fact]
+        public void PointAt_Returns_Start_Point_If_Parameter_Is_Less_Than_The_Curve_Domain()
+        {
+            // Act
+            var pt = _exampleLine.PointAt(-1);
+
+            // Assert
+            pt.Equals(_exampleLine.StartPoint).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Tangent_Vector_At_Specified_Parameter()
+        {
+            //Arrange
+            var expectedDir = _exampleLine.Direction;
+
+            //Act
+            var tangent = _exampleLine.TangentAt(0.33);
+
+            //Assert
+            tangent.Equals(expectedDir).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Tangent_Vector_At_Specified_Length()
+        {
+            //Arrange
+            var expectedDir = _exampleLine.Direction;
+
+            //Act
+            var tangent = _exampleLine.TangentAtLength(0.33);
+
+            //Assert
+            tangent.Equals(expectedDir).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_The_Length_At_Specified_Parameter()
+        {
+            //Arrange
+            var line = new Line(new Point3(0,0,0), new Point3(10,0,0));
+            var parameter = 0.5;
+            var expectedLength = 5;
+
+            //Act
+            var length = line.LengthAt(parameter);
+
+            //Assert
+            length.Equals(expectedLength).Should().BeTrue();
         }
 
         [Theory]
@@ -189,8 +257,8 @@ namespace GShark.Test.XUnit.Geometry
             Line flippedLine = _exampleLine.Flip();
 
             // Assert
-            flippedLine.Start.Equals(_exampleLine.End).Should().BeTrue();
-            flippedLine.End.Equals(_exampleLine.Start).Should().BeTrue();
+            flippedLine.StartPoint.Equals(_exampleLine.EndPoint).Should().BeTrue();
+            flippedLine.EndPoint.Equals(_exampleLine.StartPoint).Should().BeTrue();
         }
 
         [Fact]
@@ -201,7 +269,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             extendedLine.Length.Should().BeApproximately(13.027756, GSharkMath.MaxTolerance);
-            extendedLine.Start.Should().BeEquivalentTo(_exampleLine.Start);
+            extendedLine.StartPoint.Should().BeEquivalentTo(_exampleLine.StartPoint);
         }
 
         [Fact]
@@ -226,19 +294,24 @@ namespace GShark.Test.XUnit.Geometry
             Line transformedLine = _exampleLine.Transform(transform);
 
             // Assert
-            transformedLine.Start.Should().BeEquivalentTo(new Point3(15, 10, 0));
-            transformedLine.End.Should().BeEquivalentTo(new Point3(25, 25, 0));
+            transformedLine.StartPoint.Should().BeEquivalentTo(new Point3(15, 10, 0));
+            transformedLine.EndPoint.Should().BeEquivalentTo(new Point3(25, 25, 0));
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Data_From_The_Line()
+        public void It_Returns_A_NurbsCurve_Form_Of_A_Line()
         {
             // Arrange
-            ICurve line = _exampleLine;
+            var line = _exampleLine;
+
+            //Act
+            var nurbsLine = line.ToNurbs();
 
             // Assert
-            line.LocationPoints.Count.Should().Be(2);
-            line.Degree.Should().Be(1);
+            nurbsLine.ControlPointLocations.Count.Should().Be(2);
+            nurbsLine.ControlPointLocations[0].Equals(line.StartPoint).Should().BeTrue();
+            nurbsLine.ControlPointLocations[1].Equals(line.EndPoint).Should().BeTrue();
+            nurbsLine.Degree.Should().Be(1);
         }
     }
 }
