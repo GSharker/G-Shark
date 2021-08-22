@@ -211,6 +211,26 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Returns the length at a given parameter.
+        /// </summary>
+        /// <param name="t">Parameter, between 0 and 1.</param>
+        /// <returns>The curve length at t.</returns>
+        public double LengthAt(double t)
+        {
+            if (t < 0)
+            {
+                return 0;
+            }
+
+            if (t > 1)
+            {
+                return Length;
+            }
+
+            return Length * t;
+        }
+
+        /// <summary>
         /// Gets the point on the circular curve which is closest to the test point.
         /// </summary>
         /// <param name="pt">The test point to project onto the circular curve.</param>
