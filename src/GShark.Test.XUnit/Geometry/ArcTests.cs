@@ -83,8 +83,8 @@ namespace GShark.Test.XUnit.Geometry
             Arc arc3D = _exampleArc3D;
 
             // Act
-            BoundingBox bBox2D = arc2D.BoundingBox;
-            BoundingBox bBox3D = arc3D.BoundingBox;
+            BoundingBox bBox2D = arc2D.BoundingBox();
+            BoundingBox bBox3D = arc3D.BoundingBox();
 
             // Assert
             bBox2D.Min.EpsilonEquals(new Vector3(11.490667, 0, 0), 6).Should().BeTrue();
@@ -125,7 +125,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            ICurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
+            NurbsCurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8)).ToNurbsCurve();
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(5);
@@ -164,7 +164,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            ICurve arc = _exampleArc3D;
+            NurbsCurve arc = _exampleArc3D.ToNurbsCurve();
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(7);

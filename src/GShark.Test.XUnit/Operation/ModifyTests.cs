@@ -272,7 +272,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt1 = new Point3(3.34125, 0.005, 0.6125 );
             Point3 expectedPt2 = new Point3(5, 2.363281, 4.570313 );
             Point3 expectedPt3 = new Point3(5.351058, 5, -4.340474);
-            ICurve[] curves = {curve, ln.ToNurbs(), arc};
+            ICurve[] curves = {curve, ln.ToNurbs(), arc.ToNurbsCurve()};
 
             // Act
             ICurve joinedCurve = Modify.JoinCurves(curves);

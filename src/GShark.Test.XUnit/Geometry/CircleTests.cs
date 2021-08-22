@@ -53,7 +53,6 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Circle3D_With_Its_Nurbs_Representation()
         {
             // Arrange
-            Circle circle = _circle3D;
             var ptsExpected = new List<Point3>
             {
                 new Point3(74.264416, 36.39316, -1.884313),
@@ -68,12 +67,12 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            List<Point3> ctrPts = circle.ControlPointLocations;
+            NurbsCurve circleNurbs = _circle3D.ToNurbs();
 
             // Assert
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
-                ctrPts[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);
+                circleNurbs.ControlPointLocations[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);
             }
         }
 
@@ -168,7 +167,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 maxCheck = new Point3(108.591002, 47.043069, 6.904624);
 
             // Act
-            BoundingBox bBox = circle.BoundingBox;
+            BoundingBox bBox = circle.GetBoundingBox();
 
             // Assert
             bBox.Min.EpsilonEquals(minCheck, GSharkMath.MaxTolerance).Should().BeTrue();
