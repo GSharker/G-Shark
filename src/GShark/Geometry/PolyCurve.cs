@@ -32,7 +32,7 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(Line line)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(line.Start) <= GSharkMath.Epsilon)
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(line.StartPoint) <= GSharkMath.Epsilon)
             {
                 this.Segments.Add(line);
             }
@@ -66,7 +66,7 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(NurbsCurve nurbs)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(nurbs.LocationPoints.First()) <= GSharkMath.Epsilon)
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(nurbs.ControlPointLocations.First()) <= GSharkMath.Epsilon)
             {
                 this.Segments.Add(nurbs);
             }
@@ -83,7 +83,7 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(PolyCurve polycurve)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.LocationPoints.First()) <= GSharkMath.Epsilon)
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.ControlPointLocations.First()) <= GSharkMath.Epsilon)
             {
                 this.Segments.Add(polycurve);
             }
@@ -118,12 +118,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Returns the start point of the polycurve
         /// </summary>
-        public Point3 StartPoint => this.Segments.First().LocationPoints.First();
+        public Point3 StartPoint => this.Segments.First().ControlPointLocations.First();
 
         /// <summary>
         /// Returns the end point of the polycurve
         /// </summary>
-        public Point3 EndPoint => this.Segments.Last().LocationPoints.Last();
+        public Point3 EndPoint => this.Segments.Last().ControlPointLocations.Last();
 
         /// <summary>
         /// First and last point of the PolyCurve are coincident
@@ -138,7 +138,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Returns the location points for each segment
         /// </summary>
-        public List<Point3> LocationPoints => this.GetLocationPoints();
+        public List<Point3> ControlPointLocations => this.GetLocationPoints();
 
         /// <summary>
         /// Returns the controls points for each segment
@@ -179,12 +179,12 @@ namespace GShark.Geometry
         {
             double progressiveEndLength = 0;
             double progressiveStartLength = 0;
-            
+
             if (this.SegmentCount == 0)
             {
                 throw new InvalidOperationException("The polycurve is empty");
             }
-            else if(l > this.Length)
+            else if (l > this.Length)
             {
                 throw new InvalidOperationException("Length value is bigger than the polycurve total length");
             }
@@ -196,7 +196,7 @@ namespace GShark.Geometry
                     progressiveStartLength = progressiveEndLength;
                     progressiveEndLength += this.SegmentsLengths[i];
                     if (l <= progressiveEndLength) // This is the right segment
-                    {                        
+                    {
                         double segmentLength = i == 0 ? l : l - progressiveStartLength;
                         var t = segment.GetType().Name;
                         switch (t)
@@ -204,11 +204,10 @@ namespace GShark.Geometry
                             case "NurbsCurve":
                                 var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
                                 var par1 = GSharkMath.RemapValue(
-                                    segmentLength, 
-                                    new Interval(0, this.SegmentsLengths[i]), 
+                                    segmentLength,
+                                    new Interval(0, this.SegmentsLengths[i]),
                                     new Interval(0, 1)
                                     );
-
                                 return ((NurbsCurve)segment).PointAt(par);
                             case "Line":
                                 //var line = ((Line)segment);
@@ -314,7 +313,7 @@ namespace GShark.Geometry
             List<Point3> locPts = new List<Point3>();
             foreach (var segm in Segments)
             {
-                locPts.AddRange(segm.LocationPoints.Select(pts => pts));
+                locPts.AddRange(segm.ControlPointLocations.Select(pts => pts));
             }
             return locPts;
         }
