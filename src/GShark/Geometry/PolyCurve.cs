@@ -1,4 +1,5 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
@@ -24,6 +25,11 @@ namespace GShark.Geometry
         {
             this.Segments.Add(curve);
         }
+
+        /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType => CurveType.POLYCURVE;
 
         /// <summary>
         /// Appends and matches the start of the line to the end of polycurve.
@@ -199,9 +205,9 @@ namespace GShark.Geometry
                     {
                         double segmentLength = i == 0 ? l : l - progressiveStartLength;
                         var t = segment.GetType().Name;
-                        switch (t)
+                        switch (segment.CurveType)
                         {
-                            case "NurbsCurve":
+                            case CurveType.NURBSCURVE:
                                 var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
                                 var par1 = GSharkMath.RemapValue(
                                     segmentLength,
@@ -209,13 +215,11 @@ namespace GShark.Geometry
                                     new Interval(0, 1)
                                     );
                                 return ((NurbsCurve)segment).PointAt(par);
-                            case "Line":
-                                //var line = ((Line)segment);
-                                //var dir = (line.End - line.Start).Amplify(segmentLength);
-                                return ((Line)segment).PointAt(segmentLength / this.SegmentsLengths[i]);
-                            case "Arc":
-                                return ((Arc)segment).PointAt(segmentLength);
-                            case "PolyCurve":
+                            case CurveType.LINE:
+                                return ((Line)segment).PointAtLength(segmentLength);
+                            case CurveType.ARC:
+                                return ((Arc)segment).PointAtLength(segmentLength);
+                            case CurveType.POLYCURVE:
                                 l = ((PolyCurve)segment).Length;
                                 break;
                         }

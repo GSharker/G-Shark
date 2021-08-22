@@ -199,7 +199,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 maxCheck = new Point3(108.591002, 47.043069, 6.904624);
 
             // Act
-            BoundingBox bBox = circle.GetBoundingBox();
+            BoundingBox bBox = circle.BoundingBox;
 
             // Assert
             bBox.Min.EpsilonEquals(minCheck, GSharkMath.MaxTolerance).Should().BeTrue();

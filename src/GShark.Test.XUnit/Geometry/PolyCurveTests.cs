@@ -78,8 +78,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_PolyCurve_Start_And_End_Points()
         {
             // Arrange
-            var startPoint = _nurbs.LocationPoints.First();
-            var endPoint = _arc.LocationPoints.Last();
+            var startPoint = _nurbs.ControlPointLocations.First();
+            var endPoint = _arc.ControlPointLocations.Last();
 
             // Act            
 

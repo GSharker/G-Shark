@@ -1,4 +1,5 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
     /// </example>
-    public class Line : IEquatable<Line>, ITransformable<Line>
+    public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Initializes a line by start point and end point.
@@ -51,6 +52,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType => CurveType.LINE;
+
+        /// <summary>
         /// Start point of the line.
         /// </summary>
         public Point3 StartPoint { get; }
@@ -70,10 +76,22 @@ namespace GShark.Geometry
         /// </summary>
         public Vector3 Direction { get; }
 
+        public int Degree => throw new NotImplementedException();
+
+        public List<Point3> ControlPointLocations => new List<Point3> { this.StartPoint, this.EndPoint};
+
+        public List<Point4> ControlPoints => new List<Point4> {this.StartPoint, this.EndPoint};
+
+        public KnotVector Knots => throw new NotImplementedException();
+
+        public Interval Domain => throw new NotImplementedException();
+
+        public BoundingBox BoundingBox => GetBoundingBox();
+
         /// <summary>
         /// Gets the BoundingBox in ascending fashion.
         /// </summary>
-        public BoundingBox GetBoundingBox()
+        private BoundingBox GetBoundingBox()
         {
             BoundingBox bBox = new BoundingBox(StartPoint, EndPoint);
             BoundingBox validBBox = bBox.MakeItValid();

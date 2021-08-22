@@ -1,4 +1,5 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,11 @@ namespace GShark.Geometry
             AddRange(CleanVerticesForShortLength(vertices));
             ToNurbsCurve();
         }
+
+        /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType => CurveType.POLYLINE;
 
         public int Degree => 1;
 

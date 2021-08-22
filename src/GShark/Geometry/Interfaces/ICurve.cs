@@ -1,10 +1,16 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
 using System.Collections.Generic;
 
 namespace GShark.Geometry.Interfaces
 {
     public interface ICurve
     {
+        /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType { get; }
+
         /// <summary>
         /// Gets the degree of curve.
         /// </summary>

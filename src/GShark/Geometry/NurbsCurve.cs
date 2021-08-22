@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using GShark.Core;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
@@ -79,6 +80,11 @@ namespace GShark.Geometry
             : this(degree, new KnotVector(degree, points!.Count), points.Select((p, i) => new Point4(p, weights[i])).ToList())
         {
         }
+
+        /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType => CurveType.NURBSCURVE;
 
         /// <summary>
         /// List of weight values.

@@ -1,6 +1,8 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -12,10 +14,8 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
     /// </example>
-    public class Circle : IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
-        internal Interval Domain = new Interval(0.0, 2.0 * Math.PI);
-
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
         /// </summary>
@@ -68,6 +68,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Defines the curve type
+        /// </summary>
+        public CurveType CurveType => CurveType.CIRCLE;
+
+        /// <summary>
         /// Gets the plane where the circle lays.
         /// </summary>
         public Plane Plane { get; }
@@ -102,10 +107,25 @@ namespace GShark.Geometry
         /// </summary>
         public Point3 EndPoint => PointAt(1.0);
 
+        public int Degree => throw new NotImplementedException();
+
+        public List<Point3> ControlPointLocations => throw new NotImplementedException();
+
+        public List<Point4> ControlPoints => throw new NotImplementedException();
+
+        public KnotVector Knots => throw new NotImplementedException();
+
+        public Interval Domain { get; set; } = new Interval(0.0, 2.0 * Math.PI);
+
         /// <summary>
         /// Gets the bounding box of this circle.
         /// </summary>
-        public virtual BoundingBox GetBoundingBox()
+        public BoundingBox BoundingBox => GetBoundingBox();
+
+        /// <summary>
+        /// Gets the bounding box of this circle.
+        /// </summary>
+        private BoundingBox GetBoundingBox()
         {
             double val1 = Radius * SelectionLength(Plane.ZAxis[1], Plane.ZAxis[2]);
             double val2 = Radius * SelectionLength(Plane.ZAxis[2], Plane.ZAxis[0]);
