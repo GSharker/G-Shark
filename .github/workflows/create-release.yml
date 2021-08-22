@@ -5,15 +5,13 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  PROJECT_PATH: 'src/GShark/GShark.csproj'
 
 on:
   pull_request:
     types: [closed]
     branches:
       - develop
-
-env:
-  PROJECT_PATH: 'src/GShark/GShark.csproj'
 
 jobs:
   build:
