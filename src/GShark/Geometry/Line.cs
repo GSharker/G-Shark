@@ -128,7 +128,7 @@ namespace GShark.Geometry
         {
             if (t < 0)
             {
-               return StartPoint;
+                return StartPoint;
             }
 
             if (t > 1)
@@ -148,7 +148,7 @@ namespace GShark.Geometry
         {
             if (length < 0)
             {
-                return  StartPoint;
+                return StartPoint;
             }
 
             if (length > Length)
@@ -258,7 +258,7 @@ namespace GShark.Geometry
         /// <returns>A NURBS curve.</returns>
         public NurbsCurve ToNurbs()
         {
-            return new NurbsCurve(new List<Point3> {StartPoint, EndPoint}, 1);
+            return new NurbsCurve(new List<Point3> { StartPoint, EndPoint }, 1);
         }
 
         /// <summary>
