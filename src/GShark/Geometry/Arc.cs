@@ -3,19 +3,19 @@ using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GShark.Geometry
 {
     /// <summary>
+    /// An arc is any portion (other than the entire curve) of the circumference of a circle.<br/>
     /// Represents the value of a plane, two angles (interval in radians) and a radius (radians).<br/>
     /// The arc run ccw rotation where Xaxis and Yaxis form a orthonormal frame.
     /// </summary>
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/ArcTests.cs?name=example)]
     /// </example>
-    public class Arc : ICurve, IEquatable<Arc>, ITransformable<Arc>
+    public class Arc : Circle, ICurve, IEquatable<Arc>, ITransformable<Arc>
     {
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.
@@ -23,16 +23,14 @@ namespace GShark.Geometry
         /// <param name="plane">Base plane.</param>
         /// <param name="radius">Radius value in radians.</param>
         /// <param name="angleDomainRadians">Interval defining the angle in radians of the arc. Interval should be between 0.0 to 2Pi</param>
-        public Arc(Plane plane, double radius, Interval angleDomainRadians)
+        public Arc(Plane plane, double radius, Interval angleDomainRadians) : base(plane, radius)
         {
             if (angleDomainRadians.T1 < angleDomainRadians.T0)
             {
                 throw new Exception("Angle domain must never be decreasing.");
             }
 
-            Plane = plane;
-            Radius = radius;
-            Domain = (angleDomainRadians.Length > Math.PI * 2.0)
+            _domain = (angleDomainRadians.Length > Math.PI * 2.0)
                 ? new Interval(AngularDiff(angleDomainRadians.T0, Math.PI * 2.0), AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
                 : angleDomainRadians;
 
@@ -56,28 +54,9 @@ namespace GShark.Geometry
         /// <param name="pt1">Start point of the arc.</param>
         /// <param name="pt2">Interior point on arc.</param>
         /// <param name="pt3">End point of the arc.</param>
-        public Arc(Point3 pt1, Point3 pt2, Point3 pt3)
+        public Arc(Point3 pt1, Point3 pt2, Point3 pt3) : base(pt1, pt2, pt3)
         {
-            if (!pt1.IsValid)
-            {
-                throw new Exception("The first point is not valid.");
-            }
-            if (!pt2.IsValid)
-            {
-                throw new Exception("The second point is not valid.");
-            }
-            if (!pt3.IsValid)
-            {
-                throw new Exception("The third point is not valid.");
-            }
-
-            Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
-            Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
-            Vector3 xDir = pt1 - center;
-            Vector3 yDir = Vector3.CrossProduct(normal, xDir);
-            Plane pl = new Plane(center, xDir, yDir);
-
-            (double u, double v) = pl.ClosestParameters(pt3);
+            (double u, double v) = Plane.ClosestParameters(pt3);
             double angle = Math.Atan2(v, u);
 
             if (angle < 0.0)
@@ -85,72 +64,32 @@ namespace GShark.Geometry
                 angle += 2 * Math.PI;
             }
 
-            Plane = pl;
-            Radius = xDir.Length;
-            Domain = new Interval(0.0, angle);
+            _domain = new Interval(0.0, angle);
             ToNurbsCurve();
         }
-
-        /// <summary>
-        /// Gets the plane on which the arc lies.
-        /// </summary>
-        public Plane Plane { get; }
-
-        /// <summary>
-        /// Gets the radius of the arc.
-        /// </summary>
-        public double Radius { get; }
-
-        /// <summary>
-        /// Gets the center point of this arc.
-        /// </summary>
-        public Point3 Center => Plane.Origin;
 
         /// <summary>
         /// Gets the angle of this arc.<br/>
         /// Angle value in radians.
         /// </summary>
-        public double Angle => Domain.Length;
-
-        /// <summary>
-        /// Gets the angle domain of this arc.<br/>
-        /// The domain is in radians.
-        /// </summary>
-        public Interval Domain { get; }
+        public double Angle => _domain.Length;
 
         /// <summary>
         /// Calculates the length of the arc.
         /// </summary>
-        public double Length => Math.Abs(Angle * Radius);
+        public new double Length => Math.Abs(Angle * Radius);
 
-        /// <summary>
-        /// Gets the start point of the arc.
-        /// </summary>
-        public Vector3 StartPoint => ControlPointLocations[0];
+        public new List<Point3> ControlPointLocations { get; private set; }
 
-        /// <summary>
-        /// Gets the mid-point of the arc.
-        /// </summary>
-        public Vector3 MidPoint => PointAt(Domain.Mid);
+        public new List<Point4> ControlPoints { get; private set; }
 
-        /// <summary>
-        /// Gets the end point of the arc.
-        /// </summary>
-        public Vector3 EndPoint => ControlPointLocations[ControlPointLocations.Count - 1];
-
-        public int Degree => 2;
-
-        public List<Point3> ControlPointLocations { get; private set; }
-
-        public List<Point4> ControlPoints { get; private set; }
-
-        public KnotVector Knots { get; private set; }
+        public new KnotVector Knots { get; private set; }
 
         /// <summary>
         /// Gets the BoundingBox of this arc.<br/>
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
-        public BoundingBox BoundingBox
+        public new BoundingBox BoundingBox
         {
             get
             {
@@ -225,114 +164,14 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Evaluates the point at the parameter t on the arc.
-        /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
-        /// <returns>Point on the arc.</returns>
-        public Point3 PointAt(double t)
-        {
-            if (t > 1.0 || t < 0.0)
-            {
-                throw new ArgumentOutOfRangeException($"The value provided for parameter t, {t}, must be between 0.0 and 1.0.");
-            }
-
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-            Vector3 xDir = Plane.XAxis * Math.Cos(theta) * Radius;
-            Vector3 yDir = Plane.YAxis * Math.Sin(theta) * Radius;
-
-            return Plane.Origin + xDir + yDir;
-        }
-
-        /// <summary>
-        /// Evaluates the point at the specific length.
-        /// </summary>
-        /// <param name="length">The length where to evaluate the point.</param>
-        /// <returns>The point at the length.</returns>
-        public Point3 PointAtLength(double length)
-        {
-            if (length < 0)
-            {
-                throw new Exception("Length factor cannot be less than zero.");
-            }
-
-            if (length > Length)
-            {
-                throw new Exception("Length factor cannot be larger than the length of the curve.");
-            }
-
-            double angleLength = GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
-
-            Vector3 xDir = Plane.XAxis * Math.Cos(angleLength) * Radius;
-            Vector3 yDir = Plane.YAxis * Math.Sin(angleLength) * Radius;
-
-            return Plane.Origin + xDir + yDir;
-        }
-
-        /// <summary>
-        /// Evaluates the tangent at the specific length.
-        /// </summary>
-        /// <param name="length">The length where to evaluate the tangent.</param>
-        /// <returns>The unitize tangent at the length.</returns>
-        public Vector3 TangentAtLength(double length)
-        {
-            Point3 pt = PointAtLength(length);
-            (double u, double v) = Plane.ClosestParameters(pt);
-            double t = EvaluateParameter(u, v, true);
-            return TangentAt(t);
-        }
-
-        /// <summary>
-        /// Calculates the tangent at the parameter t on the arc.
-        /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0.</param>
-        /// <returns>Tangent vector at the t parameter.</returns>
-        public Vector3 TangentAt(double t)
-        {
-            if (t > 1.0 || t < 0.0)
-            {
-                throw new ArgumentOutOfRangeException($"The value provided, {t}, must be between 0.0 and 1.0.");
-            }
-
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-
-            double r1 = Radius;
-            double r2 = Radius;
-
-            r1 *= -Math.Sin(theta);
-            r2 *= Math.Cos(theta);
-
-            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
-
-            return vector.Unitize();
-        }
-
-        /// <summary>
-        /// Calculates the point on an arc that is close to a test point.
-        /// </summary>
-        /// <param name="pt">The test point. Point to get close to.</param>
-        /// <returns>The point on the arc that is close to the test point.</returns>
-        public Point3 ClosestPoint(Point3 pt)
-        {
-            (double u, double v) = Plane.ClosestParameters(pt);
-            if (Math.Abs(u) < GSharkMath.MinTolerance && Math.Abs(v) < GSharkMath.MinTolerance)
-            {
-                return PointAt(0.0);
-            }
-
-            double t = EvaluateParameter(u, v, true);
-
-            return PointAt(t);
-        }
-
-        /// <summary>
         /// Applies a transformation to the plane where the arc is on.
         /// </summary>
         /// <param name="transformation">Transformation matrix to apply.</param>
         /// <returns>A transformed arc.</returns>
-        public Arc Transform(Transform transformation)
+        public new Arc Transform(Transform transformation)
         {
             Plane plane = Plane.Transform(transformation);
-            Interval angleDomain = new Interval(Domain.T0, Domain.T1);
+            Interval angleDomain = new Interval(_domain.T0, _domain.T1);
 
             return new Arc(plane, Radius, angleDomain);
         }
@@ -379,12 +218,12 @@ namespace GShark.Geometry
 
             double detTheta = Angle / numberOfArc;
             double weight1 = Math.Cos(detTheta / 2);
-            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
-            Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
+            Vector3 p0 = Center + (axisX * (Radius * Math.Cos(_domain.T0)) + axisY * (Radius * Math.Sin(_domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(_domain.T0) - axisX * Math.Sin(_domain.T0);
 
             KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
-            double angle = Domain.T0;
+            double angle = _domain.T0;
 
             ctrPts[0] = p0;
             weights[0] = 1.0;
@@ -505,37 +344,6 @@ namespace GShark.Geometry
             }
 
             return dif;
-        }
-
-        private double EvaluateParameter(double u, double v, bool parametrize = false)
-        {
-            double twoPi = 2.0 * Math.PI;
-
-            double t = Math.Atan2(v, u);
-            if (t < 0.0)
-            {
-                t += twoPi;
-            }
-
-            t -= Domain.T0;
-
-            while (t < 0.0)
-            {
-                t += twoPi;
-            }
-
-            while (t >= twoPi)
-            {
-                t -= twoPi;
-            }
-
-            double t1 = Domain.Length;
-            if (t > t1)
-            {
-                t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
-            }
-
-            return (parametrize) ? (t - Domain.T0) / (Domain.T1 - Domain.T0) : t;
         }
     }
 }

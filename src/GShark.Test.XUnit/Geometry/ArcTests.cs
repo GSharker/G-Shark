@@ -66,7 +66,8 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
-
+            var pt = arc.EndPoint;
+            var pt5 = arc.StartPoint;
             // Assert
             arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
             arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();
@@ -93,74 +94,6 @@ namespace GShark.Test.XUnit.Geometry
             bBox3D.Max.EpsilonEquals(new Vector3(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(0.15, new double[] { 69.334566, 27.421862, 0.510428 })]
-        [InlineData(0.5, new double[] { 82.012463, 9.246222, 5.174356 })]
-        [InlineData(0.72, new double[] { 96.621782, 12.93396, 4.08574 })]
-        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
-        {
-            // Arrange
-            var expectedPt = new Point3(pts[0], pts[1], pts[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            var pt = arc.PointAt(t);
-
-            // Assert
-            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(10, new double[] { 69.463068, 28.087104, 0.334816 })]
-        [InlineData(17.5, new double[] { 69.624396, 20.896489, 2.220164 })]
-        [InlineData(22.5, new double[] { 71.568605, 16.456984, 3.368902 })]
-        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Length(double length, double[] pts)
-        {
-            // Arrange
-            var expectedPt = new Point3(pts[0], pts[1], pts[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            var pt = arc.PointAtLength(length);
-
-            // Assert
-            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(10, new double[] { -0.20443, -0.946415, 0.250015 })]
-        [InlineData(17.5, new double[] { 0.246705, -0.937861, 0.244034 })]
-        [InlineData(22.5, new double[] { 0.525002, -0.824293, 0.21193 })]
-        public void It_Returns_A_Tangent_On_The_Arc_At_The_Given_Length(double length, double[] tangent)
-        {
-            // Arrange
-            var expectedTan = new Vector3(tangent[0], tangent[1], tangent[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            var tan = arc.TangentAtLength(length);
-
-            // Assert
-            tan.EpsilonEquals(expectedTan, 1e-6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, new double[] { 80.001066, 9.815219, 5.041724 })]
-        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 74.264416, 36.39316, -1.884313 })]
-        public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
-        {
-            // Arrange
-            Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
-            Point3 expectedPt = new Point3(result[0], result[1], result[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            Point3 pt = arc.ClosestPoint(testPt);
-
-            // Assert
-            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
-        }
-
         [Fact]
         public void It_Returns_A_Transformed_Arc()
         {
@@ -176,23 +109,6 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             arcTransformed.StartPoint.EpsilonEquals(expectedStartPt, 1e-6).Should().BeTrue();
             arcTransformed.EndPoint.EpsilonEquals(expectedEndPt, 1e-6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(0.15, new double[] { -0.162674, -0.954043, 0.251671 })]
-        [InlineData(0.5, new double[] { 0.976088, -0.212106, 0.047567 })]
-        [InlineData(0.72, new double[] { 0.742847, 0.646006, -0.175654 })]
-        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
-        {
-            // Arrange
-            Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            Vector3 tangent = arc.TangentAt(t);
-
-            // Assert
-            tangent.EpsilonEquals(expectedTangent, 1e-6).Should().BeTrue();
         }
 
         [Fact]
