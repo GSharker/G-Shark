@@ -34,15 +34,17 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(5.0, 5.0, 1.5);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
-            Point3 evalPt = new Point3(Evaluation.SurfacePointAt(surface, 0.5, 0.5));
+            NurbsSurface surfaceCcw = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
+            NurbsSurface surfaceCw = NurbsSurface.CreateFromCorners(p1, p4, p3, p2);
+            Point3 evalPtCcw = new Point3(Evaluation.SurfacePointAt(surfaceCcw, 0.5, 0.5));
+            Point3 evalPtCw = new Point3(Evaluation.SurfacePointAt(surfaceCw, 0.5, 0.5));
 
             // Assert
-            surface.Should().NotBeNull();
-            surface.LocationPoints.Count.Should().Be(2);
-            surface.LocationPoints[0].Count.Should().Be(2);
-            surface.LocationPoints[0][1].Equals(p4).Should().BeTrue();
-            evalPt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
+            surfaceCcw.Should().NotBeNull();
+            surfaceCcw.LocationPoints.Count.Should().Be(2);
+            surfaceCcw.LocationPoints[0].Count.Should().Be(2);
+            surfaceCcw.LocationPoints[0][1].Equals(p4).Should().BeTrue();
+            (evalPtCcw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance) && evalPtCw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance)).Should().BeTrue();
         }
 
         [Theory]
@@ -348,6 +350,17 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             closestPt.DistanceTo(expectedClosestPt).Should().BeLessThan(GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
+        public void Returns_True_If_Two_Surfaces_Are_Equals()
+        {
+            // Arrange
+            NurbsSurface surface0 = NurbsSurfaceCollection.SurfaceFromPoints();
+            NurbsSurface surface1 = NurbsSurfaceCollection.SurfaceFromPoints();
+
+            // Assert
+            surface0.Equals(surface1).Should().BeTrue();
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using GShark.Core;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
-using GShark.Operation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Core;
+using GShark.Geometry.Enum;
+using GShark.Geometry.Interfaces;
+using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -48,8 +48,8 @@ namespace GShark.Geometry
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
-            DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
-            DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
+            DomainU = new Interval(KnotsU.First(), KnotsU.Last());
+            DomainV = new Interval(KnotsV.First(), KnotsV.Last());
         }
 
         /// <summary>
@@ -115,8 +115,9 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
-        /// The surface is defined with degree 1.
+        /// Constructs a NURBS surface from four corners.<br/>
+        /// If the corners are ordered ccw the normal of the surface will point up otherwise, if corners ordered cw the normal will point down.<br/>
+        /// The surface is defined of degree 1.
         /// </summary>
         /// <param name="p1">The first point.</param>
         /// <param name="p2">The second point.</param>
@@ -269,29 +270,32 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS surface are equal.</returns>
         public bool Equals(NurbsSurface other)
         {
-            List<List<Point3>> otherPts = other?.LocationPoints;
-
             if (other == null)
             {
                 return false;
             }
 
-            if (LocationPoints.Count != otherPts?.Count)
+            if (LocationPoints.Count != other.LocationPoints.Count)
             {
                 return false;
             }
 
-            if (!LocationPoints.All(otherPts.Contains))
+            if (LocationPoints.Where((pt, i) => !pt.SequenceEqual(other.LocationPoints[i])).Any())
             {
                 return false;
             }
 
-            if (KnotsU.Count != other.KnotsU.Count || KnotsV.Count != other.KnotsU.Count)
+            if (KnotsU.Count != other.KnotsU.Count || KnotsV.Count != other.KnotsV.Count)
             {
                 return false;
             }
 
-            return DegreeU == other.DegreeU && DegreeV == other.DegreeV && Weights.All(other.Weights.Contains);
+            if (Weights.Where((w, i) => !w.SequenceEqual(other.Weights[i])).Any())
+            {
+                return false;
+            }
+
+            return DegreeU == other.DegreeU && DegreeV == other.DegreeV;
         }
 
         /// <summary>
