@@ -176,6 +176,11 @@ namespace GShark.Geometry
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
+            // ToDo: this should be removed rebuilding the curve with less point. 
+            int numberOfPts = copyCurves[0].ControlPointLocations.Count;
+            foreach (NurbsCurve c in copyCurves.Skip(1))
+                if (numberOfPts != c.ControlPointLocations.Count)
+                    throw new ArgumentException("Loft only works if all curves have the same number of points.");
 
             if (copyCurves[0].IsPeriodic())
             {
