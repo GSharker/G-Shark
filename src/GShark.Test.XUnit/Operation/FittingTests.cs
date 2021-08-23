@@ -38,7 +38,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             crv.Degree.Should().Be(degree);
             crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
-            crv.ControlPointLocations[^1].DistanceTo(pts[^1]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[crv.ControlPointLocations.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
 
             foreach (var pt in pts)
             {
@@ -59,7 +59,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
-            crv.ControlPointLocations[^1].DistanceTo(pts[^1]).Should().BeLessThan(GSharkMath.MaxTolerance);
+            crv.ControlPointLocations[crv.ControlPointLocations.Count - 1].DistanceTo(pts[pts.Count - 1]).Should().BeLessThan(GSharkMath.MaxTolerance);
 
             foreach (var crvControlPoint in crv.ControlPointLocations)
             {
