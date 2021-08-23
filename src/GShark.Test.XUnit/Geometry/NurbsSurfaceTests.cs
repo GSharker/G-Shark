@@ -88,12 +88,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Normal_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs);
-            Point4 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves());
+            Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
             surface.Should().NotBeNull();
@@ -107,12 +106,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Loose_Lofted_Surface_By_Opened_Curves(double u, double v, double[] pt)
         {
             // Arrange
-            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(crvs, 3, LoftType.Loose);
-            Point4 evalPt = Evaluation.SurfacePointAt(surface, u, v);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves(), 3, LoftType.Loose);
+            Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
             surface.Should().NotBeNull();
@@ -133,11 +131,8 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void Lofted_Surface_Throws_An_Exception_If_The_DegreeV_Is_Greater_Than_Curves_Minus_One()
         {
-            // Arange
-            List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
-
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs, 4, LoftType.Loose);
+            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves(), 4, LoftType.Loose);
 
             // Assert
             func.Should().Throw<Exception>()
@@ -147,7 +142,7 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void Lofted_Surface_Throws_An_Exception_If_There_Are_Null_Curves()
         {
-            // Arange
+            // Arrange
             List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
             crvs.Add(null);
 
@@ -361,6 +356,16 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             surface0.Equals(surface1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_True_If_Surface_Is_Close()
+        {
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.ClosedCurves(), 3, LoftType.Loose);
+
+            // Assert
+            surface.IsClosed(SurfaceDirection.U).Should().BeTrue();
         }
     }
 }

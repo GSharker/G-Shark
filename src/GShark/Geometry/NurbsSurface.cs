@@ -102,15 +102,9 @@ namespace GShark.Geometry
         /// A surface is closed if the first points and the lasts in a direction are coincident.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
-        // ToDo: Add test using lofts.
         public bool IsClosed(SurfaceDirection direction)
         {
-            KnotVector knot = (direction == SurfaceDirection.U) ? KnotsU : KnotsV;
-            int degree = (direction == SurfaceDirection.U) ? DegreeU : DegreeV;
-
-            if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
-
-            var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
+            var pts2d = (direction == SurfaceDirection.U) ? Sets.Reverse2DMatrixData(LocationPoints) : LocationPoints;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
@@ -163,34 +157,45 @@ namespace GShark.Geometry
         /// <returns>A NURBS surface.</returns>
         public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, int degreeV = 3, LoftType loftType = LoftType.Normal)
         {
-            if (curves == null)
+            IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
+
+            if (copyCurves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            if (curves.Count < 2)
+            if (copyCurves.Count < 2)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            if (degreeV > curves.Count - 1)
+            if (degreeV > copyCurves.Count - 1)
                 throw new ArgumentException("The degreeV of the surface cannot be greater than the number of curves minus one.");
 
-            if (curves.Any(x => x == null))
+            if (copyCurves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
 
-            bool isClosed = curves[0].IsClosed();
-            foreach (NurbsCurve c in curves.Skip(1))
+            bool isClosed = copyCurves[0].IsClosed();
+            foreach (NurbsCurve c in copyCurves.Skip(1))
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
-            int degreeU = curves[0].Degree;
-            KnotVector knotVectorU = curves[0].Knots;
+
+            if (copyCurves[0].IsPeriodic())
+            {
+                for (int i = 0; i < copyCurves.Count; i++)
+                {
+                    copyCurves[i] = copyCurves[i].ClampEnds();
+                }
+            }
+
+            int degreeU = copyCurves[0].Degree;
+            KnotVector knotVectorU = copyCurves[0].Knots;
             KnotVector knotVectorV = new KnotVector();
             List<List<Point4>> surfaceControlPoints = new List<List<Point4>>();
 
             switch (loftType)
             {
                 case LoftType.Normal:
-                    for (int n = 0; n < curves[0].ControlPointLocations.Count; n++)
+                    for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
-                        List<Point3> pts = curves.Select(c => c.ControlPointLocations[n]).ToList();
+                        List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
                         NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
                         surfaceControlPoints.Add(crv.ControlPoints);
                         knotVectorV = crv.Knots;
@@ -198,8 +203,8 @@ namespace GShark.Geometry
                     break;
 
                 case LoftType.Loose:
-                    surfaceControlPoints = Sets.Reverse2DMatrixData(curves.Select(c => c.ControlPoints).ToList());
-                    knotVectorV = new KnotVector(degreeV, curves.Count);
+                    surfaceControlPoints = Sets.Reverse2DMatrixData(copyCurves.Select(c => c.ControlPoints).ToList());
+                    knotVectorV = new KnotVector(degreeV, copyCurves.Count);
                     break;
             }
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);
