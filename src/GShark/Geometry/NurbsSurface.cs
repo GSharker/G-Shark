@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GShark.Core;
+﻿using GShark.Core;
 using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace GShark.Geometry
 {
@@ -88,12 +88,12 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2D collection of points, U direction increases from left to right, the V direction from bottom to top.
+        /// A 2D collection of points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
         /// <summary>
-        /// A 2d collection of control points, U direction increases from left to right, the V direction from bottom to top.
+        /// A 2d collection of control points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
         internal List<List<Point4>> ControlPoints { get; }
 
@@ -133,7 +133,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Constructs a NURBS surface from a 2D grid of points.<br/>
-        /// The grid of points should be organized as, U direction increases from bottom to top, the V direction from left to right.
+        /// The grid of points should be organized as, the V direction from left to right and the U direction increases from bottom to top.
         /// </summary>
         /// <param name="degreeU">Degree of surface in U direction.</param>
         /// <param name="degreeV">Degree of surface in V direction.</param>
@@ -152,21 +152,17 @@ namespace GShark.Geometry
         /// Constructs a NURBS surface from a set of NURBS curves.<br/>
         /// </summary>
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
-        /// <param name="degreeV">Degree of surface in V direction.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, int degreeV = 3, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, LoftType loftType = LoftType.Normal)
         {
+            if (curves == null)
+                throw new ArgumentException("An invalid number of curves to perform the loft.");
+
+            if (curves.Count < 2)
+                throw new ArgumentException("An invalid number of curves to perform the loft.");
+
             IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
-
-            if (copyCurves == null)
-                throw new ArgumentException("An invalid number of curves to perform the loft.");
-
-            if (copyCurves.Count < 2)
-                throw new ArgumentException("An invalid number of curves to perform the loft.");
-
-            if (degreeV > copyCurves.Count - 1)
-                throw new ArgumentException("The degreeV of the surface cannot be greater than the number of curves minus one.");
 
             if (copyCurves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
@@ -190,26 +186,29 @@ namespace GShark.Geometry
                 }
             }
 
-            int degreeU = copyCurves[0].Degree;
-            KnotVector knotVectorU = copyCurves[0].Knots;
-            KnotVector knotVectorV = new KnotVector();
+            int degreeV = copyCurves[0].Degree;
+            int degreeU = 3;
+            KnotVector knotVectorU = new KnotVector();
+            KnotVector knotVectorV = copyCurves[0].Knots;
             List<List<Point4>> surfaceControlPoints = new List<List<Point4>>();
 
             switch (loftType)
             {
                 case LoftType.Normal:
+                    List<List<Point4>> tempPts = new List<List<Point4>>();
                     for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
                         List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
-                        surfaceControlPoints.Add(crv.ControlPoints);
-                        knotVectorV = crv.Knots;
+                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeU);
+                        tempPts.Add(crv.ControlPoints);
+                        knotVectorU = crv.Knots;
                     }
+                    surfaceControlPoints = Sets.Reverse2DMatrixData(tempPts);
                     break;
 
                 case LoftType.Loose:
-                    surfaceControlPoints = Sets.Reverse2DMatrixData(copyCurves.Select(c => c.ControlPoints).ToList());
-                    knotVectorV = new KnotVector(degreeV, copyCurves.Count);
+                    surfaceControlPoints = copyCurves.Select(c => c.ControlPoints).ToList();
+                    knotVectorU = new KnotVector(degreeU, copyCurves.Count);
                     break;
             }
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);

@@ -109,7 +109,25 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves(), 3, LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves(), LoftType.Loose);
+            Point3 evalPt = surface.PointAt(u, v);
+
+            // Assert
+            surface.Should().NotBeNull();
+            evalPt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0.5, 0.5, new double[] { 8.515625, 17.5, 1.890625 })]
+        [InlineData(0.1, 0.1, new double[] { -3.9403, 3.14, 6.446595 })]
+        [InlineData(1.0, 1.0, new double[] { -2.5, 35, 9 })]
+        public void It_Returns_A_Loose_Lofted_Surface_By_Closed_Curves(double u, double v, double[] pt)
+        {
+            // Arrange
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
+
+            // Act
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -126,17 +144,6 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             func.Should().Throw<Exception>()
                          .WithMessage("An invalid number of curves to perform the loft.");
-        }
-
-        [Fact]
-        public void Lofted_Surface_Throws_An_Exception_If_The_DegreeV_Is_Greater_Than_Curves_Minus_One()
-        {
-            // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.OpenCurves(), 4, LoftType.Loose);
-
-            // Assert
-            func.Should().Throw<Exception>()
-                         .WithMessage("The degreeV of the surface cannot be greater than the number of curves minus one.");
         }
 
         [Fact]
@@ -362,10 +369,10 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_True_If_Surface_Is_Close()
         {
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.ClosedCurves(), 3, LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
 
             // Assert
-            surface.IsClosed(SurfaceDirection.U).Should().BeTrue();
+            surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
         }
     }
 }
