@@ -31,10 +31,9 @@ namespace GShark.Geometry
             }
 
             Domain = (angleDomainRadians.Length > Math.PI * 2.0)
-                ? new Interval(AngularDiff(angleDomainRadians.T0, Math.PI * 2.0), AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
+                ? new Interval(AngularDiff(angleDomainRadians.T0, Math.PI * 2.0),
+                    AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
                 : angleDomainRadians;
-
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -65,7 +64,6 @@ namespace GShark.Geometry
             }
 
             Domain = new Interval(0.0, angle);
-            ToNurbsCurve();
         }
 
         /// <summary>

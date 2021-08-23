@@ -48,8 +48,8 @@ namespace GShark.Geometry
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
-            DomainU = new Interval(this.KnotsU.First(), this.KnotsU.Last());
-            DomainV = new Interval(this.KnotsV.First(), this.KnotsV.Last());
+            DomainU = new Interval(KnotsU.First(), KnotsU.Last());
+            DomainV = new Interval(KnotsV.First(), KnotsV.Last());
         }
 
         /// <summary>
@@ -88,12 +88,12 @@ namespace GShark.Geometry
         public List<List<double>> Weights { get; }
 
         /// <summary>
-        /// A 2D collection of points, U direction increases from left to right, the V direction from bottom to top.
+        /// A 2D collection of points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
         public List<List<Point3>> LocationPoints { get; }
 
         /// <summary>
-        /// A 2d collection of control points, U direction increases from left to right, the V direction from bottom to top.
+        /// A 2d collection of control points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
         internal List<List<Point4>> ControlPoints { get; }
 
@@ -102,21 +102,16 @@ namespace GShark.Geometry
         /// A surface is closed if the first points and the lasts in a direction are coincident.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
-        // ToDo: Add test using lofts.
         public bool IsClosed(SurfaceDirection direction)
         {
-            KnotVector knot = (direction == SurfaceDirection.U) ? KnotsU : KnotsV;
-            int degree = (direction == SurfaceDirection.U) ? DegreeU : DegreeV;
-
-            if (!knot.IsClamped(degree)) return knot.IsKnotVectorPeriodic(degree);
-
-            var pts2d = (direction == SurfaceDirection.U) ? LocationPoints : Sets.Reverse2DMatrixData(LocationPoints);
+            var pts2d = (direction == SurfaceDirection.U) ? Sets.Reverse2DMatrixData(LocationPoints) : LocationPoints;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
         /// <summary>
-        /// Constructs a NURBS surface from four corners are expected in counter-clockwise order.<br/>
-        /// The surface is defined with degree 1.
+        /// Constructs a NURBS surface from four corners.<br/>
+        /// If the corners are ordered ccw the normal of the surface will point up otherwise, if corners ordered cw the normal will point down.<br/>
+        /// The surface is defined of degree 1.
         /// </summary>
         /// <param name="p1">The first point.</param>
         /// <param name="p2">The second point.</param>
@@ -138,7 +133,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Constructs a NURBS surface from a 2D grid of points.<br/>
-        /// The grid of points should be organized as, U direction increases from bottom to top, the V direction from left to right.
+        /// The grid of points should be organized as, the V direction from left to right and the U direction increases from bottom to top.
         /// </summary>
         /// <param name="degreeU">Degree of surface in U direction.</param>
         /// <param name="degreeV">Degree of surface in V direction.</param>
@@ -157,10 +152,9 @@ namespace GShark.Geometry
         /// Constructs a NURBS surface from a set of NURBS curves.<br/>
         /// </summary>
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
-        /// <param name="degreeV">Degree of surface in V direction.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, int degreeV = 3, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -168,37 +162,53 @@ namespace GShark.Geometry
             if (curves.Count < 2)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            if (degreeV > curves.Count - 1)
-                throw new ArgumentException("The degreeV of the surface cannot be greater than the number of curves minus one.");
+            IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
 
-            if (curves.Any(x => x == null))
+            if (copyCurves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
 
-            bool isClosed = curves[0].IsClosed();
-            foreach (NurbsCurve c in curves.Skip(1))
+            bool isClosed = copyCurves[0].IsClosed();
+            foreach (NurbsCurve c in copyCurves.Skip(1))
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
-            int degreeU = curves[0].Degree;
-            KnotVector knotVectorU = curves[0].Knots;
-            KnotVector knotVectorV = new KnotVector();
+            // ToDo: this should be removed rebuilding the curve with less point. 
+            int numberOfPts = copyCurves[0].ControlPointLocations.Count;
+            foreach (NurbsCurve c in copyCurves.Skip(1))
+                if (numberOfPts != c.ControlPointLocations.Count)
+                    throw new ArgumentException("Loft only works if all curves have the same number of points.");
+
+            if (copyCurves[0].IsPeriodic())
+            {
+                for (int i = 0; i < copyCurves.Count; i++)
+                {
+                    copyCurves[i] = copyCurves[i].ClampEnds();
+                }
+            }
+
+            int degreeV = copyCurves[0].Degree;
+            int degreeU = 3;
+            KnotVector knotVectorU = new KnotVector();
+            KnotVector knotVectorV = copyCurves[0].Knots;
             List<List<Point4>> surfaceControlPoints = new List<List<Point4>>();
 
             switch (loftType)
             {
                 case LoftType.Normal:
-                    for (int n = 0; n < curves[0].ControlPointLocations.Count; n++)
+                    List<List<Point4>> tempPts = new List<List<Point4>>();
+                    for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
-                        List<Point3> pts = curves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeV);
-                        surfaceControlPoints.Add(crv.ControlPoints);
-                        knotVectorV = crv.Knots;
+                        List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
+                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeU);
+                        tempPts.Add(crv.ControlPoints);
+                        knotVectorU = crv.Knots;
                     }
+                    surfaceControlPoints = Sets.Reverse2DMatrixData(tempPts);
                     break;
 
                 case LoftType.Loose:
-                    surfaceControlPoints = Sets.Reverse2DMatrixData(curves.Select(c => c.ControlPoints).ToList());
-                    knotVectorV = new KnotVector(degreeV, curves.Count);
+                    surfaceControlPoints = copyCurves.Select(c => c.ControlPoints).ToList();
+                    knotVectorU = new KnotVector(degreeU, copyCurves.Count);
                     break;
             }
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);
@@ -269,29 +279,32 @@ namespace GShark.Geometry
         /// <returns>Return true if the NURBS surface are equal.</returns>
         public bool Equals(NurbsSurface other)
         {
-            List<List<Point3>> otherPts = other?.LocationPoints;
-
             if (other == null)
             {
                 return false;
             }
 
-            if (LocationPoints.Count != otherPts?.Count)
+            if (LocationPoints.Count != other.LocationPoints.Count)
             {
                 return false;
             }
 
-            if (!LocationPoints.All(otherPts.Contains))
+            if (LocationPoints.Where((pt, i) => !pt.SequenceEqual(other.LocationPoints[i])).Any())
             {
                 return false;
             }
 
-            if (KnotsU.Count != other.KnotsU.Count || KnotsV.Count != other.KnotsU.Count)
+            if (KnotsU.Count != other.KnotsU.Count || KnotsV.Count != other.KnotsV.Count)
             {
                 return false;
             }
 
-            return DegreeU == other.DegreeU && DegreeV == other.DegreeV && Weights.All(other.Weights.Contains);
+            if (Weights.Where((w, i) => !w.SequenceEqual(other.Weights[i])).Any())
+            {
+                return false;
+            }
+
+            return DegreeU == other.DegreeU && DegreeV == other.DegreeV;
         }
 
         /// <summary>

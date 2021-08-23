@@ -64,7 +64,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             nurbsCurve.ControlPoints.Count.Should().Be(5);
-            nurbsCurve.ControlPointLocations[1].DistanceTo(nurbsCurve.ControlPointLocations[^1]).Should().BeLessThan(GSharkMath.Epsilon);
+            nurbsCurve.ControlPointLocations[1].DistanceTo(nurbsCurve.ControlPointLocations[nurbsCurve.ControlPointLocations.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
             nurbsCurve.Domain.T0.Should().Be(0.0);
             nurbsCurve.Domain.T1.Should().Be(1.0);
@@ -217,10 +217,10 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             curveClamped.Knots.IsClamped(curveClamped.Degree).Should().BeTrue();
             curveClamped.ControlPoints[0]
-                .EpsilonEquals(curveClamped.ControlPoints[^1], GSharkMath.MaxTolerance)
+                .EpsilonEquals(curveClamped.ControlPoints[curveClamped.ControlPoints.Count - 1], GSharkMath.MaxTolerance)
                 .Should().BeTrue();
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
-            curve.ControlPoints[^3].Should().BeEquivalentTo(curveClamped.ControlPoints[^3]);
+            curve.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree].Should().BeEquivalentTo(curveClamped.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree]);
         }
     }
 }
