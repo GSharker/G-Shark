@@ -104,7 +104,6 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Length: {0}", length));
         }
 
-
         [Fact]
         public void It_Returns_A_Point_At_Length()
         {
@@ -125,6 +124,28 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Point 1 on the nurbs: {0} - Deviation: {1}", pl1, pl1.DistanceTo(p1)));
             _testOutput.WriteLine(string.Format("Point 2 on the line: {0} - Deviation: {1}", pl2, pl2.DistanceTo(p2)));
             _testOutput.WriteLine(string.Format("Point 3 on the arc: {0} - Deviation: {1}", pl3, pl3.DistanceTo(p3)));
+        }
+
+        [Fact]
+        public void It_Returns_A_Tangent_At_Length()
+        {
+            // Act
+            var v1 = new Vector3(0,0.967518,-0.252801);
+            var v2 = new Vector3(0,0,-1);
+            var v3 = new Vector3(0.602025,0,-0.798477);
+
+            var vl1 = _polycurve.TangentAtLength(15);
+            var vl2 = _polycurve.TangentAtLength(22);
+            var vl3 = _polycurve.TangentAtLength(26);
+
+            // Arrange
+            vl1.EpsilonEquals(v1, 1e-5).Should().BeTrue();
+            vl2.EpsilonEquals(v2, GSharkMath.MinTolerance).Should().BeTrue();
+            vl3.EpsilonEquals(v3, GSharkMath.MinTolerance).Should().BeTrue();
+            
+            _testOutput.WriteLine(string.Format("{0} on the nurbs", vl1));
+            _testOutput.WriteLine(string.Format("{0} on the line", vl2));
+            _testOutput.WriteLine(string.Format("{0} on the arc", vl3));
         }
 
         [Fact]

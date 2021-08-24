@@ -278,11 +278,6 @@ namespace GShark.Geometry
                         {
                             case "NurbsCurve":
                                 var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
-                                var par1 = GSharkMath.RemapValue(
-                                    segmentLength,
-                                    new Interval(0, this.SegmentsLengths[i]),
-                                    new Interval(0, 1)
-                                    );
                                 return ((NurbsCurve)segment).PointAt(par);
                             case "Line":
                                 return ((Line)segment).PointAtLength(segmentLength);
@@ -336,6 +331,59 @@ namespace GShark.Geometry
             return new Point3();
         }
 
+        public Vector3 TangentAtLength(double l)
+        {
+            Vector3 tangent = new Vector3();
+            double progressiveEndLength = 0;
+            double progressiveStartLength = 0;
+
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (l > this.Length)
+            {
+                throw new InvalidOperationException("Length value is bigger than the polycurve total length");
+            }
+            else
+            {
+                for (int i = 0; i < this.SegmentCount; i++)
+                {
+                    var segment = this.Segments[i];
+                    progressiveStartLength = progressiveEndLength;
+                    progressiveEndLength += this.SegmentsLengths[i];
+                    if (l <= progressiveEndLength) // This is the right segment
+                    {
+                        double segmentLength = i == 0 ? l : l - progressiveStartLength;
+                        var type = segment.GetType().Name;
+                        switch (type)
+                        {
+                            case "NurbsCurve":
+                                var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
+                                tangent =  ((NurbsCurve)segment).TangentAt(par);
+                                break;
+                            case "Line":
+                                tangent =  ((Line)segment).TangentAtLength(segmentLength);
+                                break;
+                            case "Arc":
+                                tangent =  ((Arc)segment).TangentAtLength(segmentLength);
+                                break;
+                            case "PolyCurve":
+                                tangent = ((PolyCurve)segment).TangentAtLength(segmentLength);
+                                break;
+                        }
+                        return tangent.Unitize();
+                    }
+                }
+            }
+            return new Vector3();
+        }
+
+        /// <summary>
+        /// It returns the closest point to a given point on the polycurve.
+        /// </summary>
+        /// <param name="pt">Point</param>
+        /// <returns></returns>
         public Point3 ClosestPoint(Point3 pt)
         {
             var closest = new Point3();
