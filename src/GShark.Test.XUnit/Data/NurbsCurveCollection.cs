@@ -153,9 +153,9 @@ namespace GShark.Test.XUnit.Data
             NurbsCurve c3 = new NurbsCurve(points3, degree);
             NurbsCurve c4 = new NurbsCurve(points4, degree);
 
-            return new List<NurbsCurve>() { c1, c2, c3, c4 };
+            return new List<NurbsCurve> { c1, c2, c3, c4 };
         }
-        
+
         public static List<NurbsCurve> ClosedCurves()
         {
             List<NurbsCurve> crvs = NurbsCurveCollection.OpenCurves();
