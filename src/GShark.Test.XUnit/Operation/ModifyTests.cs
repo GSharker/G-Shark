@@ -304,7 +304,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
             Point3 expectedPt2 = new Point3(2.5, 0, 0);
             Point3 expectedPt3 = new Point3(5, 5.0, 4.0);
-            ICurve[] curves = { poly, ln.ToNurbs() };
+            ICurve[] curves = { poly.ToNurbs(), ln.ToNurbs() };
 
             // Act
             ICurve joinedCurve = Modify.JoinCurves(curves);

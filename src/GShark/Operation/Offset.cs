@@ -75,8 +75,8 @@ namespace GShark.Operation
             int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
 
             Point3[] offsetPts = new Point3[poly.Count];
-            Line[] segments = poly.Segments;
-            Line[] offsetSegments = new Line[segments.Length + 1];
+            var segments = poly.Segments;
+            Line[] offsetSegments = new Line[segments.Count + 1];
 
             for (int i = 0; i < iteration; i++)
             {
@@ -100,7 +100,7 @@ namespace GShark.Operation
                     continue;
                 }
 
-            Intersection:
+                Intersection:
                 bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
                 if (!ccx) continue;
                 offsetPts[k] = pt;
