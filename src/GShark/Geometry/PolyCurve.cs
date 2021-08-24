@@ -221,7 +221,6 @@ namespace GShark.Geometry
 
         public Interval Domain => throw new NotImplementedException();
 
-
         /// <summary>
         /// Closes the polycurve with a line segment
         /// </summary>
@@ -248,7 +247,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Returns a point at a given length along the polycurve
         /// </summary>
-        /// <param name="l"></param>
+        /// <param name="l">The length</param>
         /// <returns></returns>
         public Point3 PointAtLength(double l)
         {
@@ -332,9 +331,9 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Return a Vector tangent to a given length
+        /// Return a vector tangent at a given length
         /// </summary>
-        /// <param name="l"></param>
+        /// <param name="l">The length</param>
         /// <returns></returns>
         public Vector3 TangentAtLength(double l)
         {
@@ -423,9 +422,9 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// It returns the closest point to a given point on the polycurve.
+        /// It returns the closest point at a given point on the polycurve.
         /// </summary>
-        /// <param name="pt">Point</param>
+        /// <param name="pt">The point</param>
         /// <returns></returns>
         public Point3 ClosestPoint(Point3 pt)
         {
