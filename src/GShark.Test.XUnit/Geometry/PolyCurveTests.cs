@@ -175,6 +175,32 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_A_Tangent_At_Parameter()
+        {
+            // Act
+            var v1 = new Vector3(0, 0.967518, -0.252801);
+            var v2 = new Vector3(0, 0, -1);
+            var v3 = new Vector3(0.602025, 0, -0.798477);
+
+            double t0 = 0.265154;
+            double t1 = 0.564023;
+            double t2 = 0.80376;
+
+            var vp1 = _polycurve.TangentAt(t0);
+            var vp2 = _polycurve.TangentAt(t1);
+            var vp3 = _polycurve.TangentAt(t2);
+
+            // Arrange
+            vp1.EpsilonEquals(v1, 1e-4).Should().BeTrue();
+            vp2.EpsilonEquals(v2, 1e-4).Should().BeTrue();
+            vp3.EpsilonEquals(v3, 1e-4).Should().BeTrue();
+
+            _testOutput.WriteLine(string.Format("{0} on the nurbs", vp1));
+            _testOutput.WriteLine(string.Format("{0} on the line", vp2));
+            _testOutput.WriteLine(string.Format("{0} on the arc", vp3));
+        }
+
+        [Fact]
         public void It_Returns_The_Closest_Point()
         {
             // Act

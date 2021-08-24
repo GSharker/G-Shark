@@ -331,6 +331,11 @@ namespace GShark.Geometry
             return new Point3();
         }
 
+        /// <summary>
+        /// Return a Vector tangent to a given length
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
         public Vector3 TangentAtLength(double l)
         {
             Vector3 tangent = new Vector3();
@@ -374,6 +379,44 @@ namespace GShark.Geometry
                         }
                         return tangent.Unitize();
                     }
+                }
+            }
+            return new Vector3();
+        }
+
+        /// <summary>
+        /// Returns a vector tangent at a given parameter along the polycurve [0,1]
+        /// </summary>
+        /// <param name="t">Parameter value between 0 and 1</param>
+        /// <returns></returns>
+        public Vector3 TangentAt(double t)
+        {
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (t > 1.0)
+            {
+                t = 1.0;
+            }
+            else
+            {
+                var param = t * SegmentCount;
+                var i = int.Parse(Math.Floor(param).ToString());
+                param -= i;
+                var segment = this.Segments[i];
+
+                var type = segment.GetType().Name;
+                switch (type)
+                {
+                    case "NurbsCurve":
+                        return ((NurbsCurve)segment).TangentAt(param).Unitize();
+                    case "Line":
+                        return ((Line)segment).TangentAt(param).Unitize();
+                    case "Arc":
+                        return ((Arc)segment).TangentAt(param).Unitize();
+                    case "PolyCurve":
+                        return ((PolyCurve)segment).TangentAt(param).Unitize();
                 }
             }
             return new Vector3();
