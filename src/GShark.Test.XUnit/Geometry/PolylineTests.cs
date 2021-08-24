@@ -260,15 +260,15 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            var poly = new Polyline(pts).ToNurbs();
-            KnotVector knots = poly.Knots;
+            var polyNurbs = new Polyline(pts).ToNurbs();
+            KnotVector knots = polyNurbs.Knots;
 
             // Assert
-            poly.Degree.Should().Be(1);
-            for (int i = 1; i < poly.Knots.Count - 1; i++)
+            polyNurbs.Degree.Should().Be(1);
+            for (int i = 1; i < polyNurbs.Knots.Count - 1; i++)
             {
-                Point3 pt = poly.PointAt(knots[i]);
-                pts[i - 1].EpsilonEquals(poly.PointAt(knots[i]), GSharkMath.MaxTolerance).Should().BeTrue();
+                Point3 pt = polyNurbs.PointAt(knots[i]);
+                pts[i - 1].EpsilonEquals(polyNurbs.PointAt(knots[i]), GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 

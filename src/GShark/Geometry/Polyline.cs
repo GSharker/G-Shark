@@ -355,17 +355,19 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             double lengthSum = 0;
-            KnotVector knots = new KnotVector { 0 };
-            var ctrlPts = Point4.PointsHomogeniser(this, new List<double>());
+            var knots = new KnotVector { 0 };
+            var weights = new List<double>();
+            var ctrlPts = Point4.PointsHomogeniser(this, weights);
 
             for (int i = 0; i < this.Count; i++)
             {
                 lengthSum += 1;
                 knots.Add(i);
+                weights.Add(1.0);
             }
-
             knots.Add(lengthSum - 1);
-            return new NurbsCurve(1, knots, ctrlPts);
+
+           return new NurbsCurve(1, knots, ctrlPts) ;
         }
 
         /// <summary>
