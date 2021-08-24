@@ -50,12 +50,10 @@ namespace GShark.Test.XUnit.Operation
         [Fact]
         public void Interpolates_With_End_And_Start_Tangent()
         {
-            Point3 v1 = new Point3(1.278803, 1.06885, 0);
-            Point3 v2 = new Point3(-4.204863, -2.021209, 0);
+            // Arrange
+            Vector3 v1 = new Vector3(1.278803, 1.06885, 0);
+            Vector3 v2 = new Vector3(-4.204863, -2.021209, 0);
 
-            var newPts = new List<Point3>(pts);
-            newPts.Insert(1, v1);
-            newPts.Insert(newPts.Count - 1, v2);
             // Act
             NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
 

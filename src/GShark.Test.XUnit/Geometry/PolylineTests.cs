@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Geometry
             Polyline closedPolyline = _polyline.Close();
 
             // Assert
-            closedPolyline[0].DistanceTo(closedPolyline[^1]).Should().BeLessThan(GSharkMath.Epsilon);
+            closedPolyline[0].DistanceTo(closedPolyline[closedPolyline.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
         }
 
         [Fact]

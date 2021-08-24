@@ -58,7 +58,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
-            (offsetResult[^1].DistanceTo(pl[^1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Theory]
