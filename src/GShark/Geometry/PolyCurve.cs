@@ -124,12 +124,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Returns the start point of the polycurve
         /// </summary>
-        public Point3 StartPoint => this.Segments.First().ControlPointLocations.First();
+        public Point3 StartPoint => this.Segments.First().PointAt(0.0);
 
         /// <summary>
         /// Returns the end point of the polycurve
         /// </summary>
-        public Point3 EndPoint => this.Segments.Last().ControlPointLocations.Last();
+        public Point3 EndPoint => this.Segments.Last().PointAt(1.0);
 
         /// <summary>
         /// First and last point of the PolyCurve are coincident
@@ -204,10 +204,10 @@ namespace GShark.Geometry
                     if (l <= progressiveEndLength) // This is the right segment
                     {
                         double segmentLength = i == 0 ? l : l - progressiveStartLength;
-                        var t = segment.GetType().Name;
-                        switch (segment.CurveType)
+                        var type = segment.GetType().Name;
+                        switch (type)
                         {
-                            case CurveType.NURBSCURVE:
+                            case "NurbsCurve":
                                 var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
                                 var par1 = GSharkMath.RemapValue(
                                     segmentLength,
@@ -215,11 +215,11 @@ namespace GShark.Geometry
                                     new Interval(0, 1)
                                     );
                                 return ((NurbsCurve)segment).PointAt(par);
-                            case CurveType.LINE:
+                            case "Line":
                                 return ((Line)segment).PointAtLength(segmentLength);
-                            case CurveType.ARC:
+                            case "Arc":
                                 return ((Arc)segment).PointAtLength(segmentLength);
-                            case CurveType.POLYCURVE:
+                            case "PolyCurve":
                                 l = ((PolyCurve)segment).Length;
                                 break;
                         }
