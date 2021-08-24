@@ -104,19 +104,6 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Length: {0}", length));
         }
 
-        [Fact]
-        public void It_Returns_Segment_Domains_Reparametrized()
-        {
-            // Arrange
-
-            // Act            
-            var intervals = PolyCurve.CurveDomainsFromLengths(_polycurve);
-
-            // Arrange
-            intervals.Count.Should().Be(3);
-            intervals.First().Min.Should().Be(0);
-            intervals.Last().Max.Should().Be(1);
-        }
 
         [Fact]
         public void It_Returns_A_Point_At_Length()

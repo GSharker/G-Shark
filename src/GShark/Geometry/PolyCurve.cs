@@ -304,8 +304,6 @@ namespace GShark.Geometry
         /// <returns></returns>
         public Point3 PointAt(double t)
         {
-            var domains = CurveDomainsFromLengths(this);
-
             if (this.SegmentCount == 0)
             {
                 throw new InvalidOperationException("The polycurve is empty");
@@ -349,20 +347,6 @@ namespace GShark.Geometry
                 min = max;
             }
 
-            return intervals;
-        }
-
-        public static List<Interval> CurveDomainsFromLengths(PolyCurve curve)
-        {
-            var intervals = new List<Interval>();
-            double min = 0, max = 0;
-            foreach (double length in curve.SegmentsLengths)
-            {
-                double proportion = length / curve.Length;
-                max = min + proportion;
-                intervals.Add(new Interval(min, max));
-                min = max;
-            }
             return intervals;
         }
 
