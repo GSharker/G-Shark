@@ -27,7 +27,6 @@ namespace GShark.Geometry
 
             if (IsClosed) return;
             Add(vertices[0]);
-            ToNurbsCurve();
         }
 
         /// <summary>
