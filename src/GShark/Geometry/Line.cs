@@ -72,7 +72,7 @@ namespace GShark.Geometry
         public double Length { get; }
 
         /// <summary>
-        /// Direction of the line.
+        /// Unit vector representing direction of the line.
         /// </summary>
         public Vector3 Direction { get; }
 
@@ -144,12 +144,12 @@ namespace GShark.Geometry
         /// <returns>The point at the specific parameter.</returns>
         public Point3 PointAt(double t)
         {
-            if (t < 0)
+            if (t <= 0)
             {
                 return StartPoint;
             }
 
-            if (t > 1)
+            if (t >= 1)
             {
                 return EndPoint;
             }
@@ -164,12 +164,12 @@ namespace GShark.Geometry
         /// <returns>The point.</returns>
         public Point3 PointAtLength(double length)
         {
-            if (length < 0)
+            if (length <= 0)
             {
                 return StartPoint;
             }
 
-            if (length > Length)
+            if (length >= Length)
             {
                 return EndPoint;
             }
@@ -204,12 +204,12 @@ namespace GShark.Geometry
         /// <returns>The curve length at t.</returns>
         public double LengthAt(double t)
         {
-            if (t < 0)
+            if (t <= 0)
             {
                 return 0;
             }
 
-            if (t > 1)
+            if (t >= 1)
             {
                 return Length;
             }
@@ -224,12 +224,12 @@ namespace GShark.Geometry
         /// <returns>The evaluated parameter.</returns>
         public double ParameterAt(double length)
         {
-            if (length < 0)
+            if (length <= 0)
             {
                 return 0;
             }
 
-            if (length > Length)
+            if (length >= Length)
             {
                 return 1;
             }
@@ -257,12 +257,12 @@ namespace GShark.Geometry
             Point3 start = StartPoint;
             Point3 end = EndPoint;
 
-            if (startLength >= -GSharkMath.Epsilon || startLength <= GSharkMath.Epsilon)
+            if (startLength != 0)
             {
                 start = StartPoint - (Direction * startLength);
             }
 
-            if (endLength >= -GSharkMath.Epsilon || endLength <= GSharkMath.Epsilon)
+            if (endLength != 0)
             {
                 end = EndPoint + (Direction * endLength);
             }

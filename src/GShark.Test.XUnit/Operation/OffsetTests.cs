@@ -61,20 +61,23 @@ namespace GShark.Test.XUnit.Operation
             (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
-        [Fact]
-        public void Returns_The_Offset_Of_A_Polygon()
+        [Theory]
+        [InlineData(0,7.071068)]
+        [InlineData(1, 12.205361)]
+        [InlineData(2, 5.481013)]
+        [InlineData(3, 7.071068)]
+        [InlineData(4, 7.071068)]
+        public void Returns_The_Offset_Of_A_Polygon(int vertex, double expectedDistance)
         {
             // Arrange
-            Polygon pl = new Polygon(PolygonTests.Planar2D);
+            Polygon polygon = new Polygon(PolygonTests.Planar2D);
             double offset = 5;
 
-            Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
+            Polyline offsetPolygon = Offset.Polyline(polygon, offset, Plane.PlaneXY);
 
             // Assert
-            offsetResult[0].DistanceTo(offsetResult[offsetResult.Count - 1]).Should().Be(0.0);
-            Point3 pt = offsetResult.PointAt(0.5);
-            Point3 closestPt = pl.ClosestPoint(pt);
-            pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MinTolerance);
+            polygon[vertex].DistanceTo(offsetPolygon[vertex]).Should()
+                .BeApproximately(expectedDistance, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -92,7 +95,7 @@ namespace GShark.Test.XUnit.Operation
             {
                 Point3 pt = offsetResult.PointAt(i);
                 Point3 closestPt = crv.ClosestPoint(pt);
-                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
+                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MinTolerance);
             }
         }
     }

@@ -121,7 +121,7 @@ namespace GShark.Test.XUnit.Operation
             Polyline poly = new Polyline(pts);
 
             // Act
-            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(poly);
+            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(poly.ToNurbs());
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);

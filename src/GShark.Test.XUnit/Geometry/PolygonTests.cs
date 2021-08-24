@@ -52,7 +52,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             polygon.Should().NotBeEmpty();
-            polygon.Segments.Length.Should().Be(5);
+            polygon.Segments.Count.Should().Be(5);
         }
 
         [Fact]
@@ -139,7 +139,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
         {
             // Arrange
-            ICurve poly2D = new Polygon(Planar2D);
+            ICurve poly2D = new Polygon(Planar2D).ToNurbs();
             KnotVector knots = poly2D.Knots;
 
             // Assert

@@ -206,7 +206,7 @@ namespace GShark.Operation
         public static List<Point3> PolylinePlane(Polyline poly, Plane pl)
         {
             List<Point3> intersectionPts = new List<Point3>();
-            Line[] segments = poly.Segments;
+            var segments = poly.Segments;
 
             foreach (Line segment in segments)
             {
