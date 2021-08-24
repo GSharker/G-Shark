@@ -20,7 +20,11 @@ namespace GShark.Operation
         /// <returns>The offset line.</returns>
         public static Line Line(Line ln, double distance, Plane pln)
         {
-            if (distance == 0.0) return ln;
+            if (distance == 0.0)
+            {
+                return ln;
+            }
+
             Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.ZAxis).Amplify(distance);
             return new Line(ln.StartPoint + vecOffset, ln.EndPoint + vecOffset);
         }
@@ -33,7 +37,11 @@ namespace GShark.Operation
         /// <returns>The offset circle.</returns>
         public static Circle Circle(Circle cl, double distance)
         {
-            if (distance == 0.0) return cl;
+            if (distance == 0.0)
+            {
+                return cl;
+            }
+
             return new Circle(cl.Plane, cl.Radius + distance);
         }
 
@@ -46,7 +54,10 @@ namespace GShark.Operation
         /// <returns>The offset curve.</returns>
         public static ICurve Curve(ICurve crv, double distance, Plane pln)
         {
-            if (distance == 0.0) return crv;
+            if (distance == 0.0)
+            {
+                return crv;
+            }
 
             (List<double> tValues, List<Point3> pts) subdivision = Tessellation.CurveAdaptiveSample(crv);
 
@@ -70,12 +81,15 @@ namespace GShark.Operation
         /// <returns>The offset polyline.</returns>
         public static Polyline Polyline(Polyline poly, double distance, Plane pln)
         {
-            if (distance == 0.0) return poly;
+            if (distance == 0.0)
+            {
+                return poly;
+            }
 
             int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
 
             Point3[] offsetPts = new Point3[poly.Count];
-            var segments = poly.Segments;
+            List<Line> segments = poly.Segments;
             Line[] offsetSegments = new Line[segments.Count + 1];
 
             for (int i = 0; i < iteration; i++)
@@ -102,7 +116,11 @@ namespace GShark.Operation
 
                 Intersection:
                 bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
-                if (!ccx) continue;
+                if (!ccx)
+                {
+                    continue;
+                }
+
                 offsetPts[k] = pt;
 
                 if (i == iteration - 1)
