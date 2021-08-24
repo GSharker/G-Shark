@@ -2,7 +2,6 @@
 using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -50,7 +49,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act            
 
-            // Arrange
+            // Assert
             _polycurve.Should().NotBeNull();
             _polycurve.SegmentCount.Should().Be(numberOfExpectedSegments);
         }
@@ -62,7 +61,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act            
 
-            // Arrange
+            // Assert
             _polycurve.Should().NotBeNull();
             _polycurve.IsClosed.Should().BeFalse();
 
@@ -82,7 +81,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act            
 
-            // Arrange
+            // Assert
             _polycurve.StartPoint.Should().Be(startPoint);
             _polycurve.EndPoint.Should().Be(endPoint);
         }
@@ -107,7 +106,7 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Point_At_Length()
         {
-            // Act
+            // Arrange
             var p1 = new Point3(5.0, 3.042501, 4.519036);
             var p2 = new Point3(5.0, 5.0, -1.730175);
             var p3 = new Point3(6.007615, 5.0, -5.510126);
@@ -116,7 +115,9 @@ namespace GShark.Test.XUnit.Geometry
             var pl2 = _polycurve.PointAtLength(22);
             var pl3 = _polycurve.PointAtLength(26);
 
-            // Arrange
+            // Act
+
+            // Assert
             pl1.DistanceTo(p1).Should().BeLessOrEqualTo(1e-4);
             pl2.DistanceTo(p2).Should().BeLessOrEqualTo(1e-4);
             pl3.DistanceTo(p3).Should().BeLessOrEqualTo(1e-4);
@@ -127,22 +128,23 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Tangent_At_Length()
+        public void It_Returns_The_Unitized_Tangent_At_Length()
         {
-            // Act
-            var v1 = new Vector3(0,0.967518,-0.252801);
-            var v2 = new Vector3(0,0,-1);
-            var v3 = new Vector3(0.602025,0,-0.798477);
+            // Arrange
+            var v1 = new Vector3(0, 0.967518, -0.252801);
+            var v2 = new Vector3(0, 0, -1);
+            var v3 = new Vector3(0.602025, 0, -0.798477);
 
+            //Act
             var vl1 = _polycurve.TangentAtLength(15);
             var vl2 = _polycurve.TangentAtLength(22);
             var vl3 = _polycurve.TangentAtLength(26);
 
-            // Arrange
+            // Assert
             vl1.EpsilonEquals(v1, 1e-5).Should().BeTrue();
             vl2.EpsilonEquals(v2, GSharkMath.MinTolerance).Should().BeTrue();
             vl3.EpsilonEquals(v3, GSharkMath.MinTolerance).Should().BeTrue();
-            
+
             _testOutput.WriteLine(string.Format("{0} on the nurbs", vl1));
             _testOutput.WriteLine(string.Format("{0} on the line", vl2));
             _testOutput.WriteLine(string.Format("{0} on the arc", vl3));
@@ -151,20 +153,21 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Point_At_Parameter()
         {
-            // Act
+            // Arrange
             var p1 = new Point3(5.0, 3.042501, 4.519036);
             var p2 = new Point3(5.0, 5.0, -1.730175);
             var p3 = new Point3(6.007615, 5.0, -5.510126);
 
             double t0 = 0.265154;
             double t1 = 0.564023;
-            double t2= 0.80376;
+            double t2 = 0.80376;
 
+            //Act
             var pl1 = _polycurve.PointAt(t0);
             var pl2 = _polycurve.PointAt(t1);
             var pl3 = _polycurve.PointAt(t2);
 
-            // Arrange
+            // Assert
             pl1.DistanceTo(p1).Should().BeLessOrEqualTo(1e-4);
             pl2.DistanceTo(p2).Should().BeLessOrEqualTo(1e-4);
             pl3.DistanceTo(p3).Should().BeLessOrEqualTo(1e-4);
@@ -175,9 +178,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Tangent_At_Parameter()
+        public void It_Returns_The_Unitized_Tangent_At_Parameter()
         {
-            // Act
+            // Arrange
             var v1 = new Vector3(0, 0.967518, -0.252801);
             var v2 = new Vector3(0, 0, -1);
             var v3 = new Vector3(0.602025, 0, -0.798477);
@@ -186,11 +189,12 @@ namespace GShark.Test.XUnit.Geometry
             double t1 = 0.564023;
             double t2 = 0.80376;
 
+            //Act
             var vp1 = _polycurve.TangentAt(t0);
             var vp2 = _polycurve.TangentAt(t1);
             var vp3 = _polycurve.TangentAt(t2);
 
-            // Arrange
+            // Assert
             vp1.EpsilonEquals(v1, 1e-4).Should().BeTrue();
             vp2.EpsilonEquals(v2, 1e-4).Should().BeTrue();
             vp3.EpsilonEquals(v3, 1e-4).Should().BeTrue();
@@ -203,19 +207,20 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_The_Closest_Point()
         {
-            // Act
+            // Arrange
             var p1 = new Point3(-0.852901, 2.957569, 1.405093);
-            var p2 = new Point3(5.110799,4.817776,-1.224014);
-            var p3 = new Point3(7.15482,4.790861,-6.554605);
+            var p2 = new Point3(5.110799, 4.817776, -1.224014);
+            var p3 = new Point3(7.15482, 4.790861, -6.554605);
             var cp1 = new Point3(0.326161, 2.36256, 2.371569);
-            var cp2= new Point3(5,5,-1.224014);
-            var cp3 = new Point3(7.127977,5,-6.592858);
+            var cp2 = new Point3(5, 5, -1.224014);
+            var cp3 = new Point3(7.127977, 5, -6.592858);
 
+            //Act
             var pl1 = _polycurve.ClosestPoint(p1);
             var pl2 = _polycurve.ClosestPoint(p2);
             var pl3 = _polycurve.ClosestPoint(p3);
 
-            // Arrange
+            // Assert
             pl1.DistanceTo(cp1).Should().BeLessOrEqualTo(1e-4);
             pl2.DistanceTo(cp2).Should().BeLessOrEqualTo(1e-4);
             pl3.DistanceTo(cp3).Should().BeLessOrEqualTo(1e-4);
@@ -223,7 +228,6 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p1, pl1, pl1.DistanceTo(p1)));
             _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p2, pl2, pl2.DistanceTo(p2)));
             _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p3, pl3, pl3.DistanceTo(p3)));
- 
         }
     }
 }

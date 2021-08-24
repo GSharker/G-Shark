@@ -38,31 +38,25 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(Line line)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(line.StartPoint) <= GSharkMath.Epsilon)
-            {
-                this.Segments.Add(line);
-            }
-            else
+            if (this.SegmentCount != 0 && this.EndPoint.DistanceTo(line.StartPoint) > GSharkMath.Epsilon)
             {
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
+            this.Segments.Add(line);
         }
 
         /// <summary>
         /// Appends and matches the start of the arc to the end of polycurve.
         /// </summary>
-        /// <param name="curve"></param>
+        /// <param name="curve">The arc.</param>
         /// <returns></returns>
         public void Append(Arc arc)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(arc.StartPoint) <= GSharkMath.Epsilon)
-            {
-                this.Segments.Add(arc);
-            }
-            else
+            if (this.SegmentCount != 0 && this.EndPoint.DistanceTo(arc.StartPoint) > GSharkMath.Epsilon)
             {
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
+            this.Segments.Add(arc);
         }
 
         /// <summary>
@@ -72,14 +66,15 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(NurbsCurve nurbs)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(nurbs.ControlPointLocations.First()) <= GSharkMath.Epsilon)
+            if (nurbs.IsClosed())
             {
-                this.Segments.Add(nurbs);
+                throw new InvalidOperationException("The curve is closed.");
             }
-            else
+            if (this.SegmentCount != 0 && this.EndPoint.DistanceTo(nurbs.PointAt(1.0)) > GSharkMath.Epsilon)
             {
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
+            this.Segments.Add(nurbs);
         }
 
         /// <summary>
@@ -89,7 +84,7 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(PolyCurve polycurve)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.StartPoint) <= GSharkMath.Epsilon)
+            if (this.SegmentCount != 0 && this.EndPoint.DistanceTo(polycurve.StartPoint) > GSharkMath.Epsilon)
             {
                 this.Segments.Add(polycurve);
             }
@@ -100,7 +95,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Return the polycurve bounding box
+        /// Return the polycurve bounding box.
         /// </summary>
         public BoundingBox BoundingBox
         {
@@ -113,14 +108,14 @@ namespace GShark.Geometry
         /// <summary>
         /// Explodes this PolyCurve into a list of Curve segments.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ordered list of curves composing the polycurve.</returns>
         public IList<ICurve> Explode()
         {
             return this.Segments.Select(crv => crv).ToList();
         }
 
         /// <summary>
-        /// Return the total lenght of the polycurve
+        /// Return the total lenght of the polycurve.
         /// </summary>
         public double Length
         {
@@ -154,12 +149,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// The segments of the PolyCurve
+        /// The segments of the polycurve.
         /// </summary>
         public IList<ICurve> Segments { get; set; } = new List<ICurve>();
 
         /// <summary>
-        /// Ordered list of segment lengths
+        /// Ordered list of segment lengths.
         /// </summary>
         public IList<double> SegmentsLengths
         {
@@ -192,22 +187,22 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns the start point of the polycurve
+        /// Returns the start point of the polycurve.
         /// </summary>
         public Point3 StartPoint => this.Segments.First().PointAt(0.0);
 
         /// <summary>
-        /// Returns the end point of the polycurve
+        /// Returns the end point of the polycurve.
         /// </summary>
         public Point3 EndPoint => this.Segments.Last().PointAt(1.0);
 
         /// <summary>
-        /// First and last point of the PolyCurve are coincident
+        /// First and last point of the PolyCurve are coincident.
         /// </summary>
         public bool IsClosed => this.StartPoint.DistanceTo(this.EndPoint) <= GSharkMath.Epsilon;
 
         /// <summary>
-        /// Number of segments
+        /// Number of segments.
         /// </summary>
         public int SegmentCount => this.Segments.Count;
 
@@ -222,9 +217,9 @@ namespace GShark.Geometry
         public Interval Domain => throw new NotImplementedException();
 
         /// <summary>
-        /// Closes the polycurve with a line segment
+        /// Closes the polycurve with a line segment.
         /// </summary>
-        public void Close()
+        public PolyCurve Close()
         {
             if (!this.IsClosed && this.SegmentCount > 0)
             {
@@ -238,32 +233,29 @@ namespace GShark.Geometry
                     throw new InvalidOperationException("The polycurve is empty");
                 }
             }
-            else
-            {
-                throw new InvalidOperationException("The polycurve is already closed");
-            }
+            return this;
         }
 
         /// <summary>
-        /// Returns a point at a given length along the polycurve
+        /// Returns a point at a given length along the polycurve.
         /// </summary>
-        /// <param name="l">The length</param>
-        /// <returns></returns>
+        /// <param name="l">The length.</param>
+        /// <returns>The point at the given length.</returns>
         public Point3 PointAtLength(double l)
         {
-            double progressiveEndLength = 0;
-            double progressiveStartLength = 0;
+            if (l == 0)
+            {
+                return this.StartPoint;
+            }
 
             if (this.SegmentCount == 0)
             {
                 throw new InvalidOperationException("The polycurve is empty");
             }
-            else if (l > this.Length)
+            if (l <= this.Length)
             {
-                throw new InvalidOperationException("Length value is bigger than the polycurve total length");
-            }
-            else
-            {
+                double progressiveEndLength = 0;
+                double progressiveStartLength = 0;
                 for (int i = 0; i < this.SegmentCount; i++)
                 {
                     var segment = this.Segments[i];
@@ -288,14 +280,14 @@ namespace GShark.Geometry
                     }
                 }
             }
-            return new Point3();
+            return this.EndPoint;
         }
 
         /// <summary>
-        /// Returns a point at a given parameter along the polycurve [0,1]
+        /// Returns a point at a given parameter along the polycurve [0,1].
         /// </summary>
-        /// <param name="t">Parameter value between 0 and 1</param>
-        /// <returns></returns>
+        /// <param name="t">Parameter value between 0 and 1.</param>
+        /// <returns>The point at the given parameter.</returns>
         public Point3 PointAt(double t)
         {
             if (this.SegmentCount == 0)
@@ -331,10 +323,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Return a vector tangent at a given length
+        /// Return a vector tangent at a given length.
         /// </summary>
-        /// <param name="l">The length</param>
-        /// <returns></returns>
+        /// <param name="l">The length.</param>
+        /// <returns>The vector at the given length.</returns>
         public Vector3 TangentAtLength(double l)
         {
             Vector3 tangent = new Vector3();
@@ -364,13 +356,13 @@ namespace GShark.Geometry
                         {
                             case "NurbsCurve":
                                 var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
-                                tangent =  ((NurbsCurve)segment).TangentAt(par);
+                                tangent = ((NurbsCurve)segment).TangentAt(par);
                                 break;
                             case "Line":
-                                tangent =  ((Line)segment).TangentAtLength(segmentLength);
+                                tangent = ((Line)segment).TangentAtLength(segmentLength);
                                 break;
                             case "Arc":
-                                tangent =  ((Arc)segment).TangentAtLength(segmentLength);
+                                tangent = ((Arc)segment).TangentAtLength(segmentLength);
                                 break;
                             case "PolyCurve":
                                 tangent = ((PolyCurve)segment).TangentAtLength(segmentLength);
@@ -384,10 +376,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns a vector tangent at a given parameter along the polycurve [0,1]
+        /// Returns a vector tangent at a given parameter along the polycurve [0,1].
         /// </summary>
-        /// <param name="t">Parameter value between 0 and 1</param>
-        /// <returns></returns>
+        /// <param name="t">Parameter value between 0 and 1.</param>
+        /// <returns>The vector at the given parameter.</returns>
         public Vector3 TangentAt(double t)
         {
             if (this.SegmentCount == 0)
@@ -424,8 +416,8 @@ namespace GShark.Geometry
         /// <summary>
         /// It returns the closest point at a given point on the polycurve.
         /// </summary>
-        /// <param name="pt">The point</param>
-        /// <returns></returns>
+        /// <param name="pt">The point.</param>
+        /// <returns>The point on the curve closest to the fiven point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
             var closest = new Point3();
@@ -480,7 +472,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Constructs the string representation for the current PolyCurve.
         /// </summary>
-        /// <returns>The point representation in the form X,Y,Z,W.</returns>
+        /// <returns>The polycurve representation in the form of number of segments</returns>
         public override string ToString()
         {
             return $"PolyCurve ({this.SegmentCount})";
