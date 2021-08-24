@@ -325,6 +325,7 @@ namespace GShark.Geometry
                     case "NurbsCurve":
                         return ((NurbsCurve)segment).PointAt(param);
                     case "Line":
+                        var p = ((Line)segment);
                         return ((Line)segment).PointAt(param);
                     case "Arc":
                         return ((Arc)segment).PointAt(param);
@@ -335,27 +336,56 @@ namespace GShark.Geometry
             return new Point3();
         }
 
-        public static List<Interval> CC(PolyCurve curve)
-        {
-            var intervals = new List<Interval>();
-            double min = 0, max = 0;
-            foreach (double length in curve.SegmentsLengths)
-            {
-                double proportion = length / curve.SegmentCount;
-                max = min + proportion;
-                intervals.Add(new Interval(min, max));
-                min = max;
-            }
-
-            return intervals;
-        }
-
-
         public Point3 ClosestPoint(Point3 pt)
         {
-            throw new NotImplementedException();
+            var closest = new Point3();
+            var point = new Point3();
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else
+            {
+                var d = 1e10;
+                foreach (var segment in this.Segments)
+                {
+                    var type = segment.GetType().Name;
+                    switch (type)
+                    {
+                        case "NurbsCurve":
+                            point = ((NurbsCurve)segment).ClosestPoint(pt);
+                            if (point.DistanceTo(pt) < d)
+                            {
+                                closest = point;
+                            }
+                            break;
+                        case "Line":
+                            point = ((Line)segment).ClosestPoint(pt);
+                            if (point.DistanceTo(pt) < d)
+                            {
+                                closest = point;
+                            }
+                            break;
+                        case "Arc":
+                            point = ((Arc)segment).ClosestPoint(pt);
+                            if (point.DistanceTo(pt) < d)
+                            {
+                                closest = point;
+                            }
+                            break;
+                        case "PolyCurve":
+                            point = ((PolyCurve)segment).ClosestPoint(pt);
+                            if (point.DistanceTo(pt) < d)
+                            {
+                                closest = point;
+                            }
+                            break;
+                    }
+                    d = closest.DistanceTo(pt);
+                }
+            }
+            return closest;
         }
-
 
         /// <summary>
         /// Constructs the string representation for the current PolyCurve.

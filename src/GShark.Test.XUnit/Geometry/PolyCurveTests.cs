@@ -152,5 +152,31 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Point at t={0} on the line: {1} - Deviation: {2}", t1, pl2, pl2.DistanceTo(p2)));
             _testOutput.WriteLine(string.Format("Point at t={0} on the arc: {1} - Deviation: {2}", t2, pl3, pl3.DistanceTo(p3)));
         }
+
+        [Fact]
+        public void It_Returns_The_Closest_Point()
+        {
+            // Act
+            var p1 = new Point3(-0.852901, 2.957569, 1.405093);
+            var p2 = new Point3(5.110799,4.817776,-1.224014);
+            var p3 = new Point3(7.15482,4.790861,-6.554605);
+            var cp1 = new Point3(0.326161, 2.36256, 2.371569);
+            var cp2= new Point3(5,5,-1.224014);
+            var cp3 = new Point3(7.127977,5,-6.592858);
+
+            var pl1 = _polycurve.ClosestPoint(p1);
+            var pl2 = _polycurve.ClosestPoint(p2);
+            var pl3 = _polycurve.ClosestPoint(p3);
+
+            // Arrange
+            pl1.DistanceTo(cp1).Should().BeLessOrEqualTo(1e-4);
+            pl2.DistanceTo(cp2).Should().BeLessOrEqualTo(1e-4);
+            pl3.DistanceTo(cp3).Should().BeLessOrEqualTo(1e-4);
+
+            _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p1, pl1, pl1.DistanceTo(p1)));
+            _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p2, pl2, pl2.DistanceTo(p2)));
+            _testOutput.WriteLine(string.Format("Closest Point to {0} is {1} - Distance: {2}", p3, pl3, pl3.DistanceTo(p3)));
+ 
+        }
     }
 }
