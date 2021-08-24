@@ -139,5 +139,31 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Point 2 on the line: {0} - Deviation: {1}", pl2, pl2.DistanceTo(p2)));
             _testOutput.WriteLine(string.Format("Point 3 on the arc: {0} - Deviation: {1}", pl3, pl3.DistanceTo(p3)));
         }
+
+        [Fact]
+        public void It_Returns_A_Point_At_Parameter()
+        {
+            // Act
+            var p1 = new Point3(5.0, 3.042501, 4.519036);
+            var p2 = new Point3(5.0, 5.0, -1.730175);
+            var p3 = new Point3(6.007615, 5.0, -5.510126);
+
+            double t0 = 0.265154;
+            double t1 = 0.564023;
+            double t2= 0.80376;
+
+            var pl1 = _polycurve.PointAt(t0);
+            var pl2 = _polycurve.PointAt(t1);
+            var pl3 = _polycurve.PointAt(t2);
+
+            // Arrange
+            pl1.DistanceTo(p1).Should().BeLessOrEqualTo(1e-4);
+            pl2.DistanceTo(p2).Should().BeLessOrEqualTo(1e-4);
+            pl3.DistanceTo(p3).Should().BeLessOrEqualTo(1e-4);
+
+            _testOutput.WriteLine(string.Format("Point at t={0} on the nurbs: {1} - Deviation: {2}", t0, pl1, pl1.DistanceTo(p1)));
+            _testOutput.WriteLine(string.Format("Point at t={0} on the line: {1} - Deviation: {2}", t1, pl2, pl2.DistanceTo(p2)));
+            _testOutput.WriteLine(string.Format("Point at t={0} on the arc: {1} - Deviation: {2}", t2, pl3, pl3.DistanceTo(p3)));
+        }
     }
 }

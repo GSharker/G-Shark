@@ -297,6 +297,61 @@ namespace GShark.Geometry
             return new Point3();
         }
 
+        /// <summary>
+        /// Returns a point at a given parameter along the polycurve [0,1]
+        /// </summary>
+        /// <param name="t">Parameter value between 0 and 1</param>
+        /// <returns></returns>
+        public Point3 PointAt(double t)
+        {
+            var domains = CurveDomainsFromLengths(this);
+
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (t > 1.0)
+            {
+                t = 1.0;
+            }
+            else
+            {
+                var param = t * SegmentCount;
+                var i = int.Parse(Math.Floor(param).ToString());
+                param -= i;
+                var segment = this.Segments[i];
+
+                var type = segment.GetType().Name;
+                switch (type)
+                {
+                    case "NurbsCurve":
+                        return ((NurbsCurve)segment).PointAt(param);
+                    case "Line":
+                        return ((Line)segment).PointAt(param);
+                    case "Arc":
+                        return ((Arc)segment).PointAt(param);
+                    case "PolyCurve":
+                        return ((PolyCurve)segment).PointAt(param);
+                }
+            }
+            return new Point3();
+        }
+
+        public static List<Interval> CC(PolyCurve curve)
+        {
+            var intervals = new List<Interval>();
+            double min = 0, max = 0;
+            foreach (double length in curve.SegmentsLengths)
+            {
+                double proportion = length / curve.SegmentCount;
+                max = min + proportion;
+                intervals.Add(new Interval(min, max));
+                min = max;
+            }
+
+            return intervals;
+        }
+
         public static List<Interval> CurveDomainsFromLengths(PolyCurve curve)
         {
             var intervals = new List<Interval>();
@@ -317,10 +372,6 @@ namespace GShark.Geometry
             throw new NotImplementedException();
         }
 
-        public Point3 PointAt(double t)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Constructs the string representation for the current PolyCurve.
