@@ -16,6 +16,11 @@ namespace GShark.Core
         /// <summary>
         /// The default euclidean distance that identifies whether two points are coincident.
         /// </summary>
+        public const double MidTolerance = 1e-4;
+
+        /// <summary>
+        /// The default euclidean distance that identifies whether two points are coincident.
+        /// </summary>
         public const double MinTolerance = 1e-6;
 
         /// <summary>

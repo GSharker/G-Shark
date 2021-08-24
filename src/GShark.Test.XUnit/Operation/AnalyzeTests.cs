@@ -124,7 +124,7 @@ namespace GShark.Test.XUnit.Operation
             double t = Analyze.CurveParameterAtLength(curve, segmentLength);
 
             // Assert
-            t.Should().BeApproximately(tValueExpected, 1e-5);
+            t.Should().BeApproximately(tValueExpected, GSharkMath.MidTolerance);
         }
 
         [Theory]

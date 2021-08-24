@@ -99,8 +99,9 @@ namespace GShark.Test.XUnit.Geometry
             // Arrange
             length.Should().BeApproximately(30.623806269249716, GSharkMath.Epsilon);
             lengthNested.Should().BeApproximately(30.623806269249716, GSharkMath.Epsilon);
-
+#if DEBUG
             _testOutput.WriteLine(string.Format("Length: {0}", length));
+#endif
         }
 
         [Theory]
@@ -116,7 +117,7 @@ namespace GShark.Test.XUnit.Geometry
             var pt = _polycurve.PointAtLength(l);
 
             // Assert
-            pt.DistanceTo(pc).Should().BeLessOrEqualTo(GSharkMath.MaxTolerance);
+            pt.DistanceTo(pc).Should().BeLessOrEqualTo(GSharkMath.MidTolerance);
 
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", pt));
@@ -135,7 +136,7 @@ namespace GShark.Test.XUnit.Geometry
             var vp = _polycurve.TangentAtLength(l);
 
             // Assert
-            vp.EpsilonEquals(v, 1e-5).Should().BeTrue();
+            vp.EpsilonEquals(v, GSharkMath.MidTolerance).Should().BeTrue();
 
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0} on the nurbs", vp));

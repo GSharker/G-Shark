@@ -119,7 +119,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 dir = _exampleLine.Direction;
 
             // Assert
-            dir.EpsilonEquals(expectedDirection, 1e-5).Should().BeTrue();
+            dir.EpsilonEquals(expectedDirection, GSharkMath.MidTolerance).Should().BeTrue();
         }
 
         [Fact]
