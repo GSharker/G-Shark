@@ -1,9 +1,7 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace GShark.Geometry
 {
@@ -32,7 +30,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the number of segments for this polyline;
         /// </summary>
-        public int SegmentsCount => this.Count - 1;
+        public int SegmentsCount => Count - 1;
 
         /// <summary>
         /// Gets true if the polyline is closed.
@@ -71,7 +69,7 @@ namespace GShark.Geometry
         {
             get
             {
-                var lines = new Line[Count - 1];
+                Line[] lines = new Line[Count - 1];
 
                 for (int i = 0; i < Count - 1; i++)
                 {
@@ -120,8 +118,8 @@ namespace GShark.Geometry
                 return Segments.Last();
             }
 
-            var tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
-            var segIdx = (int)Math.Truncate(tOnSegmentDomain);
+            double tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
+            int segIdx = (int)Math.Truncate(tOnSegmentDomain);
 
             return Segments[segIdx];
         }
@@ -173,9 +171,9 @@ namespace GShark.Geometry
                 return EndPoint;
             }
 
-            var tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
-            var segIdx = (int)Math.Truncate(tOnSegmentDomain);
-            var t2 = Math.Abs(tOnSegmentDomain - segIdx);
+            double tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
+            int segIdx = (int)Math.Truncate(tOnSegmentDomain);
+            double t2 = Math.Abs(tOnSegmentDomain - segIdx);
             return Segments[segIdx].PointAt(t2);
         }
 
@@ -216,8 +214,8 @@ namespace GShark.Geometry
                 return Segments.Last();
             }
 
-            var tempLength = this[0].DistanceTo(this[1]);
-            var segIdx = 0;
+            double tempLength = this[0].DistanceTo(this[1]);
+            int segIdx = 0;
             for (int i = 0; i < SegmentsCount; i++)
             {
                 if (tempLength >= length)
@@ -287,7 +285,11 @@ namespace GShark.Geometry
                     Point3 tempPt = tempLine.ClosestPoint(pt);
                     double tempDistance = tempPt.DistanceTo(pt);
 
-                    if (!(tempDistance < distance)) continue;
+                    if (!(tempDistance < distance))
+                    {
+                        continue;
+                    }
+
                     closestPt = tempPt;
                     distance = tempDistance;
                 }
@@ -355,11 +357,11 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             double lengthSum = 0;
-            var knots = new KnotVector { 0 };
-            var weights = new List<double>();
-            var ctrlPts = Point4.PointsHomogeniser(this, weights);
+            KnotVector knots = new KnotVector { 0 };
+            List<double> weights = new List<double>();
+            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, weights);
 
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 lengthSum += 1;
                 knots.Add(i);
