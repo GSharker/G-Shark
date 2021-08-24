@@ -177,31 +177,24 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Point at t={0} on the arc: {1} - Deviation: {2}", t2, pl3, pl3.DistanceTo(p3)));
         }
 
-        [Fact]
-        public void It_Returns_The_Unitized_Tangent_At_Parameter()
+        [Theory]
+        [InlineData(new double[] { 0, 0.967518309198639, -0.252800952065861 }, 0.265154444812697)]
+        [InlineData(new double[] { 0, 0, -1 }, 0.564023377863855)]
+        [InlineData(new double[] { 0.602025237950695, 0, -0.798477058449652 }, 0.803759565721669)]
+        public void It_Returns_The_Unitized_Tangent_At_Parameter(double[] coords, double t)
         {
             // Arrange
-            var v1 = new Vector3(0, 0.967518, -0.252801);
-            var v2 = new Vector3(0, 0, -1);
-            var v3 = new Vector3(0.602025, 0, -0.798477);
-
-            double t0 = 0.265154;
-            double t1 = 0.564023;
-            double t2 = 0.80376;
-
+            Vector3 v = new Vector3(coords[0], coords[1], coords[2]);
             //Act
-            var vp1 = _polycurve.TangentAt(t0);
-            var vp2 = _polycurve.TangentAt(t1);
-            var vp3 = _polycurve.TangentAt(t2);
+            var vp = _polycurve.TangentAt(t);
 
             // Assert
-            vp1.EpsilonEquals(v1, 1e-4).Should().BeTrue();
-            vp2.EpsilonEquals(v2, 1e-4).Should().BeTrue();
-            vp3.EpsilonEquals(v3, 1e-4).Should().BeTrue();
+            vp.EpsilonEquals(v, GSharkMath.MinTolerance).Should().BeTrue();
 
-            _testOutput.WriteLine(string.Format("{0} on the nurbs", vp1));
-            _testOutput.WriteLine(string.Format("{0} on the line", vp2));
-            _testOutput.WriteLine(string.Format("{0} on the arc", vp3));
+#if DEBUG
+            _testOutput.WriteLine(string.Format("{0} on the nurbs", vp));
+#else
+#endif
         }
 
         [Fact]
