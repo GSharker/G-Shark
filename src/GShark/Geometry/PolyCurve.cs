@@ -89,7 +89,7 @@ namespace GShark.Geometry
         /// <returns></returns>
         public void Append(PolyCurve polycurve)
         {
-            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.ControlPointLocations.First()) <= GSharkMath.Epsilon)
+            if (this.SegmentCount == 0 || this.EndPoint.DistanceTo(polycurve.StartPoint) <= GSharkMath.Epsilon)
             {
                 this.Segments.Add(polycurve);
             }
@@ -99,6 +99,16 @@ namespace GShark.Geometry
             }
         }
 
+        /// <summary>
+        /// Return the polycurve bounding box
+        /// </summary>
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// Explodes this PolyCurve into a list of Curve segments.
@@ -109,7 +119,39 @@ namespace GShark.Geometry
             return this.Segments.Select(crv => crv).ToList();
         }
 
-        public double Length => GetLength();
+        /// <summary>
+        /// Return the total lenght of the polycurve
+        /// </summary>
+        public double Length
+        {
+            get
+            {
+                double length = 0;
+                foreach (ICurve segment in this.Segments)
+                {
+                    var t = segment.GetType().Name;
+                    double l = 0;
+                    switch (t)
+                    {
+                        case "NurbsCurve":
+                            l = ((NurbsCurve)segment).Length();
+                            break;
+                        case "Line":
+                            l = ((Line)segment).Length;
+                            break;
+                        case "Arc":
+                            l = ((Arc)segment).Length;
+                            break;
+                        case "PolyCurve":
+                            l = ((PolyCurve)segment).Length;
+                            break;
+                    }
+                    length += l;
+                    this.SegmentsLengths.Add(l);
+                }
+                return length;
+            }
+        }
 
         /// <summary>
         /// The segments of the PolyCurve
@@ -119,7 +161,35 @@ namespace GShark.Geometry
         /// <summary>
         /// Ordered list of segment lengths
         /// </summary>
-        public IList<double> SegmentsLengths => GetSegmentLength();
+        public IList<double> SegmentsLengths
+        {
+            get
+            {
+                var segmentLengths = new List<double>();
+                foreach (ICurve segment in this.Segments)
+                {
+                    var t = segment.GetType().Name;
+                    double l = 0;
+                    switch (t)
+                    {
+                        case "NurbsCurve":
+                            l = ((NurbsCurve)segment).Length();
+                            break;
+                        case "Line":
+                            l = ((Line)segment).Length;
+                            break;
+                        case "Arc":
+                            l = ((Arc)segment).Length;
+                            break;
+                        case "PolyCurve":
+                            l = ((PolyCurve)segment).Length;
+                            break;
+                    }
+                    segmentLengths.Add(l);
+                }
+                return segmentLengths;
+            }
+        }
 
         /// <summary>
         /// Returns the start point of the polycurve
@@ -141,17 +211,16 @@ namespace GShark.Geometry
         /// </summary>
         public int SegmentCount => this.Segments.Count;
 
-        /// <summary>
-        /// Returns the location points for each segment
-        /// </summary>
-        public List<Point3> ControlPointLocations => this.GetLocationPoints();
-
-        /// <summary>
-        /// Returns the controls points for each segment
-        /// </summary>
-        public List<Point4> ControlPoints => this.GetControlPoints();
-
         public int Degree => throw new NotImplementedException();
+
+        public List<Point3> ControlPointLocations => throw new NotImplementedException();
+
+        public List<Point4> ControlPoints => throw new NotImplementedException();
+
+        public KnotVector Knots => throw new NotImplementedException();
+
+        public Interval Domain => throw new NotImplementedException();
+
 
         /// <summary>
         /// Closes the polycurve with a line segment
@@ -220,78 +289,12 @@ namespace GShark.Geometry
                             case "Arc":
                                 return ((Arc)segment).PointAtLength(segmentLength);
                             case "PolyCurve":
-                                l = ((PolyCurve)segment).Length;
-                                break;
+                                return ((PolyCurve)segment).PointAtLength(segmentLength);
                         }
                     }
                 }
             }
             return new Point3();
-        }
-
-        /// <summary>
-        /// It calculates the total length of a polycurve based on the different segments.
-        /// If there is a polycurve a segment il will recoursively calculate the length of the nested segments.
-        /// </summary>
-        /// <returns></returns>
-        private double GetLength()
-        {
-            double length = 0;
-            foreach (ICurve segment in this.Segments)
-            {
-                var t = segment.GetType().Name;
-                double l = 0;
-                switch (t)
-                {
-                    case "NurbsCurve":
-                        l = ((NurbsCurve)segment).Length();
-                        break;
-                    case "Line":
-                        l = ((Line)segment).Length;
-                        break;
-                    case "Arc":
-                        l = ((Arc)segment).Length;
-                        break;
-                    case "PolyCurve":
-                        l = ((PolyCurve)segment).Length;
-                        break;
-                }
-                length += l;
-                this.SegmentsLengths.Add(l);
-            }
-            return length;
-        }
-
-        /// <summary>
-        /// Returns a list of progressive curve lengths
-        /// If there is a polycurve a segment il will recoursively calculate the length of the nested segments.
-        /// </summary>
-        /// <returns></returns>
-        private List<double> GetSegmentLength()
-        {
-            var segmentLengths = new List<double>();
-            foreach (ICurve segment in this.Segments)
-            {
-                var t = segment.GetType().Name;
-                double l = 0;
-                switch (t)
-                {
-                    case "NurbsCurve":
-                        l = ((NurbsCurve)segment).Length();
-                        break;
-                    case "Line":
-                        l = ((Line)segment).Length;
-                        break;
-                    case "Arc":
-                        l = ((Arc)segment).Length;
-                        break;
-                    case "PolyCurve":
-                        l = ((PolyCurve)segment).Length;
-                        break;
-                }
-                segmentLengths.Add(l);
-            }
-            return segmentLengths;
         }
 
         public static List<Interval> CurveDomainsFromLengths(PolyCurve curve)
@@ -308,39 +311,6 @@ namespace GShark.Geometry
             return intervals;
         }
 
-        /// <summary>
-        /// Returns the location points for each segment
-        /// </summary>
-        /// <returns></returns>
-        private List<Point3> GetLocationPoints()
-        {
-            List<Point3> locPts = new List<Point3>();
-            foreach (var segm in Segments)
-            {
-                locPts.AddRange(segm.ControlPointLocations.Select(pts => pts));
-            }
-            return locPts;
-        }
-
-        /// <summary>
-        /// Returns the location points for each segment
-        /// </summary>
-        /// <returns></returns>
-        private List<Point4> GetControlPoints()
-        {
-            List<Point4> ctrlPts = new List<Point4>();
-            foreach (var segm in Segments)
-            {
-                ctrlPts.AddRange(segm.ControlPoints.Select(pts => pts));
-            }
-            return ctrlPts;
-        }
-
-        public KnotVector Knots => throw new NotImplementedException();
-
-        public Interval Domain => throw new NotImplementedException();
-
-        public BoundingBox BoundingBox => throw new NotImplementedException();
 
         public Point3 ClosestPoint(Point3 pt)
         {
