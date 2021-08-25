@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
+using GShark.ExtendedMethods;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
@@ -298,26 +299,23 @@ namespace GShark.Geometry
             {
                 t = 1.0;
             }
-            else
-            {
-                var param = t * SegmentCount;
-                var i = int.Parse(Math.Floor(param).ToString());
-                param -= i;
-                var segment = this.Segments[i];
+            var param = t * SegmentCount;
+            var i = int.Parse(Math.Floor(param).ToString());
+            param -= i;
+            var segment = this.Segments[i];
 
-                var type = segment.GetType().Name;
-                switch (type)
-                {
-                    case "NurbsCurve":
-                        return ((NurbsCurve)segment).PointAt(param);
-                    case "Line":
-                        var p = ((Line)segment);
-                        return ((Line)segment).PointAt(param);
-                    case "Arc":
-                        return ((Arc)segment).PointAt(param);
-                    case "PolyCurve":
-                        return ((PolyCurve)segment).PointAt(param);
-                }
+            var type = segment.GetType().Name;
+            switch (type)
+            {
+                case "NurbsCurve":
+                    return ((NurbsCurve)segment).PointAt(param);
+                case "Line":
+                    var p = ((Line)segment);
+                    return ((Line)segment).PointAt(param);
+                case "Arc":
+                    return ((Arc)segment).PointAt(param);
+                case "PolyCurve":
+                    return ((PolyCurve)segment).PointAt(param);
             }
             return new Point3();
         }
@@ -337,39 +335,36 @@ namespace GShark.Geometry
             {
                 throw new InvalidOperationException("The polycurve is empty");
             }
-            else if (l > this.Length)
+            if (l > this.Length)
             {
-                throw new InvalidOperationException("Length value is bigger than the polycurve total length");
+                l = this.Length;
             }
-            else
+            for (int i = 0; i < this.SegmentCount; i++)
             {
-                for (int i = 0; i < this.SegmentCount; i++)
+                var segment = this.Segments[i];
+                progressiveStartLength = progressiveEndLength;
+                progressiveEndLength += this.SegmentsLengths[i];
+                if (l <= progressiveEndLength) // This is the right segment
                 {
-                    var segment = this.Segments[i];
-                    progressiveStartLength = progressiveEndLength;
-                    progressiveEndLength += this.SegmentsLengths[i];
-                    if (l <= progressiveEndLength) // This is the right segment
+                    double segmentLength = i == 0 ? l : l - progressiveStartLength;
+                    var type = segment.GetType().Name;
+                    switch (type)
                     {
-                        double segmentLength = i == 0 ? l : l - progressiveStartLength;
-                        var type = segment.GetType().Name;
-                        switch (type)
-                        {
-                            case "NurbsCurve":
-                                var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
-                                tangent = ((NurbsCurve)segment).TangentAt(par);
-                                break;
-                            case "Line":
-                                tangent = ((Line)segment).TangentAtLength(segmentLength);
-                                break;
-                            case "Arc":
-                                tangent = ((Arc)segment).TangentAtLength(segmentLength);
-                                break;
-                            case "PolyCurve":
-                                tangent = ((PolyCurve)segment).TangentAtLength(segmentLength);
-                                break;
-                        }
-                        return tangent.Unitize();
+                        case "NurbsCurve":
+                            var par = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
+                            tangent = ((NurbsCurve)segment).TangentAt(par);
+                            break;
+                        case "Line":
+                            tangent = ((Line)segment).TangentAtLength(segmentLength);
+                            break;
+                        case "Arc":
+                            tangent = ((Arc)segment).TangentAtLength(segmentLength);
+                            break;
+                        case "PolyCurve":
+                            tangent = ((PolyCurve)segment).TangentAtLength(segmentLength);
+                            break;
                     }
+                    return tangent.Unitize();
                 }
             }
             return new Vector3();
@@ -396,7 +391,9 @@ namespace GShark.Geometry
                 var i = int.Parse(Math.Floor(param).ToString());
                 param -= i;
                 var segment = this.Segments[i];
-
+                var p = new Plane();
+                p.Origin = segment.PointAt(param);
+  
                 var type = segment.GetType().Name;
                 switch (type)
                 {
@@ -467,6 +464,46 @@ namespace GShark.Geometry
                 }
             }
             return closest;
+        }
+
+        /// <summary>
+        /// Returns a plane at a given parameter perpendicular to the polycurve [0,1].
+        /// </summary>
+        /// <param name="t">Parameter value between 0 and 1.</param>
+        /// <returns>The plane at the given parameter.</returns>
+        public List<Vector3> FrameAt(double t)
+        {
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (t > 1.0)
+            {
+                t = 1.0;
+            }
+            var param = t * SegmentCount;
+            var i = int.Parse(Math.Floor(param).ToString());
+            param -= i;
+            var segment = this.Segments[i];
+            var type = segment.GetType().Name;
+            var der = new List<Vector3>();
+            switch (type)
+            {
+                case "NurbsCurve":
+                    der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                    break;
+                case "Line":
+                    der = Evaluation.RationalCurveDerivatives(((ICurve)((Line)segment).ToNurbs()), param, 2);
+                    break;
+                case "Arc":
+                    var tangent = ((Arc)segment).TangentAt(param).Unitize();
+                    var ctr = ((Arc)segment).Center;
+                    var normal = new Vector3(ctr);
+                    return new List<Vector3> { ((Arc)segment).PointAt(param), tangent, normal };
+                //case "PolyCurve":
+                //    return ((PolyCurve)segment).FrameAt(t);
+            }
+            return new List<Vector3> { der[0], der[1].Unitize(), der[2].Unitize() };
         }
 
         /// <summary>
