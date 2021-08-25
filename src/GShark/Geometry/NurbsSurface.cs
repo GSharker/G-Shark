@@ -227,7 +227,7 @@ namespace GShark.Geometry
             // ToDo: this should be removed rebuilding the curve with less point. 
             if (curveA.ControlPointLocations.Count != curveB.ControlPointLocations.Count)
             {
-                throw new ArgumentException("Loft only works if the curves have the same number of points.");
+                throw new ArgumentException("Ruled surface only works if the curves have the same number of points.");
             }
 
             ICurve copyCurveA = curveA;
