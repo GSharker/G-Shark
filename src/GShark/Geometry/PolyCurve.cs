@@ -1,7 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
-using GShark.ExtendedMethods;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
@@ -393,7 +392,7 @@ namespace GShark.Geometry
                 var segment = this.Segments[i];
                 var p = new Plane();
                 p.Origin = segment.PointAt(param);
-  
+
                 var type = segment.GetType().Name;
                 switch (type)
                 {
@@ -498,8 +497,8 @@ namespace GShark.Geometry
                     var ta = ((Arc)segment).TangentAt(param).Unitize();
                     var pt = ((Arc)segment).PointAt(param);
                     return new Plane(pt, ta, Vector3.PerpendicularTo(ta).Unitize().Reverse());
-                //case "PolyCurve":
-                //    return ((PolyCurve)segment).FrameAt(t);
+                    //case "PolyCurve":
+                    //    return ((PolyCurve)segment).FrameAt(t);
             }
             return new Plane();
         }
