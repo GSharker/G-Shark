@@ -15,6 +15,7 @@ namespace GShark.Geometry
     public class Circle : IEquatable<Circle>, ITransformable<Circle>
     {
         internal Interval Domain = new Interval(0.0, 2.0 * Math.PI);
+        internal double _length;
 
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
@@ -25,6 +26,7 @@ namespace GShark.Geometry
         {
             Plane = plane;
             Radius = Math.Abs(radius);
+            _length = Math.Abs(2.0 * Math.PI * radius);
         }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace GShark.Geometry
 
             Plane = new Plane(center, xDir, yDir);
             Radius = xDir.Length;
+            _length = Math.Abs(2.0 * Math.PI * Radius);
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the circumference of the circle.
         /// </summary>
-        public double Length => Math.Abs(2.0 * Math.PI * Radius);
+        public double Length => _length;
 
         /// <summary>
         /// Gets the start point of the circle.
