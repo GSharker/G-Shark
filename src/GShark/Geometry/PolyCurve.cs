@@ -629,7 +629,7 @@ namespace GShark.Geometry
                             return GSharkMath.RemapValue(((Line)segment).ParameterAt(segmentLength) + i, source, target);
                         case "Arc":
                             var al = segmentLength/((Arc)segment).Length;
-                            return GSharkMath.RemapValue(al + i, source, target);
+                            return GSharkMath.RemapValue(/*((Arc)segment).ParameterAt(segmentLength)*/al  + i, source, target);
                         case "PolyCurve":
                             return GSharkMath.RemapValue(((PolyCurve)segment).ParameterAtLength(segmentLength) + i, source, target);
 

@@ -236,8 +236,6 @@ namespace GShark.Test.XUnit.Geometry
             Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
-            Vector3.CrossProduct(vp.XAxis, vp.YAxis).Should().Be(vp.ZAxis);
-
 
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", vp));
