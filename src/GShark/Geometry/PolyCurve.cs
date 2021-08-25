@@ -466,7 +466,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns a plane at a given parameter perpendicular to the polycurve [0,1].
+        /// Returns a plane at a given parameter on the polycurve [0,1].
         /// </summary>
         /// <param name="t">Parameter value between 0 and 1.</param>
         /// <returns>The plane at the given parameter.</returns>
@@ -499,6 +499,56 @@ namespace GShark.Geometry
                     return new Plane(pt, ta, Vector3.PerpendicularTo(ta).Unitize().Reverse());
                     //case "PolyCurve":
                     //    return ((PolyCurve)segment).FrameAt(t);
+            }
+            return new Plane();
+        }
+
+        /// <summary>
+        /// Returns a plane at a given length on the polycurve [0,1].
+        /// </summary>
+        /// <param name="l">Length value.</param>
+        /// <returns>The plane at the given length.</returns>
+        public Plane FrameAtLength(double l)
+        {
+
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            if (l > this.Length)
+            {
+                l = this.Length;
+            }
+            double progressiveEndLength = 0;
+            double progressiveStartLength = 0;
+            for (int i = 0; i < this.SegmentCount; i++)
+            {
+                var segment = this.Segments[i];
+                progressiveStartLength = progressiveEndLength;
+                progressiveEndLength += this.SegmentsLengths[i];
+                if (l <= progressiveEndLength) // This is the right segment
+                {
+                    double segmentLength = i == 0 ? l : l - progressiveStartLength;
+                    var type = segment.GetType().Name;
+                    switch (type)
+                    {
+                        case "NurbsCurve":
+                            var param = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
+                            var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                            return new Plane(der[0], der[1].Unitize(), der[2].Unitize());
+                        case "Line":
+                            var tl = ((Line)segment).TangentAtLength(segmentLength);
+                            return new Plane(((Line)segment).PointAtLength(segmentLength), tl, Vector3.PerpendicularTo(tl).Unitize());
+                        case "Arc":
+                            var ta = ((Arc)segment).TangentAtLength(segmentLength);
+                            var pt = ((Arc)segment).PointAtLength(segmentLength);
+                            return new Plane(pt, ta, Vector3.PerpendicularTo(ta).Unitize().Reverse());
+                        case "PolyCurve":
+                            var tp = ((PolyCurve)segment).TangentAtLength(segmentLength);
+                            var ptP = ((PolyCurve)segment).PointAt(segmentLength);
+                            return new Plane(ptP, tp, Vector3.PerpendicularTo(tp).Unitize().Reverse());
+                    }
+                }
             }
             return new Plane();
         }

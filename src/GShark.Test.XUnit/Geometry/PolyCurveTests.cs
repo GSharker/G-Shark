@@ -224,13 +224,46 @@ namespace GShark.Test.XUnit.Geometry
             new double[] { 0.602025237950695, 0, -0.798477058449652 },
             new double[] { 0.798477058449651, 0, 0.602025237950696 },
             0.803759565721669)]
-        public void It_Returns_The_Plane__At_Parameter(double[] cTan, double[] cNor, double t)
+        public void It_Returns_The_Plane_At_Parameter(double[] cTan, double[] cNor, double t)
         {
             // Arrange
             Vector3 tan = new Vector3(cTan[0], cTan[1], cTan[2]);
             Vector3 nor = new Vector3(cNor[0], cNor[1], cNor[2]);
             //Act
             var vp = _polycurve.FrameAt(t);
+
+            // Assert
+            Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
+            Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
+            Vector3.DotProduct(vp.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
+
+#if DEBUG
+            _testOutput.WriteLine(string.Format("{0}", vp));
+#endif
+        }
+
+        [Theory]
+        [InlineData(
+           new double[] { 0, 0.967518309198639, -0.252800952065861 },
+           new double[] { 0, -0.0811634964031671, -0.996700801069014 },
+           15
+           )]
+        [InlineData(
+           new double[] { 0, 0, -1 },
+           new double[] { -1, 0, 0 },
+           22
+           )]
+        [InlineData(
+           new double[] { 0.602025237950695, 0, -0.798477058449652 },
+           new double[] { 0.798477058449651, 0, 0.602025237950696 },
+           26)]
+        public void It_Returns_The_Plane_At_Length(double[] cTan, double[] cNor, double l)
+        {
+            // Arrange
+            Vector3 tan = new Vector3(cTan[0], cTan[1], cTan[2]);
+            Vector3 nor = new Vector3(cNor[0], cNor[1], cNor[2]);
+            //Act
+            var vp = _polycurve.FrameAtLength(l);
 
             // Assert
             Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
