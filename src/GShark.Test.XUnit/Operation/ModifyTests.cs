@@ -289,34 +289,35 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_A_Curve_Joining_Polylines_And_Lines()
         {
             // Arrange
-            List<Point3> pts = new List<Point3>
+            var poly = new Polyline(new List<Point3>
             {
-                new Point3(0, 5, 5),
-                new Point3(0, 0, 0),
-                new Point3(5, 0, 0),
-                new Point3(5, 0, 5),
-                new Point3(5, 5, 5),
-                new Point3(5, 5, 0)
-            };
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, 0)
+            });
 
-            Polyline poly = new Polyline(pts);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+
             Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
             Point3 expectedPt2 = new Point3(2.5, 0, 0);
             Point3 expectedPt3 = new Point3(5, 5.0, 4.0);
-            ICurve[] curves = { poly, ln.ToNurbs() };
+            var polylineNurbs = poly.ToNurbs();
+            var lineNurbs = ln.ToNurbs();
 
             // Act
-            ICurve joinedCurve = Modify.JoinCurves(curves);
+            ICurve joinedCurve = Modify.JoinCurves(new List<ICurve>{polylineNurbs, lineNurbs});
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
             Point3 pt3 = joinedCurve.PointAt(0.70);
 
             // Arrange
             joinedCurve.Degree.Should().Be(1);
-            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt1.Equals(expectedPt1).Should().BeTrue();
+            pt2.Equals(expectedPt2).Should().BeTrue();
+            pt3.Equals(expectedPt3).Should().BeTrue();
         }
     }
 }
