@@ -236,6 +236,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
+            Vector3.CrossProduct(vp.XAxis, vp.YAxis).Should().Be(vp.ZAxis);
+
 
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", vp));
@@ -269,7 +271,6 @@ namespace GShark.Test.XUnit.Geometry
             Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
-
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", vp));
 #endif
@@ -302,9 +303,27 @@ namespace GShark.Test.XUnit.Geometry
             Vector3.DotProduct(pFrame.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(pFrame.YAxis, nor).Should().BeApproximately(0, GSharkMath.MinTolerance);
             Vector3.DotProduct(pFrame.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
-
+            Vector3.CrossProduct(pFrame.XAxis, pFrame.YAxis).Should().Be(pFrame.ZAxis);
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", pFrame));
+#endif
+        }
+
+        [Theory]
+        [InlineData(15, 0.265154444812697)]
+        [InlineData(22, 0.564023377863855)]
+        [InlineData(26, 0.803759565721669)]
+        public void It_Returns_The_Parameter_At_Length(double l, double t)
+        {
+            // Arrange
+
+            //Act
+            var param = _polycurve.ParameterAtLength(l);
+
+            // Assert
+            param.Should().BeApproximately(t, GSharkMath.MinTolerance);
+#if DEBUG
+            _testOutput.WriteLine(string.Format("Parameter {0} at length {1}", param, l));
 #endif
         }
     }

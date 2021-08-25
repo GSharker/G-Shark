@@ -593,6 +593,53 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Returns the parameter at given length.
+        /// </summary>
+        /// <param name="l">Length value.</param>
+        /// <returns>The parameter between [0,1].</returns>
+        public double ParameterAtLength(double l)
+        {
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            if (l > this.Length)
+            {
+                l = this.Length;
+            }
+            double progressiveEndLength = 0;
+            double progressiveStartLength = 0;
+            Interval target = new Interval(0, 1);
+            Interval source = new Interval(0, SegmentCount);
+
+            for (int i = 0; i < this.SegmentCount; i++)
+            {
+                var segment = this.Segments[i];
+                progressiveStartLength = progressiveEndLength;
+                progressiveEndLength += this.SegmentsLengths[i];
+                if (l <= progressiveEndLength) // This is the right segment
+                {
+                    double segmentLength = i == 0 ? l : l - progressiveStartLength;
+                    var type = segment.GetType().Name;
+                    switch (type)
+                    {
+                        case "NurbsCurve":
+                            return GSharkMath.RemapValue(Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon) + i, source, target);
+                        case "Line":
+                            return GSharkMath.RemapValue(((Line)segment).ParameterAt(segmentLength) + i, source, target);
+                        case "Arc":
+                            var al = segmentLength/((Arc)segment).Length;
+                            return GSharkMath.RemapValue(al + i, source, target);
+                        case "PolyCurve":
+                            return GSharkMath.RemapValue(((PolyCurve)segment).ParameterAtLength(segmentLength) + i, source, target);
+
+                    }
+                }
+            }
+            return double.NaN;
+        }
+
+        /// <summary>
         /// Constructs the string representation for the current PolyCurve.
         /// </summary>
         /// <returns>The polycurve representation in the form of number of segments</returns>
