@@ -390,9 +390,6 @@ namespace GShark.Geometry
                 var i = int.Parse(Math.Floor(param).ToString());
                 param -= i;
                 var segment = this.Segments[i];
-                var p = new Plane();
-                p.Origin = segment.PointAt(param);
-
                 var type = segment.GetType().Name;
                 switch (type)
                 {
@@ -501,6 +498,48 @@ namespace GShark.Geometry
                     //    return ((PolyCurve)segment).FrameAt(t);
             }
             return new Plane();
+        }
+
+        /// <summary>
+        /// Returns a perpendicular plane at a given parameter on the polycurve [0,1].
+        /// </summary>
+        /// <param name="t">Parameter value between 0 and 1.</param>
+        /// <returns>The plane at the given parameter.</returns>
+        public Plane PerpendicularFrameAt(double t)
+        {
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (t > 1.0)
+            {
+                t = 1.0;
+            }
+            var param = t * SegmentCount;
+            var i = int.Parse(Math.Floor(param).ToString());
+            param -= i;
+            var segment = this.Segments[i];
+            var type = segment.GetType().Name;
+            var frame = new Plane();
+            switch (type)
+            {
+                case "NurbsCurve":
+                    var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                    frame = new Plane(der[0], der[1].Unitize(), der[2].Unitize());
+                    break;
+                case "Line":
+                    var tl = ((Line)segment).TangentAt(param).Unitize();
+                    frame = new Plane(((Line)segment).PointAt(param), tl, Vector3.PerpendicularTo(tl).Unitize());
+                    break;
+                case "Arc":
+                    var ta = ((Arc)segment).TangentAt(param).Unitize();
+                    var pt = ((Arc)segment).PointAt(param);
+                    frame = new Plane(pt, ta, Vector3.PerpendicularTo(ta).Unitize().Reverse());
+                    break;
+                    //case "PolyCurve":
+                    //    return ((PolyCurve)segment).FrameAt(t);
+            }
+            return new Plane(frame.Origin, frame.YAxis, frame.ZAxis);
         }
 
         /// <summary>
