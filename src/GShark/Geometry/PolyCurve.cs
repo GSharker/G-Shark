@@ -471,7 +471,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Parameter value between 0 and 1.</param>
         /// <returns>The plane at the given parameter.</returns>
-        public List<Vector3> FrameAt(double t)
+        public Plane FrameAt(double t)
         {
             if (this.SegmentCount == 0)
             {
@@ -486,24 +486,22 @@ namespace GShark.Geometry
             param -= i;
             var segment = this.Segments[i];
             var type = segment.GetType().Name;
-            var der = new List<Vector3>();
             switch (type)
             {
                 case "NurbsCurve":
-                    der = Evaluation.RationalCurveDerivatives(segment, param, 2);
-                    break;
+                    var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                    return new Plane(der[0], der[1].Unitize(), der[2].Unitize());
                 case "Line":
-                    der = Evaluation.RationalCurveDerivatives(((ICurve)((Line)segment).ToNurbs()), param, 2);
-                    break;
+                    var tl = ((Line)segment).TangentAt(param).Unitize();
+                    return new Plane(((Line)segment).PointAt(param), tl, Vector3.PerpendicularTo(tl).Unitize());
                 case "Arc":
-                    var tangent = ((Arc)segment).TangentAt(param).Unitize();
-                    var ctr = ((Arc)segment).Center;
-                    var normal = new Vector3(ctr);
-                    return new List<Vector3> { ((Arc)segment).PointAt(param), tangent, normal };
+                    var ta = ((Arc)segment).TangentAt(param).Unitize();
+                    var pt = ((Arc)segment).PointAt(param);
+                    return new Plane(pt, ta, Vector3.PerpendicularTo(ta).Unitize().Reverse());
                 //case "PolyCurve":
                 //    return ((PolyCurve)segment).FrameAt(t);
             }
-            return new List<Vector3> { der[0], der[1].Unitize(), der[2].Unitize() };
+            return new Plane();
         }
 
         /// <summary>
