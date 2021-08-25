@@ -95,7 +95,7 @@ namespace GShark.Test.XUnit.Operation
             {
                 Point3 pt = offsetResult.PointAt(i);
                 Point3 closestPt = crv.ClosestPoint(pt);
-                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MinTolerance);
+                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
             }
         }
     }
