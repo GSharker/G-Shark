@@ -170,13 +170,12 @@ namespace GShark.Geometry
         /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
-        public NurbsCurve ToNurbsCurve()
+        public new NurbsCurve ToNurbs()
         {
             Vector3 axisX = Plane.XAxis;
             Vector3 axisY = Plane.YAxis;
             int numberOfArc;
             Point4[] ctrPts;
-            double[] weights;
 
             // Number of arcs.
             double piNum = 0.5 * Math.PI;
@@ -184,29 +183,25 @@ namespace GShark.Geometry
             {
                 numberOfArc = 1;
                 ctrPts = new Point4[3];
-                weights = new double[3];
             }
             else if ((Angle - piNum * 2) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 2;
                 ctrPts = new Point4[5];
-                weights = new double[5];
             }
             else if ((Angle - piNum * 3) <= GSharkMath.Epsilon)
             {
                 numberOfArc = 3;
                 ctrPts = new Point4[7];
-                weights = new double[7];
             }
             else
             {
                 numberOfArc = 4;
                 ctrPts = new Point4[9];
-                weights = new double[9];
             }
 
             double detTheta = Angle / numberOfArc;
-            double weight1 = Math.Cos(detTheta / 2);
+            double weight = Math.Cos(detTheta / 2);
             Point3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
             Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
@@ -229,7 +224,7 @@ namespace GShark.Geometry
                 Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out _);
                 Point3 p1 = p0 + (t0 * u0);
 
-                ctrPts[index + 1] = new Point4(p1, weight1);
+                ctrPts[index + 1] = new Point4(p1, weight);
                 index += 2;
 
                 if (i >= numberOfArc)

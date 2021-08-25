@@ -444,7 +444,7 @@ namespace GShark.Operation
             P[0] = bpts[0];
             P[P.Length - 1] = bpts.Last();
 
-            bool isDegreeOdd = (degree % 2 != 0) ? true : false;
+            bool isDegreeOdd = degree % 2 != 0;
 
             int r1 = (isDegreeOdd) ? r - 1 : r;
 
@@ -614,7 +614,7 @@ namespace GShark.Operation
                         }
 
                         // Compute knot removal error bounds (Br).
-                        double Br = 0.0;
+                        double Br;
                         if (j - l < k)
                         {
                             Br = Pw[l - 2].DistanceTo(rbpts[kj + 1]);

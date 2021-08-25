@@ -59,14 +59,14 @@ namespace GShark.Operation
                 return crv;
             }
 
-            (List<double> tValues, List<Point3> pts) subdivision = Tessellation.CurveAdaptiveSample(crv);
+            var (tValues, pts) = Tessellation.CurveAdaptiveSample(crv);
 
             List<Point3> offsetPts = new List<Point3>();
-            for (int i = 0; i < subdivision.pts.Count; i++)
+            for (int i = 0; i < pts.Count; i++)
             {
-                Vector3 tangent = Evaluation.RationalCurveTangent(crv, subdivision.tValues[i]);
+                Vector3 tangent = Evaluation.RationalCurveTangent(crv, tValues[i]);
                 Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.ZAxis).Amplify(distance);
-                offsetPts.Add(subdivision.pts[i] + vecOffset);
+                offsetPts.Add(pts[i] + vecOffset);
             }
 
             return Fitting.InterpolatedCurve(offsetPts, 2);
