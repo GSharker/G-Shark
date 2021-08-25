@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.ExtendedMethods;
 
 namespace GShark.Geometry
 {
@@ -212,6 +213,63 @@ namespace GShark.Geometry
                     break;
             }
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);
+        }
+
+        /// <summary>
+        /// Constructs a ruled surface between two curves.
+        /// <em>Follows the algorithm at page 337 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="curveA">The first curve.</param>
+        /// <param name="curveB">The second curve.</param>
+        /// <returns>A ruled surface.</returns>
+        public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
+        {
+            // ToDo: this should be removed rebuilding the curve with less point. 
+            if (curveA.ControlPointLocations.Count != curveB.ControlPointLocations.Count)
+            {
+                throw new ArgumentException("Loft only works if the curves have the same number of points.");
+            }
+
+            ICurve copyCurveA = curveA;
+            ICurve copyCurveB = curveB;
+
+            // Ensure that the two curves are defined on the same parameter range
+            if (Math.Abs(copyCurveA.Knots.Domain - copyCurveB.Knots.Domain) > GSharkMath.Epsilon)
+            {
+                Interval knotsIntervalB = new Interval(copyCurveB.Knots.First(), curveB.Knots.Last());
+                Interval knotsIntervalA = new Interval(copyCurveA.Knots.First(), copyCurveA.Knots.Last());
+                var knots = curveB.Knots.Select(k => GSharkMath.RemapValue(k, knotsIntervalB, knotsIntervalA)).ToKnot();
+                copyCurveB = new NurbsCurve(copyCurveB.Degree, knots, copyCurveB.ControlPoints);
+            }
+
+            // Raise the degree if the lower degree curve.
+            if (copyCurveA.Degree < copyCurveB.Degree)
+            {
+                copyCurveA = Modify.ElevateDegree(copyCurveA, copyCurveB.Degree);
+            }
+
+            if (copyCurveA.Degree > copyCurveB.Degree)
+            {
+                copyCurveB = Modify.ElevateDegree(copyCurveB, copyCurveA.Degree);
+            }
+
+            // If the knot vectors U1 and U2 are not identical, merge them to obtain the knot vector U.
+            if (!copyCurveA.Knots.SequenceEqual(copyCurveB.Knots))
+            {
+                KnotVector combinedKnots = copyCurveA.Knots
+                    .Concat(copyCurveB.Knots.Where(k => !copyCurveA.Knots.Contains(k)))
+                    .OrderBy(k => k).ToKnot();
+
+                KnotVector knotToInsertA = combinedKnots.Where(k => !copyCurveA.Knots.Contains(k)).ToKnot();
+                KnotVector knotToInsertB = combinedKnots.Where(k => !copyCurveB.Knots.Contains(k)).ToKnot();
+
+                // using U, apply knot refinement to both curves.
+                copyCurveA = Modify.CurveKnotRefine(copyCurveA, knotToInsertA);
+                copyCurveB = Modify.CurveKnotRefine(copyCurveB, knotToInsertB);
+            }
+
+            return new NurbsSurface(1, copyCurveA.Degree, new KnotVector(1, 2), copyCurveA.Knots,
+                new List<List<Point4>> {copyCurveA.ControlPoints, copyCurveB.ControlPoints});
         }
 
         /// <summary>

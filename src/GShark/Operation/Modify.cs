@@ -497,7 +497,7 @@ namespace GShark.Operation
         /// <param name="curve">The object curve to elevate.</param>
         /// <param name="tolerance">Tolerance value declaring if the curve is degree reducible. Default value set to 10e-4, refer to Eq 5.30 for the meaning.</param>
         /// <returns>The curve after degree reduction, the curve will be degree - 1 from the input.</returns>
-        public static ICurve ReduceDegree(ICurve curve, double tolerance = 10e-4)
+        public static NurbsCurve ReduceDegree(NurbsCurve curve, double tolerance = 10e-4)
         {
             int n = curve.Knots.Count - curve.Degree - 2;
             int p = curve.Degree;
