@@ -290,7 +290,7 @@ namespace GShark.Operation
                 return false;
             }
 
-            bool intersection = PlanePlane(pl, cl.Plane, out Line intersectionLine);
+            _ = PlanePlane(pl, cl.Plane, out Line intersectionLine);
             Point3 closestPt = intersectionLine.ClosestPoint(clPt);
             double distance = clPt.DistanceTo(intersectionLine);
 

@@ -374,5 +374,79 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
         }
+
+        [Theory]
+        [InlineData(0.1, 0.1, new double[] {0.2655, 1, 2.442})]
+        [InlineData(0.5, 0.5, new double[] { 4.0625, 5, 4.0625 })]
+        [InlineData(1.0, 1.0, new double[] {10, 10, 0 })]
+        public void Returns_A_Ruled_Surface_Between_Two_Nurbs_Curve(double u, double v, double[] pt1)
+        {
+            // Arrange
+            Point3 expectedPt = new Point3(pt1[0], pt1[1], pt1[2]);
+            List<Point3> ptsA = new List<Point3>
+            {
+                new Point3(0, 0, 0),
+                new Point3(0, 0, 5),
+                new Point3(5, 0, 5),
+                new Point3(5, 0, 0),
+                new Point3(10, 0, 0)
+            };
+
+            List<Point3> ptsB = new List<Point3>
+            {
+                new Point3(0, 10, 0),
+                new Point3(0, 10, 5),
+                new Point3(5, 10, 5),
+                new Point3(5, 10, 0),
+                new Point3(10, 10, 0)
+            };
+
+            NurbsCurve curveA = new NurbsCurve(ptsA, 3);
+            NurbsCurve curveB = new NurbsCurve(ptsB, 2);
+
+            // Act
+            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(curveA, curveB);
+            Point3 pointAt = ruledSurface.PointAt(u, v);
+
+            // Assert
+            pointAt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0.1, 0.1, new double[] { 0.0225, 1, 2.055 })]
+        [InlineData(0.5, 0.5, new double[] { 4.6875, 5, 4.6875 })]
+        [InlineData(1.0, 1.0, new double[] { 10, 10, 0 })]
+        public void Returns_A_Ruled_Surface_Between_A_Polyline_And_A_Nurbs_Curve(double u, double v, double[] pt)
+        {
+            // Arrange
+            Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
+            List<Point3> ptsA = new List<Point3>
+            {
+                new Point3(0, 0, 0),
+                new Point3(0, 0, 5),
+                new Point3(5, 0, 5),
+                new Point3(5, 0, 0),
+                new Point3(10, 0, 0)
+            };
+
+            List<Point3> ptsB = new List<Point3>
+            {
+                new Point3(0, 10, 0),
+                new Point3(0, 10, 5),
+                new Point3(5, 10, 5),
+                new Point3(5, 10, 0),
+                new Point3(10, 10, 0)
+            };
+
+            Polyline poly = new Polyline(ptsA);
+            NurbsCurve curveB = new NurbsCurve(ptsB, 2);
+
+            // Act
+            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly.ToNurbs(), curveB);
+            Point3 pointAt = ruledSurface.PointAt(u, v);
+
+            // Assert
+            pointAt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
+        }
     }
 }
