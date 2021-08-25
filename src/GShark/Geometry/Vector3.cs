@@ -486,7 +486,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Vector3d and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Vector3 && this == (Vector3)obj);
+            return (obj is Vector3 vector3 && this == vector3);
         }
 
         /// <summary>
@@ -556,9 +556,9 @@ namespace GShark.Geometry
 
         int IComparable.CompareTo(object obj)
         {
-            if (obj is Vector3)
+            if (obj is Vector3 vector3)
             {
-                return CompareTo((Vector3)obj);
+                return CompareTo(vector3);
             }
 
             throw new ArgumentException("Input must be of type Vector3d", "obj");

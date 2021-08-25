@@ -65,8 +65,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Act
             Arc arc = Arc.ByStartEndDirection(pt1, pt2, dir);
-            var pt = arc.EndPoint;
-            var pt5 = arc.StartPoint;
+
             // Assert
             arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
             arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();
@@ -124,7 +123,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8)).ToNurbsCurve();
+            NurbsCurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8)).ToNurbs();
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(5);
@@ -163,7 +162,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve arc = _exampleArc3D.ToNurbsCurve();
+            NurbsCurve arc = _exampleArc3D.ToNurbs();
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(7);

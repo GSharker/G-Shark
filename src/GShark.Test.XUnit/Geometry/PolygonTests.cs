@@ -146,7 +146,6 @@ namespace GShark.Test.XUnit.Geometry
             poly2D.Degree.Should().Be(1);
             for (int i = 1; i < poly2D.Knots.Count - 1; i++)
             {
-                Point3 pt = poly2D.PointAt(knots[i]);
                 Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
             }
         }

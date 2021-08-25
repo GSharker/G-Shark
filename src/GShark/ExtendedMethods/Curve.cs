@@ -123,10 +123,7 @@ namespace GShark.ExtendedMethods
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane();
-                frameNext.Origin = pointsOnCurve[i + 1];
-                frameNext.XAxis = rNext;
-                frameNext.YAxis = sNext;
+                var frameNext = new Plane {Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext};
                 perpFrames[i + 1] = frameNext; //output frame
             }
 

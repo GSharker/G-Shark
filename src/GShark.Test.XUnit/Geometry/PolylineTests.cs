@@ -267,7 +267,6 @@ namespace GShark.Test.XUnit.Geometry
             polyNurbs.Degree.Should().Be(1);
             for (int i = 1; i < polyNurbs.Knots.Count - 1; i++)
             {
-                Point3 pt = polyNurbs.PointAt(knots[i]);
                 pts[i - 1].EpsilonEquals(polyNurbs.PointAt(knots[i]), GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
