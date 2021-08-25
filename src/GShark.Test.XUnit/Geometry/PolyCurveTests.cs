@@ -35,7 +35,7 @@ namespace GShark.Test.XUnit.Geometry
 
             _nurbs = new NurbsCurve(pts, degree);
             _line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            _arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(-10, 5, -7.5), new Vector3(0, 0, -1));
+            _arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
 
             _polycurve = new PolyCurve();
             _polycurve.Append(_nurbs);
@@ -235,8 +235,8 @@ namespace GShark.Test.XUnit.Geometry
             var vp = _polycurve.FrameAt(t);
 
             // Assert
-            //Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
-            //Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
+            Vector3.DotProduct(vp.XAxis, tan).Should().BeApproximately(1, GSharkMath.MinTolerance);
+            Vector3.DotProduct(vp.YAxis, nor).Should().BeApproximately(1, GSharkMath.MinTolerance);
             Vector3.DotProduct(vp.ZAxis, tan).Should().BeApproximately(0, GSharkMath.MinTolerance);
 
 #if DEBUG
