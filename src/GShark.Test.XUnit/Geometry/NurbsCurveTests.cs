@@ -222,20 +222,5 @@ namespace GShark.Test.XUnit.Geometry
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
             curve.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree].Should().BeEquivalentTo(curveClamped.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree]);
         }
-
-        [Fact]
-        public void It_Returns_The_Curvature_Vector_At_The_Given_Parameter()
-        {
-            // Arrange
-            double expectedRadiusLength = 1.469236;
-            Vector3 expectedCurvature = new Vector3(1.044141, 0.730898, 0.730898);
-
-            // Act
-            Vector3 curvature = NurbsCurveCollection.NurbsCurve3DExample().CurvatureAt(0.25);
-
-            // Assert
-            (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
-            curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
-        }
     }
 }
