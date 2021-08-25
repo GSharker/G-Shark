@@ -212,6 +212,38 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Computes the curvature vector of the curve at the parameter t.
+        /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
+        /// </summary>
+        /// <param name="t">Evaluation parameter.</param>
+        /// <returns>The curvature vector.</returns>
+        public Vector3 CurvatureAt(double t)
+        {
+            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+            double d1 = derivatives[1].Length;
+
+            // If the first derivative exists and is zero the curvature is a zero vector.
+            if (d1 == 0.0)
+            {
+                return Vector3.Zero;
+            }
+
+            Vector3 tangent = derivatives[1] / d1;
+            double d2DotTang = (derivatives[2] * -1) * tangent;
+            d1 = 1.0 / (d1 * d1);
+            Vector3 curvature = d1 * (derivatives[2] + d2DotTang * tangent); // usually identified as k.
+
+            double curvatureLength = curvature.Length;
+            if (curvatureLength < 1.490116119385E-08) // SqrtEpsilon value that is used when comparing square roots.
+            {
+                throw new Exception("Curvature is infinite.");
+            }
+
+            double radius = (curvature / (curvatureLength * curvatureLength)).Length;
+            return curvature.Unitize().Amplify(radius);
+        }
+
+        /// <summary>
         /// Calculates the length of the curve.
         /// </summary>
         /// <returns>The length of the curve.</returns>
