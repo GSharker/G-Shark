@@ -124,6 +124,51 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Determines the value of the Nth derivative at a parameter.
+        /// </summary>
+        /// <param name="t">Parameter to evaluate derivative. A parameter between 0.0 to 1.0.</param>
+        /// <param name="derivative">Which order of derivative is wanted. Valid values are 0,1,2,3.</param>
+        /// <returns>The derivative of the circle at the given parameter.</returns>
+        public Vector3 DerivativeAt(double t, int derivative = 0)
+        {
+            if (t < 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t > 1.0)
+            {
+                t = 1.0;
+            }
+
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
+
+            double r0 = 0;
+            double r1 = 0;
+            switch (derivative % 4)
+            {
+                case 0:
+                    r0 = Radius * Math.Cos(theta);
+                    r1 = Radius * Math.Sin(theta);
+                    break;
+                case 1:
+                    r0 = Radius * -Math.Sin(theta);
+                    r1 = Radius * Math.Cos(theta);
+                    break;
+                case 2:
+                    r0 = Radius * -Math.Cos(theta);
+                    r1 = Radius * -Math.Sin(theta);
+                    break;
+                case 3:
+                    r0 = Radius * Math.Sin(theta);
+                    r1 = Radius * -Math.Cos(theta);
+                    break;
+            }
+
+            return r0 * Plane.XAxis + r1 * Plane.YAxis;
+        }
+
+        /// <summary>
         /// Evaluates the point at the parameter t on the circular curve.
         /// </summary>
         /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
@@ -187,13 +232,8 @@ namespace GShark.Geometry
             }
 
             double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-
-            double r1 = Radius * (-Math.Sin(theta));
-            double r2 = Radius * (Math.Cos(theta));
-
-            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
-
-            return vector.Unitize();
+            Vector3 derivative = DerivativeAt(theta, 1);
+            return derivative.Unitize();
         }
 
         /// <summary>

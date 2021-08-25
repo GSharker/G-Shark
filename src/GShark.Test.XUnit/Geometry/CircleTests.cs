@@ -238,6 +238,30 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             parameter.Should().BeApproximately(expectedParameter, GSharkMath.MaxTolerance);
         }
+
+        [Fact]
+        public void It_Returns_The_Derivatives_At_Given_Parameter()
+        {
+            // Arrange
+            Point3 expectedDerv0 = new Point3(69.253451, 22.768104, 1.732159);
+            Vector3 expectedDerv1 = new Vector3(13.388719, -99.325852, 25.95035);
+            Vector3 expectedDerv2 = new Vector3(645.009827, 80.060471, -26.349577);
+            Vector3 expectedDerv3 = new Vector3(-528.565438, 3921.227465, -1024.478763);
+
+            // Act
+            Vector3 derv0 = _circle3D.DerivativeAt(0.15, 0);
+            Vector3 derv1 = _circle3D.DerivativeAt(0.15, 1);
+            Vector3 derv2 = _circle3D.DerivativeAt(0.15, 2);
+            Vector3 derv3 = _circle3D.DerivativeAt(0.15, 3);
+            Point3 pt = _circle3D.Center + derv0;
+
+            // Assert
+            // The zero derivative is the vector identify the point on the circle.
+            expectedDerv0.EpsilonEquals(pt, GSharkMath.MaxTolerance).Should().BeTrue();
+            expectedDerv1.IsParallelTo(derv1).Should().NotBe(0);
+            expectedDerv2.IsParallelTo(derv2).Should().NotBe(0);
+            expectedDerv3.IsParallelTo(derv3).Should().NotBe(0);
+        }
     }
 }
 
