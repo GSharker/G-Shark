@@ -652,7 +652,7 @@ namespace GShark.Geometry
             }
             else if (t > 1.0)
             {
-                t = 1.0;
+                return this.Segments.Last();
             }
             else
             {
@@ -661,7 +661,6 @@ namespace GShark.Geometry
                 param -= i;
                 return this.Segments[i];
             }
-            return this;
         }
 
         /// <summary>
