@@ -234,8 +234,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-            Vector3 derivative = DerivativeAt(theta, 1);
+            Vector3 derivative = DerivativeAt(t, 1);
             return derivative.Unitize();
         }
 
@@ -249,7 +248,7 @@ namespace GShark.Geometry
             Point3 pt = PointAtLength(length);
             (double u, double v) = Plane.ClosestParameters(pt);
             double t = EvaluateParameter(u, v, true);
-            return TangentAt(t);
+            return DerivativeAt(t, 1).Unitize();
         }
 
         /// <summary>
@@ -266,7 +265,7 @@ namespace GShark.Geometry
 
             if (t > 1)
             {
-                return Length;
+                return _length;
             }
 
             return Length * t;
