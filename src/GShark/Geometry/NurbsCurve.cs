@@ -212,6 +212,28 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Determines the derivatives of a curve at a given parameter.<br/>
+        /// </summary>
+        /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
+        /// <param name="numberOfDerivatives">The number of derivatives required.</param>
+        /// <returns>The derivatives.</returns>
+        public List<Vector3> DerivativeAt(double t, int numberOfDerivatives = 1)
+        {
+            return Evaluation.RationalCurveDerivatives(this, t, numberOfDerivatives);
+        }
+
+        /// <summary>
+        /// Computes the curvature vector of the NURBS at the parameter t.
+        /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
+        /// </summary>
+        /// <param name="t">Evaluation parameter.</param>
+        /// <returns>The curvature vector.</returns>
+        public Vector3 CurvatureAt(double t)
+        {
+            return Analyze.Curvature(this, t);
+        }
+
+        /// <summary>
         /// Calculates the length of the curve.
         /// </summary>
         /// <returns>The length of the curve.</returns>
