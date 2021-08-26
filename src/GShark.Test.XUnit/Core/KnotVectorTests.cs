@@ -120,7 +120,7 @@ namespace GShark.Test.XUnit.Core
             KnotVector knot = new KnotVector(knots);
 
             // Assert
-            knot.IsKnotVectorPeriodic(degree).Should().Be(expectedResult);
+            knot.IsPeriodic(degree).Should().Be(expectedResult);
         }
 
         [Theory]

@@ -139,7 +139,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="degree"></param>
         /// <returns>If true the knot is periodic, if false is clamped or unclamped.</returns>
-        public bool IsKnotVectorPeriodic(int degree)
+        public bool IsPeriodic(int degree)
         {
             if (this[0] > this[degree])
             {
@@ -157,7 +157,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the domain of the knots, as the max value - min value.
         /// </summary>
-        public double Domain => this[Count - 1] - this[0];
+        public Interval Domain => new Interval(this[0], this[Count - 1]);
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
