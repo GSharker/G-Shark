@@ -366,7 +366,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
-        /// <param name="numberOfDerivatives"></param>
+        /// <param name="numberOfDerivatives">The number of derivatives required.</param>
         /// <returns>The derivatives.</returns>
         public static List<Vector3> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
         {
