@@ -310,13 +310,13 @@ namespace GShark.Test.XUnit.Operation
 
             Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
             Point3 expectedPt2 = new Point3(2.5, 0, 0);
-            Point3 expectedPt3 = new Point3(5, 5.0, 4.0);
+            Point3 expectedPt3 = new Point3(5, 5.0, 2.5);
 
             // Act
             ICurve joinedCurve = Modify.JoinCurves(new List<ICurve>{ poly.ToNurbs(), ln.ToNurbs() });
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
-            Point3 pt3 = joinedCurve.PointAt(0.70);
+            Point3 pt3 = joinedCurve.PointAt(0.75);
 
             // Arrange
             joinedCurve.Degree.Should().Be(1);
