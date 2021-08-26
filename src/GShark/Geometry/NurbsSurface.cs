@@ -44,8 +44,8 @@ namespace GShark.Geometry
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
-            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
+            KnotsU = (Math.Abs(knotsU.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
@@ -228,7 +228,7 @@ namespace GShark.Geometry
             ICurve copyCurveB = curveB;
 
             // Ensure that the two curves are defined on the same parameter range
-            if (Math.Abs(copyCurveA.Knots.Domain - copyCurveB.Knots.Domain) > GSharkMath.Epsilon)
+            if (Math.Abs(copyCurveA.Knots.Domain.Length - copyCurveB.Knots.Domain.Length) > GSharkMath.Epsilon)
             {
                 Interval knotsIntervalB = new Interval(copyCurveB.Knots.First(), curveB.Knots.Last());
                 Interval knotsIntervalA = new Interval(copyCurveA.Knots.First(), copyCurveA.Knots.Last());

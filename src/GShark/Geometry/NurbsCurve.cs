@@ -149,7 +149,7 @@ namespace GShark.Geometry
         /// <returns>True if the curve is periodic.</returns>
         public bool IsPeriodic()
         {
-            if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
+            if (!Knots.IsPeriodic(Degree)) return false;
             int i, j;
             for (i = 0, j = ControlPointLocations.Count - Degree; i < Degree; i++, j++)
             {
