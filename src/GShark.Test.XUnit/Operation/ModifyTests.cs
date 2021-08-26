@@ -6,6 +6,7 @@ using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
+using System.Transactions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -268,16 +269,22 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
-            Point3 expectedPt1 = new Point3(3.34125, 0.005, 0.6125);
-            Point3 expectedPt2 = new Point3(5, 2.363281, 4.570313);
-            Point3 expectedPt3 = new Point3(5.351058, 5, -4.340474);
             ICurve[] curves = { curve, ln.ToNurbs(), arc.ToNurbs() };
 
+            Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
+            Point3 expectedPt2 = new Point3(5, 5, -1.230175);
+            Point3 expectedPt3 = new Point3(7.075482, 5, -6.555514);
+
             // Act
-            ICurve joinedCurve = Modify.JoinCurves(curves);
-            Point3 pt1 = joinedCurve.PointAt(0.1);
-            Point3 pt2 = joinedCurve.PointAt(0.25);
-            Point3 pt3 = joinedCurve.PointAt(0.75);
+            NurbsCurve joinedCurve = (NurbsCurve) Modify.JoinCurves(curves);
+
+            double t0 = joinedCurve.ParameterAtLength(15);
+            double t1 = joinedCurve.ParameterAtLength(21.5);
+            double t2 = joinedCurve.ParameterAtLength(27.5);
+
+            Point3 pt1 = joinedCurve.PointAt(t0);
+            Point3 pt2 = joinedCurve.PointAt(t1);
+            Point3 pt3 = joinedCurve.PointAt(t2);
 
             // Arrange
             pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
@@ -304,11 +311,9 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
             Point3 expectedPt2 = new Point3(2.5, 0, 0);
             Point3 expectedPt3 = new Point3(5, 5.0, 4.0);
-            var polylineNurbs = poly.ToNurbs();
-            var lineNurbs = ln.ToNurbs();
 
             // Act
-            ICurve joinedCurve = Modify.JoinCurves(new List<ICurve>{polylineNurbs, lineNurbs});
+            ICurve joinedCurve = Modify.JoinCurves(new List<ICurve>{ poly.ToNurbs(), ln.ToNurbs() });
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
             Point3 pt3 = joinedCurve.PointAt(0.70);
