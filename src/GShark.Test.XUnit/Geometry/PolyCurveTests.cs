@@ -324,5 +324,41 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput.WriteLine(string.Format("Parameter {0} at length {1}", param, l));
 #endif
         }
+
+        [Theory]
+        [InlineData(15, "NurbsCurve")]
+        [InlineData(22, "Line")]
+        [InlineData(26, "Arc")]
+        public void It_Returns_The_Segment_At_Length(double l, string type)
+        {
+            // Arrange
+
+            //Act
+            var segment = _polycurve.SegmentAtLength(l);
+
+            // Assert
+            segment.GetType().Name.Should().Be(type);
+#if DEBUG
+            _testOutput.WriteLine(string.Format("Segment at length {0} is a {1}", l, type));
+#endif
+        }
+
+        [Theory]
+        [InlineData(0.265154444812697, "NurbsCurve")]
+        [InlineData(0.564023377863855, "Line")]
+        [InlineData(0.803759565721669, "Arc")]
+        public void It_Returns_The_Segment_At_Parameter(double t, string type)
+        {
+            // Arrange
+
+            //Act
+            var segment = _polycurve.SegmentAt(t);
+
+            // Assert
+            segment.GetType().Name.Should().Be(type);
+#if DEBUG
+            _testOutput.WriteLine(string.Format("Segment at parameter {0} is a {1}", t, type));
+#endif
+        }
     }
 }

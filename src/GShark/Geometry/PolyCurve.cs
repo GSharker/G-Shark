@@ -640,6 +640,73 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Returns the segment at a given parameter on the polycurve [0,1].
+        /// </summary>
+        /// <param name="t">Parameter value between 0 and 1.</param>
+        /// <returns>An ICurve segment.</returns>
+        public ICurve SegmentAt(double t)
+        {
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            else if (t > 1.0)
+            {
+                t = 1.0;
+            }
+            else
+            {
+                var param = t * SegmentCount;
+                var i = int.Parse(Math.Floor(param).ToString());
+                param -= i;
+                return this.Segments[i];
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Returns the segment at a given length.
+        /// </summary>
+        /// <param name="l">The length.</param>
+        /// <returns>An ICurve segment.</returns>
+        public ICurve SegmentAtLength(double l)
+        {
+            double progressiveEndLength = 0;
+            double progressiveStartLength = 0;
+
+            if (this.SegmentCount == 0)
+            {
+                throw new InvalidOperationException("The polycurve is empty");
+            }
+            if (l > this.Length)
+            {
+                return this.Segments.Last();
+            }
+            for (int i = 0; i < this.SegmentCount; i++)
+            {
+                var segment = this.Segments[i];
+                progressiveStartLength = progressiveEndLength;
+                progressiveEndLength += this.SegmentsLengths[i];
+                if (l <= progressiveEndLength) // This is the right segment
+                {
+                    var type = segment.GetType().Name;
+                    switch (type)
+                    {
+                        case "NurbsCurve":
+                            return ((NurbsCurve)segment);
+                        case "Line":
+                            return ((Line)segment);
+                        case "Arc":
+                            return ((Arc)segment);
+                        case "PolyCurve":
+                            return ((PolyCurve)segment);
+                    }
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Constructs the string representation for the current PolyCurve.
         /// </summary>
         /// <returns>The polycurve representation in the form of number of segments</returns>
