@@ -469,15 +469,18 @@ namespace GShark.Operation
             List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
             double curveLength = -GSharkMath.Epsilon;
+            double segmentLengthLeft = segmentLength;
 
+            // Iterate through the curves consuming the bezier's, summing their length along the way.
             while (curveLength < segmentLength && i < curves.Count)
             {
-                double bezierLength = BezierCurveLength(curve);
+                double bezierLength = BezierCurveLength(curves[i]);
                 curveLength += bezierLength;
 
                 if (segmentLength < curveLength + GSharkMath.Epsilon)
-                    return BezierCurveParamAtLength(curve, segmentLength, tolerance, bezierLength);
+                    return BezierCurveParamAtLength(curves[i], segmentLengthLeft, tolerance, bezierLength);
                 i++;
+                segmentLengthLeft -= bezierLength;
             }
 
             return -1;
