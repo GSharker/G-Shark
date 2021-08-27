@@ -45,10 +45,10 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i <= 12 - degree - 2; i++)
                 pts.Add(new Point3(i, 0.0, 0.0));
 
-            ICurve curve = new NurbsCurve(pts, degree);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
-            ICurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
+            NurbsCurve curveAfterRefine = Modify.CurveKnotRefine(curve, newKnots);
 
             // Assert
             (curve.Knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
@@ -72,14 +72,14 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i <= 12 - degree - 2; i++)
                 pts.Add(new Point3(i, 0.0, 0.0));
 
-            ICurve curve = new NurbsCurve(pts, degree);
+            NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
-            List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsCurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
 
             // Assert
             curvesAfterDecompose.Count.Should().Be(5);
-            foreach (ICurve bezierCurve in curvesAfterDecompose)
+            foreach (NurbsCurve bezierCurve in curvesAfterDecompose)
             {
                 double t = bezierCurve.Knots[0];
                 Point3 pt0 = bezierCurve.PointAt(t);
@@ -107,11 +107,11 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(controlPts, degree);
 
             // Act
-            List<ICurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsCurve> curvesAfterDecompose = Modify.DecomposeCurveIntoBeziers(curve);
 
             // Assert
             curvesAfterDecompose.Count.Should().Be(3);
-            foreach (ICurve bezierCurve in curvesAfterDecompose)
+            foreach (NurbsCurve bezierCurve in curvesAfterDecompose)
             {
                 double t = bezierCurve.Knots[0];
                 Point3 pt0 = bezierCurve.PointAt(t);
@@ -130,8 +130,8 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = NurbsCurveCollection.NurbsCurveCubicBezierPlanar();
 
             // Act
-            ICurve crvRev1 = Modify.ReverseCurve(curve);
-            ICurve crvRev2 = Modify.ReverseCurve(crvRev1);
+            NurbsCurve crvRev1 = Modify.ReverseCurve(curve);
+            NurbsCurve crvRev2 = Modify.ReverseCurve(crvRev1);
 
             Point3 pt0 = curve.PointAt(0.0);
             Point3 pt1 = crvRev1.PointAt(1.0);
@@ -160,7 +160,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptOnCurve = curve.PointAt(0.5);
 
             // Act
-            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            NurbsCurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
             Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
 
             // Assert
@@ -185,7 +185,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptOnCurve = curve.PointAt(0.5);
 
             // Act
-            ICurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
+            NurbsCurve elevatedDegreeCurve = Modify.ElevateDegree(curve, finalDegree);
             Point3 ptOnElevatedDegreeCurve = elevatedDegreeCurve.PointAt(0.5);
 
             // Assert
@@ -214,7 +214,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 ptOnCurve1 = curve.PointAt(0.25);
 
             // Act
-            ICurve reducedCurve = Modify.ReduceDegree(curve, tolerance);
+            NurbsCurve reducedCurve = Modify.ReduceDegree(curve, tolerance);
             Point3 ptOnReducedDegreeCurve0 = reducedCurve.PointAt(0.5);
             Point3 ptOnReducedDegreeCurve1 = reducedCurve.PointAt(0.25);
 
@@ -229,7 +229,7 @@ namespace GShark.Test.XUnit.Operation
         public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
         {
             // Arrange
-            ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample() };
+            NurbsCurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample() };
 
             // Act
             Func<object> func = () => Modify.JoinCurves(curves);
@@ -242,7 +242,7 @@ namespace GShark.Test.XUnit.Operation
         public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
         {
             // Arrange
-            ICurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample(), NurbsCurveCollection.NurbsCurveQuadratic3DBezier() };
+            NurbsCurve[] curves = { NurbsCurveCollection.NurbsCurvePlanarExample(), NurbsCurveCollection.NurbsCurveQuadratic3DBezier() };
 
             // Act
             Func<object> func = () => Modify.JoinCurves(curves);
@@ -269,14 +269,14 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
-            ICurve[] curves = { curve, ln.ToNurbs(), arc.ToNurbs() };
+            NurbsCurve[] curves = { curve, ln.ToNurbs(), arc.ToNurbs() };
 
             Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
             Point3 expectedPt2 = new Point3(5, 5, -1.230175);
             Point3 expectedPt3 = new Point3(7.075482, 5, -6.555514);
 
             // Act
-            NurbsCurve joinedCurve = (NurbsCurve) Modify.JoinCurves(curves);
+            NurbsCurve joinedCurve = Modify.JoinCurves(curves);
 
             double t0 = joinedCurve.ParameterAtLength(15);
             double t1 = joinedCurve.ParameterAtLength(21.5);
@@ -313,7 +313,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt3 = new Point3(5, 5.0, 2.5);
 
             // Act
-            ICurve joinedCurve = Modify.JoinCurves(new List<ICurve>{ poly.ToNurbs(), ln.ToNurbs() });
+            NurbsCurve joinedCurve = Modify.JoinCurves(new List<NurbsCurve> { poly.ToNurbs(), ln.ToNurbs() });
             Point3 pt1 = joinedCurve.PointAt(0.1);
             Point3 pt2 = joinedCurve.PointAt(0.25);
             Point3 pt3 = joinedCurve.PointAt(0.75);

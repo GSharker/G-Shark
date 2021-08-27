@@ -81,17 +81,31 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// List of weight values.
+        /// Gets the list of weight values.
         /// </summary>
         public List<double> Weights { get; }
 
+        /// <summary>
+        /// Gets the degree of the curve.
+        /// </summary>
         public int Degree { get; }
 
+        /// <summary>
+        /// Gets the control points in their rational form. 
+        /// </summary>
         public List<Point3> ControlPointLocations { get; }
 
+        /// <summary>
+        /// Gets the control points in their homogenized form.
+        /// </summary>
         public List<Point4> ControlPoints { get; }
 
+        /// <summary>
+        /// Gets the knots vectors of the curve.
+        /// </summary>
         public KnotVector Knots { get; }
+
+        public double Length => Analyze.CurveLength(this);
 
         public Interval Domain
         {
@@ -105,29 +119,37 @@ namespace GShark.Geometry
             }
         }
 
-        public BoundingBox BoundingBox
+        public Point3 StartPoint => PointAt(0.0);
+
+        public Point3 MidPoint => PointAt(0.5);
+
+        public Point3 EndPoint => PointAt(1.0);
+
+        public BoundingBox GetBoundingBox()
         {
-            get
+            NurbsCurve curve = this;
+
+            if (IsPeriodic())
             {
-                NurbsCurve curve = this;
-
-                if (IsPeriodic())
-                {
-                    curve = ClampEnds();
-                }
-
-                List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
-                foreach (ICurve crv in beziers)
-                {
-                    Extrema e = Evaluation.ComputeExtrema(crv);
-                    pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
-                }
-
-                pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
-                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
-                return new BoundingBox(removedDuplicate);
+                curve = ClampEnds();
             }
+
+            List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
+            List<NurbsCurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
+            foreach (NurbsCurve crv in beziers)
+            {
+                Extrema e = Evaluation.ComputeExtrema(crv);
+                pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
+            }
+
+            pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
+            Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
+            return new BoundingBox(removedDuplicate);
+        }
+
+        public double LengthAt(double t)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -199,6 +221,11 @@ namespace GShark.Geometry
         public Point3 PointAt(double t)
         {
             return Evaluation.CurvePointAt(this, t);
+        }
+
+        public Point3 PointAtLength(double length)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -274,15 +301,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Calculates the length of the curve.
-        /// </summary>
-        /// <returns>The length of the curve.</returns>
-        public double Length()
-        {
-            return Analyze.CurveLength(this);
-        }
-
-        /// <summary>
         /// Reverses the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
@@ -299,6 +317,11 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 point)
         {
             return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+        }
+
+        public double ClosestParameter(Point3 pt)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

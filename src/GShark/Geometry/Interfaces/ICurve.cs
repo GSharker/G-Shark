@@ -1,29 +1,13 @@
 ﻿using GShark.Core;
-using System.Collections.Generic;
 
 namespace GShark.Geometry.Interfaces
 {
     public interface ICurve
     {
         /// <summary>
-        /// Gets the degree of curve.
+        /// Gets the length of the curve.
         /// </summary>
-        public int Degree { get; }
-
-        /// <summary>
-        /// Gets world 3-D, or Euclidean location of the control point.
-        /// </summary>
-        public List<Point3> ControlPointLocations { get; }
-
-        /// <summary>
-        /// Gets the homogeneous control point, the 4-D representation is (w*x, w*y, w*z, w).
-        /// </summary>
-        public List<Point4> ControlPoints { get; }
-
-        /// <summary>
-        /// Gets the collection of non-decreasing knot values.
-        /// </summary>
-        public KnotVector Knots { get; }
+        public double Length { get; }
 
         /// <summary>
         /// Gets the domain of the curve.
@@ -31,22 +15,58 @@ namespace GShark.Geometry.Interfaces
         public Interval Domain { get; }
 
         /// <summary>
-        /// Gets the bounding box of the curve.
+        /// Gets the starting point of the curve.
         /// </summary>
-        public BoundingBox BoundingBox { get; }
+        public Point3 StartPoint { get; }
 
         /// <summary>
-        /// Computes the point at the parameter t on the curve,
+        /// Gets the middle point of the curve.
         /// </summary>
-        /// <param name="t">The parameter t on the curve.</param>
-        /// <returns>The point on the curve.</returns>
+        public Point3 MidPoint { get; }
+
+        /// <summary>
+        /// Gets the end point of the curve.
+        /// </summary>
+        public Point3 EndPoint { get; }
+
+        /// <summary>
+        /// Gets the bounding box of the curve.
+        /// </summary>
+        public BoundingBox GetBoundingBox();
+
+        /// <summary>
+        /// Evaluates the length at the parameter t on the curve.
+        /// </summary>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
+        /// <returns>The length of the curve coincides at the given parameter.</returns>
+        public double LengthAt(double t);
+
+        /// <summary>
+        /// Evaluates the point at the parameter t on the curve.
+        /// </summary>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
+        /// <returns>The point on the curve at the given parameter.</returns>
         public Point3 PointAt(double t);
 
         /// <summary>
-        /// Computes the closest point on the curve that is close to the test point.
+        /// Evaluates the point at a certain length along the curve.
+        /// </summary>
+        /// <param name="length">Length along the curve between the start point and the returned point.</param>
+        /// <returns>The point on the curve at the given length.</returns>
+        public Point3 PointAtLength(double length);
+
+        /// <summary>
+        /// Evaluates the closest point on the curve that is close to the test point.
         /// </summary>
         /// <param name="pt">The test point.</param>
         /// <returns>The closest point.</returns>
         public Point3 ClosestPoint(Point3 pt);
+
+        /// <summary>
+        /// Evaluates the closest parameter on the curve that is close to the test point.
+        /// </summary>
+        /// <param name="pt">The test point.</param>
+        /// <returns>The closest parameter between 0.0 and 1.0.</returns>
+        public double ClosestParameter(Point3 pt);
     }
 }

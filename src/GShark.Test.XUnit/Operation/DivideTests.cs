@@ -40,7 +40,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
-            List<ICurve> curves = curve.SplitAt(parameter);
+            List<NurbsCurve> curves = curve.SplitAt(parameter);
 
             // Assert
             curves.Should().HaveCount(2);
@@ -84,7 +84,7 @@ namespace GShark.Test.XUnit.Operation
                 degree:3);
 
             // Act
-            ICurve subCurve = curve.SubCurve(domain);
+            NurbsCurve subCurve = curve.SubCurve(domain);
 
             // Assert
             subCurve.ControlPointLocations.SequenceEqual(expectedSubCurve.ControlPointLocations).Should().BeTrue();
@@ -163,7 +163,7 @@ namespace GShark.Test.XUnit.Operation
             };
             List<Point3> pointsExpected = tValuesExpected.Select(t => curve.PointAt(t)).ToList();
             int steps = 7;
-            double length = curve.Length() / steps;
+            double length = curve.Length / steps;
 
             // Act
             (List<Point3> Points, List<double> Parameters) divideResult = curve.Divide(length);

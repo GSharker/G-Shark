@@ -24,7 +24,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="knotsToInsert">The set of knots.</param>
         /// <returns>A curve with refined knots.</returns>
-        public static ICurve CurveKnotRefine(ICurve curve, List<double> knotsToInsert)
+        public static NurbsCurve CurveKnotRefine(NurbsCurve curve, List<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0)
                 return curve;
@@ -101,7 +101,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
         /// <returns>Collection of curve objects, defined by degree, knots, and control points.</returns>
-        public static List<ICurve> DecomposeCurveIntoBeziers(ICurve curve, bool normalize = false)
+        public static List<NurbsCurve> DecomposeCurveIntoBeziers(NurbsCurve curve, bool normalize = false)
         {
             int degree = curve.Degree;
             List<Point4> controlPoints = curve.ControlPoints;
@@ -118,13 +118,13 @@ namespace GShark.Operation
                 if (kvp.Value >= reqMultiplicity) continue;
                 List<double> knotsToInsert = Sets.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
                 NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
-                ICurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                NurbsCurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
                 knots = curveResult.Knots;
                 controlPoints = curveResult.ControlPoints;
             }
 
             int crvKnotLength = reqMultiplicity * 2;
-            List<ICurve> curves = new List<ICurve>();
+            List<NurbsCurve> curves = new List<NurbsCurve>();
             int i = 0;
 
             while (i < controlPoints.Count)
@@ -149,7 +149,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">The curve has to be reversed.</param>
         /// <returns>A curve with a reversed parametrization.</returns>
-        public static ICurve ReverseCurve(ICurve curve)
+        public static NurbsCurve ReverseCurve(NurbsCurve curve)
         {
             List<Point4> controlPts = new List<Point4>(curve.ControlPoints);
             controlPts.Reverse();
@@ -183,7 +183,7 @@ namespace GShark.Operation
                 degree = surface.DegreeU;
             }
 
-            ICurve curve = null;
+            NurbsCurve curve = null;
             foreach (List<Point4> pts in controlPts)
             {
                 curve = CurveKnotRefine(new NurbsCurve(degree, knots, pts), knotsToInsert);
@@ -214,7 +214,7 @@ namespace GShark.Operation
         /// <param name="curve">The object curve to elevate.</param>
         /// <param name="finalDegree">The expected final degree. If the supplied degree is less or equal the curve is returned unmodified.</param>
         /// <returns>The curve after degree elevation.</returns>
-        public static ICurve ElevateDegree(ICurve curve, int finalDegree)
+        public static NurbsCurve ElevateDegree(NurbsCurve curve, int finalDegree)
         {
             if (finalDegree <= curve.Degree)
             {
@@ -697,7 +697,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curves">Curves to join.</param>
         /// <returns>A curve that is the result of joining all the curves.</returns>
-        public static ICurve JoinCurves(IList<ICurve> curves)
+        public static NurbsCurve JoinCurves(IList<NurbsCurve> curves)
         {
             if (curves == null)
             {
@@ -721,14 +721,14 @@ namespace GShark.Operation
             int finalDegree = curves.Max(c => c.Degree);
 
             // Homogenized degree curves.
-            IEnumerable<ICurve> homogenizedCurves = curves.Select(curve => curve.Degree != finalDegree ? ElevateDegree(curve, finalDegree) : curve);
+            IEnumerable<NurbsCurve> homogenizedCurves = curves.Select(curve => curve.Degree != finalDegree ? ElevateDegree(curve, finalDegree) : curve);
 
             // Join curves.
             List<double> joinedKnots = new List<double>();
             List<Point4> joinedControlPts = new List<Point4>();
             double endDomain = 0;
 
-            foreach (ICurve curve in homogenizedCurves)
+            foreach (NurbsCurve curve in homogenizedCurves)
             {
                 if (joinedKnots.Count == 0)
                 {

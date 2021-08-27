@@ -11,7 +11,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
     /// </example>
-    public class Line : IEquatable<Line>, ITransformable<Line>
+    public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Initializes a line by start point and end point.
@@ -51,12 +51,22 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Start point of the line.
+        /// Domain of the line.
+        /// </summary>
+        public Interval Domain => new Interval(0.0, 1.0);
+
+        /// <summary>
+        /// Gets the start point of the line.
         /// </summary>
         public Point3 StartPoint { get; }
 
         /// <summary>
-        /// End point of the line.
+        /// Gets the middle point of the line.
+        /// </summary>
+        public Point3 MidPoint => StartPoint + (EndPoint - StartPoint) / 2;
+
+        /// <summary>
+        /// Gets the end point of the line.
         /// </summary>
         public Point3 EndPoint { get; }
 
@@ -71,7 +81,7 @@ namespace GShark.Geometry
         public Vector3 Direction { get; }
 
         /// <summary>
-        /// Gets the BoundingBox in ascending fashion.
+        /// Gets the bounding box in ascending fashion.
         /// </summary>
         public BoundingBox GetBoundingBox()
         {

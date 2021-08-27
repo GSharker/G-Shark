@@ -224,8 +224,8 @@ namespace GShark.Geometry
         /// <returns>A ruled surface.</returns>
         public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
         {
-            ICurve copyCurveA = curveA;
-            ICurve copyCurveB = curveB;
+            NurbsCurve copyCurveA = curveA;
+            NurbsCurve copyCurveB = curveB;
 
             // Ensure that the two curves are defined on the same parameter range
             if (Math.Abs(copyCurveA.Knots.Domain.Length - copyCurveB.Knots.Domain.Length) > GSharkMath.Epsilon)

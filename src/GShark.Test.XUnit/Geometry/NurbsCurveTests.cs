@@ -126,8 +126,8 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPtMax1 = new Point3(20, 15, 5);
 
             // Act
-            BoundingBox bBox0 = crv0.BoundingBox;
-            BoundingBox bBox1 = crv1.BoundingBox;
+            BoundingBox bBox0 = crv0.GetBoundingBox();
+            BoundingBox bBox1 = crv1.GetBoundingBox();
 
             // Assert
             bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -151,8 +151,8 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPtMax1 = new Point3(4.545455, 5, 3.333333);
 
             // Act
-            BoundingBox bBox0 = crv0.BoundingBox;
-            BoundingBox bBox1 = crv1.BoundingBox;
+            BoundingBox bBox0 = crv0.GetBoundingBox();
+            BoundingBox bBox1 = crv1.GetBoundingBox();
 
             // Assert
             bBox0.Max.DistanceTo(expectedPtMax0).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -170,7 +170,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPtMax = new Point3(4.354648, 5, 3.333333);
 
             // Act
-            BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsCurve().BoundingBox;
+            BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsCurve().GetBoundingBox();
 
             // Assert
             bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GSharkMath.MaxTolerance);

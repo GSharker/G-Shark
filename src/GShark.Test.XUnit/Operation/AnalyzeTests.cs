@@ -51,7 +51,7 @@ namespace GShark.Test.XUnit.Operation
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;
-            double length = curve.Length() / steps;
+            double length = curve.Length / steps;
             double sumLengths = 0.0;
 
             for (int i = 0; i < steps + 1; i++)
@@ -155,7 +155,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt = new Point3(3.591549, 10, 4.464789);
 
             // Act
-            ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
+            NurbsCurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
 
             // Assert
             Isocurve.ControlPointLocations[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
@@ -170,7 +170,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPtAt = new Point3(5, 3.913043, 1.695652);
 
             // Act
-            ICurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.V);
+            NurbsCurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.V);
             Point3 ptAt = Isocurve.PointAt(0.5);
 
             // Assert

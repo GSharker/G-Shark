@@ -184,7 +184,7 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            double parameter = circle.ParameterAt(length);
+            double parameter = circle.ParameterAtLength(length);
 
             // Assert
             parameter.Should().BeApproximately(expectedParameter, GSharkMath.MinTolerance);

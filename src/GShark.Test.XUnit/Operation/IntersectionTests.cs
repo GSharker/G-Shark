@@ -277,7 +277,7 @@ namespace GShark.Test.XUnit.Operation
 
             int crvDegree1 = 2;
             var crvPts1 = new List<Point3> { new Point3(0.5, 0.5, 0), new Point3(0.7, 0, 0), new Point3(0.5, -1.5, 0) };
-            ICurve crv = new NurbsCurve(crvPts1, crvDegree1);
+            NurbsCurve crv = new NurbsCurve(crvPts1, crvDegree1);
 
             // Act
             List<CurvesIntersectionResult> intersection = Intersect.CurveLine(crv, ln);
