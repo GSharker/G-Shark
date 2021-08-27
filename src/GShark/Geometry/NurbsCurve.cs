@@ -119,8 +119,8 @@ namespace GShark.Geometry
             }
 
             List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
-            List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
-            foreach (ICurve crv in beziers)
+            List<NurbsCurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
+            foreach (NurbsCurve crv in beziers)
             {
                 Extrema e = Evaluation.ComputeExtrema(crv);
                 pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
