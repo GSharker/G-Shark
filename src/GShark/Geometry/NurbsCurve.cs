@@ -81,16 +81,28 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// List of weight values.
+        /// Gets the list of weight values.
         /// </summary>
         public List<double> Weights { get; }
 
+        /// <summary>
+        /// Gets the degree of the curve.
+        /// </summary>
         public int Degree { get; }
 
+        /// <summary>
+        /// Gets the control points in their rational form. 
+        /// </summary>
         public List<Point3> ControlPointLocations { get; }
 
+        /// <summary>
+        /// Gets the control points in their homogenized form.
+        /// </summary>
         public List<Point4> ControlPoints { get; }
 
+        /// <summary>
+        /// Gets the knots vectors of the curve.
+        /// </summary>
         public KnotVector Knots { get; }
 
         public double Length => Analyze.CurveLength(this);
@@ -108,7 +120,11 @@ namespace GShark.Geometry
         }
 
         public Point3 StartPoint => PointAt(0.0);
+
+        public Point3 MidPoint => PointAt(0.5);
+
         public Point3 EndPoint => PointAt(1.0);
+
         public BoundingBox GetBoundingBox()
         {
             NurbsCurve curve = this;

@@ -281,7 +281,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
         /// <returns>The evaluated parameter.</returns>
-        public double ParameterAt(double length)
+        public double ParameterAtLength(double length)
         {
             if (length < 0)
             {

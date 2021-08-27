@@ -50,6 +50,11 @@ namespace GShark.Geometry
         public Point3 StartPoint => this[0];
 
         /// <summary>
+        /// Gets the middle point of the polyline.
+        /// </summary>
+        public Point3 MidPoint => PointAt(0.5);
+
+        /// <summary>
         /// Gets the end point of the polyline.
         /// </summary>
         public Point3 EndPoint => this[Count - 1];
@@ -91,7 +96,6 @@ namespace GShark.Geometry
                 return lines.ToList();
             }
         }
-
 
         /// <summary>
         /// Computes the bounding box of the list of points.

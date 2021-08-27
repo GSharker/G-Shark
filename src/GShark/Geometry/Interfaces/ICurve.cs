@@ -20,6 +20,11 @@ namespace GShark.Geometry.Interfaces
         public Point3 StartPoint { get; }
 
         /// <summary>
+        /// Gets the middle point of the curve.
+        /// </summary>
+        public Point3 MidPoint { get; }
+
+        /// <summary>
         /// Gets the end point of the curve.
         /// </summary>
         public Point3 EndPoint { get; }

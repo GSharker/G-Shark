@@ -56,12 +56,17 @@ namespace GShark.Geometry
         public Interval Domain => new Interval(0.0, 1.0);
 
         /// <summary>
-        /// Start point of the line.
+        /// Gets the start point of the line.
         /// </summary>
         public Point3 StartPoint { get; }
 
         /// <summary>
-        /// End point of the line.
+        /// Gets the middle point of the line.
+        /// </summary>
+        public Point3 MidPoint => StartPoint + (EndPoint - StartPoint) / 2;
+
+        /// <summary>
+        /// Gets the end point of the line.
         /// </summary>
         public Point3 EndPoint { get; }
 
@@ -76,7 +81,7 @@ namespace GShark.Geometry
         public Vector3 Direction { get; }
 
         /// <summary>
-        /// Gets the BoundingBox in ascending fashion.
+        /// Gets the bounding box in ascending fashion.
         /// </summary>
         public BoundingBox GetBoundingBox()
         {
