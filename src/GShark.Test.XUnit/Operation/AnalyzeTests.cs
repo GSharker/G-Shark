@@ -177,21 +177,5 @@ namespace GShark.Test.XUnit.Operation
             Isocurve.ControlPointLocations[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
             ptAt.DistanceTo(expectedPtAt).Should().BeLessThan(GSharkMath.MinTolerance);
         }
-
-
-        [Fact]
-        public void It_Returns_The_Curvature_Vector_At_The_Given_Parameter()
-        {
-            // Arrange
-            double expectedRadiusLength = 1.469236;
-            Vector3 expectedCurvature = new Vector3(1.044141, 0.730898, 0.730898);
-
-            // Act
-            Vector3 curvature = Analyze.Curvature(NurbsCurveCollection.NurbsCurve3DExample(), 0.25);
-
-            // Assert
-            (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
-            curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
-        }
     }
 }

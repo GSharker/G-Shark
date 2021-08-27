@@ -46,17 +46,16 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Computes the curvature vector of the curve at the given parameter.
+        /// Computes the curvature vector.
         /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
         /// https://github.com/mcneel/opennurbs/blob/484ba88836bbedff8fe0b9e574fcd6434b49c21c/opennurbs_math.cpp#L839
         /// </summary>
-        /// <param name="curve">The curve object.</param>
-        /// <param name="t">Evaluation parameter.</param>
+        /// <param name="derivative1">The first derivative.</param>
+        /// <param name="derivative2">The second derivative.</param>
         /// <returns>The curvature vector.</returns>
-        public static Vector3 Curvature(NurbsCurve curve, double t)
+        public static Vector3 Curvature(Vector3 derivative1, Vector3 derivative2)
         {
-            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(curve, t, 2);
-            double d1 = derivatives[1].Length;
+            double d1 = derivative1.Length;
 
             // If the first derivative exists and is zero the curvature is a zero vector.
             if (d1 == 0.0)
@@ -64,10 +63,10 @@ namespace GShark.Operation
                 return Vector3.Zero;
             }
 
-            Vector3 tangent = derivatives[1] / d1;
-            double d2DotTang = (derivatives[2] * -1) * tangent;
+            Vector3 tangent = derivative1 / d1;
+            double d2DotTang = (derivative2 * -1) * tangent;
             d1 = 1.0 / (d1 * d1);
-            Vector3 curvature = d1 * (derivatives[2] + d2DotTang * tangent); // usually identified as k.
+            Vector3 curvature = d1 * (derivative2 + d2DotTang * tangent); // usually identified as k.
 
             double curvatureLength = curvature.Length;
             if (curvatureLength < 1.490116119385E-08) // SqrtEpsilon value that is used when comparing square roots.
