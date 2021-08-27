@@ -222,5 +222,45 @@ namespace GShark.Test.XUnit.Geometry
             curve.ControlPoints[2].Should().BeEquivalentTo(curveClamped.ControlPoints[2]);
             curve.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree].Should().BeEquivalentTo(curveClamped.ControlPoints[curve.ControlPoints.Count - curveClamped.Degree]);
         }
+
+        [Fact]
+        public void It_Returns_A_Perpendicular_Frame_At_Given_Parameter()
+        {
+            // Arrange
+            double t0 = 0.2;
+            double t1 = 0.75;
+
+            Point3 expectedPlaneOrigin0 = new Point3(0.784, 1.16, 1.16);
+            Point3 expectedPlaneOrigin1 = new Point3(3.96875, 3.59375, 2.96875);
+
+            Vector3 expectedXDir0 = new Vector3(0.889878, 0.322581, 0.322581);
+            Vector3 expectedXDir1 = new Vector3(-0.690371, -0.162782, -0.704905);
+
+            // Act
+            Plane frame0 = NurbsCurveCollection.NurbsCurve3DExample().FrameAt(t0);
+            Plane frame1 = NurbsCurveCollection.NurbsCurve3DExample().FrameAt(t1);
+
+            // Assert
+            frame0.Origin.EpsilonEquals(expectedPlaneOrigin0, GSharkMath.MinTolerance).Should().BeTrue();
+            frame1.Origin.EpsilonEquals(expectedPlaneOrigin1, GSharkMath.MinTolerance).Should().BeTrue();
+
+            frame0.XAxis.IsParallelTo(expectedXDir0).Should().NotBe(0);
+            frame1.XAxis.IsParallelTo(expectedXDir1).Should().NotBe(0);
+        }
+
+        [Fact]
+        public void It_Returns_The_Curvature_Vector_At_The_Given_Parameter()
+        {
+            // Arrange
+            double expectedRadiusLength = 1.469236;
+            Vector3 expectedCurvature = new Vector3(1.044141, 0.730898, 0.730898);
+
+            // Act
+            Vector3 curvature = NurbsCurveCollection.NurbsCurve3DExample().CurvatureAt(0.25);
+
+            // Assert
+            (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
+        }
     }
 }

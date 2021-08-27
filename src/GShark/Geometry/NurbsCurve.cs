@@ -194,7 +194,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes a point at the given parameter.
         /// </summary>
-        /// <param name="t">The parameter to sample the curve.</param>
+        /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>A point at the given parameter.</returns>
         public Point3 PointAt(double t)
         {
@@ -204,7 +204,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the curve tangent at the given parameter.
         /// </summary>
-        /// <param name="t">The parameter to sample the curve.</param>
+        /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The vector at the given parameter.</returns>
         public Vector3 TangentAt(double t)
         {
@@ -214,7 +214,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Determines the derivatives of a curve at a given parameter.<br/>
         /// </summary>
-        /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
+        /// <param name="t">Parameter on the curve at which the point is to be evaluated. Parameter should be between 0.0 and 1.0.</param>
         /// <param name="numberOfDerivatives">The number of derivatives required.</param>
         /// <returns>The derivatives.</returns>
         public List<Vector3> DerivativeAt(double t, int numberOfDerivatives = 1)
@@ -226,11 +226,51 @@ namespace GShark.Geometry
         /// Computes the curvature vector of the NURBS at the parameter t.
         /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
         /// </summary>
-        /// <param name="t">Evaluation parameter.</param>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The curvature vector.</returns>
         public Vector3 CurvatureAt(double t)
         {
-            return Analyze.Curvature(this, t);
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
+            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+            return Analyze.Curvature(derivatives[1], derivatives[2]);
+        }
+
+        /// <summary>
+        /// Calculates the 3D plane at the given parameter.
+        /// Defined as the Frenet frame, is constructed from the velocity and the acceleration of the curve.
+        /// https://janakiev.com/blog/framing-parametric-curves/
+        /// </summary>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
+        /// <returns>The perpendicular frame.</returns>
+        public Plane FrameAt(double t)
+        {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
+            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+
+            Vector3 normal = (derivatives[2].Length == 0.0) 
+                ? Vector3.PerpendicularTo(derivatives[1])
+                : Analyze.Curvature(derivatives[1], derivatives[2]);
+
+            Vector3 yDir = Vector3.CrossProduct(derivatives[1], normal);
+            return new Plane(derivatives[0], normal, yDir);
         }
 
         /// <summary>
