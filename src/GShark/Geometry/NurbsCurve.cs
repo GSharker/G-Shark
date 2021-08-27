@@ -93,6 +93,8 @@ namespace GShark.Geometry
 
         public KnotVector Knots { get; }
 
+        public double Length => Analyze.CurveLength(this);
+
         public Interval Domain
         {
             get
@@ -105,29 +107,33 @@ namespace GShark.Geometry
             }
         }
 
-        public BoundingBox BoundingBox
+        public Point3 StartPoint => PointAt(0.0);
+        public Point3 EndPoint => PointAt(1.0);
+        public BoundingBox GetBoundingBox()
         {
-            get
+            NurbsCurve curve = this;
+
+            if (IsPeriodic())
             {
-                NurbsCurve curve = this;
-
-                if (IsPeriodic())
-                {
-                    curve = ClampEnds();
-                }
-
-                List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
-                foreach (ICurve crv in beziers)
-                {
-                    Extrema e = Evaluation.ComputeExtrema(crv);
-                    pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
-                }
-
-                pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
-                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
-                return new BoundingBox(removedDuplicate);
+                curve = ClampEnds();
             }
+
+            List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
+            List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
+            foreach (ICurve crv in beziers)
+            {
+                Extrema e = Evaluation.ComputeExtrema(crv);
+                pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
+            }
+
+            pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
+            Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
+            return new BoundingBox(removedDuplicate);
+        }
+
+        public double LengthAt(double t)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -199,6 +205,11 @@ namespace GShark.Geometry
         public Point3 PointAt(double t)
         {
             return Evaluation.CurvePointAt(this, t);
+        }
+
+        public Point3 PointAtLength(double length)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -274,15 +285,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Calculates the length of the curve.
-        /// </summary>
-        /// <returns>The length of the curve.</returns>
-        public double Length()
-        {
-            return Analyze.CurveLength(this);
-        }
-
-        /// <summary>
         /// Reverses the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
@@ -299,6 +301,11 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 point)
         {
             return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+        }
+
+        public double ClosestParameter(Point3 pt)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

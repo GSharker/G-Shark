@@ -12,9 +12,9 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
     /// </example>
-    public class Circle : IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
-        internal Interval Domain = new Interval(0.0, 2.0 * Math.PI);
+        internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
         internal double _length;
 
         /// <summary>
@@ -71,42 +71,47 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the plane where the circle lays.
+        /// Gets the plane where the circular curve lays.
         /// </summary>
         public Plane Plane { get; }
 
         /// <summary>
-        /// Gets the radius of the circle.
+        /// Gets the radius of the circular curve.
         /// </summary>
         public double Radius { get; }
 
         /// <summary>
-        /// Gets the center of the circle.
+        /// Gets the center of the circular curve.
         /// </summary>
         public Point3 Center => Plane.Origin;
 
         /// <summary>
-        /// Gets the circumference of the circle.
+        /// Gets the circumference of the circular curve.
         /// </summary>
         public double Length => _length;
 
         /// <summary>
-        /// Gets the start point of the circle.
+        /// Gets the domain of the circular curve.
+        /// </summary>
+        public Interval Domain => _domain;
+
+        /// <summary>
+        /// Gets the start point of the circular curve.
         /// </summary>
         public Point3 StartPoint => PointAt(0.0);
 
         /// <summary>
-        /// Gets the mid-point of the arc.
+        /// Gets the mid-point of the circular curve.
         /// </summary>
-        public Point3 MidPoint => PointAt(Domain.Mid);
+        public Point3 MidPoint => PointAt(_domain.Mid);
 
         /// <summary>
-        /// Gets the end point of the arc.
+        /// Gets the end point of the circular curve.
         /// </summary>
         public Point3 EndPoint => PointAt(1.0);
 
         /// <summary>
-        /// Gets the bounding box of this circle.
+        /// Gets the bounding box of this circular curve.
         /// </summary>
         public virtual BoundingBox GetBoundingBox()
         {

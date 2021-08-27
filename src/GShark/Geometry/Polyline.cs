@@ -1,4 +1,5 @@
 ﻿using GShark.Core;
+using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class Polyline : List<Point3>
+    public class Polyline : List<Point3>, ICurve
     {
-       /// <summary>
+        /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
@@ -38,8 +39,19 @@ namespace GShark.Geometry
         /// </summary>
         public bool IsClosed => this[0] == this[Count - 1];
 
+        /// <summary>
+        /// Gets the domain of the polyline.
+        /// </summary>
+        public Interval Domain => new Interval(0, SegmentsCount);
+
+        /// <summary>
+        /// Gets the starting point of the polyline.
+        /// </summary>
         public Point3 StartPoint => this[0];
 
+        /// <summary>
+        /// Gets the end point of the polyline.
+        /// </summary>
         public Point3 EndPoint => this[Count - 1];
 
         /// <summary>
@@ -88,7 +100,7 @@ namespace GShark.Geometry
         public BoundingBox GetBoundingBox()
         {
             return new BoundingBox(this);
-        } 
+        }
 
         /// <summary>
         /// Creates a closed polyline, where the first and last point are the same.
@@ -224,7 +236,7 @@ namespace GShark.Geometry
                     break;
                 }
 
-                tempLength += this[i+1].DistanceTo(this[i+2]);
+                tempLength += this[i + 1].DistanceTo(this[i + 2]);
             }
 
             return Segments[segIdx];
@@ -369,7 +381,7 @@ namespace GShark.Geometry
             }
             knots.Add(lengthSum - 1);
 
-           return new NurbsCurve(1, knots, ctrlPts) ;
+            return new NurbsCurve(1, knots, ctrlPts);
         }
 
         /// <summary>

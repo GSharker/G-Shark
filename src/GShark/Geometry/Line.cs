@@ -11,7 +11,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
     /// </example>
-    public class Line : IEquatable<Line>, ITransformable<Line>
+    public class Line : ICurve, IEquatable<Line>, ITransformable<Line>
     {
         /// <summary>
         /// Initializes a line by start point and end point.
@@ -49,6 +49,11 @@ namespace GShark.Geometry
             Length = Math.Abs(length);
             Direction = (EndPoint - StartPoint).Unitize();
         }
+
+        /// <summary>
+        /// Domain of the line.
+        /// </summary>
+        public Interval Domain => new Interval(0.0, 1.0);
 
         /// <summary>
         /// Start point of the line.

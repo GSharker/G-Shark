@@ -34,7 +34,7 @@ namespace GShark.Geometry.Interfaces
         /// </summary>
         /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The length of the curve coincides at the given parameter.</returns>
-        public Point3 LengthAt(double t);
+        public double LengthAt(double t);
 
         /// <summary>
         /// Evaluates the point at the parameter t on the curve.
@@ -62,6 +62,6 @@ namespace GShark.Geometry.Interfaces
         /// </summary>
         /// <param name="pt">The test point.</param>
         /// <returns>The closest parameter between 0.0 and 1.0.</returns>
-        public Point3 ClosestParameter(Point3 pt);
+        public double ClosestParameter(Point3 pt);
     }
 }
