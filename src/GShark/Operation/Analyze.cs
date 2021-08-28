@@ -112,18 +112,21 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="segmentLength">The length to find the parameter.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
-        /// <param name="curveLength">The length of curve if computer, if not will be computed.</param>
         /// <returns>The parameter at the given length.</returns>
-        //ToDo Refactor to remove curveLength parameter.
-        public static double BezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance,
-            double curveLength = -1)
+        public static double BezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance)
         {
-            if (segmentLength < 0) return curve.Knots[0];
+            if (segmentLength < 0)
+            {
+                return curve.Knots[0];
+            }
 
-            // We compute the whole length, if the curve lengths is not provided.
-            double setCurveLength = curveLength < 0 ? BezierCurveLength(curve) : curveLength;
+            // We compute the whole length.
+            double curveLength = BezierCurveLength(curve);
 
-            if (segmentLength > setCurveLength) return curve.Knots[curve.Knots.Count - 1];
+            if (segmentLength > curveLength)
+            {
+                return curve.Knots[curve.Knots.Count - 1];
+            }
 
             // Divide and conquer.
             double setTolerance = tolerance <= 0.0 ? GSharkMath.Epsilon : tolerance;
@@ -132,7 +135,7 @@ namespace GShark.Operation
             double startLength = 0.0;
 
             double endT = curve.Knots[curve.Knots.Count - 1];
-            double endLength = setCurveLength;
+            double endLength = curveLength;
 
             while (endLength - startLength > setTolerance)
             {
@@ -477,7 +480,7 @@ namespace GShark.Operation
                 curveLength += bezierLength;
 
                 if (segmentLength < curveLength + GSharkMath.Epsilon)
-                    return BezierCurveParamAtLength(curves[i], segmentLengthLeft, tolerance, bezierLength);
+                    return BezierCurveParamAtLength(curves[i], segmentLengthLeft, tolerance);
                 i++;
                 segmentLengthLeft -= bezierLength;
             }
