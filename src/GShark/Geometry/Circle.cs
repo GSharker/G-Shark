@@ -1,8 +1,6 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GShark.Geometry
@@ -16,6 +14,9 @@ namespace GShark.Geometry
     /// </example>
     public class Circle : ICurve, IEquatable<Circle>, ITransformable<Circle>
     {
+        internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
+        internal double _length;
+
         /// <summary>
         /// Initializes a circle on a plane with a given radius.
         /// </summary>
@@ -25,6 +26,7 @@ namespace GShark.Geometry
         {
             Plane = plane;
             Radius = Math.Abs(radius);
+            _length = Math.Abs(2.0 * Math.PI * radius);
         }
 
         /// <summary>
@@ -65,67 +67,53 @@ namespace GShark.Geometry
 
             Plane = new Plane(center, xDir, yDir);
             Radius = xDir.Length;
+            _length = Math.Abs(2.0 * Math.PI * Radius);
         }
 
         /// <summary>
-        /// Defines the curve type
-        /// </summary>
-        public CurveType CurveType => CurveType.CIRCLE;
-
-        /// <summary>
-        /// Gets the plane where the circle lays.
+        /// Gets the plane where the circular curve lays.
         /// </summary>
         public Plane Plane { get; }
 
         /// <summary>
-        /// Gets the radius of the circle.
+        /// Gets the radius of the circular curve.
         /// </summary>
         public double Radius { get; }
 
         /// <summary>
-        /// Gets the center of the circle.
+        /// Gets the center of the circular curve.
         /// </summary>
         public Point3 Center => Plane.Origin;
 
         /// <summary>
-        /// Gets the circumference of the circle.
+        /// Gets the circumference of the circular curve.
         /// </summary>
-        public double Length => Math.Abs(2.0 * Math.PI * Radius);
+        public double Length => _length;
 
         /// <summary>
-        /// Gets the start point of the circle.
+        /// Gets the domain of the circular curve.
+        /// </summary>
+        public Interval Domain => _domain;
+
+        /// <summary>
+        /// Gets the start point of the circular curve.
         /// </summary>
         public Point3 StartPoint => PointAt(0.0);
 
         /// <summary>
-        /// Gets the mid-point of the arc.
+        /// Gets the mid-point of the circular curve.
         /// </summary>
-        public Point3 MidPoint => PointAt(Domain.Mid);
+        public Point3 MidPoint => PointAt(_domain.Mid);
 
         /// <summary>
-        /// Gets the end point of the arc.
+        /// Gets the end point of the circular curve.
         /// </summary>
         public Point3 EndPoint => PointAt(1.0);
 
-        public int Degree => throw new NotImplementedException();
-
-        public List<Point3> ControlPointLocations => throw new NotImplementedException();
-
-        public List<Point4> ControlPoints => throw new NotImplementedException();
-
-        public KnotVector Knots => throw new NotImplementedException();
-
-        public Interval Domain { get; set; } = new Interval(0.0, 2.0 * Math.PI);
-
         /// <summary>
-        /// Gets the bounding box of this circle.
+        /// Gets the bounding box of this circular curve.
         /// </summary>
-        public BoundingBox BoundingBox => GetBoundingBox();
-
-        /// <summary>
-        /// Gets the bounding box of this circle.
-        /// </summary>
-        private BoundingBox GetBoundingBox()
+        public virtual BoundingBox GetBoundingBox()
         {
             double val1 = Radius * SelectionLength(Plane.ZAxis[1], Plane.ZAxis[2]);
             double val2 = Radius * SelectionLength(Plane.ZAxis[2], Plane.ZAxis[0]);
@@ -141,6 +129,51 @@ namespace GShark.Geometry
             Point3 min = new Point3(minX, minY, minZ);
             Point3 max = new Point3(maxX, maxY, maxZ);
             return new BoundingBox(min, max);
+        }
+
+        /// <summary>
+        /// Determines the value of the Nth derivative at a parameter.
+        /// </summary>
+        /// <param name="t">Parameter to evaluate derivative. A parameter between 0.0 to 1.0.</param>
+        /// <param name="derivative">Which order of derivative is wanted. Valid values are 0,1,2,3.</param>
+        /// <returns>The derivative of the circle at the given parameter.</returns>
+        public Vector3 DerivativeAt(double t, int derivative = 0)
+        {
+            if (t < 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t > 1.0)
+            {
+                t = 1.0;
+            }
+
+            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
+
+            double r0 = 0;
+            double r1 = 0;
+            switch (derivative % 4)
+            {
+                case 0:
+                    r0 = Radius * Math.Cos(theta);
+                    r1 = Radius * Math.Sin(theta);
+                    break;
+                case 1:
+                    r0 = Radius * -Math.Sin(theta);
+                    r1 = Radius * Math.Cos(theta);
+                    break;
+                case 2:
+                    r0 = Radius * -Math.Cos(theta);
+                    r1 = Radius * -Math.Sin(theta);
+                    break;
+                case 3:
+                    r0 = Radius * Math.Sin(theta);
+                    r1 = Radius * -Math.Cos(theta);
+                    break;
+            }
+
+            return r0 * Plane.XAxis + r1 * Plane.YAxis;
         }
 
         /// <summary>
@@ -206,14 +239,8 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-
-            double r1 = Radius * (-Math.Sin(theta));
-            double r2 = Radius * (Math.Cos(theta));
-
-            Vector3 vector = Plane.XAxis * r1 + Plane.YAxis * r2;
-
-            return vector.Unitize();
+            Vector3 derivative = DerivativeAt(t, 1);
+            return derivative.Unitize();
         }
 
         /// <summary>
@@ -226,7 +253,7 @@ namespace GShark.Geometry
             Point3 pt = PointAtLength(length);
             (double u, double v) = Plane.ClosestParameters(pt);
             double t = EvaluateParameter(u, v, true);
-            return TangentAt(t);
+            return DerivativeAt(t, 1).Unitize();
         }
 
         /// <summary>
@@ -243,7 +270,7 @@ namespace GShark.Geometry
 
             if (t > 1)
             {
-                return Length;
+                return _length;
             }
 
             return Length * t;
@@ -254,7 +281,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
         /// <returns>The evaluated parameter.</returns>
-        public double ParameterAt(double length)
+        public double ParameterAtLength(double length)
         {
             if (length < 0)
             {

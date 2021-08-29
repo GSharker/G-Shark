@@ -180,7 +180,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">Parameter on the curve at which the point is to be evaluated</param>
         /// <returns>The evaluated point on the curve.</returns>
-        public static Point3 CurvePointAt(ICurve curve, double t)
+        public static Point3 CurvePointAt(NurbsCurve curve, double t)
         {
             List<Point4> controlPts = curve.ControlPoints;
             KnotVector knots = curve.Knots;
@@ -212,7 +212,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="t">The parameter on the curve.</param>
         /// <returns>The tangent vector at the given parameter.</returns>
-        public static Vector3 RationalCurveTangent(ICurve curve, double t)
+        public static Vector3 RationalCurveTangent(NurbsCurve curve, double t)
         {
             List<Vector3> derivatives = RationalCurveDerivatives(curve, t, 1);
             return derivatives[1];
@@ -244,7 +244,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">Curve where the extrema are calculated.</param>
         /// <returns>The extrema.</returns>
-        public static Extrema ComputeExtrema(ICurve curve)
+        public static Extrema ComputeExtrema(NurbsCurve curve)
         {
             var derivPts = DerivativeCoordinates(curve.ControlPointLocations);
             Extrema extrema = new Extrema();
@@ -366,9 +366,9 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curve">The curve object.</param>
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated</param>
-        /// <param name="numberOfDerivatives"></param>
+        /// <param name="numberOfDerivatives">The number of derivatives required.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Vector3> RationalCurveDerivatives(ICurve curve, double parameter, int numberOfDerivatives = 1)
+        public static List<Vector3> RationalCurveDerivatives(NurbsCurve curve, double parameter, int numberOfDerivatives = 1)
         {
             List<Point4> derivatives = CurveDerivatives(curve, parameter, numberOfDerivatives);
             // Array of derivative of A(t).
@@ -413,7 +413,7 @@ namespace GShark.Operation
         /// <param name="parameter">Parameter on the curve at which the point is to be evaluated.</param>
         /// <param name="numberDerivs">Integer number of basis functions - 1 = knots.length - degree - 2.</param>
         /// <returns>The derivatives.</returns>
-        public static List<Point4> CurveDerivatives(ICurve curve, double parameter, int numberDerivs)
+        public static List<Point4> CurveDerivatives(NurbsCurve curve, double parameter, int numberDerivs)
         {
             List<Point4> curveHomogenizedPoints = curve.ControlPoints;
 

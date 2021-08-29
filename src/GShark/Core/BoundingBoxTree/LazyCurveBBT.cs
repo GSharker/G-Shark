@@ -6,20 +6,20 @@ using GShark.ExtendedMethods;
 
 namespace GShark.Core.BoundingBoxTree
 {
-    internal class LazyCurveBBT : IBoundingBoxTree<ICurve>
+    internal class LazyCurveBBT : IBoundingBoxTree<NurbsCurve>
     {
-        private readonly ICurve _curve;
+        private readonly NurbsCurve _curve;
         private readonly BoundingBox _boundingBox;
         private readonly double _knotTolerance;
 
-        internal LazyCurveBBT(ICurve curve, double knotTolerance = double.NaN)
+        internal LazyCurveBBT(NurbsCurve curve, double knotTolerance = double.NaN)
         {
             _curve = curve;
             _boundingBox = new BoundingBox(curve.ControlPointLocations);
 
             if (double.IsNaN(knotTolerance))
             {
-                knotTolerance = _curve.Knots.Domain / 64;
+                knotTolerance = _curve.Knots.Domain.Length / 64;
             }
 
             _knotTolerance = knotTolerance;
@@ -30,25 +30,25 @@ namespace GShark.Core.BoundingBoxTree
             return _boundingBox;
         }
 
-        public Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>> Split()
+        public Tuple<IBoundingBoxTree<NurbsCurve>, IBoundingBoxTree<NurbsCurve>> Split()
         {
             Random r = new Random();
             double t = (_curve.Knots[_curve.Knots.Count - 1] + _curve.Knots[0]) / 2.0 +
                        (_curve.Knots[_curve.Knots.Count - 1] - _curve.Knots[0]) * 0.1 * r.NextDouble();
-            List<ICurve> curves = _curve.SplitAt(t);
+            List<NurbsCurve> curves = _curve.SplitAt(t);
 
-            return new Tuple<IBoundingBoxTree<ICurve>, IBoundingBoxTree<ICurve>>
+            return new Tuple<IBoundingBoxTree<NurbsCurve>, IBoundingBoxTree<NurbsCurve>>
                 (new LazyCurveBBT(curves[0], _knotTolerance), new LazyCurveBBT(curves[1], _knotTolerance));
         }
 
-        public ICurve Yield()
+        public NurbsCurve Yield()
         {
             return _curve;
         }
 
         public bool IsIndivisible(double tolerance)
         {
-            return _curve.Knots.Domain < _knotTolerance;
+            return _curve.Knots.Domain.Length < _knotTolerance;
         }
 
         public bool IsEmpty()

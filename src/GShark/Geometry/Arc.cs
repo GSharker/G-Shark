@@ -30,10 +30,11 @@ namespace GShark.Geometry
                 throw new Exception("Angle domain must never be decreasing.");
             }
 
-            Domain = (angleDomainRadians.Length > Math.PI * 2.0)
+            _domain = (angleDomainRadians.Length > Math.PI * 2.0)
                 ? new Interval(AngularDiff(angleDomainRadians.T0, Math.PI * 2.0),
                     AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
                 : angleDomainRadians;
+            _length = Math.Abs(Angle * Radius);
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace GShark.Geometry
                 angle += 2 * Math.PI;
             }
 
-            Domain = new Interval(0.0, angle);
+            _domain = new Interval(0.0, angle);
+            _length = Math.Abs(Angle * Radius);
         }
 
         /// <summary>
@@ -71,11 +73,6 @@ namespace GShark.Geometry
         /// Angle value in radians.
         /// </summary>
         public double Angle => Domain.Length;
-
-        /// <summary>
-        /// Calculates the length of the arc.
-        /// </summary>
-        public new double Length => Math.Abs(Angle * Radius);
 
         /// <summary>
         /// Gets the BoundingBox of this arc.<br/>

@@ -1,6 +1,5 @@
 ﻿using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System.Collections.Generic;
 
 namespace GShark.Operation
@@ -8,7 +7,6 @@ namespace GShark.Operation
     /// <summary>
     /// Collects a set of method for offsetting primitives and NURBS geometries.
     /// </summary>
-    //ToDo Refactor as extension method on ICurve with switch cases for types?
     public static class Offset
     {
         /// <summary>
@@ -52,7 +50,7 @@ namespace GShark.Operation
         /// <param name="distance">The distance of the offset.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset curve.</returns>
-        public static ICurve Curve(ICurve crv, double distance, Plane pln)
+        public static NurbsCurve Curve(NurbsCurve crv, double distance, Plane pln)
         {
             if (distance == 0.0)
             {
@@ -114,7 +112,7 @@ namespace GShark.Operation
                     continue;
                 }
 
-                Intersection:
+            Intersection:
                 bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
                 if (!ccx)
                 {

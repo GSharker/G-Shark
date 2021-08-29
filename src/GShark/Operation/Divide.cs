@@ -41,7 +41,7 @@ namespace GShark.Operation
 
             List<List<Point4>> surfPtsLeft = new List<List<Point4>>();
             List<List<Point4>> surfPtsRight = new List<List<Point4>>();
-            ICurve result = null;
+            NurbsCurve result = null;
 
             foreach (List<Point4> pts in srfCtrlPts)
             {
@@ -102,7 +102,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="divisions">The number of parts to split the curve into.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static List<double> CurveByCount(ICurve curve, int divisions)
+        internal static List<double> CurveByCount(NurbsCurve curve, int divisions)
         {
             double approximatedLength = Analyze.CurveLength(curve);
             double arcLengthSeparation = approximatedLength / divisions;
@@ -119,9 +119,9 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="length">The length separating the resultant samples.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
+        internal static (List<double> tValues, List<double> lengths) CurveByLength(NurbsCurve curve, double length)
         {
-            List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
             double totalLength = curveLengths.Sum();
 
@@ -141,8 +141,7 @@ namespace GShark.Operation
 
                 while (segmentLength < sum + GSharkMath.Epsilon)
                 {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GSharkMath.MaxTolerance, curveLengths[i]); //***this is getting the parameter on the next curve. does this mean decompose into bezier maintains original params?
+                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MaxTolerance);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);

@@ -139,7 +139,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
         {
             // Arrange
-            ICurve poly2D = new Polygon(Planar2D).ToNurbs();
+            NurbsCurve poly2D = new Polygon(Planar2D).ToNurbs();
             KnotVector knots = poly2D.Knots;
 
             // Assert

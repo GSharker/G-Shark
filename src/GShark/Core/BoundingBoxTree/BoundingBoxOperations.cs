@@ -74,21 +74,13 @@ namespace GShark.Core.BoundingBoxTree
 
                 Tuple<IBoundingBoxTree<T>, IBoundingBoxTree<T>> aSplit = a.Split();
 
-                //NurbsCurve crv = a.Yield();
-                //Vector3 pt1 = crv.ControlPointLocations[0];
-                //Vector3 pt2 = crv.ControlPointLocations[crv.ControlPointLocations.Count - 1];
                 var pt1 = a.BoundingBox().Max;
                 var pt2 = a.BoundingBox().Min;
-                //double pt1pt2Length = pt1.DistanceTo(pt2);
-                var ppt1 = pl.ClosestPoint(pt1, out double h1);
-                var ppt2 = pl.ClosestPoint(pt2, out double h2);
+                _ = pl.ClosestPoint(pt1, out double h1);
+                _ = pl.ClosestPoint(pt2, out double h2);
 
                 if (Math.Abs(h1) < tolerance || Math.Abs(h2) < tolerance || h1 * h2 > 0.0)
                 {
-                    //if (crv.Length() < Math.Sqrt(4 * Math.Abs(h1) * Math.Abs(h2) + pt1pt2Length * pt1pt2Length) + tolerance)
-                    //{
-                    //    continue;
-                    //}
                     if (a.IsIndivisible(tolerance))
                     {
                         continue;

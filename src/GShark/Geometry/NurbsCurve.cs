@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using GShark.Core;
-using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
@@ -82,22 +81,31 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Defines the curve type
-        /// </summary>
-        public CurveType CurveType => CurveType.NURBSCURVE;
-
-        /// <summary>
-        /// List of weight values.
+        /// Gets the list of weight values.
         /// </summary>
         public List<double> Weights { get; }
 
+        /// <summary>
+        /// Gets the degree of the curve.
+        /// </summary>
         public int Degree { get; }
 
+        /// <summary>
+        /// Gets the control points in their rational form. 
+        /// </summary>
         public List<Point3> ControlPointLocations { get; }
 
+        /// <summary>
+        /// Gets the control points in their homogenized form.
+        /// </summary>
         public List<Point4> ControlPoints { get; }
 
+        /// <summary>
+        /// Gets the knots vectors of the curve.
+        /// </summary>
         public KnotVector Knots { get; }
+
+        public double Length => Analyze.CurveLength(this);
 
         public Interval Domain
         {
@@ -111,33 +119,36 @@ namespace GShark.Geometry
             }
         }
 
-        public BoundingBox BoundingBox
+        public Point3 StartPoint => PointAt(0.0);
+
+        public Point3 MidPoint => PointAt(0.5);
+
+        public Point3 EndPoint => PointAt(1.0);
+
+        public BoundingBox GetBoundingBox()
         {
-            get
+            NurbsCurve curve = this;
+
+            if (IsPeriodic())
             {
-                NurbsCurve curve = this;
-
-                if (IsPeriodic())
-                {
-                    curve = ClampEnds();
-                }
-
-                List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
-                List<ICurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
-                foreach (ICurve crv in beziers)
-                {
-                    Extrema e = Evaluation.ComputeExtrema(crv);
-                    pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
-                }
-
-                pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
-                Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
-                return new BoundingBox(removedDuplicate);
+                curve = ClampEnds();
             }
+
+            List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
+            List<NurbsCurve> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
+            foreach (NurbsCurve crv in beziers)
+            {
+                Extrema e = Evaluation.ComputeExtrema(crv);
+                pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
+            }
+
+            pts.Add(curve.ControlPointLocations[curve.ControlPointLocations.Count - 1]);
+            Point3[] removedDuplicate = Point3.CullDuplicates(pts, GSharkMath.MinTolerance);
+            return new BoundingBox(removedDuplicate);
         }
 
         /// <summary>
-        /// Checks if a NURBS curve is closed.<br/>
+        /// Checks if a curve is closed.<br/>
         /// A curve is closed if the first point and the last are the same.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
@@ -149,13 +160,13 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if a NURBS curve is periodic.<br/>
+        /// Checks if a curve is periodic.<br/>
         /// A curve is periodic, where the number of overlapping points is equal the curve degree.
         /// </summary>
         /// <returns>True if the curve is periodic.</returns>
         public bool IsPeriodic()
         {
-            if (!Knots.IsKnotVectorPeriodic(Degree)) return false;
+            if (!Knots.IsPeriodic(Degree)) return false;
             int i, j;
             for (i = 0, j = ControlPointLocations.Count - Degree; i < Degree; i++, j++)
             {
@@ -168,7 +179,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Creates a periodic NURBS curve.<br/>
+        /// Creates a periodic curve.<br/>
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
@@ -187,7 +198,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Transforms a NURBS curve with the given transformation matrix.
+        /// Transforms a curve with the given transformation matrix.
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new NURBS curve transformed.</returns>
@@ -197,20 +208,21 @@ namespace GShark.Geometry
             return new NurbsCurve(Degree, Knots, pts);
         }
 
-        /// <summary>
-        /// Computes a point at the given parameter.
-        /// </summary>
-        /// <param name="t">The parameter to sample the curve.</param>
-        /// <returns>A point at the given parameter.</returns>
         public Point3 PointAt(double t)
         {
             return Evaluation.CurvePointAt(this, t);
         }
 
+        public Point3 PointAtLength(double length)
+        {
+            double parameter = Analyze.CurveParameterAtLength(this, length);
+            return Evaluation.CurvePointAt(this, parameter);
+        }
+
         /// <summary>
         /// Computes the curve tangent at the given parameter.
         /// </summary>
-        /// <param name="t">The parameter to sample the curve.</param>
+        /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The vector at the given parameter.</returns>
         public Vector3 TangentAt(double t)
         {
@@ -218,12 +230,65 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Calculates the length of the curve.
+        /// Determines the derivatives of a curve at a given parameter.<br/>
         /// </summary>
-        /// <returns>The length of the curve.</returns>
-        public double Length()
+        /// <param name="t">Parameter on the curve at which the point is to be evaluated. Parameter should be between 0.0 and 1.0.</param>
+        /// <param name="numberOfDerivatives">The number of derivatives required.</param>
+        /// <returns>The derivatives.</returns>
+        public List<Vector3> DerivativeAt(double t, int numberOfDerivatives = 1)
         {
-            return Analyze.CurveLength(this);
+            return Evaluation.RationalCurveDerivatives(this, t, numberOfDerivatives);
+        }
+
+        /// <summary>
+        /// Computes the curvature vector of the curve at the parameter t.
+        /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
+        /// </summary>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
+        /// <returns>The curvature vector.</returns>
+        public Vector3 CurvatureAt(double t)
+        {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
+            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+            return Analyze.Curvature(derivatives[1], derivatives[2]);
+        }
+
+        /// <summary>
+        /// Calculates the 3D plane at the given parameter.
+        /// Defined as the Frenet frame, is constructed from the velocity and the acceleration of the curve.
+        /// https://janakiev.com/blog/framing-parametric-curves/
+        /// </summary>
+        /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
+        /// <returns>The perpendicular frame.</returns>
+        public Plane FrameAt(double t)
+        {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
+            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+
+            Vector3 normal = (derivatives[2].Length == 0.0) 
+                ? Vector3.PerpendicularTo(derivatives[1])
+                : Analyze.Curvature(derivatives[1], derivatives[2]);
+
+            Vector3 yDir = Vector3.CrossProduct(derivatives[1], normal);
+            return new Plane(derivatives[0], normal, yDir);
         }
 
         /// <summary>
@@ -235,14 +300,14 @@ namespace GShark.Geometry
             return (NurbsCurve)Modify.ReverseCurve(this);
         }
 
-        /// <summary>
-        /// Computes the closest point on the curve to the given point.
-        /// </summary>
-        /// <param name="point">Point to analyze.</param>
-        /// <returns>The closest point on the curve.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
             return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+        }
+
+        public double ClosestParameter(Point3 pt)
+        {
+            return Analyze.CurveClosestParameter(this, pt);
         }
 
         /// <summary>
@@ -250,26 +315,21 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="segmentLength">Length of segment to measure. Must be less than or equal to the length of the curve.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
-        /// <returns></returns>
+        /// <returns>The parameter on the curve at the given length.</returns>
         public double ParameterAtLength(double segmentLength, double tolerance = -1.0)
         {
             return Analyze.CurveParameterAtLength(this, segmentLength, tolerance);
         }
 
-        /// <summary>
-        /// Computes the length curve which coincides with a given parameter t.
-        /// </summary>
-        /// <param name="t">The parameter at which to evaluate.</param>
-        /// <returns>The length of the curve at the give parameter.</returns>
-        public double LengthParameter(double t)
+        public double LengthAt(double t)
         {
             return Analyze.CurveLength(this, t);
         }
 
         /// <summary>
-        /// Converts a NURBS curve where the knotVector is clamped.
+        /// Converts a curve where the knotVector is clamped.
         /// </summary>
-        /// <returns>A NURBS curve with clamped knots.</returns>
+        /// <returns>A curve with clamped knots.</returns>
         public NurbsCurve ClampEnds()
         {
             List<Point4> evalPts = new List<Point4>(ControlPoints);
@@ -291,11 +351,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares two NURBS curves for equality.<br/>
+        /// Compares two curves for equality.<br/>
         /// Two NURBS curves are equal when the have same control points, weights, knots and degree.
         /// </summary>
-        /// <param name="other">The other NURBS curve.</param>
-        /// <returns>Return true if the NURBS curves are equal.</returns>
+        /// <param name="other">The other curve.</param>
+        /// <returns>Return true if the curves are equal.</returns>
         public bool Equals(NurbsCurve? other)
         {
             if (other == null)
@@ -322,11 +382,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Compares if two NURBS curves are the same.<br/>
-        /// Two NURBS curves are equal when the have same degree, same control points order and dimension, and same knots.
+        /// Compares if two curves are the same.<br/>
+        /// Two curves are equal when the have same degree, same control points order and dimension, and same knots.
         /// </summary>
         /// <param name="obj">The curve object.</param>
-        /// <returns>Return true if the NURBS curves are equal.</returns>
+        /// <returns>Return true if the curves are equal.</returns>
         public override bool Equals(object? obj)
         {
             if (obj is NurbsCurve curve)
@@ -337,7 +397,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Implements the override method to string.
         /// </summary>
-        /// <returns>The representation of a NURBS curve in string.</returns>
+        /// <returns>The representation of a curve in string.</returns>
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();

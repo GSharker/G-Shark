@@ -1,4 +1,5 @@
 ﻿using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry.Enum;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
@@ -6,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GShark.ExtendedMethods;
 
 namespace GShark.Geometry
 {
@@ -44,8 +44,8 @@ namespace GShark.Geometry
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = (Math.Abs(knotsU.Domain - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
-            KnotsV = (Math.Abs(knotsV.Domain - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
+            KnotsU = (Math.Abs(knotsU.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
@@ -173,7 +173,7 @@ namespace GShark.Geometry
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
-            // ToDo: this should be removed rebuilding the curve with less point. 
+            // ToDo: compare the knots and refine the curve using knots refinement. See ruled surface.
             int numberOfPts = copyCurves[0].ControlPointLocations.Count;
             foreach (NurbsCurve c in copyCurves.Skip(1))
                 if (numberOfPts != c.ControlPointLocations.Count)
@@ -224,17 +224,11 @@ namespace GShark.Geometry
         /// <returns>A ruled surface.</returns>
         public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
         {
-            // ToDo: this should be removed rebuilding the curve with less point. 
-            if (curveA.ControlPointLocations.Count != curveB.ControlPointLocations.Count)
-            {
-                throw new ArgumentException("Ruled surface only works if the curves have the same number of points.");
-            }
-
-            ICurve copyCurveA = curveA;
-            ICurve copyCurveB = curveB;
+            NurbsCurve copyCurveA = curveA;
+            NurbsCurve copyCurveB = curveB;
 
             // Ensure that the two curves are defined on the same parameter range
-            if (Math.Abs(copyCurveA.Knots.Domain - copyCurveB.Knots.Domain) > GSharkMath.Epsilon)
+            if (Math.Abs(copyCurveA.Knots.Domain.Length - copyCurveB.Knots.Domain.Length) > GSharkMath.Epsilon)
             {
                 Interval knotsIntervalB = new Interval(copyCurveB.Knots.First(), curveB.Knots.Last());
                 Interval knotsIntervalA = new Interval(copyCurveA.Knots.First(), copyCurveA.Knots.Last());
@@ -269,7 +263,7 @@ namespace GShark.Geometry
             }
 
             return new NurbsSurface(1, copyCurveA.Degree, new KnotVector(1, 2), copyCurveA.Knots,
-                new List<List<Point4>> {copyCurveA.ControlPoints, copyCurveB.ControlPoints});
+                new List<List<Point4>> { copyCurveA.ControlPoints, copyCurveB.ControlPoints });
         }
 
         /// <summary>
