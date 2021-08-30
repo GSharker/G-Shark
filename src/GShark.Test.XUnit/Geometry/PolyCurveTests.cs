@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
+using GShark.Operation;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
@@ -358,6 +359,46 @@ namespace GShark.Test.XUnit.Geometry
             segment.GetType().Name.Should().Be(type);
 #if DEBUG
             _testOutput.WriteLine(string.Format("Segment at parameter {0} is a {1}", t, type));
+#endif
+        }
+
+        [Theory]
+        [InlineData(0.265154444812697, 15)]
+        [InlineData(0.564023377863855, 22)]
+        [InlineData(0.803759565721669, 26)]
+        public void It_Returns_The_Length_At_Parameter(double t, double l)
+        {
+            // Arrange
+
+            //Act
+            var length = _polycurve.LengthAt(t);
+            var nurbs = _polycurve.ToNurbs();
+            var intersections = Intersect.CurvePlane(nurbs, new Plane());
+
+            // Assert
+            length.Should().BeApproximately(l, GSharkMath.MinTolerance);
+#if DEBUG
+            _testOutput.WriteLine(string.Format("Length at parameter {0} is a {1}", t, length));
+#endif
+        }
+
+        [Theory]
+        [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 0.265154444812697)]
+        [InlineData(new double[] { 5, 5, -1.73017533397891 }, 0.564023377863855)]
+        [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 0.803759565721669)]
+        public void It_Returns_The_Closes_Parameter_To_A_Point(double[] coords, double t)
+        {
+            // Arrange
+            Point3 pc = new Point3(coords[0], coords[1], coords[2]);
+
+            //Act
+            var closestParam = _polycurve.ClosestParameter(pc);
+
+            // Assert
+            closestParam.Should().BeApproximately(t, GSharkMath.MaxTolerance);
+
+#if DEBUG
+            _testOutput.WriteLine(string.Format("{0}", closestParam));
 #endif
         }
     }

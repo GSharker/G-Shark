@@ -129,7 +129,7 @@ namespace GShark.Geometry
                     switch (t)
                     {
                         case "NurbsCurve":
-                            l = ((NurbsCurve)segment).Length();
+                            l = ((NurbsCurve)segment).Length;
                             break;
                         case "Line":
                             l = ((Line)segment).Length;
@@ -168,7 +168,7 @@ namespace GShark.Geometry
                     switch (t)
                     {
                         case "NurbsCurve":
-                            l = ((NurbsCurve)segment).Length();
+                            l = ((NurbsCurve)segment).Length;
                             break;
                         case "Line":
                             l = ((Line)segment).Length;
@@ -206,15 +206,9 @@ namespace GShark.Geometry
         /// </summary>
         public int SegmentCount => this.Segments.Count;
 
-        public int Degree => throw new NotImplementedException();
-
-        public List<Point3> ControlPointLocations => throw new NotImplementedException();
-
-        public List<Point4> ControlPoints => throw new NotImplementedException();
-
-        public KnotVector Knots => throw new NotImplementedException();
-
         public Interval Domain => throw new NotImplementedException();
+
+        public Point3 MidPoint => throw new NotImplementedException();
 
         /// <summary>
         /// Closes the polycurve with a line segment.
@@ -485,7 +479,7 @@ namespace GShark.Geometry
             switch (type)
             {
                 case "NurbsCurve":
-                    var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                    var der = Evaluation.RationalCurveDerivatives((NurbsCurve)segment, param, 2);
                     return new Plane(der[0], der[1].Unitize(), der[2].Unitize());
                 case "Line":
                     var tl = ((Line)segment).TangentAt(param).Unitize();
@@ -524,7 +518,7 @@ namespace GShark.Geometry
             switch (type)
             {
                 case "NurbsCurve":
-                    var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                    var der = Evaluation.RationalCurveDerivatives((NurbsCurve)segment, param, 2);
                     frame = new Plane(der[0], der[1].Unitize(), der[2].Unitize());
                     break;
                 case "Line":
@@ -573,7 +567,7 @@ namespace GShark.Geometry
                     {
                         case "NurbsCurve":
                             var param = Analyze.CurveParameterAtLength((NurbsCurve)segment, segmentLength, GSharkMath.Epsilon);
-                            var der = Evaluation.RationalCurveDerivatives(segment, param, 2);
+                            var der = Evaluation.RationalCurveDerivatives((NurbsCurve)segment, param, 2);
                             return new Plane(der[0], der[1].Unitize(), der[2].Unitize());
                         case "Line":
                             var tl = ((Line)segment).TangentAtLength(segmentLength);
@@ -712,6 +706,60 @@ namespace GShark.Geometry
         public override string ToString()
         {
             return $"PolyCurve ({this.SegmentCount})";
+        }
+
+        /// <summary>
+        /// Returns the bounding box of the polycurve.
+        /// </summary>
+        /// <returns>The bounding box</returns>
+        public BoundingBox GetBoundingBox()
+        {
+            return this.ToNurbs().GetBoundingBox();
+        }
+
+        /// <summary>
+        /// ToDos: Returns the lenght at a given parameter.
+        /// </summary>
+        /// <param name="t">The length.</param>
+        /// <returns>The parameter between 0 and 1.</returns>
+        public double LengthAt(double t)
+        {
+            return this.ToNurbs().LengthAt(t);
+        }
+
+        /// <summary>
+        /// ToDos: Returns the closest parameter to the given point.
+        /// </summary>
+        /// <param name="pt">The point.</param>
+        /// <returns>The parameter</returns>
+        public double ClosestParameter(Point3 pt)
+        {
+            return this.ToNurbs().ClosestParameter(pt);
+        }
+
+        /// <summary>
+        /// Returns a nurbs joining the polycurve segments.
+        /// </summary>
+        /// <returns>The nurbscurve.</returns>
+        public NurbsCurve ToNurbs()
+        {
+            List<NurbsCurve> nurbsCrvs = new List<NurbsCurve>();
+            foreach(var segment in this.Segments)
+            {
+                switch (segment.GetType().Name)
+                {
+                    case "NurbsCurve":
+                        nurbsCrvs.Add((NurbsCurve)segment);
+                        break;
+                    case "Line":
+                        nurbsCrvs.Add(((Line)segment).ToNurbs());
+                        break;
+                    case "Arc":
+                        nurbsCrvs.Add(((Arc)segment).ToNurbs());
+                        break;
+                }
+            }
+            return Modify.JoinCurves(nurbsCrvs);
         }
     }
 }
