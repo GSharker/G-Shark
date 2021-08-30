@@ -372,8 +372,6 @@ namespace GShark.Test.XUnit.Geometry
 
             //Act
             var length = _polycurve.LengthAt(t);
-            var nurbs = _polycurve.ToNurbs();
-            var intersections = Intersect.CurvePlane(nurbs, new Plane());
 
             // Assert
             length.Should().BeApproximately(l, GSharkMath.MinTolerance);
@@ -386,7 +384,7 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 0.265154444812697)]
         [InlineData(new double[] { 5, 5, -1.73017533397891 }, 0.564023377863855)]
         [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 0.803759565721669)]
-        public void It_Returns_The_Closes_Parameter_To_A_Point(double[] coords, double t)
+        public void It_Returns_The_Closest_Parameter_To_A_Point(double[] coords, double t)
         {
             // Arrange
             Point3 pc = new Point3(coords[0], coords[1], coords[2]);
