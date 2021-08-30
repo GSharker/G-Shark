@@ -6,6 +6,7 @@ using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GShark.Geometry
@@ -163,28 +164,31 @@ namespace GShark.Geometry
             if (curves.Count < 2)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
 
-            IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
-
-            if (copyCurves.Any(x => x == null))
+            if (curves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
 
-            bool isClosed = copyCurves[0].IsClosed();
-            foreach (NurbsCurve c in copyCurves.Skip(1))
+            bool isClosed = curves[0].IsClosed();
+            foreach (NurbsCurve c in curves.Skip(1))
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
-            // ToDo: compare the knots and refine the curve using knots refinement. See ruled surface.
-            int numberOfPts = copyCurves[0].ControlPointLocations.Count;
-            foreach (NurbsCurve c in copyCurves.Skip(1))
-                if (numberOfPts != c.ControlPointLocations.Count)
-                    throw new ArgumentException("Loft only works if all curves have the same number of points.");
+            // Copy curves for possible operation of homogenization.
+            IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
 
+            // Clamp curves if periodic.
             if (copyCurves[0].IsPeriodic())
             {
                 for (int i = 0; i < copyCurves.Count; i++)
                 {
                     copyCurves[i] = copyCurves[i].ClampEnds();
                 }
+            }
+
+            // If necessary, the curves can be brought to a common degree and knots, as we do for the ruled surface.
+            // In fact, the ruled surface is a special case of a skinned surface.
+            if (copyCurves.All(c => c.Degree != copyCurves[0].Degree))
+            {
+                copyCurves = HomogenizedCurves(copyCurves);
             }
 
             int degreeV = copyCurves[0].Degree;
@@ -215,6 +219,34 @@ namespace GShark.Geometry
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);
         }
 
+        private static IList<NurbsCurve> HomogenizedCurves(IList<NurbsCurve> copyCurves)
+        {
+            // Unify knots, normalized them.
+            copyCurves = copyCurves
+                .Select(curve => curve.Knots.Domain.Length > 1
+                    ? new NurbsCurve(curve.Degree, curve.Knots.Normalize(), curve.ControlPoints)
+                    : curve).ToList();
+
+            // Unify curves by degree.
+            int targetDegree = copyCurves.Max(c => c.Degree);
+            copyCurves = copyCurves
+                .Select(curve => curve.Degree != targetDegree
+                    ? Modify.ElevateDegree(curve, targetDegree)
+                    : curve).ToList();
+
+            // Unify curves by knots.
+            KnotVector combinedKnots = copyCurves.First().Knots.Copy();
+            foreach (NurbsCurve curve in copyCurves.Skip(1))
+            {
+                combinedKnots.AddRange(curve.Knots.Where(k => !combinedKnots.Contains(k)));
+            }
+
+            copyCurves = (from curve in copyCurves
+                let knotToInsert = combinedKnots.Where(k => !curve.Knots.Contains(k)).ToKnot()
+                select Modify.CurveKnotRefine(curve, knotToInsert)).ToList();
+            return copyCurves;
+        }
+
         /// <summary>
         /// Constructs a ruled surface between two curves.
         /// <em>Follows the algorithm at page 337 of The NURBS Book by Piegl and Tiller.</em>
@@ -226,6 +258,9 @@ namespace GShark.Geometry
         {
             NurbsCurve copyCurveA = curveA;
             NurbsCurve copyCurveB = curveB;
+
+            IList<NurbsCurve> curves = new List<NurbsCurve> {curveA, curveB};
+            curves = HomogenizedCurves(curves);
 
             // Ensure that the two curves are defined on the same parameter range
             if (Math.Abs(copyCurveA.Knots.Domain.Length - copyCurveB.Knots.Domain.Length) > GSharkMath.Epsilon)
