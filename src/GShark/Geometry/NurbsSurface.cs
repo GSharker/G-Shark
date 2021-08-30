@@ -186,7 +186,7 @@ namespace GShark.Geometry
 
             // If necessary, the curves can be brought to a common degree and knots, as we do for the ruled surface.
             // In fact, the ruled surface is a special case of a skinned surface.
-            if (copyCurves.All(c => c.Degree != copyCurves[0].Degree))
+            if (copyCurves.Any(c => c.Degree != copyCurves[0].Degree))
             {
                 copyCurves = HomogenizedCurves(copyCurves);
             }
