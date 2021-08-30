@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Operation;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,6 +14,7 @@ namespace GShark.Test.XUnit.Geometry
     {
         private PolyCurve _polycurve;
         private NurbsCurve _nurbs;
+        private NurbsCurve _nurbs2;
         private Line _line;
         private Arc _arc;
 
@@ -31,6 +34,20 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(5, 5, 5),
                 new Point3(5, 5, 0)
             };
+
+            List<Point3> pts2 = new List<Point3>
+            {
+                new Point3( -4, 5, 0),
+                new Point3( -2, 1, 0),
+                new Point3( 3, 1, 0),
+                new Point3( 4, 4, 0),
+                new Point3( 6, 4, 0),
+                new Point3( 9, 6, 0),
+                new Point3( 13, 5, 0),
+            };              
+
+            _nurbs = new NurbsCurve(pts, degree);
+            _nurbs2 = new NurbsCurve(pts2, degree);
 
             _nurbs = new NurbsCurve(pts, degree);
             _line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
@@ -397,6 +414,47 @@ namespace GShark.Test.XUnit.Geometry
 
 #if DEBUG
             _testOutput.WriteLine(string.Format("{0}", closestParam));
+#endif
+        }
+
+        [Theory]
+        [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 15)]
+        [InlineData(new double[] { 5, 5, -1.73017533397891 }, 22)]
+        [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 26)]
+        public void It_Returns_The_Point_At_Length_Using_Nurbs(double[] coords, double l)
+        {
+            // Arrange
+            Point3 pc = new Point3(coords[0], coords[1], coords[2]);
+
+            //Act
+            var pt = _polycurve.ToNurbs().PointAtLength(l);
+
+            // Assert
+            pt.DistanceTo(pc).Should().BeLessOrEqualTo(GSharkMath.MinTolerance);
+
+#if DEBUG
+            _testOutput.WriteLine(string.Format("{0}", pt));
+#endif
+        }
+
+        [Theory]
+        [InlineData(new double[] { 4.9390316067, 0.3195023545, 3.0007995198 }, 0.6)]
+        [InlineData(new double[] { 6.12, 5, -5.6536645351 }, 0.8)]
+        public void It_Returns_The_Intersections_Between_Nurbs_And_Planes(double[] coords, double p)
+        {
+            // Arrange
+            Point3 pc = new Point3(coords[0], coords[1], coords[2]);
+            Line line = new Line(new Point3(-5, -5, 0), new Point3(10, 6, 0));
+            var frames = Curve.PerpendicularFrames(line.ToNurbs(), new List<double> { p });
+
+            //Act
+            var intintersection = Intersect.CurvePlane(_polycurve.ToNurbs(), frames[0], 1e-8).ToList().First();
+
+            // Assert
+            intintersection.Point.DistanceTo(pc).Should().BeLessOrEqualTo(GSharkMath.MinTolerance);
+
+#if DEBUG
+            _testOutput.WriteLine(string.Format("{0}", intintersection.Point));
 #endif
         }
     }
