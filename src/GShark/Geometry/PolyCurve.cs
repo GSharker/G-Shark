@@ -719,6 +719,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// ToDos: Returns the lenght at a given parameter.
+        /// Test implemented and commented.
         /// </summary>
         /// <param name="t">The length.</param>
         /// <returns>The parameter between 0 and 1.</returns>
@@ -729,6 +730,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// ToDos: Returns the closest parameter to the given point.
+        /// Test implemented and commented.
         /// </summary>
         /// <param name="pt">The point.</param>
         /// <returns>The parameter</returns>

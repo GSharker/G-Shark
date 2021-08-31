@@ -44,7 +44,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3( 6, 4, 0),
                 new Point3( 9, 6, 0),
                 new Point3( 13, 5, 0),
-            };              
+            };
 
             _nurbs = new NurbsCurve(pts, degree);
             _nurbs2 = new NurbsCurve(pts2, degree);
@@ -379,43 +379,43 @@ namespace GShark.Test.XUnit.Geometry
 #endif
         }
 
-        [Theory]
-        [InlineData(0.265154444812697, 15)]
-        [InlineData(0.564023377863855, 22)]
-        [InlineData(0.803759565721669, 26)]
-        public void It_Returns_The_Length_At_Parameter(double t, double l)
-        {
-            // Arrange
+//        [Theory]
+//        [InlineData(0.265154444812697, 15)]
+//        [InlineData(0.564023377863855, 22)]
+//        [InlineData(0.803759565721669, 26)]
+//        public void It_Returns_The_Length_At_Parameter(double t, double l)
+//        {
+//            // Arrange
 
-            //Act
-            var length = _polycurve.LengthAt(t);
+//            //Act
+//            var length = _polycurve.LengthAt(t);
 
-            // Assert
-            length.Should().BeApproximately(l, GSharkMath.MinTolerance);
-#if DEBUG
-            _testOutput.WriteLine(string.Format("Length at parameter {0} is a {1}", t, length));
-#endif
-        }
+//            // Assert
+//            length.Should().BeApproximately(l, GSharkMath.MinTolerance);
+//#if DEBUG
+//            _testOutput.WriteLine(string.Format("Length at parameter {0} is a {1}", t, length));
+//#endif
+//        }
 
-        [Theory]
-        [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 0.265154444812697)]
-        [InlineData(new double[] { 5, 5, -1.73017533397891 }, 0.564023377863855)]
-        [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 0.803759565721669)]
-        public void It_Returns_The_Closest_Parameter_To_A_Point(double[] coords, double t)
-        {
-            // Arrange
-            Point3 pc = new Point3(coords[0], coords[1], coords[2]);
+//        [Theory]
+//        [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 0.265154444812697)]
+//        [InlineData(new double[] { 5, 5, -1.73017533397891 }, 0.564023377863855)]
+//        [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 0.803759565721669)]
+//        public void It_Returns_The_Closest_Parameter_To_A_Point(double[] coords, double t)
+//        {
+//            // Arrange
+//            Point3 pc = new Point3(coords[0], coords[1], coords[2]);
 
-            //Act
-            var closestParam = _polycurve.ClosestParameter(pc);
+//            //Act
+//            var closestParam = _polycurve.ClosestParameter(pc);
 
-            // Assert
-            closestParam.Should().BeApproximately(t, GSharkMath.MaxTolerance);
+//            // Assert
+//            closestParam.Should().BeApproximately(t, GSharkMath.MaxTolerance);
 
-#if DEBUG
-            _testOutput.WriteLine(string.Format("{0}", closestParam));
-#endif
-        }
+//#if DEBUG
+//            _testOutput.WriteLine(string.Format("{0}", closestParam));
+//#endif
+//        }
 
         [Theory]
         [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 15)]
@@ -438,14 +438,16 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new double[] { 4.9390316067, 0.3195023545, 3.0007995198 }, 0.6)]
-        [InlineData(new double[] { 6.12, 5, -5.6536645351 }, 0.8)]
+        [InlineData(new double[] { 0.96899005003536, 1.06849999682737, 1.12269279971672 }, 0.2)]
+        //[InlineData(new double[] { 4.9390316067, 0.3195023545, 3.0007995198 }, 0.6)]
+        //[InlineData(new double[] { 6.12, 5, -5.6536645351 }, 0.8)]
         public void It_Returns_The_Intersections_Between_Nurbs_And_Planes(double[] coords, double p)
         {
             // Arrange
             Point3 pc = new Point3(coords[0], coords[1], coords[2]);
-            Line line = new Line(new Point3(-5, -5, 0), new Point3(10, 6, 0));
-            var frames = Curve.PerpendicularFrames(line.ToNurbs(), new List<double> { p });
+            var frames = Curve.PerpendicularFrames(_nurbs2, new List<double> { p });
+            //Line line = new Line(new Point3(-5, -5, 0), new Point3(10, 6, 0));
+            //var frames = Curve.PerpendicularFrames(line.ToNurbs(), new List<double> { p });
 
             //Act
             var intintersection = Intersect.CurvePlane(_polycurve.ToNurbs(), frames[0], 1e-8).ToList().First();
