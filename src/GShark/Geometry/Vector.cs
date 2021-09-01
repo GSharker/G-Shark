@@ -2,7 +2,9 @@
 using GShark.ExtendedMethods;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace GShark.Geometry
 {
@@ -48,7 +50,7 @@ namespace GShark.Geometry
         /// <returns>True if the vector is valid.</returns>
         public bool IsValid()
         {
-            return this.Any(GeoSharkMath.IsValidDouble);
+            return this.Any(GSharkMath.IsValidDouble);
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace GShark.Geometry
         /// <returns>True if all the component are less than Epsilon.</returns>
         public bool IsZero()
         {
-            return this.All(value => Math.Abs(value) < GeoSharkMath.Epsilon);
+            return this.All(value => Math.Abs(value) < GSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -288,10 +290,17 @@ namespace GShark.Geometry
 
             for (var i = 0; i < Count; i++)
             {
-                if (!(Math.Abs(this[i] - other[i]) <= GeoSharkMath.Epsilon)) return false;
+                if (!(Math.Abs(this[i] - other[i]) <= GSharkMath.Epsilon)) return false;
             }
-            
+
             return true;
+        }
+
+        public override int GetHashCode()
+        {
+            var sBldr = new StringBuilder();
+            this.Select(d => sBldr.Append(d.ToString(CultureInfo.InvariantCulture)));
+            return sBldr.ToString().GetHashCode();
         }
 
         /// <summary>
@@ -300,7 +309,7 @@ namespace GShark.Geometry
         /// <returns>The vector in string format.</returns>
         public override string ToString()
         {
-            return string.Join(",", this.Select(e => GeoSharkMath.Truncate(e)));
+            return string.Join(",", this.Select(e => GSharkMath.Truncate(e)));
         }
     }
 }

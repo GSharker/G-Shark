@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlTypes;
 
 namespace GShark.Core
 {
@@ -32,7 +31,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the value between the interval's min and max values.
         /// </summary>
-        public double Mid => Math.Abs(T0 - T1) > GeoSharkMath.MaxTolerance ? 0.5 * (T0 + T1) : T0;
+        public double Mid => Math.Abs(T0 - T1) > GSharkMath.MinTolerance ? 0.5 * (T0 + T1) : T0;
 
         /// <summary>
         /// Gets the length of the interval.<br/>
@@ -53,7 +52,7 @@ namespace GShark.Core
         /// <summary>
         /// True if t0 == t1.
         /// </summary>
-        public bool IsSingleton => Math.Abs(T1 - T0) <= GeoSharkMath.Epsilon;
+        public bool IsSingleton => Math.Abs(T1 - T0) <= GSharkMath.Epsilon;
 
         /// <summary>
         /// Returns the largest value in the interval.
@@ -72,8 +71,8 @@ namespace GShark.Core
         /// <returns>Interval parameter t0*(1.0-normalizedParameter) + t1*normalizedParameter.</returns>
         public double ParameterAt(double normalizedParameter)
         {
-            return !GeoSharkMath.IsValidDouble(normalizedParameter)
-                ? GeoSharkMath.UnsetValue
+            return !GSharkMath.IsValidDouble(normalizedParameter)
+                ? GSharkMath.UnsetValue
                 : (1.0 - normalizedParameter) * T0 + normalizedParameter * T1;
         }
     }

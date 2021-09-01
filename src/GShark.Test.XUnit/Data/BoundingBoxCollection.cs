@@ -60,14 +60,14 @@ namespace GShark.Test.XUnit.Data
         {
             get
             {
-                yield return new object[] {BoundingBox2D(), BoundingBox2D()[0], BoundingBox2D()[2]};
-                yield return new object[] {BoundingBox3D(), new Point3(74.264416, 13.940616, -4.22451), new Point3(100.92443, 45.16886, 3.812853)};
-                yield return new object[] {NegativeBoundingBox(), NegativeBoundingBox()[0], NegativeBoundingBox()[1]};
+                yield return new object[] { BoundingBox2D(), BoundingBox2D()[0], BoundingBox2D()[2] };
+                yield return new object[] { BoundingBox3D(), new Point3(74.264416, 13.940616, -4.22451), new Point3(100.92443, 45.16886, 3.812853) };
+                yield return new object[] { NegativeBoundingBox(), NegativeBoundingBox()[0], NegativeBoundingBox()[1] };
                 yield return new object[] {
                     NegativeMinValuePositiveMaxValue(), NegativeMinValuePositiveMaxValue()[0],
                     NegativeMinValuePositiveMaxValue()[1]
                 };
-                yield return new object[] {BoundingBoxWithZValue(), BoundingBoxWithZValue()[0], BoundingBoxWithZValue()[1]};
+                yield return new object[] { BoundingBoxWithZValue(), BoundingBoxWithZValue()[0], BoundingBoxWithZValue()[1] };
             }
         }
 
@@ -75,12 +75,12 @@ namespace GShark.Test.XUnit.Data
         {
             get
             {
-                yield return new object[] {BoundingBox2D(), 1, 10d};
-                yield return new object[] {NegativeBoundingBox(), 2, 0d}; //Index 2 is equal axis Z.
-                yield return new object[] {NegativeMinValuePositiveMaxValue(), 0, 22d};
-                yield return new object[] {BoundingBoxWithZValue(), 2, 15d};
-                yield return new object[] {NegativeBoundingBox(), -2, 0};
-                yield return new object[] {NegativeBoundingBox(), 4, 0};
+                yield return new object[] { BoundingBox2D(), 1, 10d };
+                yield return new object[] { NegativeBoundingBox(), 2, 0d }; //Index 2 is equal axis Z.
+                yield return new object[] { NegativeMinValuePositiveMaxValue(), 0, 22d };
+                yield return new object[] { BoundingBoxWithZValue(), 2, 15d };
+                yield return new object[] { NegativeBoundingBox(), -2, 0 };
+                yield return new object[] { NegativeBoundingBox(), 4, 0 };
             }
         }
 
@@ -88,12 +88,12 @@ namespace GShark.Test.XUnit.Data
         {
             get
             {
-                yield return new object[] {BoundingBox2D(), NegativeMinValuePositiveMaxValue(), true};
-                yield return new object[] {BoundingBox2D(), NegativeBoundingBox(), false};
+                yield return new object[] { BoundingBox2D(), NegativeMinValuePositiveMaxValue(), true };
+                yield return new object[] { BoundingBox2D(), NegativeBoundingBox(), false };
             }
         }
 
-        public static TheoryData<Point3[], BoundingBox> BoundingBoxIntersectionsUnset => 
+        public static TheoryData<Point3[], BoundingBox> BoundingBoxIntersectionsUnset =>
             new TheoryData<Point3[], BoundingBox>
             {
                 {BoundingBox2D(), BoundingBox.Unset},

@@ -30,7 +30,7 @@ namespace GShark.Operation
             line = new Line(new Point3(0, 0, 0), new Point3(0, 0, 1));
 
             Vector3 directionVec = Vector3.CrossProduct(plNormal1, plNormal2);
-            if (Vector3.DotProduct(directionVec, directionVec) < GeoSharkMath.Epsilon)
+            if (Vector3.DotProduct(directionVec, directionVec) < GSharkMath.Epsilon)
             {
                 return false;
             }
@@ -127,13 +127,13 @@ namespace GShark.Operation
         public static bool LinePlane(Line line, Plane plane, out Point3 pt, out double t)
         {
             Vector3 lnDir = line.Direction;
-            Point3 ptPlane = plane.Origin - line.Start;
+            Point3 ptPlane = plane.Origin - line.StartPoint;
             double segmentLength = line.Length;
 
             double denominator = Vector3.DotProduct(plane.ZAxis, lnDir);
             double numerator = Vector3.DotProduct(plane.ZAxis, ptPlane);
 
-            if (Math.Abs(denominator) < GeoSharkMath.Epsilon)
+            if (Math.Abs(denominator) < GSharkMath.Epsilon)
             {
                 pt = Point3.Unset;
                 t = 0.0;
@@ -142,7 +142,7 @@ namespace GShark.Operation
 
             // Compute the intersect parameter.
             double s = numerator / denominator;
-            pt = line.Start + lnDir * s;
+            pt = line.StartPoint + lnDir * s;
             // Parametrize the t value between 0.0 to 1.0.
             t = s / segmentLength;
             return true;
@@ -167,7 +167,7 @@ namespace GShark.Operation
             double ln1Length = ln1.Length;
             Vector3 lnDir0 = ln0.Direction;
             Vector3 lnDir1 = ln1.Direction;
-            Vector3 ln0Ln1Dir = ln0.Start - ln1.Start;
+            Vector3 ln0Ln1Dir = ln0.StartPoint - ln1.StartPoint;
 
             double a = Vector3.DotProduct(lnDir0, lnDir0);
             double b = Vector3.DotProduct(lnDir0, lnDir1);
@@ -176,7 +176,7 @@ namespace GShark.Operation
             double e = Vector3.DotProduct(lnDir1, ln0Ln1Dir);
             double div = a * c - b * b;
 
-            if (Math.Abs(div) < GeoSharkMath.Epsilon)
+            if (Math.Abs(div) < GSharkMath.Epsilon)
             {
                 pt0 = Vector3.Unset;
                 pt1 = Vector3.Unset;
@@ -188,8 +188,8 @@ namespace GShark.Operation
             double s = (b * e - c * d) / div;
             double t = (a * e - b * d) / div;
 
-            pt0 = ln0.Start + lnDir0 * s;
-            pt1 = ln1.Start + lnDir1 * t;
+            pt0 = ln0.StartPoint + lnDir0 * s;
+            pt1 = ln1.StartPoint + lnDir1 * t;
             t0 = s / ln0Length;
             t1 = t / ln1Length;
             return true;
@@ -206,7 +206,7 @@ namespace GShark.Operation
         public static List<Point3> PolylinePlane(Polyline poly, Plane pl)
         {
             List<Point3> intersectionPts = new List<Point3>();
-            Line[] segments = poly.Segments;
+            var segments = poly.Segments;
 
             foreach (Line segment in segments)
             {
@@ -236,7 +236,7 @@ namespace GShark.Operation
         /// <returns>True if intersection is computed.</returns>
         public static bool LineCircle(Circle cl, Line ln, out Point3[] pts)
         {
-            Point3 pt0 = ln.Start;
+            Point3 pt0 = ln.StartPoint;
             Point3 ptCircle = cl.Center;
             Vector3 lnDir = ln.Direction;
             Point3 pt0PtCir = pt0 - ptCircle;
@@ -248,13 +248,13 @@ namespace GShark.Operation
             double det = b * b - 4 * a * c;
             double t;
 
-            if ((a <= GeoSharkMath.MaxTolerance) || (det < 0))
+            if ((a <= GSharkMath.MaxTolerance) || (det < 0))
             {
                 pts = new Point3[] { };
                 return false;
             }
 
-            if (Math.Abs(det) < GeoSharkMath.MaxTolerance)
+            if (Math.Abs(det) < GSharkMath.MaxTolerance)
             {
                 t = -b / (2 * a);
                 Point3 intersection = pt0 + lnDir * t;
@@ -285,16 +285,16 @@ namespace GShark.Operation
             Point3 clPt = cl.Center;
 
             Vector3 cCross = Vector3.CrossProduct(pl.Origin, clPt);
-            if (Math.Abs(cCross.Length) < GeoSharkMath.Epsilon)
+            if (Math.Abs(cCross.Length) < GSharkMath.Epsilon)
             {
                 return false;
             }
 
-            bool intersection = PlanePlane(pl, cl.Plane, out Line intersectionLine);
+            _ = PlanePlane(pl, cl.Plane, out Line intersectionLine);
             Point3 closestPt = intersectionLine.ClosestPoint(clPt);
             double distance = clPt.DistanceTo(intersectionLine);
 
-            if (Math.Abs(distance) < GeoSharkMath.Epsilon)
+            if (Math.Abs(distance) < GSharkMath.Epsilon)
             {
                 Point3 pt = cl.ClosestPoint(closestPt);
                 pts = new[] { pt };
@@ -310,9 +310,9 @@ namespace GShark.Operation
         /// <param name="crv">The curve to intersect.</param>
         /// <param name="ln">The line to intersect with.</param>
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
-        public static List<CurvesIntersectionResult> CurveLine(ICurve crv, Line ln)
+        public static List<CurvesIntersectionResult> CurveLine(NurbsCurve crv, Line ln)
         {
-            return CurveCurve(crv, ln);
+            return CurveCurve(crv, ln.ToNurbs());
         }
 
         /// <summary>
@@ -322,9 +322,9 @@ namespace GShark.Operation
         /// <param name="crv2">Second curve to intersect.</param>
         /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
         /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
-        public static List<CurvesIntersectionResult> CurveCurve(ICurve crv1, ICurve crv2, double tolerance = 1e-6)
+        public static List<CurvesIntersectionResult> CurveCurve(NurbsCurve crv1, NurbsCurve crv2, double tolerance = 1e-6)
         {
-            List<Tuple<ICurve, ICurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
                 .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquareLength < tolerance)
@@ -341,9 +341,9 @@ namespace GShark.Operation
         /// <param name="pl">The plane to intersect with the curve.</param>
         /// <param name="tolerance">Tolerance set per default at 1e-6.</param>
         /// <returns>If intersection found a collection of <see cref="CurvePlaneIntersectionResult"/> otherwise the result will be empty.</returns>
-        public static List<CurvePlaneIntersectionResult> CurvePlane(ICurve crv, Plane pl, double tolerance = 1e-6)
+        public static List<CurvePlaneIntersectionResult> CurvePlane(NurbsCurve crv, Plane pl, double tolerance = 1e-6)
         {
-            List<ICurve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
+            List<NurbsCurve> bBoxRoot = BoundingBoxOperations.BoundingBoxPlaneIntersection(new LazyCurveBBT(crv), pl);
             List<CurvePlaneIntersectionResult> intersectionResults = bBoxRoot.Select(
                 x => IntersectionRefiner.CurvePlaneWithEstimation(crv, pl, x.Knots[0], x.Knots[0], tolerance)).ToList();
 
@@ -358,7 +358,7 @@ namespace GShark.Operation
         /// <returns>If intersection found a collection of <see cref="CurvesIntersectionResult"/> otherwise the result will be empty.</returns>
         public static List<CurvesIntersectionResult> CurveSelf(NurbsCurve crv, double tolerance = 1e-6)
         {
-            List<Tuple<ICurve, ICurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
+            List<Tuple<NurbsCurve, NurbsCurve>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(x.Item1, x.Item2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
                 .Where(crInRe => Math.Abs(crInRe.T0 - crInRe.T1) > tolerance)

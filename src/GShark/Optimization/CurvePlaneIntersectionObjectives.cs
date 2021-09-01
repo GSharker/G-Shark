@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
@@ -10,7 +9,7 @@ namespace GShark.Optimization
     /// </summary>
     public class CurvePlaneIntersectionObjectives : IObjectiveFunction
     {
-        private readonly ICurve _curve;
+        private readonly NurbsCurve _curve;
         private readonly Plane _plane;
 
         /// <summary>
@@ -18,7 +17,7 @@ namespace GShark.Optimization
         /// </summary>
         /// <param name="crv">ICurve used in the intersection process.</param>
         /// <param name="plane">Plane used in the intersection process.</param>
-        public CurvePlaneIntersectionObjectives(ICurve crv, Plane plane)
+        public CurvePlaneIntersectionObjectives(NurbsCurve crv, Plane plane)
         {
             _curve = crv;
             _plane = plane;
@@ -45,7 +44,7 @@ namespace GShark.Optimization
 
             double value0 = 2 * (f / df);
 
-            return new Vector{value0, value0};
+            return new Vector { value0, value0 };
         }
     }
 }

@@ -20,14 +20,13 @@ namespace GShark.Geometry
 
             Plane fitPlane = Plane.FitPlane(vertices, out double deviation);
 
-            if (!(Math.Abs(deviation) < GeoSharkMath.MinTolerance))
+            if (!(Math.Abs(deviation) < GSharkMath.MinTolerance))
             {
                 throw new Exception("The points must be co-planar.");
             }
 
             if (IsClosed) return;
             Add(vertices[0]);
-            ToNurbsCurve();
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace GShark.Geometry
                 bool isOnPlaneXy = true;
                 Transform transformBack = new Transform();
                 List<Point3> copiedPts = new List<Point3>(this);
-                if (Math.Abs(this[0][2]) > GeoSharkMath.MaxTolerance)
+                if (Math.Abs(this[0][2]) > GSharkMath.MaxTolerance)
                 {
                     isOnPlaneXy = false;
                     Plane polygonPlane = new Plane(this[0], this[1], this[2]);
@@ -154,7 +153,7 @@ namespace GShark.Geometry
                 throw new Exception("Polygon radius cannot be less or equal zero.");
             }
             Point3[] pts = new Point3[numberOfSegments + 1];
-            double t = 2.0 * Math.PI / (double) numberOfSegments;
+            double t = 2.0 * Math.PI / (double)numberOfSegments;
             for (int i = 0; i < numberOfSegments; i++)
             {
                 var ty = Math.Sin(t * i) * radius;

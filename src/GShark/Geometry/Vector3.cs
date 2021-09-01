@@ -41,7 +41,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of the vector with components 0,0,0.
         /// </summary>
-        public static Vector3 Zero => new Vector3(0,0,0);
+        public static Vector3 Zero => new Vector3(0, 0, 0);
 
         /// <summary>
         /// Gets the value of the vector with components 1,0,0.
@@ -61,7 +61,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the value of the vector with each component set to GeoSharkMath.UNSET_VALUE.
         /// </summary>
-        public static Vector3 Unset => new Vector3(GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue, GeoSharkMath.UnsetValue);
+        public static Vector3 Unset => new Vector3(GSharkMath.UnsetValue, GSharkMath.UnsetValue, GSharkMath.UnsetValue);
 
         /// <summary>
         /// Multiplies a vector by a number, having the effect of scaling it.
@@ -172,7 +172,7 @@ namespace GShark.Geometry
         /// <returns>The resulting Vector3.</returns>
         public static implicit operator Vector(Vector3 vector3d)
         {
-            return new Vector{vector3d.X, vector3d.Y, vector3d.Z};
+            return new Vector { vector3d.X, vector3d.Y, vector3d.Z };
         }
 
         /// <summary>
@@ -211,12 +211,12 @@ namespace GShark.Geometry
         {
             if (!a.IsValid || !b.IsValid)
             {
-                return GeoSharkMath.UnsetValue;
+                return GSharkMath.UnsetValue;
             }
 
             //compute dot product
             double dot = DotProduct(a.Unitize(), b.Unitize());
-            
+
             if (dot > 1.0)
             {
                 dot = 1.0;
@@ -242,34 +242,34 @@ namespace GShark.Geometry
         public static double VectorAngleOnPlane(Vector3 a, Vector3 b, Plane plane, out double reflexAngle)
         {
             // Project vectors onto plane.
-                var pA = plane.Origin + a;
-                var pB = plane.Origin + b;
+            var pA = plane.Origin + a;
+            var pB = plane.Origin + b;
 
-                pA = plane.ClosestPoint(pA, out _);
-                pB = plane.ClosestPoint(pB, out _);
+            pA = plane.ClosestPoint(pA, out _);
+            pB = plane.ClosestPoint(pB, out _);
 
-                a = pA - plane.Origin;
-                b = pB - plane.Origin;
-                a = a.Unitize();
-                b = b.Unitize();
-           
+            a = pA - plane.Origin;
+            b = pB - plane.Origin;
+            a = a.Unitize();
+            b = b.Unitize();
+
 
             // Abort on invalid cases.
             if (a == Unset || b == Unset)
             {
-                reflexAngle = GeoSharkMath.UnsetValue;
-                return GeoSharkMath.UnsetValue;
+                reflexAngle = GSharkMath.UnsetValue;
+                return GSharkMath.UnsetValue;
             }
 
             double dot = a * b;
-             // Limit dot product to valid range.
-                if (dot >= 1.0)
-                { dot = 1.0; }
-                else if (dot < -1.0)
-                { dot = -1.0; }
-            
+            // Limit dot product to valid range.
+            if (dot >= 1.0)
+            { dot = 1.0; }
+            else if (dot < -1.0)
+            { dot = -1.0; }
+
             double angle = Math.Acos(dot);
-         // Special case (anti)parallel vectors.
+            // Special case (anti)parallel vectors.
             if (Math.Abs(angle) < 1e-64)
             {
                 reflexAngle = 0;
@@ -284,7 +284,7 @@ namespace GShark.Geometry
 
             if (angle > Math.PI)
             {
-                reflexAngle = angle ;
+                reflexAngle = angle;
                 return 2 * Math.PI - angle;
             }
 
@@ -411,7 +411,7 @@ namespace GShark.Geometry
         /// Gets a value indicating whether this vector is valid. 
         /// A valid vector must be formed of valid component values for x, y and z.
         /// </summary>
-        public bool IsValid => GeoSharkMath.IsValidDouble(X) && GeoSharkMath.IsValidDouble(Y) && GeoSharkMath.IsValidDouble(Z);
+        public bool IsValid => GSharkMath.IsValidDouble(X) && GSharkMath.IsValidDouble(Y) && GSharkMath.IsValidDouble(Z);
 
         /// <summary>
         /// Computes the length (or magnitude, or size) of this vector.
@@ -439,7 +439,7 @@ namespace GShark.Geometry
             {
                 // checks for invalid values and returns 0.0 if there are any
                 double length = GetLengthHelper(X, Y, Z);
-                return Math.Abs(length - 1.0) <= GeoSharkMath.Epsilon;
+                return Math.Abs(length - 1.0) <= GSharkMath.Epsilon;
             }
         }
 
@@ -486,7 +486,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Vector3d and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Vector3 && this == (Vector3)obj);
+            return (obj is Vector3 vector3 && this == vector3);
         }
 
         /// <summary>
@@ -556,9 +556,9 @@ namespace GShark.Geometry
 
         int IComparable.CompareTo(object obj)
         {
-            if (obj is Vector3)
+            if (obj is Vector3 vector3)
             {
-                return CompareTo((Vector3)obj);
+                return CompareTo(vector3);
             }
 
             throw new ArgumentException("Input must be of type Vector3d", "obj");
@@ -580,7 +580,7 @@ namespace GShark.Geometry
         /// <returns>A string with the current location of the point.</returns>
         public override string ToString()
         {
-            return $"Vector3: ({GeoSharkMath.Truncate(X)},{GeoSharkMath.Truncate(Y)},{GeoSharkMath.Truncate(Z)})";
+            return $"Vector3: ({GSharkMath.Truncate(X)},{GSharkMath.Truncate(Y)},{GSharkMath.Truncate(Z)})";
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace GShark.Geometry
             double cosAngle = Math.Cos(radiansAngle);
             double sinAngle = Math.Sin(radiansAngle);
 
-            GeoSharkMath.KillNoise(ref sinAngle, ref cosAngle);
+            GSharkMath.KillNoise(ref sinAngle, ref cosAngle);
 
             Vector3 unitizedAxis = axis.Unitize();
             Vector3 crossProduct = CrossProduct(unitizedAxis, this);
@@ -631,7 +631,7 @@ namespace GShark.Geometry
         /// <returns>The amplified vector.</returns>
         public Vector3 Amplify(double amplitude)
         {
-            if (!GeoSharkMath.IsValidDouble(amplitude))
+            if (!GSharkMath.IsValidDouble(amplitude))
             {
                 throw new ArgumentException("Invalid double value.");
             }
@@ -665,7 +665,7 @@ namespace GShark.Geometry
         /// <para>0 = vectors are not parallel or at least one of the vectors is zero.</para>
         /// <para>-1 = vectors are anti-parallel.</para>
         /// </returns>
-        public int IsParallelTo(Vector3 other, double angleTolerance = GeoSharkMath.AngleTolerance)
+        public int IsParallelTo(Vector3 other, double angleTolerance = GSharkMath.AngleTolerance)
         {
             int result = 0;
             double toleranceSet = Math.Cos(angleTolerance);
@@ -692,8 +692,8 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the dot product between two vectors.
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector with which compute the dot product.</param>
+        /// <param name="vector1">The first vector.</param>
+        /// <param name="vector2">The second vector with which compute the dot product.</param>
         /// <returns>The dot product.</returns>
         public static double DotProduct(Vector3 vector1, Vector3 vector2)
         {
@@ -712,7 +712,7 @@ namespace GShark.Geometry
         /// <param name="other">Vector to use for comparison.</param>
         /// <param name="angleTolerance">Angle tolerance (in radians).</param>
         ///<returns>true if vectors form Pi-radians (90-degree) angles with each other; otherwise false.</returns>
-        public bool IsPerpendicularTo(Vector3 other, double angleTolerance = GeoSharkMath.AngleTolerance)
+        public bool IsPerpendicularTo(Vector3 other, double angleTolerance = GSharkMath.AngleTolerance)
         {
             bool result = false;
             double ll = Length * other.Length;
@@ -734,75 +734,75 @@ namespace GShark.Geometry
         /// <param name="vector">The other vector.</param>
         /// <returns>The perpendicular vector.</returns>
         public static Vector3 PerpendicularTo(Vector3 vector)
+        {
+            double[] vectorComponents = { vector.X, vector.Y, vector.Z };
+            double[] tempVector = new double[3];
+            int i, j, k;
+            double a, b;
+            if (Math.Abs(vectorComponents[1]) > Math.Abs(vectorComponents[0]))
             {
-                double[] vectorComponents = {vector.X, vector.Y, vector.Z};
-                double[] tempVector = new double[3];
-                int i, j, k;
-                double a, b;
-                if (Math.Abs(vectorComponents[1]) > Math.Abs(vectorComponents[0]))
+                if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
                 {
-                    if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
-                    {
-                        // |v.z| > |v.y| > |v.x|
-                        i = 2;
-                        j = 1;
-                        k = 0;
-                        a = vectorComponents[2];
-                        b = -vectorComponents[1];
-                    }
-                    else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
-                    {
-                        // |v.y| >= |v.z| >= |v.x|
-                        i = 1;
-                        j = 2;
-                        k = 0;
-                        a = vectorComponents[1];
-                        b = -vectorComponents[2];
-                    }
-                    else
-                    {
-                        // |v.y| > |v.x| > |v.z|
-                        i = 1;
-                        j = 0;
-                        k = 2;
-                        a = vectorComponents[1];
-                        b = -vectorComponents[0];
-                    }
+                    // |v.z| > |v.y| > |v.x|
+                    i = 2;
+                    j = 1;
+                    k = 0;
+                    a = vectorComponents[2];
+                    b = -vectorComponents[1];
                 }
                 else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
                 {
-                    // |v.z| > |v.x| >= |v.y|
-                    i = 2;
-                    j = 0;
-                    k = 1;
-                    a = vectorComponents[2];
-                    b = -vectorComponents[0];
-                }
-                else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
-                {
-                    // |v.x| >= |v.z| > |v.y|
-                    i = 0;
+                    // |v.y| >= |v.z| >= |v.x|
+                    i = 1;
                     j = 2;
-                    k = 1;
-                    a = vectorComponents[0];
+                    k = 0;
+                    a = vectorComponents[1];
                     b = -vectorComponents[2];
                 }
                 else
                 {
-                    // |v.x| >= |v.y| >= |v.z|
-                    i = 0;
-                    j = 1;
+                    // |v.y| > |v.x| > |v.z|
+                    i = 1;
+                    j = 0;
                     k = 2;
-                    a = vectorComponents[0];
-                    b = -vectorComponents[1];
+                    a = vectorComponents[1];
+                    b = -vectorComponents[0];
                 }
-
-                tempVector[i] = b;
-                tempVector[j] = a;
-                tempVector[k] = 0.0;
-
-                return new Vector3(tempVector[0], tempVector[1], tempVector[2]);
             }
+            else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[0]))
+            {
+                // |v.z| > |v.x| >= |v.y|
+                i = 2;
+                j = 0;
+                k = 1;
+                a = vectorComponents[2];
+                b = -vectorComponents[0];
+            }
+            else if (Math.Abs(vectorComponents[2]) > Math.Abs(vectorComponents[1]))
+            {
+                // |v.x| >= |v.z| > |v.y|
+                i = 0;
+                j = 2;
+                k = 1;
+                a = vectorComponents[0];
+                b = -vectorComponents[2];
+            }
+            else
+            {
+                // |v.x| >= |v.y| >= |v.z|
+                i = 0;
+                j = 1;
+                k = 2;
+                a = vectorComponents[0];
+                b = -vectorComponents[1];
+            }
+
+            tempVector[i] = b;
+            tempVector[j] = a;
+            tempVector[k] = 0.0;
+
+            return new Vector3(tempVector[0], tempVector[1], tempVector[2]);
+        }
 
         /// <summary>
         /// Computes the perpendicular of a vector given three points.<br/>
@@ -859,9 +859,9 @@ namespace GShark.Geometry
         }
         internal static double GetLengthHelper(double dx, double dy, double dz)
         {
-            if (!GeoSharkMath.IsValidDouble(dx) ||
-                !GeoSharkMath.IsValidDouble(dy) ||
-                !GeoSharkMath.IsValidDouble(dz))
+            if (!GSharkMath.IsValidDouble(dx) ||
+                !GSharkMath.IsValidDouble(dy) ||
+                !GSharkMath.IsValidDouble(dz))
             {
                 return 0.0;
             }
@@ -888,7 +888,7 @@ namespace GShark.Geometry
                 fz *= len;
                 len = fx * Math.Sqrt(1.0 + fy * fy + fz * fz);
             }
-            else if (fx > 0.0 && GeoSharkMath.IsValidDouble(fx))
+            else if (fx > 0.0 && GSharkMath.IsValidDouble(fx))
             {
                 len = fx;
             }

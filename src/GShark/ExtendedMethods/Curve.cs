@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GShark.Core;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
 using GShark.Operation;
@@ -11,7 +13,15 @@ namespace GShark.ExtendedMethods
 {
     public static class Curve
     {
-        public static (List<Point3> Points, List<double> Parameters) Divide(this ICurve curve, int numberOfSegments)
+        /// <summary>
+        /// Divides a curve for a given number of time, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="numberOfSegments">The number of parts to split the curve into.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        public static (List<Point3> Points, List<double> Parameters) Divide(this NurbsCurve curve, int numberOfSegments)
         {
             if (numberOfSegments < 2)
             {
@@ -22,13 +32,22 @@ namespace GShark.ExtendedMethods
             {
                 throw new ArgumentNullException(nameof(curve));
             }
-            
+
             var divideResult = Operation.Divide.CurveByCount(curve, numberOfSegments);
             var points = divideResult.Select(curve.PointAt).ToList();
             return (points, divideResult);
         }
 
-        public static (List<Point3> Points, List<double> Parameters ) Divide(this ICurve curve, double maxSegmentLength, bool equalSegmentLengths = false)
+        /// <summary>
+        /// Divides a curve for a given max segment length, including the end points.<br/>
+        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
+        /// As with all arc length methods, the result is an approximation.
+        /// </summary>
+        /// <param name="curve">The curve object to divide.</param>
+        /// <param name="maxSegmentLength">The maximum length the segments have to be split in.</param>
+        /// <param name="equalSegmentLengths">Force to have all the segments of the same lengths.</param>
+        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
+        public static (List<Point3> Points, List<double> Parameters) Divide(this NurbsCurve curve, double maxSegmentLength, bool equalSegmentLengths = false)
         {
             if (maxSegmentLength <= 0)
             {
@@ -43,17 +62,17 @@ namespace GShark.ExtendedMethods
             var len = maxSegmentLength;
             if (equalSegmentLengths)
             {
-                List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
+                List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
                 List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
                 double totalLength = curveLengths.Sum();
 
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
             }
 
-            var divideResult = Operation.Divide.CurveByLength(curve, len);
-            var points = divideResult.tValues.Select(curve.PointAt).ToList();
+            var (tValues, lengths) = Operation.Divide.CurveByLength(curve, len);
+            var points = tValues.Select(curve.PointAt).ToList();
 
-            return (points, divideResult.tValues);
+            return (points, tValues);
         }
 
         /// <summary>
@@ -62,7 +81,7 @@ namespace GShark.ExtendedMethods
         /// </summary>
         ///<param name="curve">The input curve.</param>
         /// ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
-        public static List<Plane> PerpendicularFrames(this ICurve curve, List<double> uValues)
+        public static List<Plane> PerpendicularFrames(this NurbsCurve curve, List<double> uValues)
         {
             var pointsOnCurve = uValues.Select(curve.PointAt).ToList(); //get points at t values
             var pointsOnCurveTan = uValues.Select(t => Evaluation.RationalCurveTangent(curve, t)).ToList(); //get tangents at t values
@@ -104,14 +123,125 @@ namespace GShark.ExtendedMethods
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane();
-                frameNext.Origin = pointsOnCurve[i + 1];
-                frameNext.XAxis = rNext;
-                frameNext.YAxis = sNext;
+                var frameNext = new Plane {Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext};
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
             return perpFrames.ToList();
+        }
+
+        /// <summary>
+        /// Splits a curve into two parts at a given parameter.
+        /// </summary>
+        /// <param name="curve">The curve object.</param>
+        /// <param name="t">The parameter at which to split the curve.</param>
+        /// <returns>Two NurbsCurve objects.</returns>
+        public static List<NurbsCurve> SplitAt(this NurbsCurve curve, double t)
+        {
+            int degree = curve.Degree;
+
+            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
+
+            NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+
+            int s = curve.Knots.Span(degree, t);
+
+            KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
+            KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
+
+            List<Point4> controlPoints0 = refinedCurve.ControlPoints.GetRange(0, s + 1);
+            List<Point4> controlPoints1 = refinedCurve.ControlPoints.GetRange(s + 1, refinedCurve.ControlPointLocations.Count - (s + 1));
+
+            return new List<NurbsCurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
+        }
+
+        /// <summary>
+        /// Splits a curve at given parameters and returns the segments as curves.
+        /// </summary>
+        /// <param name="curve">The curve to split.</param>
+        /// <param name="parameters">The parameters at which to split the curve. Values should be between 0 and 1.</param>
+        /// <returns>Collection of curve segments.</returns>
+        public static List<NurbsCurve> SplitAt(this NurbsCurve curve, double[] parameters)
+        {
+            var curves = new List<NurbsCurve>();
+            if (parameters.Length == 0)
+            {
+                curves.Add(curve);
+                return curves;
+            }
+
+            var sortedParameters = parameters.OrderBy(x => x).ToArray();
+
+            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GSharkMath.MaxTolerance)
+            {
+                var tempParams = new double[sortedParameters.Length + 1];
+                tempParams[0] = curve.Domain.T0;
+                for (var i = 0; i < sortedParameters.Length; i++)
+                {
+                    tempParams[i+1] = sortedParameters[i];
+                }
+                sortedParameters = tempParams;
+            }
+
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GSharkMath.MaxTolerance)
+            {
+                Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
+                sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
+            }
+
+            for (int i = 0; i < sortedParameters.Length - 1; i++)
+            {
+                curves.Add(SubCurve(curve, new Interval(sortedParameters[i], sortedParameters[i+1])));
+            }
+
+            return curves;
+        }
+
+        /// <summary>
+        /// Extract sub-curve defined by domain.
+        /// </summary>
+        /// <param name="curve">The curve from which to extract the sub-curve.</param>
+        /// <param name="domain">Domain of sub-curve</param>
+        /// <returns>NurbsCurve.</returns>
+        public static NurbsCurve SubCurve(this NurbsCurve curve, Interval domain)
+        {
+            int degree = curve.Degree;
+            int order = degree + 1;
+            Interval subCurveDomain = domain;
+            
+            //NOTE: Handling decreasing domain by flipping it to maintain direction of original curve in sub-curve. Is this what we want?
+            if (domain.IsDecreasing)
+            {
+                subCurveDomain = new Interval(domain.T1, domain.T0);
+            }
+
+            var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GSharkMath.MaxTolerance;
+            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GSharkMath.MaxTolerance;
+
+            if (isT0AtStart && isT1AtEnd)
+            {
+                return curve;
+            }
+
+            if (isT0AtStart || isT1AtEnd)
+            {
+               return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
+            }
+
+            KnotVector subCurveKnotVector = new KnotVector();
+            List<double> knotsToInsert = Sets.RepeatData(domain.T0, order).Concat(Sets.RepeatData(domain.T1, degree + 1)).ToList();
+            NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
+            var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);
+            var t0Idx = refinedCurve.Knots.IndexOf(subCurveDomain.T0);
+            
+            subCurveKnotVector.AddRange(refinedCurve.Knots.GetRange(t0Idx, multiplicityAtT0 + multiplicityAtT1));
+
+            var subCurveControlPoints = refinedCurve.ControlPoints.GetRange(order, order);
+
+            var subCurve = new NurbsCurve(curve.Degree, subCurveKnotVector, subCurveControlPoints);
+
+            return subCurve;
         }
     }
 }

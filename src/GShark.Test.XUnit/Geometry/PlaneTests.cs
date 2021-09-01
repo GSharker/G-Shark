@@ -17,8 +17,8 @@ namespace GShark.Test.XUnit.Geometry
             _testOutput = testOutput;
         }
 
-        public static Plane BasePlane => new Plane(new Point3(5, 0, 0 ), new Point3(10, 15, 0));
-        public static Plane BasePlaneByPoints => new Plane(new Point3( 20, 20, 0 ), new Point3( 5, 5, 0), new Point3( -5, 10, 0));
+        public static Plane BasePlane => new Plane(new Point3(5, 0, 0), new Point3(10, 15, 0));
+        public static Plane BasePlaneByPoints => new Plane(new Point3(20, 20, 0), new Point3(5, 5, 0), new Point3(-5, 10, 0));
 
         [Fact]
         public void It_Initializes_A_Plane()
@@ -31,9 +31,9 @@ namespace GShark.Test.XUnit.Geometry
             Plane plane = new Plane(origin, dir);
 
             // Assert
-            plane.XAxis.EpsilonEquals(new Vector3(-0.83205, 0.5547, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            plane.YAxis.EpsilonEquals(new Vector3(0, 0, -1), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            plane.ZAxis.EpsilonEquals(new Vector3(-0.5547, -0.83205, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
+            plane.XAxis.EpsilonEquals(new Vector3(-0.83205, 0.5547, 0), GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.YAxis.EpsilonEquals(new Vector3(0, 0, -1), GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.ZAxis.EpsilonEquals(new Vector3(-0.5547, -0.83205, 0), GSharkMath.MaxTolerance).Should().BeTrue();
             plane.Origin.Equals(origin).Should().BeTrue();
         }
 
@@ -43,7 +43,7 @@ namespace GShark.Test.XUnit.Geometry
             //Arrange
             var validPlane = new Plane(new Point3(5, 5, 5), new Vector3(10, 0, 0), new Vector3(0, 5, 0));
             var invalidPlane = new Plane(validPlane);
-            invalidPlane.XAxis = new Vector3(5,5,5);
+            invalidPlane.XAxis = new Vector3(5, 5, 5);
 
             //Assert
             validPlane.IsValid.Should().BeTrue();
@@ -79,9 +79,9 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             plane.Origin.Equals(pt1).Should().BeTrue();
-            plane.XAxis.EpsilonEquals(new Vector3(-0.707107, -0.707107, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            plane.YAxis.EpsilonEquals(new Vector3(-0.707107, 0.707107, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            plane.ZAxis.EpsilonEquals(new Vector3(0, 0, -1), GeoSharkMath.MaxTolerance).Should().BeTrue();
+            plane.XAxis.EpsilonEquals(new Vector3(-0.707107, -0.707107, 0), GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.YAxis.EpsilonEquals(new Vector3(-0.707107, 0.707107, 0), GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.ZAxis.EpsilonEquals(new Vector3(0, 0, -1), GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -96,8 +96,8 @@ namespace GShark.Test.XUnit.Geometry
             var closestPt = plane.ClosestPoint(pt, out double distance);
 
             // Assert
-            closestPt.EpsilonEquals(new Point3(3.153846, 1.230769, 3), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            System.Math.Abs(distance).Should().BeApproximately(expectedDistance, GeoSharkMath.MaxTolerance);
+            closestPt.EpsilonEquals(new Point3(3.153846, 1.230769, 3), GSharkMath.MaxTolerance).Should().BeTrue();
+            System.Math.Abs(distance).Should().BeApproximately(expectedDistance, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -118,22 +118,22 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_Plane()
         {
             // Arrange
-            var pt1 = new Point3( 20, 20, 0);
-            var pt2 = new Point3( 5, 5, 0);
-            var pt3 = new Point3( -5, 10, 0);
+            var pt1 = new Point3(20, 20, 0);
+            var pt2 = new Point3(5, 5, 0);
+            var pt3 = new Point3(-5, 10, 0);
             Plane plane = new Plane(pt1, pt2, pt3);
-            Transform translation = Transform.Translation(new Point3( 10, 15, 0));
-            Transform rotation = Transform.Rotation(GeoSharkMath.ToRadians(30), new Point3(0, 0, 0));
+            Transform translation = Transform.Translation(new Point3(10, 15, 0));
+            Transform rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
             var expectedOrigin = new Point3(17.320508, 42.320508, 0);
-            var expectedZAxis = new Vector3( 0, 0, -1);
+            var expectedZAxis = new Vector3(0, 0, -1);
 
             // Act
             Transform combinedTransformations = translation.Combine(rotation);
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
             // Assert
-            transformedPlane.Origin.EpsilonEquals(expectedOrigin, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            transformedPlane.ZAxis.EpsilonEquals(expectedZAxis, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            transformedPlane.Origin.EpsilonEquals(expectedOrigin, GSharkMath.MaxTolerance).Should().BeTrue();
+            transformedPlane.ZAxis.EpsilonEquals(expectedZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -143,12 +143,12 @@ namespace GShark.Test.XUnit.Geometry
             Plane plane = BasePlaneByPoints;
 
             // Act
-            Plane rotatedPlane = plane.Rotate(GeoSharkMath.ToRadians(30));
+            Plane rotatedPlane = plane.Rotate(GSharkMath.ToRadians(30));
 
             // Assert
-            rotatedPlane.XAxis.EpsilonEquals(new Vector3( -0.965926, -0.258819, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            rotatedPlane.YAxis.EpsilonEquals(new Vector3( -0.258819, 0.965926, 0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            rotatedPlane.ZAxis.EpsilonEquals(new Vector3( 0, 0, -1), GeoSharkMath.MaxTolerance).Should().BeTrue();
+            rotatedPlane.XAxis.EpsilonEquals(new Vector3(-0.965926, -0.258819, 0), GSharkMath.MaxTolerance).Should().BeTrue();
+            rotatedPlane.YAxis.EpsilonEquals(new Vector3(-0.258819, 0.965926, 0), GSharkMath.MaxTolerance).Should().BeTrue();
+            rotatedPlane.ZAxis.EpsilonEquals(new Vector3(0, 0, -1), GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -161,9 +161,9 @@ namespace GShark.Test.XUnit.Geometry
             Plane alignedPlane = plane.Align(Vector3.XAxis);
 
             // Assert
-            alignedPlane.XAxis.EpsilonEquals(Vector3.XAxis, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            alignedPlane.YAxis.EpsilonEquals(new Vector3( 0.0, -1.0, 0.0), GeoSharkMath.MaxTolerance).Should().BeTrue();
-            alignedPlane.ZAxis.EpsilonEquals(new Vector3( 0.0, 0.0, -1.0), GeoSharkMath.MaxTolerance).Should().BeTrue();
+            alignedPlane.XAxis.EpsilonEquals(Vector3.XAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+            alignedPlane.YAxis.EpsilonEquals(new Vector3(0.0, -1.0, 0.0), GSharkMath.MaxTolerance).Should().BeTrue();
+            alignedPlane.ZAxis.EpsilonEquals(new Vector3(0.0, 0.0, -1.0), GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -171,14 +171,14 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Plane plane = BasePlaneByPoints;
-            var newOrigin = new Point3( 50, 60, 5);
+            var newOrigin = new Point3(50, 60, 5);
 
             // Act
             Plane translatedPlane = plane.SetOrigin(newOrigin);
 
             // Assert
-            translatedPlane.Origin.EpsilonEquals(newOrigin, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            translatedPlane.ZAxis.EpsilonEquals(plane.ZAxis, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            translatedPlane.Origin.EpsilonEquals(newOrigin, GSharkMath.MaxTolerance).Should().BeTrue();
+            translatedPlane.ZAxis.EpsilonEquals(plane.ZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -192,14 +192,14 @@ namespace GShark.Test.XUnit.Geometry
                 new (78.805261, 45.16886, -4.22451), new (74.264416, 36.39316, -1.884313)
             };
             var originCheck = new Point3(86.266409, 29.701102, -0.227864);
-            var normalCheck = new Point3( 0.008012, 0.253783, 0.967228);
+            var normalCheck = new Point3(0.008012, 0.253783, 0.967228);
 
             // Act
             Plane fitPlane = Plane.FitPlane(pts, out _);
 
             // Assert
-            fitPlane.Origin.EpsilonEquals(originCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
-            fitPlane.ZAxis.EpsilonEquals(normalCheck, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            fitPlane.Origin.EpsilonEquals(originCheck, GSharkMath.MaxTolerance).Should().BeTrue();
+            fitPlane.ZAxis.EpsilonEquals(normalCheck, GSharkMath.MaxTolerance).Should().BeTrue();
         }
     }
 }

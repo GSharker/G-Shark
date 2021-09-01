@@ -78,7 +78,7 @@ namespace GShark.Core
 
             for (int i = 0; i < Count; i++)
             {
-                if (!GeoSharkMath.IsValidDouble(this[i]))
+                if (!GSharkMath.IsValidDouble(this[i]))
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace GShark.Core
                 {
                     if (i < degree + 1)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
+                        if (Math.Abs(this[i] - rep) > GSharkMath.Epsilon)
                         {
                             return false;
                         }
@@ -100,14 +100,14 @@ namespace GShark.Core
 
                     if (i > Count - degree - 1 && i < Count)
                     {
-                        if (Math.Abs(this[i] - rep) > GeoSharkMath.Epsilon)
+                        if (Math.Abs(this[i] - rep) > GSharkMath.Epsilon)
                         {
                             return false;
                         }
                     }
                 }
 
-                if (this[i] < rep - GeoSharkMath.Epsilon)
+                if (this[i] < rep - GSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -125,12 +125,12 @@ namespace GShark.Core
         /// <returns>If true the knot is clamped, if false is unclamped.</returns>
         public bool IsClamped(int degree)
         {
-            if (Math.Abs(this[0] - this[degree]) > GeoSharkMath.Epsilon)
+            if (Math.Abs(this[0] - this[degree]) > GSharkMath.Epsilon)
             {
                 return false;
             }
 
-            return !(Math.Abs(this[Count - 1] - this[Count - degree - 1]) > GeoSharkMath.Epsilon);
+            return !(Math.Abs(this[Count - 1] - this[Count - degree - 1]) > GSharkMath.Epsilon);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="degree"></param>
         /// <returns>If true the knot is periodic, if false is clamped or unclamped.</returns>
-        public bool IsKnotVectorPeriodic(int degree)
+        public bool IsPeriodic(int degree)
         {
             if (this[0] > this[degree])
             {
@@ -157,7 +157,7 @@ namespace GShark.Core
         /// <summary>
         /// Gets the domain of the knots, as the max value - min value.
         /// </summary>
-        public double Domain => this[Count - 1] - this[0];
+        public Interval Domain => new Interval(this[0], this[Count - 1]);
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
@@ -181,12 +181,12 @@ namespace GShark.Core
         public int Span(int n, int degree, double parameter)
         {
             // special case if parameter == knots[n+1]
-            if (parameter > this[n + 1] - GeoSharkMath.Epsilon)
+            if (parameter > this[n + 1] - GSharkMath.Epsilon)
             {
                 return n;
             }
 
-            if (parameter < this[degree] + GeoSharkMath.Epsilon)
+            if (parameter < this[degree] + GSharkMath.Epsilon)
             {
                 return degree;
             }
@@ -215,52 +215,30 @@ namespace GShark.Core
         /// <summary>
         /// Calculates the multiplicity of a knot.
         /// </summary>
-        /// <param name="knotIndex">The index of the knot to determine multiplicity.</param>
-        /// <returns>The multiplicity of the knot.</returns>
-        public int Multiplicity(int knotIndex)
+        /// <param name="knot">The index of the knot to determine multiplicity.</param>
+        /// <returns>The multiplicity of the knot, or 0 if the knot is not part of the knot vector.</returns>
+        public int Multiplicity(double knot)
         {
-            if (knotIndex < 0 || knotIndex > Count)
-            {
-                throw new Exception("Input values must be in the dimension of the knot set.");
-            }
-
-            int index = knotIndex;
-            double knot = this[knotIndex];
-            int multiplicity = 1;
-            while (index < Count - 1)
-            {
-                if (Math.Abs(this[index + 1] - knot) > GeoSharkMath.Epsilon)
-                {
-                    break;
-                }
-
-                index += 1;
-                multiplicity += 1;
-            }
-
-            return multiplicity;
+            return this.Count(x => Math.Abs(x - knot) <= GSharkMath.MinTolerance);
         }
 
         /// <summary>
-        /// Determines the multiplicity values of the knots.
+        /// Returns the multiplicity values of the all knots in this knot vector.
         /// </summary>
-        /// <returns>Dictionary where the key is the knot and the value the multiplicity.</returns>
+        /// <returns>Dictionary of [knot, multiplicity].</returns>
         public Dictionary<double, int> Multiplicities()
         {
-            Dictionary<double, int> multiplicities = new Dictionary<double, int> { { this[0], 0 } };
-            double tempKnot = this[0];
-
+            Dictionary<double, int> multiplicities = new Dictionary<double, int>(Count);
             foreach (double knot in this)
             {
-                if (Math.Abs(knot - tempKnot) > GeoSharkMath.Epsilon)
+                var multiplicity = Multiplicity(knot);
+                if (!multiplicities.Keys.Contains(knot))
                 {
-                    multiplicities.Add(knot, 0);
-                    tempKnot = knot;
+                    multiplicities.Add(knot, multiplicity);
                 }
 
-                multiplicities[tempKnot] += 1;
+                multiplicities[knot] = multiplicity;
             }
-
             return multiplicities;
         }
 
@@ -315,7 +293,7 @@ namespace GShark.Core
 
             double[] knot = new double[degree + numberOfControlPts + 1];
 
-            double k = 0.0;
+            double k;
             int i, knotCount = numberOfControlPts + degree + 1;
 
             double delta = 1.0 / (numberOfControlPts - degree);
@@ -366,6 +344,16 @@ namespace GShark.Core
             }
 
             return reversedKnots;
+        }
+
+        /// <summary>
+        /// Creates a copy of the knotVector.
+        /// </summary>
+        /// <returns>The copy of the knotVector.</returns>
+        public KnotVector Copy()
+        {
+            List<double> knotVectorCopy = new List<double>(this);
+            return knotVectorCopy.ToKnot();
         }
 
         /// <summary>

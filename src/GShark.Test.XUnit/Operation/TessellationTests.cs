@@ -4,7 +4,6 @@ using GShark.Geometry;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,18 +23,17 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             int degree = 2;
-            KnotVector knots = new KnotVector { 0, 0, 0, 1, 1, 1 };
             List<double> weights1 = new List<double> { 1, 1, 1 };
             List<double> weights2 = new List<double> { 1, 1, 2 };
-            List<Point3> controlPts = new List<Point3>
+            List<Point3> pts = new List<Point3>
             {
                 new Point3(1, 0, 0),
                 new Point3(1, 1, 0),
                 new Point3(0, 2, 0)
             };
 
-            NurbsCurve curve1 = new NurbsCurve(degree, knots, controlPts, weights1);
-            NurbsCurve curve2 = new NurbsCurve(degree, knots, controlPts, weights2);
+            NurbsCurve curve1 = new NurbsCurve(pts, weights1, degree);
+            NurbsCurve curve2 = new NurbsCurve(pts, weights2, degree);
 
             // Act
             (List<double> tvalues, List<Point3> pts) curveLength1 = Tessellation.CurveRegularSample(curve1, 10);
@@ -82,15 +80,15 @@ namespace GShark.Test.XUnit.Operation
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3> controlPts = NurbsCurveCollection.NurbsCurvePlanarExample().LocationPoints;
-            NurbsCurve curve = new NurbsCurve(controlPts, 1);
+            List<Point3> locationPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPointLocations;
+            NurbsCurve curve = new NurbsCurve(locationPts, 1);
 
             // Act
             (List<double> tValues, List<Point3> pts) = Tessellation.CurveAdaptiveSample(curve, 0.1);
 
             // Assert
             tValues.Count.Should().Be(pts.Count).And.Be(6);
-            pts.Should().BeEquivalentTo(controlPts);
+            pts.Should().BeEquivalentTo(locationPts);
         }
 
         [Fact]
@@ -102,33 +100,33 @@ namespace GShark.Test.XUnit.Operation
             Line ln = new Line(p1, p2);
 
             // Act
-            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(ln);
+            var (tValues, pts) = Tessellation.CurveAdaptiveSample(ln.ToNurbs());
 
             // Arrange
-            result.pts.Count.Should().Be(result.tValues.Count).And.Be(2);
-            result.pts[0].DistanceTo(p1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            result.pts[1].DistanceTo(p2).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            pts.Count.Should().Be(tValues.Count).And.Be(2);
+            pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            pts[1].DistanceTo(p2).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
         public void Return_Adaptive_Sample_Subdivision_Of_A_Polyline()
         {
             // Arrange
-            var p1 = new Point3( 0, 0, 0);
-            var p2 = new Point3( 10, 10, 0);
-            var p3 = new Point3( 14, 20, 0);
-            var p4 = new Point3( 10, 32, 4);
-            var p5 = new Point3( 12, 16, 22);
+            var p1 = new Point3(0, 0, 0);
+            var p2 = new Point3(10, 10, 0);
+            var p3 = new Point3(14, 20, 0);
+            var p4 = new Point3(10, 32, 4);
+            var p5 = new Point3(12, 16, 22);
             List<Point3> pts = new List<Point3> { p1, p2, p3, p4, p5 };
             Polyline poly = new Polyline(pts);
 
             // Act
-            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(poly);
+            (List<double> tValues, List<Point3> pts) result = Tessellation.CurveAdaptiveSample(poly.ToNurbs());
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);
-            result.pts[0].DistanceTo(p1).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            result.pts[result.pts.Count - 1].DistanceTo(p5).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            result.pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            result.pts[result.pts.Count - 1].DistanceTo(p5).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]

@@ -4,7 +4,6 @@ using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace GShark.Operation
 {
@@ -25,7 +24,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="numSamples">Number of samples.</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tvalues, List<Point3> pts) CurveRegularSample(ICurve curve, int numSamples)
+        public static (List<double> tvalues, List<Point3> pts) CurveRegularSample(NurbsCurve curve, int numSamples)
         {
             if (numSamples < 1)
                 throw new Exception("Number of sample must be at least 1 and not negative.");
@@ -56,13 +55,13 @@ namespace GShark.Operation
         /// <param name="curve">The curve to sampling.</param>
         /// <param name="tolerance">The tolerance for the adaptive division.</param>
         /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
-        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSample(ICurve curve, double tolerance = 1e-6)
+        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSample(NurbsCurve curve, double tolerance = 1e-6)
         {
             if (curve.Degree != 1) return CurveAdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[curve.Knots.Count - 1], tolerance);
             KnotVector copyKnot = new KnotVector(curve.Knots);
             copyKnot.RemoveAt(0);
             copyKnot.RemoveAt(copyKnot.Count - 1);
-            return (copyKnot, curve.LocationPoints);
+            return (copyKnot, curve.ControlPointLocations);
         }
 
         /// <summary>
@@ -76,18 +75,18 @@ namespace GShark.Operation
         /// <param name="tolerance">Tolerance for the adaptive scheme.
         /// If tolerance is smaller or equal 0.0, the tolerance used is set as MAX_TOLERANCE (1e-6).</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSampleRange(ICurve curve, double start, double end, double tolerance)
+        public static (List<double> tValues, List<Point3> pts) CurveAdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance)
         {
-            double setTolerance = (tolerance <= 0.0) ? GeoSharkMath.MaxTolerance : tolerance;
+            double setTolerance = (tolerance <= 0.0) ? GSharkMath.MaxTolerance : tolerance;
 
             // Sample curve at three pts.
             Random random = new Random();
             double t = 0.5 + 0.2 * random.NextDouble();
             double mid = start + (end - start) * t;
 
-            Point3 pt1 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
-            Point3 pt2 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
-            Point3 pt3 = LinearAlgebra.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
+            Point3 pt1 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
+            Point3 pt2 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
+            Point3 pt3 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
 
             Vector3 diff = pt1 - pt3;
             Vector3 diff2 = pt1 - pt2;

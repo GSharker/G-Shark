@@ -2,9 +2,10 @@
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using GShark.Geometry.Interfaces;
+using GShark.Operation.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace GShark.Operation
 {
@@ -14,28 +15,83 @@ namespace GShark.Operation
     public class Divide
     {
         /// <summary>
-		/// Splits a curve into two parts at a given parameter.
-		/// </summary>
-		/// <param name="curve">The curve object.</param>
-		/// <param name="t">The parameter where to split the curve.</param>
-		/// <returns>Two new curves, defined by degree, knots, and control points.</returns>
-		public static List<ICurve> SplitCurve(ICurve curve, double t)
+        /// Splits (divides) the surface into two parts at the specified parameter
+        /// </summary>
+        /// <param name="surface">The NURBS surface to split.</param>
+        /// <param name="parameter">The parameter at which to split the surface, parameter should be between 0 and 1.</param>
+        /// <param name="direction">Where to split in the U or V direction of the surface.</param>
+        /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
+        /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.<br/>
+        /// If the spit direction selected is both, the split computes first a U direction split and on the result a V direction split.</returns>
+        internal static NurbsSurface[] SplitSurface(NurbsSurface surface, double parameter, SplitDirection direction)
         {
-            int degree = curve.Degree;
+            KnotVector knots = surface.KnotsV;
+            int degree = surface.DegreeV;
+            List<List<Point4>> srfCtrlPts = surface.ControlPoints;
 
-            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
+            if (direction != SplitDirection.V)
+            {
+                srfCtrlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                knots = surface.KnotsU;
+                degree = surface.DegreeU;
+            }
 
-            ICurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
+            List<double> knotsToInsert = Sets.RepeatData(parameter, degree + 1);
+            int span = knots.Span(degree, parameter);
 
-            int s = curve.Knots.Span(degree, t);
+            List<List<Point4>> surfPtsLeft = new List<List<Point4>>();
+            List<List<Point4>> surfPtsRight = new List<List<Point4>>();
+            NurbsCurve result = null;
 
-            KnotVector knots0 = refinedCurve.Knots.ToList().GetRange(0, s + degree + 2).ToKnot();
-            KnotVector knots1 = refinedCurve.Knots.GetRange(s + 1, refinedCurve.Knots.Count - (s + 1)).ToKnot();
+            foreach (List<Point4> pts in srfCtrlPts)
+            {
+                NurbsCurve tempCurve = new NurbsCurve(degree, knots, pts);
+                result = Modify.CurveKnotRefine(tempCurve, knotsToInsert);
 
-            List<Point3> controlPoints0 = refinedCurve.LocationPoints.GetRange(0, s + 1);
-            List<Point3> controlPoints1 = refinedCurve.LocationPoints.GetRange(s + 1, refinedCurve.LocationPoints.Count - (s + 1));
+                surfPtsLeft.Add(result.ControlPoints.GetRange(0, span + 1));
+                surfPtsRight.Add(result.ControlPoints.GetRange(span + 1, span + 1));
+            }
 
-            return new List<ICurve> { new NurbsCurve(degree, knots0, controlPoints0), new NurbsCurve(degree, knots1, controlPoints1) };
+            if (result == null) throw new Exception($"Could not split {nameof(surface)}.");
+
+            KnotVector knotLeft = result.Knots.GetRange(0, span + degree + 2).ToKnot();
+            KnotVector knotRight = result.Knots.GetRange(span + 1, span + degree + 2).ToKnot();
+            NurbsSurface[] surfaceResult = Array.Empty<NurbsSurface>();
+
+            switch (direction)
+            {
+                case SplitDirection.U:
+                    {
+                        surfaceResult = new NurbsSurface[]
+                        {
+                        new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft)),
+                        new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight))
+                        };
+                        break;
+                    }
+                case SplitDirection.V:
+                    {
+                        surfaceResult = new NurbsSurface[]
+                        {
+                        new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotLeft, surfPtsLeft),
+                        new NurbsSurface(surface.DegreeU, degree, surface.KnotsU.Copy(), knotRight, surfPtsRight)
+                        };
+                        break;
+                    }
+                case SplitDirection.Both:
+                    {
+                        NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft));
+                        NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight));
+
+                        NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
+                        NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);
+
+                        surfaceResult = split2.Concat(split1).ToArray();
+                        break;
+                    }
+            }
+
+            return surfaceResult;
         }
 
         /// <summary>
@@ -46,7 +102,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="divisions">The number of parts to split the curve into.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static List<double> CurveByCount(ICurve curve, int divisions)
+        internal static List<double> CurveByCount(NurbsCurve curve, int divisions)
         {
             double approximatedLength = Analyze.CurveLength(curve);
             double arcLengthSeparation = approximatedLength / divisions;
@@ -63,9 +119,9 @@ namespace GShark.Operation
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="length">The length separating the resultant samples.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static (List<double> tValues, List<double> lengths) CurveByLength(ICurve curve, double length)
+        internal static (List<double> tValues, List<double> lengths) CurveByLength(NurbsCurve curve, double length)
         {
-            List<ICurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
             List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
             double totalLength = curveLengths.Sum();
 
@@ -83,10 +139,9 @@ namespace GShark.Operation
             {
                 sum += curveLengths[i];
 
-                while (segmentLength < sum + GeoSharkMath.Epsilon)
+                while (segmentLength < sum + GSharkMath.Epsilon)
                 {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2,
-                        GeoSharkMath.MaxTolerance, curveLengths[i]); //***this is getting the parameter on the next curve. does this mean decompose into bezier maintains original params?
+                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MaxTolerance);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);

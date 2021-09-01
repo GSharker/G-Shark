@@ -29,7 +29,7 @@ namespace GShark.Core
             {
                 var vec3 = points[i] - points[0];
                 double tripleProduct = Vector3.DotProduct(Vector3.CrossProduct(vec3, vec2), vec1);
-                if (Math.Abs(tripleProduct) > GeoSharkMath.Epsilon)
+                if (Math.Abs(tripleProduct) > GSharkMath.Epsilon)
                 {
                     return false;
                 }
@@ -39,17 +39,17 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Determines if three points form a straight line (are collinear) within a given tolerance.
+        /// Determines if three points form a straight line (are collinear) within a given tolerance.<br/>
+        /// Find the area of the triangle without using square root and multiply it for 0.5.<br/>
+        /// http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
         /// <param name="pt3">Third point.</param>
-        /// <param name="tol">Tolerance ser per default as 1e-6</param>
+        /// <param name="tol">Tolerance set per default as 1e-3</param>
         /// <returns>True if the three points are collinear.</returns>
-        public static bool ArePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = GeoSharkMath.MaxTolerance)
+        public static bool ArePointsCollinear(Point3 pt1, Point3 pt2, Point3 pt3, double tol = GSharkMath.MaxTolerance)
         {
-            // Find the area of the triangle without using square root and multiply it for 0.5
-            // http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
             Vector3 pt1ToPt2 = pt2 - pt1;
             Vector3 pt1ToPt3 = pt3 - pt1;
             Vector3 norm = Vector3.CrossProduct(pt1ToPt2, pt1ToPt3);
@@ -74,7 +74,7 @@ namespace GShark.Core
             Vector3 direction = segmentPt1 - segmentPt0;
             double length = direction.Length;
 
-            if (length < GeoSharkMath.Epsilon)
+            if (length < GSharkMath.Epsilon)
             {
                 return (tValue: valueT0, pt: segmentPt0);
             }

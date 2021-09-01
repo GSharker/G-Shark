@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using System;
 using GShark.Geometry.Interfaces;
+using System;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,10 +18,10 @@ namespace GShark.Test.XUnit.Geometry
 
         public static Point3[] Planar2D => new[]
         {
-            new Point3(1d, 1d, 0d), 
+            new Point3(1d, 1d, 0d),
             new Point3(10d, 1d, 0d),
-            new Point3(2d, 10d, 0d), 
-            new Point3(1d, 10d, 0d), 
+            new Point3(2d, 10d, 0d),
+            new Point3(1d, 10d, 0d),
             new Point3(1d, 1d, 0)
         };
 
@@ -52,7 +52,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             polygon.Should().NotBeEmpty();
-            polygon.Segments.Length.Should().Be(5);
+            polygon.Segments.Count.Should().Be(5);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             poly2DArea.Should().Be(45);
-            poly3DArea.Should().BeApproximately(480.580633, GeoSharkMath.MinTolerance);
+            poly3DArea.Should().BeApproximately(480.580630021221, GSharkMath.MinTolerance);
         }
 
         [Fact]
@@ -104,8 +104,8 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Point3 centroid2DExpected = new Point3( 3.5, 5.5, 0.0);
-            Point3 centroid3DExpected = new Point3( 86.266409, 29.701102, -0.227864);
+            Point3 centroid2DExpected = new Point3(3.5, 5.5, 0.0);
+            Point3 centroid3DExpected = new Point3(86.266409, 29.701102, -0.227864);
 
             // Act
             Point3 poly2DCentroid = poly2D.CentroidByVertices;
@@ -113,7 +113,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             poly2DCentroid.Equals(centroid2DExpected).Should().BeTrue();
-            poly3DCentroid.EpsilonEquals(centroid3DExpected, GeoSharkMath.MaxTolerance).Should().BeTrue();
+            poly3DCentroid.EpsilonEquals(centroid3DExpected, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]
@@ -123,30 +123,29 @@ namespace GShark.Test.XUnit.Geometry
             Polygon poly2D = new Polygon(Planar2D);
             Polygon poly3D = new Polygon(Planar3D);
 
-            Point3 centroid2DExpected = new Point3( 4.033333, 4.3, 0);
-            Point3 centroid3DExpected = new Point3( 87.620479, 29.285305, -0.129984);
+            Point3 centroid2DExpected = new Point3(4.033333, 4.3, 0);
+            Point3 centroid3DExpected = new Point3(87.620479, 29.285305, -0.129984);
 
             // Act
             Point3 poly2DCentroid = poly2D.CentroidByArea;
             Point3 poly3DCentroid = poly3D.CentroidByArea;
 
             // Assert
-            poly2DCentroid.DistanceTo(centroid2DExpected).Should().BeLessThan(GeoSharkMath.MaxTolerance);
-            poly3DCentroid.DistanceTo(centroid3DExpected).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            poly2DCentroid.DistanceTo(centroid2DExpected).Should().BeLessThan(GSharkMath.MaxTolerance);
+            poly3DCentroid.DistanceTo(centroid3DExpected).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
         public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
         {
             // Arrange
-            ICurve poly2D = new Polygon(Planar2D);
+            NurbsCurve poly2D = new Polygon(Planar2D).ToNurbs();
             KnotVector knots = poly2D.Knots;
 
             // Assert
             poly2D.Degree.Should().Be(1);
             for (int i = 1; i < poly2D.Knots.Count - 1; i++)
             {
-                Point3 pt = poly2D.PointAt(knots[i]);
                 Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
             }
         }
@@ -164,7 +163,7 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             rectangle.Count.Should().Be(5);
-            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GeoSharkMath.MaxTolerance);
+            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GSharkMath.MaxTolerance);
             rectangle[0].DistanceTo(rectangle[1]).Should().Be(xDimension);
             rectangle[1].DistanceTo(rectangle[2]).Should().Be(yDimension);
         }

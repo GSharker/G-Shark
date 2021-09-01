@@ -1,8 +1,6 @@
-﻿using System.Drawing;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -20,7 +18,7 @@ namespace GShark.Test.XUnit.Geometry
 
             #region example
             // Initializes an arc by plane, radius and angle.
-            double angle = GeoSharkMath.ToRadians(40);
+            double angle = GSharkMath.ToRadians(40);
             _exampleArc2D = new Arc(Plane.PlaneXY, 15, angle);
 
             // Initializes an arc by 3 points.
@@ -39,10 +37,10 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             arc.Should().NotBeNull();
-            arc.Length.Should().BeApproximately(10.471976, GeoSharkMath.MaxTolerance);
+            arc.Length.Should().BeApproximately(10.471976, GSharkMath.MaxTolerance);
             arc.Center.Should().BeEquivalentTo(Plane.PlaneXY.Origin);
             arc.Radius.Should().Be(15);
-            arc.Angle.Should().BeApproximately(0.698132, GeoSharkMath.MaxTolerance);
+            arc.Angle.Should().BeApproximately(0.698132, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -52,9 +50,9 @@ namespace GShark.Test.XUnit.Geometry
             Arc arc = _exampleArc3D;
 
             // Assert
-            arc.Length.Should().BeApproximately(71.333203, GeoSharkMath.MaxTolerance);
-            arc.Radius.Should().BeApproximately(16.47719, GeoSharkMath.MaxTolerance);
-            GeoSharkMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GeoSharkMath.MaxTolerance);
+            arc.Length.Should().BeApproximately(71.333203, GSharkMath.MaxTolerance);
+            arc.Radius.Should().BeApproximately(16.47719, GSharkMath.MaxTolerance);
+            GSharkMath.ToDegrees(arc.Angle).Should().BeApproximately(248.045414, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -71,60 +69,27 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             arc.StartPoint.EpsilonEquals(pt1, 1e-6).Should().BeTrue();
             arc.EndPoint.EpsilonEquals(pt2, 1e-6).Should().BeTrue();
-            arc.Radius.Should().BeApproximately(12.247449, GeoSharkMath.MaxTolerance);
+            arc.Radius.Should().BeApproximately(12.247449, GSharkMath.MaxTolerance);
         }
 
         [Fact]
         public void It_Returns_The_BoundingBox_Of_The_Arc()
         {
             // Arrange
-            double angle = GeoSharkMath.ToRadians(40);
+            double angle = GSharkMath.ToRadians(40);
             Arc arc2D = new Arc(Plane.PlaneXY, 15, angle);
             Arc arc3D = _exampleArc3D;
 
             // Act
-            BoundingBox bBox2D = arc2D.BoundingBox;
-            BoundingBox bBox3D = arc3D.BoundingBox;
+            BoundingBox bBox2D = arc2D.BoundingBox();
+            BoundingBox bBox3D = arc3D.BoundingBox();
 
             // Assert
             bBox2D.Min.EpsilonEquals(new Vector3(11.490667, 0, 0), 6).Should().BeTrue();
             bBox2D.Max.EpsilonEquals(new Vector3(15, 9.641814, 0), 6).Should().BeTrue();
-                       
+
             bBox3D.Min.EpsilonEquals(new Vector3(69.115079, 8.858347, -1.884313), 6).Should().BeTrue();
             bBox3D.Max.EpsilonEquals(new Vector3(102.068402, 36.39316, 5.246477), 6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(1.2, new double[] { 70.334926, 18.808863, 2.762032 })]
-        [InlineData(2.5, new double[] { 87.505564, 8.962333, 5.203339 })]
-        public void It_Returns_A_Point_On_The_Arc_At_The_Given_Parameter(double t, double[] pts)
-        {
-            // Arrange
-            var expectedPt = new Point3(pts[0], pts[1], pts[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            var pt = arc.PointAt(t);
-
-            // Assert
-            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(new double[]{ 82.248292, 15.836914, 3.443127 }, new double[] { 80.001066, 9.815219, 5.041724 })]
-        [InlineData(new double[] { 85.591741, 24.79606, 1.064717 }, new double[] { 74.264416, 36.39316, -1.884313 })]
-        public void It_Returns_The_Closest_Point_On_An_Arc(double[] ptToTest, double[] result)
-        {
-            // Arrange
-            Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
-            Point3 expectedPt = new Point3(result[0], result[1], result[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            Point3 pt = arc.ClosestPoint(testPt);
-
-            // Assert
-            pt.EpsilonEquals(expectedPt, 1e-6).Should().BeTrue();
         }
 
         [Fact]
@@ -144,27 +109,11 @@ namespace GShark.Test.XUnit.Geometry
             arcTransformed.EndPoint.EpsilonEquals(expectedEndPt, 1e-6).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(0.0, new double[] { -0.726183, -0.663492, 0.180104 })]
-        [InlineData(1.2, new double[] { 0.377597, -0.896416, 0.232075 })]
-        public void It_Returns_The_Tangent_At_The_Give_Parameter_T(double t, double[] pts)
-        {
-            // Arrange
-            Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
-            Arc arc = _exampleArc3D;
-
-            // Act
-            Vector3 tangent = arc.TangentAt(t);
-
-            // Assert
-            tangent.EpsilonEquals(expectedTangent, 1e-6).Should().BeTrue();
-        }
-
         [Fact]
         public void It_Is_A_Curve_Representation_Of_The_Arc_From_0_To_90_Deg()
         {
             // Arrange
-            double[] weightChecks = new[] {1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0};
+            double[] weightChecks = new[] { 1.0, 0.9004471023526769, 1.0, 0.9004471023526769, 1.0 };
             Point3[] ptChecks = new[] {
                 new Point3(0, 20, 0),
                 new Point3(0, 20, 9.661101312331581),
@@ -174,15 +123,15 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            ICurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
+            NurbsCurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8)).ToNurbs();
 
             // Assert
-            arc.LocationPoints.Count.Should().Be(5);
+            arc.ControlPointLocations.Count.Should().Be(5);
             arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.LocationPoints[i].Equals(ptChecks[i]).Should().BeTrue();
+                arc.ControlPointLocations[i].Equals(ptChecks[i]).Should().BeTrue();
                 arc.ControlPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
@@ -213,15 +162,15 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            ICurve arc = _exampleArc3D;
+            NurbsCurve arc = _exampleArc3D.ToNurbs();
 
             // Assert
-            arc.LocationPoints.Count.Should().Be(7);
+            arc.ControlPointLocations.Count.Should().Be(7);
             arc.Degree.Should().Be(2);
 
             for (int i = 0; i < ptChecks.Length; i++)
             {
-                arc.LocationPoints[i].EpsilonEquals(ptChecks[i], GeoSharkMath.MaxTolerance).Should().BeTrue();
+                arc.ControlPointLocations[i].EpsilonEquals(ptChecks[i], GSharkMath.MaxTolerance).Should().BeTrue();
                 arc.ControlPoints[i].W.Should().Be(weightChecks[i]);
 
                 if (i < 3)
@@ -229,7 +178,7 @@ namespace GShark.Test.XUnit.Geometry
                     arc.Knots[i].Should().Be(0);
                     arc.Knots[i + 7].Should().Be(1);
                 }
-                else if(i<5)
+                else if (i < 5)
                 {
                     arc.Knots[i].Should().Be(0.3333333333333333);
                 }
@@ -248,7 +197,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 endPt = new Point3(10, 15, 10);
             Vector3 dir = new Vector3(3, 3, 0);
             double radiusExpected = 12.247449;
-            double angleExpected = GeoSharkMath.ToRadians(60);
+            double angleExpected = GSharkMath.ToRadians(60);
             Point3 centerExpected = new Point3(0, 10, 15);
 
             // Act
