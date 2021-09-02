@@ -59,53 +59,13 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Finds the closest point on a segment.<br/>
-        /// The segment is deconstruct in two points and two t values.
-        /// </summary>
-        /// <param name="point">Point to project.</param>
-        /// <param name="segmentPt0">First point of the segment.</param>
-        /// <param name="segmentPt1">Second point of the segment.</param>
-        /// <param name="valueT0">First t value of the segment.</param>
-        /// <param name="valueT1">Second t value of the segment.</param>
-        /// <returns>Tuple with the point projected and its t value.</returns>
-        public static (double tValue, Point3 pt) ClosestPointToSegment(Point3 point, Point3 segmentPt0,
-            Point3 segmentPt1, double valueT0, double valueT1)
-        {
-            Vector3 direction = segmentPt1 - segmentPt0;
-            double length = direction.Length;
-
-            if (length < GSharkMath.Epsilon)
-            {
-                return (tValue: valueT0, pt: segmentPt0);
-            }
-
-            Vector3 vecUnitized = direction.Unitize();
-            Vector3 ptToSegPt0 = point - segmentPt0;
-            double dotResult = Vector3.DotProduct(ptToSegPt0, vecUnitized);
-
-            if (dotResult < 0.0)
-            {
-                return (tValue: valueT0, pt: segmentPt0);
-            }
-
-            if (dotResult > length)
-            {
-                return (tValue: valueT1, pt: segmentPt1);
-            }
-
-            Point3 pointResult = segmentPt0 + (vecUnitized * dotResult);
-            double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
-            return (tValue: tValueResult, pt: pointResult);
-        }
-
-        /// <summary>
         /// Calculates the point at the equal distance from the three points, it can be also described as the center of a circle.
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
         /// <param name="pt3">Third point.</param>
         /// <returns>The point at the same distance from the three points.</returns>
-        public static Point3 PointAtEqualDistanceFromThreePoints(Point3 pt1, Point3 pt2, Point3 pt3)
+        public static Point3 EquidistantPoint(Point3 pt1, Point3 pt2, Point3 pt3)
         {
             if (LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
                 throw new Exception("Points must not be collinear.");
