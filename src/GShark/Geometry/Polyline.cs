@@ -193,7 +193,7 @@ namespace GShark.Geometry
             return Segments[segIdx].PointAt(t2);
         }
 
-        public Point3 PointAtLength(double length)
+        public Point3 PointAtLength(double length, bool normalized)
         {
             return PointAt(ParameterAtLength(length));
         }

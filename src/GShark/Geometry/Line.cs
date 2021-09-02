@@ -51,11 +51,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Domain of the line.
-        /// </summary>
-        public Interval Domain => new Interval(0.0, 1.0);
-
-        /// <summary>
         /// Gets the start point of the line.
         /// </summary>
         public Point3 StartPoint { get; }
@@ -91,10 +86,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the closest point on the line from this point.
+        /// Gets the closest point on the line to the test point.
         /// </summary>
         /// <param name="pt">The closest point to find.</param>
-        /// <returns>The closest point on the line from this point.</returns>
+        /// <returns>The point on the line closest to the test point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
             Vector3 dir = Direction;
@@ -108,7 +103,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the parameter on the line the is closest to a test point.
+        /// Computes the parameter on the line that is closest to a test point.
         /// </summary>
         /// <param name="pt">The test point.</param>
         /// <returns>The parameter on the line closest to the test point.</returns>
@@ -132,7 +127,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Evaluates the line at the specified parameter.
         /// </summary>
-        /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0</param>
+        /// <param name="t">Parameter to evaluate the line. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The point at the specific parameter.</returns>
         public Point3 PointAt(double t)
         {
@@ -152,14 +147,18 @@ namespace GShark.Geometry
         /// <summary>
         /// Evaluates the point on the curve at a given length.
         /// </summary>
-        /// <param name="length">Length, between 0 and the length of the curve.</param>
-        /// <returns>The point.</returns>
-        public Point3 PointAtLength(double length)
+        /// <param name="length">Length, between 0.0 and the length of the curve.</param>
+        /// <returns>The point at the given length.</returns>
+        public Point3 PointAtLength(double length, bool normalized = true)
         {
             if (length <= 0)
             {
                 return StartPoint;
             }
+
+            length = (normalized)
+                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
+                : length;
 
             if (length >= Length)
             {
@@ -170,30 +169,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Returns the tangent at the given parameter.
-        /// </summary>
-        /// <param name="t">Parameter, between 0 and 1.</param>
-        /// <returns>The tangent vector.</returns>
-        public Vector3 TangentAt(double t)
-        {
-            return Direction;
-        }
-
-        /// <summary>
-        /// Returns the tangent at the given length.
-        /// </summary>
-        /// <param name="length">Length, between 0 and the length of the line.</param>
-        /// <returns>The tangent vector.</returns>
-        public Vector3 TangentAtLength(double length)
-        {
-            return Direction;
-        }
-
-        /// <summary>
         /// Returns the length at a given parameter.
         /// </summary>
-        /// <param name="t">Parameter, between 0 and 1.</param>
-        /// <returns>The curve length at t.</returns>
+        /// <param name="t">Parameter, between 0.0 and 1.0.</param>
+        /// <returns>The curve length at parameter.</returns>
         public double LengthAt(double t)
         {
             if (t <= 0)
@@ -207,26 +186,6 @@ namespace GShark.Geometry
             }
 
             return Length * t;
-        }
-
-        /// <summary>
-        /// Evaluates the parameter of the line at a given length.
-        /// </summary>
-        /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
-        /// <returns>The evaluated parameter.</returns>
-        public double ParameterAt(double length)
-        {
-            if (length <= 0)
-            {
-                return 0;
-            }
-
-            if (length >= Length)
-            {
-                return 1;
-            }
-
-            return length / Length;
         }
 
         /// <summary>

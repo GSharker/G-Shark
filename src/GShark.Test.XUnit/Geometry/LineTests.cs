@@ -147,7 +147,7 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPoint = line.StartPoint + line.Direction * len;
 
             //Act
-            var pt = line.PointAtLength(len);
+            var pt = line.PointAtLength(len, false);
 
             //Assert
             pt.Equals(expectedPoint).Should().BeTrue();
@@ -171,32 +171,6 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             pt.Equals(_exampleLine.StartPoint).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Parameter()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAt(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Length()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAtLength(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
         }
 
         [Fact]
