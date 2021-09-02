@@ -1,6 +1,5 @@
 ﻿using GShark.Core.IntersectionResults;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Optimization;
 
 namespace GShark.Operation

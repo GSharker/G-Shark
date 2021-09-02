@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
 namespace GShark.ExtendedMethods

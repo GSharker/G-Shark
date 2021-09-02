@@ -1,13 +1,13 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using GShark.Enumerations;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {

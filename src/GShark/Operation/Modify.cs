@@ -1,11 +1,10 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Geometry.Enum;
+using GShark.Enumerations;
 
 namespace GShark.Operation
 {
