@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GShark.Core;
+﻿using GShark.Core;
 using GShark.Geometry;
 using GShark.Operation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.ExtendedMethods
 {
@@ -122,7 +119,7 @@ namespace GShark.ExtendedMethods
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane {Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext};
+                var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
@@ -158,7 +155,7 @@ namespace GShark.ExtendedMethods
         /// Splits a curve at given parameters and returns the segments as curves.
         /// </summary>
         /// <param name="curve">The curve to split.</param>
-        /// <param name="parameters">The parameters at which to split the curve. Values should be between 0 and 1.</param>
+        /// <param name="parameters">The parameters at which to split the curve. Values should be between 0.0 and 1.0.</param>
         /// <returns>Collection of curve segments.</returns>
         public static List<NurbsCurve> SplitAt(this NurbsCurve curve, double[] parameters)
         {
@@ -171,26 +168,26 @@ namespace GShark.ExtendedMethods
 
             var sortedParameters = parameters.OrderBy(x => x).ToArray();
 
-            if (Math.Abs(sortedParameters[0] - curve.Knots.Domain.T0) > GSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GSharkMath.MaxTolerance)
             {
                 var tempParams = new double[sortedParameters.Length + 1];
-                tempParams[0] = curve.Knots.Domain.T0;
+                tempParams[0] = curve.Domain.T0;
                 for (var i = 0; i < sortedParameters.Length; i++)
                 {
-                    tempParams[i+1] = sortedParameters[i];
+                    tempParams[i + 1] = sortedParameters[i];
                 }
                 sortedParameters = tempParams;
             }
 
-            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Knots.Domain.T1) > GSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GSharkMath.MaxTolerance)
             {
                 Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
-                sortedParameters[sortedParameters.Length - 1] = curve.Knots.Domain.T1;
+                sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
             }
 
             for (int i = 0; i < sortedParameters.Length - 1; i++)
             {
-                curves.Add(SubCurve(curve, new Interval(sortedParameters[i], sortedParameters[i+1])));
+                curves.Add(SubCurve(curve, new Interval(sortedParameters[i], sortedParameters[i + 1])));
             }
 
             return curves;
@@ -207,7 +204,7 @@ namespace GShark.ExtendedMethods
             int degree = curve.Degree;
             int order = degree + 1;
             Interval subCurveDomain = domain;
-            
+
             //NOTE: Handling decreasing domain by flipping it to maintain direction of original curve in sub-curve. Is this what we want?
             if (domain.IsDecreasing)
             {
@@ -215,7 +212,7 @@ namespace GShark.ExtendedMethods
             }
 
             var isT0AtStart = Math.Abs(subCurveDomain.T0 - curve.Knots[0]) < GSharkMath.MaxTolerance;
-            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count-1]) < GSharkMath.MaxTolerance;
+            var isT1AtEnd = Math.Abs(subCurveDomain.T1 - curve.Knots[curve.Knots.Count - 1]) < GSharkMath.MaxTolerance;
 
             if (isT0AtStart && isT1AtEnd)
             {
@@ -224,7 +221,7 @@ namespace GShark.ExtendedMethods
 
             if (isT0AtStart || isT1AtEnd)
             {
-               return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
+                return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
             }
 
             KnotVector subCurveKnotVector = new KnotVector();
@@ -233,7 +230,7 @@ namespace GShark.ExtendedMethods
             var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
             var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);
             var t0Idx = refinedCurve.Knots.IndexOf(subCurveDomain.T0);
-            
+
             subCurveKnotVector.AddRange(refinedCurve.Knots.GetRange(t0Idx, multiplicityAtT0 + multiplicityAtT1));
 
             var subCurveControlPoints = refinedCurve.ControlPoints.GetRange(order, order);
