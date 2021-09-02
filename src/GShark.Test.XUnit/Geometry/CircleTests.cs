@@ -174,22 +174,6 @@ namespace GShark.Test.XUnit.Geometry
             length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
 
-        [Theory]
-        [InlineData(0.202075814453784, 29.202635)]
-        [InlineData(0.636170371459934, 91.935056)]
-        [InlineData(0.815184783236304, 117.805012)]
-        public void It_Returns_The_Parameter_At_The_Give_Length(double expectedParameter, double length)
-        {
-            // Arrange
-            Circle circle = _circle2D;
-
-            // Act
-            double parameter = circle.ParameterAtLength(length);
-
-            // Assert
-            parameter.Should().BeApproximately(expectedParameter, GSharkMath.MinTolerance);
-        }
-
         [Fact]
         public void It_Returns_The_Bounding_Box_Of_The_Circle()
         {

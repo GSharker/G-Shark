@@ -81,6 +81,11 @@ namespace GShark.Geometry
         public double Radius { get; }
 
         /// <summary>
+        /// Gets the angle domain (in radians) of this circular curve.
+        /// </summary>
+        public Interval AngleDomain => _domain;
+
+        /// <summary>
         /// Gets the center of the circular curve.
         /// </summary>
         public Point3 Center => Plane.Origin;
@@ -89,11 +94,6 @@ namespace GShark.Geometry
         /// Gets the circumference of the circular curve.
         /// </summary>
         public double Length => _length;
-
-        /// <summary>
-        /// Gets the domain of the circular curve.
-        /// </summary>
-        public Interval Domain => _domain;
 
         /// <summary>
         /// Gets the start point of the circular curve.
@@ -134,7 +134,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Determines the value of the Nth derivative at a parameter.
         /// </summary>
-        /// <param name="t">Parameter to evaluate derivative. A parameter between 0.0 to 1.0.</param>
+        /// <param name="t">Parameter to evaluate derivative. A parameter between 0.0 and angle domain in radians.</param>
         /// <param name="derivative">Which order of derivative is wanted. Valid values are 0,1,2,3.</param>
         /// <returns>The derivative of the circle at the given parameter.</returns>
         public Vector3 DerivativeAt(double t, int derivative = 0)
@@ -144,32 +144,30 @@ namespace GShark.Geometry
                 t = 0.0;
             }
 
-            if (t > 1.0)
+            if (t > _domain.Max)
             {
-                t = 1.0;
+                t = _domain.Max;
             }
-
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
 
             double r0 = 0;
             double r1 = 0;
             switch (derivative % 4)
             {
                 case 0:
-                    r0 = Radius * Math.Cos(theta);
-                    r1 = Radius * Math.Sin(theta);
+                    r0 = Radius * Math.Cos(t);
+                    r1 = Radius * Math.Sin(t);
                     break;
                 case 1:
-                    r0 = Radius * -Math.Sin(theta);
-                    r1 = Radius * Math.Cos(theta);
+                    r0 = Radius * -Math.Sin(t);
+                    r1 = Radius * Math.Cos(t);
                     break;
                 case 2:
-                    r0 = Radius * -Math.Cos(theta);
-                    r1 = Radius * -Math.Sin(theta);
+                    r0 = Radius * -Math.Cos(t);
+                    r1 = Radius * -Math.Sin(t);
                     break;
                 case 3:
-                    r0 = Radius * Math.Sin(theta);
-                    r1 = Radius * -Math.Cos(theta);
+                    r0 = Radius * Math.Sin(t);
+                    r1 = Radius * -Math.Cos(t);
                     break;
             }
 
@@ -179,62 +177,74 @@ namespace GShark.Geometry
         /// <summary>
         /// Evaluates the point at the parameter t on the circular curve.
         /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0 or between the angle domain.></param>
+        /// <param name="t">A parameter between 0.0 and angle domain in radians.></param>
         /// <returns>Point on the circular curve.</returns>
         public Point3 PointAt(double t)
-        {
-            if (t < 0.0)
-            {
-                return StartPoint;
-            }
-
-            if (t > 1.0)
-            {
-                return EndPoint;
-            }
-
-            double theta = Domain.T0 + (Domain.T1 - Domain.T0) * t;
-            return Plane.PointAt(Math.Cos(theta) * Radius, Math.Sin(theta) * Radius);
-        }
-
-        /// <summary>
-        /// Evaluates the point at the specific length.
-        /// </summary>
-        /// <param name="length">The length where to evaluate the point.</param>
-        /// <returns>The point at the length.</returns>
-        public Point3 PointAtLength(double length)
-        {
-            if (length < 0)
-            {
-                return StartPoint;
-            }
-
-            if (length > Length)
-            {
-                return EndPoint;
-            }
-
-            double angleLength = GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
-
-            Vector3 xDir = Plane.XAxis * Math.Cos(angleLength) * Radius;
-            Vector3 yDir = Plane.YAxis * Math.Sin(angleLength) * Radius;
-
-            return Plane.Origin + xDir + yDir;
-        }
-
-        /// <summary>
-        /// Calculates the tangent at the parameter t on the circular curve.
-        /// </summary>
-        /// <param name="t">A parameter between 0.0 to 1.0.</param>
-        /// <returns>Unitized tangent vector at the t parameter.</returns>
-        public Vector3 TangentAt(double t)
         {
             if (t < 0.0)
             {
                 t = 0.0;
             }
 
-            if (t > 1.0)
+            if (t > _domain.Max)
+            {
+                t = _domain.Max;
+            }
+
+            return Plane.PointAt(Math.Cos(t) * Radius, Math.Sin(t) * Radius);
+        }
+
+        /// <summary>
+        /// Evaluates the point at the specific length.
+        /// </summary>
+        /// <param name="length">The length where to evaluate the point.</param>
+        /// <param name="normalized">If true, the length factor is normalized between 0.0 and 1.0.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtLength(double length, bool normalized = true)
+        {
+            if (length <= 0)
+            {
+                return StartPoint;
+            }
+
+            if (normalized)
+            {
+                if (length >= 1)
+                {
+                    return EndPoint;
+                }
+            }
+            else
+            {
+                if (length > Length)
+                {
+                    return EndPoint;
+                }
+            }
+
+            double theta = (normalized) 
+                ? _domain.T0 + (_domain.T1 - _domain.T0) * length 
+                : GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
+
+            Vector3 xDir = Plane.XAxis * Math.Cos(theta) * Radius;
+            Vector3 yDir = Plane.YAxis * Math.Sin(theta) * Radius;
+
+            return Plane.Origin + xDir + yDir;
+        }
+
+        /// <summary>
+        /// Calculates the tangent at the parameter on the circular curve.
+        /// </summary>
+        /// <param name="t">A parameter between 0.0 and angle domain in radians.</param>
+        /// <returns>Unitized tangent vector at the parameter.</returns>
+        public Vector3 TangentAt(double t)
+        {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
             {
                 t = 1.0;
             }
@@ -247,53 +257,34 @@ namespace GShark.Geometry
         /// Evaluates the tangent at the specific length.
         /// </summary>
         /// <param name="length">The length where to evaluate the tangent.</param>
+        /// <param name="normalized">If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The unitize tangent at the length.</returns>
-        public Vector3 TangentAtLength(double length)
+        public Vector3 TangentAtLength(double length, bool normalized = true)
         {
-            Point3 pt = PointAtLength(length);
+            Point3 pt = PointAtLength(length, normalized);
             (double u, double v) = Plane.ClosestParameters(pt);
-            double t = EvaluateParameter(u, v, true);
+            double t = EvaluateParameter(u, v, false);
             return DerivativeAt(t, 1).Unitize();
         }
 
         /// <summary>
         /// Returns the length at a given parameter.
         /// </summary>
-        /// <param name="t">Parameter, between 0 and 1.</param>
+        /// <param name="t">A parameter between 0.0 and angle domain in radians.</param>
         /// <returns>The curve length at t.</returns>
         public double LengthAt(double t)
         {
-            if (t < 0)
+            if (t <= 0)
             {
                 return 0;
             }
 
-            if (t > 1)
+            if (t >= 1)
             {
                 return _length;
             }
 
-            return Length * t;
-        }
-
-        /// <summary>
-        /// Evaluates the parameter of the circular curve at a given length.
-        /// </summary>
-        /// <param name="length">Length to evaluate, between 0 and length of the curve.</param>
-        /// <returns>The evaluated parameter.</returns>
-        public double ParameterAtLength(double length)
-        {
-            if (length < 0)
-            {
-                return 0;
-            }
-
-            if (length > Length)
-            {
-                return 1;
-            }
-
-            return length / Length;
+            return Radius * t;
         }
 
         /// <summary>
@@ -309,7 +300,7 @@ namespace GShark.Geometry
                 return PointAt(0.0);
             }
 
-            double t = EvaluateParameter(u, v, true);
+            double t = EvaluateParameter(u, v, false);
 
             return PointAt(t);
         }
@@ -327,7 +318,7 @@ namespace GShark.Geometry
                 return 0.0;
             }
 
-            return EvaluateParameter(u, v, true);
+            return EvaluateParameter(u, v, false);
         }
 
         /// <summary>
@@ -444,7 +435,7 @@ namespace GShark.Geometry
                 t += twoPi;
             }
 
-            t -= Domain.T0;
+            t -= _domain.T0;
 
             while (t < 0.0)
             {
@@ -456,13 +447,13 @@ namespace GShark.Geometry
                 t -= twoPi;
             }
 
-            double t1 = Domain.Length;
+            double t1 = _domain.Length;
             if (t > t1)
             {
                 t = t > 0.5 * t1 + Math.PI ? 0.0 : t1;
             }
 
-            return (parametrize) ? (t - Domain.T0) / (Domain.T1 - Domain.T0) : t;
+            return (parametrize) ? (t - _domain.T0) / (_domain.T1 - _domain.T0) : t;
         }
     }
 }

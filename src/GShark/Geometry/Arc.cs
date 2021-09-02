@@ -72,10 +72,10 @@ namespace GShark.Geometry
         /// Gets the angle of this arc.<br/>
         /// Angle value in radians.
         /// </summary>
-        public double Angle => Domain.Length;
+        public double Angle => _domain.Length;
 
         /// <summary>
-        /// Gets the BoundingBox of this arc.<br/>
+        /// Gets the bounding box of this arc.<br/>
         /// https://stackoverflow.com/questions/1336663/2d-bounding-box-of-a-sector
         /// </summary>
         public BoundingBox BoundingBox()
@@ -157,14 +157,14 @@ namespace GShark.Geometry
         public new Arc Transform(Transform transformation)
         {
             Plane plane = Plane.Transform(transformation);
-            Interval angleDomain = new Interval(Domain.T0, Domain.T1);
+            Interval angleDomain = new Interval(_domain.T0, _domain.T1);
 
             return new Arc(plane, Radius, angleDomain);
         }
 
         /// <summary>
         /// Constructs a nurbs curve representation of this arc.<br/>
-        /// Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.
+        /// <em>Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
         public new NurbsCurve ToNurbs()
@@ -199,12 +199,12 @@ namespace GShark.Geometry
 
             double detTheta = Angle / numberOfArc;
             double weight = Math.Cos(detTheta / 2);
-            Point3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
-            Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
+            Point3 p0 = Center + (axisX * (Radius * Math.Cos(_domain.T0)) + axisY * (Radius * Math.Sin(_domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(_domain.T0) - axisX * Math.Sin(_domain.T0);
 
             KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
-            double angle = Domain.T0;
+            double angle = _domain.T0;
 
             ctrPts[0] = new Point4(p0);
 
