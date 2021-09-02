@@ -247,12 +247,12 @@ namespace GShark.Operation
             bezalfs[0, 0] = bezalfs[ph, p] = 1.0;
             for (int i = 1; i <= ph2; i++)
             {
-                double inv = 1.0 / LinearAlgebra.GetBinomial(ph, i);
+                double inv = 1.0 / GSharkMath.GetBinomial(ph, i);
                 int mpi = Math.Min(p, i);
 
                 for (int j = Math.Max(0, i - t); j <= mpi; j++)
                 {
-                    bezalfs[i, j] = inv * LinearAlgebra.GetBinomial(p, j) * LinearAlgebra.GetBinomial(t, i - j);
+                    bezalfs[i, j] = inv * GSharkMath.GetBinomial(p, j) * GSharkMath.GetBinomial(t, i - j);
                 }
             }
 
