@@ -91,9 +91,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.15, new double[] { 62.785627, 21.965299, 1.996379 })]
-        [InlineData(0.5, new double[] { 101.403202, 8.608026, 5.181176 })]
-        [InlineData(0.72, new double[] { 104.960878, 36.75273, -2.232944 })]
+        [InlineData(0.15, new double[] { 67.461878, 38.521847, -2.38649 })]
+        [InlineData(0.5, new double[] { 63.708413, 31.686215, -0.561853 })]
+        [InlineData(0.72, new double[] { 62.691414, 26.903904, 0.701361 })]
         public void It_Returns_The_Point_On_The_Circle_At_The_Give_Parameter(double t, double[] pts)
         {
             // Arrange
@@ -108,9 +108,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.15, new double[] { 0.129323, -0.959399, 0.250657 })]
-        [InlineData(0.5, new double[] { 0.726183, 0.663492, -0.180104 })]
-        [InlineData(0.72, new double[] { -0.539205, 0.815687, -0.209554 })]
+        [InlineData(0.15, new double[] { -0.615297, -0.76122, 0.204827 })]
+        [InlineData(0.5, new double[] { -0.307702, -0.919702, 0.243862 })]
+        [InlineData(0.72, new double[] { -0.092651, -0.96291, 0.253417 })]
         public void It_Returns_The_Tangent_At_The_Give_Parameter(double t, double[] pts)
         {
             // Arrange
@@ -135,7 +135,7 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            Point3 pt = circle.PointAtLength(length);
+            Point3 pt = circle.PointAtLength(length, false);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -152,16 +152,16 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            Vector3 tangent = circle.TangentAtLength(length);
+            Vector3 tangent = circle.TangentAtLength(length, false);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(0.202075814453784, 29.202635)]
-        [InlineData(0.636170371459934, 91.935056)]
-        [InlineData(0.815184783236304, 117.805012)]
+        [InlineData(1.2, 27.599999)]
+        [InlineData(4.0, 92)]
+        [InlineData(5.1, 117.3)]
         public void It_Returns_The_Length_At_The_Give_Parameter(double parameter, double expectedLength)
         {
             // Arrange

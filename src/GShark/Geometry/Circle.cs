@@ -279,7 +279,7 @@ namespace GShark.Geometry
                 return 0;
             }
 
-            if (t >= 1)
+            if (t >= _domain.T1)
             {
                 return _length;
             }
