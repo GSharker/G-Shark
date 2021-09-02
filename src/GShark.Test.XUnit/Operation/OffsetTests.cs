@@ -17,39 +17,6 @@ namespace GShark.Test.XUnit.Operation
             _testOutput = testOutput;
         }
 
-        [Fact]
-        public void Returns_The_Offset_Of_A_Open_Polyline()
-        {
-            // Arrange
-            Polyline pl = new Polyline(new PolylineTests().ExamplePts);
-            double offset = 5;
-
-            // Act
-            Polyline offsetResult = Offset.Polyline(pl, offset, Plane.PlaneXY);
-
-            // Assert
-            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
-            (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
-        }
-
-        [Theory]
-        [InlineData(0,7.071068)]
-        [InlineData(1, 12.205361)]
-        [InlineData(2, 5.481013)]
-        [InlineData(3, 7.071068)]
-        [InlineData(4, 7.071068)]
-        public void Returns_The_Offset_Of_A_Polygon(int vertex, double expectedDistance)
-        {
-            // Arrange
-            Polygon polygon = new Polygon(PolygonTests.Planar2D);
-            double offset = 5;
-
-            Polyline offsetPolygon = Offset.Polyline(polygon, offset, Plane.PlaneXY);
-
-            // Assert
-            polygon[vertex].DistanceTo(offsetPolygon[vertex]).Should()
-                .BeApproximately(expectedDistance, GSharkMath.MaxTolerance);
-        }
 
         [Fact]
         public void Returns_The_Offset_Of_A_Curve()

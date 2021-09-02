@@ -34,67 +34,7 @@ namespace GShark.Operation
                 offsetPts.Add(pts[i] + vecOffset);
             }
 
-            return Fitting.InterpolatedCurve(offsetPts, 2);
-        }
-
-        /// <summary>
-        /// Computes the offset of a polyline or a polygon.
-        /// </summary>
-        /// <param name="poly"></param>
-        /// <param name="distance">The distance of the offset.</param>
-        /// <param name="pln">The plane for the offset operation.</param>
-        /// <returns>The offset polyline.</returns>
-        public static Polyline Polyline(Polyline poly, double distance, Plane pln)
-        {
-            if (distance == 0.0)
-            {
-                return poly;
-            }
-
-            int iteration = (poly.IsClosed) ? poly.Count : poly.Count - 1;
-
-            Point3[] offsetPts = new Point3[poly.Count];
-            List<Line> segments = poly.Segments;
-            Line[] offsetSegments = new Line[segments.Count + 1];
-
-            for (int i = 0; i < iteration; i++)
-            {
-                int k = (i == iteration - 1 && poly.IsClosed) ? 0 : i;
-                if (i == iteration - 1 && k == 0)
-                {
-                    goto Intersection;
-                }
-
-                Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.ZAxis).Amplify(distance);
-                Transform xForm = Transform.Translation(vecOffset);
-                offsetSegments[k] = segments[k].Transform(xForm);
-
-                if (i == 0 && poly.IsClosed)
-                {
-                    continue;
-                }
-                if (k == 0 && !poly.IsClosed)
-                {
-                    offsetPts[k] = offsetSegments[k].StartPoint;
-                    continue;
-                }
-
-            Intersection:
-                bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && poly.IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
-                if (!ccx)
-                {
-                    continue;
-                }
-
-                offsetPts[k] = pt;
-
-                if (i == iteration - 1)
-                {
-                    offsetPts[(poly.IsClosed) ? i : i + 1] = (poly.IsClosed) ? offsetPts[0] : offsetSegments[k].EndPoint;
-                }
-            }
-
-            return new Polyline(offsetPts);
+            return Fitting.InterpolatedCurve(offsetPts, crv.Degree);
         }
     }
 }

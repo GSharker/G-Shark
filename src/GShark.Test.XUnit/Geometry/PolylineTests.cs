@@ -202,6 +202,21 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Returns_The_Offset_Of_A_Open_Polyline()
+        {
+            // Arrange
+            Polyline pl = new Polyline(new PolylineTests().ExamplePts);
+            double offset = 5;
+
+            // Act
+            Polyline offsetResult = pl.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
         public void It_Returns_The_Closest_Point()
         {
             // Arrange
