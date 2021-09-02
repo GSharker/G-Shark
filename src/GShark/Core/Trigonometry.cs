@@ -67,7 +67,7 @@ namespace GShark.Core
         /// <returns>The point at the same distance from the three points.</returns>
         public static Point3 EquidistantPoint(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            if (LinearAlgebra.Orientation(pt1, pt2, pt3) == 0)
+            if (PointOrder(pt1, pt2, pt3) == 0)
                 throw new Exception("Points must not be collinear.");
 
             Vector3 v1 = pt2 - pt1;
@@ -82,6 +82,28 @@ namespace GShark.Core
             double k2 = a * v1V1 * (v2V2 - v1V2);
 
             return pt1 + v1 * k1 + v2 * k2;
+        }
+
+        /// <summary>
+        /// Gets the orientation between tree points in the plane.<br/>
+        /// https://math.stackexchange.com/questions/2386810/orientation-of-three-points-in-3d-space
+        /// </summary>
+        /// <param name="pt1">First point.</param>
+        /// <param name="pt2">Second point.</param>
+        /// <param name="pt3">Third point.</param>
+        /// <returns>0 if points are collinear, 1 if point order is clockwise, 2 if point order is counterclockwise.</returns>
+        public static int PointOrder(Point3 pt1, Point3 pt2, Point3 pt3)
+        {
+            Plane pl = new Plane(pt1, pt2, pt3);
+            Vector3 n = Vector3.CrossProduct(pt2 - pt1, pt3 - pt1);
+            double result = Vector3.DotProduct(pl.ZAxis, n.Unitize());
+
+            if (Math.Abs(result) < GSharkMath.Epsilon)
+            {
+                return 0;
+            }
+
+            return (result < 0) ? 1 : 2;
         }
     }
 }
