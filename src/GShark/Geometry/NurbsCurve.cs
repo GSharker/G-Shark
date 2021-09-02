@@ -213,7 +213,7 @@ namespace GShark.Geometry
             return Evaluation.CurvePointAt(this, t);
         }
 
-        public Point3 PointAtLength(double length)
+        public Point3 PointAtLength(double length, bool normalized = true)
         {
             double parameter = Analyze.CurveParameterAtLength(this, length);
             return Evaluation.CurvePointAt(this, parameter);
