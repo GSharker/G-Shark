@@ -710,6 +710,10 @@ namespace GShark.Operation
 
             for (int i = 0; i < curves.Count - 1; i++)
             {
+                if (curves[i].IsClosed())
+                {
+                    throw new Exception($"Curve at {i} is closed.");
+                }
                 if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
                 {
                     throw new Exception($"Curve at {i} and curve at {i + 1} don't touch each other.");
@@ -733,6 +737,10 @@ namespace GShark.Operation
                 {
                     joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)));
                     joinedControlPts.AddRange(curve.ControlPoints);
+                    if (curve.Degree == 1)
+                    {
+                        endDomain += curve.Knots[curve.Knots.Count - (finalDegree + 2)];
+                    }
                 }
                 else
                 {

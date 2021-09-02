@@ -66,8 +66,6 @@ namespace GShark.Test.XUnit.Geometry
             nurbsCurve.ControlPoints.Count.Should().Be(5);
             nurbsCurve.ControlPointLocations[1].DistanceTo(nurbsCurve.ControlPointLocations[nurbsCurve.ControlPointLocations.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
-            nurbsCurve.Knots.Domain.T0.Should().Be(0.0);
-            nurbsCurve.Knots.Domain.T1.Should().Be(1.0);
             expectedPt00.DistanceTo(ptAt00).Should().BeLessThan(GSharkMath.Epsilon);
             expectedPt01.DistanceTo(ptAt01).Should().BeLessThan(GSharkMath.Epsilon);
         }

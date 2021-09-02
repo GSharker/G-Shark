@@ -80,6 +80,18 @@ namespace GShark.Geometry
         {
         }
 
+        internal Interval Domain
+        {
+            get
+            {
+                if (IsPeriodic())
+                {
+                    return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
+                }
+                return new Interval(Knots[0], Knots[Knots.Count - 1]);
+            }
+        }
+
         /// <summary>
         /// Gets the list of weight values.
         /// </summary>
@@ -216,7 +228,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAtLength"/>
         /// </summary>
-        public Point3 PointAtLength(double length, bool normalized = true)
+        public Point3 PointAtLength(double length, bool normalized = false)
         {
             length = (normalized)
                 ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
@@ -351,7 +363,7 @@ namespace GShark.Geometry
         /// <returns>The parameter on the curve at the given length.</returns>
         public double ParameterAtLength(double segmentLength, double tolerance = -1.0)
         {
-            if (segmentLength <= Length)
+            if (segmentLength <= 0.0)
             {
                 return 0.0;
             }
@@ -364,6 +376,9 @@ namespace GShark.Geometry
             return Analyze.CurveParameterAtLength(this, segmentLength, tolerance);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.LengthAt"/>
+        /// </summary>
         public double LengthAt(double t)
         {
             if (t <= 0.0)

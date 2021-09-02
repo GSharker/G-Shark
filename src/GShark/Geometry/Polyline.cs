@@ -373,17 +373,15 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             double lengthSum = 0;
-            KnotVector knots = new KnotVector { 0 };
-            List<double> weights = new List<double>();
-            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, weights);
+            KnotVector knots = new KnotVector { 0, 0};
+            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, 1.0);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
-                lengthSum += 1;
-                knots.Add(i);
-                weights.Add(1.0);
+                lengthSum += Segments[i].Length;
+                knots.Add(lengthSum);
             }
-            knots.Add(lengthSum - 1);
+            knots.Add(lengthSum);
 
             return new NurbsCurve(1, knots, ctrlPts);
         }

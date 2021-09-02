@@ -48,7 +48,7 @@ namespace GShark.Interfaces
         /// Evaluates the point at a certain length along the curve.
         /// </summary>
         /// <param name="length">Length along the curve between the start point and the returned point.</param>
-        /// <param name="normalized">If true, the length factor is normalized between 0.0 and 1.0.</param>
+        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point on the curve at the given length.</returns>
         public Point3 PointAtLength(double length, bool normalized);
 
