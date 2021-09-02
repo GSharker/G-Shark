@@ -40,7 +40,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(3);
-            nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, 6));
+            nurbsCurve.Weights.Should().BeEquivalentTo(CollectionHelpers.RepeatData(1.0, 6));
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             nurbsCurve.Should().NotBeNull();
             nurbsCurve.Degree.Should().Be(2);
-            nurbsCurve.Weights.Should().BeEquivalentTo(Sets.RepeatData(1.0, CurveData.pts.Count));
+            nurbsCurve.Weights.Should().BeEquivalentTo(CollectionHelpers.RepeatData(1.0, CurveData.pts.Count));
             nurbsCurve.Knots.Should().BeEquivalentTo(new KnotVector(CurveData.degree, CurveData.pts.Count));
         }
 
