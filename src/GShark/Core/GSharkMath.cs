@@ -155,5 +155,64 @@ namespace GShark.Core
 
             return r;
         }
+
+        /// <summary>
+        /// Computes the binomial coefficient (denoted by n choose k).<br/>
+        /// Please see the following website for details: http://mathworld.wolfram.com/BinomialCoefficient.html
+        /// </summary>
+        /// <param name="n">Size of the set of distinct elements.</param>
+        /// <param name="k">Size of the subsets.</param>
+        /// <returns>Combination of k and n</returns>
+        public static double GetBinomial(int n, int k)
+        {
+            (int n, int k, double val) storage = (0, 0, 0.0);
+
+            if (k == 0)
+            {
+                return 1.0;
+            }
+
+            if (n == 0 || k > n)
+            {
+                return 0.0;
+            }
+
+            if (k > n - k)
+            {
+                k = n - k;
+            }
+
+            if (storage.n == n && storage.k == k)
+            {
+                return storage.val;
+            }
+
+            double r = 1.0;
+            int n0 = n;
+
+            for (int d = 1; d < k + 1; d++)
+            {
+                if (storage.n == n0 && storage.k == d)
+                {
+                    n--;
+                    r = storage.val;
+                    continue;
+                }
+
+                r *= n--;
+                r /= d;
+
+                if (storage.n == n0)
+                {
+                    continue;
+                }
+
+                storage.n = n0;
+                storage.k = d;
+                storage.val = r;
+            }
+
+            return r;
+        }
     }
 }

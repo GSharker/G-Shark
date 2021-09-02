@@ -264,9 +264,9 @@ namespace GShark.Core
                 numOfSegments = degree + numberOfControlPts - 1;
             }
 
-            this.AddRange(Sets.RepeatData(0.0, numOfRepeat));
-            this.AddRange(Sets.LinearSpace(new Interval(0.0, 1.0), numOfSegments + 2));
-            this.AddRange(Sets.RepeatData(1.0, numOfRepeat));
+            this.AddRange(CollectionHelpers.RepeatData(0.0, numOfRepeat));
+            this.AddRange(Interval.Divide(new Interval(0.0, 1.0), numOfSegments + 2));
+            this.AddRange(CollectionHelpers.RepeatData(1.0, numOfRepeat));
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
 **G-Shark** is short for **Geometry Shark**. It all started with a need for a geometry library able to handle curves, surfaces, meshes and solids written in C#. Although there
 are plenty of geometry libraries written in a variety of languages including C, C++, Python and some also in C# but, as is often the case, we could not find a library that encompassed all the functionality that we were looking for in one place.
 
-For this reason we began work on this ambitious project to create an easy to use, well documented, and highly functional geometry library for C# development, targeted primarily at the AECO sector and computational designers. We've gone back to the text books and first principles of computational geometry, and we learn what we can from the great work done by others before us for which we are very thankful, in particular [Verb](http://verbnurbs.com/) which is our reference for the backbone of this library. 
+For this reason we began work on this ambitious project to create an easy to use, well documented, and highly functional geometry library for C# development, targeted primarily at the AECO sector and computational designers. We've gone back to the text books and first principles of computational geometry, and we learn what we can from the great work done by others before us for which we are very thankful, in particular [Verb](http://verbnurbs.com/), [NurbsPython](https://github.com/orbingol/NURBS-Python) and [OpenNurbs](https://github.com/mcneel/opennurbs) which are our references for the backbone of this library. 
 
 We try to write and commit code every day and look forward to contributions from the open source dev community. 
 

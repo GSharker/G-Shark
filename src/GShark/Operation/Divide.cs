@@ -31,12 +31,12 @@ namespace GShark.Operation
 
             if (direction != SplitDirection.V)
             {
-                srfCtrlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                srfCtrlPts = CollectionHelpers.Transpose2DArray(surface.ControlPoints);
                 knots = surface.KnotsU;
                 degree = surface.DegreeU;
             }
 
-            List<double> knotsToInsert = Sets.RepeatData(parameter, degree + 1);
+            List<double> knotsToInsert = CollectionHelpers.RepeatData(parameter, degree + 1);
             int span = knots.Span(degree, parameter);
 
             List<List<Point4>> surfPtsLeft = new List<List<Point4>>();
@@ -64,8 +64,8 @@ namespace GShark.Operation
                     {
                         surfaceResult = new NurbsSurface[]
                         {
-                        new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft)),
-                        new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight))
+                        new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsLeft)),
+                        new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsRight))
                         };
                         break;
                     }
@@ -80,8 +80,8 @@ namespace GShark.Operation
                     }
                 case SplitDirection.Both:
                     {
-                        NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsLeft));
-                        NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), Sets.Reverse2DMatrixData(surfPtsRight));
+                        NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsLeft));
+                        NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsRight));
 
                         NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
                         NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);

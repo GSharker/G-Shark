@@ -83,9 +83,9 @@ namespace GShark.Test.XUnit.Core
             Transform transform = Transform.Rotation(angleInRadians, center);
 
             // Getting the angles.
-            Dictionary<string, double> angles = LinearAlgebra.GetYawPitchRoll(transform);
+            Dictionary<string, double> angles = Transform.GetYawPitchRoll(transform);
             // Getting the direction.
-            var axis = LinearAlgebra.GetRotationAxis(transform);
+            var axis = Transform.GetRotationAxis(transform);
 
             // Assert
             GSharkMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GSharkMath.Epsilon);

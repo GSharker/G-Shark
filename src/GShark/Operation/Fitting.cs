@@ -182,7 +182,7 @@ namespace GShark.Operation
         private static KnotVector ComputeKnotsForInterpolation(List<double> curveParameters, int degree, bool hasTangents)
         {
             // Start knot vectors.
-            KnotVector knots = Sets.RepeatData(0.0, degree + 1).ToKnot();
+            KnotVector knots = CollectionHelpers.RepeatData(0.0, degree + 1).ToKnot();
 
             // If we have tangent values we need two more control points and knots.
             int start = (hasTangents) ? 0 : 1;
@@ -201,7 +201,7 @@ namespace GShark.Operation
             }
 
             // Add end knot vectors.
-            knots.AddRange(Sets.RepeatData(1.0, degree + 1));
+            knots.AddRange(CollectionHelpers.RepeatData(1.0, degree + 1));
             return knots;
         }
 
@@ -211,7 +211,7 @@ namespace GShark.Operation
         private static KnotVector ComputeKnotsForCurveApproximation(List<double> curveParameters, int degree, int numberOfCtrPts, int numberOfPts)
         {
             // Start knot vectors.
-            KnotVector knots = Sets.RepeatData(0.0, degree + 1).ToKnot();
+            KnotVector knots = CollectionHelpers.RepeatData(0.0, degree + 1).ToKnot();
 
             // Compute 'd' value - Eqn 9.68.
             double d = (double)numberOfPts / (numberOfCtrPts - degree);
@@ -226,7 +226,7 @@ namespace GShark.Operation
             }
 
             // Add end knot vectors.
-            knots.AddRange(Sets.RepeatData(1.0, degree + 1));
+            knots.AddRange(CollectionHelpers.RepeatData(1.0, degree + 1));
             return knots;
         }
 
@@ -295,15 +295,15 @@ namespace GShark.Operation
                 int span = knots.Span(dim, degree, u);
                 List<double> basicFunction = Evaluation.BasisFunction(degree, knots, span, u);
 
-                List<double> startRow = Sets.RepeatData(0.0, span - degree);
-                List<double> endRow = Sets.RepeatData(0.0, dimEnd - (span - degree));
+                List<double> startRow = CollectionHelpers.RepeatData(0.0, span - degree);
+                List<double> endRow = CollectionHelpers.RepeatData(0.0, dimEnd - (span - degree));
 
                 coeffMatrix.Add(startRow.Concat(basicFunction).Concat(endRow).ToList());
             }
 
             if (!hasTangents) return coeffMatrix;
 
-            List<double> zeros = Sets.RepeatData(0.0, coeffMatrix[0].Count - 2);
+            List<double> zeros = CollectionHelpers.RepeatData(0.0, coeffMatrix[0].Count - 2);
             List<double> tangent = new List<double> { -1.0, 1.0 };
 
             coeffMatrix.Insert(1, tangent.Concat(zeros).ToList());
