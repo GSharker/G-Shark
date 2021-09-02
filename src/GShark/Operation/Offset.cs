@@ -11,22 +11,6 @@ namespace GShark.Operation
     {
 
         /// <summary>
-        /// Computes the offset of a circle.
-        /// </summary>
-        /// <param name="cl">The circle to offset.</param>
-        /// <param name="distance">The distance of the offset.</param>
-        /// <returns>The offset circle.</returns>
-        public static Circle Circle(Circle cl, double distance)
-        {
-            if (distance == 0.0)
-            {
-                return cl;
-            }
-
-            return new Circle(cl.Plane, cl.Radius + distance);
-        }
-
-        /// <summary>
         /// Computes the offset of a curve.
         /// </summary>
         /// <param name="crv">The curve to offset.</param>

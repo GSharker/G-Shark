@@ -18,21 +18,6 @@ namespace GShark.Test.XUnit.Operation
         }
 
         [Fact]
-        public void Returns_The_Offset_Of_A_Circle()
-        {
-            // Arrange
-            Circle cl = new Circle(Plane.PlaneXY, 13);
-            double offset = -5;
-
-            // Act
-            Circle offsetResult = Offset.Circle(cl, offset);
-
-            // Assert
-            offsetResult.Plane.Origin.Should().BeEquivalentTo(cl.Plane.Origin);
-            (offsetResult.Radius - offset).Should().Be(cl.Radius);
-        }
-
-        [Fact]
         public void Returns_The_Offset_Of_A_Open_Polyline()
         {
             // Arrange

@@ -161,6 +161,21 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Computes the offset of the arc.
+        /// </summary>
+        /// <param name="distance">The distance of the offset.</param>
+        /// <returns>The offset arc.</returns>
+        public new Arc Offset(double distance)
+        {
+            if (distance == 0.0)
+            {
+                return this;
+            }
+
+            return new Arc(Plane, Radius + distance, AngleDomain);
+        }
+
+        /// <summary>
         /// Determines whether the arc is equal to another.<br/>
         /// The arcs are equal if have the same plane, radius and angle.
         /// </summary>

@@ -323,6 +323,21 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Computes the offset of a circle.
+        /// </summary>
+        /// <param name="distance">The distance of the offset.</param>
+        /// <returns>The offset circle.</returns>
+        public Circle Offset(double distance)
+        {
+            if (distance == 0.0)
+            {
+                return this;
+            }
+
+            return new Circle(Plane, Radius + distance);
+        }
+
+        /// <summary>
         /// Constructs a nurbs curve representation of this arc.<br/>
         /// <em>Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>

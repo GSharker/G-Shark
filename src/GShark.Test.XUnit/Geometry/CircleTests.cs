@@ -214,6 +214,21 @@ namespace GShark.Test.XUnit.Geometry
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
+        [Fact]
+        public void Returns_The_Offset_Of_A_Circle()
+        {
+            // Arrange
+            Circle cl = _circle2D;
+            double offset = -5;
+
+            // Act
+            Circle offsetResult = cl.Offset(offset);
+
+            // Assert
+            offsetResult.Plane.Origin.Should().BeEquivalentTo(cl.Plane.Origin);
+            (offsetResult.Radius - offset).Should().Be(cl.Radius);
+        }
+
         [Theory]
         [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, 2.037401)]
         [InlineData(new double[] { 89.12029, 34.989032, -1.63896 }, 5.202272)]
