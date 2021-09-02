@@ -202,7 +202,7 @@ namespace GShark.Geometry
             Point3 p0 = Center + (axisX * (Radius * Math.Cos(Domain.T0)) + axisY * (Radius * Math.Sin(Domain.T0)));
             Vector3 t0 = axisY * Math.Cos(Domain.T0) - axisX * Math.Sin(Domain.T0);
 
-            KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
+            KnotVector knots = new KnotVector(CollectionHelpers.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
             double angle = Domain.T0;
 

@@ -520,7 +520,7 @@ namespace GShark.Operation
             NurbsSurface refinedSurface = surface;
             if (knotToInsert > 0)
             {
-                List<double> knotsToInsert = Sets.RepeatData(parameter, knotToInsert);
+                List<double> knotsToInsert = CollectionHelpers.RepeatData(parameter, knotToInsert);
                 refinedSurface = Modify.SurfaceKnotRefine(surface, knotsToInsert, direction);
             }
 
@@ -539,7 +539,7 @@ namespace GShark.Operation
             }
 
             return direction == SurfaceDirection.V 
-                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, Sets.Reverse2DMatrixData(refinedSurface.ControlPoints)[span]) 
+                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, CollectionHelpers.Transpose2DArray(refinedSurface.ControlPoints)[span]) 
                 : new NurbsCurve(refinedSurface.DegreeV, refinedSurface.KnotsV, refinedSurface.ControlPoints[span]);
         }
 

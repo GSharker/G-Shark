@@ -116,7 +116,7 @@ namespace GShark.Operation
             foreach (KeyValuePair<double, int> kvp in knotMultiplicities)
             {
                 if (kvp.Value >= reqMultiplicity) continue;
-                List<double> knotsToInsert = Sets.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
+                List<double> knotsToInsert = CollectionHelpers.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
                 NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
                 NurbsCurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
                 knots = curveResult.Knots;
@@ -178,7 +178,7 @@ namespace GShark.Operation
 
             if (direction != SurfaceDirection.V)
             {
-                controlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                controlPts = CollectionHelpers.Transpose2DArray(surface.ControlPoints);
                 knots = surface.KnotsU;
                 degree = surface.DegreeU;
             }
@@ -198,7 +198,7 @@ namespace GShark.Operation
 
             if (direction != SurfaceDirection.V)
             {
-                var reversedControlPts = Sets.Reverse2DMatrixData(modifiedControlPts);
+                var reversedControlPts = CollectionHelpers.Transpose2DArray(modifiedControlPts);
                 return new NurbsSurface(surface.DegreeU, surface.DegreeV, curve.Knots, surface.KnotsV.Copy(),
                     reversedControlPts);
             }
@@ -745,7 +745,7 @@ namespace GShark.Operation
             }
 
             // Appending the last knot to the end.
-            joinedKnots.AddRange(Sets.RepeatData(endDomain, finalDegree + 1));
+            joinedKnots.AddRange(CollectionHelpers.RepeatData(endDomain, finalDegree + 1));
             return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
         }
     }
