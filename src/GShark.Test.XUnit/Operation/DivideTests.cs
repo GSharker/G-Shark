@@ -2,7 +2,6 @@
 using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;

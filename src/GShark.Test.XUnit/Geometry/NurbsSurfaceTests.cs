@@ -2,13 +2,12 @@
 using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
-using GShark.Geometry.Enum;
 using GShark.Operation;
-using GShark.Operation.Enum;
 using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 

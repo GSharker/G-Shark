@@ -1,4 +1,4 @@
-﻿namespace GShark.Geometry.Enum
+﻿namespace GShark.Enumerations
 {
     /// <summary>
     /// Enum defining the direction of a surface.

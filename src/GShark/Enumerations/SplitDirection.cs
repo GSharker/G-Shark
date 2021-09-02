@@ -1,6 +1,4 @@
-﻿using GShark.Geometry.Enum;
-
-namespace GShark.Operation.Enum
+﻿namespace GShark.Enumerations
 {
     /// <summary>
     /// Enum defining the direction where a surface will be spitted.

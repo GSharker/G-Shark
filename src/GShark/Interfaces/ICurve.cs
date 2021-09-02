@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
+using GShark.Geometry;
 
-namespace GShark.Geometry.Interfaces
+namespace GShark.Interfaces
 {
     public interface ICurve
     {
