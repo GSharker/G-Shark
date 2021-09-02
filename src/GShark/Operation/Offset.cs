@@ -9,23 +9,6 @@ namespace GShark.Operation
     /// </summary>
     public static class Offset
     {
-        /// <summary>
-        /// Computes the offset of a line.
-        /// </summary>
-        /// <param name="ln">The line to offset.</param>
-        /// <param name="distance">The distance of the offset.</param>
-        /// <param name="pln">The plane for the offset operation.</param>
-        /// <returns>The offset line.</returns>
-        public static Line Line(Line ln, double distance, Plane pln)
-        {
-            if (distance == 0.0)
-            {
-                return ln;
-            }
-
-            Vector3 vecOffset = Vector3.CrossProduct(ln.Direction, pln.ZAxis).Amplify(distance);
-            return new Line(ln.StartPoint + vecOffset, ln.EndPoint + vecOffset);
-        }
 
         /// <summary>
         /// Computes the offset of a circle.
