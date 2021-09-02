@@ -1,8 +1,8 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Linq;
 using GShark.Interfaces;
+using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -363,7 +363,7 @@ namespace GShark.Geometry
             Point3 p0 = Center + (axisX * (Radius * Math.Cos(_domain.T0)) + axisY * (Radius * Math.Sin(_domain.T0)));
             Vector3 t0 = axisY * Math.Cos(_domain.T0) - axisX * Math.Sin(_domain.T0);
 
-            KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
+            KnotVector knots = new KnotVector(CollectionHelpers.RepeatData(0.0, ctrPts.Length + 3));
             int index = 0;
             double angle = _domain.T0;
 
