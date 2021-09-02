@@ -1,8 +1,8 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {

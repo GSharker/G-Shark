@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 
 namespace GShark.ExtendedMethods
@@ -140,7 +139,7 @@ namespace GShark.ExtendedMethods
         {
             int degree = curve.Degree;
 
-            List<double> knotsToInsert = Sets.RepeatData(t, degree + 1);
+            List<double> knotsToInsert = CollectionHelpers.RepeatData(t, degree + 1);
 
             NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
 
@@ -229,7 +228,7 @@ namespace GShark.ExtendedMethods
             }
 
             KnotVector subCurveKnotVector = new KnotVector();
-            List<double> knotsToInsert = Sets.RepeatData(domain.T0, order).Concat(Sets.RepeatData(domain.T1, degree + 1)).ToList();
+            List<double> knotsToInsert = CollectionHelpers.RepeatData(domain.T0, order).Concat(CollectionHelpers.RepeatData(domain.T1, degree + 1)).ToList();
             NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
             var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
             var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);

@@ -1,6 +1,5 @@
 ﻿#nullable enable
 using GShark.Core;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
 using System;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {

@@ -1,6 +1,5 @@
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
@@ -90,7 +89,7 @@ namespace GShark.Operation
                 return 0.0;
             }
 
-            List<double> N = Sets.RepeatData(0.0, degree + span + 1);
+            List<double> N = CollectionHelpers.RepeatData(0.0, degree + span + 1);
             // Initialize the zeroth degree basic functions.
             for (int j = 0; j < degree + 1; j++)
             {
@@ -386,7 +385,7 @@ namespace GShark.Operation
 
                 for (int i = 1; i < k + 1; i++)
                 {
-                    double valToMultiply = LinearAlgebra.GetBinomial(k, i) * weightDers[i];
+                    double valToMultiply = GSharkMath.GetBinomial(k, i) * weightDers[i];
                     var pt = CK[k - i];
                     for (int j = 0; j < rationalDerivativePoint.Size; j++)
                     {
@@ -594,19 +593,19 @@ namespace GShark.Operation
                     Vector3 t = derivatives.Item1[k, l];
                     for (int j = 1; j < l + 1; j++)
                     {
-                        t -= SKL[k, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[0, j]);
+                        t -= SKL[k, l - j] * (GSharkMath.GetBinomial(l, j) * derivatives.Item2[0, j]);
                     }
 
                     for (int i = 1; i < k + 1; i++)
                     {
-                        t -= SKL[k - i, l] * (LinearAlgebra.GetBinomial(k, i) * derivatives.Item2[i, 0]);
+                        t -= SKL[k - i, l] * (GSharkMath.GetBinomial(k, i) * derivatives.Item2[i, 0]);
                         Vector3 t2 = Vector3.Zero;
                         for (int j = 1; j < l + 1; j++)
                         {
-                            t2 += SKL[k - i, l - j] * (LinearAlgebra.GetBinomial(l, j) * derivatives.Item2[i, j]);
+                            t2 += SKL[k - i, l - j] * (GSharkMath.GetBinomial(l, j) * derivatives.Item2[i, j]);
                         }
 
-                        t -= t2 * LinearAlgebra.GetBinomial(k, i);
+                        t -= t2 * GSharkMath.GetBinomial(k, i);
                     }
                     SKL[k, l] = t / derivatives.Item2[0, 0];
                 }

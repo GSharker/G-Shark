@@ -1,11 +1,10 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Geometry.Enum;
+using GShark.Enumerations;
 
 namespace GShark.Operation
 {
@@ -116,7 +115,7 @@ namespace GShark.Operation
             foreach (KeyValuePair<double, int> kvp in knotMultiplicities)
             {
                 if (kvp.Value >= reqMultiplicity) continue;
-                List<double> knotsToInsert = Sets.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
+                List<double> knotsToInsert = CollectionHelpers.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
                 NurbsCurve curveTemp = new NurbsCurve(degree, knots, controlPoints);
                 NurbsCurve curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
                 knots = curveResult.Knots;
@@ -178,7 +177,7 @@ namespace GShark.Operation
 
             if (direction != SurfaceDirection.V)
             {
-                controlPts = Sets.Reverse2DMatrixData(surface.ControlPoints);
+                controlPts = CollectionHelpers.Transpose2DArray(surface.ControlPoints);
                 knots = surface.KnotsU;
                 degree = surface.DegreeU;
             }
@@ -198,7 +197,7 @@ namespace GShark.Operation
 
             if (direction != SurfaceDirection.V)
             {
-                var reversedControlPts = Sets.Reverse2DMatrixData(modifiedControlPts);
+                var reversedControlPts = CollectionHelpers.Transpose2DArray(modifiedControlPts);
                 return new NurbsSurface(surface.DegreeU, surface.DegreeV, curve.Knots, surface.KnotsV.Copy(),
                     reversedControlPts);
             }
@@ -247,12 +246,12 @@ namespace GShark.Operation
             bezalfs[0, 0] = bezalfs[ph, p] = 1.0;
             for (int i = 1; i <= ph2; i++)
             {
-                double inv = 1.0 / LinearAlgebra.GetBinomial(ph, i);
+                double inv = 1.0 / GSharkMath.GetBinomial(ph, i);
                 int mpi = Math.Min(p, i);
 
                 for (int j = Math.Max(0, i - t); j <= mpi; j++)
                 {
-                    bezalfs[i, j] = inv * LinearAlgebra.GetBinomial(p, j) * LinearAlgebra.GetBinomial(t, i - j);
+                    bezalfs[i, j] = inv * GSharkMath.GetBinomial(p, j) * GSharkMath.GetBinomial(t, i - j);
                 }
             }
 
@@ -745,7 +744,7 @@ namespace GShark.Operation
             }
 
             // Appending the last knot to the end.
-            joinedKnots.AddRange(Sets.RepeatData(endDomain, finalDegree + 1));
+            joinedKnots.AddRange(CollectionHelpers.RepeatData(endDomain, finalDegree + 1));
             return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
         }
     }

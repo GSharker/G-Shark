@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
+using GShark.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Geometry;
 using Xunit;

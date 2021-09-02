@@ -1,13 +1,13 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using GShark.Enumerations;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
@@ -106,7 +106,7 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed(SurfaceDirection direction)
         {
-            var pts2d = (direction == SurfaceDirection.U) ? Sets.Reverse2DMatrixData(LocationPoints) : LocationPoints;
+            var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(LocationPoints) : LocationPoints;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
@@ -208,7 +208,7 @@ namespace GShark.Geometry
                         tempPts.Add(crv.ControlPoints);
                         knotVectorU = crv.Knots;
                     }
-                    surfaceControlPoints = Sets.Reverse2DMatrixData(tempPts);
+                    surfaceControlPoints = CollectionHelpers.Transpose2DArray(tempPts);
                     break;
 
                 case LoftType.Loose:

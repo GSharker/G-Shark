@@ -357,7 +357,7 @@ namespace GShark.Geometry
             if (controlPoints.Count > weights.Count)
             {
                 int diff = controlPoints.Count - weights.Count;
-                List<double> dataFilled = Sets.RepeatData(1.0, diff);
+                List<double> dataFilled = CollectionHelpers.RepeatData(1.0, diff);
                 weights.AddRange(dataFilled);
             }
 
@@ -426,7 +426,7 @@ namespace GShark.Geometry
                 usedWeights = new List<List<double>>();
                 for (int i = 0; i < rows; i++)
                 {
-                    usedWeights.Add(Sets.RepeatData(1.0, controlPoints[i].Count));
+                    usedWeights.Add(CollectionHelpers.RepeatData(1.0, controlPoints[i].Count));
                 }
             }
             if (controlPoints.Count < usedWeights.Count)

@@ -1,8 +1,8 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Interfaces;
-using GShark.Operation;
 using System;
 using System.Linq;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
@@ -61,7 +61,7 @@ namespace GShark.Geometry
                 throw new Exception("The third point is not valid.");
             }
 
-            Point3 center = Trigonometry.PointAtEqualDistanceFromThreePoints(pt1, pt2, pt3);
+            Point3 center = Trigonometry.EquidistantPoint(pt1, pt2, pt3);
             Vector3 normal = Vector3.ZAxis.PerpendicularTo(pt1, pt2, pt3);
             Vector3 xDir = pt1 - center;
             Vector3 yDir = Vector3.CrossProduct(normal, xDir);
