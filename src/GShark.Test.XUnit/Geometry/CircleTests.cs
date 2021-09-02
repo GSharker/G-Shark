@@ -70,6 +70,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve circleNurbs = _circle3D.ToNurbs();
 
             // Assert
+            circleNurbs.Knots.Domain.Length.Should().Be(1.0);
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
                 circleNurbs.ControlPointLocations[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);
@@ -135,10 +136,13 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            Point3 pt = circle.PointAtLength(length, false);
+            double normalizeLength = GSharkMath.RemapValue(length, new Interval(0.0, circle.Length), new Interval(0.0, 1.0));
+            Point3 pt = circle.PointAtLength(length);
+            Point3 ptNormalizedLength = circle.PointAtLength(normalizeLength, true);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
+            pt.EpsilonEquals(ptNormalizedLength, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -152,10 +156,13 @@ namespace GShark.Test.XUnit.Geometry
             Circle circle = _circle2D;
 
             // Act
-            Vector3 tangent = circle.TangentAtLength(length, false);
+            double normalizeLength = GSharkMath.RemapValue(length, new Interval(0.0, circle.Length), new Interval(0.0, 1.0));
+            Vector3 tangent = circle.TangentAtLength(length);
+            Vector3 tangentNormalizedLength = circle.TangentAtLength(normalizeLength, true);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
+            tangent.EpsilonEquals(tangentNormalizedLength, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]

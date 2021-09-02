@@ -1,5 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Geometry.Interfaces;
+using GShark.Operation;
 using System;
 using System.Linq;
 
@@ -195,12 +196,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Evaluates the point at the specific length.
+        /// Evaluates a point at the specif length.
         /// </summary>
         /// <param name="length">The length where to evaluate the point.</param>
-        /// <param name="normalized">If true, the length factor is normalized between 0.0 and 1.0.</param>
+        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point at the length.</returns>
-        public Point3 PointAtLength(double length, bool normalized = true)
+        public Point3 PointAtLength(double length, bool normalized = false)
         {
             if (length <= 0)
             {
@@ -222,8 +223,8 @@ namespace GShark.Geometry
                 }
             }
 
-            double theta = (normalized) 
-                ? _domain.T0 + (_domain.T1 - _domain.T0) * length 
+            double theta = (normalized)
+                ? _domain.T0 + (_domain.T1 - _domain.T0) * length
                 : GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
 
             Vector3 xDir = Plane.XAxis * Math.Cos(theta) * Radius;
@@ -257,9 +258,9 @@ namespace GShark.Geometry
         /// Evaluates the tangent at the specific length.
         /// </summary>
         /// <param name="length">The length where to evaluate the tangent.</param>
-        /// <param name="normalized">If true, the length factor is normalized between 0.0 and 1.0.</param>
+        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The unitize tangent at the length.</returns>
-        public Vector3 TangentAtLength(double length, bool normalized = true)
+        public Vector3 TangentAtLength(double length, bool normalized = false)
         {
             Point3 pt = PointAtLength(length, normalized);
             (double u, double v) = Plane.ClosestParameters(pt);
@@ -322,30 +323,99 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the NURBS form of the circle.
+        /// Constructs a nurbs curve representation of this arc.<br/>
+        /// <em>Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
-        /// <returns>A NURBS curve.</returns>
-        public virtual NurbsCurve ToNurbs()
+        /// <returns>A nurbs curve shaped like this arc.</returns>
+        public new NurbsCurve ToNurbs()
         {
-            Point4[] ctrPts = new Point4[9];
-            ctrPts[0] = new Point4(Plane.PointAt(Radius, 0.0));
-            ctrPts[1] = new Point4(Plane.PointAt(Radius, Radius), 1.0 / Math.Sqrt(2.0));
-            ctrPts[2] = new Point4(Plane.PointAt(0.0, Radius));
-            ctrPts[3] = new Point4(Plane.PointAt(-Radius, Radius), 1.0 / Math.Sqrt(2.0));
-            ctrPts[4] = new Point4(Plane.PointAt(-Radius, 0.0));
-            ctrPts[5] = new Point4(Plane.PointAt(-Radius, -Radius), 1.0 / Math.Sqrt(2.0));
-            ctrPts[6] = new Point4(Plane.PointAt(0.0, -Radius));
-            ctrPts[7] = new Point4(Plane.PointAt(Radius, -Radius), 1.0 / Math.Sqrt(2.0));
-            ctrPts[8] = ctrPts[0];
+            Vector3 axisX = Plane.XAxis;
+            Vector3 axisY = Plane.YAxis;
+            double curveAngle = _domain.Length;
+            int numberOfArc;
+            Point4[] ctrPts;
 
-            KnotVector knots = new KnotVector
+            // Number of arcs.
+            double piNum = 0.5 * Math.PI;
+            if ((curveAngle - piNum) <= GSharkMath.Epsilon)
             {
-                0, 0, 0,
-                0.5 * Math.PI, 0.5 * Math.PI,
-                Math.PI, Math.PI,
-                1.5 * Math.PI, 1.5 * Math.PI,
-                2.0 * Math.PI, 2.0 * Math.PI, 2.0 * Math.PI
-            };
+                numberOfArc = 1;
+                ctrPts = new Point4[3];
+            }
+            else if ((curveAngle - piNum * 2) <= GSharkMath.Epsilon)
+            {
+                numberOfArc = 2;
+                ctrPts = new Point4[5];
+            }
+            else if ((curveAngle - piNum * 3) <= GSharkMath.Epsilon)
+            {
+                numberOfArc = 3;
+                ctrPts = new Point4[7];
+            }
+            else
+            {
+                numberOfArc = 4;
+                ctrPts = new Point4[9];
+            }
+
+            double detTheta = curveAngle / numberOfArc;
+            double weight = Math.Cos(detTheta / 2);
+            Point3 p0 = Center + (axisX * (Radius * Math.Cos(_domain.T0)) + axisY * (Radius * Math.Sin(_domain.T0)));
+            Vector3 t0 = axisY * Math.Cos(_domain.T0) - axisX * Math.Sin(_domain.T0);
+
+            KnotVector knots = new KnotVector(Sets.RepeatData(0.0, ctrPts.Length + 3));
+            int index = 0;
+            double angle = _domain.T0;
+
+            ctrPts[0] = new Point4(p0);
+
+            for (int i = 1; i < numberOfArc + 1; i++)
+            {
+                angle += detTheta;
+                Point3 p2 = Center + (axisX * (Radius * Math.Cos(angle)) + axisY * (Radius * Math.Sin(angle)));
+
+                ctrPts[index + 2] = new Point4(p2);
+
+                Vector3 t2 = (axisY * Math.Cos(angle)) - (axisX * Math.Sin(angle));
+                Line ln0 = new Line(p0, t0.Unitize() + p0);
+                Line ln1 = new Line(p2, t2.Unitize() + p2);
+                Intersect.LineLine(ln0, ln1, out _, out _, out double u0, out _);
+                Point3 p1 = p0 + (t0 * u0);
+
+                ctrPts[index + 1] = new Point4(p1, weight);
+                index += 2;
+
+                if (i >= numberOfArc)
+                {
+                    continue;
+                }
+
+                p0 = p2;
+                t0 = t2;
+            }
+
+            int j = 2 * numberOfArc + 1;
+            for (int i = 0; i < 3; i++)
+            {
+                knots[i] = 0.0;
+                knots[i + j] = 1.0;
+            }
+
+            switch (numberOfArc)
+            {
+                case 2:
+                    knots[3] = knots[4] = 0.5;
+                    break;
+                case 3:
+                    knots[3] = knots[4] = (double)1 / 3;
+                    knots[5] = knots[6] = (double)2 / 3;
+                    break;
+                case 4:
+                    knots[3] = knots[4] = 0.25;
+                    knots[5] = knots[6] = 0.5;
+                    knots[7] = knots[8] = 0.75;
+                    break;
+            }
 
             return new NurbsCurve(2, knots, ctrPts.ToList());
         }

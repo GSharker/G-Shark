@@ -86,10 +86,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the closest point on the line from a test point.
+        /// Gets the closest point on the line to the test point.
         /// </summary>
         /// <param name="pt">The closest point to find.</param>
-        /// <returns>The closest point on the line from the test point.</returns>
+        /// <returns>The point on the line closest to the test point.</returns>
         public Point3 ClosestPoint(Point3 pt)
         {
             Vector3 dir = Direction;
