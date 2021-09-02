@@ -2,8 +2,8 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
+using GShark.Test.XUnit.Operation;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -248,6 +248,25 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
             curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_The_Offset_Of_A_Curve()
+        {
+            // Arrange
+            NurbsCurve crv = new NurbsCurve(FittingTests.pts, 2);
+            double offset = 22.5;
+
+            // Act
+            NurbsCurve offsetResult = crv.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            for (double i = 0; i <= 1; i += 0.1)
+            {
+                Point3 pt = offsetResult.PointAt(i);
+                Point3 closestPt = crv.ClosestPoint(pt);
+                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
+            }
         }
     }
 }
