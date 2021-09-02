@@ -171,10 +171,10 @@ namespace GShark.ExtendedMethods
 
             var sortedParameters = parameters.OrderBy(x => x).ToArray();
 
-            if (Math.Abs(sortedParameters[0] - curve.Domain.T0) > GSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[0] - curve.Knots.Domain.T0) > GSharkMath.MaxTolerance)
             {
                 var tempParams = new double[sortedParameters.Length + 1];
-                tempParams[0] = curve.Domain.T0;
+                tempParams[0] = curve.Knots.Domain.T0;
                 for (var i = 0; i < sortedParameters.Length; i++)
                 {
                     tempParams[i+1] = sortedParameters[i];
@@ -182,10 +182,10 @@ namespace GShark.ExtendedMethods
                 sortedParameters = tempParams;
             }
 
-            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Domain.T1) > GSharkMath.MaxTolerance)
+            if (Math.Abs(sortedParameters[sortedParameters.Length - 1] - curve.Knots.Domain.T1) > GSharkMath.MaxTolerance)
             {
                 Array.Resize(ref sortedParameters, sortedParameters.Length + 1);
-                sortedParameters[sortedParameters.Length - 1] = curve.Domain.T1;
+                sortedParameters[sortedParameters.Length - 1] = curve.Knots.Domain.T1;
             }
 
             for (int i = 0; i < sortedParameters.Length - 1; i++)
