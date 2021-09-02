@@ -148,7 +148,7 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPoint = line.StartPoint + line.Direction * len;
 
             //Act
-            var pt = line.PointAtLength(len);
+            var pt = line.PointAtLength(len, false);
 
             //Assert
             pt.Equals(expectedPoint).Should().BeTrue();

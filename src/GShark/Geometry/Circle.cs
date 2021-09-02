@@ -108,7 +108,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the end point of the circular curve.
         /// </summary>
-        public Point3 EndPoint => PointAt(1.0);
+        public Point3 EndPoint => PointAt(_domain.T1);
 
         /// <summary>
         /// Gets the bounding box of this circular curve.

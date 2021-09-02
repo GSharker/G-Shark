@@ -208,8 +208,8 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, 0.324263)]
-        [InlineData(new double[] { 89.12029, 34.989032, -1.63896 }, 0.827967)]
+        [InlineData(new double[] { 82.248292, 15.836914, 3.443127 }, 2.037401)]
+        [InlineData(new double[] { 89.12029, 34.989032, -1.63896 }, 5.202272)]
         public void It_Returns_The_Closest_Parameter_On_A_Circle(double[] ptToTest, double expectedParameter)
         {
             // Arrange
