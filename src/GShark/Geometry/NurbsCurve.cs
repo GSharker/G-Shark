@@ -107,18 +107,6 @@ namespace GShark.Geometry
 
         public double Length => Analyze.CurveLength(this);
 
-        public Interval Domain
-        {
-            get
-            {
-                if (IsPeriodic())
-                {
-                    return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
-                }
-                return new Interval(Knots[0], Knots[Knots.Count - 1]);
-            }
-        }
-
         public Point3 StartPoint => PointAt(0.0);
 
         public Point3 MidPoint => PointAt(0.5);
@@ -154,8 +142,8 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed()
         {
-            Point3 pt0 = Evaluation.CurvePointAt(this,Domain.T0);
-            Point3 pt1 = Evaluation.CurvePointAt(this, Domain.T1);
+            Point3 pt0 = Evaluation.CurvePointAt(this,0.0);
+            Point3 pt1 = Evaluation.CurvePointAt(this, 1.0);
             return pt0.EpsilonEquals(pt1, GSharkMath.Epsilon);
         }
 
@@ -208,13 +196,32 @@ namespace GShark.Geometry
             return new NurbsCurve(Degree, Knots, pts);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.PointAt"/>
+        /// </summary>
         public Point3 PointAt(double t)
         {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
             return Evaluation.CurvePointAt(this, t);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.PointAtLength"/>
+        /// </summary>
         public Point3 PointAtLength(double length, bool normalized = true)
         {
+            length = (normalized)
+                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
+                : length;
+
             double parameter = Analyze.CurveParameterAtLength(this, length);
             return Evaluation.CurvePointAt(this, parameter);
         }
@@ -223,10 +230,20 @@ namespace GShark.Geometry
         /// Computes the curve tangent at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
-        /// <returns>The vector at the given parameter.</returns>
+        /// <returns>The unitized vector at the given parameter.</returns>
         public Vector3 TangentAt(double t)
         {
-            return Evaluation.RationalCurveTangent(this, t);
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
+            return Evaluation.RationalCurveTangent(this, t).Unitize();
         }
 
         /// <summary>
@@ -237,11 +254,21 @@ namespace GShark.Geometry
         /// <returns>The derivatives.</returns>
         public List<Vector3> DerivativeAt(double t, int numberOfDerivatives = 1)
         {
+            if (t <= 0.0)
+            {
+                t = 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                t = 1.0;
+            }
+
             return Evaluation.RationalCurveDerivatives(this, t, numberOfDerivatives);
         }
 
         /// <summary>
-        /// Computes the curvature vector of the curve at the parameter t.
+        /// Computes the curvature vector of the curve at the parameter.
         /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
         /// </summary>
         /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
@@ -300,11 +327,17 @@ namespace GShark.Geometry
             return (NurbsCurve)Modify.ReverseCurve(this);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.ClosestPoint"/>
+        /// </summary>
         public Point3 ClosestPoint(Point3 point)
         {
             return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.ClosestParameter"/>
+        /// </summary>
         public double ClosestParameter(Point3 pt)
         {
             return Analyze.CurveClosestParameter(this, pt);
@@ -318,11 +351,31 @@ namespace GShark.Geometry
         /// <returns>The parameter on the curve at the given length.</returns>
         public double ParameterAtLength(double segmentLength, double tolerance = -1.0)
         {
+            if (segmentLength <= Length)
+            {
+                return 0.0;
+            }
+
+            if (segmentLength >= Length)
+            {
+                return 1.0;
+            }
+
             return Analyze.CurveParameterAtLength(this, segmentLength, tolerance);
         }
 
         public double LengthAt(double t)
         {
+            if (t <= 0.0)
+            {
+               return 0.0;
+            }
+
+            if (t >= 1.0)
+            {
+                return Length;
+            }
+
             return Analyze.CurveLength(this, t);
         }
 
