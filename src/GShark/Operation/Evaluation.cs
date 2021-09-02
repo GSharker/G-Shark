@@ -90,7 +90,7 @@ namespace GShark.Operation
                 return 0.0;
             }
 
-            List<double> N = Sets.RepeatData(0.0, degree + span + 1);
+            List<double> N = CollectionHelpers.RepeatData(0.0, degree + span + 1);
             // Initialize the zeroth degree basic functions.
             for (int j = 0; j < degree + 1; j++)
             {

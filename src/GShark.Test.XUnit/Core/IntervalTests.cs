@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using GShark.Core;
 using Xunit;
 
@@ -6,6 +7,15 @@ namespace GShark.Test.XUnit.Core
 {
     public class IntervalTests
     {
+        public static IEnumerable<object[]> RangesToBeDefined =>
+            new List<object[]>
+            {
+                new object[] { new Interval(0, 1), 4},
+                new object[] { new Interval(2, 30), 3},
+                new object[] { new Interval(-10, 30), 6},
+                new object[] { new Interval(1, 10), 0}
+            };
+
         [Fact]
         public void It_Returns_An_Interval()
         {
@@ -117,6 +127,21 @@ namespace GShark.Test.XUnit.Core
 
             //Assert
             interval.Min.Should().Be(-0.5);
+        }
+
+        [Theory]
+        [MemberData(nameof(RangesToBeDefined))]
+        public void It_Divides_An_Interval_In_Equal_Parts(Interval interval, int step)
+        {
+            // Arrange
+            IList<double> linearSpace = Interval.Divide(interval, step);
+
+            // Act
+            _ = string.Join(',', linearSpace);
+
+            // Assert
+            linearSpace.Should().NotBeNull();
+            linearSpace.Should().BeEquivalentTo(new List<double>(linearSpace));
         }
     }
 }

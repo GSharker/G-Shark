@@ -36,7 +36,7 @@ namespace GShark.Core
 
             for (int i = 0; i < columns; i++)
             {
-                List<double> tempRow = Sets.RepeatData(0.0, rows);
+                List<double> tempRow = CollectionHelpers.RepeatData(0.0, rows);
                 tempMatrix.Add(tempRow);
             }
 
@@ -167,7 +167,7 @@ namespace GShark.Core
 
             for (int i = 0; i < aRows; ++i)
             {
-                List<double> tempRow = Sets.RepeatData(0.0, bCols);
+                List<double> tempRow = CollectionHelpers.RepeatData(0.0, bCols);
                 for (int j = 0; j < bCols; ++j)
                 {
                     double value = 0.0;
