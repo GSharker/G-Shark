@@ -1,9 +1,10 @@
-﻿using GShark.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using GShark.ExtendedMethods;
+using GShark.Geometry;
+using GShark.Interfaces;
 
-namespace GShark.Core.BoundingBoxTree
+namespace GShark.Intersection.BoundingBoxTree
 {
     internal class LazyCurveBBT : IBoundingBoxTree<NurbsCurve>
     {
