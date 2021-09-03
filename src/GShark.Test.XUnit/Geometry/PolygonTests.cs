@@ -138,14 +138,18 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
         {
             // Arrange
-            NurbsCurve poly2D = new Polygon(Planar2D).ToNurbs();
-            KnotVector knots = poly2D.Knots;
+            Polyline poly = new Polygon(Planar2D);
+            NurbsCurve polyCurve = poly.ToNurbs();
+            double lengthSum = 0.0;
 
             // Assert
-            poly2D.Degree.Should().Be(1);
-            for (int i = 1; i < poly2D.Knots.Count - 1; i++)
+            polyCurve.Degree.Should().Be(1);
+            // ToDo: has to be completed refactoring the polyline.
+            for (int i = 1; i < poly.SegmentsCount; i++)
             {
-                Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
+                lengthSum += poly.Segments[i].Length;
+
+                // Planar2D[i - 1].Equals(poly.PointAtLength(lengthSum)).Should().BeTrue();
             }
         }
 

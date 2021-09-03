@@ -327,7 +327,7 @@ namespace GShark.Geometry
         /// <em>Implementation of Algorithm A7.1 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <returns>A nurbs curve shaped like this arc.</returns>
-        public new NurbsCurve ToNurbs()
+        public NurbsCurve ToNurbs()
         {
             Vector3 axisX = Plane.XAxis;
             Vector3 axisY = Plane.YAxis;
