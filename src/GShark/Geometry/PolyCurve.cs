@@ -1,6 +1,5 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Enum;
-using GShark.Geometry.Interfaces;
+using GShark.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
@@ -25,11 +24,6 @@ namespace GShark.Geometry
         {
             this.Segments.Add(curve);
         }
-
-        /// <summary>
-        /// Defines the curve type
-        /// </summary>
-        public CurveType CurveType => CurveType.POLYCURVE;
 
         /// <summary>
         /// Appends and matches the start of the line to the end of polycurve.
@@ -622,8 +616,8 @@ namespace GShark.Geometry
                         case "Line":
                             return GSharkMath.RemapValue(((Line)segment).ParameterAt(segmentLength) + i, source, target);
                         case "Arc":
-                            var al = segmentLength/((Arc)segment).Length;
-                            return GSharkMath.RemapValue(/*((Arc)segment).ParameterAt(segmentLength)*/al  + i, source, target);
+                            var al = segmentLength / ((Arc)segment).Length;
+                            return GSharkMath.RemapValue(/*((Arc)segment).ParameterAt(segmentLength)*/al + i, source, target);
                         case "PolyCurve":
                             return GSharkMath.RemapValue(((PolyCurve)segment).ParameterAtLength(segmentLength) + i, source, target);
 
@@ -746,7 +740,7 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             List<NurbsCurve> nurbsCrvs = new List<NurbsCurve>();
-            foreach(var segment in this.Segments)
+            foreach (var segment in this.Segments)
             {
                 switch (segment.GetType().Name)
                 {
