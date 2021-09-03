@@ -1,8 +1,7 @@
-﻿using GShark.Core.IntersectionResults;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Optimization;
 
-namespace GShark.Operation
+namespace GShark.Intersection
 {
     internal static class IntersectionRefiner
     {

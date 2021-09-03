@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GShark.Interfaces;
+using GShark.Intersection;
 using GShark.Operation;
 
 namespace GShark.Geometry

@@ -1,6 +1,6 @@
 ﻿using GShark.Geometry;
 
-namespace GShark.Core.IntersectionResults
+namespace GShark.Intersection
 {
     /// <summary>
     /// This is a POC class used to collect the result from curves intersection.
