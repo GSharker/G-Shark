@@ -1,7 +1,8 @@
-﻿using GShark.Geometry;
-using System;
+﻿using System;
+using GShark.Geometry;
+using GShark.Intersection.BoundingBoxTree;
 
-namespace GShark.Core.BoundingBoxTree
+namespace GShark.Interfaces
 {
     /// <summary>
     /// Interface defining the requirements used by <see cref="BoundingBoxOperations"/>.

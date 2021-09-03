@@ -24,4 +24,10 @@
     <None Include="../../media/gshark-logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Analysis\" />
+    <Folder Include="Modify\" />
+    <Folder Include="Evaluation\" />
+  </ItemGroup>
+
 </Project>

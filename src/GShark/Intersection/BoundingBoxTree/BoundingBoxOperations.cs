@@ -1,8 +1,9 @@
-﻿using GShark.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GShark.Geometry;
+using GShark.Interfaces;
 
-namespace GShark.Core.BoundingBoxTree
+namespace GShark.Intersection.BoundingBoxTree
 {
     /// <summary>
     /// A collection of tools operating on bounding box trees.
@@ -26,7 +27,7 @@ namespace GShark.Core.BoundingBoxTree
             aTrees.Add(bbt1);
             bTrees.Add(bbt2);
 
-            return FindTheRoot(aTrees, bTrees, tolerance);
+            return GetRoot(aTrees, bTrees, tolerance);
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace GShark.Core.BoundingBoxTree
             aTrees.Add(firstSplit.Item1);
             bTrees.Add(firstSplit.Item2);
 
-            return FindTheRoot(aTrees, bTrees, tolerance);
+            return GetRoot(aTrees, bTrees, tolerance);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace GShark.Core.BoundingBoxTree
         /// <param name="bTrees">The second Bounding box tree object.</param>
         /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
         /// <returns>A collection of tuples extracted from the Yield method of the BoundingBoxTree.</returns>
-        private static List<Tuple<T1, T2>> FindTheRoot<T1, T2>(List<IBoundingBoxTree<T1>> aTrees, List<IBoundingBoxTree<T2>> bTrees, double tolerance)
+        private static List<Tuple<T1, T2>> GetRoot<T1, T2>(List<IBoundingBoxTree<T1>> aTrees, List<IBoundingBoxTree<T2>> bTrees, double tolerance)
         {
             List<Tuple<T1, T2>> result = new List<Tuple<T1, T2>>();
 
