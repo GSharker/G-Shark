@@ -325,7 +325,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the offset of a circle.
         /// </summary>
-        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <returns>The offset circle.</returns>
         public Circle Offset(double distance)
         {

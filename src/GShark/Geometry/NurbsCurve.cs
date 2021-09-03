@@ -80,18 +80,6 @@ namespace GShark.Geometry
         {
         }
 
-        internal Interval Domain
-        {
-            get
-            {
-                if (IsPeriodic())
-                {
-                    return new Interval(Knots[Degree], Knots[Knots.Count - Degree - 1]);
-                }
-                return new Interval(Knots[0], Knots[Knots.Count - 1]);
-            }
-        }
-
         /// <summary>
         /// Gets the list of weight values.
         /// </summary>
@@ -242,7 +230,7 @@ namespace GShark.Geometry
         /// Computes the curve tangent at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
-        /// <returns>The unitized vector at the given parameter.</returns>
+        /// <returns>The unitized tangent vector at the given parameter.</returns>
         public Vector3 TangentAt(double t)
         {
             if (t <= 0.0)
@@ -361,7 +349,7 @@ namespace GShark.Geometry
         /// <param name="segmentLength">Length of segment to measure. Must be less than or equal to the length of the curve.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <returns>The parameter on the curve at the given length.</returns>
-        public double ParameterAtLength(double segmentLength, double tolerance = -1.0)
+        public double ParameterAtLength(double segmentLength)
         {
             if (segmentLength <= 0.0)
             {
@@ -373,7 +361,7 @@ namespace GShark.Geometry
                 return 1.0;
             }
 
-            return Analyze.CurveParameterAtLength(this, segmentLength, tolerance);
+            return Analyze.CurveParameterAtLength(this, segmentLength);
         }
 
         /// <summary>
@@ -421,7 +409,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the offset of the curve.
         /// </summary>
-        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset curve.</returns>
         public NurbsCurve Offset(double distance, Plane pln)

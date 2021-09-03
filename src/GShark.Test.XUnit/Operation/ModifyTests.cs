@@ -284,9 +284,9 @@ namespace GShark.Test.XUnit.Operation
 
             // Arrange
             (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
         }
 
         [Fact]
@@ -319,13 +319,13 @@ namespace GShark.Test.XUnit.Operation
             Point3 pt3 = joinedCurve.PointAtLength(27.5);
             Point3 pt4 = joinedCurve.PointAtLength(35.2);
 
-            // Arrange
+            // Assert
             joinedCurve.Degree.Should().Be(1);
             (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt1.Equals(expectedPt1).Should().BeTrue();
-            pt2.Equals(expectedPt2).Should().BeTrue();
-            pt3.Equals(expectedPt3).Should().BeTrue();
-            pt4.Equals(expectedPt4).Should().BeTrue();
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
+            (expectedPt4 == pt4).Should().BeTrue();
         }
 
         [Fact]
@@ -359,9 +359,9 @@ namespace GShark.Test.XUnit.Operation
 
             // Arrange
             (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
-            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
         }
     }
 }

@@ -155,9 +155,18 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets the domain of the knots, as the max value - min value.
+        /// Gets the domain of the knot vector.
         /// </summary>
-        public Interval Domain => new Interval(this[0], this[Count - 1]);
+        /// <param name="degree">The degree of the curve.</param>
+        /// <returns>The domain.</returns>
+        public Interval GetDomain(int degree)
+        {
+            if (IsPeriodic(degree))
+            {
+                    return new Interval(this[degree], this[Count - degree - 1]);
+            }
+            return new Interval(this[0], this[Count - 1]);
+        }
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
