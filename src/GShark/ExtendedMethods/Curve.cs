@@ -224,18 +224,13 @@ namespace GShark.ExtendedMethods
                 return isT0AtStart ? curve.SplitAt(subCurveDomain.T1)[0] : curve.SplitAt(subCurveDomain.T0)[1];
             }
 
-            KnotVector subCurveKnotVector = new KnotVector();
             List<double> knotsToInsert = CollectionHelpers.RepeatData(domain.T0, order).Concat(CollectionHelpers.RepeatData(domain.T1, degree + 1)).ToList();
             NurbsCurve refinedCurve = Modify.CurveKnotRefine(curve, knotsToInsert);
-            var multiplicityAtT0 = refinedCurve.Knots.Multiplicity(subCurveDomain.T0);
-            var multiplicityAtT1 = refinedCurve.Knots.Multiplicity(subCurveDomain.T1);
-            var t0Idx = refinedCurve.Knots.IndexOf(subCurveDomain.T0);
-
-            subCurveKnotVector.AddRange(refinedCurve.Knots.GetRange(t0Idx, multiplicityAtT0 + multiplicityAtT1));
 
             var subCurveControlPoints = refinedCurve.ControlPoints.GetRange(order, order);
+            var subCrvCrtlPtsLocations = subCurveControlPoints.Select(Point4.PointDehomogenizer).ToList();
 
-            var subCurve = new NurbsCurve(curve.Degree, subCurveKnotVector, subCurveControlPoints);
+            var subCurve = new NurbsCurve(subCrvCrtlPtsLocations, curve.Degree);
 
             return subCurve;
         }
