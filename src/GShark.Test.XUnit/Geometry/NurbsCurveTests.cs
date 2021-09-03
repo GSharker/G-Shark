@@ -2,8 +2,8 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
+using GShark.Test.XUnit.Operation;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -66,8 +66,6 @@ namespace GShark.Test.XUnit.Geometry
             nurbsCurve.ControlPoints.Count.Should().Be(5);
             nurbsCurve.ControlPointLocations[1].DistanceTo(nurbsCurve.ControlPointLocations[nurbsCurve.ControlPointLocations.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
             nurbsCurve.Knots.Count.Should().Be(8);
-            nurbsCurve.Domain.T0.Should().Be(0.0);
-            nurbsCurve.Domain.T1.Should().Be(1.0);
             expectedPt00.DistanceTo(ptAt00).Should().BeLessThan(GSharkMath.Epsilon);
             expectedPt01.DistanceTo(ptAt01).Should().BeLessThan(GSharkMath.Epsilon);
         }
@@ -178,17 +176,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Domain_Of_The_Curve()
-        {
-            // Act
-            Interval curveDomain = NurbsCurveCollection.NurbsCurveExample().Domain;
-
-            // Assert
-            curveDomain.T0.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.First());
-            curveDomain.T1.Should().Be(NurbsCurveCollection.NurbsCurveExample().Knots.Last());
-        }
-
-        [Fact]
         public void It_Transforms_A_NurbsCurve_By_A_Given_Matrix()
         {
             // Arrange
@@ -261,6 +248,25 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
             curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_The_Offset_Of_A_Curve()
+        {
+            // Arrange
+            NurbsCurve crv = new NurbsCurve(FittingTests.pts, 2);
+            double offset = 22.5;
+
+            // Act
+            NurbsCurve offsetResult = crv.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            for (double i = 0; i <= 1; i += 0.1)
+            {
+                Point3 pt = offsetResult.PointAt(i);
+                Point3 closestPt = crv.ClosestPoint(pt);
+                pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
+            }
         }
     }
 }

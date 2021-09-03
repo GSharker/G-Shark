@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.Core.IntersectionResults;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using System.Collections.Generic;
+using GShark.Intersection;
 using Xunit;
 using Xunit.Abstractions;
 

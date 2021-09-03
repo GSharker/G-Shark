@@ -1,6 +1,6 @@
 ﻿using GShark.Core;
 
-namespace GShark.Geometry.Interfaces
+namespace GShark.Interfaces
 {
     public interface ITransformable<T>
     {

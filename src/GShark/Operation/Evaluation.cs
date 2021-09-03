@@ -1,6 +1,5 @@
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using Xunit;
 using Xunit.Abstractions;
@@ -148,7 +147,7 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPoint = line.StartPoint + line.Direction * len;
 
             //Act
-            var pt = line.PointAtLength(len);
+            var pt = line.PointAtLength(len, false);
 
             //Assert
             pt.Equals(expectedPoint).Should().BeTrue();
@@ -172,32 +171,6 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             pt.Equals(_exampleLine.StartPoint).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Parameter()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAt(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Length()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAtLength(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
         }
 
         [Fact]
@@ -270,6 +243,20 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             extendedLine.Length.Should().BeApproximately(13.027756, GSharkMath.MaxTolerance);
             extendedLine.StartPoint.Should().BeEquivalentTo(_exampleLine.StartPoint);
+        }
+
+        [Fact]
+        public void Returns_The_Offset_Of_A_Line()
+        {
+            // Arrange
+            Line ln = new Line(new Point3(5, 0, 0), new Point3(0, 5, 0));
+            double offset = 12;
+
+            // Act
+            Line offsetResult = ln.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult.StartPoint.DistanceTo(ln.StartPoint) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]

@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Enum;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
-using GShark.Geometry.Interfaces;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 

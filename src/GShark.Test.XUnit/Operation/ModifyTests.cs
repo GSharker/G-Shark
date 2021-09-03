@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System;
@@ -268,25 +267,23 @@ namespace GShark.Test.XUnit.Operation
 
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -7.5), new Vector3(0, 0, -1));
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
             NurbsCurve[] curves = { curve, ln.ToNurbs(), arc.ToNurbs() };
 
             Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
             Point3 expectedPt2 = new Point3(5, 5, -1.230175);
-            Point3 expectedPt3 = new Point3(7.075482, 5, -6.555514);
+            Point3 expectedPt3 = new Point3(7.946534, 5.0, -5.6199);
+            double expectedLength = 30.623806;
 
             // Act
             NurbsCurve joinedCurve = Modify.JoinCurves(curves);
 
-            double t0 = joinedCurve.ParameterAtLength(15);
-            double t1 = joinedCurve.ParameterAtLength(21.5);
-            double t2 = joinedCurve.ParameterAtLength(27.5);
-
-            Point3 pt1 = joinedCurve.PointAt(t0);
-            Point3 pt2 = joinedCurve.PointAt(t1);
-            Point3 pt3 = joinedCurve.PointAt(t2);
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
 
             // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
             pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
             pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
             pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
@@ -306,23 +303,65 @@ namespace GShark.Test.XUnit.Operation
                 new (5, 5, 0)
             });
 
-            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Line ln0 = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Line ln1 = new Line(new Point3(5, 5, -2.5), new Point3(10, 10, 10));
 
-            Point3 expectedPt1 = new Point3(0, 2.0, 2.0);
-            Point3 expectedPt2 = new Point3(2.5, 0, 0);
-            Point3 expectedPt3 = new Point3(5, 5.0, 2.5);
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            Point3 expectedPt4 = new Point3(6.959743, 6.959743, 2.399357);
+            double expectedLength = 43.932474;
 
             // Act
-            NurbsCurve joinedCurve = Modify.JoinCurves(new List<NurbsCurve> { poly.ToNurbs(), ln.ToNurbs() });
-            Point3 pt1 = joinedCurve.PointAt(0.1);
-            Point3 pt2 = joinedCurve.PointAt(0.25);
-            Point3 pt3 = joinedCurve.PointAt(0.75);
+            NurbsCurve joinedCurve = Modify.JoinCurves(new List<NurbsCurve> { poly.ToNurbs(), ln0.ToNurbs(), ln1.ToNurbs() });
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+            Point3 pt4 = joinedCurve.PointAtLength(35.2);
 
             // Arrange
             joinedCurve.Degree.Should().Be(1);
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
             pt1.Equals(expectedPt1).Should().BeTrue();
             pt2.Equals(expectedPt2).Should().BeTrue();
             pt3.Equals(expectedPt3).Should().BeTrue();
+            pt4.Equals(expectedPt4).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Arc()
+        {
+            // Arrange
+            var poly = new Polyline(new List<Point3>
+            {
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, -2.5)
+            });
+
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            NurbsCurve[] curves = { poly.ToNurbs(), arc.ToNurbs() };
+
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            double expectedLength = 36.490747;
+
+            // Act
+            NurbsCurve joinedCurve = Modify.JoinCurves(curves);
+
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+
+            // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt1.DistanceTo(expectedPt1).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt2.DistanceTo(expectedPt2).Should().BeLessThan(GSharkMath.MinTolerance);
+            pt3.DistanceTo(expectedPt3).Should().BeLessThan(GSharkMath.MinTolerance);
         }
     }
 }

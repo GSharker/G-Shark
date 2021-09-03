@@ -1,4 +1,4 @@
-﻿namespace GShark.Core.Interfaces
+﻿namespace GShark.Interfaces
 {
     public interface ISerializable<T>
     {

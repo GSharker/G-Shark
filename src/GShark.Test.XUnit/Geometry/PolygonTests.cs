@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -139,15 +139,40 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
         {
             // Arrange
-            NurbsCurve poly2D = new Polygon(Planar2D).ToNurbs();
-            KnotVector knots = poly2D.Knots;
+            Polyline polygon = new Polygon(Planar2D);
+            double lengthSum = 0.0;
+
+            // Act
+            NurbsCurve polygonCurve = polygon.ToNurbs();
 
             // Assert
-            poly2D.Degree.Should().Be(1);
-            for (int i = 1; i < poly2D.Knots.Count - 1; i++)
+            polygonCurve.Degree.Should().Be(1);
+            polygonCurve.ControlPointLocations[0]
+                .EpsilonEquals(polygonCurve.ControlPointLocations.Last(), GSharkMath.MinTolerance).Should().BeTrue();
+            for (int i = 0; i < polygon.SegmentsCount; i++)
             {
-                Planar2D[i - 1].Equals(poly2D.PointAt(knots[i])).Should().BeTrue();
+                lengthSum += polygon.Segments[i].Length;
+                polygon[i + 1].EpsilonEquals(polygonCurve.PointAtLength(lengthSum), GSharkMath.MaxTolerance).Should().BeTrue();
             }
+        }
+
+        [Theory]
+        [InlineData(0, 7.071068)]
+        [InlineData(1, 12.205361)]
+        [InlineData(2, 5.481013)]
+        [InlineData(3, 7.071068)]
+        [InlineData(4, 7.071068)]
+        public void Returns_The_Offset_Of_A_Polygon(int vertex, double expectedDistance)
+        {
+            // Arrange
+            Polygon polygon = new Polygon(PolygonTests.Planar2D);
+            double offset = 5;
+
+            Polyline offsetPolygon = polygon.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            polygon[vertex].DistanceTo(offsetPolygon[vertex]).Should()
+                .BeApproximately(expectedDistance, GSharkMath.MaxTolerance);
         }
 
         [Fact]

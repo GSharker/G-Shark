@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
+using GShark.Geometry;
 
-namespace GShark.Geometry.Interfaces
+namespace GShark.Interfaces
 {
     public interface ICurve
     {
@@ -8,11 +9,6 @@ namespace GShark.Geometry.Interfaces
         /// Gets the length of the curve.
         /// </summary>
         public double Length { get; }
-
-        /// <summary>
-        /// Gets the domain of the curve.
-        /// </summary>
-        public Interval Domain { get; }
 
         /// <summary>
         /// Gets the starting point of the curve.
@@ -52,8 +48,9 @@ namespace GShark.Geometry.Interfaces
         /// Evaluates the point at a certain length along the curve.
         /// </summary>
         /// <param name="length">Length along the curve between the start point and the returned point.</param>
+        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point on the curve at the given length.</returns>
-        public Point3 PointAtLength(double length);
+        public Point3 PointAtLength(double length, bool normalized);
 
         /// <summary>
         /// Evaluates the closest point on the curve that is close to the test point.

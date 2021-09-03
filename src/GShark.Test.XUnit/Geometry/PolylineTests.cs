@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -203,6 +202,21 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Returns_The_Offset_Of_A_Open_Polyline()
+        {
+            // Arrange
+            Polyline pl = new Polyline(new PolylineTests().ExamplePts);
+            double offset = 5;
+
+            // Act
+            Polyline offsetResult = pl.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (offsetResult[offsetResult.Count - 1].DistanceTo(pl[pl.Count - 1]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
         public void It_Returns_The_Closest_Point()
         {
             // Arrange
@@ -258,16 +272,18 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(18.154088, 30.745098, 7.561387),
                 new Point3(18.154088, 12.309505, 7.561387)
             };
+            Polyline poly = new Polyline(pts);
+            double lengthSum = 0.0;
 
             // Act
-            var polyNurbs = new Polyline(pts).ToNurbs();
-            KnotVector knots = polyNurbs.Knots;
+            var polyNurbs = poly.ToNurbs();
 
             // Assert
             polyNurbs.Degree.Should().Be(1);
-            for (int i = 1; i < polyNurbs.Knots.Count - 1; i++)
+            for (int i = 0; i < poly.SegmentsCount; i++)
             {
-                pts[i - 1].EpsilonEquals(polyNurbs.PointAt(knots[i]), GSharkMath.MaxTolerance).Should().BeTrue();
+                lengthSum += poly.Segments[i].Length;
+                pts[i + 1].EpsilonEquals(polyNurbs.PointAtLength(lengthSum), GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 

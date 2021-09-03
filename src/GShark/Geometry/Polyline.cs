@@ -1,8 +1,10 @@
 ﻿using GShark.Core;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Interfaces;
+using GShark.Intersection;
+using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -38,11 +40,6 @@ namespace GShark.Geometry
         /// A polyline is considered closed, if its start and end point are identical.
         /// </summary>
         public bool IsClosed => this[0] == this[Count - 1];
-
-        /// <summary>
-        /// Gets the domain of the polyline.
-        /// </summary>
-        public Interval Domain => new Interval(0, SegmentsCount);
 
         /// <summary>
         /// Gets the starting point of the polyline.
@@ -193,7 +190,7 @@ namespace GShark.Geometry
             return Segments[segIdx].PointAt(t2);
         }
 
-        public Point3 PointAtLength(double length)
+        public Point3 PointAtLength(double length, bool normalized)
         {
             return PointAt(ParameterAtLength(length));
         }
@@ -373,19 +370,76 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             double lengthSum = 0;
-            KnotVector knots = new KnotVector { 0 };
-            List<double> weights = new List<double>();
-            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, weights);
+            KnotVector knots = new KnotVector { 0, 0};
+            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, 1.0);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Count - 1; i++)
             {
-                lengthSum += 1;
-                knots.Add(i);
-                weights.Add(1.0);
+                lengthSum += Segments[i].Length;
+                knots.Add(lengthSum);
             }
-            knots.Add(lengthSum - 1);
+            knots.Add(lengthSum);
 
             return new NurbsCurve(1, knots, ctrlPts);
+        }
+
+        /// <summary>
+        /// Computes the offset of the polyline.
+        /// </summary>
+        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="pln">The plane for the offset operation.</param>
+        /// <returns>The offset polyline.</returns>
+        public Polyline Offset(double distance, Plane pln)
+        {
+            if (distance == 0.0)
+            {
+                return this;
+            }
+
+            int iteration = (IsClosed) ? Count : Count - 1;
+
+            Point3[] offsetPts = new Point3[Count];
+            List<Line> segments = Segments;
+            Line[] offsetSegments = new Line[segments.Count + 1];
+
+            for (int i = 0; i < iteration; i++)
+            {
+                int k = (i == iteration - 1 && IsClosed) ? 0 : i;
+                if (i == iteration - 1 && k == 0)
+                {
+                    goto Intersection;
+                }
+
+                Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.ZAxis).Amplify(distance);
+                Transform xForm = Core.Transform.Translation(vecOffset);
+                offsetSegments[k] = segments[k].Transform(xForm);
+
+                if (i == 0 && IsClosed)
+                {
+                    continue;
+                }
+                if (k == 0 && !IsClosed)
+                {
+                    offsetPts[k] = offsetSegments[k].StartPoint;
+                    continue;
+                }
+
+                Intersection:
+                bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
+                if (!ccx)
+                {
+                    continue;
+                }
+
+                offsetPts[k] = pt;
+
+                if (i == iteration - 1)
+                {
+                    offsetPts[(IsClosed) ? i : i + 1] = (IsClosed) ? offsetPts[0] : offsetSegments[k].EndPoint;
+                }
+            }
+
+            return new Polyline(offsetPts);
         }
 
         /// <summary>
@@ -393,7 +447,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
         /// <returns>A cleaned collections of points if necessary otherwise the same collection of points.</returns>
-        protected static IList<Point3> CleanVerticesForShortLength(IList<Point3> vertices)
+        private static IList<Point3> CleanVerticesForShortLength(IList<Point3> vertices)
         {
             int[] coincidenceFlag = new int[vertices.Count];
             coincidenceFlag[0] = 0;

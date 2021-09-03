@@ -312,9 +312,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Normalizes the input knot vector to a range from 0 to 1.
+        /// Normalizes the input knot vector to a range from 0.0 to 1.0.
         /// </summary>
-        /// <param name="knots">Knots vector to be normalized.</param>
         /// <returns>Normalized knots vector.</returns>
         public KnotVector Normalize()
         {

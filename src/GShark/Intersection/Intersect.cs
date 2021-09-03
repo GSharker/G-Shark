@@ -1,14 +1,12 @@
-﻿using GShark.Core;
-using GShark.Core.BoundingBoxTree;
-using GShark.Core.IntersectionResults;
-using GShark.ExtendedMethods;
-using GShark.Geometry;
-using GShark.Geometry.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Core;
+using GShark.ExtendedMethods;
+using GShark.Geometry;
+using GShark.Intersection.BoundingBoxTree;
 
-namespace GShark.Operation
+namespace GShark.Intersection
 {
     /// <summary>
     /// Provides various tools for all kinds of intersection between NURBS and primitive.
