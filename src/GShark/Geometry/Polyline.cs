@@ -386,7 +386,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Computes the offset of the polyline.
         /// </summary>
-        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset polyline.</returns>
         public Polyline Offset(double distance, Plane pln)

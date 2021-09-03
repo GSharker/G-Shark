@@ -70,7 +70,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve circleNurbs = _circle3D.ToNurbs();
 
             // Assert
-            circleNurbs.Knots.Domain.Length.Should().Be(1.0);
+            circleNurbs.Knots.GetDomain(circleNurbs.Degree).Length.Should().Be(1.0);
             for (int ptIndex = 0; ptIndex < ptsExpected.Count; ptIndex++)
             {
                 circleNurbs.ControlPointLocations[ptIndex].EpsilonEquals(ptsExpected[ptIndex], GSharkMath.MaxTolerance);

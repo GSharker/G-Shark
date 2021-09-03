@@ -45,8 +45,8 @@ namespace GShark.Geometry
 
             DegreeU = degreeU;
             DegreeV = degreeV;
-            KnotsU = (Math.Abs(knotsU.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
-            KnotsV = (Math.Abs(knotsV.Domain.Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
+            KnotsU = (Math.Abs(knotsU.GetDomain(degreeU).Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
+            KnotsV = (Math.Abs(knotsV.GetDomain(degreeV).Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
             LocationPoints = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
@@ -354,7 +354,7 @@ namespace GShark.Geometry
         {
             // Unify knots, normalized them.
             copyCurves = copyCurves
-                .Select(curve => curve.Knots.Domain.Length > 1
+                .Select(curve => curve.Knots.GetDomain(curve.Degree).Length > 1
                     ? new NurbsCurve(curve.Degree, curve.Knots.Normalize(), curve.ControlPoints)
                     : curve).ToList();
 

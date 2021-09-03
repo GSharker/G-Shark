@@ -19,7 +19,7 @@ namespace GShark.Intersection.BoundingBoxTree
 
             if (double.IsNaN(knotTolerance))
             {
-                knotTolerance = _curve.Knots.Domain.Length / 64;
+                knotTolerance = _curve.Knots.GetDomain(_curve.Degree).Length / 64;
             }
 
             _knotTolerance = knotTolerance;
@@ -48,7 +48,7 @@ namespace GShark.Intersection.BoundingBoxTree
 
         public bool IsIndivisible(double tolerance)
         {
-            return _curve.Knots.Domain.Length < _knotTolerance;
+            return _curve.Knots.GetDomain(_curve.Degree).Length < _knotTolerance;
         }
 
         public bool IsEmpty()
