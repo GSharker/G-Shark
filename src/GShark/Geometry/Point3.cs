@@ -385,9 +385,9 @@ namespace GShark.Geometry
         //ToDo Using EpsilonEquals everywhere. Perhaps should be moved into actual Equals method of classes.
         public bool EpsilonEquals(Point3 other, double epsilon)
         {
-            return Math.Abs(X - other.X) <= GSharkMath.MaxTolerance &&
-                   Math.Abs(Y - other.Y) <= GSharkMath.MaxTolerance &&
-                   Math.Abs(Z - other.Z) <= GSharkMath.MaxTolerance;
+            return Math.Abs(X - other.X) <= epsilon &&
+                   Math.Abs(Y - other.Y) <= epsilon &&
+                   Math.Abs(Z - other.Z) <= epsilon;
         }
 
         /// <summary>
