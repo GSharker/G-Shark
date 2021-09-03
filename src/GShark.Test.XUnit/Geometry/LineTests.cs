@@ -246,6 +246,20 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Returns_The_Offset_Of_A_Line()
+        {
+            // Arrange
+            Line ln = new Line(new Point3(5, 0, 0), new Point3(0, 5, 0));
+            double offset = 12;
+
+            // Act
+            Line offsetResult = ln.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult.StartPoint.DistanceTo(ln.StartPoint) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
         public void It_Checks_If_Two_Lines_Are_Equals()
         {
             // Act

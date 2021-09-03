@@ -419,6 +419,32 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Computes the offset of the curve.
+        /// </summary>
+        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="pln">The plane for the offset operation.</param>
+        /// <returns>The offset curve.</returns>
+        public NurbsCurve Offset(double distance, Plane pln)
+        {
+            if (distance == 0.0)
+            {
+                return this;
+            }
+
+            var (tValues, pts) = Tessellation.CurveAdaptiveSample(this);
+
+            List<Point3> offsetPts = new List<Point3>();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                Vector3 tangent = Evaluation.RationalCurveTangent(this, tValues[i]);
+                Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.ZAxis).Amplify(distance);
+                offsetPts.Add(pts[i] + vecOffset);
+            }
+
+            return Fitting.InterpolatedCurve(offsetPts, Degree);
+        }
+
+        /// <summary>
         /// Compares two curves for equality.<br/>
         /// Two NURBS curves are equal when the have same control points, weights, knots and degree.
         /// </summary>

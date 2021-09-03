@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using GShark.Interfaces;
 
 namespace GShark.Geometry
@@ -195,6 +196,23 @@ namespace GShark.Geometry
         public Line Flip()
         {
             return new Line(EndPoint, StartPoint);
+        }
+
+        /// <summary>
+        /// Computes the offset of the line.
+        /// </summary>
+        /// <param name="distance">The distance of the offset.</param>
+        /// <param name="pln">The plane for the offset operation.</param>
+        /// <returns>The offset line.</returns>
+        public Line Offset(double distance, Plane pln)
+        {
+            if (distance == 0.0)
+            {
+                return this;
+            }
+
+            Vector3 vecOffset = Vector3.CrossProduct(Direction, pln.ZAxis).Amplify(distance);
+            return new Line(StartPoint + vecOffset, EndPoint + vecOffset);
         }
 
         /// <summary>
