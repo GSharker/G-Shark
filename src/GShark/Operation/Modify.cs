@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GShark.Enumerations;
+using GShark.Interfaces;
 
 namespace GShark.Operation
 {
@@ -708,6 +709,7 @@ namespace GShark.Operation
                 throw new Exception("Insufficient curves for join operation.");
             }
 
+            bool isTheCollectionUsable = true;
             for (int i = 0; i < curves.Count - 1; i++)
             {
                 if (curves[i].IsClosed())
@@ -716,7 +718,43 @@ namespace GShark.Operation
                 }
                 if (curves[i].ControlPoints.Last().DistanceTo(curves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
                 {
-                    throw new Exception($"Curve at {i} and curve at {i + 1} don't touch each other.");
+                    isTheCollectionUsable = false;
+                }
+            }
+
+            if (isTheCollectionUsable == false)
+            {
+                bool isConnected = false;
+                NurbsCurve curve = null;
+
+                for (int i = 0; i < curves.Count; i++)
+                {
+                    for (int j = 0; j < curves.Count; j++)
+                    {
+                        if (i == j)
+                        {
+                            continue;
+                        }
+
+                        if (curves[i].ControlPoints.Last().DistanceTo(curves[j].ControlPoints[0]) < GSharkMath.MinTolerance)
+                        {
+                            curve = curves[j];
+                            isConnected = true;
+                        }
+
+                        if (curves[i].ControlPoints.Last().DistanceTo(curves[j].ControlPoints.Last()) < GSharkMath.MinTolerance)
+                        {
+                            curve = curves[j].Reverse();
+                            isConnected = true;
+                        }
+
+                        if (!isConnected)
+                        {
+                            throw new Exception($"Curve at {i} don't touch any of the curves.");
+                        }
+                        curves.RemoveAt(j);
+                        curves.Insert(i + 1, curve);
+                    }
                 }
             }
 
