@@ -1,9 +1,9 @@
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Operation.Utilities;
 
 namespace GShark.Operation
 {

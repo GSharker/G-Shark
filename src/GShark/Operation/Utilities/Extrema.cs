@@ -10,12 +10,12 @@ namespace GShark.Operation.Utilities
     /// </summary>
     public class Extrema
     {
-        public IList<double> Xvalue { get; set; }
-        public IList<double> Yvalue { get; set; }
-        public IList<double> Zvalue { get; set; }
-        public IList<double> Values { get; set; }
+        public List<double> Xvalue { get; set; }
+        public List<double> Yvalue { get; set; }
+        public List<double> Zvalue { get; set; }
+        public List<double> Values { get; set; }
 
-        public IList<double> this[int index]
+        public List<double> this[int index]
         {
             get
             {

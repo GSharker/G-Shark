@@ -268,6 +268,16 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Computes the parameter values of all local extrema.
+        /// </summary>
+        /// <returns>The parameter values of all the local extrema.</returns>
+        public IReadOnlyList<double> Extrema()
+        {
+            Extrema extremaResult = Evaluation.ComputeExtrema(this);
+            return extremaResult.Values.ToList();
+        }
+
+        /// <summary>
         /// Computes the curvature vector of the curve at the parameter.
         /// The vector has length equal to the radius of the curvature circle and with direction to the center of the circle.
         /// </summary>
