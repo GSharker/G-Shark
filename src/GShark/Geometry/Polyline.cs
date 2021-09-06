@@ -380,7 +380,7 @@ namespace GShark.Geometry
             }
             knots.Add(lengthSum);
 
-            return new NurbsCurve(1, knots, ctrlPts);
+            return new NurbsCurve(1, knots.Normalize(), ctrlPts);
         }
 
         /// <summary>
