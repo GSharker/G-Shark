@@ -729,30 +729,18 @@ namespace GShark.Operation
             // Join curves.
             List<double> joinedKnots = new List<double>();
             List<Point4> joinedControlPts = new List<Point4>();
-            double endDomain = 0;
 
-            foreach (NurbsCurve curve in homogenizedCurves)
+            joinedKnots.AddRange(homogenizedCurves.First().Knots.Take(homogenizedCurves.First().Knots.Count - 1));
+            joinedControlPts.AddRange(homogenizedCurves.First().ControlPoints);
+
+            foreach (NurbsCurve curve in homogenizedCurves.Skip(1))
             {
-                if (joinedKnots.Count == 0)
-                {
-                    joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)));
-                    joinedControlPts.AddRange(curve.ControlPoints);
-                    if (curve.Degree == 1)
-                    {
-                        endDomain += curve.Knots[curve.Knots.Count - (finalDegree + 2)];
-                    }
-                }
-                else
-                {
-                    joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - (finalDegree + 1)).Skip(1).Select(k => k + endDomain));
-                    joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
-                }
-
-                endDomain += curve.Knots.Last();
+                joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - 1).Skip(finalDegree + 1).Select(k => k + joinedKnots.Last()).ToList());
+                joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
             }
 
             // Appending the last knot to the end.
-            joinedKnots.AddRange(CollectionHelpers.RepeatData(endDomain, finalDegree + 1));
+            joinedKnots.Add(joinedKnots.Last());
             return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
         }
     }
