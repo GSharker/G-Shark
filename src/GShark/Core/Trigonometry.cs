@@ -1,6 +1,8 @@
 ﻿using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GShark.Interfaces;
 
 namespace GShark.Core
 {
@@ -104,6 +106,98 @@ namespace GShark.Core
             }
 
             return (result < 0) ? 1 : 2;
+        }
+
+        /// <summary>
+        /// A quickSort algo used to put the curves in a sequential order based on the distance between the first and last points of each curves.
+        /// </summary>
+        /// <param name="curves">The sets of curve to sort.</param>
+        /// <returns>The set of curves sorted.</returns>
+        public static List<NurbsCurve> QuickSortCurve(List<NurbsCurve> curves)
+        {
+            if (curves == null || curves.Count == 0)
+            {
+                throw new Exception("The set of curves is empty.");
+            }
+
+            if (curves.Count == 1)
+            {
+                return curves;
+            }
+
+            // creates the sets of data required.
+            List<Point3[]> lines = curves.Select(c => new []{c.StartPoint, c.EndPoint}).ToList();
+            int[] indexes = new int[lines.Count];
+            bool[] revers = new bool[lines.Count];
+            for (int t = 0; t < lines.Count; t++)
+            {
+                revers[t] = false;
+                indexes[t] = t;
+            }
+
+            // sort lines
+            for (int ni = 1; ni < lines.Count; ni++)
+            {
+                int endI, endEnd, i;
+                var startI = endI = ni;
+                var startEnd = endEnd = 0;
+                var startPoint = (revers[0]) ? lines[indexes[0]][1] : lines[indexes[0]][0];
+                var endPoint = (revers[ni - 1]) ? lines[indexes[ni - 1]][0] : lines[indexes[ni - 1]][1];
+                var startDistance = startPoint.DistanceTo(lines[indexes[startI]][0]);
+                var endDistance = endPoint.DistanceTo(lines[indexes[endI]][0]);
+
+                for (i = ni; i < lines.Count; i++)
+                {
+                    Point3 testingPoint = lines[indexes[i]][0];
+                    for (int end = 0; end < 2; end++)
+                    {
+                        double testingDistance = startPoint.DistanceTo(testingPoint);
+                        if (testingDistance < startDistance)
+                        {
+                            startI = i;
+                            startEnd = end;
+                            startDistance = testingDistance;
+                        }
+
+                        testingDistance = endPoint.DistanceTo(testingPoint);
+                        if (testingDistance < endDistance)
+                        {
+                            endI = i;
+                            endEnd = end;
+                            endDistance = testingDistance;
+                        }
+
+                        testingPoint = lines[indexes[i]][1];
+                    }
+                }
+
+                if (startDistance < endDistance)
+                {
+                    // N[index[startI]] will be first in list.
+                    i = indexes[ni];
+                    indexes[ni] = indexes[startI];
+                    indexes[startI] = i;
+                    startI = indexes[ni];
+                    for (i = ni; i > 0; i--)
+                    {
+                        indexes[i] = indexes[i - 1];
+                        revers[i] = revers[i - 1];
+                    }
+                    indexes[0] = startI;
+                    revers[0] = (startEnd != 1);
+                }
+                else
+                {
+                    // N[index[endI]] will be next in the list.
+                    i = indexes[ni];
+                    indexes[ni] = indexes[endI];
+                    indexes[endI] = i;
+                    revers[ni] = (endEnd == 1);
+                }
+            }
+
+            List<NurbsCurve> sortedCurves = indexes.Select(i => (revers[i]) ? curves[i].Reverse() : curves[i]).ToList();
+            return sortedCurves;
         }
     }
 }
