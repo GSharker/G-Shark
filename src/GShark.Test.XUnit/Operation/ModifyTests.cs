@@ -304,7 +304,7 @@ namespace GShark.Test.XUnit.Operation
             });
 
             Line ln0 = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            Line ln1 = new Line(new Point3(5, 5, -2.5), new Point3(10, 10, 10));
+            Line ln1 = new Line(new Point3(10, 10, 10), new Point3(5, 5, -2.5));
 
             Point3 expectedPt1 = new Point3(5, 0, 2.928932);
             Point3 expectedPt2 = new Point3(5, 4.428932, 5);
