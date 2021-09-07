@@ -160,8 +160,35 @@ namespace GShark.Geometry
             return Segments[segIdx].PointAt(t2);
         }
 
-        public Point3 PointAtLength(double length, bool normalized)
+        public Point3 PointAtLength(double length, bool normalized = false)
         {
+            if (length <= 0.0)
+            {
+                return StartPoint;
+            }
+
+            if (length >= Length)
+            {
+                return EndPoint;
+            }
+
+            length = (normalized)
+                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
+                : length;
+
+            double progressiveEndLength = 0;
+
+            for (int i = 0; i < SegmentsCount; i++)
+            {
+                double progressiveStartLength = progressiveEndLength;
+                progressiveEndLength += Segments[i].Length;
+                if (length <= progressiveEndLength) // This is the right segment
+                {
+                    double segmentLength = i == 0 ? length : length - progressiveStartLength;
+
+                }
+            }
+
             throw new NotImplementedException();
         }
 
