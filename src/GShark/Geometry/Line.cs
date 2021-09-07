@@ -131,12 +131,12 @@ namespace GShark.Geometry
         /// <returns>The point at the specific parameter.</returns>
         public Point3 PointAt(double t)
         {
-            if (t <= 0)
+            if (t <= 0.0)
             {
                 return StartPoint;
             }
 
-            if (t >= 1)
+            if (t >= 1.0)
             {
                 return EndPoint;
             }
@@ -149,16 +149,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="length">Length, between 0.0 and the length of the curve.</param>
         /// <returns>The point at the given length.</returns>
-        public Point3 PointAtLength(double length, bool normalized = true)
+        public Point3 PointAtLength(double length)
         {
             if (length <= 0)
             {
                 return StartPoint;
             }
-
-            length = (normalized)
-                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
-                : length;
 
             if (length >= Length)
             {
