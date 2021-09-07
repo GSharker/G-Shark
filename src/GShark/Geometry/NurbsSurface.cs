@@ -188,7 +188,8 @@ namespace GShark.Geometry
             // In fact, the ruled surface is a special case of a skinned surface.
             if (copyCurves.Any(c => c.Degree != copyCurves[0].Degree))
             {
-                copyCurves = CurveHelpers.HomogenizedCurves(copyCurves);
+                copyCurves = CurveHelpers.NormalizedDegree(copyCurves);
+                copyCurves = CurveHelpers.NormalizedKnots(copyCurves);
             }
 
             int degreeV = copyCurves[0].Degree;
@@ -229,7 +230,8 @@ namespace GShark.Geometry
         public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
         {
             IList<NurbsCurve> curves = new[] { curveA, curveB };
-            curves = CurveHelpers.HomogenizedCurves(curves);
+            curves = CurveHelpers.NormalizedDegree(curves);
+            curves = CurveHelpers.NormalizedKnots(curves);
 
             return new NurbsSurface(1, curves[0].Degree, new KnotVector(1, 2), curves[0].Knots,
                 new List<List<Point4>> { curves[0].ControlPoints, curves[1].ControlPoints });
