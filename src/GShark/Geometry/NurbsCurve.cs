@@ -217,14 +217,21 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAtLength"/>
         /// </summary>
-        public Point3 PointAtLength(double length, bool normalized = false)
+        public Point3 PointAtLength(double length)
         {
-            length = (normalized)
-                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
-                : length;
-
             double parameter = Analyze.CurveParameterAtLength(this, length);
             return Evaluation.CurvePointAt(this, parameter);
+        }
+
+        /// <summary>
+        /// Evaluates a point at the normalized length.
+        /// </summary>
+        /// <param name="normalizedLength">The length factor is normalized between 0.0 and 1.0.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtNormalizedLength(double normalizedLength)
+        {
+            double length = GSharkMath.RemapValue(normalizedLength, new Interval(0.0, 1.0), new Interval(0.0, Length));
+            return PointAtLength(length);
         }
 
         /// <summary>

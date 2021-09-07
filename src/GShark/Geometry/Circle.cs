@@ -200,38 +200,36 @@ namespace GShark.Geometry
         /// Evaluates a point at the specif length.
         /// </summary>
         /// <param name="length">The length where to evaluate the point.</param>
-        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point at the length.</returns>
-        public Point3 PointAtLength(double length, bool normalized = false)
+        public Point3 PointAtLength(double length)
         {
-            if (length <= 0)
+            if (length <= 0.0)
             {
                 return StartPoint;
             }
 
-            if (normalized)
+            if (length >= Length)
             {
-                if (length >= 1)
-                {
-                    return EndPoint;
-                }
-            }
-            else
-            {
-                if (length > Length)
-                {
-                    return EndPoint;
-                }
+                return EndPoint;
             }
 
-            double theta = (normalized)
-                ? _domain.T0 + (_domain.T1 - _domain.T0) * length
-                : GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
+            double theta = GSharkMath.ToRadians((length * 360) / (Math.PI * 2 * Radius));
 
             Vector3 xDir = Plane.XAxis * Math.Cos(theta) * Radius;
             Vector3 yDir = Plane.YAxis * Math.Sin(theta) * Radius;
 
             return Plane.Origin + xDir + yDir;
+        }
+
+        /// <summary>
+        /// Evaluates a point at the normalized length.
+        /// </summary>
+        /// <param name="normalizedLength">The length factor is normalized between 0.0 and 1.0.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtNormalizedLength(double normalizedLength)
+        {
+            double theta = _domain.T0 + (_domain.T1 - _domain.T0) * normalizedLength;
+            return PointAt(theta);
         }
 
         /// <summary>
@@ -259,11 +257,10 @@ namespace GShark.Geometry
         /// Evaluates the tangent at the specific length.
         /// </summary>
         /// <param name="length">The length where to evaluate the tangent.</param>
-        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The unitize tangent at the length.</returns>
-        public Vector3 TangentAtLength(double length, bool normalized = false)
+        public Vector3 TangentAtLength(double length)
         {
-            Point3 pt = PointAtLength(length, normalized);
+            Point3 pt = PointAtLength(length);
             (double u, double v) = Plane.ClosestParameters(pt);
             double t = EvaluateParameter(u, v, false);
             return DerivativeAt(t, 1).Unitize();

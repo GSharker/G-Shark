@@ -174,19 +174,21 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(19.369239, 6.261522, 0);
 
             // Act
-            Point3 pt = _polyline.PointAtLength(0.5, true);
+            Point3 pt = _polyline.PointAtNormalizedLength(0.5);
             
             // Assert
             (pt == expectedPt).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(0.5, 1.873848)]
-        [InlineData(1.0, 4.0)]
-        public void It_Returns_The_Parameter_At_The_Given_Length(double normalizedLength, double parameterExpected)
+        [InlineData(12.5, 0.693375)]
+        [InlineData(16.8, 0.931896)]
+        [InlineData(32.9, 2.330214)]
+        [InlineData(46.7, 3.415046)]
+        public void It_Returns_The_Parameter_At_The_Given_Length(double length, double parameterExpected)
         {
             // Act
-            double parameter = _polyline.ParameterAtLength(normalizedLength, true);
+            double parameter = _polyline.ParameterAtLength(length);
 
             // Assert
             parameter.Should().BeApproximately(parameterExpected, GSharkMath.MaxTolerance);

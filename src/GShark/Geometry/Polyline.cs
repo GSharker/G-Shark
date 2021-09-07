@@ -48,7 +48,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the middle point of the polyline.
         /// </summary>
-        public Point3 MidPoint => PointAtLength(0.5, true);
+        public Point3 MidPoint => PointAtNormalizedLength(0.5);
 
         /// <summary>
         /// Gets the end point of the polyline.
@@ -163,23 +163,33 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAtLength"/>
         /// </summary>
-        public Point3 PointAtLength(double length, bool normalized = false)
+        public Point3 PointAtLength(double length)
         {
             if (length <= 0.0)
             {
                 return StartPoint;
             }
 
-            return length >= Length ? EndPoint : PointAt(ParameterAtLength(length, normalized));
+            return length >= Length ? EndPoint : PointAt(ParameterAtLength(length));
+        }
+
+        /// <summary>
+        /// Evaluates a point at the normalized length.
+        /// </summary>
+        /// <param name="normalizedLength">The length factor is normalized between 0.0 and 1.0.</param>
+        /// <returns>The point at the length.</returns>
+        public Point3 PointAtNormalizedLength(double normalizedLength)
+        {
+            double length = GSharkMath.RemapValue(normalizedLength, new Interval(0.0, 1.0), new Interval(0.0, Length));
+            return PointAtLength(length);
         }
 
         /// <summary>
         /// Calculates the parameter of the polyline at the given length.
         /// </summary>
         /// <param name="length">Length from start of polyline.</param>
-        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The parameter at the given length.</returns>
-        public double ParameterAtLength(double length, bool normalized = false)
+        public double ParameterAtLength(double length)
         {
             if (length <= 0.0)
             {
@@ -188,10 +198,6 @@ namespace GShark.Geometry
 
             if (length < Length)
             {
-                length = (normalized)
-                    ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
-                    : length;
-
                 double progressiveEndLength = 0.0;
 
                 for (int i = 0; i < SegmentsCount; i++)

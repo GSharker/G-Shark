@@ -81,11 +81,10 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Circumference_Of_A_Circle()
         {
             // Arrange
-            Circle circle = _circle2D;
             int expectedCircumference = 46;
 
             // Act
-            double circumference = circle.Length;
+            double circumference = _circle2D.Length;
 
             // Assert
             (circumference / Math.PI).Should().Be(expectedCircumference);
@@ -99,10 +98,9 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Point3 expectedPt = new Point3(pts[0], pts[1], pts[2]);
-            Circle circle = _circle2D;
 
             // Act
-            Point3 pt = circle.PointAt(t);
+            Point3 pt = _circle2D.PointAt(t);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -116,10 +114,9 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
-            Circle circle = _circle2D;
 
             // Act
-            Vector3 tangent = circle.TangentAt(t);
+            Vector3 tangent = _circle2D.TangentAt(t);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -133,12 +130,11 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Point3 expectedPt = new Point3(pts[0], pts[1], pts[2]);
-            Circle circle = _circle2D;
 
             // Act
-            double normalizeLength = GSharkMath.RemapValue(length, new Interval(0.0, circle.Length), new Interval(0.0, 1.0));
-            Point3 pt = circle.PointAtLength(length);
-            Point3 ptNormalizedLength = circle.PointAtLength(normalizeLength, true);
+            double normalizeLength = GSharkMath.RemapValue(length, new Interval(0.0, _circle2D.Length), new Interval(0.0, 1.0));
+            Point3 pt = _circle2D.PointAtLength(length);
+            Point3 ptNormalizedLength = _circle2D.PointAtNormalizedLength(normalizeLength);
 
             // Assert
             pt.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -153,16 +149,12 @@ namespace GShark.Test.XUnit.Geometry
         {
             // Arrange
             Vector3 expectedTangent = new Vector3(pts[0], pts[1], pts[2]);
-            Circle circle = _circle2D;
 
             // Act
-            double normalizeLength = GSharkMath.RemapValue(length, new Interval(0.0, circle.Length), new Interval(0.0, 1.0));
-            Vector3 tangent = circle.TangentAtLength(length);
-            Vector3 tangentNormalizedLength = circle.TangentAtLength(normalizeLength, true);
+            Vector3 tangent = _circle2D.TangentAtLength(length);
 
             // Assert
             tangent.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
-            tangent.EpsilonEquals(tangentNormalizedLength, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Theory]
@@ -171,11 +163,8 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(5.1, 117.3)]
         public void It_Returns_The_Length_At_The_Give_Parameter(double parameter, double expectedLength)
         {
-            // Arrange
-            Circle circle = _circle2D;
-
             // Act
-            double length = circle.LengthAt(parameter);
+            double length = _circle2D.LengthAt(parameter);
 
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
@@ -185,12 +174,11 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_The_Circle()
         {
             // Arrange
-            Circle circle = _circle2D;
             Point3 minCheck = new Point3(62.592479, 2.549050, -4.77519);
             Point3 maxCheck = new Point3(108.591002, 47.043069, 6.904624);
 
             // Act
-            BoundingBox bBox = circle.GetBoundingBox();
+            BoundingBox bBox = _circle2D.GetBoundingBox();
 
             // Assert
             bBox.Min.EpsilonEquals(minCheck, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -218,15 +206,14 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_The_Offset_Of_A_Circle()
         {
             // Arrange
-            Circle cl = _circle2D;
             double offset = -5;
 
             // Act
-            Circle offsetResult = cl.Offset(offset);
+            Circle offsetResult = _circle2D.Offset(offset);
 
             // Assert
-            offsetResult.Plane.Origin.Should().BeEquivalentTo(cl.Plane.Origin);
-            (offsetResult.Radius - offset).Should().Be(cl.Radius);
+            offsetResult.Plane.Origin.Should().BeEquivalentTo(_circle2D.Plane.Origin);
+            (offsetResult.Radius - offset).Should().Be(_circle2D.Radius);
         }
 
         [Theory]
@@ -238,8 +225,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 testPt = new Point3(ptToTest[0], ptToTest[1], ptToTest[2]);
 
             // Act
-            Circle circle = _circle3D;
-            double parameter = circle.ClosestParameter(testPt);
+            double parameter = _circle3D.ClosestParameter(testPt);
 
             // Assert
             parameter.Should().BeApproximately(expectedParameter, GSharkMath.MaxTolerance);
