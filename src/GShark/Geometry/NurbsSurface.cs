@@ -1,13 +1,13 @@
 ﻿using GShark.Core;
+using GShark.Enumerations;
 using GShark.ExtendedMethods;
+using GShark.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using GShark.Enumerations;
-using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
@@ -188,7 +188,7 @@ namespace GShark.Geometry
             // In fact, the ruled surface is a special case of a skinned surface.
             if (copyCurves.Any(c => c.Degree != copyCurves[0].Degree))
             {
-                copyCurves = HomogenizedCurves(copyCurves);
+                copyCurves = CurveHelpers.HomogenizedCurves(copyCurves);
             }
 
             int degreeV = copyCurves[0].Degree;
@@ -228,8 +228,8 @@ namespace GShark.Geometry
         /// <returns>A ruled surface.</returns>
         public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
         {
-            IList<NurbsCurve> curves = new []{curveA, curveB};
-            curves = HomogenizedCurves(curves);
+            IList<NurbsCurve> curves = new[] { curveA, curveB };
+            curves = CurveHelpers.HomogenizedCurves(curves);
 
             return new NurbsSurface(1, curves[0].Degree, new KnotVector(1, 2), curves[0].Knots,
                 new List<List<Point4>> { curves[0].ControlPoints, curves[1].ControlPoints });
@@ -278,6 +278,23 @@ namespace GShark.Geometry
             Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
             Vector3 normal = Vector3.CrossProduct(derivatives[1, 0], derivatives[0, 1]);
             return normal.Unitize();
+        }
+
+        /// <summary>
+        /// Splits (divides) the surface into two parts at the specified parameter
+        /// </summary>
+        /// <param name="parameter">The parameter at which to split the surface, parameter should be between 0 and 1.</param>
+        /// <param name="direction">Where to split in the U or V direction of the surface.</param>
+        /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
+        /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.</returns>
+        public NurbsSurface[] Split(double parameter, SplitDirection direction)
+        {
+            if (parameter < 0.0 || parameter > 1.0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(parameter), "The parameter is not into the domain 0.0 to 1.0.");
+            }
+
+            return Divide.SplitSurface(this, parameter, direction);
         }
 
         /// <summary>
@@ -345,37 +362,6 @@ namespace GShark.Geometry
             stringBuilder.AppendLine(degreeV);
 
             return stringBuilder.ToString();
-        }
-
-        /// <summary>
-        /// The curves are brought to a common degree and knots.
-        /// </summary>
-        private static IList<NurbsCurve> HomogenizedCurves(IList<NurbsCurve> copyCurves)
-        {
-            // Unify knots, normalized them.
-            copyCurves = copyCurves
-                .Select(curve => curve.Knots.GetDomain(curve.Degree).Length > 1
-                    ? new NurbsCurve(curve.Degree, curve.Knots.Normalize(), curve.ControlPoints)
-                    : curve).ToList();
-
-            // Unify curves by degree.
-            int targetDegree = copyCurves.Max(c => c.Degree);
-            copyCurves = copyCurves
-                .Select(curve => curve.Degree != targetDegree
-                    ? Modify.ElevateDegree(curve, targetDegree)
-                    : curve).ToList();
-
-            // Unify curves by knots.
-            KnotVector combinedKnots = copyCurves.First().Knots.Copy();
-            foreach (NurbsCurve curve in copyCurves.Skip(1))
-            {
-                combinedKnots.AddRange(curve.Knots.Where(k => !combinedKnots.Contains(k)).ToList());
-            }
-
-            copyCurves = (from curve in copyCurves
-                let knotToInsert = combinedKnots.OrderBy(k => k).Where(k => !curve.Knots.Contains(k)).ToKnot()
-                select Modify.CurveKnotRefine(curve, knotToInsert)).ToList();
-            return copyCurves;
         }
     }
 }
