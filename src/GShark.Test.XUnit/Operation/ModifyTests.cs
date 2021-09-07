@@ -268,7 +268,7 @@ namespace GShark.Test.XUnit.Operation
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
-            NurbsCurve[] curves = { ln.ToNurbs(), curve, arc.ToNurbs() };
+            NurbsCurve[] curves = { ln.ToNurbs(), arc.ToNurbs(), curve };
 
             Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
             Point3 expectedPt2 = new Point3(5, 5, -1.230175);

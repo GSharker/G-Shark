@@ -109,11 +109,13 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// A quickSort algo used to put the curves in a sequential order based on the distance between the first and last points of each curves.
+        /// A quickSort algorithm used to order the curves in a sequential manner based on the distance between the first and last points of each curves.<br/>
+        /// https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_curve.cpp#L3600 <br/>
+        /// https://exceptionnotfound.net/quick-sort-csharp-the-sorting-algorithm-family-reunion/
         /// </summary>
         /// <param name="curves">The sets of curve to sort.</param>
         /// <returns>The set of curves sorted.</returns>
-        public static List<NurbsCurve> QuickSortCurve(List<NurbsCurve> curves)
+        public static List<NurbsCurve> QuickSortCurve(IList<NurbsCurve> curves)
         {
             if (curves == null || curves.Count == 0)
             {
@@ -122,7 +124,7 @@ namespace GShark.Core
 
             if (curves.Count == 1)
             {
-                return curves;
+                return curves.ToList();
             }
 
             // creates the sets of data required.
