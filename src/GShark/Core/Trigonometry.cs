@@ -1,6 +1,7 @@
 ﻿using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.Core
 {
