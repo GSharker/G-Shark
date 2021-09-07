@@ -1,5 +1,4 @@
-﻿using GShark.Core;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 
 namespace GShark.Interfaces
 {

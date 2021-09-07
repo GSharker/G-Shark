@@ -1,10 +1,9 @@
 ﻿using GShark.Core;
+using GShark.Interfaces;
+using GShark.Intersection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Interfaces;
-using GShark.Intersection;
-using GShark.Operation;
 
 namespace GShark.Geometry
 {
@@ -14,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class Polyline : List<Point3>, ICurve
+    public class Polyline : List<Point3>, ICurve, ITransformable<Polyline>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
@@ -27,7 +26,7 @@ namespace GShark.Geometry
                 throw new Exception("Insufficient points for a polyline.");
             }
 
-            AddRange(CleanVerticesForShortLength(vertices));
+            AddRange(RemoveShortSegments(vertices));
         }
 
         /// <summary>
@@ -103,6 +102,11 @@ namespace GShark.Geometry
             return new BoundingBox(this);
         }
 
+        public double LengthAt(double t)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates a closed polyline, where the first and last point are the same.
         /// </summary>
@@ -117,7 +121,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the line segment at the given parameter.
         /// </summary>
-        /// <param name="t">Curve parameter, between 0 and 1.</param>
+        /// <param name="t">Curve parameter. Parameter should be between 0.0 and segments count.</param>
         /// <returns>The line segment at the index.</returns>
         public Line SegmentAt(double t)
         {
@@ -126,52 +130,20 @@ namespace GShark.Geometry
                 return Segments.First();
             }
 
-            if (t >= 1)
+            if (t >= SegmentsCount)
             {
                 return Segments.Last();
             }
 
-            double tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
-            int segIdx = (int)Math.Truncate(tOnSegmentDomain);
-
+            int segIdx = (int)Math.Truncate(t);
             return Segments[segIdx];
         }
 
-        public Vector3 TangentAt(double t)
-        {
-            if (t <= 0)
-            {
-                return Segments.First().Direction;
-            }
-
-            if (t >= 1)
-            {
-                return Segments.Last().Direction;
-            }
-
-            return SegmentAt(t).Direction;
-        }
-
-        public Vector3 TangentAtLength(double length)
-        {
-            return SegmentAtLength(length).Direction;
-        }
-
-        public double ParameterAtLength(double length)
-        {
-            if (length <= 0)
-            {
-                return 0;
-            }
-
-            if (length >= Length)
-            {
-                return 1;
-            }
-
-            return length / Length;
-        }
-
+        /// <summary>
+        /// Gets the point on the polyline at the given parameter. The integer part of the parameter indicates the index of the segment.
+        /// </summary>
+        /// <param name="t">Evaluate parameter. Parameter should be between 0.0 and segments count.</param>
+        /// <returns></returns>
         public Point3 PointAt(double t)
         {
             if (t <= 0)
@@ -179,35 +151,19 @@ namespace GShark.Geometry
                 return StartPoint;
             }
 
-            if (t >= 1)
+            if (t >= SegmentsCount)
             {
                 return EndPoint;
             }
 
-            double tOnSegmentDomain = GSharkMath.RemapValue(t, new Interval(0, 1), new Interval(0, SegmentsCount));
-            int segIdx = (int)Math.Truncate(tOnSegmentDomain);
-            double t2 = Math.Abs(tOnSegmentDomain - segIdx);
+            int segIdx = (int)Math.Truncate(t);
+            double t2 = Math.Abs(t - segIdx);
             return Segments[segIdx].PointAt(t2);
         }
 
         public Point3 PointAtLength(double length, bool normalized)
         {
-            return PointAt(ParameterAtLength(length));
-        }
-
-        public double LengthAt(double t)
-        {
-            if (t <= 0)
-            {
-                return 0;
-            }
-
-            if (t >= 1)
-            {
-                return Length;
-            }
-
-            return Length * t;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -244,10 +200,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the parameter along the polyline which is closest to the point.
+        /// Gets the parameter along the polyline which is closest to the test point.
         /// </summary>
         /// <param name="pt">The point to test.</param>
-        /// <returns>The parameter closest to the point.</returns>
+        /// <returns>The parameter closest to the test point.</returns>
         public double ClosestParameter(Point3 pt)
         {
             int index = 0;
@@ -268,12 +224,10 @@ namespace GShark.Geometry
                 }
 
                 double distFromPt = line.PointAt(tempT).DistanceTo(pt);
-                if (distFromPt < smallestDistance)
-                {
-                    smallestDistance = distFromPt;
-                    valueT = tempT;
-                    index = i;
-                }
+                if (!(distFromPt < smallestDistance)) continue;
+                smallestDistance = distFromPt;
+                valueT = tempT;
+                index = i;
             }
 
             return valueT + index;
@@ -370,7 +324,7 @@ namespace GShark.Geometry
         public NurbsCurve ToNurbs()
         {
             double lengthSum = 0;
-            KnotVector knots = new KnotVector { 0, 0};
+            KnotVector knots = new KnotVector { 0, 0 };
             List<Point4> ctrlPts = Point4.PointsHomogeniser(this, 1.0);
 
             for (int i = 0; i < Count - 1; i++)
@@ -380,7 +334,7 @@ namespace GShark.Geometry
             }
             knots.Add(lengthSum);
 
-            return new NurbsCurve(1, knots.Normalize(), ctrlPts);
+            return new NurbsCurve(1, knots, ctrlPts);
         }
 
         /// <summary>
@@ -447,7 +401,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
         /// <returns>A cleaned collections of points if necessary otherwise the same collection of points.</returns>
-        private static IList<Point3> CleanVerticesForShortLength(IList<Point3> vertices)
+        private static IList<Point3> RemoveShortSegments(IList<Point3> vertices)
         {
             int[] coincidenceFlag = new int[vertices.Count];
             coincidenceFlag[0] = 0;
