@@ -154,34 +154,17 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.0, new double[] { 0.5547, 0.83205, 0 })]
-        [InlineData(0.25, new double[] { 0.447214, -0.894427, 0 })]
-        [InlineData(0.66, new double[] { 0.894427, 0.447214, 0 })]
-        [InlineData(4.0, new double[] { 0.986394, 0.164399, 0 })]
-        public void It_Returns_A_Tangent_Vector_At_The_Given_Parameter(double t, double[] tangent)
-        {
-            // Arrange
-            Vector3 expectedTangent = new Vector3(tangent[0], tangent[1], tangent[2]);
-
-            // Act
-            Vector3 tanResult = _polyline.TangentAt(t);
-
-            // Assert
-            tanResult.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(0.0, 0)]
-        [InlineData(0.25, 1)]
-        [InlineData(0.66, 2)]
-        [InlineData(1, 3)]
-        public void It_Returns_A_Segment_At_The_Given_Index(double t, int expectedIndex)
+        [InlineData(0.693375, 12.5)]
+        [InlineData(0.931896, 16.8)]
+        [InlineData(2.330214, 32.9)]
+        [InlineData(3.415046, 46.7)]
+        public void It_Returns_The_Length_At_The_Given_Parameter(double t, double expectedLength)
         {
             // Act
-            Line segment = _polyline.SegmentAt(t);
+            double length = _polyline.LengthAt(t);
 
             // Assert
-            segment.Should().Be(_polyline.Segments[expectedIndex]);
+            length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -314,30 +297,6 @@ namespace GShark.Test.XUnit.Geometry
 
             //Assert
             polyLine.Segments.IndexOf(segment).Should().Be(expectedIndex);
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_At_A_Given_Length()
-        {
-            //Arrange
-            var polyLine = new Polyline(new List<Point3>
-            {
-                new (0, 0, 0),
-                new (5, 0, 0),
-                new (5, 10, 0),
-                new (0, 10, 0),
-                new (0, 0, 0)
-            });
-            
-            var testLength = 6.66;
-            var tan = polyLine[2] - polyLine[1];
-            var expectedTangent = tan.Unitize();
-            
-            //Act
-            var tangent = polyLine.TangentAtLength(testLength);
-
-            //Assert
-            tangent.Should().Be(expectedTangent);
         }
     }
 }

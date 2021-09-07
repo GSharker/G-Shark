@@ -102,9 +102,29 @@ namespace GShark.Geometry
             return new BoundingBox(this);
         }
 
+        /// <summary>
+        /// Evaluated the length on the polyline at the given parameter.
+        /// </summary>
+        /// <param name="t">Evaluate parameter. Parameter should be between 0.0 and segments count.</param>
+        /// <returns>The evaluated length at the curve parameter.</returns>
         public double LengthAt(double t)
         {
-            throw new NotImplementedException();
+            if (t <= 0)
+            {
+                return 0.0;
+            }
+
+            if (t >= SegmentsCount)
+            {
+                return Length;
+            }
+
+            int segIdx = (int)Math.Truncate(t);
+            double t2 = Math.Abs(t - segIdx);
+
+            double length = Segments[segIdx].Length * t2;
+            length += Segments.GetRange(0, segIdx).Sum(seg => seg.Length);
+            return length;
         }
 
         /// <summary>
@@ -119,31 +139,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the line segment at the given parameter.
-        /// </summary>
-        /// <param name="t">Curve parameter. Parameter should be between 0.0 and segments count.</param>
-        /// <returns>The line segment at the index.</returns>
-        public Line SegmentAt(double t)
-        {
-            if (t <= 0)
-            {
-                return Segments.First();
-            }
-
-            if (t >= SegmentsCount)
-            {
-                return Segments.Last();
-            }
-
-            int segIdx = (int)Math.Truncate(t);
-            return Segments[segIdx];
-        }
-
-        /// <summary>
-        /// Gets the point on the polyline at the given parameter. The integer part of the parameter indicates the index of the segment.
+        /// Evaluates the point on the polyline at the given parameter. The integer part of the parameter indicates the index of the segment.
         /// </summary>
         /// <param name="t">Evaluate parameter. Parameter should be between 0.0 and segments count.</param>
-        /// <returns></returns>
+        /// <returns>The evaluated point at the curve parameter.</returns>
         public Point3 PointAt(double t)
         {
             if (t <= 0)
