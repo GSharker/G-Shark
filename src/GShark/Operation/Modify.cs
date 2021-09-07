@@ -1,11 +1,10 @@
 ﻿using GShark.Core;
+using GShark.Enumerations;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Enumerations;
-using GShark.Interfaces;
 
 namespace GShark.Operation
 {
@@ -237,7 +236,7 @@ namespace GShark.Operation
 
             int m = n + p + 1;
             int ph = finalDegree;
-            int ph2 = (int) Math.Floor((double) (ph / 2));
+            int ph2 = (int)Math.Floor((double)(ph / 2));
 
             // Output values;
             List<Point4> Qw = new List<Point4>();
@@ -302,8 +301,8 @@ namespace GShark.Operation
 
                 // Insert knot U[b] r times.
                 // Checks for integer arithmetic.
-                int lbz = (oldr > 0) ? (int) Math.Floor((double) ((2 + oldr) / 2)) : 1;
-                int rbz = (r > 0) ? (int) Math.Floor((double) (ph - (r + 1) / 2)) : ph;
+                int lbz = (oldr > 0) ? (int)Math.Floor((double)((2 + oldr) / 2)) : 1;
+                int rbz = (r > 0) ? (int)Math.Floor((double)(ph - (r + 1) / 2)) : ph;
 
                 if (r > 0)
                 {
@@ -438,7 +437,7 @@ namespace GShark.Operation
         private static double BezDegreeReduce(Point4[] bpts, int degree, out Point4[] rbpts)
         {
             // Eq. 5.40
-            int r = (int) Math.Floor(((double) degree - 1) / 2);
+            int r = (int)Math.Floor(((double)degree - 1) / 2);
 
             Point4[] P = new Point4[degree];
             P[0] = bpts[0];
@@ -451,13 +450,13 @@ namespace GShark.Operation
             // Eq. 5.41
             for (int i = 1; i <= r1; i++)
             {
-                double alphaI = (double) i / degree;
+                double alphaI = (double)i / degree;
                 P[i] = (bpts[i] - (P[i - 1] * alphaI)) / (1 - alphaI);
             }
 
             for (int i = degree - 2; i >= r + 1; i--)
             {
-                double alphaI = (double) (i + 1) / degree;
+                double alphaI = (double)(i + 1) / degree;
                 P[i] = (bpts[i + 1] - (P[i + 1] * (1 - alphaI))) / alphaI;
             }
 
@@ -466,22 +465,22 @@ namespace GShark.Operation
                For p even the maximum error occurs at u = 1/2; for p odd the error is zero at u = 1/2, and it has two peaks a bit to the left and
                right of u = 1/2. */
 
-             // Eq. 5.43 p even.
-             List<double> Br = Evaluation.BasisFunction(degree - 1, new KnotVector(degree - 1, P.Length), 0.5);
-            double parametricError = bpts[r + 1].DistanceTo((P[r] + P[r + 1]) * 0.5) * Br[r + 1]; 
+            // Eq. 5.43 p even.
+            List<double> Br = Evaluation.BasisFunction(degree - 1, new KnotVector(degree - 1, P.Length), 0.5);
+            double parametricError = bpts[r + 1].DistanceTo((P[r] + P[r + 1]) * 0.5) * Br[r + 1];
 
             // Eq. 5.42
             if (isDegreeOdd)
             {
-                double alphaR = (double) r / degree;
+                double alphaR = (double)r / degree;
                 Point4 PLeft = (bpts[r] - (P[r - 1] * alphaR)) / (1 - alphaR);
 
-                double alphaR1 = (double) (r + 1) / degree;
+                double alphaR1 = (double)(r + 1) / degree;
                 Point4 PRight = (bpts[r + 1] - (P[r + 1] * (1 - alphaR1))) / alphaR1;
 
                 P[r] = (PLeft + PRight) * 0.5;
                 // Eq. 5.44 p odd.
-                parametricError = ((1-alphaR) * 0.5) * ((Br[r] - Br[r + 1])*PLeft.DistanceTo(PRight));
+                parametricError = ((1 - alphaR) * 0.5) * ((Br[r] - Br[r + 1]) * PLeft.DistanceTo(PRight));
             }
 
             rbpts = P;
@@ -605,7 +604,7 @@ namespace GShark.Operation
                         {
                             double alfa = (U[a] - Uh[l - 1]) / (U[b] - Uh[l - 1]);
                             double beta = (U[a] - Uh[j - k - 1]) / (U[b] - Uh[j - k - 1]);
-                            Pw[l - 1] = (Pw[l - 1] - Pw[l - 2] * (1.0-alfa)) / alfa;
+                            Pw[l - 1] = (Pw[l - 1] - Pw[l - 2] * (1.0 - alfa)) / alfa;
                             rbpts[kj] = (rbpts[kj] - rbpts[kj + 1] * beta) / (1.0 - beta);
 
                             l += 1;
@@ -628,7 +627,7 @@ namespace GShark.Operation
 
                         // Update the error vector.
                         int K = a + oldr - k;
-                        int q = (int)Math.Floor((double) (2 * p - k + 1) / 2);
+                        int q = (int)Math.Floor((double)(2 * p - k + 1) / 2);
                         int L = K - q;
 
                         for (int ii = L; ii <= a; ii++)
@@ -709,7 +708,7 @@ namespace GShark.Operation
                 throw new Exception("Insufficient curves for join operation.");
             }
 
-            List<NurbsCurve> sortedCurves = Trigonometry.QuickSortCurve(curves);
+            List<NurbsCurve> sortedCurves = CurveHelpers.QuickSortCurve(curves);
 
             for (int i = 0; i < sortedCurves.Count - 1; i++)
             {
@@ -719,7 +718,7 @@ namespace GShark.Operation
                 }
                 if (sortedCurves[i].ControlPoints.Last().DistanceTo(sortedCurves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
                 {
-                    throw new Exception($"Curve at {i} don't touch curve at {i+1}.");
+                    throw new Exception($"Curve at {i} don't touch curve at {i + 1}.");
                 }
             }
 
