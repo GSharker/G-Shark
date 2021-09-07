@@ -48,7 +48,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the middle point of the polyline.
         /// </summary>
-        public Point3 MidPoint => PointAt(0.5);
+        public Point3 MidPoint => PointAtLength(0.5, true);
 
         /// <summary>
         /// Gets the end point of the polyline.
@@ -160,6 +160,9 @@ namespace GShark.Geometry
             return Segments[segIdx].PointAt(t2);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="ICurve.PointAtLength"/>
+        /// </summary>
         public Point3 PointAtLength(double length, bool normalized = false)
         {
             if (length <= 0.0)
@@ -167,29 +170,40 @@ namespace GShark.Geometry
                 return StartPoint;
             }
 
-            if (length >= Length)
+            return length >= Length ? EndPoint : PointAt(ParameterAtLength(length, normalized));
+        }
+
+        /// <summary>
+        /// Calculates the parameter of the polyline at the given length.
+        /// </summary>
+        /// <param name="length">Length from start of polyline.</param>
+        /// <param name="normalized">If false, the length is between 0.0 and length of the curve. If true, the length factor is normalized between 0.0 and 1.0.</param>
+        /// <returns>The parameter at the given length.</returns>
+        public double ParameterAtLength(double length, bool normalized = false)
+        {
+            if (length <= 0.0)
             {
-                return EndPoint;
+                return 0.0;
             }
 
-            length = (normalized)
-                ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
-                : length;
-
-            double progressiveEndLength = 0;
-
-            for (int i = 0; i < SegmentsCount; i++)
+            if (length < Length)
             {
-                double progressiveStartLength = progressiveEndLength;
-                progressiveEndLength += Segments[i].Length;
-                if (length <= progressiveEndLength) // This is the right segment
-                {
-                    double segmentLength = i == 0 ? length : length - progressiveStartLength;
+                length = (normalized)
+                    ? GSharkMath.RemapValue(length, new Interval(0.0, 1.0), new Interval(0.0, Length))
+                    : length;
 
+                double progressiveEndLength = 0.0;
+
+                for (int i = 0; i < SegmentsCount; i++)
+                {
+                    double progressiveStartLength = progressiveEndLength;
+                    progressiveEndLength += Segments[i].Length;
+                    if (!(length <= progressiveEndLength)) continue;
+                    return (Math.Abs(length - progressiveStartLength) / Segments[i].Length) + i;
                 }
             }
 
-            throw new NotImplementedException();
+            return SegmentsCount;
         }
 
         /// <summary>

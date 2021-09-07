@@ -122,8 +122,8 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [InlineData(0.0, new double[] { 5, 0, 0 })]
-        [InlineData(0.25, new double[] { 15, 15, 0 })]
-        [InlineData(0.66, new double[] { 26.4, 8.2, 0 })]
+        [InlineData(0.25, new double[] { 7.5, 3.75, 0 })]
+        [InlineData(2.5, new double[] { 25, 7.5, 0 })]
         [InlineData(4.0, new double[] { 45, 12.5, 0 })]
         public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] pt)
         {
@@ -165,6 +165,31 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
+        public void It_Returns_The_Point_At_The_Given_Length()
+        {
+            // Arrange
+            Point3 expectedPt = new Point3(19.369239, 6.261522, 0);
+
+            // Act
+            Point3 pt = _polyline.PointAtLength(0.5, true);
+            
+            // Assert
+            (pt == expectedPt).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0.5, 1.873848)]
+        [InlineData(1.0, 4.0)]
+        public void It_Returns_The_Parameter_At_The_Given_Length(double normalizedLength, double parameterExpected)
+        {
+            // Act
+            double parameter = _polyline.ParameterAtLength(normalizedLength, true);
+
+            // Assert
+            parameter.Should().BeApproximately(parameterExpected, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -256,18 +281,13 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(18.154088, 12.309505, 7.561387)
             };
             Polyline poly = new Polyline(pts);
-            double lengthSum = 0.0;
 
             // Act
             var polyNurbs = poly.ToNurbs();
 
             // Assert
             polyNurbs.Degree.Should().Be(1);
-            for (int i = 0; i < poly.SegmentsCount; i++)
-            {
-                lengthSum += poly.Segments[i].Length;
-                pts[i + 1].EpsilonEquals(polyNurbs.PointAtLength(lengthSum), GSharkMath.MaxTolerance).Should().BeTrue();
-            }
+            polyNurbs.ControlPointLocations.Select((pt, i) => (pt == pts[i]).Should().BeTrue());
         }
 
         [Theory]
