@@ -1,9 +1,8 @@
 ﻿using GShark.Core;
-using System;
-using System.Linq;
 using GShark.Interfaces;
 using GShark.Intersection;
-using GShark.Operation;
+using System;
+using System.Linq;
 
 namespace GShark.Geometry
 {

@@ -238,7 +238,7 @@ namespace GShark.Geometry
         /// Gets the NURBS form of the curve.
         /// </summary>
         /// <returns>A NURBS curve.</returns>
-        public NurbsCurve ToNurbs()
+        public NurbsBase ToNurbs()
         {
             return new NurbsCurve(new List<Point3> { StartPoint, EndPoint }, 1);
         }

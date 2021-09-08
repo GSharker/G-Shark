@@ -46,7 +46,7 @@ namespace GShark.Test.XUnit.Operation
         public void RationalBezierCurveParamAtLength_Returns_Parameters_At_Passed_Lengths()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;
@@ -72,7 +72,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_The_Length_Of_The_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
             double expectedLength = 50.334675;
 
             // Act
@@ -92,7 +92,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_The_Closest_Point_And_The_Parameter_t(double[] ptToCheck, double[] ptExpected, double tValExpected)
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
             Point3 testPt = new Point3(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
             Point3 expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
 
@@ -113,7 +113,7 @@ namespace GShark.Test.XUnit.Operation
         public void RationalCurveParameterAtLength_Returns_Parameter_t_At_The_Given_Length(double segmentLength, double tValueExpected)
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
 
             // Act
             double t = Analyze.CurveParameterAtLength(curve, segmentLength);
@@ -150,7 +150,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPt = new Point3(3.591549, 10, 4.464789);
 
             // Act
-            NurbsCurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
+            NurbsBase Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.U);
 
             // Assert
             Isocurve.ControlPointLocations[1].DistanceTo(expectedPt).Should().BeLessThan(GSharkMath.MinTolerance);
@@ -165,7 +165,7 @@ namespace GShark.Test.XUnit.Operation
             Point3 expectedPtAt = new Point3(5, 3.913043, 1.695652);
 
             // Act
-            NurbsCurve Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.V);
+            NurbsBase Isocurve = Analyze.Isocurve(surface, 0.3, SurfaceDirection.V);
             Point3 ptAt = Isocurve.PointAt(0.5);
 
             // Assert

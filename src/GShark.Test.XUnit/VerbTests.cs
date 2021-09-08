@@ -39,7 +39,7 @@ namespace GShark.Test.XUnit
         }
 
         [Fact]
-        public void NurbsCurvebyPoints()
+        public void NurbsBasebyPoints()
         {
             Array<object> pts = new Array<object>();
 

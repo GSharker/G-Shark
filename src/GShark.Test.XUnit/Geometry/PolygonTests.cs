@@ -136,14 +136,14 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Polygon_Transformed_In_NurbsCurve()
+        public void It_Returns_A_Polygon_Transformed_In_NurbsBase()
         {
             // Arrange
             Polyline polygon = new Polygon(Planar2D);
             double lengthSum = 0.0;
 
             // Act
-            NurbsCurve polygonCurve = polygon.ToNurbs();
+            NurbsBase polygonCurve = polygon.ToNurbs();
 
             // Assert
             polygonCurve.Degree.Should().Be(1);

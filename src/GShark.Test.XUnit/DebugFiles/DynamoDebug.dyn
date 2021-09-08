@@ -1817,7 +1817,7 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsCurve.ByControlPoints@Autodesk.DesignScript.Geometry.Point[],int,bool",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsBase.ByControlPoints@Autodesk.DesignScript.Geometry.Point[],int,bool",
       "Id": "fda182cae6704aa28a014216de461430",
       "Inputs": [
         {
@@ -1851,8 +1851,8 @@
       "Outputs": [
         {
           "Id": "d3b2f5c4dfa945b3b476cbba50236387",
-          "Name": "NurbsCurve",
-          "Description": "NurbsCurve",
+          "Name": "NurbsBase",
+          "Description": "NurbsBase",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -1860,7 +1860,7 @@
         }
       ],
       "Replication": "Auto",
-      "Description": "Create a BSplineCurve by using explicit control points. NOTE 1: BSplineCurves with deg=1 have G1 discontinuities, which cause problems for extrusion, sweep, and other operations. They should be avoided. Use a PolyCurve instead. NOTE 2: If the curve is periodic (closed), then the first and last points MUST be the same.\n\nNurbsCurve.ByControlPoints (points: Point[], degree: int = 3, closeCurve: bool = false): NurbsCurve"
+      "Description": "Create a BSplineCurve by using explicit control points. NOTE 1: BSplineCurves with deg=1 have G1 discontinuities, which cause problems for extrusion, sweep, and other operations. They should be avoided. Use a PolyCurve instead. NOTE 2: If the curve is periodic (closed), then the first and last points MUST be the same.\n\nNurbsBase.ByControlPoints (points: Point[], degree: int = 3, closeCurve: bool = false): NurbsBase"
     },
     {
       "ConcreteType": "CoreNodeModels.CreateList, CoreNodeModels",
@@ -2107,7 +2107,7 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[],int",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsBase.ByPoints@Autodesk.DesignScript.Geometry.Point[],int",
       "Id": "4f6cbe6195734e439e9aea2b7fd5f428",
       "Inputs": [
         {
@@ -2132,8 +2132,8 @@
       "Outputs": [
         {
           "Id": "e303f62158cb4c97aa99cac73fcb5506",
-          "Name": "NurbsCurve",
-          "Description": "NurbsCurve",
+          "Name": "NurbsBase",
+          "Description": "NurbsBase",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -2141,18 +2141,18 @@
         }
       ],
       "Replication": "Auto",
-      "Description": "Create a BSplineCurve by interpolating between points.\n\nNurbsCurve.ByPoints (points: Point[], degree: int = 3): NurbsCurve"
+      "Description": "Create a BSplineCurve by interpolating between points.\n\nNurbsBase.ByPoints (points: Point[], degree: int = 3): NurbsBase"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsCurve.ControlPoints",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.NurbsBase.ControlPoints",
       "Id": "64922aa005654e1290cd94a1eeddd189",
       "Inputs": [
         {
           "Id": "166b577253b14add8d4b9530d94ecdd6",
-          "Name": "nurbsCurve",
-          "Description": "Autodesk.DesignScript.Geometry.NurbsCurve",
+          "Name": "NurbsBase",
+          "Description": "Autodesk.DesignScript.Geometry.NurbsBase",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -2171,7 +2171,7 @@
         }
       ],
       "Replication": "Auto",
-      "Description": "Get the control points of the NurbsCurve. These are the points that the curve interpolates.\n\nNurbsCurve.ControlPoints ( ): Point[]"
+      "Description": "Get the control points of the NurbsBase. These are the points that the curve interpolates.\n\nNurbsBase.ControlPoints ( ): Point[]"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -3407,7 +3407,7 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "NurbsCurve.ByControlPoints",
+        "Name": "NurbsBase.ByControlPoints",
         "Id": "fda182cae6704aa28a014216de461430",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -3487,7 +3487,7 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "NurbsCurve.ByPoints",
+        "Name": "NurbsBase.ByPoints",
         "Id": "4f6cbe6195734e439e9aea2b7fd5f428",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -3497,7 +3497,7 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "NurbsCurve.ControlPoints",
+        "Name": "NurbsBase.ControlPoints",
         "Id": "64922aa005654e1290cd94a1eeddd189",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,

@@ -25,7 +25,7 @@ namespace GShark.Sampling
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="divisions">The number of parts to split the curve into.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static List<double> ByCount(NurbsCurve curve, int divisions)
+        internal static List<double> ByCount(NurbsBase curve, int divisions)
         {
             double approximatedLength = Analyze.CurveLength(curve);
             double arcLengthSeparation = approximatedLength / divisions;
@@ -42,10 +42,10 @@ namespace GShark.Sampling
         /// <param name="curve">The curve object to divide.</param>
         /// <param name="length">The length separating the resultant samples.</param>
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static (List<double> tValues, List<double> lengths) ByLength(NurbsCurve curve, double length)
+        internal static (List<double> tValues, List<double> lengths) ByLength(NurbsBase curve, double length)
         {
-            List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
-            List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
+            List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<double> curveLengths = curves.Select(NurbsBase => Analyze.BezierCurveLength(NurbsBase)).ToList();
             double totalLength = curveLengths.Sum();
 
             List<double> tValues = new List<double> { curve.Knots[0] };
@@ -85,7 +85,7 @@ namespace GShark.Sampling
         /// <param name="curve">The curve object.</param>
         /// <param name="numSamples">Number of samples.</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        internal static (List<double> tvalues, List<Point3> pts) RegularSample(NurbsCurve curve, int numSamples)
+        internal static (List<double> tvalues, List<Point3> pts) RegularSample(NurbsBase curve, int numSamples)
         {
             if (numSamples < 1)
                 throw new Exception("Number of sample must be at least 1 and not negative.");
@@ -116,7 +116,7 @@ namespace GShark.Sampling
         /// <param name="curve">The curve to sampling.</param>
         /// <param name="tolerance">The tolerance for the adaptive division.</param>
         /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
-        public static (List<double> tValues, List<Point3> pts) AdaptiveSample(NurbsCurve curve, double tolerance = GSharkMath.MinTolerance)
+        public static (List<double> tValues, List<Point3> pts) AdaptiveSample(NurbsBase curve, double tolerance = GSharkMath.MinTolerance)
         {
             if (curve.Degree != 1) return AdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[curve.Knots.Count - 1], tolerance);
             KnotVector copyKnot = new KnotVector(curve.Knots);
@@ -135,7 +135,7 @@ namespace GShark.Sampling
         /// <param name="end">The end parameter for sampling.</param>
         /// <param name="tolerance">Tolerance for the adaptive scheme. The default tolerance is set as (1e-6).</param>
         /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Point3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance = GSharkMath.MinTolerance)
+        public static (List<double> tValues, List<Point3> pts) AdaptiveSampleRange(NurbsBase curve, double start, double end, double tolerance = GSharkMath.MinTolerance)
         {
             // Sample curve at three pts.
             Random random = new Random();

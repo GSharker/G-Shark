@@ -39,7 +39,7 @@ namespace GShark.Test.XUnit.Sampling
             NurbsCurve curve = new NurbsCurve(pts, degree);
 
             // Act
-            List<NurbsCurve> curves = curve.SplitAt(parameter);
+            List<NurbsBase> curves = curve.SplitAt(parameter);
 
             // Assert
             curves.Should().HaveCount(2);
@@ -83,7 +83,7 @@ namespace GShark.Test.XUnit.Sampling
                 degree);
 
             // Act
-            NurbsCurve subCurve = curve.SubCurve(domain);
+            NurbsBase subCurve = curve.SubCurve(domain);
 
             // Assert
             subCurve.ControlPointLocations.SequenceEqual(expectedSubCurve.ControlPointLocations).Should().BeTrue();
@@ -116,7 +116,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Divide_By_Number_Of_Segments_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
             double[] tValuesExpected = {
                     0,
                     0.12294074023135007,
@@ -147,7 +147,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Divide_By_Length_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
             double[] tValuesExpected = {
                 0,
                 0.12294074023135007,
@@ -302,7 +302,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Return_Adaptive_Sample_Subdivision_Of_A_Nurbs()
         {
             // Arrange
-            NurbsCurve curve = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
+            NurbsBase curve = NurbsBaseCollection.NurbsBaseQuadratic3DBezier();
 
             // Act
             (List<double> tValues, List<Point3> pts) result0 = Curve.AdaptiveSample(curve, 0.1);
@@ -328,7 +328,7 @@ namespace GShark.Test.XUnit.Sampling
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3> locationPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPointLocations;
+            List<Point3> locationPts = NurbsBaseCollection.NurbsBasePlanarExample().ControlPointLocations;
             NurbsCurve curve = new NurbsCurve(locationPts, 1);
 
             // Act
@@ -383,7 +383,7 @@ namespace GShark.Test.XUnit.Sampling
         public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
         {
             // Act
-            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(NurbsCurveCollection.NurbsCurvePlanarExample());
+            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(NurbsBaseCollection.NurbsBasePlanarExample());
 
             // Assert
             tValues.Should().NotBeEmpty();

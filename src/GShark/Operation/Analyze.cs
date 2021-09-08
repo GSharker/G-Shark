@@ -23,14 +23,14 @@ namespace GShark.Operation
         /// A higher number yields a more exact result, default set to 17.
         /// </param>
         /// <returns>The approximate length.</returns>
-        public static double CurveLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 17)
+        public static double CurveLength(NurbsBase curve, double u = -1.0, int gaussDegIncrease = 17)
         {
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
-            List<NurbsCurve> crvs = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsBase> crvs = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
             double sum = 0.0;
-            NurbsCurve tempCrv = crvs[0];
+            NurbsBase tempCrv = crvs[0];
 
             while (i < crvs.Count && tempCrv.Knots[0] + GSharkMath.Epsilon < uSet)
             {
@@ -86,7 +86,7 @@ namespace GShark.Operation
         /// A higher number yields a more exact result, default set to 17.
         /// </param>
         /// <returns>The approximate length of a bezier.</returns>
-        public static double BezierCurveLength(NurbsCurve curve, double u = -1.0, int gaussDegIncrease = 17)
+        public static double BezierCurveLength(NurbsBase curve, double u = -1.0, int gaussDegIncrease = 17)
         {
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
             double z = (uSet - curve.Knots[0]) / 2;
@@ -111,7 +111,7 @@ namespace GShark.Operation
         /// <param name="segmentLength">The length to find the parameter.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <returns>The parameter at the given length.</returns>
-        public static double BezierCurveParamAtLength(NurbsCurve curve, double segmentLength, double tolerance)
+        public static double BezierCurveParamAtLength(NurbsBase curve, double segmentLength, double tolerance)
         {
             if (segmentLength < 0)
             {
@@ -162,7 +162,7 @@ namespace GShark.Operation
         /// <param name="point">Point to search from.</param>
         /// <param name="t">Parameter of local closest point.</param>
         /// <returns>The closest point on the curve.</returns>
-        public static Point3 CurveClosestPoint(NurbsCurve curve, Point3 point, out double t)
+        public static Point3 CurveClosestPoint(NurbsBase curve, Point3 point, out double t)
         {
             t = CurveClosestParameter(curve, point);
             return Evaluation.CurvePointAt(curve, t);
@@ -175,7 +175,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="point">Point to search from.</param>
         /// <returns>The closest parameter on the curve.</returns>
-        public static double CurveClosestParameter(NurbsCurve curve, Point3 point)
+        public static double CurveClosestParameter(NurbsBase curve, Point3 point)
         {
             double minimumDistance = double.PositiveInfinity;
             double tParameter = 0D;
@@ -461,12 +461,12 @@ namespace GShark.Operation
         /// <param name="segmentLength">The arc length for which to do the procedure.</param>
         /// <param name="tolerance">If set less or equal 0.0, the tolerance used is 1e-10.</param>
         /// <returns>The parameter on the curve.</returns>
-        public static double CurveParameterAtLength(NurbsCurve curve, double segmentLength, double tolerance = -1)
+        public static double CurveParameterAtLength(NurbsBase curve, double segmentLength, double tolerance = -1)
         {
             if (segmentLength < GSharkMath.Epsilon) return curve.Knots[0];
             if (Math.Abs(curve.Length - segmentLength) < GSharkMath.Epsilon) return curve.Knots[curve.Knots.Count - 1];
 
-            List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(curve);
             int i = 0;
             double curveLength = -GSharkMath.Epsilon;
             double segmentLengthLeft = segmentLength;
@@ -493,7 +493,7 @@ namespace GShark.Operation
         /// <param name="parameter">The parameter between 0.0 to 1.0 whether the isocurve will be extracted.</param>
         /// <param name="direction">The U or V direction whether the isocurve will be extracted.</param>
         /// <returns>The isocurve extracted.</returns>
-        public static NurbsCurve Isocurve(NurbsSurface surface, double parameter, SurfaceDirection direction)
+        public static NurbsBase Isocurve(NurbsSurface surface, double parameter, SurfaceDirection direction)
         {
             KnotVector knots = (direction == SurfaceDirection.V) ? surface.KnotsV : surface.KnotsU;
             int degree = (direction == SurfaceDirection.V) ? surface.DegreeV : surface.DegreeU;

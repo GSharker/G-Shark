@@ -9,15 +9,15 @@ namespace GShark.Optimization
     /// </summary>
     public class CurvesIntersectionObjectives : IObjectiveFunction
     {
-        private readonly NurbsCurve _curve0;
-        private readonly NurbsCurve _curve1;
+        private readonly NurbsBase _curve0;
+        private readonly NurbsBase _curve1;
 
         /// <summary>
         /// Initialize the class, which collects the functions used for the minimization problem.
         /// </summary>
         /// <param name="curve0">First curve used in the intersection process.</param>
         /// <param name="curve1">First curve used in the intersection process.</param>
-        public CurvesIntersectionObjectives(NurbsCurve curve0, NurbsCurve curve1)
+        public CurvesIntersectionObjectives(NurbsBase curve0, NurbsBase curve1)
         {
             _curve0 = curve0;
             _curve1 = curve1;

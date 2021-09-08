@@ -286,7 +286,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Form_Of_A_Line()
+        public void It_Returns_A_NurbsBase_Form_Of_A_Line()
         {
             // Arrange
             var line = _exampleLine;

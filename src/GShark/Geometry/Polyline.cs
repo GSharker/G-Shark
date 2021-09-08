@@ -367,7 +367,7 @@ namespace GShark.Geometry
         /// Constructs a nurbs curve representation of this polyline.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this polyline.</returns>
-        public NurbsCurve ToNurbs()
+        public NurbsBase ToNurbs()
         {
             double lengthSum = 0;
             KnotVector knots = new KnotVector { 0, 0 };
