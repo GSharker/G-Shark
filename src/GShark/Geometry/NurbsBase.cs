@@ -142,7 +142,7 @@ namespace GShark.Geometry
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
-        /// <returns>A periodic NURBS curve.</returns>
+        /// <returns>A periodic curve.</returns>
         public NurbsBase Close()
         {
             // Wrapping control points
@@ -518,7 +518,7 @@ namespace GShark.Geometry
         /// Splits a curve into two parts at a given parameter.
         /// </summary>
         /// <param name="t">The parameter at which to split the curve.</param>
-        /// <returns>Two NurbsBase objects.</returns>
+        /// <returns>Two curves.</returns>
         public List<NurbsBase> SplitAt(double t)
         {
             int degree = Degree;
@@ -584,7 +584,7 @@ namespace GShark.Geometry
         /// Extract sub-curve defined by domain.
         /// </summary>
         /// <param name="domain">Domain of sub-curve</param>
-        /// <returns>NurbsBase.</returns>
+        /// <returns>The sub curve.</returns>
         public NurbsBase SubCurve(Interval domain)
         {
             int degree = Degree;
@@ -642,7 +642,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Compares two curves for equality.<br/>
-        /// Two NURBS curves are equal when the have same control points, weights, knots and degree.
+        /// Two curves are equal when the have same control points, weights, knots and degree.
         /// </summary>
         /// <param name="other">The other curve.</param>
         /// <returns>Return true if the curves are equal.</returns>
