@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using GShark.Core;
+using GShark.ExtendedMethods;
 using GShark.Interfaces;
 using GShark.Operation;
 using GShark.Operation.Utilities;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using GShark.ExtendedMethods;
 
 namespace GShark.Geometry
 {
@@ -446,7 +446,7 @@ namespace GShark.Geometry
                 offsetPts.Add(pts[i] + vecOffset);
             }
 
-            return Fitting.InterpolatedCurve(offsetPts, Degree);
+            return Fitting.Curve.Interpolated(offsetPts, Degree);
         }
 
         /// <summary>

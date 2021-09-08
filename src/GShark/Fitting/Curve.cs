@@ -1,24 +1,25 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
+using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GShark.Operation
+namespace GShark.Fitting
 {
     /// <summary>
-    /// Provides functions for interpolating and approximating NURBS curves and surfaces from points.<br/>
+    /// Provides functions for interpolating and approximating NURBS curves from points.<br/>
     /// Approximation uses least squares algorithm.
     /// </summary>
-    public static class Fitting
+    public static class Curve
     {
-        public static NurbsCurve ApproximateCurve(List<Point3> pts, int degree, bool centripetal = false)
+        public static NurbsCurve Approximate(List<Point3> pts, int degree, bool centripetal = false)
         {
             int numberCpts = pts.Count - 1;
 
             // Gets the parameters curve uk.
-            List<double> uk = CurveParameters(pts, centripetal);
+            List<double> uk = CurveHelpers.Parametrization(pts, centripetal);
 
             // Computes knot vectors.
             KnotVector knots = ComputeKnotsForCurveApproximation(uk, degree, numberCpts, pts.Count);
@@ -59,7 +60,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="pts">Set of points to interpolate.</param>
         /// <returns>A set of cubic beziers.</returns>
-        public static List<NurbsCurve> BezierInterpolation(List<Point3> pts)
+        public static List<NurbsCurve> InterpolateBezier(List<Point3> pts)
         {
             if (pts.Count == 0)
             {
@@ -88,7 +89,7 @@ namespace GShark.Operation
         /// <param name="endTangent">The tangent vector for the last point.</param>
         /// <param name="centripetal">True use the chord as per knot spacing, false use the squared chord.</param>
         /// <returns>A the interpolated curve.</returns>
-        public static NurbsCurve InterpolatedCurve(List<Point3> pts, int degree, Vector3? startTangent = null,
+        public static NurbsCurve Interpolated(List<Point3> pts, int degree, Vector3? startTangent = null,
             Vector3? endTangent = null, bool centripetal = false)
         {
             if (pts.Count < degree + 1)
@@ -97,7 +98,7 @@ namespace GShark.Operation
             }
 
             // Gets uk parameters.
-            List<double> uk = CurveParameters(pts, centripetal);
+            List<double> uk = CurveHelpers.Parametrization(pts, centripetal);
 
             // Compute knot vectors.
             bool hasTangents = startTangent != null && endTangent != null;
@@ -283,7 +284,7 @@ namespace GShark.Operation
         /// <summary>
         /// Builds the coefficient matrix used to calculate a curve global interpolation.
         /// </summary>
-        internal static Matrix BuildCoefficientsMatrix(List<Point3> pts, int degree, bool hasTangents, List<double> curveParameters, KnotVector knots)
+        private static Matrix BuildCoefficientsMatrix(List<Point3> pts, int degree, bool hasTangents, List<double> curveParameters, KnotVector knots)
         {
             int dim = (hasTangents) ? pts.Count + 1 : pts.Count - 1;
             Matrix coeffMatrix = new Matrix();
@@ -310,30 +311,6 @@ namespace GShark.Operation
             coeffMatrix.Insert(coeffMatrix.Count - 1, zeros.Concat(tangent).ToList());
 
             return coeffMatrix;
-        }
-
-        /// <summary>
-        /// Refer to the Equations 9.4 and 9.5 for chord length parametrization, and Equation 9.6 for centripetal method
-        /// on The NURBS Book(2nd Edition), pp.364-365.
-        /// </summary>
-        internal static List<double> CurveParameters(List<Point3> pts, bool centripetal = false)
-        {
-            List<double> chords = new List<double> { 0.0 };
-            for (int i = 1; i < pts.Count; i++)
-            {
-                double chord = (centripetal) ? Math.Sqrt((pts[i] - pts[i - 1]).Length) : (pts[i] - pts[i - 1]).Length;
-                chords.Add(chord + chords.Last());
-            }
-
-            // Divide the individual chord length by the total chord length.
-            List<double> uk = new List<double>();
-            double maxChordLength = chords.Last();
-            for (int i = 0; i < pts.Count; i++)
-            {
-                uk.Add(chords[i] / maxChordLength);
-            }
-
-            return uk;
         }
 
         /// <summary>

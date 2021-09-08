@@ -1,5 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Enumerations;
+using GShark.Fitting;
 using GShark.Interfaces;
 using GShark.Operation;
 using System;
@@ -203,7 +204,7 @@ namespace GShark.Geometry
                     for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
                         List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsCurve crv = Fitting.InterpolatedCurve(pts, degreeU);
+                        NurbsCurve crv = Curve.Interpolated(pts, degreeU);
                         tempPts.Add(crv.ControlPoints);
                         knotVectorU = crv.Knots;
                     }
