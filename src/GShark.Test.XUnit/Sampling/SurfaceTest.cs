@@ -54,16 +54,16 @@ namespace GShark.Test.XUnit.Sampling
             Point3 evaluatePtRight = surfaces[1].PointAt(0.5, 0.5);
 
             // Assert
-            evaluatePtLeft.DistanceTo(expectedPtLeft).Should().BeLessThan(GSharkMath.MaxTolerance);
-            evaluatePtRight.DistanceTo(expectedPtRight).Should().BeLessThan(GSharkMath.MaxTolerance);
+            evaluatePtLeft.DistanceTo(expectedPtLeft).Should().BeLessThan(GSharkMath.MinTolerance);
+            evaluatePtRight.DistanceTo(expectedPtRight).Should().BeLessThan(GSharkMath.MinTolerance);
 
             surfaces[0].Weights.Should().BeEquivalentTo(weightsLeft);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsRight);
 
             _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
-                pt.EpsilonEquals(surfacePtsLeft[i][j], GSharkMath.MaxTolerance).Should().BeTrue()));
+                pt.EpsilonEquals(surfacePtsLeft[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
             _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
-                pt.EpsilonEquals(surfacePtsRight[i][j], GSharkMath.MaxTolerance).Should().BeTrue()));
+                pt.EpsilonEquals(surfacePtsRight[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
         }
 
         [Fact]
@@ -108,16 +108,16 @@ namespace GShark.Test.XUnit.Sampling
             Point3 evaluatePtBottom = surfaces[1].PointAt(0.5, 0.5);
 
             // Assert
-            evaluatePtTop.DistanceTo(expectedPtTop).Should().BeLessThan(GSharkMath.MaxTolerance);
-            evaluatePtBottom.DistanceTo(expectedPtBottom).Should().BeLessThan(GSharkMath.MaxTolerance);
+            evaluatePtTop.DistanceTo(expectedPtTop).Should().BeLessThan(GSharkMath.MinTolerance);
+            evaluatePtBottom.DistanceTo(expectedPtBottom).Should().BeLessThan(GSharkMath.MinTolerance);
 
             surfaces[0].Weights.Should().BeEquivalentTo(weightsTop);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsBottom);
 
             _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
-                pt.EpsilonEquals(surfacePtsTop[i][j], GSharkMath.MaxTolerance).Should().BeTrue()));
+                pt.EpsilonEquals(surfacePtsTop[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
             _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
-                pt.EpsilonEquals(surfacePtsBottom[i][j], GSharkMath.MaxTolerance).Should().BeTrue()));
+                pt.EpsilonEquals(surfacePtsBottom[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
         }
 
         [Fact]
@@ -139,7 +139,7 @@ namespace GShark.Test.XUnit.Sampling
 
             // Assert
             splitSrf.Length.Should().Be(4);
-            _ = ptsAt.Select((pt, i) => pt.DistanceTo(expectedPts[i]).Should().BeLessThan(GSharkMath.MaxTolerance));
+            _ = ptsAt.Select((pt, i) => pt.DistanceTo(expectedPts[i]).Should().BeLessThan(GSharkMath.MinTolerance));
         }
 
         [Theory]

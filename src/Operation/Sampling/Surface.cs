@@ -17,7 +17,7 @@ namespace GShark.Sampling
     /// For example, it is sometimes necessarily to compute higher order derivatives in order to<br/>
     /// obtain these more economical results.Your usage of these algorithms should consider these tradeoffs.
     /// </summary>
-    public static class Surface
+    internal static class Surface
     {
         /// <summary>
         /// Splits (divides) the surface into two parts at the specified parameter

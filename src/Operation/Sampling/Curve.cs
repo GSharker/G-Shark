@@ -15,7 +15,7 @@ namespace GShark.Sampling
     /// For example, it is sometimes necessarily to compute higher order derivatives in order to<br/>
     /// obtain these more economical results.Your usage of these algorithms should consider these tradeoffs.
     /// </summary>
-    public static class Curve
+    internal static class Curve
     {
         /// <summary>
         /// Divides a curve for a given number of time, including the end points.<br/>
@@ -113,10 +113,7 @@ namespace GShark.Sampling
         /// Samples a curve in an adaptive way. <br/>
         /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf </em>
         /// </summary>
-        /// <param name="curve">The curve to sampling.</param>
-        /// <param name="tolerance">The tolerance for the adaptive division.</param>
-        /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
-        public static (List<double> tValues, List<Point3> pts) AdaptiveSample(NurbsCurve curve, double tolerance = GSharkMath.MinTolerance)
+        internal static (List<double> tValues, List<Point3> pts) AdaptiveSample(NurbsCurve curve, double tolerance)
         {
             if (curve.Degree != 1) return AdaptiveSampleRange(curve, curve.Knots[0], curve.Knots[curve.Knots.Count - 1], tolerance);
             KnotVector copyKnot = new KnotVector(curve.Knots);
@@ -130,12 +127,7 @@ namespace GShark.Sampling
         /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf <br/>
         /// https://www.modelical.com/en/grasshopper-scripting-107/ </em>
         /// </summary>
-        /// <param name="curve">The curve to sampling.</param>
-        /// <param name="start">The start parameter for sampling.</param>
-        /// <param name="end">The end parameter for sampling.</param>
-        /// <param name="tolerance">Tolerance for the adaptive scheme. The default tolerance is set as (1e-6).</param>
-        /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
-        public static (List<double> tValues, List<Point3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance = GSharkMath.MinTolerance)
+        internal static (List<double> tValues, List<Point3> pts) AdaptiveSampleRange(NurbsCurve curve, double start, double end, double tolerance)
         {
             // Sample curve at three pts.
             Random random = new Random();
