@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using GShark.ExtendedMethods;
-using GShark.Geometry;
+﻿using GShark.Geometry;
 using GShark.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace GShark.Intersection.BoundingBoxTree
 {

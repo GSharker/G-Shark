@@ -224,8 +224,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedXDir1 = new Vector3(-0.690371, -0.162782, -0.704905);
 
             // Act
-            Plane frame0 = NurbsBaseCollection.NurbsBase3DExample().FrameAt(t0);
-            Plane frame1 = NurbsBaseCollection.NurbsBase3DExample().FrameAt(t1);
+            Plane frame0 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t0);
+            Plane frame1 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t1);
 
             // Assert
             frame0.Origin.EpsilonEquals(expectedPlaneOrigin0, GSharkMath.MinTolerance).Should().BeTrue();

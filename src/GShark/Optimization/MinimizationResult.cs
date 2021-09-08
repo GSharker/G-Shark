@@ -6,12 +6,12 @@ namespace GShark.Optimization
     /// <summary>
     /// Collects the minimization results.
     /// </summary>
-    public class MinimizationResult
+    internal class MinimizationResult
     {
         /// <summary>
         /// Initialize the class.
         /// </summary>
-        public MinimizationResult(Vector solutionPoint, double initialGuess, Vector gradient, Matrix hessianMatrix, int iterations, string message)
+        internal MinimizationResult(Vector solutionPoint, double initialGuess, Vector gradient, Matrix hessianMatrix, int iterations, string message)
         {
             SolutionPoint = solutionPoint;
             InitialGuess = initialGuess;
@@ -21,11 +21,11 @@ namespace GShark.Optimization
             Message = message;
         }
 
-        public Vector SolutionPoint { get; private set; }
-        public double InitialGuess { get; private set; }
-        public Vector Gradient { get; private set; }
-        public Matrix HessianMatrix { get; private set; }
-        public int Iterations { get; private set; }
-        public string Message { get; private set; }
+        internal Vector SolutionPoint { get; private set; }
+        internal double InitialGuess { get; private set; }
+        internal Vector Gradient { get; private set; }
+        internal Matrix HessianMatrix { get; private set; }
+        internal int Iterations { get; private set; }
+        internal string Message { get; private set; }
     }
 }

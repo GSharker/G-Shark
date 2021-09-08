@@ -325,8 +325,8 @@ namespace GShark.Intersection
             List<Tuple<NurbsBase, NurbsBase>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv1), new LazyCurveBBT(crv2), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(crv1, crv2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
-                .Where(crInRe => (crInRe.Pt0 - crInRe.Pt1).SquareLength < tolerance)
-                .Unique((a, b) => Math.Abs(a.T0 - b.T0) < tolerance * 5);
+                .Where(crInRe => (crInRe.PointA - crInRe.PointB).SquareLength < tolerance)
+                .Unique((a, b) => Math.Abs(a.ParameterA - b.ParameterA) < tolerance * 5);
 
             return intersectionResults;
         }
@@ -359,8 +359,8 @@ namespace GShark.Intersection
             List<Tuple<NurbsBase, NurbsBase>> bBoxTreeIntersections = BoundingBoxOperations.BoundingBoxTreeIntersection(new LazyCurveBBT(crv), 0);
             List<CurvesIntersectionResult> intersectionResults = bBoxTreeIntersections
                 .Select(x => IntersectionRefiner.CurvesWithEstimation(x.Item1, x.Item2, x.Item1.Knots[0], x.Item2.Knots[0], tolerance))
-                .Where(crInRe => Math.Abs(crInRe.T0 - crInRe.T1) > tolerance)
-                .Unique((a, b) => Math.Abs(a.T0 - b.T0) < tolerance * 5);
+                .Where(crInRe => Math.Abs(crInRe.ParameterA - crInRe.ParameterB) > tolerance)
+                .Unique((a, b) => Math.Abs(a.ParameterA - b.ParameterA) < tolerance * 5);
 
             return intersectionResults;
         }

@@ -273,7 +273,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Evaluation parameter. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The perpendicular frame.</returns>
-        public Plane FrameAt(double t)
+        public Plane PerpendicularFrameAt(double t)
         {
             if (t <= 0.0)
             {
@@ -446,7 +446,7 @@ namespace GShark.Geometry
             if (equalSegmentLengths)
             {
                 List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(this);
-                List<double> curveLengths = curves.Select(NurbsBase => Analyze.BezierCurveLength(NurbsBase)).ToList();
+                List<double> curveLengths = curves.Select(curve => Analyze.BezierCurveLength(curve)).ToList();
                 double totalLength = curveLengths.Sum();
 
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
@@ -463,7 +463,8 @@ namespace GShark.Geometry
         /// Double reflection method taken from Wang, W., J¨uttler, B., Zheng, D., and Liu, Y. 2008. "Computation of rotation minimizing frame."<br/>
         /// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/Computation-of-rotation-minimizing-frames.pdf
         /// </summary>
-        /// ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
+        ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
+        /// <returns>A collection of planes.</returns>
         public List<Plane> PerpendicularFrames(List<double> uValues)
         {
             var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values

@@ -12,7 +12,7 @@ namespace GShark.Intersection.BoundingBoxTree
     {
         /// <summary>
         /// The core algorithm for bounding box tree intersection.<br/>
-        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{CurveParameter}"/> interface.
         /// </summary>
         /// <param name="bbt1">The first Bounding box tree object.</param>
         /// <param name="bbt2">The second Bounding box tree object.</param>
@@ -32,7 +32,7 @@ namespace GShark.Intersection.BoundingBoxTree
 
         /// <summary>
         /// The core algorithm for bounding box tree intersection.<br/>
-        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{CurveParameter}"/> interface.
         /// </summary>
         /// <param name="bbt1">The first Bounding box tree object.</param>
         /// <param name="tolerance">Tolerance as per default set as 1e-9.</param>
@@ -52,7 +52,7 @@ namespace GShark.Intersection.BoundingBoxTree
 
         /// <summary>
         /// The core algorithm to find the bounding box trees intersecting with a plane.<br/>
-        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{CurveParameter}"/> interface.
         /// </summary>
         /// <param name="bbt">The bounding box object.</param>
         /// <param name="pl">The plane to intersect with.</param>
@@ -106,7 +106,7 @@ namespace GShark.Intersection.BoundingBoxTree
 
         /// <summary>
         /// The core algorithm for bounding box tree intersection.<br/>
-        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{T}"/> interface.
+        /// Supporting both lazy and pre-computed bounding box trees via the <see cref="IBoundingBoxTree{CurveParameter}"/> interface.
         /// </summary>
         /// <param name="aTrees">The first Bounding box tree object.</param>
         /// <param name="bTrees">The second Bounding box tree object.</param>
