@@ -1,20 +1,20 @@
 ﻿using FluentAssertions;
 using GShark.Core;
-using GShark.ExtendedMethods;
 using GShark.Geometry;
+using GShark.Sampling;
 using GShark.Test.XUnit.Data;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GShark.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Sampling
 {
-    public class DivideTests
+    public class CurveTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public DivideTests(ITestOutputHelper testOutput)
+        public CurveTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -47,13 +47,13 @@ namespace GShark.Test.XUnit.Operation
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = curves[0].Knots.Count - (degree + 1);
-                curves[0].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MaxTolerance);
+                curves[0].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MinTolerance);
             }
 
             for (int i = 0; i < degree + 1; i++)
             {
                 int d = 0;
-                curves[1].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MaxTolerance);
+                curves[1].Knots[d + i].Should().BeApproximately(parameter, GSharkMath.MinTolerance);
             }
         }
 
@@ -70,7 +70,7 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(7,12,0),
                 new Point3(15,2,5)
             };
-            var expectedKnotVector = new KnotVector(new List<double> {0.65, 0.65, 0.65, 0.65, 0.85, 0.85, 0.85, 0.85});
+
             NurbsCurve curve = new NurbsCurve(controlPts, degree);
             NurbsCurve expectedSubCurve = new NurbsCurve(
                 new List<Point3>
@@ -80,7 +80,7 @@ namespace GShark.Test.XUnit.Operation
                     new (10.406,7.225,2.348125),
                     new (11.724,5.825,3.070625)
                 },
-                degree:3);
+                degree);
 
             // Act
             NurbsCurve subCurve = curve.SubCurve(domain);
@@ -94,7 +94,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Splits_A_Curve_Into_Segments_At_Given_Parameters()
         {
             // Arrange
-            var parameters = new[]{0.25, 0.5, 0.75};
+            var parameters = new[] { 0.25, 0.5, 0.75 };
             int degree = 3;
             List<Point3> controlPts = new List<Point3>
             {
@@ -103,7 +103,6 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(7,12,0),
                 new Point3(15,2,5)
             };
-            KnotVector knots = new KnotVector(degree, controlPts.Count);
             NurbsCurve curve = new NurbsCurve(controlPts, degree);
 
             // Act
@@ -292,11 +291,103 @@ namespace GShark.Test.XUnit.Operation
             {
                 Plane perpFrame = perpFrames[i];
                 Plane expectedPerpFrame = expectedPerpFrames[i];
-                perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GSharkMath.MaxTolerance);
-                perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GSharkMath.MaxTolerance);
-                perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GSharkMath.MaxTolerance);
-                perpFrame.ZAxis.EpsilonEquals(expectedPerpFrame.ZAxis, GSharkMath.MaxTolerance);
+                perpFrame.Origin.EpsilonEquals(expectedPerpFrame.Origin, GSharkMath.MinTolerance);
+                perpFrame.XAxis.EpsilonEquals(expectedPerpFrame.XAxis, GSharkMath.MinTolerance);
+                perpFrame.YAxis.EpsilonEquals(expectedPerpFrame.YAxis, GSharkMath.MinTolerance);
+                perpFrame.ZAxis.EpsilonEquals(expectedPerpFrame.ZAxis, GSharkMath.MinTolerance);
             }
+        }
+
+        [Fact]
+        public void Return_Adaptive_Sample_Subdivision_Of_A_Nurbs()
+        {
+            // Arrange
+            NurbsCurve curve = NurbsCurveCollection.NurbsCurveQuadratic3DBezier();
+
+            // Act
+            (List<double> tValues, List<Point3> pts) result0 = Curve.AdaptiveSample(curve, 0.1);
+            (List<double> tValues, List<Point3> pts) result1 = Curve.AdaptiveSample(curve, 0.01);
+
+            // Arrange
+            result0.Should().NotBeNull();
+            result1.Should().NotBeNull();
+            result0.pts.Count.Should().BeLessThan(result1.pts.Count);
+            result0.tValues[0].Should().Be(result1.tValues[0]).And.Be(0.0);
+            result0.tValues[result0.tValues.Count - 1].Should().Be(result1.tValues[result1.tValues.Count - 1]).And.Be(1.0);
+
+            double prev = double.MinValue;
+            foreach (var t in result1.tValues)
+            {
+                t.Should().BeGreaterThan(prev);
+                t.Should().BeInRange(0.0, 1.0);
+                prev = t;
+            }
+        }
+
+        [Fact]
+        public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
+        {
+            // Arrange
+            List<Point3> locationPts = NurbsCurveCollection.NurbsCurvePlanarExample().ControlPointLocations;
+            NurbsCurve curve = new NurbsCurve(locationPts, 1);
+
+            // Act
+            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(curve, 0.1);
+
+            // Assert
+            tValues.Count.Should().Be(pts.Count).And.Be(6);
+            pts.Should().BeEquivalentTo(locationPts);
+        }
+
+        [Fact]
+        public void Return_Adaptive_Sample_Subdivision_Of_A_Line()
+        {
+            // Arrange
+            Point3 p1 = new Point3(0, 0, 0);
+            Point3 p2 = new Point3(10, 0, 0);
+            Line ln = new Line(p1, p2);
+
+
+
+            // Act
+            var (tValues, pts) = Curve.AdaptiveSample(ln.ToNurbs());
+
+            // Arrange
+            pts.Count.Should().Be(tValues.Count).And.Be(2);
+            pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MinTolerance);
+            pts[1].DistanceTo(p2).Should().BeLessThan(GSharkMath.MinTolerance);
+        }
+
+        [Fact]
+        public void Return_Adaptive_Sample_Subdivision_Of_A_Polyline()
+        {
+            // Arrange
+            var p1 = new Point3(0, 0, 0);
+            var p2 = new Point3(10, 10, 0);
+            var p3 = new Point3(14, 20, 0);
+            var p4 = new Point3(10, 32, 4);
+            var p5 = new Point3(12, 16, 22);
+            List<Point3> pts = new List<Point3> { p1, p2, p3, p4, p5 };
+            Polyline poly = new Polyline(pts);
+
+            // Act
+            (List<double> tValues, List<Point3> pts) result = Curve.AdaptiveSample(poly.ToNurbs());
+
+            // Arrange
+            result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);
+            result.pts[0].DistanceTo(p1).Should().BeLessThan(GSharkMath.MinTolerance);
+            result.pts[result.pts.Count - 1].DistanceTo(p5).Should().BeLessThan(GSharkMath.MinTolerance);
+        }
+
+        [Fact]
+        public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
+        {
+            // Act
+            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(NurbsCurveCollection.NurbsCurvePlanarExample());
+
+            // Assert
+            tValues.Should().NotBeEmpty();
+            pts.Should().NotBeEmpty();
         }
     }
 }

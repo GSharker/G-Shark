@@ -436,7 +436,7 @@ namespace GShark.Geometry
                 return this;
             }
 
-            var (tValues, pts) = Tessellation.CurveAdaptiveSample(this);
+            var (tValues, pts) = Sampling.Curve.AdaptiveSample(this);
 
             List<Point3> offsetPts = new List<Point3>();
             for (int i = 0; i < pts.Count; i++)
@@ -463,7 +463,7 @@ namespace GShark.Geometry
                 throw new ArgumentException("Number of segments must be greater than 1.", nameof(numberOfSegments));
             }
 
-            var divideResult = Operation.Divide.CurveByCount(this, numberOfSegments);
+            var divideResult = Sampling.Curve.ByCount(this, numberOfSegments);
             var points = divideResult.Select(PointAt).ToList();
             return (points, divideResult);
         }
@@ -493,7 +493,7 @@ namespace GShark.Geometry
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
             }
 
-            var (tValues, lengths) = Operation.Divide.CurveByLength(this, len);
+            var (tValues, lengths) = Sampling.Curve.ByLength(this, len);
             var points = tValues.Select(PointAt).ToList();
 
             return (points, tValues);

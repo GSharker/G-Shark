@@ -1,17 +1,23 @@
 ﻿using GShark.Core;
+using GShark.Enumerations;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
+using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Enumerations;
 
-namespace GShark.Operation
+namespace GShark.Sampling
 {
     /// <summary>
-    /// Provides various methods for dividing and splitting NURBS geometry.
+    /// Contains static algorithms for tessellation and division of NURBS surface.<br/>
+    /// Some of these algorithms are "adaptive" - using certain heuristics to sample geometry where such samples make sense - while<br/>
+    /// others are "regular" in that they sample regularly throughout a parametric domain.There are tradeoffs here.<br/>
+    /// While adaptive algorithms can sometimes yield "better" results that are smaller or more economical, this can sometimes come at increased computational cost.
+    /// For example, it is sometimes necessarily to compute higher order derivatives in order to<br/>
+    /// obtain these more economical results.Your usage of these algorithms should consider these tradeoffs.
     /// </summary>
-    public class Divide
+    internal static class Surface
     {
         /// <summary>
         /// Splits (divides) the surface into two parts at the specified parameter
@@ -22,7 +28,7 @@ namespace GShark.Operation
         /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
         /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.<br/>
         /// If the spit direction selected is both, the split computes first a U direction split and on the result a V direction split.</returns>
-        internal static NurbsSurface[] SplitSurface(NurbsSurface surface, double parameter, SplitDirection direction)
+        internal static NurbsSurface[] Split(NurbsSurface surface, double parameter, SplitDirection direction)
         {
             KnotVector knots = surface.KnotsV;
             int degree = surface.DegreeV;
@@ -82,8 +88,8 @@ namespace GShark.Operation
                         NurbsSurface srf1 = new NurbsSurface(degree, surface.DegreeV, knotLeft, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsLeft));
                         NurbsSurface srf2 = new NurbsSurface(degree, surface.DegreeV, knotRight, surface.KnotsV.Copy(), CollectionHelpers.Transpose2DArray(surfPtsRight));
 
-                        NurbsSurface[] split1 = SplitSurface(srf1, parameter, SplitDirection.V);
-                        NurbsSurface[] split2 = SplitSurface(srf2, parameter, SplitDirection.V);
+                        NurbsSurface[] split1 = Split(srf1, parameter, SplitDirection.V);
+                        NurbsSurface[] split2 = Split(srf2, parameter, SplitDirection.V);
 
                         surfaceResult = split2.Concat(split1).ToArray();
                         break;
@@ -91,68 +97,6 @@ namespace GShark.Operation
             }
 
             return surfaceResult;
-        }
-
-        /// <summary>
-        /// Divides a curve for a given number of time, including the end points.<br/>
-        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
-        /// As with all arc length methods, the result is an approximation.
-        /// </summary>
-        /// <param name="curve">The curve object to divide.</param>
-        /// <param name="divisions">The number of parts to split the curve into.</param>
-        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static List<double> CurveByCount(NurbsCurve curve, int divisions)
-        {
-            double approximatedLength = Analyze.CurveLength(curve);
-            double arcLengthSeparation = approximatedLength / divisions;
-            var divisionByLength = CurveByLength(curve, arcLengthSeparation);
-            var tValues = divisionByLength.tValues;
-            return tValues;
-        }
-
-        /// <summary>
-        /// Divides a curve for a given length, including the end points.<br/>
-        /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
-        /// As with all arc length methods, the result is an approximation.
-        /// </summary>
-        /// <param name="curve">The curve object to divide.</param>
-        /// <param name="length">The length separating the resultant samples.</param>
-        /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
-        internal static (List<double> tValues, List<double> lengths) CurveByLength(NurbsCurve curve, double length)
-        {
-            List<NurbsCurve> curves = Modify.DecomposeCurveIntoBeziers(curve);
-            List<double> curveLengths = curves.Select(nurbsCurve => Analyze.BezierCurveLength(nurbsCurve)).ToList();
-            double totalLength = curveLengths.Sum();
-
-            List<double> tValues = new List<double> { curve.Knots[0] };
-            List<double> divisionLengths = new List<double> { 0.0 };
-
-            if (length > totalLength) return (tValues, divisionLengths);
-
-            int i = 0;
-            double sum = 0.0;
-            double sum2 = 0.0;
-            double segmentLength = length;
-
-            while (i < curves.Count)
-            {
-                sum += curveLengths[i];
-
-                while (segmentLength < sum + GSharkMath.Epsilon)
-                {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MaxTolerance);
-
-                    tValues.Add(t);
-                    divisionLengths.Add(segmentLength);
-
-                    segmentLength += length;
-                }
-
-                sum2 += curveLengths[i];
-                i++;
-            }
-
-            return (tValues, divisionLengths);
         }
     }
 }
