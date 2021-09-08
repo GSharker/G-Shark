@@ -64,7 +64,7 @@ namespace GShark.Sampling
 
                 while (segmentLength < sum + GSharkMath.Epsilon)
                 {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MaxTolerance);
+                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MinTolerance);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);
