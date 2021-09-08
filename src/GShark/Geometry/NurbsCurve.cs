@@ -436,7 +436,7 @@ namespace GShark.Geometry
                 return this;
             }
 
-            var (tValues, pts) = Tessellation.CurveAdaptiveSample(this);
+            var (tValues, pts) = AdaptiveDivision();
 
             List<Point3> offsetPts = new List<Point3>();
             for (int i = 0; i < pts.Count; i++)
@@ -463,9 +463,34 @@ namespace GShark.Geometry
                 throw new ArgumentException("Number of segments must be greater than 1.", nameof(numberOfSegments));
             }
 
-            var divideResult = Operation.Divide.CurveByCount(this, numberOfSegments);
+            var divideResult = Sampling.Curve.ByCount(this, numberOfSegments);
             var points = divideResult.Select(PointAt).ToList();
             return (points, divideResult);
+        }
+
+        /// <summary>
+        /// Samples a curve in an adaptive way. <br/>
+        /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf </em>
+        /// </summary>
+        /// <param name="tolerance">The tolerance for the adaptive division.</param>
+        /// <returns>A tuple collecting the parameter where it was sampled and the points.</returns>
+        public (List<double> Parameters, List<Point3> Points) AdaptiveDivision(double tolerance = 1e-6)
+        {
+            return Sampling.Curve.AdaptiveSample(this, tolerance);
+        }
+
+        /// <summary>
+        /// Samples a curve in an adaptive way. <br/>
+        /// <em>Corresponds to this algorithm http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf <br/>
+        /// https://www.modelical.com/en/grasshopper-scripting-107/ </em>
+        /// </summary>
+        /// <param name="start">The start parameter for sampling.</param>
+        /// <param name="end">The end parameter for sampling.</param>
+        /// <param name="tolerance">Tolerance for the adaptive scheme. The default tolerance is set as (1e-6).</param>
+        /// <returns>A tuple with the set of points and the t parameter where the point was evaluated.</returns>
+        public (List<double> Parameters, List<Point3> Points) AdaptiveDivision(double start, double end, double tolerance = 1e-6)
+        {
+            return Sampling.Curve.AdaptiveSampleRange(this, start, end, tolerance);
         }
 
         /// <summary>
@@ -493,7 +518,7 @@ namespace GShark.Geometry
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
             }
 
-            var (tValues, lengths) = Operation.Divide.CurveByLength(this, len);
+            var (tValues, lengths) = Sampling.Curve.ByLength(this, len);
             var points = tValues.Select(PointAt).ToList();
 
             return (points, tValues);

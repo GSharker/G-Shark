@@ -1,12 +1,10 @@
 ﻿using GShark.Core;
 using GShark.Enumerations;
-using GShark.ExtendedMethods;
 using GShark.Interfaces;
 using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GShark.Geometry
@@ -289,14 +287,14 @@ namespace GShark.Geometry
         /// <param name="direction">Where to split in the U or V direction of the surface.</param>
         /// <returns>If the surface is split vertically (U direction) the left side is returned as the first surface and the right side is returned as the second surface.<br/>
         /// If the surface is split horizontally (V direction) the bottom side is returned as the first surface and the top side is returned as the second surface.</returns>
-        public NurbsSurface[] Split(double parameter, SplitDirection direction)
+        public NurbsSurface[] SplitAt(double parameter, SplitDirection direction)
         {
             if (parameter < 0.0 || parameter > 1.0)
             {
                 throw new ArgumentOutOfRangeException(nameof(parameter), "The parameter is not into the domain 0.0 to 1.0.");
             }
 
-            return Divide.SplitSurface(this, parameter, direction);
+            return Sampling.Surface.Split(this, parameter, direction);
         }
 
         /// <summary>

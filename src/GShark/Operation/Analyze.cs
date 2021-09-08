@@ -181,7 +181,7 @@ namespace GShark.Operation
             double tParameter = 0D;
             List<Point3> ctrlPts = curve.ControlPointLocations;
 
-            (List<double> tValues, List<Point3> pts) = Tessellation.CurveRegularSample(curve, ctrlPts.Count * curve.Degree);
+            (List<double> tValues, List<Point3> pts) = Sampling.Curve.RegularSample(curve, ctrlPts.Count * curve.Degree);
 
             for (int i = 0; i < pts.Count - 1; i++)
             {
@@ -268,7 +268,7 @@ namespace GShark.Operation
 
             for (int i = 0; i < maxIterations; i++)
             {
-                NurbsSurface[] surfaces = splitSrf.Split(0.5, SplitDirection.Both);
+                NurbsSurface[] surfaces = splitSrf.SplitAt(0.5, SplitDirection.Both);
                 Point3[] pts = surfaces.Select(s => s.PointAt(0.5, 0.5)).ToArray();
                 double[] distanceBetweenPts = pts.Select(point.DistanceTo).ToArray();
                 if (distanceBetweenPts.All(d => d > minimumDistance)) break;

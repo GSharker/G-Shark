@@ -73,17 +73,13 @@ namespace GShark.Test.XUnit.Operation
         {
             // Arrange
             NurbsCurve curve = NurbsCurveCollection.NurbsCurvePlanarExample();
+            double expectedLength = 50.334675;
 
             // Act
             double crvLength = Analyze.CurveLength(curve);
-            var (_, pts) = Tessellation.CurveRegularSample(curve, 10000);
-
-            double length = 0.0;
-            for (int j = 0; j < pts.Count - 1; j++)
-                length += (pts[j + 1] - pts[j]).Length;
 
             // Assert
-            crvLength.Should().BeApproximately(length, 1e-3);
+            crvLength.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
 
         [Theory]
