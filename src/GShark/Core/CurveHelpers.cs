@@ -49,13 +49,38 @@ namespace GShark.Core
         }
 
         /// <summary>
+        /// The chord length parametrization is the most widely used method.
+        /// The centripetal gives better results than the chord length method when the curve takes sharp turns.
+        /// Refer to the Equations 9.4 and 9.5 for chord length parametrization, and Equation 9.6 for centripetal method on The NURBS Book(2nd Edition), pp.364-365.
+        /// </summary>
+        internal static List<double> Parametrization(List<Point3> pts, bool centripetal = false)
+        {
+            List<double> chords = new List<double> { 0.0 };
+            for (int i = 1; i < pts.Count; i++)
+            {
+                double chord = (centripetal) ? Math.Sqrt((pts[i] - pts[i - 1]).Length) : (pts[i] - pts[i - 1]).Length;
+                chords.Add(chord + chords.Last());
+            }
+
+            // Divide the individual chord length by the total chord length.
+            List<double> curveParameters = new List<double>();
+            double maxChordLength = chords.Last();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                curveParameters.Add(chords[i] / maxChordLength);
+            }
+
+            return curveParameters;
+        }
+
+        /// <summary>
         /// A quickSort algorithm used to order the curves in a sequential manner based on the distance between the first and last points of each curves.<br/>
         /// https://github.com/mcneel/opennurbs/blob/c20e599d1ff8f08a55d3dddf5b39e37e8b5cac06/opennurbs_curve.cpp#L3600 <br/>
         /// https://exceptionnotfound.net/quick-sort-csharp-the-sorting-algorithm-family-reunion/
         /// </summary>
         /// <param name="curves">The sets of curve to sort.</param>
         /// <returns>The set of curves sorted.</returns>
-        public static List<NurbsCurve> QuickSortCurve(IList<NurbsCurve> curves)
+        internal static List<NurbsCurve> QuickSortCurve(IList<NurbsCurve> curves)
         {
             if (curves == null || curves.Count == 0)
             {

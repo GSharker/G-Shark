@@ -2,7 +2,7 @@
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
-using GShark.Test.XUnit.Operation;
+using GShark.Test.XUnit.Fitting;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
@@ -254,7 +254,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_The_Offset_Of_A_Curve()
         {
             // Arrange
-            NurbsCurve crv = new NurbsCurve(FittingTests.pts, 2);
+            NurbsCurve crv = new NurbsCurve(CurveTests.pts, 2);
             double offset = 22.5;
 
             // Act

@@ -1,18 +1,18 @@
 ﻿using FluentAssertions;
 using GShark.Core;
+using GShark.Fitting;
 using GShark.Geometry;
-using GShark.Operation;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GShark.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Fitting
 {
-    public class FittingTests
+    public class CurveTests
     {
         private readonly ITestOutputHelper _testOutput;
 
-        public FittingTests(ITestOutputHelper testOutput)
+        public CurveTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
         }
@@ -33,7 +33,7 @@ namespace GShark.Test.XUnit.Operation
         public void Interpolates_A_Collection_Of_Points(int degree)
         {
             // Act
-            NurbsCurve crv = Fitting.InterpolatedCurve(pts, degree);
+            NurbsCurve crv = Curve.Interpolated(pts, degree);
 
             // Assert
             crv.Degree.Should().Be(degree);
@@ -55,7 +55,7 @@ namespace GShark.Test.XUnit.Operation
             Vector3 v2 = new Vector3(-4.204863, -2.021209, 0);
 
             // Act
-            NurbsCurve crv = Fitting.InterpolatedCurve(pts, 2, v1, v2);
+            NurbsCurve crv = Curve.Interpolated(pts, 2, v1, v2);
 
             // Assert
             crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -77,7 +77,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_A_Sets_Of_Interpolated_Beziers_From_A_Collection_Of_Points()
         {
             // Act
-            List<NurbsCurve> crvs = Fitting.BezierInterpolation(pts);
+            List<NurbsCurve> crvs = Curve.InterpolateBezier(pts);
 
             // Assert
             crvs.Count.Should().Be(4);
@@ -102,7 +102,7 @@ namespace GShark.Test.XUnit.Operation
             };
 
             // Act
-            NurbsCurve approximateCurve = Fitting.ApproximateCurve(pts, 3);
+            NurbsCurve approximateCurve = Curve.Approximate(pts, 3);
 
             // Assert
             approximateCurve.ControlPointLocations.Count.Should().Be(4);
