@@ -15,8 +15,17 @@ namespace GShark.Geometry
     /// <summary>
     /// This class represents a base class that is common to most curve types.
     /// </summary>
-    public abstract class NurbsBase : IEquatable<NurbsBase>
+    public abstract class NurbsBase : ICurve, IEquatable<NurbsBase>
     {
+        protected NurbsBase()
+        {
+            Weights = new List<double>();
+            Degree = 0;
+            Knots = new KnotVector();
+            ControlPointLocations = new List<Point3>();
+            ControlPoints = new List<Point4>();
+        }
+
         protected NurbsBase(int degree, KnotVector knots, List<Point4> controlPoints)
         {
             if (controlPoints is null)
@@ -54,27 +63,27 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the list of weight values.
         /// </summary>
-        public List<double> Weights { get; }
+        public List<double> Weights { get; protected set; }
 
         /// <summary>
         /// Gets the degree of the curve.
         /// </summary>
-        public int Degree { get; }
+        public int Degree { get; protected set; }
 
         /// <summary>
         /// Gets the control points in their rational form. 
         /// </summary>
-        public List<Point3> ControlPointLocations { get; }
+        public List<Point3> ControlPointLocations { get; protected set; }
 
         /// <summary>
         /// Gets the control points in their homogenized form.
         /// </summary>
-        public List<Point4> ControlPoints { get; }
+        public List<Point4> ControlPoints { get; protected set; }
 
         /// <summary>
         /// Gets the knots vectors of the curve.
         /// </summary>
-        public KnotVector Knots { get; }
+        public KnotVector Knots { get; protected set; }
 
         public double Length => Analyze.CurveLength(this);
 

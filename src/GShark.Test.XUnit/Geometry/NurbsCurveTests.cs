@@ -4,6 +4,8 @@ using GShark.Geometry;
 using GShark.Test.XUnit.Data;
 using GShark.Test.XUnit.Fitting;
 using System.Collections.Generic;
+using System.Linq;
+using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 

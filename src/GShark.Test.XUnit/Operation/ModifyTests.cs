@@ -293,7 +293,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_A_Curve_Joining_Polylines_And_Lines()
         {
             // Arrange
-            var poly = new Polyline(new List<Point3>
+            var poly = new PolyLine(new List<Point3>
             {
                 new (0, 5, 5),
                 new (0, 0, 0),
@@ -332,7 +332,7 @@ namespace GShark.Test.XUnit.Operation
         public void Returns_A_Curve_Joining_Polylines_And_Arc()
         {
             // Arrange
-            var poly = new Polyline(new List<Point3>
+            var poly = new PolyLine(new List<Point3>
             {
                 new (0, 5, 5),
                 new (0, 0, 0),

@@ -139,7 +139,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Polygon_Transformed_In_NurbsBase()
         {
             // Arrange
-            Polyline polygon = new Polygon(Planar2D);
+            PolyLine polygon = new Polygon(Planar2D);
             double lengthSum = 0.0;
 
             // Act
@@ -168,7 +168,7 @@ namespace GShark.Test.XUnit.Geometry
             Polygon polygon = new Polygon(PolygonTests.Planar2D);
             double offset = 5;
 
-            Polyline offsetPolygon = polygon.Offset(offset, Plane.PlaneXY);
+            PolyLine offsetPolygon = polygon.Offset(offset, Plane.PlaneXY);
 
             // Assert
             polygon[vertex].DistanceTo(offsetPolygon[vertex]).Should()

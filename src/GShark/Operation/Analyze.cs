@@ -28,16 +28,16 @@ namespace GShark.Operation
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
             List<NurbsBase> crvs = Modify.DecomposeCurveIntoBeziers(curve);
-            int i = 0;
             double sum = 0.0;
-            NurbsBase tempCrv = crvs[0];
 
-            while (i < crvs.Count && tempCrv.Knots[0] + GSharkMath.Epsilon < uSet)
+            foreach (NurbsBase bezier in crvs)
             {
-                tempCrv = crvs[i];
-                double param = Math.Min(tempCrv.Knots.Last(), uSet);
-                sum += BezierCurveLength(tempCrv, param, gaussDegIncrease);
-                i += 1;
+                if (!(bezier.Knots[0] + GSharkMath.Epsilon < uSet))
+                {
+                    break;
+                }
+                double param = Math.Min(bezier.Knots.Last(), uSet);
+                sum += BezierCurveLength(bezier, param, gaussDegIncrease);
             }
 
             return sum;

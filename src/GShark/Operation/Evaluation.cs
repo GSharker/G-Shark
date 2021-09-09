@@ -405,7 +405,7 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Determines the derivatives of a NURBS curve at a given parameter.<br/>
+        /// Determines the derivatives of a curve at a given parameter.<br/>
         /// <em>Corresponds to algorithm 3.2 from The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The curve object.</param>

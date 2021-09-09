@@ -7,9 +7,9 @@ using System.Linq;
 namespace GShark.Geometry
 {
     /// <summary>
-    /// A closed planar <see cref="Polyline"/>.
+    /// A closed planar <see cref="PolyLine"/>.
     /// </summary>
-    public class Polygon : Polyline
+    public class Polygon : PolyLine
     {
         public Polygon(IList<Point3> vertices) : base(vertices)
         {
