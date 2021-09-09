@@ -33,7 +33,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Reverses a bi-dimensional collection of T data.<br/>
+        /// Reverses a bi-dimensional collection of CurveParameter data.<br/>
         /// </summary>
         /// <param name="data">The bi-dimensional collection of data.</param>
         /// <returns>The bi-dimensional collection reversed.</returns>

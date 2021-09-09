@@ -10,14 +10,11 @@ namespace GShark.Intersection
         /// <summary>
         /// Collects the result from an intersection.
         /// </summary>
-        /// <param name="point">ICurve's intersection point.</param>
-        /// <param name="t">Curve's parameter t on curve.</param>
-        /// <param name="uv">Parameter uv on plane.</param>
         public CurvePlaneIntersectionResult(Point3 point, double t, Vector uv)
         {
             Point = point;
-            T = t;
-            Uv = uv;
+            CurveParameter = t;
+            Coordinate = (uv[0], uv[1]);
         }
 
         /// <summary>
@@ -26,14 +23,14 @@ namespace GShark.Intersection
         public Point3 Point { get; }
 
         /// <summary>
-        /// Gets the curve's parameter t.
+        /// Gets the curve's parameter.
         /// </summary>
-        public double T { get; }
+        public double CurveParameter { get; }
 
         /// <summary>
-        /// Gets the parameter uv on plane.
+        /// Gets the coordinate of the project point on the plane.
         /// </summary>
-        public Vector Uv { get; }
+        public (double U, double V) Coordinate { get; }
 
         /// <summary>
         /// Compose the curve intersection result as a text.
@@ -41,7 +38,7 @@ namespace GShark.Intersection
         /// <returns>The text format of the intersection.</returns>
         public override string ToString()
         {
-            return $"pt: {Point} - t: {T} - uv: {Uv}";
+            return $"pt: {Point} - t: {CurveParameter} - uv: {Coordinate}";
         }
     }
 }

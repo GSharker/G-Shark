@@ -231,7 +231,7 @@ namespace GShark.Geometry
         ///
         ///   The alternative here is to give each face in Face array it's own
         ///   openSet. I don't like that solution, because then you have to
-        ///   juggle so many more heap-allocated List<T>'s, we'd have to use
+        ///   juggle so many more heap-allocated List<CurveParameter>'s, we'd have to use
         ///   object pools and such. It would do a lot more allocation, and it
         ///   would have worse locality. I should maybe test that solution, but
         ///   it probably wont be faster enough (if at all) to justify the extra
@@ -331,7 +331,7 @@ namespace GShark.Geometry
                     // i wonder if this is a good idea... if you call
                     // GenerateHull over and over with slightly increasing
                     // points counts, it's going to reallocate every time. Maybe
-                    // i should just use .Add(), and let the List<T> manage the
+                    // i should just use .Add(), and let the List<CurveParameter> manage the
                     // capacity, increasing it geometrically every time we need
                     // to reallocate.
 
@@ -864,7 +864,7 @@ namespace GShark.Geometry
         ///   openSet, we could just loop through the openSets in the removed
         ///   faces. That would make the loop here shorter.
         ///
-        ///   However, to do that, we would have to juggle A LOT more List<T>'s,
+        ///   However, to do that, we would have to juggle A LOT more List<CurveParameter>'s,
         ///   and we would need an object pool to manage them all without
         ///   generating a whole bunch of garbage. I don't think it's worth
         ///   doing that to make this loop shorter, a straight for-loop through

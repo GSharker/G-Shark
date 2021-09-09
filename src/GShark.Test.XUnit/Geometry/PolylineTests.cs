@@ -271,7 +271,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Polyline_Transformed_In_NurbsCurve()
+        public void It_Returns_A_Polyline_Transformed_In_NurbsBase()
         {
             // Arrange
             Point3[] pts = new[]

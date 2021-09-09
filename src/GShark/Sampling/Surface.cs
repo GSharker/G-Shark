@@ -46,7 +46,7 @@ namespace GShark.Sampling
 
             List<List<Point4>> surfPtsLeft = new List<List<Point4>>();
             List<List<Point4>> surfPtsRight = new List<List<Point4>>();
-            NurbsCurve result = null;
+            NurbsBase result = null;
 
             foreach (List<Point4> pts in srfCtrlPts)
             {

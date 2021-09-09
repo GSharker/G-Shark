@@ -12,7 +12,7 @@ namespace GShark.Core
         /// <summary>
         /// Normalizes knot vectors of all curves to the same domain.
         /// </summary>
-        internal static IList<NurbsCurve> NormalizedKnots(IList<NurbsCurve> curves)
+        internal static IList<NurbsBase> NormalizedKnots(IList<NurbsBase> curves)
         {
             // Unify knots, normalized them.
             curves = curves
@@ -22,7 +22,7 @@ namespace GShark.Core
 
             // Unify curves by knots.
             KnotVector combinedKnots = curves.First().Knots.Copy();
-            foreach (NurbsCurve curve in curves.Skip(1))
+            foreach (NurbsBase curve in curves.Skip(1))
             {
                 combinedKnots.AddRange(curve.Knots.Where(k => !combinedKnots.Contains(k)).ToList());
             }
@@ -36,7 +36,7 @@ namespace GShark.Core
         /// <summary>
         /// Elevates degree of all curves to highest degree among all curves.
         /// </summary>
-        internal static IList<NurbsCurve> NormalizedDegree(IList<NurbsCurve> curves)
+        internal static IList<NurbsBase> NormalizedDegree(IList<NurbsBase> curves)
         {
             // Unify curves by degree.
             int targetDegree = curves.Max(c => c.Degree);
@@ -80,7 +80,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="curves">The sets of curve to sort.</param>
         /// <returns>The set of curves sorted.</returns>
-        internal static List<NurbsCurve> QuickSortCurve(IList<NurbsCurve> curves)
+        internal static List<NurbsBase> QuickSortCurve(IList<NurbsBase> curves)
         {
             if (curves == null || curves.Count == 0)
             {
@@ -163,7 +163,7 @@ namespace GShark.Core
                 }
             }
 
-            List<NurbsCurve> sortedCurves = indexes.Select(i => (revers[i]) ? curves[i].Reverse() : curves[i]).ToList();
+            List<NurbsBase> sortedCurves = indexes.Select(i => (revers[i]) ? curves[i].Reverse() : curves[i]).ToList();
             return sortedCurves;
         }
     }

@@ -14,7 +14,7 @@ namespace GShark.Fitting
     /// </summary>
     public static class Curve
     {
-        public static NurbsCurve Approximate(List<Point3> pts, int degree, bool centripetal = false)
+        public static NurbsBase Approximate(List<Point3> pts, int degree, bool centripetal = false)
         {
             int numberCpts = pts.Count - 1;
 
@@ -60,14 +60,14 @@ namespace GShark.Fitting
         /// </summary>
         /// <param name="pts">Set of points to interpolate.</param>
         /// <returns>A set of cubic beziers.</returns>
-        public static List<NurbsCurve> InterpolateBezier(List<Point3> pts)
+        public static List<NurbsBase> InterpolateBezier(List<Point3> pts)
         {
             if (pts.Count == 0)
             {
                 throw new Exception("Collection of points is empty.");
             }
 
-            List<NurbsCurve> beziers = new List<NurbsCurve>();
+            List<NurbsBase> beziers = new List<NurbsBase>();
             var (ptsA, ptsB) = SolveBezierCtrlPts(pts);
 
             for (int i = 0; i < pts.Count - 1; i++)
@@ -89,7 +89,7 @@ namespace GShark.Fitting
         /// <param name="endTangent">The tangent vector for the last point.</param>
         /// <param name="centripetal">True use the chord as per knot spacing, false use the squared chord.</param>
         /// <returns>A the interpolated curve.</returns>
-        public static NurbsCurve Interpolated(List<Point3> pts, int degree, Vector3? startTangent = null,
+        public static NurbsBase Interpolated(List<Point3> pts, int degree, Vector3? startTangent = null,
             Vector3? endTangent = null, bool centripetal = false)
         {
             if (pts.Count < degree + 1)

@@ -7,17 +7,17 @@ namespace GShark.Optimization
     /// <summary>
     /// The basic functions used into the minimization process, to define the intersection results between curves.
     /// </summary>
-    public class CurvesIntersectionObjectives : IObjectiveFunction
+    internal class CurvesIntersectionObjectives : IObjectiveFunction
     {
-        private readonly NurbsCurve _curve0;
-        private readonly NurbsCurve _curve1;
+        private readonly NurbsBase _curve0;
+        private readonly NurbsBase _curve1;
 
         /// <summary>
         /// Initialize the class, which collects the functions used for the minimization problem.
         /// </summary>
         /// <param name="curve0">First curve used in the intersection process.</param>
         /// <param name="curve1">First curve used in the intersection process.</param>
-        public CurvesIntersectionObjectives(NurbsCurve curve0, NurbsCurve curve1)
+        internal CurvesIntersectionObjectives(NurbsBase curve0, NurbsBase curve1)
         {
             _curve0 = curve0;
             _curve1 = curve1;

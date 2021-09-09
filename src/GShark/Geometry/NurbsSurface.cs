@@ -155,7 +155,7 @@ namespace GShark.Geometry
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(IList<NurbsCurve> curves, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface CreateLoftedSurface(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -167,12 +167,12 @@ namespace GShark.Geometry
                 throw new ArgumentException("The input set contains null curves.");
 
             bool isClosed = curves[0].IsClosed();
-            foreach (NurbsCurve c in curves.Skip(1))
+            foreach (NurbsBase c in curves.Skip(1))
                 if (isClosed != c.IsClosed())
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
             // Copy curves for possible operation of homogenization.
-            IList<NurbsCurve> copyCurves = new List<NurbsCurve>(curves);
+            IList<NurbsBase> copyCurves = new List<NurbsBase>(curves);
 
             // Clamp curves if periodic.
             if (copyCurves[0].IsPeriodic())
@@ -204,7 +204,7 @@ namespace GShark.Geometry
                     for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
                         List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsCurve crv = Curve.Interpolated(pts, degreeU);
+                        NurbsBase crv = Curve.Interpolated(pts, degreeU);
                         tempPts.Add(crv.ControlPoints);
                         knotVectorU = crv.Knots;
                     }
@@ -226,9 +226,9 @@ namespace GShark.Geometry
         /// <param name="curveA">The first curve.</param>
         /// <param name="curveB">The second curve.</param>
         /// <returns>A ruled surface.</returns>
-        public static NurbsSurface CreateRuledSurface(NurbsCurve curveA, NurbsCurve curveB)
+        public static NurbsSurface CreateRuledSurface(NurbsBase curveA, NurbsBase curveB)
         {
-            IList<NurbsCurve> curves = new[] { curveA, curveB };
+            IList<NurbsBase> curves = new[] { curveA, curveB };
             curves = CurveHelpers.NormalizedDegree(curves);
             curves = CurveHelpers.NormalizedKnots(curves);
 

@@ -262,8 +262,8 @@ namespace GShark.Test.XUnit.Operation
 
             // Assert
             intersection.Count.Should().Be(1);
-            intersection[0].T0.Should().BeApproximately(0.25, GSharkMath.MaxTolerance);
-            intersection[0].T1.Should().BeApproximately(0.25, GSharkMath.MaxTolerance);
+            intersection[0].ParameterA.Should().BeApproximately(0.25, GSharkMath.MaxTolerance);
+            intersection[0].ParameterB.Should().BeApproximately(0.25, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -284,7 +284,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
             intersection.Count.Should().Be(1);
-            intersection[0].Pt0.DistanceTo(intersection[0].Pt1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            intersection[0].PointA.DistanceTo(intersection[0].PointB).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -306,7 +306,7 @@ namespace GShark.Test.XUnit.Operation
             // Assert
             _testOutput.WriteLine(intersection[0].ToString());
             intersection.Count.Should().Be(1);
-            intersection[0].Pt0.DistanceTo(intersection[0].Pt1).Should().BeLessThan(GSharkMath.MaxTolerance);
+            intersection[0].PointA.DistanceTo(intersection[0].PointB).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -337,7 +337,7 @@ namespace GShark.Test.XUnit.Operation
             foreach (CurvesIntersectionResult intersection in intersections)
             {
                 _testOutput.WriteLine(intersection.ToString());
-                intersection.Pt0.DistanceTo(intersection.Pt1).Should().BeLessThan(GSharkMath.MaxTolerance);
+                intersection.PointA.DistanceTo(intersection.PointB).Should().BeLessThan(GSharkMath.MaxTolerance);
             }
         }
 
@@ -369,7 +369,7 @@ namespace GShark.Test.XUnit.Operation
             foreach (CurvesIntersectionResult intersection in intersections)
             {
                 _testOutput.WriteLine(intersection.ToString());
-                intersection.Pt0.DistanceTo(intersection.Pt1).Should().BeLessThan(GSharkMath.MaxTolerance);
+                intersection.PointA.DistanceTo(intersection.PointB).Should().BeLessThan(GSharkMath.MaxTolerance);
             }
         }
 
@@ -388,7 +388,7 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             List<CurvePlaneIntersectionResult> intersections = Intersect.CurvePlane(crv, pl);
-            var ptOnPlane = pl.PointAt(intersections[0].Uv[0], intersections[0].Uv[1]);
+            var ptOnPlane = pl.PointAt(intersections[0].Coordinate.U, intersections[0].Coordinate.V);
 
             // Assert
             _testOutput.WriteLine(intersections[0].ToString());
@@ -421,7 +421,7 @@ namespace GShark.Test.XUnit.Operation
             foreach (CurvePlaneIntersectionResult curveIntersectionResult in intersections)
             {
                 _testOutput.WriteLine(curveIntersectionResult.ToString());
-                var ptOnPlane = testPlnXformed.PointAt(curveIntersectionResult.Uv[0], curveIntersectionResult.Uv[1]);
+                var ptOnPlane = testPlnXformed.PointAt(curveIntersectionResult.Coordinate.U, curveIntersectionResult.Coordinate.V);
                 curveIntersectionResult.Point.DistanceTo(ptOnPlane).Should().BeLessThan(GSharkMath.MaxTolerance);
             }
         }
@@ -440,12 +440,12 @@ namespace GShark.Test.XUnit.Operation
 
             // Act
             List<CurvesIntersectionResult> intersections = Intersect.CurveSelf(crv);
-            var ptAt = crv.PointAt(intersections[0].T1);
+            var ptAt = crv.PointAt(intersections[0].ParameterB);
 
             // Assert
             _testOutput.WriteLine(intersections[0].ToString());
             intersections.Count.Should().Be(1);
-            intersections[0].Pt0.DistanceTo(ptAt).Should().BeLessThan(GSharkMath.MaxTolerance);
+            intersections[0].PointA.DistanceTo(ptAt).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -468,8 +468,8 @@ namespace GShark.Test.XUnit.Operation
             foreach (CurvesIntersectionResult curveIntersectionResult in intersections)
             {
                 _testOutput.WriteLine(curveIntersectionResult.ToString());
-                var ptAt = crv.PointAt(curveIntersectionResult.T1);
-                curveIntersectionResult.Pt0.DistanceTo(ptAt).Should().BeLessThan(GSharkMath.MaxTolerance);
+                var ptAt = crv.PointAt(curveIntersectionResult.ParameterB);
+                curveIntersectionResult.PointA.DistanceTo(ptAt).Should().BeLessThan(GSharkMath.MaxTolerance);
             }
         }
     }

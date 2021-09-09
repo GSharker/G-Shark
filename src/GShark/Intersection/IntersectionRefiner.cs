@@ -15,7 +15,7 @@ namespace GShark.Intersection
         /// <param name="secondGuess">The second guess parameter.</param>
         /// <param name="tolerance">The value tolerance for the intersection.</param>
         /// <returns>The results collected into the object <see cref="CurvesIntersectionResult"/>.</returns>
-        internal static CurvesIntersectionResult CurvesWithEstimation(NurbsCurve crv0, NurbsCurve crv1,
+        internal static CurvesIntersectionResult CurvesWithEstimation(NurbsBase crv0, NurbsBase crv1,
             double firstGuess, double secondGuess, double tolerance)
         {
             IObjectiveFunction objectiveFunctions = new CurvesIntersectionObjectives(crv0, crv1);
@@ -39,7 +39,7 @@ namespace GShark.Intersection
         /// <param name="secondGuess">The second guess parameter.</param>
         /// <param name="tolerance">The value tolerance for the intersection.</param>
         /// <returns>The results collected into the object <see cref="CurvePlaneIntersectionResult"/>.</returns>
-        internal static CurvePlaneIntersectionResult CurvePlaneWithEstimation(NurbsCurve crv, Plane plane,
+        internal static CurvePlaneIntersectionResult CurvePlaneWithEstimation(NurbsBase crv, Plane plane,
             double firstGuess, double secondGuess, double tolerance)
         {
             IObjectiveFunction objectiveFunctions = new CurvePlaneIntersectionObjectives(crv, plane);

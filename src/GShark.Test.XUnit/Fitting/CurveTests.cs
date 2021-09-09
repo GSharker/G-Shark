@@ -33,7 +33,7 @@ namespace GShark.Test.XUnit.Fitting
         public void Interpolates_A_Collection_Of_Points(int degree)
         {
             // Act
-            NurbsCurve crv = Curve.Interpolated(pts, degree);
+            NurbsBase crv = Curve.Interpolated(pts, degree);
 
             // Assert
             crv.Degree.Should().Be(degree);
@@ -55,7 +55,7 @@ namespace GShark.Test.XUnit.Fitting
             Vector3 v2 = new Vector3(-4.204863, -2.021209, 0);
 
             // Act
-            NurbsCurve crv = Curve.Interpolated(pts, 2, v1, v2);
+            NurbsBase crv = Curve.Interpolated(pts, 2, v1, v2);
 
             // Assert
             crv.ControlPointLocations[0].DistanceTo(pts[0]).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -77,7 +77,7 @@ namespace GShark.Test.XUnit.Fitting
         public void Returns_A_Sets_Of_Interpolated_Beziers_From_A_Collection_Of_Points()
         {
             // Act
-            List<NurbsCurve> crvs = Curve.InterpolateBezier(pts);
+            List<NurbsBase> crvs = Curve.InterpolateBezier(pts);
 
             // Assert
             crvs.Count.Should().Be(4);
@@ -102,7 +102,7 @@ namespace GShark.Test.XUnit.Fitting
             };
 
             // Act
-            NurbsCurve approximateCurve = Curve.Approximate(pts, 3);
+            NurbsBase approximateCurve = Curve.Approximate(pts, 3);
 
             // Assert
             approximateCurve.ControlPointLocations.Count.Should().Be(4);

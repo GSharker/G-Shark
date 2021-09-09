@@ -9,7 +9,7 @@ namespace GShark.Optimization
     /// Solves for unconstrained problems, using a gradient descendent.<br/>
     /// This class is at the base of some intersection methods.
     /// </summary>
-    public class Minimizer
+    internal class Minimizer
     {
         private readonly IObjectiveFunction _objectiveFunction;
 
@@ -17,7 +17,7 @@ namespace GShark.Optimization
         /// Minimizer initialization.
         /// </summary>
         /// <param name="objectiveFunction">The objective functions used into the minimization process.</param>
-        public Minimizer(IObjectiveFunction objectiveFunction)
+        internal Minimizer(IObjectiveFunction objectiveFunction)
         {
             _objectiveFunction = objectiveFunction;
         }
@@ -29,7 +29,7 @@ namespace GShark.Optimization
         /// <param name="gradientTolerance">The gradient tolerance set per default to 1e-8.</param>
         /// <param name="maxIteration">The number of iteration used, set per default 1000.</param>
         /// <returns>The minimization result, <see cref="MinimizationResult"/>.</returns>
-        public MinimizationResult UnconstrainedMinimizer(Vector initialGuess, double gradientTolerance = 1e-8, int maxIteration = 1000)
+        internal MinimizationResult UnconstrainedMinimizer(Vector initialGuess, double gradientTolerance = 1e-8, int maxIteration = 1000)
         {
             Vector x0 = new Vector(initialGuess);
             int n = x0.Count;
@@ -102,7 +102,7 @@ namespace GShark.Optimization
                 }
                 if (iteration > maxIteration)
                 {
-                    message = "T1 iteration reached during line search.";
+                    message = "ParameterB iteration reached during line search.";
                     break;
                 }
 

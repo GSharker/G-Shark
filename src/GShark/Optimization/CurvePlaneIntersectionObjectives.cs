@@ -6,9 +6,9 @@ namespace GShark.Optimization
     /// <summary>
     /// The basic functions used into the minimization process, to define the intersection results between a curve and a plane.
     /// </summary>
-    public class CurvePlaneIntersectionObjectives : IObjectiveFunction
+    internal class CurvePlaneIntersectionObjectives : IObjectiveFunction
     {
-        private readonly NurbsCurve _curve;
+        private readonly NurbsBase _curve;
         private readonly Plane _plane;
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace GShark.Optimization
         /// </summary>
         /// <param name="crv">ICurve used in the intersection process.</param>
         /// <param name="plane">Plane used in the intersection process.</param>
-        public CurvePlaneIntersectionObjectives(NurbsCurve crv, Plane plane)
+        internal CurvePlaneIntersectionObjectives(NurbsBase crv, Plane plane)
         {
             _curve = crv;
             _plane = plane;

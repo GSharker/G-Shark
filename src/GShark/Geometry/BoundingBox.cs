@@ -87,7 +87,7 @@ namespace GShark.Geometry
         public Point3 Max { get; }
 
         /// <summary>
-        /// Gets a BoundingBox that has Unset coordinates for T0 and T1.
+        /// Gets a BoundingBox that has Unset coordinates for ParameterA and ParameterB.
         /// </summary>
         public static BoundingBox Unset { get; } = new BoundingBox(Point3.Unset, Point3.Unset);
 
@@ -294,7 +294,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Ensures that the box is defined in an increasing fashion.
-        /// If the T0 or T1 points are unset, this function will return a BoundingBox unset.
+        /// If the ParameterA or ParameterB points are unset, this function will return a BoundingBox unset.
         /// </summary>
         /// <returns>A BoundingBox made valid.</returns>
         public BoundingBox MakeItValid()
