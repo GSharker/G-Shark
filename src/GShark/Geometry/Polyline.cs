@@ -13,13 +13,13 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class Polyline : List<Point3>, ICurve, ITransformable<Polyline>
+    public class PolyLine : List<Point3>, ICurve, ITransformable<PolyLine>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
         /// </summary>
         /// <param name="vertices">Points used to create the polyline.</param>
-        public Polyline(IList<Point3> vertices)
+        public PolyLine(IList<Point3> vertices)
         {
             if (vertices.Count < 2)
             {
@@ -131,11 +131,11 @@ namespace GShark.Geometry
         /// Creates a closed polyline, where the first and last point are the same.
         /// </summary>
         /// <returns>A closed polyline.</returns>
-        public Polyline Close()
+        public PolyLine Close()
         {
             List<Point3> copyPts = new List<Point3>(this);
             copyPts.Add(copyPts[0]);
-            return new Polyline(copyPts);
+            return new PolyLine(copyPts);
         }
 
         /// <summary>
@@ -321,8 +321,8 @@ namespace GShark.Geometry
                 leftSubCollection = conquer.Take(mid + 1).ToList();
                 rightSubCollection = conquer.Skip(mid).ToList();
 
-                Polyline leftPoly = new Polyline(leftSubCollection);
-                Polyline rightPoly = new Polyline(rightSubCollection);
+                PolyLine leftPoly = new PolyLine(leftSubCollection);
+                PolyLine rightPoly = new PolyLine(rightSubCollection);
 
                 Point3 leftPt = leftPoly.PointAt(0.5);
                 Point3 rightPt = rightPoly.PointAt(0.5);
@@ -344,11 +344,11 @@ namespace GShark.Geometry
         /// Reverses the order of the polyline.
         /// </summary>
         /// <returns>A polyline reversed.</returns>
-        public new Polyline Reverse()
+        public new PolyLine Reverse()
         {
             List<Point3> copyVertices = new List<Point3>(this);
             copyVertices.Reverse();
-            return new Polyline(copyVertices);
+            return new PolyLine(copyVertices);
         }
 
         /// <summary>
@@ -356,11 +356,11 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polyline transformed.</returns>
-        public Polyline Transform(Transform transform)
+        public PolyLine Transform(Transform transform)
         {
             List<Point3> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
 
-            return new Polyline(transformedPts);
+            return new PolyLine(transformedPts);
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace GShark.Geometry
         /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset polyline.</returns>
-        public Polyline Offset(double distance, Plane pln)
+        public PolyLine Offset(double distance, Plane pln)
         {
             if (distance == 0.0)
             {
@@ -439,7 +439,7 @@ namespace GShark.Geometry
                 }
             }
 
-            return new Polyline(offsetPts);
+            return new PolyLine(offsetPts);
         }
 
         /// <summary>

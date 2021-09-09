@@ -291,7 +291,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(10, 10, 0)
             };
 
-            Polyline poly = new Polyline(ptsA);
+            PolyLine poly = new PolyLine(ptsA);
             NurbsCurve curveB = new NurbsCurve(ptsB, 2);
 
             // Act

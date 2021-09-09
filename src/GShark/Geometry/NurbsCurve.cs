@@ -15,12 +15,10 @@ namespace GShark.Geometry
     public class NurbsCurve : NurbsBase, ITransformable<NurbsCurve>
     {
         /// <summary>
-        /// Creates a NURBS curve.
+        /// Internal constructor, creates a NURBS curve.
         /// </summary>
-        /// <param name="degree">The curve degree.</param>
-        /// <param name="knots">The knots defining the curve.</param>
-        /// <param name="controlPoints">The controlPoints of the curve.</param>
-        internal NurbsCurve(int degree, KnotVector knots, List<Point4> controlPoints) : base(degree, knots, controlPoints)
+        internal NurbsCurve(int degree, KnotVector knots, List<Point4> controlPoints) 
+            : base(degree, knots, controlPoints)
         {
         }
 

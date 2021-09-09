@@ -11,7 +11,7 @@ namespace GShark.Test.XUnit.Geometry
     public class PolylineTests
     {
         public readonly Point3[] ExamplePts;
-        private readonly Polyline _polyline;
+        private readonly PolyLine _polyLine;
         public PolylineTests()
         {
             #region example
@@ -24,7 +24,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(45, 12.5, 0)
             };
 
-            _polyline = new Polyline(ExamplePts);
+            _polyLine = new PolyLine(ExamplePts);
             #endregion
         }
 
@@ -35,12 +35,12 @@ namespace GShark.Test.XUnit.Geometry
             int numberOfExpectedSegments = 4;
 
             // Act
-            Polyline polyline = _polyline;
+            PolyLine polyLine = _polyLine;
 
             // Arrange
-            polyline.SegmentsCount.Should().Be(numberOfExpectedSegments);
-            polyline.Count.Should().Be(ExamplePts.Length);
-            polyline[0].Should().BeEquivalentTo(ExamplePts[0]);
+            polyLine.SegmentsCount.Should().Be(numberOfExpectedSegments);
+            polyLine.Count.Should().Be(ExamplePts.Length);
+            polyLine[0].Should().BeEquivalentTo(ExamplePts[0]);
         }
 
         [Fact]
@@ -50,10 +50,10 @@ namespace GShark.Test.XUnit.Geometry
             Point3[] pts = new Point3[] { new Point3(5, 0, 0) };
 
             // Act
-            Func<Polyline> func = () => new Polyline(pts);
+            Func<PolyLine> func = () => new PolyLine(pts);
 
             // Assert
-            func.Should().Throw<Exception>().WithMessage("Insufficient points for a polyline.");
+            func.Should().Throw<Exception>().WithMessage("Insufficient points for a polyLine.");
         }
 
         [Fact]
@@ -75,20 +75,20 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            Polyline polyline = new Polyline(pts);
+            PolyLine polyLine = new PolyLine(pts);
 
             // Assert
-            polyline.Should().BeEquivalentTo(ptsExpected);
+            polyLine.Should().BeEquivalentTo(ptsExpected);
         }
 
         [Fact]
         public void It_Returns_A_Closed_Polyline()
         {
             // Arrange
-            Polyline closedPolyline = _polyline.Close();
+            PolyLine closedPolyLine = _polyLine.Close();
 
             // Assert
-            closedPolyline[0].DistanceTo(closedPolyline[closedPolyline.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
+            closedPolyLine[0].DistanceTo(closedPolyLine[closedPolyLine.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace GShark.Test.XUnit.Geometry
             double expectedLength = 55.595342;
 
             // Act
-            double length = _polyline.Length;
+            double length = _polyLine.Length;
 
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
@@ -112,7 +112,7 @@ namespace GShark.Test.XUnit.Geometry
             double expectedSegmentLength = 11.18034;
 
             // Act
-            var segments = _polyline.Segments;
+            var segments = _polyLine.Segments;
 
             // Assert
             segments.Count.Should().Be(expectedNumberOfSegments);
@@ -131,7 +131,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            Point3 ptResult = _polyline.PointAt(t);
+            Point3 ptResult = _polyLine.PointAt(t);
 
             // Assert
             ptResult.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -147,7 +147,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 closestPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            double param = _polyline.ClosestParameter(closestPt);
+            double param = _polyLine.ClosestParameter(closestPt);
 
             // Assert
             param.Should().BeApproximately(expectedParam, GSharkMath.MaxTolerance);
@@ -161,7 +161,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Length_At_The_Given_Parameter(double t, double expectedLength)
         {
             // Act
-            double length = _polyline.LengthAt(t);
+            double length = _polyLine.LengthAt(t);
 
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
@@ -174,7 +174,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(19.369239, 6.261522, 0);
 
             // Act
-            Point3 pt = _polyline.PointAtNormalizedLength(0.5);
+            Point3 pt = _polyLine.PointAtNormalizedLength(0.5);
             
             // Assert
             (pt == expectedPt).Should().BeTrue();
@@ -188,7 +188,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Parameter_At_The_Given_Length(double length, double parameterExpected)
         {
             // Act
-            double parameter = _polyline.ParameterAtLength(length);
+            double parameter = _polyLine.ParameterAtLength(length);
 
             // Assert
             parameter.Should().BeApproximately(parameterExpected, GSharkMath.MaxTolerance);
@@ -204,10 +204,10 @@ namespace GShark.Test.XUnit.Geometry
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
 
             // Act
-            Polyline transformedPoly = _polyline.Transform(combinedTransformations);
+            PolyLine transformedPoly = _polyLine.Transform(combinedTransformations);
 
             // Assert
-            double[] lengths = _polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
+            double[] lengths = _polyLine.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
             lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GSharkMath.MaxTolerance));
         }
 
@@ -215,11 +215,11 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_The_Offset_Of_A_Open_Polyline()
         {
             // Arrange
-            Polyline pl = new Polyline(new PolylineTests().ExamplePts);
+            PolyLine pl = new PolyLine(new PolylineTests().ExamplePts);
             double offset = 5;
 
             // Act
-            Polyline offsetResult = pl.Offset(offset, Plane.PlaneXY);
+            PolyLine offsetResult = pl.Offset(offset, Plane.PlaneXY);
 
             // Assert
             (offsetResult[0].DistanceTo(pl[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -234,7 +234,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(18.2, 8.6, 0.0);
 
             // Act
-            Point3 closestPt = _polyline.ClosestPoint(testPt);
+            Point3 closestPt = _polyLine.ClosestPoint(testPt);
 
             // Assert
             closestPt.EpsilonEquals(expectedPt, GSharkMath.Epsilon).Should().BeTrue();
@@ -248,7 +248,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 maxExpected = new Point3(45.0, 15.0, 0.0);
 
             // Act
-            BoundingBox bBox = _polyline.GetBoundingBox();
+            BoundingBox bBox = _polyLine.GetBoundingBox();
 
             // Assert
             bBox.Min.EpsilonEquals(minExpected, GSharkMath.Epsilon).Should().BeTrue();
@@ -263,11 +263,11 @@ namespace GShark.Test.XUnit.Geometry
             reversedPts.Reverse();
 
             // Act
-            Polyline reversedPolyline = _polyline.Reverse();
+            PolyLine reversedPolyLine = _polyLine.Reverse();
 
             // Assert
-            reversedPolyline.Should().NotBeSameAs(_polyline);
-            reversedPolyline.Should().BeEquivalentTo(reversedPts);
+            reversedPolyLine.Should().NotBeSameAs(_polyLine);
+            reversedPolyLine.Should().BeEquivalentTo(reversedPts);
         }
 
         [Fact]
@@ -282,7 +282,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(18.154088, 30.745098, 7.561387),
                 new Point3(18.154088, 12.309505, 7.561387)
             };
-            Polyline poly = new Polyline(pts);
+            PolyLine poly = new PolyLine(pts);
 
             // Act
             var polyNurbs = poly.ToNurbs();
@@ -305,7 +305,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Segment_At_A_Given_Length(double length, int expectedIndex)
         {
             //Arrange
-            var polyLine = new Polyline(new List<Point3>
+            var polyLine = new PolyLine(new List<Point3>
             {
                 new (0, 0, 0),
                 new (5, 0, 0),

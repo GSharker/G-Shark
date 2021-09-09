@@ -143,7 +143,7 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(10, 26.702314, 3.665482)
             };
 
-            Polyline poly = new Polyline(pts);
+            PolyLine poly = new PolyLine(pts);
             Plane pl = Plane.PlaneYZ.SetOrigin(new Point3(10, 20, 5));
 
             // Act
