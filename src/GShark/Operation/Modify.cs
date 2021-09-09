@@ -696,7 +696,7 @@ namespace GShark.Operation
         /// </summary>
         /// <param name="curves">Curves to join.</param>
         /// <returns>A curve that is the result of joining all the curves.</returns>
-        public static NurbsBase JoinCurves(IList<NurbsBase> curves)
+        public static PolyCurve JoinCurves(IList<NurbsBase> curves)
         {
             if (curves == null)
             {
@@ -722,28 +722,10 @@ namespace GShark.Operation
                 }
             }
 
-            // Extract the biggest degree between the curves.
-            int finalDegree = sortedCurves.Max(c => c.Degree);
+            PolyCurve polyCurve = new PolyCurve();
+            polyCurve.Append(sortedCurves);
 
-            // Homogenized degree curves.
-            IEnumerable<NurbsBase> homogenizedCurves = sortedCurves.Select(curve => curve.Degree != finalDegree ? ElevateDegree(curve, finalDegree) : curve);
-
-            // Join curves.
-            List<double> joinedKnots = new List<double>();
-            List<Point4> joinedControlPts = new List<Point4>();
-
-            joinedKnots.AddRange(homogenizedCurves.First().Knots.Take(homogenizedCurves.First().Knots.Count - 1));
-            joinedControlPts.AddRange(homogenizedCurves.First().ControlPoints);
-
-            foreach (NurbsBase curve in homogenizedCurves.Skip(1))
-            {
-                joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - 1).Skip(finalDegree + 1).Select(k => k + joinedKnots.Last()).ToList());
-                joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
-            }
-
-            // Appending the last knot to the end.
-            joinedKnots.Add(joinedKnots.Last());
-            return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
+            return polyCurve;
         }
     }
 }
