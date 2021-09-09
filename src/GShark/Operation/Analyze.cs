@@ -1,10 +1,9 @@
 ﻿using GShark.Core;
-using GShark.ExtendedMethods;
+using GShark.Enumerations;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.Enumerations;
 
 namespace GShark.Operation
 {
@@ -536,8 +535,8 @@ namespace GShark.Operation
                     : refinedSurface.ControlPoints.Count - 1;
             }
 
-            return direction == SurfaceDirection.V 
-                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, CollectionHelpers.Transpose2DArray(refinedSurface.ControlPoints)[span]) 
+            return direction == SurfaceDirection.V
+                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, CollectionHelpers.Transpose2DArray(refinedSurface.ControlPoints)[span])
                 : new NurbsCurve(refinedSurface.DegreeV, refinedSurface.KnotsV, refinedSurface.ControlPoints[span]);
         }
 

@@ -11,6 +11,9 @@ namespace GShark.Geometry
     /// <summary>
     /// Represents a curve that is the result of joining several (possibly different) types of curves.
     /// </summary>
+    /// <example>
+    /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolyCurveTests.cs?name=example)]
+    /// </example>
     public class PolyCurve : NurbsBase
     {
         private readonly List<ICurve> _segments = new List<ICurve>();
@@ -24,10 +27,10 @@ namespace GShark.Geometry
         { }
 
         /// <summary>
-        /// Appends and matches the start of the line to the end of polyCurve.
+        /// Appends and matches the start of the arc to the end of polycurve.
+        /// This function will fail if the polycurve is closed.
         /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
+        /// <param name="line">The line to append.</param>
         public void Append(Line line)
         {
             HealthChecks(line);
@@ -37,10 +40,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Appends and matches the start of the arc to the end of polyCurve.
+        /// Appends and matches the start of the arc to the end of polycurve.
+        /// This function will fail if the polycurve is closed.
         /// </summary>
-        /// <param name="arc">The arc.</param>
-        /// <returns></returns>
+        /// <param name="arc">The arc to append.</param>
         public void Append(Arc arc)
         {
             HealthChecks(arc);
@@ -50,10 +53,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Appends and matches the start of the curve to the end of polyCurve.
+        /// Appends and matches the start of the curve to the end of polycurve.
+        /// This function will fail if the polycurve is closed or if SegmentCount > 0 and the segment curve is closed.
         /// </summary>
         /// <param name="curve"></param>
-        /// <returns></returns>
         public void Append(NurbsCurve curve)
         {
             if (curve.IsClosed())
@@ -67,10 +70,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Appends and matches the start of the polyCurve to the end of polyCurve.
+        /// Appends and matches the start of the curve to the end of polycurve.
+        /// This function will fail if the polycurve is closed or if SegmentCount > 0 and the segment polycurve is closed.
         /// </summary>
         /// <param name="polyCurve"></param>
-        /// <returns></returns>
         public void Append(PolyCurve polyCurve)
         {
             if (polyCurve.IsClosed())
@@ -84,10 +87,25 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Internal initialization of polycurve.
+        /// No health checks are made, you are responsible of the collection of curve you are passing.
+        /// </summary>
+        /// <param name="curves"></param>
+        internal void Append(List<NurbsBase> curves)
+        {
+            _segments.AddRange(curves);
+            _segmentsNurbs.AddRange(curves);
+            ToNurbsForm();
+        }
+
+        /// <summary>
         /// The segments of the polyCurve.
         /// </summary>
         public List<ICurve> Segments => _segments;
 
+        /// <summary>
+        /// Defines the NURBS form of the polyline.
+        /// </summary>
         private void ToNurbsForm()
         {
             if (_segments.Count == 1)
@@ -129,11 +147,14 @@ namespace GShark.Geometry
             ControlPoints = joinedControlPts;
         }
 
+        /// <summary>
+        /// Checks to define if the curve can be appended to the polycurve.
+        /// </summary>
         private void HealthChecks(ICurve curve)
         {
             if (_segments.Count <= 0) return;
 
-            if (this.IsClosed())
+            if (IsClosed())
             {
                 throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curve.GetType()}.");
             }

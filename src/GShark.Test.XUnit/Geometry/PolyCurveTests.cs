@@ -10,16 +10,12 @@ namespace GShark.Test.XUnit.Geometry
     public class PolyCurveTests
     {
         private readonly PolyCurve _polycurve;
-        private readonly NurbsCurve _nurbs;
-        private readonly Line _line;
-        private readonly Arc _arc;
 
         private readonly ITestOutputHelper _testOutput;
 
         public PolyCurveTests(ITestOutputHelper testOutput)
         {
             _testOutput = testOutput;
-
             int degree = 3;
             List<Point3> pts = new List<Point3>
             {
@@ -31,33 +27,36 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(5, 5, 0)
             };
 
-            _nurbs = new NurbsCurve(pts, degree);
-            _line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
-            _arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            #region example
+            // Initializes a polycurve from a curve a line and an arc.
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Line line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
 
             _polycurve = new PolyCurve();
-            _polycurve.Append(_nurbs);
-            _polycurve.Append(_line);
-            _polycurve.Append(_arc);
+            _polycurve.Append(curve);
+            _polycurve.Append(line);
+            _polycurve.Append(arc);
+            #endregion
         }
 
         [Fact]
         public void It_Returns_The_Length_Of_The_PolyCurve()
         {
             // Arrange
-            double expectedLength = 30.623806269249716;
+            double expectedLength = 29.689504;
 
             // Act            
             var length = _polycurve.Length;
 
             // Arrange
-            length.Should().BeApproximately(expectedLength, GSharkMath.Epsilon);
+            length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
 
         [Theory]
-        [InlineData(new double[] { 5, 3.04250104617472, 4.51903625915119 }, 15)]
-        [InlineData(new double[] { 5, 5, -1.73017533397891 }, 22)]
-        [InlineData(new double[] { 6.00761470775174, 5, -5.51012618975348 }, 26)]
+        [InlineData(new double[] { 5, 3.042501, 4.519036 }, 15)]
+        [InlineData(new double[] { 5, 5, -1.730175 }, 22)]
+        [InlineData(new double[] { 6.118663, 5, -4.895879 }, 25.5)]
         public void It_Returns_A_Point_At_Length(double[] coords, double length)
         {
             // Arrange

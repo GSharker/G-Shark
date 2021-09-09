@@ -21,18 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Analysis\**" />
-    <Compile Remove="Evaluation\**" />
-    <Compile Remove="Modify\**" />
-    <EmbeddedResource Remove="Analysis\**" />
-    <EmbeddedResource Remove="Evaluation\**" />
-    <EmbeddedResource Remove="Modify\**" />
-    <None Remove="Analysis\**" />
-    <None Remove="Evaluation\**" />
-    <None Remove="Modify\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="../../media/gshark-logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
