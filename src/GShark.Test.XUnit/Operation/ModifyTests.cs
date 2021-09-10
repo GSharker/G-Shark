@@ -126,7 +126,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Reverses_The_Curve()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBaseCubicBezierPlanar();
+            NurbsBase curve = NurbsCurveCollection.NurbsBaseCubicBezierPlanar();
 
             // Act
             NurbsBase crvRev1 = Modify.ReverseCurve(curve);
@@ -228,7 +228,7 @@ namespace GShark.Test.XUnit.Operation
         public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
         {
             // Arrange
-            NurbsBase[] curves = { NurbsBaseCollection.NurbsBasePlanarExample() };
+            NurbsBase[] curves = { NurbsCurveCollection.NurbsBasePlanarExample() };
 
             // Act
             Func<object> func = () => Modify.JoinCurves(curves);
@@ -241,7 +241,7 @@ namespace GShark.Test.XUnit.Operation
         public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
         {
             // Arrange
-            NurbsBase[] curves = { NurbsBaseCollection.NurbsBasePlanarExample(), NurbsBaseCollection.NurbsBaseQuadratic3DBezier() };
+            NurbsBase[] curves = { NurbsCurveCollection.NurbsBasePlanarExample(), NurbsCurveCollection.NurbsBaseQuadratic3DBezier() };
 
             // Act
             Func<object> func = () => Modify.JoinCurves(curves);

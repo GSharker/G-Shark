@@ -194,6 +194,17 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Evaluates a point at a given chord length from a parameter on the curve.
+        /// </summary>
+        /// <returns></returns>
+        public Point3 ParameterAtChordLength(double t, double chordLength)
+        {
+            //Call minimiser with objecive function
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Computes the curve tangent at the given parameter.
         /// </summary>
         /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>

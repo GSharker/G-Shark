@@ -35,7 +35,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsBase()
         {
             // Act
-            NurbsBase NurbsBase = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase NurbsBase = NurbsCurveCollection.NurbsBasePlanarExample();
 
             // Assert
             NurbsBase.Should().NotBeNull();
@@ -74,22 +74,22 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_True_If_A_NurbsBase_Is_Closed()
         {
             // Assert
-            NurbsBaseCollection.NurbsBaseWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
-            NurbsBaseCollection.PeriodicClosedNurbsBase().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.NurbsBaseWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
+            NurbsCurveCollection.PeriodicClosedNurbsBase().IsClosed().Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_True_If_A_NurbsBase_Is_Periodic()
         {
             // Assert
-            NurbsBaseCollection.PeriodicClosedNurbsBase().IsPeriodic().Should().BeTrue();
+            NurbsCurveCollection.PeriodicClosedNurbsBase().IsPeriodic().Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_NurbsBase_Evaluated_With_A_List_Of_Weights()
         {
             // Act
-            NurbsBase NurbsBase = NurbsBaseCollection.NurbsBasePtsAndWeightsExample();
+            NurbsBase NurbsBase = NurbsCurveCollection.NurbsBasePtsAndWeightsExample();
 
             // Assert
             NurbsBase.Should().NotBeNull();
@@ -114,8 +114,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_Planar_Curve()
         {
             // Arrange
-            NurbsBase crv0 = NurbsBaseCollection.NurbsBaseCubicBezierPlanar();
-            NurbsBase crv1 = NurbsBaseCollection.NurbsBaseQuadraticBezierPlanar();
+            NurbsBase crv0 = NurbsCurveCollection.NurbsBaseCubicBezierPlanar();
+            NurbsBase crv1 = NurbsCurveCollection.NurbsBaseQuadraticBezierPlanar();
 
             var expectedPtMin0 = new Point3(0, 0, 0);
             var expectedPtMax0 = new Point3(2, 0.444444, 0);
@@ -139,8 +139,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_3D_Nurbs_Curve()
         {
             // Arrange
-            NurbsBase crv0 = NurbsBaseCollection.NurbsBase3DExample();
-            NurbsBase crv1 = NurbsBaseCollection.NurbsBaseQuadratic3DBezier();
+            NurbsBase crv0 = NurbsCurveCollection.NurbsBase3DExample();
+            NurbsBase crv1 = NurbsCurveCollection.NurbsBaseQuadratic3DBezier();
 
             var expectedPtMin0 = new Point3(0, 0.5555556, 0);
             var expectedPtMax0 = new Point3(4.089468, 5, 5);
@@ -168,7 +168,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPtMax = new Point3(4.354648, 5, 3.333333);
 
             // Act
-            BoundingBox bBox = NurbsBaseCollection.PeriodicClosedNurbsBase().GetBoundingBox();
+            BoundingBox bBox = NurbsCurveCollection.PeriodicClosedNurbsBase().GetBoundingBox();
 
             // Assert
             bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -179,7 +179,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Transforms_A_NurbsBase_By_A_Given_Matrix()
         {
             // Arrange
-            var curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            var curve = NurbsCurveCollection.NurbsBasePlanarExample();
             var transform = Transform.Translation(new Vector3(-10, 20, 0));
 
             // Act
@@ -196,7 +196,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsBase_With_Clamped_End()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.PeriodicClosedNurbsBase();
+            NurbsBase curve = NurbsCurveCollection.PeriodicClosedNurbsBase();
 
             // Act
             NurbsBase curveClamped = curve.ClampEnds();
@@ -224,8 +224,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedXDir1 = new Vector3(-0.690371, -0.162782, -0.704905);
 
             // Act
-            Plane frame0 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t0);
-            Plane frame1 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t1);
+            Plane frame0 = NurbsCurveCollection.NurbsBase3DExample().PerpendicularFrameAt(t0);
+            Plane frame1 = NurbsCurveCollection.NurbsBase3DExample().PerpendicularFrameAt(t1);
 
             // Assert
             frame0.Origin.EpsilonEquals(expectedPlaneOrigin0, GSharkMath.MinTolerance).Should().BeTrue();
@@ -243,7 +243,7 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedCurvature = new Vector3(1.044141, 0.730898, 0.730898);
 
             // Act
-            Vector3 curvature = NurbsBaseCollection.NurbsBase3DExample().CurvatureAt(0.25);
+            Vector3 curvature = NurbsCurveCollection.NurbsBase3DExample().CurvatureAt(0.25);
 
             // Assert
             (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
@@ -267,6 +267,22 @@ namespace GShark.Test.XUnit.Geometry
                 Point3 closestPt = crv.ClosestPoint(pt);
                 pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
             }
+        }
+
+        [Fact]
+        public void It_Returns_A_Curve_Parameter_At_A_Given_ChordLength_From_A_Starting_Curve_Parameter()
+        {
+            //Arrange
+            var chordLength = 5.0;
+            var expectedParamOnCrv = 0.169836765178962;
+            var crv = NurbsCurveCollection.NurbsBase3DExample();
+            var startParam = 0;
+
+            //Act
+            var param = crv.ParameterAtChordLength(startParam, chordLength);
+
+            //Assert
+            param.Equals(expectedParamOnCrv).Should().BeTrue();
         }
     }
 }

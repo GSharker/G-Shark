@@ -46,7 +46,7 @@ namespace GShark.Test.XUnit.Operation
         public void RationalBezierCurveParamAtLength_Returns_Parameters_At_Passed_Lengths()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase curve = NurbsCurveCollection.NurbsBasePlanarExample();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;
@@ -72,7 +72,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_The_Length_Of_The_Curve()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase curve = NurbsCurveCollection.NurbsBasePlanarExample();
             double expectedLength = 50.334675;
 
             // Act
@@ -92,7 +92,7 @@ namespace GShark.Test.XUnit.Operation
         public void It_Returns_The_Closest_Point_And_The_Parameter_t(double[] ptToCheck, double[] ptExpected, double tValExpected)
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase curve = NurbsCurveCollection.NurbsBasePlanarExample();
             Point3 testPt = new Point3(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
             Point3 expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
 
@@ -113,7 +113,7 @@ namespace GShark.Test.XUnit.Operation
         public void RationalCurveParameterAtLength_Returns_Parameter_t_At_The_Given_Length(double segmentLength, double tValueExpected)
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase curve = NurbsCurveCollection.NurbsBasePlanarExample();
 
             // Act
             double t = Analyze.CurveParameterAtLength(curve, segmentLength);

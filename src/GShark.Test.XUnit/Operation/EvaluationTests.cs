@@ -262,7 +262,7 @@ namespace GShark.Test.XUnit.Operation
             // Act
             // Act on a linear nurbs curve.
             Vector3 tangentLinearCurve = Evaluation.RationalCurveTangent(curve, 0.5);
-            var tangentPlanarCurve = Evaluation.RationalCurveTangent(NurbsBaseCollection.NurbsBasePlanarExample(), t);
+            var tangentPlanarCurve = Evaluation.RationalCurveTangent(NurbsCurveCollection.NurbsBasePlanarExample(), t);
             Vector3 tangentNormalized = tangentPlanarCurve.Unitize();
 
             // Assert

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GShark.Test.XUnit.Data
 {
-    public class NurbsBaseCollection
+    public class NurbsCurveCollection
     {
         public static NurbsCurve NurbsBaseExample()
         {
@@ -158,7 +158,7 @@ namespace GShark.Test.XUnit.Data
 
         public static List<NurbsBase> ClosedCurves()
         {
-            List<NurbsBase> crvs = NurbsBaseCollection.OpenCurves();
+            List<NurbsBase> crvs = NurbsCurveCollection.OpenCurves();
             for (int i = 0; i < crvs.Count; i++)
                 crvs[i] = crvs[i].Close();
 
