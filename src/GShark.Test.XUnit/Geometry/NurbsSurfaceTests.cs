@@ -39,9 +39,9 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             surfaceCcw.Should().NotBeNull();
-            surfaceCcw.LocationPoints.Count.Should().Be(2);
-            surfaceCcw.LocationPoints[0].Count.Should().Be(2);
-            surfaceCcw.LocationPoints[0][1].Equals(p4).Should().BeTrue();
+            surfaceCcw.ControlPointLocations.Count.Should().Be(2);
+            surfaceCcw.ControlPointLocations[0].Count.Should().Be(2);
+            surfaceCcw.ControlPointLocations[0][1].Equals(p4).Should().BeTrue();
             (evalPtCcw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance) && evalPtCw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance)).Should().BeTrue();
         }
 

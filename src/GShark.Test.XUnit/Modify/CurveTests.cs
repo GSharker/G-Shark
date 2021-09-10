@@ -44,17 +44,13 @@ namespace GShark.Test.XUnit.Modify
 
             // Act
             NurbsBase curveAfterRefine = KnotVector.Refine(curve, newKnots);
+            Point3 p0 = curve.PointAt(2.5);
+            Point3 p1 = curveAfterRefine.PointAt(2.5);
 
             // Assert
             (curve.Knots.Count + insertion).Should().Be(curveAfterRefine.Knots.Count);
             (pts.Count + insertion).Should().Be(curveAfterRefine.ControlPointLocations.Count);
-
-            Point3 p0 = curve.PointAt(2.5);
-            Point3 p1 = curveAfterRefine.PointAt(2.5);
-
-            p0[0].Should().BeApproximately(p1[0], GSharkMath.MaxTolerance);
-            p0[1].Should().BeApproximately(p1[1], GSharkMath.MaxTolerance);
-            p0[2].Should().BeApproximately(p1[2], GSharkMath.MaxTolerance);
+            (p0 == p1).Should().BeTrue();
         }
 
         [Fact]
