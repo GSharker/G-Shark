@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
 using GShark.Test.XUnit.Fitting;
 using System.Collections.Generic;
 using System.Linq;
-using GShark.ExtendedMethods;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -37,7 +37,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsBase()
         {
             // Act
-            NurbsBase NurbsBase = NurbsBaseCollection.NurbsBasePlanarExample();
+            NurbsBase NurbsBase = NurbsBaseCollection.NurbsPlanarExample();
 
             // Assert
             NurbsBase.Should().NotBeNull();
@@ -76,22 +76,22 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_True_If_A_NurbsBase_Is_Closed()
         {
             // Assert
-            NurbsBaseCollection.NurbsBaseWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
-            NurbsBaseCollection.PeriodicClosedNurbsBase().IsClosed().Should().BeTrue();
+            NurbsBaseCollection.NurbsWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
+            NurbsBaseCollection.PeriodicClosedNurbs().IsClosed().Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_True_If_A_NurbsBase_Is_Periodic()
         {
             // Assert
-            NurbsBaseCollection.PeriodicClosedNurbsBase().IsPeriodic().Should().BeTrue();
+            NurbsBaseCollection.PeriodicClosedNurbs().IsPeriodic().Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_A_NurbsBase_Evaluated_With_A_List_Of_Weights()
         {
             // Act
-            NurbsBase NurbsBase = NurbsBaseCollection.NurbsBasePtsAndWeightsExample();
+            NurbsBase NurbsBase = NurbsBaseCollection.NurbsPtsAndWeightsExample();
 
             // Assert
             NurbsBase.Should().NotBeNull();
@@ -116,8 +116,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_Planar_Curve()
         {
             // Arrange
-            NurbsBase crv0 = NurbsBaseCollection.NurbsBaseCubicBezierPlanar();
-            NurbsBase crv1 = NurbsBaseCollection.NurbsBaseQuadraticBezierPlanar();
+            NurbsBase crv0 = NurbsBaseCollection.NurbsCubicBezierPlanar();
+            NurbsBase crv1 = NurbsBaseCollection.NurbsQuadraticBezierPlanar();
 
             var expectedPtMin0 = new Point3(0, 0, 0);
             var expectedPtMax0 = new Point3(2, 0.444444, 0);
@@ -141,7 +141,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Bounding_Box_Of_A_3D_Nurbs_Curve()
         {
             // Arrange
-            NurbsBase crv0 = NurbsBaseCollection.NurbsBase3DExample();
+            NurbsBase crv0 = NurbsBaseCollection.Nurbs3DExample();
             NurbsBase crv1 = NurbsBaseCollection.NurbsBaseQuadratic3DBezier();
 
             var expectedPtMin0 = new Point3(0, 0.5555556, 0);
@@ -170,7 +170,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPtMax = new Point3(4.354648, 5, 3.333333);
 
             // Act
-            BoundingBox bBox = NurbsBaseCollection.PeriodicClosedNurbsBase().GetBoundingBox();
+            BoundingBox bBox = NurbsBaseCollection.PeriodicClosedNurbs().GetBoundingBox();
 
             // Assert
             bBox.Max.DistanceTo(expectedPtMax).Should().BeLessThan(GSharkMath.MaxTolerance);
@@ -181,7 +181,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Transforms_A_NurbsBase_By_A_Given_Matrix()
         {
             // Arrange
-            var curve = NurbsBaseCollection.NurbsBasePlanarExample();
+            var curve = NurbsBaseCollection.NurbsPlanarExample();
             var transform = Transform.Translation(new Vector3(-10, 20, 0));
 
             // Act
@@ -198,7 +198,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_NurbsBase_With_Clamped_End()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.PeriodicClosedNurbsBase();
+            NurbsBase curve = NurbsBaseCollection.PeriodicClosedNurbs();
 
             // Act
             NurbsBase curveClamped = curve.ClampEnds();
@@ -226,8 +226,8 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedXDir1 = new Vector3(-0.690371, -0.162782, -0.704905);
 
             // Act
-            Plane frame0 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t0);
-            Plane frame1 = NurbsBaseCollection.NurbsBase3DExample().PerpendicularFrameAt(t1);
+            Plane frame0 = NurbsBaseCollection.Nurbs3DExample().PerpendicularFrameAt(t0);
+            Plane frame1 = NurbsBaseCollection.Nurbs3DExample().PerpendicularFrameAt(t1);
 
             // Assert
             frame0.Origin.EpsilonEquals(expectedPlaneOrigin0, GSharkMath.MinTolerance).Should().BeTrue();
@@ -245,11 +245,28 @@ namespace GShark.Test.XUnit.Geometry
             Vector3 expectedCurvature = new Vector3(1.044141, 0.730898, 0.730898);
 
             // Act
-            Vector3 curvature = NurbsBaseCollection.NurbsBase3DExample().CurvatureAt(0.25);
+            Vector3 curvature = NurbsBaseCollection.Nurbs3DExample().CurvatureAt(0.25);
 
             // Assert
             (curvature.Length - expectedRadiusLength).Should().BeLessThan(GSharkMath.MinTolerance);
             curvature.EpsilonEquals(expectedCurvature, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Reverses_The_Curve()
+        {
+            // Arrange
+            NurbsBase curve = NurbsBaseCollection.NurbsCubicBezierPlanar();
+
+            // Act
+            NurbsBase crvRev1 = curve.Reverse();
+            NurbsBase crvRev2 = crvRev1.Reverse();
+
+            // Assert
+            curve.ControlPoints[0].Should().BeEquivalentTo(crvRev1.ControlPoints.Last());
+            curve.Equals(crvRev2).Should().BeTrue();
+            // Checks at reference level are different.
+            curve.Should().NotBeSameAs(crvRev2);
         }
 
         [Fact]
@@ -269,6 +286,146 @@ namespace GShark.Test.XUnit.Geometry
                 Point3 closestPt = crv.ClosestPoint(pt);
                 pt.DistanceTo(closestPt).Should().BeApproximately(offset, GSharkMath.MaxTolerance);
             }
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
+        {
+            // Arrange
+            NurbsBase[] curves = { NurbsBaseCollection.NurbsPlanarExample() };
+
+            // Act
+            Func<object> func = () => NurbsBase.Join(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
+        {
+            // Arrange
+            NurbsBase[] curves = { NurbsBaseCollection.NurbsPlanarExample(), NurbsBaseCollection.NurbsBaseQuadratic3DBezier() };
+
+            // Act
+            Func<object> func = () => NurbsBase.Join(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Different_Types_Of_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(5, 0, 0),
+                new Point3(5, 0, 5),
+                new Point3(5, 5, 5),
+                new Point3(5, 5, 0)
+            };
+
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            NurbsBase[] curves = { ln.ToNurbs(), arc.ToNurbs(), curve };
+
+            Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
+            Point3 expectedPt2 = new Point3(5, 5, -1.230175);
+            Point3 expectedPt3 = new Point3(7.946534, 5.0, -5.6199);
+            double expectedLength = 30.623806;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(curves);
+
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+
+            // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Lines()
+        {
+            // Arrange
+            var poly = new PolyLine(new List<Point3>
+            {
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, 0)
+            });
+
+            Line ln0 = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Line ln1 = new Line(new Point3(10, 10, 10), new Point3(5, 5, -2.5));
+
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            Point3 expectedPt4 = new Point3(6.959743, 6.959743, 2.399357);
+            double expectedLength = 43.932474;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(new List<NurbsBase> { poly.ToNurbs(), ln0.ToNurbs(), ln1.ToNurbs() });
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+            Point3 pt4 = joinedCurve.PointAtLength(35.2);
+
+            // Assert
+            joinedCurve.Degree.Should().Be(1);
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
+            (expectedPt4 == pt4).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Arc()
+        {
+            // Arrange
+            var poly = new PolyLine(new List<Point3>
+            {
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, -2.5)
+            });
+
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            NurbsBase[] curves = { poly.ToNurbs(), arc.ToNurbs() };
+
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            double expectedLength = 36.490747;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(curves);
+
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+
+            // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
         }
     }
 }

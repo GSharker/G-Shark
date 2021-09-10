@@ -103,7 +103,7 @@ namespace GShark.Geometry
             }
 
             List<Point3> pts = new List<Point3> { curve.ControlPointLocations[0] };
-            List<NurbsBase> beziers = Modify.DecomposeCurveIntoBeziers(curve, true);
+            List<NurbsBase> beziers = Modify.Curve.DecomposeIntoBeziers(curve, true);
             foreach (NurbsBase crv in beziers)
             {
                 Extrema e = Evaluation.ComputeExtrema(crv);
@@ -310,7 +310,12 @@ namespace GShark.Geometry
         /// <returns>A reversed curve.</returns>
         public NurbsBase Reverse()
         {
-            return (NurbsBase)Modify.ReverseCurve(this);
+            List<Point4> controlPts = new List<Point4>(ControlPoints);
+            controlPts.Reverse();
+
+            KnotVector knots = KnotVector.Reverse(Knots);
+
+            return new NurbsCurve(Degree, knots, controlPts);
         }
 
         /// <summary>
@@ -418,6 +423,76 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Joins all the curves, if it is possible.
+        /// </summary>
+        /// <param name="curves">The curves to join.</param>
+        /// <returns>The polycurve that is the result of joining all the curves.</returns>
+        public static PolyCurve Join(IList<NurbsBase> curves)
+        {
+            if (curves == null)
+            {
+                throw new Exception("The set of curves is empty.");
+            }
+
+            if (curves.Count <= 1)
+            {
+                throw new Exception("Insufficient curves for join operation.");
+            }
+
+            List<NurbsBase> sortedCurves = CurveHelpers.QuickSortCurve(curves);
+
+            for (int i = 0; i < sortedCurves.Count - 1; i++)
+            {
+                if (sortedCurves[i].IsClosed())
+                {
+                    throw new Exception($"Curve at {i} is closed.");
+                }
+                if (sortedCurves[i].ControlPoints.Last().DistanceTo(sortedCurves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
+                {
+                    throw new Exception($"Curve at {i} don't touch curve at {i + 1}.");
+                }
+            }
+
+            PolyCurve polyCurve = new PolyCurve();
+            polyCurve.Append(sortedCurves);
+
+            return polyCurve;
+        }
+
+        /// <summary>
+        /// Decompose a curve into a collection of Beziers curves.<br/>
+        /// </summary>
+        /// <returns>A collection of Beziers.</returns>
+        public List<NurbsBase> DecomposeIntoBeziers()
+        {
+            return Modify.Curve.DecomposeIntoBeziers(this);
+        }
+
+        /// <summary>
+        /// Elevates the degree of a curve.
+        /// <em>Implementation of Algorithm A5.9 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="desiredDegree">The expected final degree. If the supplied degree is less or equal the curve is returned unmodified.</param>
+        /// <returns>The curve after degree elevation.</returns>
+        public NurbsBase ElevateDegree(int desiredDegree)
+        {
+            return Modify.Curve.ElevateDegree(this, desiredDegree);
+        }
+
+        /// <summary>
+        /// Reduce the degree of a NURBS curve.
+        /// <em>Implementation of Algorithm A5.11 of The NURBS Book by Piegl and Tiller.</em>
+        /// ToDo: Remove the tolerance, just let reduce and output the max deviation.
+        /// ToDo: Try this method to reduce the bezier, looks more accurate. https://pomax.github.io/bezierinfo/chapters/reordering/reorder.js
+        /// </summary>
+        /// <param name="tolerance">Tolerance value declaring if the curve is degree reducible. Default value set to 10e-4, refer to Eq 5.30 for the meaning.</param>
+        /// <returns>The curve after degree reduction, the curve will be degree - 1 from the input.</returns>
+        public NurbsBase ReduceDegree(double tolerance = 10e-4)
+        {
+            return Modify.Curve.ReduceDegree(this, tolerance);
+        }
+
+        /// <summary>
         /// Divides a curve for a given number of time, including the end points.<br/>
         /// The result is not split curves but a collection of t values and lengths that can be used for splitting.<br/>
         /// As with all arc length methods, the result is an approximation.
@@ -454,14 +529,14 @@ namespace GShark.Geometry
             var len = maxSegmentLength;
             if (equalSegmentLengths)
             {
-                List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(this);
+                List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(this);
                 List<double> curveLengths = curves.Select(curve => Analyze.BezierCurveLength(curve)).ToList();
                 double totalLength = curveLengths.Sum();
 
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);
             }
 
-            var (tValues, lengths) = Sampling.Curve.ByLength(this, len);
+            var (tValues, _) = Sampling.Curve.ByLength(this, len);
             var points = tValues.Select(PointAt).ToList();
 
             return (points, tValues);
@@ -534,7 +609,7 @@ namespace GShark.Geometry
 
             List<double> knotsToInsert = CollectionHelpers.RepeatData(t, degree + 1);
 
-            NurbsBase refinedCurve = Modify.CurveKnotRefine(this, knotsToInsert);
+            NurbsBase refinedCurve = Modify.Curve.KnotRefine(this, knotsToInsert);
 
             int s = Knots.Span(degree, t);
 
@@ -620,7 +695,7 @@ namespace GShark.Geometry
             }
 
             List<double> knotsToInsert = CollectionHelpers.RepeatData(domain.T0, order).Concat(CollectionHelpers.RepeatData(domain.T1, degree + 1)).ToList();
-            NurbsBase refinedCurve = Modify.CurveKnotRefine(this, knotsToInsert);
+            NurbsBase refinedCurve = Modify.Curve.KnotRefine(this, knotsToInsert);
 
             var subCurveControlPoints = refinedCurve.ControlPoints.GetRange(order, order);
             var subCrvCrtlPtsLocations = subCurveControlPoints.Select(Point4.PointDehomogenizer).ToList();

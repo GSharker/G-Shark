@@ -1,9 +1,10 @@
 ﻿using GShark.Core;
-using GShark.Enumerations;
+using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
 
 namespace GShark.Operation
 {
@@ -26,7 +27,7 @@ namespace GShark.Operation
         {
             double uSet = u < 0.0 ? curve.Knots.Last() : u;
 
-            List<NurbsBase> crvs = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsBase> crvs = Modify.Curve.DecomposeIntoBeziers(curve);
             double sum = 0.0;
 
             foreach (NurbsBase bezier in crvs)
@@ -465,7 +466,7 @@ namespace GShark.Operation
             if (segmentLength < GSharkMath.Epsilon) return curve.Knots[0];
             if (Math.Abs(curve.Length - segmentLength) < GSharkMath.Epsilon) return curve.Knots[curve.Knots.Count - 1];
 
-            List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(curve);
             int i = 0;
             double curveLength = -GSharkMath.Epsilon;
             double segmentLengthLeft = segmentLength;
@@ -518,7 +519,7 @@ namespace GShark.Operation
             if (knotToInsert > 0)
             {
                 List<double> knotsToInsert = CollectionHelpers.RepeatData(parameter, knotToInsert);
-                refinedSurface = Modify.SurfaceKnotRefine(surface, knotsToInsert, direction);
+                refinedSurface = KnotVector.Refine(surface, knotsToInsert, direction);
             }
 
             // Obtain the correct index of control points to extract.
@@ -535,8 +536,8 @@ namespace GShark.Operation
                     : refinedSurface.ControlPoints.Count - 1;
             }
 
-            return direction == SurfaceDirection.V
-                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, CollectionHelpers.Transpose2DArray(refinedSurface.ControlPoints)[span])
+            return direction == SurfaceDirection.V 
+                ? new NurbsCurve(refinedSurface.DegreeU, refinedSurface.KnotsU, CollectionHelpers.Transpose2DArray(refinedSurface.ControlPoints)[span]) 
                 : new NurbsCurve(refinedSurface.DegreeV, refinedSurface.KnotsV, refinedSurface.ControlPoints[span]);
         }
 

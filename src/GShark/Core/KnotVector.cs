@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
+using GShark.Geometry;
 
 namespace GShark.Core
 {
@@ -352,6 +354,32 @@ namespace GShark.Core
             }
 
             return reversedKnots;
+        }
+
+        /// <summary>
+        /// Performs a knot refinement on a curve, inserting knots and updating the control point locations.<br/>
+        /// <em>Implementation of Algorithm A5.4 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="curve">The curve object.</param>
+        /// <param name="knotsToInsert">The set of knots.</param>
+        /// <returns>A curve with refined knots.</returns>
+        public static NurbsBase Refine(NurbsBase curve, IList<double> knotsToInsert)
+        {
+            return Modify.Curve.KnotRefine(curve, knotsToInsert);
+        }
+
+        /// <summary>
+        /// Performs a knot refinement on a surface by inserting knots at various parameters and updating the control point locations.<br/>
+        /// <em>Implementation of Algorithm A5.5 of The NURBS Book by Piegl and Tiller.</em>
+        /// ToDo: refactor this algo following the book.
+        /// </summary>
+        /// <param name="surface">The surface object to insert the knots.</param>
+        /// <param name="knotsToInsert">The set of knots to insert.</param>
+        /// <param name="direction">Whether to insert in the U or V direction of the surface.</param>
+        /// <returns>A surface with the knots inserted.</returns>
+        public static NurbsSurface Refine(NurbsSurface surface, IList<double> knotsToInsert, SurfaceDirection direction)
+        {
+            return Modify.Surface.SurfaceKnotRefine(surface, knotsToInsert, direction);
         }
 
         /// <summary>

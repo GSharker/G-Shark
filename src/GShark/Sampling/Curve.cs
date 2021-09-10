@@ -44,7 +44,7 @@ namespace GShark.Sampling
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         internal static (List<double> tValues, List<double> lengths) ByLength(NurbsBase curve, double length)
         {
-            List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(curve);
+            List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(curve);
             List<double> curveLengths = curves.Select(NurbsBase => Analyze.BezierCurveLength(NurbsBase)).ToList();
             double totalLength = curveLengths.Sum();
 

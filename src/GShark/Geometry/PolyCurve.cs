@@ -122,7 +122,7 @@ namespace GShark.Geometry
             int finalDegree = _segmentsNurbs.Max(c => c.Degree);
 
             // Homogenized degree curves.
-            IEnumerable<NurbsBase> homogenizedCurves = _segmentsNurbs.Select(curve => curve.Degree != finalDegree ? Modify.ElevateDegree(curve, finalDegree) : curve);
+            IEnumerable<NurbsBase> homogenizedCurves = _segmentsNurbs.Select(curve => curve.Degree != finalDegree ? Modify.Curve.ElevateDegree(curve, finalDegree) : curve);
 
             // Join curves.
             List<double> joinedKnots = new List<double>();

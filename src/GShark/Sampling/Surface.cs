@@ -51,7 +51,7 @@ namespace GShark.Sampling
             foreach (List<Point4> pts in srfCtrlPts)
             {
                 NurbsCurve tempCurve = new NurbsCurve(degree, knots, pts);
-                result = Modify.CurveKnotRefine(tempCurve, knotsToInsert);
+                result = KnotVector.Refine(tempCurve, knotsToInsert);
 
                 surfPtsLeft.Add(result.ControlPoints.GetRange(0, span + 1));
                 surfPtsRight.Add(result.ControlPoints.GetRange(span + 1, span + 1));

@@ -18,7 +18,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static NurbsCurve NurbsBasePtsAndWeightsExample()
+        public static NurbsCurve NurbsPtsAndWeightsExample()
         {
             int degree = 2;
             List<Point3> pts = new List<Point3>
@@ -32,7 +32,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, weights, degree);
         }
 
-        public static NurbsCurve NurbsBasePlanarExample()
+        public static NurbsCurve NurbsPlanarExample()
         {
             int degree = 3;
             List<Point3> pts = new List<Point3>
@@ -47,7 +47,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static NurbsCurve NurbsBase3DExample()
+        public static NurbsCurve Nurbs3DExample()
         {
             #region example
             int degree = 3;
@@ -65,7 +65,7 @@ namespace GShark.Test.XUnit.Data
             return curve;
         }
 
-        public static NurbsCurve NurbsBaseCubicBezierPlanar()
+        public static NurbsCurve NurbsCubicBezierPlanar()
         {
             int degree = 3;
             List<Point3> pts = new List<Point3>
@@ -78,7 +78,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static NurbsCurve NurbsBaseQuadraticBezierPlanar()
+        public static NurbsCurve NurbsQuadraticBezierPlanar()
         {
             int degree = 2;
             List<Point3> pts = new List<Point3>
@@ -102,7 +102,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static NurbsBase PeriodicClosedNurbsBase()
+        public static NurbsBase PeriodicClosedNurbs()
         {
             int degree = 3;
             List<Point3> pts = new List<Point3>
@@ -116,7 +116,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree).Close();
         }
 
-        public static NurbsCurve NurbsBaseWithStartingAndEndPointOverlapping()
+        public static NurbsCurve NurbsWithStartingAndEndPointOverlapping()
         {
             int degree = 2;
             List<Point3> pts = new List<Point3>
@@ -129,7 +129,7 @@ namespace GShark.Test.XUnit.Data
             return new NurbsCurve(pts, degree);
         }
 
-        public static List<NurbsBase> OpenCurves()
+        public static List<NurbsBase> OpenNurbs()
         {
             int degree = 2;
             List<Point3> points1 = new List<Point3> { new Point3(-20.0, 0.0, 0.0),
@@ -156,9 +156,9 @@ namespace GShark.Test.XUnit.Data
             return new List<NurbsBase> { c1, c2, c3, c4 };
         }
 
-        public static List<NurbsBase> ClosedCurves()
+        public static List<NurbsBase> ClosedNurbs()
         {
-            List<NurbsBase> crvs = NurbsBaseCollection.OpenCurves();
+            List<NurbsBase> crvs = NurbsBaseCollection.OpenNurbs();
             for (int i = 0; i < crvs.Count; i++)
                 crvs[i] = crvs[i].Close();
 
