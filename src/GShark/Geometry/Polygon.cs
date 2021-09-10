@@ -32,7 +32,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the centroid averaging the vertices. 
         /// </summary>
-        public Point3 CentroidByVertices => Evaluation.CentroidByVertices(this);
+        public Point3 CentroidByVertices => Evaluate.Curve.AveragePoint(this);
 
         /// <summary>
         /// Gets the centroid of mass of the polygon.<br/>

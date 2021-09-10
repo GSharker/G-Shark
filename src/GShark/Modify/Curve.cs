@@ -400,7 +400,9 @@ namespace GShark.Modify
                right of u = 1/2. */
 
             // Eq. 5.43 p even.
-            List<double> Br = Evaluation.BasisFunction(degree - 1, new KnotVector(degree - 1, P.Length), 0.5);
+            KnotVector knots = new KnotVector(degree - 1, P.Length);
+            int span = knots.Span(degree - 1, 0.5);
+            List<double> Br = Evaluate.Curve.BasisFunction(degree - 1, knots, span, 0.5);
             double parametricError = bpts[r + 1].DistanceTo((P[r] + P[r + 1]) * 0.5) * Br[r + 1];
 
             // Eq. 5.42

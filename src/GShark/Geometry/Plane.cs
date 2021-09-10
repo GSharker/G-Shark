@@ -226,7 +226,7 @@ namespace GShark.Geometry
                 throw new Exception("The collection must have minimum three points.");
             }
 
-            Point3 centroid = Evaluation.CentroidByVertices(pts);
+            Point3 centroid = Evaluate.Curve.AveragePoint(pts);
             Vector3 normal = Vector3.Unset;
 
             double xx = 0.0; double xy = 0.0; double xz = 0.0;

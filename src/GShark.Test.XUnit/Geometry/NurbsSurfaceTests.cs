@@ -34,8 +34,8 @@ namespace GShark.Test.XUnit.Geometry
             // Act
             NurbsSurface surfaceCcw = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
             NurbsSurface surfaceCw = NurbsSurface.CreateFromCorners(p1, p4, p3, p2);
-            Point3 evalPtCcw = new Point3(Evaluation.SurfacePointAt(surfaceCcw, 0.5, 0.5));
-            Point3 evalPtCw = new Point3(Evaluation.SurfacePointAt(surfaceCw, 0.5, 0.5));
+            Point3 evalPtCcw = new Point3(surfaceCcw.PointAt(0.5, 0.5));
+            Point3 evalPtCw = new Point3(surfaceCw.PointAt(0.5, 0.5));
 
             // Assert
             surfaceCcw.Should().NotBeNull();

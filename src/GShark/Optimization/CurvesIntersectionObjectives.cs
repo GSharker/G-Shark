@@ -25,8 +25,8 @@ namespace GShark.Optimization
 
         public double Value(Vector v)
         {
-            Vector p0 = Evaluation.CurvePointAt(_curve0, v[0]);
-            Vector p1 = Evaluation.CurvePointAt(_curve1, v[1]);
+            Vector p0 = Evaluate.Curve.PointAt(_curve0, v[0]);
+            Vector p1 = Evaluate.Curve.PointAt(_curve1, v[1]);
 
             Vector p0P1 = p0 - p1;
 
@@ -35,8 +35,8 @@ namespace GShark.Optimization
 
         public Vector Gradient(Vector v)
         {
-            List<Vector3> deriveC0 = Evaluation.RationalCurveDerivatives(_curve0, v[0], 1);
-            List<Vector3> deriveC1 = Evaluation.RationalCurveDerivatives(_curve1, v[1], 1);
+            List<Vector3> deriveC0 = Evaluate.Curve.RationalDerivatives(_curve0, v[0], 1);
+            List<Vector3> deriveC1 = Evaluate.Curve.RationalDerivatives(_curve1, v[1], 1);
 
             Vector r = deriveC0[0] - deriveC1[0];
             Vector drDt = deriveC1[1] * -1.0;
