@@ -47,7 +47,7 @@ namespace GShark.Geometry
             KnotsU = (Math.Abs(knotsU.GetDomain(degreeU).Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
             KnotsV = (Math.Abs(knotsV.GetDomain(degreeV).Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
-            LocationPoints = Point4.PointDehomogenizer2d(controlPts);
+            ControlPointLocations = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
             DomainU = new Interval(KnotsU.First(), KnotsU.Last());
             DomainV = new Interval(KnotsV.First(), KnotsV.Last());
@@ -56,22 +56,22 @@ namespace GShark.Geometry
         /// <summary>
         /// The degree in U direction.
         /// </summary>
-        internal int DegreeU { get; }
+        public int DegreeU { get; }
 
         /// <summary>
         /// The degree in V direction.
         /// </summary>
-        internal int DegreeV { get; }
+        public int DegreeV { get; }
 
         /// <summary>
         /// The knotVector in U direction.
         /// </summary>
-        internal KnotVector KnotsU { get; }
+        public KnotVector KnotsU { get; }
 
         /// <summary>
         /// The knotVector in V direction.
         /// </summary>
-        internal KnotVector KnotsV { get; }
+        public KnotVector KnotsV { get; }
 
         /// <summary>
         /// The interval domain in U direction.
@@ -91,12 +91,12 @@ namespace GShark.Geometry
         /// <summary>
         /// A 2D collection of points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
-        public List<List<Point3>> LocationPoints { get; }
+        public List<List<Point3>> ControlPointLocations { get; }
 
         /// <summary>
         /// A 2d collection of control points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
-        internal List<List<Point4>> ControlPoints { get; }
+        public List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
         /// Checks if a NURBS surface is closed.<br/>
@@ -105,7 +105,7 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed(SurfaceDirection direction)
         {
-            var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(LocationPoints) : LocationPoints;
+            var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(ControlPointLocations) : ControlPointLocations;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
@@ -323,12 +323,12 @@ namespace GShark.Geometry
                 return false;
             }
 
-            if (LocationPoints.Count != other.LocationPoints.Count)
+            if (ControlPointLocations.Count != other.ControlPointLocations.Count)
             {
                 return false;
             }
 
-            if (LocationPoints.Where((pt, i) => !pt.SequenceEqual(other.LocationPoints[i])).Any())
+            if (ControlPointLocations.Where((pt, i) => !pt.SequenceEqual(other.ControlPointLocations[i])).Any())
             {
                 return false;
             }
@@ -354,7 +354,7 @@ namespace GShark.Geometry
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            string controlPts = string.Join("\n", LocationPoints.Select(first => $"({string.Join(",", first)})"));
+            string controlPts = string.Join("\n", ControlPointLocations.Select(first => $"({string.Join(",", first)})"));
             string degreeU = $"DegreeU = {DegreeU}";
             string degreeV = $"DegreeV = {DegreeV}";
 

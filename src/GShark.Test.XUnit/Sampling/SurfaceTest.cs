@@ -60,9 +60,9 @@ namespace GShark.Test.XUnit.Sampling
             surfaces[0].Weights.Should().BeEquivalentTo(weightsLeft);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsRight);
 
-            _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[0].ControlPointLocations.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsLeft[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
-            _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[1].ControlPointLocations.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsRight[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
         }
 
@@ -114,9 +114,9 @@ namespace GShark.Test.XUnit.Sampling
             surfaces[0].Weights.Should().BeEquivalentTo(weightsTop);
             surfaces[1].Weights.Should().BeEquivalentTo(weightsBottom);
 
-            _ = surfaces[0].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[0].ControlPointLocations.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsTop[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
-            _ = surfaces[1].LocationPoints.Select((pts, i) => pts.Select((pt, j) =>
+            _ = surfaces[1].ControlPointLocations.Select((pts, i) => pts.Select((pt, j) =>
                 pt.EpsilonEquals(surfacePtsBottom[i][j], GSharkMath.MinTolerance).Should().BeTrue()));
         }
 
