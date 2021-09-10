@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using GShark.Optimization;
 
 namespace GShark.Geometry
 {
@@ -197,11 +198,13 @@ namespace GShark.Geometry
         /// Evaluates a point at a given chord length from a parameter on the curve.
         /// </summary>
         /// <returns></returns>
-        public Point3 ParameterAtChordLength(double t, double chordLength)
+        public double ParameterAtChordLength(double t, double chordLength)
         {
-            //Call minimiser with objecive function
+            IObjectiveFunction objectiveFunction = new ChordLengthObjective(this, t, chordLength);
+            Minimizer min = new Minimizer(objectiveFunction);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { ParameterAtLength(chordLength), ParameterAtLength(chordLength) });
 
-            throw new NotImplementedException();
+            return solution.SolutionPoint[0];
         }
 
         /// <summary>

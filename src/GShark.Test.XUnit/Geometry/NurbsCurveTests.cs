@@ -279,10 +279,10 @@ namespace GShark.Test.XUnit.Geometry
             var startParam = 0;
 
             //Act
-            var param = crv.ParameterAtChordLength(startParam, chordLength);
+            double param = crv.ParameterAtChordLength(0.0, chordLength);
 
             //Assert
-            param.Equals(expectedParamOnCrv).Should().BeTrue();
+            param.Should().BeApproximately(expectedParamOnCrv, GSharkMath.MinTolerance);
         }
     }
 }
