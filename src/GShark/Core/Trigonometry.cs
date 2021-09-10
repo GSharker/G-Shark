@@ -106,5 +106,45 @@ namespace GShark.Core
 
             return (result < 0) ? 1 : 2;
         }
+
+        /// <summary>
+        /// Finds the closest point on a segment.<br/>
+        /// It is not a segment like a line or ray but the part that compose the segment.<br/>
+        /// The segment is deconstruct in two points and two t values.
+        /// </summary>
+        /// <param name="point">Point to project.</param>
+        /// <param name="segmentPt0">First point of the segment.</param>
+        /// <param name="segmentPt1">Second point of the segment.</param>
+        /// <param name="valueT0">First t value of the segment.</param>
+        /// <param name="valueT1">Second t value of the segment.</param>
+        /// <returns>Tuple with the closest point its corresponding tValue on the curve.</returns>
+        public static (double tValue, Point3 pt) ClosestPointToSegment(Point3 point, Point3 segmentPt0, Point3 segmentPt1, double valueT0, double valueT1)
+        {
+            Vector3 direction = segmentPt1 - segmentPt0;
+            double length = direction.Length;
+
+            if (length < GSharkMath.Epsilon)
+            {
+                return (tValue: valueT0, pt: segmentPt0);
+            }
+
+            Vector3 vecUnitized = direction.Unitize();
+            Vector3 ptToSegPt0 = point - segmentPt0;
+            double dotResult = Vector3.DotProduct(ptToSegPt0, vecUnitized);
+
+            if (dotResult < 0.0)
+            {
+                return (tValue: valueT0, pt: segmentPt0);
+            }
+
+            if (dotResult > length)
+            {
+                return (tValue: valueT1, pt: segmentPt1);
+            }
+
+            Point3 pointResult = segmentPt0 + (vecUnitized * dotResult);
+            double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
+            return (tValue: tValueResult, pt: pointResult);
+        }
     }
 }

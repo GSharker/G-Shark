@@ -85,7 +85,7 @@ namespace GShark.Geometry
         /// </summary>
         public KnotVector Knots { get; protected set; }
 
-        public double Length => Analyze.CurveLength(this);
+        public double Length => Analyze.Curve.Length(this);
 
         public Point3 StartPoint => PointAt(0.0);
 
@@ -187,7 +187,7 @@ namespace GShark.Geometry
         /// </summary>
         public Point3 PointAtLength(double length)
         {
-            double parameter = Analyze.CurveParameterAtLength(this, length);
+            double parameter = Analyze.Curve.ParameterAtLength(this, length);
             return Evaluation.CurvePointAt(this, parameter);
         }
 
@@ -272,7 +272,7 @@ namespace GShark.Geometry
             }
 
             List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
-            return Analyze.Curvature(derivatives[1], derivatives[2]);
+            return Analyze.Curve.Curvature(derivatives[1], derivatives[2]);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace GShark.Geometry
 
             Vector3 normal = (derivatives[2].Length == 0.0)
                 ? Vector3.PerpendicularTo(derivatives[1])
-                : Analyze.Curvature(derivatives[1], derivatives[2]);
+                : Analyze.Curve.Curvature(derivatives[1], derivatives[2]);
 
             Vector3 yDir = Vector3.CrossProduct(derivatives[1], normal);
             return new Plane(derivatives[0], normal, yDir);
@@ -323,7 +323,9 @@ namespace GShark.Geometry
         /// </summary>
         public Point3 ClosestPoint(Point3 point)
         {
-            return Point4.PointDehomogenizer(Analyze.CurveClosestPoint(this, point, out _));
+            double t = Analyze.Curve.ClosestParameter(this, point);
+            Point3 pointAt = Evaluation.CurvePointAt(this, t);
+            return Point4.PointDehomogenizer(pointAt);
         }
 
         /// <summary>
@@ -331,7 +333,7 @@ namespace GShark.Geometry
         /// </summary>
         public double ClosestParameter(Point3 pt)
         {
-            return Analyze.CurveClosestParameter(this, pt);
+            return Analyze.Curve.ClosestParameter(this, pt);
         }
 
         /// <summary>
@@ -351,7 +353,7 @@ namespace GShark.Geometry
                 return 1.0;
             }
 
-            return Analyze.CurveParameterAtLength(this, segmentLength);
+            return Analyze.Curve.ParameterAtLength(this, segmentLength);
         }
 
         /// <summary>
@@ -369,7 +371,7 @@ namespace GShark.Geometry
                 return Length;
             }
 
-            return Analyze.CurveLength(this, t);
+            return Analyze.Curve.Length(this, t);
         }
 
         /// <summary>
@@ -530,7 +532,7 @@ namespace GShark.Geometry
             if (equalSegmentLengths)
             {
                 List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(this);
-                List<double> curveLengths = curves.Select(curve => Analyze.BezierCurveLength(curve)).ToList();
+                List<double> curveLengths = curves.Select(curve => Analyze.Curve.BezierLength(curve)).ToList();
                 double totalLength = curveLengths.Sum();
 
                 len = totalLength / Math.Ceiling(totalLength / maxSegmentLength);

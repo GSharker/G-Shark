@@ -251,7 +251,7 @@ namespace GShark.Geometry
         /// <returns>The closest point on the surface.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
-            var (u, v) = Analyze.SurfaceClosestParameter(this, point);
+            var (u, v) = Analyze.Surface.ClosestParameter(this, point);
             return new Point3(Evaluation.SurfacePointAt(this, u, v));
         }
 
@@ -260,7 +260,10 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">The point to test against.</param>
         /// <returns>The U and V parameters of the surface that are closest to the test point.</returns>
-        public (double U, double V) ClosestParameters(Point3 point) => Analyze.SurfaceClosestParameter(this, point);
+        public (double U, double V) ClosestParameter(Point3 point)
+        {
+            return Analyze.Surface.ClosestParameter(this, point);
+        }
 
         /// <summary>
         /// Evaluate the surface at the given U and V parameters.
@@ -296,6 +299,17 @@ namespace GShark.Geometry
             }
 
             return Sampling.Surface.Split(this, parameter, direction);
+        }
+
+        /// <summary>
+        /// Extracts the isoparametric curves (isocurves) at the given parameter and surface direction.
+        /// </summary>
+        /// <param name="parameter">The parameter between 0.0 to 1.0 whether the isocurve will be extracted.</param>
+        /// <param name="direction">The U or V direction whether the isocurve will be extracted.</param>
+        /// <returns>The isocurve extracted.</returns>
+        public NurbsCurve IsoCurve(double parameter, SurfaceDirection direction)
+        {
+            return Analyze.Surface.Isocurve(this, parameter, direction);
         }
 
         /// <summary>
