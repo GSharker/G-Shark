@@ -27,7 +27,7 @@ namespace GShark.Sampling
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         internal static List<double> ByCount(NurbsBase curve, int divisions)
         {
-            double approximatedLength = Analyze.CurveLength(curve);
+            double approximatedLength = Analyze.Curve.Length(curve);
             double arcLengthSeparation = approximatedLength / divisions;
             var divisionByLength = ByLength(curve, arcLengthSeparation);
             var tValues = divisionByLength.tValues;
@@ -45,7 +45,7 @@ namespace GShark.Sampling
         internal static (List<double> tValues, List<double> lengths) ByLength(NurbsBase curve, double length)
         {
             List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(curve);
-            List<double> curveLengths = curves.Select(NurbsBase => Analyze.BezierCurveLength(NurbsBase)).ToList();
+            List<double> curveLengths = curves.Select(NurbsBase => Analyze.Curve.BezierLength(NurbsBase)).ToList();
             double totalLength = curveLengths.Sum();
 
             List<double> tValues = new List<double> { curve.Knots[0] };
@@ -64,7 +64,7 @@ namespace GShark.Sampling
 
                 while (segmentLength < sum + GSharkMath.Epsilon)
                 {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MinTolerance);
+                    double t = Analyze.Curve.BezierParameterAtLength(curves[i], segmentLength - sum2, GSharkMath.MinTolerance);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);
