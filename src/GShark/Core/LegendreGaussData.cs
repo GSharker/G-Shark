@@ -1,4 +1,4 @@
-﻿namespace GShark.Operation
+﻿namespace GShark.Core
 {
     /// <summary>
     /// Contains the value of Gaussian Quadrature Weights and Abscissae.<br/>

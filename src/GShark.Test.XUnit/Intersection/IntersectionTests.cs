@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Operation;
-using System.Collections.Generic;
 using GShark.Intersection;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GShark.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Intersection
 {
     public class IntersectionTests
     {
