@@ -2,7 +2,6 @@
 using GShark.Core;
 using GShark.ExtendedMethods;
 using GShark.Interfaces;
-using GShark.Operation;
 using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
@@ -106,7 +105,7 @@ namespace GShark.Geometry
             List<NurbsBase> beziers = Modify.Curve.DecomposeIntoBeziers(curve, true);
             foreach (NurbsBase crv in beziers)
             {
-                Extrema e = Evaluation.ComputeExtrema(crv);
+                Extrema e = Evaluate.Curve.ComputeExtrema(crv);
                 pts.AddRange(e.Values.Select(eValue => crv.PointAt(eValue)));
             }
 
@@ -122,8 +121,8 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed()
         {
-            Point3 pt0 = Evaluation.CurvePointAt(this, 0.0);
-            Point3 pt1 = Evaluation.CurvePointAt(this, 1.0);
+            Point3 pt0 = Evaluate.Curve.PointAt(this, 0.0);
+            Point3 pt1 = Evaluate.Curve.PointAt(this, 1.0);
             return pt0.EpsilonEquals(pt1, GSharkMath.Epsilon);
         }
 
@@ -179,7 +178,7 @@ namespace GShark.Geometry
             {
                 t = 1.0;
             }
-            return Evaluation.CurvePointAt(this, t);
+            return Evaluate.Curve.PointAt(this, t);
         }
 
         /// <summary>
@@ -188,7 +187,7 @@ namespace GShark.Geometry
         public Point3 PointAtLength(double length)
         {
             double parameter = Analyze.Curve.ParameterAtLength(this, length);
-            return Evaluation.CurvePointAt(this, parameter);
+            return Evaluate.Curve.PointAt(this, parameter);
         }
 
         /// <summary>
@@ -219,7 +218,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            return Evaluation.RationalCurveTangent(this, t).Unitize();
+            return Evaluate.Curve.RationalDerivatives(this, t, 1)[1].Unitize();
         }
 
         /// <summary>
@@ -240,7 +239,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            return Evaluation.RationalCurveDerivatives(this, t, numberOfDerivatives);
+            return Evaluate.Curve.RationalDerivatives(this, t, numberOfDerivatives);
         }
 
         /// <summary>
@@ -249,7 +248,7 @@ namespace GShark.Geometry
         /// <returns>The parameter values of all the local extrema.</returns>
         public IReadOnlyList<double> Extrema()
         {
-            Extrema extremaResult = Evaluation.ComputeExtrema(this);
+            Extrema extremaResult = Evaluate.Curve.ComputeExtrema(this);
             return extremaResult.Values.ToList();
         }
 
@@ -271,7 +270,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+            List<Vector3> derivatives = Evaluate.Curve.RationalDerivatives(this, t, 2);
             return Analyze.Curve.Curvature(derivatives[1], derivatives[2]);
         }
 
@@ -294,7 +293,7 @@ namespace GShark.Geometry
                 t = 1.0;
             }
 
-            List<Vector3> derivatives = Evaluation.RationalCurveDerivatives(this, t, 2);
+            List<Vector3> derivatives = Evaluate.Curve.RationalDerivatives(this, t, 2);
 
             Vector3 normal = (derivatives[2].Length == 0.0)
                 ? Vector3.PerpendicularTo(derivatives[1])
@@ -324,7 +323,7 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 point)
         {
             double t = Analyze.Curve.ClosestParameter(this, point);
-            Point3 pointAt = Evaluation.CurvePointAt(this, t);
+            Point3 pointAt = Evaluate.Curve.PointAt(this, t);
             return Point4.PointDehomogenizer(pointAt);
         }
 
@@ -386,7 +385,7 @@ namespace GShark.Geometry
 
             while (j-- > 0)
             {
-                Evaluation.DeBoor(ref evalPts, clampedKnots, Degree, clampedKnots[Degree]);
+                Evaluate.Curve.DeBoor(ref evalPts, clampedKnots, Degree, clampedKnots[Degree]);
                 for (int i = 0; i < Degree; i++)
                 {
                     clampedKnots[i] = clampedKnots[Degree];
@@ -416,7 +415,7 @@ namespace GShark.Geometry
             List<Point3> offsetPts = new List<Point3>();
             for (int i = 0; i < pts.Count; i++)
             {
-                Vector3 tangent = Evaluation.RationalCurveTangent(this, tValues[i]);
+                Vector3 tangent = Evaluate.Curve.RationalDerivatives(this, tValues[i], 1)[1];
                 Vector3 vecOffset = Vector3.CrossProduct(tangent, pln.ZAxis).Amplify(distance);
                 offsetPts.Add(pts[i] + vecOffset);
             }
@@ -554,12 +553,12 @@ namespace GShark.Geometry
         public List<Plane> PerpendicularFrames(List<double> uValues)
         {
             var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values
-            var pointsOnCurveTan = uValues.Select(t => Evaluation.RationalCurveTangent(this, t)).ToList(); //get tangents at t values
+            var pointsOnCurveTan = uValues.Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1]).ToList(); //get tangents at t values
             var firstParameter = uValues[0]; //get first t value
 
             //Create initial frame at first parameter
             var origin = PointAt(firstParameter);
-            var crvTan = Evaluation.RationalCurveTangent(this, firstParameter);
+            var crvTan = Evaluate.Curve.RationalDerivatives(this, firstParameter, 1)[1];
             var crvNormal = Vector3.PerpendicularTo(crvTan);
             var yAxis = Vector3.CrossProduct(crvTan, crvNormal);
             var xAxis = Vector3.CrossProduct(yAxis, crvTan);

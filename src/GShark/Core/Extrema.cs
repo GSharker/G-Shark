@@ -5,17 +5,17 @@ namespace GShark.Operation.Utilities
 {
     /// <summary>
     /// This object describing the extrema of a curve.<br/>
-    /// Where each dimension lists the array of t values at which an extremum occurs,<br/>
-    /// and the values property is the aggregate of the t values across all dimensions.
+    /// Where each dimension lists the array of parameter values on the curve at which an extremum occurs,<br/>
+    /// and the values property is the aggregate of the parameter values across all dimensions.
     /// </summary>
-    public class Extrema
+    internal class Extrema
     {
-        public List<double> Xvalue { get; set; }
-        public List<double> Yvalue { get; set; }
-        public List<double> Zvalue { get; set; }
-        public List<double> Values { get; set; }
+        internal List<double> Xvalue { get; set; }
+        internal List<double> Yvalue { get; set; }
+        internal List<double> Zvalue { get; set; }
+        internal List<double> Values { get; set; }
 
-        public List<double> this[int index]
+        internal List<double> this[int index]
         {
             get
             {

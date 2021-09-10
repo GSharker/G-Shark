@@ -31,7 +31,7 @@ namespace GShark.Fitting
                 List<double> tempRow = new List<double>();
                 for (int j = 1; j < numberCpts - 1; j++)
                 {
-                    tempRow.Add(Evaluation.OneBasisFunction(degree, knots, j, uk[i]));
+                    tempRow.Add(Evaluate.Curve.OneBasisFunction(degree, knots, j, uk[i]));
                 }
                 matrixN.Add(tempRow);
             }
@@ -126,7 +126,7 @@ namespace GShark.Fitting
                 List<Vector> ruTemp = new List<Vector>();
                 for (int j = 0; j < Rk.Count; j++)
                 {
-                    double tempBasisVal = Evaluation.OneBasisFunction(degree, knots, i, curveParameters[j + 1]);
+                    double tempBasisVal = Evaluate.Curve.OneBasisFunction(degree, knots, i, curveParameters[j + 1]);
                     ruTemp.Add(Rk[j] * tempBasisVal);
                 }
 
@@ -156,8 +156,8 @@ namespace GShark.Fitting
             for (int i = 1; i < pts.Count - 1; i++)
             {
                 Point3 pti = pts[i];
-                double n0p = Evaluation.OneBasisFunction(degree, knots, 0, curveParameters[i]);
-                double nnp = Evaluation.OneBasisFunction(degree, knots, numberOfCtrPts - 1, curveParameters[i]);
+                double n0p = Evaluate.Curve.OneBasisFunction(degree, knots, 0, curveParameters[i]);
+                double nnp = Evaluate.Curve.OneBasisFunction(degree, knots, numberOfCtrPts - 1, curveParameters[i]);
                 Point3 elem2 = pt0 * n0p;
                 Point3 elem3 = ptm * nnp;
 
@@ -294,7 +294,7 @@ namespace GShark.Fitting
             foreach (double u in curveParameters)
             {
                 int span = knots.Span(dim, degree, u);
-                List<double> basicFunction = Evaluation.BasisFunction(degree, knots, span, u);
+                List<double> basicFunction = Evaluate.Curve.BasisFunction(degree, knots, span, u);
 
                 List<double> startRow = CollectionHelpers.RepeatData(0.0, span - degree);
                 List<double> endRow = CollectionHelpers.RepeatData(0.0, dimEnd - (span - degree));

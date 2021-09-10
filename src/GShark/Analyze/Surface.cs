@@ -63,7 +63,7 @@ namespace GShark.Analyze
             while (t < maxIterations)
             {
                 // Get derivatives.
-                var eval = Evaluation.RationalSurfaceDerivatives(surface, selectedUV.u, selectedUV.v, 2);
+                var eval = Evaluate.Surface.RationalDerivatives(surface, selectedUV.u, selectedUV.v, 2);
 
                 // Convergence criteria:
                 // First condition, point coincidence:

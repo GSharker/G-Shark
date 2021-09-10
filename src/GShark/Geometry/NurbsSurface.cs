@@ -1,8 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Enumerations;
-using GShark.Fitting;
 using GShark.Interfaces;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -204,7 +202,7 @@ namespace GShark.Geometry
                     for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
                         List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsBase crv = Curve.Interpolated(pts, degreeU);
+                        NurbsBase crv = Fitting.Curve.Interpolated(pts, degreeU);
                         tempPts.Add(crv.ControlPoints);
                         knotVectorU = crv.Knots;
                     }
@@ -242,7 +240,7 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation U parameter.</param>
         /// <param name="v">Evaluation V parameter.</param>
         /// <returns>A evaluated point.</returns>
-        public Point3 PointAt(double u, double v) => new Point3(Evaluation.SurfacePointAt(this, u, v));
+        public Point3 PointAt(double u, double v) => new Point3(Evaluate.Surface.PointAt(this, u, v));
 
         /// <summary>
         /// Computes the point on the surface that is closest to the test point.
@@ -252,7 +250,7 @@ namespace GShark.Geometry
         public Point3 ClosestPoint(Point3 point)
         {
             var (u, v) = Analyze.Surface.ClosestParameter(this, point);
-            return new Point3(Evaluation.SurfacePointAt(this, u, v));
+            return new Point3(Evaluate.Surface.PointAt(this, u, v));
         }
 
         /// <summary>
@@ -276,10 +274,10 @@ namespace GShark.Geometry
         {
             if (direction != EvaluateSurfaceDirection.Normal)
                 return (direction == EvaluateSurfaceDirection.U)
-                    ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
-                    : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
+                    ? Evaluate.Surface.RationalDerivatives(this, u, v)[1, 0].Unitize()
+                    : Evaluate.Surface.RationalDerivatives(this, u, v)[0, 1].Unitize();
 
-            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
+            Vector3[,] derivatives = Evaluate.Surface.RationalDerivatives(this, u, v);
             Vector3 normal = Vector3.CrossProduct(derivatives[1, 0], derivatives[0, 1]);
             return normal.Unitize();
         }

@@ -1,5 +1,4 @@
 ﻿using GShark.Geometry;
-using GShark.Operation;
 
 namespace GShark.Optimization
 {
@@ -34,7 +33,7 @@ namespace GShark.Optimization
 
         public Vector Gradient(Vector v)
         {
-            var deriveC0 = Evaluation.RationalCurveDerivatives(_curve, v[0], 1);
+            var deriveC0 = Evaluate.Curve.RationalDerivatives(_curve, v[0], 1);
             var r = deriveC0[0] - new Vector3(_plane.Origin);
 
             double f = Vector3.DotProduct(_plane.ZAxis, r);

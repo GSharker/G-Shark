@@ -1,6 +1,5 @@
 ﻿using GShark.Core;
 using GShark.Geometry;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +94,7 @@ namespace GShark.Analyze
             for (int i = 0; i < gaussDegree; i++)
             {
                 double cu = z * LegendreGaussData.tValues[gaussDegree][i] + z + curve.Knots[0];
-                List<Vector3> tan = Evaluation.RationalCurveDerivatives(curve, cu);
+                List<Vector3> tan = Evaluate.Curve.RationalDerivatives(curve, cu);
 
                 sum += LegendreGaussData.cValues[gaussDegree][i] * tan[1].Length;
             }
@@ -198,7 +197,7 @@ namespace GShark.Analyze
             // To avoid infinite loop we limited the interaction.
             while (j < maxIterations)
             {
-                List<Vector3> e = Evaluation.RationalCurveDerivatives(curve, Cu, 2);
+                List<Vector3> e = Evaluate.Curve.RationalDerivatives(curve, Cu, 2);
                 Vector3 diff = e[0] - new Vector3(point); // C(u) - P
 
 
