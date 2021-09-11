@@ -310,7 +310,7 @@ namespace GShark.Intersection
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
         public static List<CurvesIntersectionResult> CurveLine(NurbsBase crv, Line ln)
         {
-            return CurveCurve(crv, ln.ToNurbs());
+            return CurveCurve(crv, ln);
         }
 
         /// <summary>
