@@ -215,7 +215,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The parameter to sample the curve. Parameter should be between 0.0 and 1.0.</param>
         /// <returns>The unitized tangent vector at the given parameter.</returns>
-        public Vector3 TangentAt(double t)
+        public virtual Vector3 TangentAt(double t)
         {
             if (t <= 0.0)
             {
