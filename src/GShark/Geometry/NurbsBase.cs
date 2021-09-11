@@ -1,7 +1,6 @@
 ﻿#nullable enable
 using GShark.Core;
 using GShark.ExtendedMethods;
-using GShark.Interfaces;
 using GShark.Operation.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace GShark.Geometry
     /// <summary>
     /// This class represents a base class that is common to most curve types.
     /// </summary>
-    public abstract class NurbsBase : ICurve, IEquatable<NurbsBase>
+    public abstract class NurbsBase : IEquatable<NurbsBase>
     {
         protected NurbsBase()
         {

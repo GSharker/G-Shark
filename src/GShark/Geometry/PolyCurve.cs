@@ -143,7 +143,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Checks to define if the curve can be appended to the polycurve.
         /// </summary>
-        private void HealthChecks(ICurve curve)
+        private void HealthChecks(NurbsBase curve)
         {
             if (_segments.Count <= 0) return;
 
