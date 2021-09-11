@@ -35,7 +35,7 @@ namespace GShark.Geometry
         {
             HealthChecks(line);
             _segments.Add(line);
-            _segmentsNurbs.Add(line.ToNurbs());
+            _segmentsNurbs.Add(line);
             ToNurbsForm();
         }
 

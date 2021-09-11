@@ -350,7 +350,7 @@ namespace GShark.Test.XUnit.Sampling
 
 
             // Act
-            var (tValues, pts) = Curve.AdaptiveSample(ln.ToNurbs());
+            var (tValues, pts) = Curve.AdaptiveSample(ln);
 
             // Arrange
             pts.Count.Should().Be(tValues.Count).And.Be(2);

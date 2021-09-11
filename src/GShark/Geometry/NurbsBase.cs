@@ -84,15 +84,15 @@ namespace GShark.Geometry
         /// </summary>
         public KnotVector Knots { get; protected set; }
 
-        public double Length => Analyze.Curve.Length(this);
+        public virtual double Length => Analyze.Curve.Length(this);
 
-        public Point3 StartPoint => PointAt(0.0);
+        public virtual Point3 StartPoint => PointAt(0.0);
 
-        public Point3 MidPoint => PointAt(0.5);
+        public virtual Point3 MidPoint => PointAt(0.5);
 
-        public Point3 EndPoint => PointAt(1.0);
+        public virtual Point3 EndPoint => PointAt(1.0);
 
-        public BoundingBox GetBoundingBox()
+        public virtual BoundingBox GetBoundingBox()
         {
             NurbsBase curve = this;
 
@@ -167,7 +167,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAt"/>
         /// </summary>
-        public Point3 PointAt(double t)
+        public virtual Point3 PointAt(double t)
         {
             if (t <= 0.0)
             {
@@ -184,7 +184,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAtLength"/>
         /// </summary>
-        public Point3 PointAtLength(double length)
+        public virtual Point3 PointAtLength(double length)
         {
             double parameter = Analyze.Curve.ParameterAtLength(this, length);
             return Evaluate.Curve.PointAt(this, parameter);
@@ -195,7 +195,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="normalizedLength">The length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point at the length.</returns>
-        public Point3 PointAtNormalizedLength(double normalizedLength)
+        public virtual Point3 PointAtNormalizedLength(double normalizedLength)
         {
             double length = GSharkMath.RemapValue(normalizedLength, new Interval(0.0, 1.0), new Interval(0.0, Length));
             return PointAtLength(length);
@@ -307,7 +307,7 @@ namespace GShark.Geometry
         /// Reverses the parametrization of the curve.
         /// </summary>
         /// <returns>A reversed curve.</returns>
-        public NurbsBase Reverse()
+        public virtual NurbsBase Reverse()
         {
             List<Point4> controlPts = new List<Point4>(ControlPoints);
             controlPts.Reverse();
@@ -320,7 +320,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.ClosestPoint"/>
         /// </summary>
-        public Point3 ClosestPoint(Point3 point)
+        public virtual Point3 ClosestPoint(Point3 point)
         {
             double t = Analyze.Curve.ClosestParameter(this, point);
             Point3 pointAt = Evaluate.Curve.PointAt(this, t);
@@ -330,7 +330,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.ClosestParameter"/>
         /// </summary>
-        public double ClosestParameter(Point3 pt)
+        public virtual double ClosestParameter(Point3 pt)
         {
             return Analyze.Curve.ClosestParameter(this, pt);
         }
@@ -358,7 +358,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.LengthAt"/>
         /// </summary>
-        public double LengthAt(double t)
+        public virtual double LengthAt(double t)
         {
             if (t <= 0.0)
             {
@@ -403,7 +403,7 @@ namespace GShark.Geometry
         /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset curve.</returns>
-        public NurbsBase Offset(double distance, Plane pln)
+        public virtual NurbsBase Offset(double distance, Plane pln)
         {
             if (distance == 0.0)
             {
@@ -491,6 +491,17 @@ namespace GShark.Geometry
         public NurbsBase ReduceDegree(double tolerance = 10e-4)
         {
             return Modify.Curve.ReduceDegree(this, tolerance);
+        }
+
+        /// <summary>
+        /// Transforms a curve with the given transformation matrix.
+        /// </summary>
+        /// <param name="transformation">The transformation matrix.</param>
+        /// <returns>A new NURBS curve transformed.</returns>
+        public virtual NurbsBase Transform(Transform transformation)
+        {
+            List<Point4> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
+            return new NurbsCurve(Degree, Knots, pts);
         }
 
         /// <summary>
