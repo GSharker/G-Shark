@@ -332,7 +332,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve curve = new NurbsCurve(pts, degree);
             Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
-            NurbsBase[] curves = { ln, arc.ToNurbs(), curve };
+            NurbsBase[] curves = { ln, arc, curve };
 
             Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
             Point3 expectedPt2 = new Point3(5, 5, -1.230175);
@@ -407,7 +407,7 @@ namespace GShark.Test.XUnit.Geometry
             });
 
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
-            NurbsBase[] curves = { poly, arc.ToNurbs() };
+            NurbsBase[] curves = { poly, arc };
 
             Point3 expectedPt1 = new Point3(5, 0, 2.928932);
             Point3 expectedPt2 = new Point3(5, 4.428932, 5);

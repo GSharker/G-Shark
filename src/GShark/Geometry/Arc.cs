@@ -33,6 +33,7 @@ namespace GShark.Geometry
                     AngularDiff(angleDomainRadians.T1, Math.PI * 2.0))
                 : angleDomainRadians;
             _length = Math.Abs(Angle * Radius);
+            ToNurbs();
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace GShark.Geometry
 
             _domain = new Interval(0.0, angle);
             _length = Math.Abs(Angle * Radius);
+            ToNurbs();
         }
 
         /// <summary>

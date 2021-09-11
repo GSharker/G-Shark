@@ -67,7 +67,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsBase circleNurbs = _circle3D.ToNurbs();
+            NurbsBase circleNurbs = _circle3D;
 
             // Assert
             circleNurbs.Knots.GetDomain(circleNurbs.Degree).Length.Should().Be(1.0);

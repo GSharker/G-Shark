@@ -16,9 +16,7 @@ namespace GShark.Geometry
     /// </example>
     public class PolyCurve : NurbsBase
     {
-        private readonly List<ICurve> _segments = new List<ICurve>();
-        // ToDo: this list will be removed after all the other curve will inheritance from NurbsBase.
-        private readonly List<NurbsBase> _segmentsNurbs = new List<NurbsBase>();
+        private readonly List<NurbsBase> _segments = new List<NurbsBase>();
 
         /// <summary>
         /// Initializes a new empty polyCurve.
@@ -35,7 +33,6 @@ namespace GShark.Geometry
         {
             HealthChecks(line);
             _segments.Add(line);
-            _segmentsNurbs.Add(line);
             ToNurbsForm();
         }
 
@@ -48,7 +45,6 @@ namespace GShark.Geometry
         {
             HealthChecks(arc);
             _segments.Add(arc);
-            _segmentsNurbs.Add(arc.ToNurbs());
             ToNurbsForm();
         }
 
@@ -65,7 +61,6 @@ namespace GShark.Geometry
             }
             HealthChecks(curve);
             _segments.Add(curve);
-            _segmentsNurbs.Add(curve);
             ToNurbsForm();
         }
 
@@ -82,7 +77,6 @@ namespace GShark.Geometry
             }
             HealthChecks(polyCurve);
             _segments.Add(polyCurve);
-            _segmentsNurbs.Add(polyCurve);
             ToNurbsForm();
         }
 
@@ -94,14 +88,13 @@ namespace GShark.Geometry
         internal void Append(List<NurbsBase> curves)
         {
             _segments.AddRange(curves);
-            _segmentsNurbs.AddRange(curves);
             ToNurbsForm();
         }
 
         /// <summary>
         /// The segments of the polyCurve.
         /// </summary>
-        public List<ICurve> Segments => _segments;
+        public List<NurbsBase> Segments => _segments;
 
         /// <summary>
         /// Defines the NURBS form of the polyline.
@@ -110,19 +103,19 @@ namespace GShark.Geometry
         {
             if (_segments.Count == 1)
             {
-                Weights = Point4.GetWeights(_segmentsNurbs[0].ControlPoints);
-                Degree = _segmentsNurbs[0].Degree;
-                Knots = _segmentsNurbs[0].Knots;
-                ControlPointLocations = Point4.PointDehomogenizer1d(_segmentsNurbs[0].ControlPoints);
-                ControlPoints = _segmentsNurbs[0].ControlPoints;
+                Weights = Point4.GetWeights(_segments[0].ControlPoints);
+                Degree = _segments[0].Degree;
+                Knots = _segments[0].Knots;
+                ControlPointLocations = Point4.PointDehomogenizer1d(_segments[0].ControlPoints);
+                ControlPoints = _segments[0].ControlPoints;
                 return;
             }
 
             // Extract the biggest degree between the curves.
-            int finalDegree = _segmentsNurbs.Max(c => c.Degree);
+            int finalDegree = _segments.Max(c => c.Degree);
 
             // Homogenized degree curves.
-            IEnumerable<NurbsBase> homogenizedCurves = _segmentsNurbs.Select(curve => curve.Degree != finalDegree ? Modify.Curve.ElevateDegree(curve, finalDegree) : curve);
+            IEnumerable<NurbsBase> homogenizedCurves = _segments.Select(curve => curve.Degree != finalDegree ? Modify.Curve.ElevateDegree(curve, finalDegree) : curve);
 
             // Join curves.
             List<double> joinedKnots = new List<double>();
@@ -150,7 +143,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Checks to define if the curve can be appended to the polycurve.
         /// </summary>
-        private void HealthChecks(ICurve curve)
+        private void HealthChecks(NurbsBase curve)
         {
             if (_segments.Count <= 0) return;
 
