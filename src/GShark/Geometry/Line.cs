@@ -242,9 +242,9 @@ namespace GShark.Geometry
         /// <returns>A NURBS curve.</returns>
         private void ToNurbs()
         {
-            Weights = new List<double> {1.0, 1.0};
+            Weights = new List<double> { 1.0, 1.0 };
             Degree = 1;
-            Knots = new KnotVector{0.0, 0.0, 1.0, 1.0};
+            Knots = new KnotVector { 0.0, 0.0, 1.0, 1.0 };
             ControlPointLocations = new List<Point3> { StartPoint, EndPoint };
             ControlPoints = new List<Point4> { StartPoint, EndPoint };
         }
@@ -254,7 +254,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A line transformed.</returns>
-        public new Line Transform(Transform transform)
+        public Line Transform(Transform transform)
         {
             Point3 pt1 = StartPoint.Transform(transform);
             Point3 pt2 = EndPoint.Transform(transform);

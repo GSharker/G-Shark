@@ -164,16 +164,16 @@ namespace GShark.Geometry
             if (curves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
 
-            bool isClosed = curves[0].IsClosed();
+            bool isClosed = curves[0].IsClosed;
             foreach (NurbsBase c in curves.Skip(1))
-                if (isClosed != c.IsClosed())
+                if (isClosed != c.IsClosed)
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
             // Copy curves for possible operation of homogenization.
             IList<NurbsBase> copyCurves = new List<NurbsBase>(curves);
 
             // Clamp curves if periodic.
-            if (copyCurves[0].IsPeriodic())
+            if (copyCurves[0].IsPeriodic)
             {
                 for (int i = 0; i < copyCurves.Count; i++)
                 {

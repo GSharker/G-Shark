@@ -51,7 +51,6 @@ namespace GShark.Test.XUnit.Geometry
             Polygon polygon = new Polygon(Planar3D);
 
             // Assert
-            polygon.Should().NotBeEmpty();
             polygon.Segments.Count.Should().Be(5);
         }
 
@@ -136,14 +135,14 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_Polygon_Transformed_In_NurbsBase()
+        public void It_Returns_True_If_The_NurbsBase_Form_Of_A_Polygon_Is_Correct()
         {
             // Arrange
             PolyLine polygon = new Polygon(Planar2D);
             double lengthSum = 0.0;
 
             // Act
-            NurbsBase polygonCurve = polygon.ToNurbs();
+            NurbsBase polygonCurve = polygon;
 
             // Assert
             polygonCurve.Degree.Should().Be(1);
@@ -152,7 +151,7 @@ namespace GShark.Test.XUnit.Geometry
             for (int i = 0; i < polygon.SegmentsCount; i++)
             {
                 lengthSum += polygon.Segments[i].Length;
-                polygon[i + 1].EpsilonEquals(polygonCurve.PointAtLength(lengthSum), GSharkMath.MaxTolerance).Should().BeTrue();
+                polygon.ControlPointLocations[i + 1].EpsilonEquals(polygonCurve.PointAtLength(lengthSum), GSharkMath.MaxTolerance).Should().BeTrue();
             }
         }
 
@@ -171,7 +170,7 @@ namespace GShark.Test.XUnit.Geometry
             PolyLine offsetPolygon = polygon.Offset(offset, Plane.PlaneXY);
 
             // Assert
-            polygon[vertex].DistanceTo(offsetPolygon[vertex]).Should()
+            polygon.ControlPointLocations[vertex].DistanceTo(offsetPolygon.ControlPointLocations[vertex]).Should()
                 .BeApproximately(expectedDistance, GSharkMath.MaxTolerance);
         }
 
@@ -187,10 +186,10 @@ namespace GShark.Test.XUnit.Geometry
             Polygon rectangle = Polygon.Rectangle(Plane.PlaneYZ, xDimension, yDimension);
 
             // Assert
-            rectangle.Count.Should().Be(5);
-            rectangle[0].DistanceTo(expectedPoint).Should().BeLessThan(GSharkMath.MaxTolerance);
-            rectangle[0].DistanceTo(rectangle[1]).Should().Be(xDimension);
-            rectangle[1].DistanceTo(rectangle[2]).Should().Be(yDimension);
+            rectangle.ControlPointLocations.Count.Should().Be(5);
+            rectangle.ControlPointLocations[0].DistanceTo(expectedPoint).Should().BeLessThan(GSharkMath.MaxTolerance);
+            rectangle.ControlPointLocations[0].DistanceTo(rectangle.ControlPointLocations[1]).Should().Be(xDimension);
+            rectangle.ControlPointLocations[1].DistanceTo(rectangle.ControlPointLocations[2]).Should().Be(yDimension);
         }
 
         [Fact]
@@ -205,8 +204,8 @@ namespace GShark.Test.XUnit.Geometry
             Polygon polygon = Polygon.RegularPolygon(pl, radius, numberOfSegments);
 
             // Assert
-            polygon.Count.Should().Be(numberOfSegments + 1);
-            polygon[0].DistanceTo(pl.Origin).Should().Be(radius);
+            polygon.ControlPointLocations.Count.Should().Be(numberOfSegments + 1);
+            polygon.ControlPointLocations[0].DistanceTo(pl.Origin).Should().Be(radius);
         }
 
         [Theory]

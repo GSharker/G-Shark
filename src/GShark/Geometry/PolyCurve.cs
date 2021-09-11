@@ -59,7 +59,7 @@ namespace GShark.Geometry
         /// <param name="curve"></param>
         public void Append(NurbsCurve curve)
         {
-            if (curve.IsClosed())
+            if (curve.IsClosed)
             {
                 throw new InvalidOperationException("The curve is closed.");
             }
@@ -76,7 +76,7 @@ namespace GShark.Geometry
         /// <param name="polyCurve"></param>
         public void Append(PolyCurve polyCurve)
         {
-            if (polyCurve.IsClosed())
+            if (polyCurve.IsClosed)
             {
                 throw new InvalidOperationException("The polycurve is closed.");
             }
@@ -154,7 +154,7 @@ namespace GShark.Geometry
         {
             if (_segments.Count <= 0) return;
 
-            if (IsClosed())
+            if (IsClosed)
             {
                 throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curve.GetType()}.");
             }

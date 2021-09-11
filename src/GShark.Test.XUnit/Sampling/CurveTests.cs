@@ -371,7 +371,7 @@ namespace GShark.Test.XUnit.Sampling
             PolyLine poly = new PolyLine(pts);
 
             // Act
-            (List<double> tValues, List<Point3> pts) result = Curve.AdaptiveSample(poly.ToNurbs());
+            (List<double> tValues, List<Point3> pts) result = Curve.AdaptiveSample(poly);
 
             // Arrange
             result.pts.Count.Should().Be(result.tValues.Count).And.Be(5);

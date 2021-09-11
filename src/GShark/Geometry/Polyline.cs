@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class PolyLine : List<Point3>, ICurve, ITransformable<PolyLine>
+    public class PolyLine : NurbsBase, IEquatable<PolyLine>, ITransformable<PolyLine>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
@@ -26,48 +26,43 @@ namespace GShark.Geometry
                 throw new Exception("Insufficient points for a polyline.");
             }
 
-            AddRange(RemoveShortSegments(vertices));
+            ControlPointLocations.AddRange(RemoveShortSegments(vertices));
+            ToNurbs();
         }
 
         /// <summary>
         /// Gets the number of segments for this polyline;
         /// </summary>
-        public int SegmentsCount => Count - 1;
-
-        /// <summary>
-        /// Gets true if the polyline is closed.
-        /// A polyline is considered closed, if its start and end point are identical.
-        /// </summary>
-        public bool IsClosed => this[0] == this[Count - 1];
+        public int SegmentsCount => ControlPointLocations.Count - 1;
 
         /// <summary>
         /// Gets the starting point of the polyline.
         /// </summary>
-        public Point3 StartPoint => this[0];
+        public override Point3 StartPoint => ControlPointLocations[0];
 
         /// <summary>
         /// Gets the middle point of the polyline.
         /// </summary>
-        public Point3 MidPoint => PointAtNormalizedLength(0.5);
+        public override Point3 MidPoint => PointAtNormalizedLength(0.5);
 
         /// <summary>
         /// Gets the end point of the polyline.
         /// </summary>
-        public Point3 EndPoint => this[Count - 1];
+        public override Point3 EndPoint => ControlPointLocations.Last();
 
         /// <summary>
         /// Calculates the length of the polyline.
         /// </summary>
         /// <value>The total length of the polyline.</value>
-        public double Length
+        public override double Length
         {
             get
             {
                 double length = 0.0;
 
-                for (int i = 0; i < Count - 1; i++)
+                for (int i = 0; i < ControlPointLocations.Count - 1; i++)
                 {
-                    length += this[i].DistanceTo(this[i + 1]);
+                    length += ControlPointLocations[i].DistanceTo(ControlPointLocations[i + 1]);
                 }
 
                 return length;
@@ -82,11 +77,11 @@ namespace GShark.Geometry
         {
             get
             {
-                Line[] lines = new Line[Count - 1];
+                Line[] lines = new Line[ControlPointLocations.Count - 1];
 
-                for (int i = 0; i < Count - 1; i++)
+                for (int i = 0; i < ControlPointLocations.Count - 1; i++)
                 {
-                    lines[i] = new Line(this[i], this[i + 1]);
+                    lines[i] = new Line(ControlPointLocations[i], ControlPointLocations[i + 1]);
                 }
 
                 return lines.ToList();
@@ -94,12 +89,18 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Gets true if the polyline is closed.
+        /// A polyline is considered closed, if its start and end point are identical.
+        /// </summary>
+        public override bool IsClosed => ControlPointLocations[0] == ControlPointLocations.Last();
+
+        /// <summary>
         /// Computes the bounding box of the list of points.
         /// </summary>
         /// <returns>The bounding box.</returns>
-        public BoundingBox GetBoundingBox()
+        public override BoundingBox GetBoundingBox()
         {
-            return new BoundingBox(this);
+            return new BoundingBox(ControlPointLocations);
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Evaluate parameter. Parameter should be between 0.0 and segments count.</param>
         /// <returns>The evaluated length at the curve parameter.</returns>
-        public double LengthAt(double t)
+        public override double LengthAt(double t)
         {
             if (t <= 0)
             {
@@ -131,9 +132,9 @@ namespace GShark.Geometry
         /// Creates a closed polyline, where the first and last point are the same.
         /// </summary>
         /// <returns>A closed polyline.</returns>
-        public PolyLine Close()
+        public new PolyLine Close()
         {
-            List<Point3> copyPts = new List<Point3>(this);
+            List<Point3> copyPts = new List<Point3>(ControlPointLocations);
             copyPts.Add(copyPts[0]);
             return new PolyLine(copyPts);
         }
@@ -143,7 +144,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">Evaluate parameter. Parameter should be between 0.0 and segments count.</param>
         /// <returns>The evaluated point at the curve parameter.</returns>
-        public Point3 PointAt(double t)
+        public override Point3 PointAt(double t)
         {
             if (t <= 0)
             {
@@ -163,7 +164,7 @@ namespace GShark.Geometry
         /// <summary>
         /// <inheritdoc cref="ICurve.PointAtLength"/>
         /// </summary>
-        public Point3 PointAtLength(double length)
+        public override Point3 PointAtLength(double length)
         {
             if (length <= 0.0)
             {
@@ -178,7 +179,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="normalizedLength">The length factor is normalized between 0.0 and 1.0.</param>
         /// <returns>The point at the length.</returns>
-        public Point3 PointAtNormalizedLength(double normalizedLength)
+        public override Point3 PointAtNormalizedLength(double normalizedLength)
         {
             double length = GSharkMath.RemapValue(normalizedLength, new Interval(0.0, 1.0), new Interval(0.0, Length));
             return PointAtLength(length);
@@ -189,7 +190,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="length">Length from start of polyline.</param>
         /// <returns>The parameter at the given length.</returns>
-        public double ParameterAtLength(double length)
+        public override double ParameterAtLength(double length)
         {
             if (length <= 0.0)
             {
@@ -229,7 +230,7 @@ namespace GShark.Geometry
                 return Segments.Last();
             }
 
-            double tempLength = this[0].DistanceTo(this[1]);
+            double tempLength = ControlPointLocations[0].DistanceTo(ControlPointLocations[1]);
             int segIdx = 0;
             for (int i = 0; i < SegmentsCount; i++)
             {
@@ -239,7 +240,7 @@ namespace GShark.Geometry
                     break;
                 }
 
-                tempLength += this[i + 1].DistanceTo(this[i + 2]);
+                tempLength += ControlPointLocations[i + 1].DistanceTo(ControlPointLocations[i + 2]);
             }
 
             return Segments[segIdx];
@@ -250,15 +251,15 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">The point to test.</param>
         /// <returns>The parameter closest to the test point.</returns>
-        public double ClosestParameter(Point3 pt)
+        public override double ClosestParameter(Point3 pt)
         {
             int index = 0;
             double valueT = 0.0;
             double smallestDistance = double.MaxValue;
 
-            for (int i = 0; i < Count - 1; i++)
+            for (int i = 0; i < ControlPointLocations.Count - 1; i++)
             {
-                Line line = new Line(this[i], this[i + 1]);
+                Line line = new Line(ControlPointLocations[i], ControlPointLocations[i + 1]);
                 double tempT = line.ClosestParameter(pt);
                 if (tempT < 0.0)
                 {
@@ -284,17 +285,17 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="pt">Point to test.</param>
         /// <returns>The point closest to the given point.</returns>
-        public Point3 ClosestPoint(Point3 pt)
+        public override Point3 ClosestPoint(Point3 pt)
         {
             // Brute force
-            if (Count <= 4)
+            if (ControlPointLocations.Count <= 4)
             {
                 double distance = double.MaxValue;
                 Point3 closestPt = Point3.Unset;
 
-                for (int i = 0; i < Count - 1; i++)
+                for (int i = 0; i < ControlPointLocations.Count - 1; i++)
                 {
-                    Line tempLine = new Line(this[i], this[i + 1]);
+                    Line tempLine = new Line(ControlPointLocations[i], ControlPointLocations[i + 1]);
                     Point3 tempPt = tempLine.ClosestPoint(pt);
                     double tempDistance = tempPt.DistanceTo(pt);
 
@@ -313,7 +314,7 @@ namespace GShark.Geometry
             // Divide and conquer.
             List<Point3> leftSubCollection = new List<Point3>();
             List<Point3> rightSubCollection = new List<Point3>();
-            List<Point3> conquer = new List<Point3>(this);
+            List<Point3> conquer = new List<Point3>(ControlPointLocations);
 
             while (leftSubCollection.Count != 2 || rightSubCollection.Count != 2)
             {
@@ -346,7 +347,7 @@ namespace GShark.Geometry
         /// <returns>A polyline reversed.</returns>
         public new PolyLine Reverse()
         {
-            List<Point3> copyVertices = new List<Point3>(this);
+            List<Point3> copyVertices = new List<Point3>(ControlPointLocations);
             copyVertices.Reverse();
             return new PolyLine(copyVertices);
         }
@@ -358,7 +359,7 @@ namespace GShark.Geometry
         /// <returns>A polyline transformed.</returns>
         public PolyLine Transform(Transform transform)
         {
-            List<Point3> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
+            List<Point3> transformedPts = ControlPointLocations.Select(pt => pt.Transform(transform)).ToList();
 
             return new PolyLine(transformedPts);
         }
@@ -367,20 +368,28 @@ namespace GShark.Geometry
         /// Constructs a nurbs curve representation of this polyline.
         /// </summary>
         /// <returns>A Nurbs curve shaped like this polyline.</returns>
-        public NurbsBase ToNurbs()
+        private void ToNurbs()
         {
             double lengthSum = 0;
+            List<double> weights = new List<double>();
             KnotVector knots = new KnotVector { 0, 0 };
-            List<Point4> ctrlPts = Point4.PointsHomogeniser(this, 1.0);
+            List<Point4> ctrlPts = new List<Point4>();
 
-            for (int i = 0; i < Count - 1; i++)
+            for (int i = 0; i < ControlPointLocations.Count - 1; i++)
             {
                 lengthSum += Segments[i].Length;
                 knots.Add(lengthSum);
+                weights.Add(1.0);
+                ctrlPts.Add(new Point4(ControlPointLocations[i], 1.0));
             }
             knots.Add(lengthSum);
+            weights.Add(1.0);
+            ctrlPts.Add(new Point4(ControlPointLocations.Last(), 1.0));
 
-            return new NurbsCurve(1, knots, ctrlPts);
+            Weights = weights;
+            Knots = knots.Normalize();
+            Degree = 1;
+            ControlPoints = ctrlPts;
         }
 
         /// <summary>
@@ -389,16 +398,16 @@ namespace GShark.Geometry
         /// <param name="distance">The distance of the offset. If negative the offset will be in the opposite side.</param>
         /// <param name="pln">The plane for the offset operation.</param>
         /// <returns>The offset polyline.</returns>
-        public PolyLine Offset(double distance, Plane pln)
+        public new PolyLine Offset(double distance, Plane pln)
         {
             if (distance == 0.0)
             {
                 return this;
             }
 
-            int iteration = (IsClosed) ? Count : Count - 1;
+            int iteration = (IsClosed) ? ControlPointLocations.Count : ControlPointLocations.Count - 1;
 
-            Point3[] offsetPts = new Point3[Count];
+            Point3[] offsetPts = new Point3[ControlPointLocations.Count];
             List<Line> segments = Segments;
             Line[] offsetSegments = new Line[segments.Count + 1];
 
@@ -424,7 +433,7 @@ namespace GShark.Geometry
                     continue;
                 }
 
-                Intersection:
+            Intersection:
                 bool ccx = Intersect.LineLine(offsetSegments[(i == iteration - 1 && IsClosed) ? iteration - 2 : k - 1], offsetSegments[k], out Point3 pt, out _, out _, out _);
                 if (!ccx)
                 {
@@ -482,6 +491,27 @@ namespace GShark.Geometry
             }
 
             return cleanedList;
+        }
+
+        /// <summary>
+        /// Checks if a polyline is equal to the provided polyline.<br/>
+        /// Two polyline are equal if all the points are the same.
+        /// </summary>
+        /// <param name="other">The polyline to compare.</param>
+        /// <returns>True if the points are equal, otherwise false.</returns>
+        public bool Equals(PolyLine other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return false;
+            }
+
+            return ControlPointLocations.SequenceEqual(other.ControlPointLocations);
         }
 
         /// <summary>

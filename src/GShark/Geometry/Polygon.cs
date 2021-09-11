@@ -1,5 +1,4 @@
 ﻿using GShark.Core;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,13 +25,13 @@ namespace GShark.Geometry
             }
 
             if (IsClosed) return;
-            Add(vertices[0]);
+            ControlPointLocations.Add(vertices[0]);
         }
 
         /// <summary>
         /// Gets the centroid averaging the vertices. 
         /// </summary>
-        public Point3 CentroidByVertices => Evaluate.Curve.AveragePoint(this);
+        public Point3 CentroidByVertices => Evaluate.Curve.AveragePoint(ControlPointLocations);
 
         /// <summary>
         /// Gets the centroid of mass of the polygon.<br/>
@@ -45,14 +44,14 @@ namespace GShark.Geometry
             {
                 bool isOnPlaneXy = true;
                 Transform transformBack = new Transform();
-                List<Point3> copiedPts = new List<Point3>(this);
-                if (Math.Abs(this[0][2]) > GSharkMath.MaxTolerance)
+                List<Point3> copiedPts = new List<Point3>(ControlPointLocations);
+                if (Math.Abs(ControlPointLocations[0][2]) > GSharkMath.MaxTolerance)
                 {
                     isOnPlaneXy = false;
-                    Plane polygonPlane = new Plane(this[0], this[1], this[2]);
+                    Plane polygonPlane = new Plane(ControlPointLocations[0], ControlPointLocations[1], ControlPointLocations[2]);
                     Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
                     transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
-                    copiedPts = this.Transform(toOrigin);
+                    copiedPts = Transform(toOrigin).ControlPointLocations;
                 }
 
                 double signedArea = 0.0;
@@ -101,11 +100,11 @@ namespace GShark.Geometry
             get
             {
                 double area = 0.0;
-                Vector3 normal = Vector3.CrossProduct(this[1] - this[0], this[2] - this[0]).Unitize();
+                Vector3 normal = Vector3.CrossProduct(ControlPointLocations[1] - ControlPointLocations[0], ControlPointLocations[2] - ControlPointLocations[0]).Unitize();
 
-                for (int i = 0; i < this.Count - 1; i++)
+                for (int i = 0; i < ControlPointLocations.Count - 1; i++)
                 {
-                    Vector3 product = Vector3.CrossProduct(this[i] - this[0], this[i + 1] - this[0]);
+                    Vector3 product = Vector3.CrossProduct(ControlPointLocations[i] - ControlPointLocations[0], ControlPointLocations[i + 1] - ControlPointLocations[0]);
                     area += Vector3.DotProduct(product, normal);
                 }
 
@@ -172,7 +171,7 @@ namespace GShark.Geometry
         /// <returns>A polygon transformed.</returns>
         public new Polygon Transform(Transform transform)
         {
-            List<Point3> transformedPts = this.Select(pt => pt.Transform(transform)).ToList();
+            List<Point3> transformedPts = ControlPointLocations.Select(pt => pt.Transform(transform)).ToList();
 
             return new Polygon(transformedPts);
         }

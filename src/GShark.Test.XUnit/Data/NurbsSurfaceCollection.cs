@@ -85,7 +85,7 @@ namespace GShark.Test.XUnit.Data
             PolyLine poly = new PolyLine(pts1);
             NurbsCurve crv1 = new NurbsCurve(pts2, 2);
             NurbsCurve crv2 = new NurbsCurve(pts3, 3);
-            List<NurbsBase> crvs = new List<NurbsBase> { ln, crv0, poly.ToNurbs(), crv1, crv2 };
+            List<NurbsBase> crvs = new List<NurbsBase> { ln, crv0, poly, crv1, crv2 };
 
             return NurbsSurface.CreateLoftedSurface(crvs);
         }

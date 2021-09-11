@@ -295,7 +295,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve curveB = new NurbsCurve(ptsB, 2);
 
             // Act
-            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly.ToNurbs(), curveB);
+            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly, curveB);
             Point3 pointAt = ruledSurface.PointAt(u, v);
 
             // Assert

@@ -92,11 +92,51 @@ namespace GShark.Geometry
 
         public virtual Point3 EndPoint => PointAt(1.0);
 
+        /// <summary>
+        /// Checks if a curve is closed.<br/>
+        /// A curve is closed if the first point and the last are the same.
+        /// </summary>
+        /// <returns>True if the curve is closed.</returns>
+        public virtual bool IsClosed
+        {
+            get
+            {
+                Point3 pt0 = Evaluate.Curve.PointAt(this, 0.0);
+                Point3 pt1 = Evaluate.Curve.PointAt(this, 1.0);
+                return pt0.EpsilonEquals(pt1, GSharkMath.Epsilon);
+            }
+        }
+
+        /// <summary>
+        /// Checks if a curve is periodic.<br/>
+        /// A curve is periodic, where the number of overlapping points is equal the curve degree.
+        /// </summary>
+        /// <returns>True if the curve is periodic.</returns>
+        public bool IsPeriodic
+        {
+            get
+            {
+                if (!Knots.IsPeriodic(Degree)) return false;
+                int i, j;
+                for (i = 0, j = ControlPointLocations.Count - Degree; i < Degree; i++, j++)
+                {
+                    if (ControlPointLocations[i].DistanceTo(ControlPointLocations[j]) > 0)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the bounding box of the curve.
+        /// </summary>
         public virtual BoundingBox GetBoundingBox()
         {
             NurbsBase curve = this;
 
-            if (IsPeriodic())
+            if (IsPeriodic)
             {
                 curve = ClampEnds();
             }
@@ -115,43 +155,12 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if a curve is closed.<br/>
-        /// A curve is closed if the first point and the last are the same.
-        /// </summary>
-        /// <returns>True if the curve is closed.</returns>
-        public bool IsClosed()
-        {
-            Point3 pt0 = Evaluate.Curve.PointAt(this, 0.0);
-            Point3 pt1 = Evaluate.Curve.PointAt(this, 1.0);
-            return pt0.EpsilonEquals(pt1, GSharkMath.Epsilon);
-        }
-
-        /// <summary>
-        /// Checks if a curve is periodic.<br/>
-        /// A curve is periodic, where the number of overlapping points is equal the curve degree.
-        /// </summary>
-        /// <returns>True if the curve is periodic.</returns>
-        public bool IsPeriodic()
-        {
-            if (!Knots.IsPeriodic(Degree)) return false;
-            int i, j;
-            for (i = 0, j = ControlPointLocations.Count - Degree; i < Degree; i++, j++)
-            {
-                if (ControlPointLocations[i].DistanceTo(ControlPointLocations[j]) > 0)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Creates a periodic curve.<br/>
         /// This method uses the control point wrapping solution.
         /// https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-curve-closed.html
         /// </summary>
         /// <returns>A periodic curve.</returns>
-        public NurbsBase Close()
+        public virtual NurbsBase Close()
         {
             // Wrapping control points
             List<Point4> pts = new List<Point4>(ControlPoints);
@@ -340,7 +349,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="segmentLength">Length of segment to measure. Must be less than or equal to the length of the curve.</param>
         /// <returns>The parameter on the curve at the given length.</returns>
-        public double ParameterAtLength(double segmentLength)
+        public virtual double ParameterAtLength(double segmentLength)
         {
             if (segmentLength <= 0.0)
             {
@@ -444,7 +453,7 @@ namespace GShark.Geometry
 
             for (int i = 0; i < sortedCurves.Count - 1; i++)
             {
-                if (sortedCurves[i].IsClosed())
+                if (sortedCurves[i].IsClosed)
                 {
                     throw new Exception($"Curve at {i} is closed.");
                 }
@@ -491,17 +500,6 @@ namespace GShark.Geometry
         public NurbsBase ReduceDegree(double tolerance = 10e-4)
         {
             return Modify.Curve.ReduceDegree(this, tolerance);
-        }
-
-        /// <summary>
-        /// Transforms a curve with the given transformation matrix.
-        /// </summary>
-        /// <param name="transformation">The transformation matrix.</param>
-        /// <returns>A new NURBS curve transformed.</returns>
-        public virtual NurbsBase Transform(Transform transformation)
-        {
-            List<Point4> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
-            return new NurbsCurve(Degree, Knots, pts);
         }
 
         /// <summary>

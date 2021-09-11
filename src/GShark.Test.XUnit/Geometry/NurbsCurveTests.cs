@@ -76,15 +76,15 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_True_If_A_NurbsBase_Is_Closed()
         {
             // Assert
-            NurbsBaseCollection.NurbsWithStartingAndEndPointOverlapping().IsClosed().Should().BeTrue();
-            NurbsBaseCollection.PeriodicClosedNurbs().IsClosed().Should().BeTrue();
+            NurbsBaseCollection.NurbsWithStartingAndEndPointOverlapping().IsClosed.Should().BeTrue();
+            NurbsBaseCollection.PeriodicClosedNurbs().IsClosed.Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_True_If_A_NurbsBase_Is_Periodic()
         {
             // Assert
-            NurbsBaseCollection.PeriodicClosedNurbs().IsPeriodic().Should().BeTrue();
+            NurbsBaseCollection.PeriodicClosedNurbs().IsPeriodic.Should().BeTrue();
         }
 
         [Fact]
@@ -377,7 +377,7 @@ namespace GShark.Test.XUnit.Geometry
             double expectedLength = 43.932474;
 
             // Act
-            NurbsBase joinedCurve = NurbsBase.Join(new List<NurbsBase> { poly.ToNurbs(), ln0, ln1 });
+            NurbsBase joinedCurve = NurbsBase.Join(new List<NurbsBase> { poly, ln0, ln1 });
             Point3 pt1 = joinedCurve.PointAtLength(15);
             Point3 pt2 = joinedCurve.PointAtLength(21.5);
             Point3 pt3 = joinedCurve.PointAtLength(27.5);
@@ -407,7 +407,7 @@ namespace GShark.Test.XUnit.Geometry
             });
 
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
-            NurbsBase[] curves = { poly.ToNurbs(), arc.ToNurbs() };
+            NurbsBase[] curves = { poly, arc.ToNurbs() };
 
             Point3 expectedPt1 = new Point3(5, 0, 2.928932);
             Point3 expectedPt2 = new Point3(5, 4.428932, 5);
