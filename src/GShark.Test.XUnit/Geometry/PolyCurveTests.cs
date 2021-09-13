@@ -4,6 +4,10 @@ using GShark.Geometry;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
+using GShark.Test.XUnit.Geometry;
+using Newtonsoft.Json;
+using System.IO;
+using System.Linq;
 
 namespace GShark.Test.XUnit.Geometry
 {
@@ -82,9 +86,37 @@ namespace GShark.Test.XUnit.Geometry
             length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
 
-        public void PyRevit_Tests()
+        [Theory]
+        [InlineData("../../../Resources/C3D_BORR_20-440-10_SW-1_2021_09_08.json")]
+        public void PyRevit_Tests(object value)
         {
+            string jsonStr = File.ReadAllText((string)value);
+            CivilData cd = JsonConvert.DeserializeObject<CivilData>(jsonStr);
 
+            List<AlignmentICurve> ents = cd.Entities;
+            //sort entities
+            PolyCurve polyCurve = new PolyCurve();
+            foreach (AlignmentICurve ent in ents.OrderBy(x=>x.StartStation).ToList())
+            {
+                switch(ent.CurveType)
+                {
+                    case "Line":
+                        Line ln = new Line(ent.StartPoint, ent.EndPoint);
+                        polyCurve.Append(ln);
+                        break;
+                    case "Arc":
+                        Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
+                        polyCurve.Append(arc);
+                        break;
+                    case "NurbCurve":
+                        break;
+                }
+            }
+
+            double ch = 33;
+            double para = polyCurve.ParameterAtLength(ch);
+
+            _testOutput.WriteLine(polyCurve.PerpendicularFrameAt(para).ToString());
         }
     }
 }
