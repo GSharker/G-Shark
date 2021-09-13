@@ -81,5 +81,10 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
+
+        public void PyRevit_Tests()
+        {
+
+        }
     }
 }
