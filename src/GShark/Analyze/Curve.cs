@@ -67,7 +67,7 @@ namespace GShark.Analyze
             double curvatureLength = curvature.Length;
             if (curvatureLength < 1.490116119385E-08) // SqrtEpsilon value that is used when comparing square roots.
             {
-                throw new Exception("Curvature is infinite.");
+                curvatureLength = 1e10;
             }
 
             double radius = (curvature / (curvatureLength * curvatureLength)).Length;
