@@ -97,56 +97,51 @@ namespace GShark.Geometry
         public List<NurbsBase> Segments => _segments;
 
         /// <summary>
-        /// Return the segment at Length in PolyCurve
+        /// Find Curve Segment At a given Length.
+        /// When there is no curve segments in the PolyCurve, return null;
+        /// If the provided length is greater than the PolyCurve Length, then it return the last segment in PolyCurve;
         /// </summary>
-        /// <param name="polyCurve"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="length">Segment Length</param>
         public NurbsBase SegmentAtLength(double length)
         {
             NurbsBase segment = null;
-            if (_segments.Count() > 0 && length <= this.Length)
+            if (_segments.Count() == 0) return null;
+
+            if (length > this.Length) return _segments.Last();
+
+            if (_segments.Count() == 1) return _segments.First();
+
+            double temp = 0;
+            foreach (NurbsBase curve in _segments)
             {
-                if (_segments.Count() > 1)
+                double cumulativeLength = curve.Length + temp;
+                if (length >= temp && length < cumulativeLength)
                 {
-                    double temp = 0;
-                    foreach (NurbsBase curve in _segments)
-                    {
-                        double cLength = curve.Length + temp;
-                        if (length >= temp && length < cLength)
-                        {
-                            segment = curve;
-                            break;
-                        }
-                        temp = cLength;
-                    }
+                    segment = curve;
+                    break;
                 }
-                else
-                {
-                    segment = _segments[0];
-                }
-            }
-            else
-            {
-                //return the last segment
-                segment = _segments[_segments.Count() - 1];
+                temp = cumulativeLength;
             }
 
             return segment;
         }
 
-
         /// <summary>
-        /// Return the segment at Length in PolyCurve
+        /// Find the Curve Segment At given paramter.
+        /// When there is no curve segments in the PolyCurve, return null;
+        /// If the paramter is greater than 1.0, then it return the last segment in PolyCurve.
         /// </summary>
-        /// <param name="polyCurve"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="t"></param>
         public NurbsBase SegmentAt(double t)
         {
             NurbsBase segment = null;
+            if (_segments.Count() == 0) return null;
+
+            if (t >= 1.0) return _segments.Last();
+
             double length = this.LengthAt(t);
             segment = this.SegmentAtLength(length);
+
             return segment;
         }
 

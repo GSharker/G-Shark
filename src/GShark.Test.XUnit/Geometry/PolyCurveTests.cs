@@ -86,33 +86,32 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(23.769824635278, 2)]
         [InlineData(21.269824635278, 1)]
         [InlineData(20, 0)]
-        public void It_Returns_The_Segment_At_Length(double length, int idx)
+        public void It_Returns_The_Segment_At_Length(double length, int expectedSegmentIndex)
 		{
             //Arrange
-            NurbsBase curve = _polycurve.Segments[idx];
+            NurbsBase expectedSegment = _polycurve.Segments[expectedSegmentIndex];
 
             //Act
-            NurbsBase result = _polycurve.SegmentAtLength(length);
+            NurbsBase segmentResult = _polycurve.SegmentAtLength(length);
 
             //Assert
-            result.Should().BeSameAs(curve);
+            segmentResult.Should().BeSameAs(expectedSegment);
         }
 
         [Theory]
-        [InlineData(23.769824635278, 2)]
-        [InlineData(21.269824635278, 1)]
-        [InlineData(20, 0)]
-        public void It_Returns_The_Segment_At_Parameter(double length, int idx)
+        [InlineData(0.333, 0)]
+        [InlineData(0.666, 1)]
+        [InlineData(1.0, 2)]
+        public void It_Returns_The_Segment_At_Parameter(double para, int expectedSegmentIndex)
         {
             //Arrange
-            NurbsBase curve = _polycurve.Segments[idx];
-            double para = _polycurve.ParameterAtLength(length);
+            NurbsBase expectedSegment = _polycurve.Segments[expectedSegmentIndex];
 
             //Act
-            NurbsBase result = _polycurve.SegmentAt(para);
+            NurbsBase segmentResult = _polycurve.SegmentAt(para);
 
             //Assert
-            result.Should().BeSameAs(curve);
+            segmentResult.Should().BeSameAs(expectedSegment);
         }
     }
 }
