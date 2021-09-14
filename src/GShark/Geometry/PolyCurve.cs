@@ -97,6 +97,87 @@ namespace GShark.Geometry
         public List<NurbsBase> Segments => _segments;
 
         /// <summary>
+        /// Return the segment at Length in PolyCurve
+        /// </summary>
+        /// <param name="polyCurve"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public NurbsBase SegmentAtLength(double length)
+        {
+            NurbsBase segment = null;
+            if (_segments.Count() > 0 && length <= this.Length)
+            {
+                if (_segments.Count() > 1)
+                {
+                    double temp = 0;
+                    foreach (NurbsBase curve in _segments)
+                    {
+                        double cLength = curve.Length + temp;
+                        if (length > temp && length < cLength)
+                        {
+                            segment = curve;
+                            break;
+                        }
+                        temp = cLength;
+                    }
+                }
+                else
+                {
+                    segment = _segments[0];
+                }
+            }
+            else
+            {
+                //return the last segment
+                segment = _segments[_segments.Count() - 1];
+            }
+
+            return segment;
+        }
+
+
+        /// <summary>
+        /// Return the segment at Length in PolyCurve
+        /// </summary>
+        /// <param name="polyCurve"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public NurbsBase SegmentAt(double t)
+        {
+            NurbsBase segment = null;
+            double length = this.LengthAt(t);
+
+            if (_segments.Count() > 0 && length <= this.Length)
+            {
+                if (_segments.Count() > 1)
+                {
+                    double temp = 0;
+                    foreach (NurbsBase curve in _segments)
+                    {
+                        double cLength = curve.Length + temp;
+                        if (length > temp && length < cLength)
+                        {
+                            segment = curve;
+                            break;
+                        }
+                        temp = cLength;
+                    }
+                }
+                else
+                {
+                    segment = _segments[0];
+                }
+            }
+            else
+            {
+                //return the last segment
+                segment = _segments[_segments.Count() - 1];
+            }
+
+            return segment;
+        }
+
+        /// <summary>
         /// Defines the NURBS form of the polyline.
         /// </summary>
         private void ToNurbsForm()

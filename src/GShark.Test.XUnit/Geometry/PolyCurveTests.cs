@@ -81,5 +81,38 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MinTolerance);
         }
+
+        [Theory]
+        [InlineData(23.769824635278, 2)]
+        [InlineData(21.269824635278, 1)]
+        [InlineData(20, 0)]
+        public void It_Returns_The_Segment_At_Length(double length, int idx)
+		{
+            //Arrange
+            NurbsBase curve = _polycurve.Segments[idx];
+
+            //Act
+            NurbsBase result = _polycurve.SegmentAtLength(length);
+
+            //Assert
+            result.Should().BeSameAs(curve);
+        }
+
+        [Theory]
+        [InlineData(23.769824635278, 2)]
+        [InlineData(21.269824635278, 1)]
+        [InlineData(20, 0)]
+        public void It_Returns_The_Segment_At_Parameter(double length, int idx)
+        {
+            //Arrange
+            NurbsBase curve = _polycurve.Segments[idx];
+            double para = _polycurve.ParameterAtLength(length);
+
+            //Act
+            NurbsBase result = _polycurve.SegmentAt(para);
+
+            //Assert
+            result.Should().BeSameAs(curve);
+        }
     }
 }
