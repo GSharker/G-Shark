@@ -99,9 +99,9 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Theory]
-        [InlineData(0.333, 0)]
-        [InlineData(0.666, 1)]
-        [InlineData(1.0, 2)]
+        [InlineData(0.1, 0)]
+        [InlineData(1.1, 1)]
+        [InlineData(2.1, 2)]
         public void It_Returns_The_Segment_At_Parameter(double para, int expectedSegmentIndex)
         {
             //Arrange

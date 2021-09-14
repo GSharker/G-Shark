@@ -129,7 +129,6 @@ namespace GShark.Geometry
         /// <summary>
         /// Find the Curve Segment At given paramter.
         /// When there is no curve segments in the PolyCurve, return null;
-        /// If the paramter is greater than 1.0, then it return the last segment in PolyCurve.
         /// </summary>
         /// <param name="t"></param>
         public NurbsBase SegmentAt(double t)
@@ -137,10 +136,14 @@ namespace GShark.Geometry
             NurbsBase segment = null;
             if (_segments.Count() == 0) return null;
 
-            if (t >= 1.0) return _segments.Last();
+            if (_segments.Count() == 1) return _segments.First();
 
-            double length = this.LengthAt(t);
-            segment = this.SegmentAtLength(length);
+            if (t > _segments.Count()) return _segments.Last();
+
+            if (t <= 0) return _segments.First();
+
+            int segIdx = (int)Math.Truncate(t);
+            segment = _segments[segIdx];
 
             return segment;
         }
