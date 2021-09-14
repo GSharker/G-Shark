@@ -146,34 +146,7 @@ namespace GShark.Geometry
         {
             NurbsBase segment = null;
             double length = this.LengthAt(t);
-
-            if (_segments.Count() > 0 && length <= this.Length)
-            {
-                if (_segments.Count() > 1)
-                {
-                    double temp = 0;
-                    foreach (NurbsBase curve in _segments)
-                    {
-                        double cLength = curve.Length + temp;
-                        if (length > temp && length < cLength)
-                        {
-                            segment = curve;
-                            break;
-                        }
-                        temp = cLength;
-                    }
-                }
-                else
-                {
-                    segment = _segments[0];
-                }
-            }
-            else
-            {
-                //return the last segment
-                segment = _segments[_segments.Count() - 1];
-            }
-
+            segment = this.SegmentAtLength(length);
             return segment;
         }
 
