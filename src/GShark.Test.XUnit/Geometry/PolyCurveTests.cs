@@ -4,10 +4,8 @@ using GShark.Geometry;
 using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
-using GShark.Test.XUnit.Geometry;
-using Newtonsoft.Json;
 using System.IO;
-using System.Linq;
+using Newtonsoft.Json;
 
 namespace GShark.Test.XUnit.Geometry
 {
@@ -91,32 +89,36 @@ namespace GShark.Test.XUnit.Geometry
         public void PyRevit_Tests(object value)
         {
             string jsonStr = File.ReadAllText((string)value);
-            CivilData cd = JsonConvert.DeserializeObject<CivilData>(jsonStr);
+            object cd = JsonConvert.DeserializeObject(jsonStr);
 
-            List<AlignmentICurve> ents = cd.Entities;
-            //sort entities
-            PolyCurve polyCurve = new PolyCurve();
-            foreach (AlignmentICurve ent in ents.OrderBy(x=>x.StartStation).ToList())
+            foreach (var prop in cd.GetType().GetProperties())
             {
-                switch(ent.CurveType)
-                {
-                    case "Line":
-                        Line ln = new Line(ent.StartPoint, ent.EndPoint);
-                        polyCurve.Append(ln);
-                        break;
-                    case "Arc":
-                        Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
-                        polyCurve.Append(arc);
-                        break;
-                    case "NurbCurve":
-                        break;
-                }
+                _testOutput.WriteLine("{0}={1}", prop.Name, prop.GetValue(cd, null));
             }
+                //List<AlignmentICurve> ents = cd.Entities;
+                ////sort entities
+                //PolyCurve polyCurve = new PolyCurve();
+                //foreach (AlignmentICurve ent in ents.OrderBy(x => x.StartStation).ToList())
+                //{
+                //    switch (ent.CurveType)
+                //    {
+                //        case "Line":
+                //            Line ln = new Line(ent.StartPoint, ent.EndPoint);
+                //            polyCurve.Append(ln);
+                //            break;
+                //        case "Arc":
+                //            Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
+                //            polyCurve.Append(arc);
+                //            break;
+                //        case "NurbCurve":
+                //            break;
+                //    }
+                //}
 
-            double ch = 33;
-            double para = polyCurve.ParameterAtLength(ch);
+                //double ch = 33;
+                //double para = polyCurve.ParameterAtLength(ch);
 
-            _testOutput.WriteLine(polyCurve.PerpendicularFrameAt(para).ToString());
-        }
+                //_testOutput.WriteLine(polyCurve.PerpendicularFrameAt(para).ToString());
+            }
     }
 }
