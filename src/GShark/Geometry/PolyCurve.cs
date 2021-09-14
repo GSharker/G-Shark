@@ -113,7 +113,7 @@ namespace GShark.Geometry
                     foreach (NurbsBase curve in _segments)
                     {
                         double cLength = curve.Length + temp;
-                        if (length > temp && length < cLength)
+                        if (length >= temp && length < cLength)
                         {
                             segment = curve;
                             break;
