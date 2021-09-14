@@ -6,6 +6,8 @@ using Xunit;
 using Xunit.Abstractions;
 using System.IO;
 using Newtonsoft.Json;
+using System.Linq;
+using GShark.Intersection;
 
 namespace GShark.Test.XUnit.Geometry
 {
@@ -89,36 +91,85 @@ namespace GShark.Test.XUnit.Geometry
         public void PyRevit_Tests(object value)
         {
             string jsonStr = File.ReadAllText((string)value);
-            object cd = JsonConvert.DeserializeObject(jsonStr);
+            CivilData cd = JsonConvert.DeserializeObject<CivilData>(jsonStr);
 
-            foreach (var prop in cd.GetType().GetProperties())
+
+			List<AlignmentICurve> ents = cd.Entities;
+			//sort entities
+			PolyCurve polyCurve = new PolyCurve();
+			foreach (AlignmentICurve ent in ents.OrderBy(x => x.StartStation).ToList())
+			{
+				switch (ent.CurveType)
+				{
+					case "Line":
+						Line ln = new Line(ent.StartPoint, ent.EndPoint);
+						polyCurve.Append(ln);
+						break;
+					case "Arc":
+						Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
+						polyCurve.Append(arc);
+						break;
+					case "NurbCurve":
+						break;
+				}
+			}
+
+			double ch = 33;
+			double para = polyCurve.ParameterAtLength(ch);
+
+			_testOutput.WriteLine(polyCurve.PerpendicularFrameAt(para).ToString());
+		}
+
+        [Theory]
+        [InlineData("../../../Resources/C3D_BORR_20-440-10_SW-1_2021_09_08.json")]
+        public void PolyCurveIntersect_Test(object value)
+        {
+            string jsonStr = File.ReadAllText((string)value);
+            CivilData cd = JsonConvert.DeserializeObject<CivilData>(jsonStr);
+
+            List<AlignmentICurve> ents = cd.Entities;
+            //sort entities
+            PolyCurve cv = new PolyCurve();
+            foreach (AlignmentICurve ent in ents.OrderBy(x => x.StartStation).ToList())
             {
-                _testOutput.WriteLine("{0}={1}", prop.Name, prop.GetValue(cd, null));
+                switch (ent.CurveType)
+                {
+                    case "Line":
+                        Line ln = new Line(ent.StartPoint, ent.EndPoint);
+                        cv.Append(ln);
+                        break;
+                    case "Arc":
+                        Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
+                        cv.Append(arc);
+                        break;
+                    case "NurbCurve":
+                        break;
+                }
             }
-                //List<AlignmentICurve> ents = cd.Entities;
-                ////sort entities
-                //PolyCurve polyCurve = new PolyCurve();
-                //foreach (AlignmentICurve ent in ents.OrderBy(x => x.StartStation).ToList())
-                //{
-                //    switch (ent.CurveType)
-                //    {
-                //        case "Line":
-                //            Line ln = new Line(ent.StartPoint, ent.EndPoint);
-                //            polyCurve.Append(ln);
-                //            break;
-                //        case "Arc":
-                //            Arc arc = new Arc(ent.StartPoint, ent.MidPoint, ent.EndPoint);
-                //            polyCurve.Append(arc);
-                //            break;
-                //        case "NurbCurve":
-                //            break;
-                //    }
-                //}
 
-                //double ch = 33;
-                //double para = polyCurve.ParameterAtLength(ch);
+            double startCh = 22;
 
-                //_testOutput.WriteLine(polyCurve.PerpendicularFrameAt(para).ToString());
+            double startPara = cv.ParameterAtLength(startCh);
+            Point3 startPoint = cv.PointAt(startPara);
+            _testOutput.WriteLine($"Start Point: {startPoint}");
+
+            Plane ppln = cv.PerpendicularFrameAt(startPara);
+            Vector3 yaxis = ppln.YAxis;
+            _testOutput.WriteLine($"YAxis: {yaxis}");
+
+            Plane pln = new Plane(startPoint, yaxis);
+            Circle c = new Circle(pln, 2);
+            _testOutput.WriteLine($"Circle Center point: {c.Center}");
+
+            List<CurvesIntersectionResult> results = Intersect.CurveCurve(cv, c, 1e-3);
+            _testOutput.WriteLine(results.ToString());
+            foreach (CurvesIntersectionResult r in results)
+            {
+                _testOutput.WriteLine(r.PointA.ToString());
+                _testOutput.WriteLine(r.PointB.ToString());
             }
+
+            _testOutput.WriteLine(cv.PerpendicularFrameAt(startPara).ToString());
+        }
     }
 }
