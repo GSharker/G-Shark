@@ -306,7 +306,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Revolved_Surface_From_A_Line()
         {
             // Arrange
-            Line axis = new Line(Point3.Origin, Vector3.ZAxis, 1);
+            Ray axis = new Ray(Point3.Origin, Vector3.ZAxis);
             Line profile = new Line(new Point3(1, 0, 0), new Point3(0, 0, 1));
 
             List<List<Point3>> expectedPts0 = new List<List<Point3>>
@@ -386,7 +386,7 @@ namespace GShark.Test.XUnit.Geometry
                 .All(res => res)
                 .Should().BeTrue();
 
-            revolvedSurface1.ControlPointLocations
+            var t = revolvedSurface1.ControlPointLocations
                 .Select((pts, i) => pts.SequenceEqual(expectedPts1[i]))
                 .All(res => res)
                 .Should().BeTrue();
@@ -396,7 +396,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Revolved_Surface_From_An_Arc()
         {
             // Arrange
-            Line axis = new Line(Point3.Origin, Vector3.ZAxis, 1);
+            Ray axis = new Ray(Point3.Origin, Vector3.ZAxis);
             Arc profile = new Arc(Plane.PlaneZX, 1, new Interval(0, Math.PI * 0.5));
 
             List<List<Point3>> expectedPts = new List<List<Point3>>

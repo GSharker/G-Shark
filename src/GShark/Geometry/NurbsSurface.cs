@@ -242,7 +242,7 @@ namespace GShark.Geometry
         /// <param name="axis">Revolution axis.</param>
         /// <param name="rotationAngle">Angle in radiance.</param>
         /// <returns>The revolution surface.</returns>
-        public static NurbsSurface CreateRevolvedSurface(NurbsBase curveProfile, Line axis, double rotationAngle)
+        public static NurbsSurface CreateRevolvedSurface(NurbsBase curveProfile, Ray axis, double rotationAngle)
         {
             // if angle is less than 90.
             int arcCount = 1;
@@ -326,7 +326,7 @@ namespace GShark.Geometry
                 for (int i = 1; i <= arcCount; i++)
                 {
                     // rotated generatrix point.
-                    Point3 pt2 = (radius == 0.0)
+                    Point3 pt2 = (Math.Abs(radius) < GSharkMath.Epsilon)
                         ? ptO
                         : ptO + (vectorX * (cosines[i] * radius) + vectorY * (sines[i] * radius));
 
@@ -336,16 +336,17 @@ namespace GShark.Geometry
                     Vector3 rotationTangent = vectorX * (-1 * sines[i]) + vectorY * cosines[i];
 
                     // construct the next control point.
-                    if (radius == 0.0)
+                    if (Math.Abs(radius) < GSharkMath.Epsilon)
                     {
                         controlPts[index + 1][j] = ptO;
-                        continue;
                     }
-
-                    Line ln0 = new Line(pt0, tangent0, tangent0.Length);
-                    Line ln1 = new Line(pt2, rotationTangent, rotationTangent.Length);
-                    Intersection.Intersect.LineLine(ln0, ln1, out Point3 intersectionPt, out _, out _, out _);
-                    controlPts[index + 1][j] = new Point4(intersectionPt, wm * curveProfile.Weights[j]);
+                    else
+                    {
+                        Line ln0 = new Line(pt0, tangent0, tangent0.Length);
+                        Line ln1 = new Line(pt2, rotationTangent, rotationTangent.Length);
+                        Intersection.Intersect.LineLine(ln0, ln1, out Point3 intersectionPt, out _, out _, out _);
+                        controlPts[index + 1][j] = new Point4(intersectionPt, wm * curveProfile.Weights[j]);
+                    }
 
                     index += 2;
                     if (i >= arcCount) continue;
