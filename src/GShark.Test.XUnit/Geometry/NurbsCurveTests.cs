@@ -4,6 +4,7 @@ using GShark.Geometry;
 using GShark.Test.XUnit.Data;
 using GShark.Test.XUnit.Fitting;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -274,7 +275,7 @@ namespace GShark.Test.XUnit.Geometry
         {
             //Arrange
             var chordLength = 5.0;
-            var expectedParamOnCrv = 0.169836765178962;
+            var expectedParamOnCrv = 0.169828641346571;
             var crv = NurbsCurveCollection.NurbsBase3DExample();
             var startParam = 0;
 
@@ -282,7 +283,63 @@ namespace GShark.Test.XUnit.Geometry
             double param = crv.ParameterAtChordLength(0.0, chordLength);
 
             //Assert
+            var resultingChordLength = crv.PointAt(param).DistanceTo(crv.PointAt(startParam));
+            resultingChordLength.Should().BeApproximately(chordLength, GSharkMath.MinTolerance);
             param.Should().BeApproximately(expectedParamOnCrv, GSharkMath.MinTolerance);
+        }
+
+
+        [Fact]
+        public void It_Returns_A_Curve_Parameter_At_A_Given_ChordLength_From_A_Starting_Curve_Parameter()
+        {
+            //Arrange
+            var chordLength = 1.5;
+            var expectedParamOnCrv = 0.169828641346571;
+            var crv = NurbsCurveCollection.NurbsBase3DExample();
+            var startParam = 0;
+
+            //Act
+            double param = crv.ParameterAtChordLength(0.0, chordLength);
+
+            //Assert
+            var resultingChordLength = crv.PointAt(param).DistanceTo(crv.PointAt(startParam));
+            resultingChordLength.Should().BeApproximately(chordLength, GSharkMath.MinTolerance);
+            param.Should().BeApproximately(expectedParamOnCrv, GSharkMath.MinTolerance);
+        }
+
+        [Fact]
+        public void It_Divides_A_Curve_By_Chord_Length()
+        {
+            //Arrange
+            var chordLength = 1.5;
+            var crv = NurbsCurveCollection.NurbsBase3DExample();
+            var expectedParams = new List<double>() //excludes start point
+            {
+                0.038210676523551,
+                0.0841487542118296,
+                0.143655776583172,
+                0.235393592061853,
+                0.411166407250385,
+                0.535196596976369,
+                0.647125285838886,
+                0.790170373873905,
+                0.88786351007188 ,
+                0.945234051105388,
+                0.987630897234936
+            };
+
+            //Act
+            var divisionParams = crv.DivideByChordLength(chordLength);
+
+            //Assert
+            var resultingChordLengths = new List<double>();
+            for (int i = 0; i < divisionParams.Count - 1; i++)
+            {
+                divisionParams[i].Should().BeApproximately(expectedParams[i], GSharkMath.MinTolerance);
+                var tempChordLength = crv.PointAt(divisionParams[i]).DistanceTo(crv.PointAt(divisionParams[i + 1]));
+                resultingChordLengths.Add(tempChordLength);
+            }
+            resultingChordLengths.All(x => (chordLength - x) <= GSharkMath.MinTolerance).Should().BeTrue();
         }
     }
 }

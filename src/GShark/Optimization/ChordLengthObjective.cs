@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Schema;
 using GShark.Core;
 using GShark.Geometry;
@@ -24,13 +25,18 @@ namespace GShark.Optimization
 
         public double Value(Vector v)
         {
-            return Math.Pow(_chordLength - _curve.PointAt(v[0]).DistanceTo(_curve.PointAt(_startParam)), 2);
+            var pointAtT = Evaluation.RationalCurveDerivatives(_curve, v[0], 0).First();
+            var pointAtStart = Evaluation.RationalCurveDerivatives(_curve, _startParam, 0).First();
+            var vec = pointAtT - pointAtStart;
+            return  Math.Pow(_chordLength - vec.Length, 2);
         }
 
         public Vector Gradient(Vector v)
         {
-            var currentChordLength = _curve.PointAt(v[0]).DistanceTo(_curve.PointAt(_startParam));
-            var slope = -2 * (_chordLength - currentChordLength);
+            var pointAtT = Evaluation.RationalCurveDerivatives(_curve, v[0], 0).First();
+            var pointAtStart = Evaluation.RationalCurveDerivatives(_curve, _startParam, 0).First();
+            var vec = pointAtT - pointAtStart;
+            var slope = -2 * (_chordLength - vec.Length);
 
             return new Vector() {slope, slope};
         }

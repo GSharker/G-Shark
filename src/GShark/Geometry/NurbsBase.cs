@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using GShark.Optimization;
 
@@ -202,9 +203,38 @@ namespace GShark.Geometry
         {
             IObjectiveFunction objectiveFunction = new ChordLengthObjective(this, t, chordLength);
             Minimizer min = new Minimizer(objectiveFunction);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { ParameterAtLength(chordLength), ParameterAtLength(chordLength) });
+            var lengthAtPrevious = LengthAt(t);
+            var initialGuess = ParameterAtLength(lengthAtPrevious + chordLength);
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { initialGuess , initialGuess });
 
             return solution.SolutionPoint[0];
+        }
+
+        /// <summary>
+        /// Divides a curve by a given chord length. Last chord will be of whatever length is left at the end of the curve.
+        /// </summary>
+        /// <param name="chordLength">Desired chord length.</param>
+        /// <returns>Collection of curve parameters along the curve.</returns>
+        public List<double> DivideByChordLength(double chordLength)
+        {
+            if (chordLength <= 0)
+            {
+                throw new ArgumentException("Chord length must be greater than 0.");
+            }
+
+            var t = 0.0;
+            var length = 0.0;
+            var resultParams = new List<double>();
+
+            while(length + chordLength < Length)
+            {
+                var parmAtChordLength = ParameterAtChordLength(t, chordLength);
+                resultParams.Add(parmAtChordLength);
+                t = parmAtChordLength;
+                length += chordLength;
+            }
+
+            return resultParams;
         }
 
         /// <summary>
