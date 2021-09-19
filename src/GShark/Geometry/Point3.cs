@@ -373,7 +373,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Point3 and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Point3 && this == (Point3)obj);
+            return obj is Point3 point3 && this == point3;
         }
 
         /// <summary>
@@ -381,8 +381,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other"></param>
         /// <param name="epsilon"></param>
-        /// <returns></returns>
-        //ToDo Using EpsilonEquals everywhere. Perhaps should be moved into actual Equals method of classes.
+        /// <returns>True if the two points have the same coordinates as this; otherwise false.</returns>
         public bool EpsilonEquals(Point3 other, double epsilon)
         {
             return Math.Abs(X - other.X) <= epsilon &&

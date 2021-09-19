@@ -2,11 +2,11 @@
 using GShark.Core;
 using GShark.Enumerations;
 using GShark.Geometry;
-using GShark.Operation;
 using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -300,6 +300,135 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             pointAt.EpsilonEquals(expectedPt, GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Revolved_Surface_From_A_Line()
+        {
+            // Arrange
+            Line axis = new Line(Point3.Origin, Vector3.ZAxis, 1);
+            Line profile = new Line(new Point3(1, 0, 0), new Point3(0, 0, 1));
+
+            List<List<Point3>> expectedPts0 = new List<List<Point3>>
+            {
+                new List<Point3>
+                    {
+                        new Point3(1, 0, 0),
+                        new Point3(0, 0, 1)
+                    },
+                new List<Point3>
+                {
+                    new Point3(1, 0.41421356237309526, 0),
+                    new Point3(0, 0, 1)
+                },
+                new List<Point3>
+                {
+                    new Point3(0.7071067811865476,0.7071067811865476,0),
+                    new Point3(0,0,1)
+                }
+            };
+            List<List<Point3>> expectedPts1 = new List<List<Point3>>
+            {
+                new List<Point3>
+                {
+                    new Point3(1, 0, 0),
+                    new Point3(0, 0, 1)
+                },
+                new List<Point3>
+                {
+                    new Point3(1, 1, 0),
+                    new Point3(0, 0, 1)
+                },
+                new List<Point3>
+                {
+                    new Point3(0,1,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(-1,1,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(-1,0,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(-1,-1,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(0,-1,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(1,-1,0),
+                    new Point3(0,0,1)
+                },
+                new List<Point3>
+                {
+                    new Point3(1, 0, 0),
+                    new Point3(0, 0, 1)
+                }
+            };
+
+            // Act
+            NurbsSurface revolvedSurface0 = NurbsSurface.CreateRevolvedSurface(profile, axis, Math.PI * 0.25);
+            NurbsSurface revolvedSurface1 = NurbsSurface.CreateRevolvedSurface(profile, axis, 2 * Math.PI);
+
+            // Assert
+            revolvedSurface0.ControlPointLocations
+                .Select((pts, i) => pts.SequenceEqual(expectedPts0[i]))
+                .All(res => res)
+                .Should().BeTrue();
+
+            revolvedSurface1.ControlPointLocations
+                .Select((pts, i) => pts.SequenceEqual(expectedPts1[i]))
+                .All(res => res)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Revolved_Surface_From_An_Arc()
+        {
+            // Arrange
+            Line axis = new Line(Point3.Origin, Vector3.ZAxis, 1);
+            Arc profile = new Arc(Plane.PlaneZX, 1, new Interval(0, Math.PI * 0.5));
+
+            List<List<Point3>> expectedPts = new List<List<Point3>>
+            {
+                new List<Point3>
+                    {
+                        new Point3(0, 0, 1),
+                        new Point3(1, 0, 1),
+                        new Point3(1, 0, 0)
+                    },
+                new List<Point3>
+                {
+                    new Point3(0, 0, 1),
+                    new Point3(1, 0.41421356237309526, 1),
+                    new Point3(1, 0.41421356237309526, 0)
+                },
+                new List<Point3>
+                {
+                    new Point3(0,0,1),
+                    new Point3(0.7071067811865476,0.7071067811865476,1),
+                    new Point3(0.7071067811865476,0.7071067811865476,0)
+                }
+            };
+
+            // Act
+            NurbsSurface revolvedSurface = NurbsSurface.CreateRevolvedSurface(profile, axis, Math.PI * 0.25);
+
+            // Assert
+            revolvedSurface.ControlPointLocations
+                .Select((pts, i) => pts.SequenceEqual(expectedPts[i]))
+                .All(res => res)
+                .Should().BeTrue();
         }
     }
 }
