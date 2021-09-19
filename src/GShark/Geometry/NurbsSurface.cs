@@ -237,6 +237,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Creates a surface of revolution through an arbitrary angle, and axis.
+        /// <em>Corresponds the algorithm A8.1 of The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curveProfile">Profile curve.</param>
         /// <param name="axis">Revolution axis.</param>
