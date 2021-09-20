@@ -105,7 +105,7 @@ namespace GShark.Geometry
         public NurbsBase SegmentAtLength(double length)
         {
             NurbsBase segment = null;
-            if (_segments.Count() == 0) return null;
+            //if (_segments.Count() == 0) return null;
 
             if (length > this.Length) return _segments.Last();
 
