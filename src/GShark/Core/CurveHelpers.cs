@@ -29,7 +29,7 @@ namespace GShark.Core
 
             curves = (from curve in curves
                           let knotToInsert = combinedKnots.OrderBy(k => k).Where(k => !curve.Knots.Contains(k)).ToKnot()
-                          select Modify.CurveKnotRefine(curve, knotToInsert)).ToList();
+                          select KnotVector.Refine(curve, knotToInsert)).ToList();
             return curves;
         }
 
@@ -42,7 +42,7 @@ namespace GShark.Core
             int targetDegree = curves.Max(c => c.Degree);
             curves = curves
                 .Select(curve => curve.Degree != targetDegree
-                    ? Modify.ElevateDegree(curve, targetDegree)
+                    ? Modify.Curve.ElevateDegree(curve, targetDegree)
                     : curve).ToList();
 
             return curves;

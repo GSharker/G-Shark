@@ -62,7 +62,7 @@ namespace GShark.Test.XUnit.Core
             Point3 pt1 = new Point3(10, 10, 0);
 
             // Act
-            (double tValue, Point3 pt) closestPt = Analyze.ClosestPointToSegment(testPt, pt0, pt1, 0, 1);
+            (double tValue, Point3 pt) closestPt = Trigonometry.ClosestPointToSegment(testPt, pt0, pt1, 0, 1);
 
             // Assert
             closestPt.tValue.Should().BeApproximately(tValExpected, GSharkMath.MaxTolerance);

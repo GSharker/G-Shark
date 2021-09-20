@@ -1,20 +1,18 @@
 ﻿using GShark.Core;
-using GShark.Enumerations;
 using GShark.ExtendedMethods;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Operation;
 
-namespace GShark.Operation
+namespace GShark.Modify
 {
     /// <summary>
-    /// Contains many fundamental algorithms for working with NURBS.<br/>
-    /// These include algorithms for:<br/>
-    /// knot insertion, knot refinement, degree elevation, re-parametrization.<br/>
-    /// Many of these algorithms owe their implementation to The NURBS Book by Piegl and Tiller.
+    /// Contains many fundamental algorithms for modifying the properties of a NURBS curve.<br/>
+    /// These include algorithms for: knot insertion, knot refinement, degree elevation, re-parametrization.<br/>
     /// </summary>
-    public class Modify
+    public static class Curve
     {
         /// <summary>
         /// Inserts a collection of knots on a curve.<br/>
@@ -23,7 +21,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="knotsToInsert">The set of knots.</param>
         /// <returns>A curve with refined knots.</returns>
-        public static NurbsBase CurveKnotRefine(NurbsBase curve, List<double> knotsToInsert)
+        internal static NurbsBase KnotRefine(NurbsBase curve, IList<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0)
                 return curve;
@@ -100,7 +98,7 @@ namespace GShark.Operation
         /// <param name="curve">The curve object.</param>
         /// <param name="normalize">Set as per default false, true normalize the knots between 0 to 1.</param>
         /// <returns>Collection of curve objects, defined by degree, knots, and control points.</returns>
-        public static List<NurbsBase> DecomposeCurveIntoBeziers(NurbsBase curve, bool normalize = false)
+        internal static List<NurbsBase> DecomposeIntoBeziers(NurbsBase curve, bool normalize = false)
         {
             int degree = curve.Degree;
             List<Point4> controlPoints = curve.ControlPoints;
@@ -117,7 +115,7 @@ namespace GShark.Operation
                 if (kvp.Value >= reqMultiplicity) continue;
                 List<double> knotsToInsert = CollectionHelpers.RepeatData(kvp.Key, reqMultiplicity - kvp.Value);
                 NurbsBase curveTemp = new NurbsCurve(degree, knots, controlPoints);
-                NurbsBase curveResult = CurveKnotRefine(curveTemp, knotsToInsert);
+                NurbsBase curveResult = KnotRefine(curveTemp, knotsToInsert);
                 knots = curveResult.Knots;
                 controlPoints = curveResult.ControlPoints;
             }
@@ -143,77 +141,13 @@ namespace GShark.Operation
         }
 
         /// <summary>
-        /// Reverses the parametrization of a curve.<br/>
-        /// The domain is unaffected.
-        /// </summary>
-        /// <param name="curve">The curve has to be reversed.</param>
-        /// <returns>A curve with a reversed parametrization.</returns>
-        public static NurbsBase ReverseCurve(NurbsBase curve)
-        {
-            List<Point4> controlPts = new List<Point4>(curve.ControlPoints);
-            controlPts.Reverse();
-
-            KnotVector knots = KnotVector.Reverse(curve.Knots);
-
-            return new NurbsCurve(curve.Degree, knots, controlPts);
-        }
-
-        /// <summary>
-        /// Performs a knot refinement on a NURBS surface by inserting knots at various parameters.<br/>
-        /// <em>Implementation of Algorithm A5.5 of The NURBS Book by Piegl and Tiller.</em>
-        /// ToDo: refactor this algo following the book.
-        /// </summary>
-        /// <param name="surface">The surface object to insert the knots.</param>
-        /// <param name="knotsToInsert">The set of knots to insert.</param>
-        /// <param name="direction">Whether to insert in the U or V direction of the surface.</param>
-        /// <returns>A NURBS surface with the knots inserted.</returns>
-        public static NurbsSurface SurfaceKnotRefine(NurbsSurface surface, List<double> knotsToInsert,
-            SurfaceDirection direction)
-        {
-            List<List<Point4>> modifiedControlPts = new List<List<Point4>>();
-            List<List<Point4>> controlPts = surface.ControlPoints;
-            KnotVector knots = surface.KnotsV;
-            int degree = surface.DegreeV;
-
-            if (direction != SurfaceDirection.V)
-            {
-                controlPts = CollectionHelpers.Transpose2DArray(surface.ControlPoints);
-                knots = surface.KnotsU;
-                degree = surface.DegreeU;
-            }
-
-            NurbsBase curve = null;
-            foreach (List<Point4> pts in controlPts)
-            {
-                curve = CurveKnotRefine(new NurbsCurve(degree, knots, pts), knotsToInsert);
-                modifiedControlPts.Add(curve.ControlPoints);
-            }
-
-            if (curve == null)
-            {
-                throw new Exception(
-                    "The refinement was not be able to be completed. A problem occur refining the internal curves.");
-            }
-
-            if (direction != SurfaceDirection.V)
-            {
-                var reversedControlPts = CollectionHelpers.Transpose2DArray(modifiedControlPts);
-                return new NurbsSurface(surface.DegreeU, surface.DegreeV, curve.Knots, surface.KnotsV.Copy(),
-                    reversedControlPts);
-            }
-
-            return new NurbsSurface(surface.DegreeU, surface.DegreeV, surface.KnotsU.Copy(), curve.Knots,
-                modifiedControlPts);
-        }
-
-        /// <summary>
-        /// Elevates the degree of a NURBS curve.
+        /// Elevates the degree of a curve.
         /// <em>Implementation of Algorithm A5.9 of The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="curve">The object curve to elevate.</param>
         /// <param name="finalDegree">The expected final degree. If the supplied degree is less or equal the curve is returned unmodified.</param>
         /// <returns>The curve after degree elevation.</returns>
-        public static NurbsBase ElevateDegree(NurbsBase curve, int finalDegree)
+        internal static NurbsBase ElevateDegree(NurbsBase curve, int finalDegree)
         {
             if (finalDegree <= curve.Degree)
             {
@@ -434,7 +368,7 @@ namespace GShark.Operation
         /// Bezier degree reduction.
         /// <em>Refer to The NURBS Book by Piegl and Tiller at page 220.</em>
         /// </summary>
-        private static double BezDegreeReduce(Point4[] bpts, int degree, out Point4[] rbpts)
+        private static double BezierDegreeReduce(Point4[] bpts, int degree, out Point4[] rbpts)
         {
             // Eq. 5.40
             int r = (int)Math.Floor(((double)degree - 1) / 2);
@@ -466,7 +400,9 @@ namespace GShark.Operation
                right of u = 1/2. */
 
             // Eq. 5.43 p even.
-            List<double> Br = Evaluation.BasisFunction(degree - 1, new KnotVector(degree - 1, P.Length), 0.5);
+            KnotVector knots = new KnotVector(degree - 1, P.Length);
+            int span = knots.Span(degree - 1, 0.5);
+            List<double> Br = Evaluate.Curve.BasisFunction(degree - 1, knots, span, 0.5);
             double parametricError = bpts[r + 1].DistanceTo((P[r] + P[r + 1]) * 0.5) * Br[r + 1];
 
             // Eq. 5.42
@@ -489,14 +425,11 @@ namespace GShark.Operation
 
         /// <summary>
         /// Reduce the degree of a NURBS curve.
-        /// <em>Implementation of Algorithm A5.11 of The NURBS Book by Piegl and Tiller.</em>
-        /// ToDo: Remove the tolerance, just let reduce and output the max deviation.
-        /// ToDo: Try this method to reduce the bezier, looks more accurate. https://pomax.github.io/bezierinfo/chapters/reordering/reorder.js
         /// </summary>
         /// <param name="curve">The object curve to elevate.</param>
-        /// <param name="tolerance">Tolerance value declaring if the curve is degree reducible. Default value set to 10e-4, refer to Eq 5.30 for the meaning.</param>
+        /// <param name="tolerance">Tolerance value declaring if the curve is degree reducible.</param>
         /// <returns>The curve after degree reduction, the curve will be degree - 1 from the input.</returns>
-        public static NurbsBase ReduceDegree(NurbsBase curve, double tolerance = 10e-4)
+        internal static NurbsBase ReduceDegree(NurbsBase curve, double tolerance)
         {
             int n = curve.Knots.Count - curve.Degree - 2;
             int p = curve.Degree;
@@ -580,7 +513,7 @@ namespace GShark.Operation
                 }
 
                 // Degree reduce Bezier segment.
-                double maxError = BezDegreeReduce(bpts, p, out rbpts);
+                double maxError = BezierDegreeReduce(bpts, p, out rbpts);
                 e[a] += maxError;
                 if (e[a] > tolerance)
                 {
@@ -689,61 +622,6 @@ namespace GShark.Operation
             }
 
             return new NurbsCurve(p - 1, Uh, Pw);
-        }
-
-        /// <summary>
-        /// Joins all the curves, if it is possible.
-        /// </summary>
-        /// <param name="curves">Curves to join.</param>
-        /// <returns>A curve that is the result of joining all the curves.</returns>
-        public static NurbsBase JoinCurves(IList<NurbsBase> curves)
-        {
-            if (curves == null)
-            {
-                throw new Exception("The set of curves is empty.");
-            }
-
-            if (curves.Count <= 1)
-            {
-                throw new Exception("Insufficient curves for join operation.");
-            }
-
-            List<NurbsBase> sortedCurves = CurveHelpers.QuickSortCurve(curves);
-
-            for (int i = 0; i < sortedCurves.Count - 1; i++)
-            {
-                if (sortedCurves[i].IsClosed())
-                {
-                    throw new Exception($"Curve at {i} is closed.");
-                }
-                if (sortedCurves[i].ControlPoints.Last().DistanceTo(sortedCurves[i + 1].ControlPoints[0]) > GSharkMath.MinTolerance)
-                {
-                    throw new Exception($"Curve at {i} don't touch curve at {i + 1}.");
-                }
-            }
-
-            // Extract the biggest degree between the curves.
-            int finalDegree = sortedCurves.Max(c => c.Degree);
-
-            // Homogenized degree curves.
-            IEnumerable<NurbsBase> homogenizedCurves = sortedCurves.Select(curve => curve.Degree != finalDegree ? ElevateDegree(curve, finalDegree) : curve);
-
-            // Join curves.
-            List<double> joinedKnots = new List<double>();
-            List<Point4> joinedControlPts = new List<Point4>();
-
-            joinedKnots.AddRange(homogenizedCurves.First().Knots.Take(homogenizedCurves.First().Knots.Count - 1));
-            joinedControlPts.AddRange(homogenizedCurves.First().ControlPoints);
-
-            foreach (NurbsBase curve in homogenizedCurves.Skip(1))
-            {
-                joinedKnots.AddRange(curve.Knots.Take(curve.Knots.Count - 1).Skip(finalDegree + 1).Select(k => k + joinedKnots.Last()).ToList());
-                joinedControlPts.AddRange(curve.ControlPoints.Skip(1));
-            }
-
-            // Appending the last knot to the end.
-            joinedKnots.Add(joinedKnots.Last());
-            return new NurbsCurve(finalDegree, joinedKnots.ToKnot().Normalize(), joinedControlPts);
         }
     }
 }

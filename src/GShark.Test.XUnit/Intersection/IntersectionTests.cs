@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Operation;
-using System.Collections.Generic;
 using GShark.Intersection;
+using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace GShark.Test.XUnit.Operation
+namespace GShark.Test.XUnit.Intersection
 {
     public class IntersectionTests
     {
@@ -143,7 +142,7 @@ namespace GShark.Test.XUnit.Operation
                 new Point3(10, 26.702314, 3.665482)
             };
 
-            Polyline poly = new Polyline(pts);
+            PolyLine poly = new PolyLine(pts);
             Plane pl = Plane.PlaneYZ.SetOrigin(new Point3(10, 20, 5));
 
             // Act

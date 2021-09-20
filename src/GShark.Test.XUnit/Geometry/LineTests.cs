@@ -227,7 +227,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Flipped_Line()
         {
             // Act
-            Line flippedLine = _exampleLine.Flip();
+            Line flippedLine = _exampleLine.Reverse();
 
             // Assert
             flippedLine.StartPoint.Equals(_exampleLine.EndPoint).Should().BeTrue();
@@ -263,8 +263,8 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Checks_If_Two_Lines_Are_Equals()
         {
             // Act
-            Line lineFlip = _exampleLine.Flip();
-            Line lineFlippedBack = lineFlip.Flip();
+            Line lineFlip = _exampleLine.Reverse();
+            Line lineFlippedBack = lineFlip.Reverse();
 
             // Assert
             lineFlip.Equals(lineFlippedBack).Should().BeFalse();
@@ -286,18 +286,15 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_NurbsBase_Form_Of_A_Line()
+        public void It_Returns_True_If_The_NurbsBase_Form_Of_A_Line_Is_Correct()
         {
-            // Arrange
-            var line = _exampleLine;
-
             //Act
-            var nurbsLine = line.ToNurbs();
+            NurbsBase nurbsLine = _exampleLine;
 
             // Assert
             nurbsLine.ControlPointLocations.Count.Should().Be(2);
-            nurbsLine.ControlPointLocations[0].Equals(line.StartPoint).Should().BeTrue();
-            nurbsLine.ControlPointLocations[1].Equals(line.EndPoint).Should().BeTrue();
+            nurbsLine.ControlPointLocations[0].Equals(_exampleLine.StartPoint).Should().BeTrue();
+            nurbsLine.ControlPointLocations[1].Equals(_exampleLine.EndPoint).Should().BeTrue();
             nurbsLine.Degree.Should().Be(1);
         }
     }

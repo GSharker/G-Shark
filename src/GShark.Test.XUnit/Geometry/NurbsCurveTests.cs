@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using GShark.Test.XUnit.Data;
@@ -252,6 +253,23 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Reverses_The_Curve()
+        {
+            // Arrange
+            NurbsBase curve = NurbsBaseCollection.NurbsCubicBezierPlanar();
+
+            // Act
+            NurbsBase crvRev1 = curve.Reverse();
+            NurbsBase crvRev2 = crvRev1.Reverse();
+
+            // Assert
+            curve.ControlPoints[0].Should().BeEquivalentTo(crvRev1.ControlPoints.Last());
+            curve.Equals(crvRev2).Should().BeTrue();
+            // Checks at reference level are different.
+            curve.Should().NotBeSameAs(crvRev2);
+        }
+
+        [Fact]
         public void Returns_The_Offset_Of_A_Curve()
         {
             // Arrange
@@ -340,6 +358,146 @@ namespace GShark.Test.XUnit.Geometry
                 resultingChordLengths.Add(tempChordLength);
             }
             resultingChordLengths.All(x => (chordLength - x) <= GSharkMath.MinTolerance).Should().BeTrue();
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_The_Number_Of_Curves_Is_Insufficient()
+        {
+            // Arrange
+            NurbsBase[] curves = { NurbsBaseCollection.NurbsPlanarExample() };
+
+            // Act
+            Func<object> func = () => NurbsBase.Join(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void JoinCurve_Throw_An_Exception_If_Curves_Are_Close_Enough_To_Be_Joined()
+        {
+            // Arrange
+            NurbsBase[] curves = { NurbsBaseCollection.NurbsPlanarExample(), NurbsBaseCollection.NurbsBaseQuadratic3DBezier() };
+
+            // Act
+            Func<object> func = () => NurbsBase.Join(curves);
+
+            // Assert
+            func.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Different_Types_Of_Curves()
+        {
+            // Arrange
+            int degree = 3;
+            List<Point3> pts = new List<Point3>
+            {
+                new Point3(0, 5, 5),
+                new Point3(0, 0, 0),
+                new Point3(5, 0, 0),
+                new Point3(5, 0, 5),
+                new Point3(5, 5, 5),
+                new Point3(5, 5, 0)
+            };
+
+            NurbsCurve curve = new NurbsCurve(pts, degree);
+            Line ln = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            NurbsBase[] curves = { ln, arc, curve };
+
+            Point3 expectedPt1 = new Point3(5, 3.042501, 4.519036);
+            Point3 expectedPt2 = new Point3(5, 5, -1.230175);
+            Point3 expectedPt3 = new Point3(7.946534, 5.0, -5.6199);
+            double expectedLength = 30.623806;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(curves);
+
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+
+            // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Lines()
+        {
+            // Arrange
+            var poly = new PolyLine(new List<Point3>
+            {
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, 0)
+            });
+
+            Line ln0 = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
+            Line ln1 = new Line(new Point3(10, 10, 10), new Point3(5, 5, -2.5));
+
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            Point3 expectedPt4 = new Point3(6.959743, 6.959743, 2.399357);
+            double expectedLength = 43.932474;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(new List<NurbsBase> { poly, ln0, ln1 });
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+            Point3 pt4 = joinedCurve.PointAtLength(35.2);
+
+            // Assert
+            joinedCurve.Degree.Should().Be(1);
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
+            (expectedPt4 == pt4).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Curve_Joining_Polylines_And_Arc()
+        {
+            // Arrange
+            var poly = new PolyLine(new List<Point3>
+            {
+                new (0, 5, 5),
+                new (0, 0, 0),
+                new (5, 0, 0),
+                new (5, 0, 5),
+                new (5, 5, 5),
+                new (5, 5, -2.5)
+            });
+
+            Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
+            NurbsBase[] curves = { poly, arc };
+
+            Point3 expectedPt1 = new Point3(5, 0, 2.928932);
+            Point3 expectedPt2 = new Point3(5, 4.428932, 5);
+            Point3 expectedPt3 = new Point3(5, 5, -0.428932);
+            double expectedLength = 36.490747;
+
+            // Act
+            NurbsBase joinedCurve = NurbsBase.Join(curves);
+
+            Point3 pt1 = joinedCurve.PointAtLength(15);
+            Point3 pt2 = joinedCurve.PointAtLength(21.5);
+            Point3 pt3 = joinedCurve.PointAtLength(27.5);
+
+            // Arrange
+            (joinedCurve.Length - expectedLength).Should().BeLessThan(GSharkMath.MinTolerance);
+            (expectedPt1 == pt1).Should().BeTrue();
+            (expectedPt2 == pt2).Should().BeTrue();
+            (expectedPt3 == pt3).Should().BeTrue();
         }
     }
 }

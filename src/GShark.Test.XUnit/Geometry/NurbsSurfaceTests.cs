@@ -34,14 +34,14 @@ namespace GShark.Test.XUnit.Geometry
             // Act
             NurbsSurface surfaceCcw = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
             NurbsSurface surfaceCw = NurbsSurface.CreateFromCorners(p1, p4, p3, p2);
-            Point3 evalPtCcw = new Point3(Evaluation.SurfacePointAt(surfaceCcw, 0.5, 0.5));
-            Point3 evalPtCw = new Point3(Evaluation.SurfacePointAt(surfaceCw, 0.5, 0.5));
+            Point3 evalPtCcw = new Point3(surfaceCcw.PointAt(0.5, 0.5));
+            Point3 evalPtCw = new Point3(surfaceCw.PointAt(0.5, 0.5));
 
             // Assert
             surfaceCcw.Should().NotBeNull();
-            surfaceCcw.LocationPoints.Count.Should().Be(2);
-            surfaceCcw.LocationPoints[0].Count.Should().Be(2);
-            surfaceCcw.LocationPoints[0][1].Equals(p4).Should().BeTrue();
+            surfaceCcw.ControlPointLocations.Count.Should().Be(2);
+            surfaceCcw.ControlPointLocations[0].Count.Should().Be(2);
+            surfaceCcw.ControlPointLocations[0][1].Equals(p4).Should().BeTrue();
             (evalPtCcw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance) && evalPtCw.EpsilonEquals(expectedPt, GSharkMath.MinTolerance)).Should().BeTrue();
         }
 
@@ -291,11 +291,11 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(10, 10, 0)
             };
 
-            Polyline poly = new Polyline(ptsA);
+            PolyLine poly = new PolyLine(ptsA);
             NurbsCurve curveB = new NurbsCurve(ptsB, 2);
 
             // Act
-            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly.ToNurbs(), curveB);
+            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly, curveB);
             Point3 pointAt = ruledSurface.PointAt(u, v);
 
             // Assert

@@ -27,7 +27,7 @@ namespace GShark.Sampling
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         internal static List<double> ByCount(NurbsBase curve, int divisions)
         {
-            double approximatedLength = Analyze.CurveLength(curve);
+            double approximatedLength = Analyze.Curve.Length(curve);
             double arcLengthSeparation = approximatedLength / divisions;
             var divisionByLength = ByLength(curve, arcLengthSeparation);
             var tValues = divisionByLength.tValues;
@@ -44,8 +44,8 @@ namespace GShark.Sampling
         /// <returns>A tuple define the t values where the curve is divided and the lengths between each division.</returns>
         internal static (List<double> tValues, List<double> lengths) ByLength(NurbsBase curve, double length)
         {
-            List<NurbsBase> curves = Modify.DecomposeCurveIntoBeziers(curve);
-            List<double> curveLengths = curves.Select(NurbsBase => Analyze.BezierCurveLength(NurbsBase)).ToList();
+            List<NurbsBase> curves = Modify.Curve.DecomposeIntoBeziers(curve);
+            List<double> curveLengths = curves.Select(NurbsBase => Analyze.Curve.BezierLength(NurbsBase)).ToList();
             double totalLength = curveLengths.Sum();
 
             List<double> tValues = new List<double> { curve.Knots[0] };
@@ -64,7 +64,7 @@ namespace GShark.Sampling
 
                 while (segmentLength < sum + GSharkMath.Epsilon)
                 {
-                    double t = Analyze.BezierCurveParamAtLength(curves[i], segmentLength - sum2, GSharkMath.MinTolerance);
+                    double t = Analyze.Curve.BezierParameterAtLength(curves[i], segmentLength - sum2, GSharkMath.MinTolerance);
 
                     tValues.Add(t);
                     divisionLengths.Add(segmentLength);
@@ -142,9 +142,9 @@ namespace GShark.Sampling
             double t = 0.5 + 0.2 * random.NextDouble();
             double mid = start + (end - start) * t;
 
-            Point3 pt1 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, start));
-            Point3 pt2 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, mid));
-            Point3 pt3 = Point4.PointDehomogenizer(Evaluation.CurvePointAt(curve, end));
+            Point3 pt1 = Point4.PointDehomogenizer(Evaluate.Curve.PointAt(curve, start));
+            Point3 pt2 = Point4.PointDehomogenizer(Evaluate.Curve.PointAt(curve, mid));
+            Point3 pt3 = Point4.PointDehomogenizer(Evaluate.Curve.PointAt(curve, end));
 
             Vector3 diff = pt1 - pt3;
             Vector3 diff2 = pt1 - pt2;

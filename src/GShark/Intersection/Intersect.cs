@@ -201,7 +201,7 @@ namespace GShark.Intersection
         /// <param name="poly">The polyline to intersect with.</param>
         /// <param name="pl">The section plane.</param>
         /// <returns>A collection of the unique intersection points.</returns>
-        public static List<Point3> PolylinePlane(Polyline poly, Plane pl)
+        public static List<Point3> PolylinePlane(PolyLine poly, Plane pl)
         {
             List<Point3> intersectionPts = new List<Point3>();
             var segments = poly.Segments;
@@ -310,7 +310,7 @@ namespace GShark.Intersection
         /// <returns>A collection of <see cref="CurvesIntersectionResult"/>.</returns>
         public static List<CurvesIntersectionResult> CurveLine(NurbsBase crv, Line ln)
         {
-            return CurveCurve(crv, ln.ToNurbs());
+            return CurveCurve(crv, ln);
         }
 
         /// <summary>

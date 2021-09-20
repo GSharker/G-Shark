@@ -1,8 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Enumerations;
-using GShark.Fitting;
 using GShark.Interfaces;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +45,7 @@ namespace GShark.Geometry
             KnotsU = (Math.Abs(knotsU.GetDomain(degreeU).Length - 1.0) > GSharkMath.Epsilon) ? knotsU.Normalize() : knotsU;
             KnotsV = (Math.Abs(knotsV.GetDomain(degreeV).Length - 1.0) > GSharkMath.Epsilon) ? knotsV.Normalize() : knotsV;
             Weights = Point4.GetWeights2d(controlPts);
-            LocationPoints = Point4.PointDehomogenizer2d(controlPts);
+            ControlPointLocations = Point4.PointDehomogenizer2d(controlPts);
             ControlPoints = controlPts;
             DomainU = new Interval(KnotsU.First(), KnotsU.Last());
             DomainV = new Interval(KnotsV.First(), KnotsV.Last());
@@ -56,22 +54,22 @@ namespace GShark.Geometry
         /// <summary>
         /// The degree in U direction.
         /// </summary>
-        internal int DegreeU { get; }
+        public int DegreeU { get; }
 
         /// <summary>
         /// The degree in V direction.
         /// </summary>
-        internal int DegreeV { get; }
+        public int DegreeV { get; }
 
         /// <summary>
         /// The knotVector in U direction.
         /// </summary>
-        internal KnotVector KnotsU { get; }
+        public KnotVector KnotsU { get; }
 
         /// <summary>
         /// The knotVector in V direction.
         /// </summary>
-        internal KnotVector KnotsV { get; }
+        public KnotVector KnotsV { get; }
 
         /// <summary>
         /// The interval domain in U direction.
@@ -91,12 +89,12 @@ namespace GShark.Geometry
         /// <summary>
         /// A 2D collection of points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
-        public List<List<Point3>> LocationPoints { get; }
+        public List<List<Point3>> ControlPointLocations { get; }
 
         /// <summary>
         /// A 2d collection of control points, V direction increases from left to right, the U direction from bottom to top.
         /// </summary>
-        internal List<List<Point4>> ControlPoints { get; }
+        public List<List<Point4>> ControlPoints { get; }
 
         /// <summary>
         /// Checks if a NURBS surface is closed.<br/>
@@ -105,7 +103,7 @@ namespace GShark.Geometry
         /// <returns>True if the curve is closed.</returns>
         public bool IsClosed(SurfaceDirection direction)
         {
-            var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(LocationPoints) : LocationPoints;
+            var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(ControlPointLocations) : ControlPointLocations;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
@@ -166,16 +164,16 @@ namespace GShark.Geometry
             if (curves.Any(x => x == null))
                 throw new ArgumentException("The input set contains null curves.");
 
-            bool isClosed = curves[0].IsClosed();
+            bool isClosed = curves[0].IsClosed;
             foreach (NurbsBase c in curves.Skip(1))
-                if (isClosed != c.IsClosed())
+                if (isClosed != c.IsClosed)
                     throw new ArgumentException("Loft only works if all curves are open, or all curves are closed.");
 
             // Copy curves for possible operation of homogenization.
             IList<NurbsBase> copyCurves = new List<NurbsBase>(curves);
 
             // Clamp curves if periodic.
-            if (copyCurves[0].IsPeriodic())
+            if (copyCurves[0].IsPeriodic)
             {
                 for (int i = 0; i < copyCurves.Count; i++)
                 {
@@ -204,7 +202,7 @@ namespace GShark.Geometry
                     for (int n = 0; n < copyCurves[0].ControlPointLocations.Count; n++)
                     {
                         List<Point3> pts = copyCurves.Select(c => c.ControlPointLocations[n]).ToList();
-                        NurbsBase crv = Curve.Interpolated(pts, degreeU);
+                        NurbsBase crv = Fitting.Curve.Interpolated(pts, degreeU);
                         tempPts.Add(crv.ControlPoints);
                         knotVectorU = crv.Knots;
                     }
@@ -242,7 +240,7 @@ namespace GShark.Geometry
         /// <param name="u">Evaluation U parameter.</param>
         /// <param name="v">Evaluation V parameter.</param>
         /// <returns>A evaluated point.</returns>
-        public Point3 PointAt(double u, double v) => new Point3(Evaluation.SurfacePointAt(this, u, v));
+        public Point3 PointAt(double u, double v) => new Point3(Evaluate.Surface.PointAt(this, u, v));
 
         /// <summary>
         /// Computes the point on the surface that is closest to the test point.
@@ -251,8 +249,8 @@ namespace GShark.Geometry
         /// <returns>The closest point on the surface.</returns>
         public Point3 ClosestPoint(Point3 point)
         {
-            var (u, v) = Analyze.SurfaceClosestParameter(this, point);
-            return new Point3(Evaluation.SurfacePointAt(this, u, v));
+            var (u, v) = Analyze.Surface.ClosestParameter(this, point);
+            return new Point3(Evaluate.Surface.PointAt(this, u, v));
         }
 
         /// <summary>
@@ -260,7 +258,10 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">The point to test against.</param>
         /// <returns>The U and V parameters of the surface that are closest to the test point.</returns>
-        public (double U, double V) ClosestParameters(Point3 point) => Analyze.SurfaceClosestParameter(this, point);
+        public (double U, double V) ClosestParameter(Point3 point)
+        {
+            return Analyze.Surface.ClosestParameter(this, point);
+        }
 
         /// <summary>
         /// Evaluate the surface at the given U and V parameters.
@@ -273,10 +274,10 @@ namespace GShark.Geometry
         {
             if (direction != EvaluateSurfaceDirection.Normal)
                 return (direction == EvaluateSurfaceDirection.U)
-                    ? Evaluation.RationalSurfaceDerivatives(this, u, v)[1, 0].Unitize()
-                    : Evaluation.RationalSurfaceDerivatives(this, u, v)[0, 1].Unitize();
+                    ? Evaluate.Surface.RationalDerivatives(this, u, v)[1, 0].Unitize()
+                    : Evaluate.Surface.RationalDerivatives(this, u, v)[0, 1].Unitize();
 
-            Vector3[,] derivatives = Evaluation.RationalSurfaceDerivatives(this, u, v);
+            Vector3[,] derivatives = Evaluate.Surface.RationalDerivatives(this, u, v);
             Vector3 normal = Vector3.CrossProduct(derivatives[1, 0], derivatives[0, 1]);
             return normal.Unitize();
         }
@@ -296,6 +297,17 @@ namespace GShark.Geometry
             }
 
             return Sampling.Surface.Split(this, parameter, direction);
+        }
+
+        /// <summary>
+        /// Extracts the isoparametric curves (isocurves) at the given parameter and surface direction.
+        /// </summary>
+        /// <param name="parameter">The parameter between 0.0 to 1.0 whether the isocurve will be extracted.</param>
+        /// <param name="direction">The U or V direction whether the isocurve will be extracted.</param>
+        /// <returns>The isocurve extracted.</returns>
+        public NurbsCurve IsoCurve(double parameter, SurfaceDirection direction)
+        {
+            return Analyze.Surface.Isocurve(this, parameter, direction);
         }
 
         /// <summary>
@@ -323,12 +335,12 @@ namespace GShark.Geometry
                 return false;
             }
 
-            if (LocationPoints.Count != other.LocationPoints.Count)
+            if (ControlPointLocations.Count != other.ControlPointLocations.Count)
             {
                 return false;
             }
 
-            if (LocationPoints.Where((pt, i) => !pt.SequenceEqual(other.LocationPoints[i])).Any())
+            if (ControlPointLocations.Where((pt, i) => !pt.SequenceEqual(other.ControlPointLocations[i])).Any())
             {
                 return false;
             }
@@ -354,7 +366,7 @@ namespace GShark.Geometry
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            string controlPts = string.Join("\n", LocationPoints.Select(first => $"({string.Join(",", first)})"));
+            string controlPts = string.Join("\n", ControlPointLocations.Select(first => $"({string.Join(",", first)})"));
             string degreeU = $"DegreeU = {DegreeU}";
             string degreeV = $"DegreeV = {DegreeV}";
 
