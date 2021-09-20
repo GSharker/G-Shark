@@ -217,6 +217,16 @@ namespace GShark.Geometry
         /// <returns></returns>
         public double ParameterAtChordLength(double t, double chordLength)
         {
+            if (chordLength <= 0)
+            {
+                throw new ArgumentException("Chord length must be greater than 0.");
+            }
+
+            if (chordLength >= Length)
+            {
+                return 1.0;
+            }
+
             IObjectiveFunction objectiveFunction = new ChordLengthObjective(this, t, chordLength);
             Minimizer min = new Minimizer(objectiveFunction);
             var lengthAtPrevious = LengthAt(t);
@@ -236,6 +246,11 @@ namespace GShark.Geometry
             if (chordLength <= 0)
             {
                 throw new ArgumentException("Chord length must be greater than 0.");
+            }
+
+            if (chordLength >= Length)
+            {
+                return new List<double>{1.0};
             }
 
             var t = 0.0;
