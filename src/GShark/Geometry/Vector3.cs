@@ -7,8 +7,13 @@ namespace GShark.Geometry
     /// Defines a Vector in Euclidean space with coordinates X, Y, and Z.
     /// Referenced from https://github.com/mcneel/rhinocommon/blob/master/dotnet/opennurbs/opennurbs_point.cs
     /// </summary>
-    public struct Vector3 : IEquatable<Vector3>, IComparable<Vector3>, IComparable
+    public class Vector3 : IEquatable<Vector3>, IComparable<Vector3>, IComparable
     {
+        public Vector3()
+        {
+
+        }
+
         /// <summary>
         /// Initializes a new instance of a vector, using its three components.
         /// </summary>

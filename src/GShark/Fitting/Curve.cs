@@ -109,7 +109,7 @@ namespace GShark.Fitting
             Matrix coeffMatrix = BuildCoefficientsMatrix(pts, degree, hasTangents, uk, knots);
             // Solve for each points.
             List<Point4> ctrlPts = (hasTangents)
-                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3(startTangent.Value), new Vector3(endTangent.Value))
+                ? SolveCtrlPtsWithTangents(knots, pts, coeffMatrix, degree, new Vector3(startTangent), new Vector3(endTangent))
                 : SolveCtrlPts(pts, coeffMatrix);
 
             return new NurbsCurve(degree, knots, ctrlPts);

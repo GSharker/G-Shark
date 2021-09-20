@@ -5,8 +5,13 @@ using System.Linq;
 
 namespace GShark.Geometry
 {
-    public struct Point4 : IEquatable<Point4>
+    public class Point4 : IEquatable<Point4>
     {
+        public Point4()
+        {
+
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Point4"/> class based on coordinates.
         /// </summary>
