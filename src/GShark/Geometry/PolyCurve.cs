@@ -18,11 +18,20 @@ namespace GShark.Geometry
     {
         private readonly List<NurbsBase> _segments = new List<NurbsBase>();
 
+
         /// <summary>
-        /// Initializes a new empty polyCurve.
+        /// Initializes a new polyCurve with a list of curves
         /// </summary>
-        public PolyCurve()
-        { }
+        /// <param name="curves">a list of curves</param>
+        public PolyCurve(List<NurbsBase> curves)
+        {
+            foreach (NurbsBase cv in curves)
+            {
+                HealthChecks(cv);
+                _segments.Add(cv);
+            }
+            ToNurbsForm();
+        }
 
         /// <summary>
         /// Appends and matches the start of the arc to the end of polycurve.
