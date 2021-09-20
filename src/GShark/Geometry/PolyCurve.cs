@@ -127,28 +127,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Find the Curve Segment At given paramter.
-        /// When there is no curve segments in the PolyCurve, return null;
-        /// </summary>
-        /// <param name="t"></param>
-        public NurbsBase SegmentAt(double t)
-        {
-            NurbsBase segment = null;
-            if (_segments.Count() == 0) return null;
-
-            if (_segments.Count() == 1) return _segments.First();
-
-            if (t > _segments.Count()) return _segments.Last();
-
-            if (t <= 0) return _segments.First();
-
-            int segIdx = (int)Math.Truncate(t);
-            segment = _segments[segIdx];
-
-            return segment;
-        }
-
-        /// <summary>
         /// Defines the NURBS form of the polyline.
         /// </summary>
         private void ToNurbsForm()
