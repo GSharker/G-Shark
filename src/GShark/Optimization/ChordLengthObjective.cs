@@ -8,7 +8,7 @@ using GShark.Operation;
 namespace GShark.Optimization
 {
     /// <summary>
-    /// The basic functions used into the minimization process, to define the intersection results between a curve and a plane.
+    /// The objective function used to find a curve parameter at a given chord length.
     /// </summary>
     internal class ChordLengthObjective : IObjectiveFunction
     {
