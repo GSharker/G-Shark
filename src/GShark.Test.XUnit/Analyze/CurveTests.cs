@@ -44,7 +44,7 @@ namespace GShark.Test.XUnit.Analyze
         public void It_Returns_Parameter_At_The_Given_Length_Of_A_Bezier()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
             double[] tValuesExpected = new[] { 0, 0.122941, 0.265156, 0.420293, 0.579707, 0.734844, 0.877059, 1 };
 
             int steps = 7;
@@ -69,7 +69,7 @@ namespace GShark.Test.XUnit.Analyze
         public void It_Returns_The_Length_Of_The_Curve()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
             double expectedLength = 50.334675;
 
             // Act
@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Analyze
         public void It_Returns_The_Closest_Point_And_Parameter(double[] ptToCheck, double[] ptExpected, double tValExpected)
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
             Point3 testPt = new Point3(ptToCheck[0], ptToCheck[1], ptToCheck[2]);
             Point3 expectedPt = new Point3(ptExpected[0], ptExpected[1], ptExpected[2]);
 
@@ -111,7 +111,7 @@ namespace GShark.Test.XUnit.Analyze
         public void It_Returns_Parameter_At_The_Given_Length(double segmentLength, double tValueExpected)
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
 
             // Act
             double parameter = curve.ParameterAtLength(segmentLength);

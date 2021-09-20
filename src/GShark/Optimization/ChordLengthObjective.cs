@@ -25,16 +25,16 @@ namespace GShark.Optimization
 
         public double Value(Vector v)
         {
-            var pointAtT = Evaluation.RationalCurveDerivatives(_curve, v[0], 0).First();
-            var pointAtStart = Evaluation.RationalCurveDerivatives(_curve, _startParam, 0).First();
+            var pointAtT = Evaluate.Curve.RationalDerivatives(_curve, v[0], 0).First();
+            var pointAtStart = Evaluate.Curve.RationalDerivatives(_curve, _startParam, 0).First();
             var vec = pointAtT - pointAtStart;
             return  Math.Pow(_chordLength - vec.Length, 2);
         }
 
         public Vector Gradient(Vector v)
         {
-            var pointAtT = Evaluation.RationalCurveDerivatives(_curve, v[0], 0).First();
-            var pointAtStart = Evaluation.RationalCurveDerivatives(_curve, _startParam, 0).First();
+            var pointAtT = Evaluate.Curve.RationalDerivatives(_curve, v[0], 0).First();
+            var pointAtStart = Evaluate.Curve.RationalDerivatives(_curve, _startParam, 0).First();
             var vec = pointAtT - pointAtStart;
             var slope = -2 * (_chordLength - vec.Length);
 

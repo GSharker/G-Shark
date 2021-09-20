@@ -223,7 +223,7 @@ namespace GShark.Test.XUnit.Evaluate
             // Act
             // Act on a linear nurbs curve.
             Vector3 tangentLinearCurve = curve.TangentAt(t);
-            Vector3 tangentPlanarCurve = NurbsBaseCollection.NurbsPlanarExample().TangentAt(t);
+            Vector3 tangentPlanarCurve = NurbsCurveCollection.PlanarCurveDegreeThree().TangentAt(t);
 
             // Assert
             (tangentLinearCurve == tangentExpectedLinearCurve).Should().BeTrue();
