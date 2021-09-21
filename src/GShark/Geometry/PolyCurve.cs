@@ -29,8 +29,8 @@ namespace GShark.Geometry
             {
                 HealthChecks(cv);
                 _segments.Add(cv);
+                ToNurbsForm();
             }
-            ToNurbsForm();
         }
 
         /// <summary>

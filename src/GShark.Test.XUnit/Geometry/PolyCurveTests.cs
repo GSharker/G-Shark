@@ -33,10 +33,11 @@ namespace GShark.Test.XUnit.Geometry
             Line line = new Line(new Point3(5, 5, 0), new Point3(5, 5, -2.5));
             Arc arc = Arc.ByStartEndDirection(new Point3(5, 5, -2.5), new Point3(10, 5, -5), new Vector3(0, 0, -1));
 
-            _polycurve = new PolyCurve();
-            _polycurve.Append(curve);
-            _polycurve.Append(line);
-            _polycurve.Append(arc);
+            List<NurbsBase> curveList = new List<NurbsBase>();
+            curveList.Add(curve);
+            curveList.Add(line);
+            curveList.Add(arc);
+            _polycurve = new PolyCurve(curveList);
             #endregion
         }
 
@@ -98,20 +99,6 @@ namespace GShark.Test.XUnit.Geometry
             segmentResult.Should().BeSameAs(expectedSegment);
         }
 
-        [Theory]
-        [InlineData(0.1, 0)]
-        [InlineData(1.1, 1)]
-        [InlineData(2.1, 2)]
-        public void It_Returns_The_Segment_At_Parameter(double para, int expectedSegmentIndex)
-        {
-            //Arrange
-            NurbsBase expectedSegment = _polycurve.Segments[expectedSegmentIndex];
-
-            //Act
-            NurbsBase segmentResult = _polycurve.SegmentAt(para);
-
-            //Assert
-            segmentResult.Should().BeSameAs(expectedSegment);
-        }
+        
     }
 }
