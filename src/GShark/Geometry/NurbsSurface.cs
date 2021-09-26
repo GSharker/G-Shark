@@ -32,13 +32,13 @@ namespace GShark.Geometry
             if (degreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
             if (knotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
             if (knotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
-            if (knotsU.Count != controlPts.Count + degreeU + 1)
+            if (knotsU.Count != controlPts.Count() + degreeU + 1)
                 throw new ArgumentException("Points count + degreeU + 1 must equal knotsU count!");
-            if (knotsV.Count != controlPts[0].Count + degreeV + 1)
+            if (knotsV.Count != controlPts.First().Count() + degreeV + 1)
                 throw new ArgumentException("Points count + degreeV + 1 must equal knotsV count!");
-            if (!knotsU.IsValid(degreeU, controlPts.Count))
+            if (!knotsU.IsValid(degreeU, controlPts.Count()))
                 throw new ArgumentException("Invalid knotsU!");
-            if (!knotsV.IsValid(degreeV, controlPts[0].Count))
+            if (!knotsV.IsValid(degreeV, controlPts.First().Count()))
                 throw new ArgumentException("Invalid knotsV!");
 
             DegreeU = degreeU;
@@ -117,7 +117,7 @@ namespace GShark.Geometry
         /// <param name="p2">The second point.</param>
         /// <param name="p3">The third point.</param>
         /// <param name="p4">The fourth point.</param>
-        public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
+        public static NurbsSurface FromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
             List<List<Point4>> pts = new List<List<Point4>>
             {
@@ -140,7 +140,7 @@ namespace GShark.Geometry
         /// <param name="points">Points locations.</param>
         /// <param name="weight">A 2D collection of weights.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateFromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
+        public static NurbsSurface FromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
         {
             KnotVector knotU = new KnotVector(degreeU, points.Count);
             KnotVector knotV = new KnotVector(degreeV, points[0].Count);
@@ -154,7 +154,7 @@ namespace GShark.Geometry
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface Lofted(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -225,7 +225,7 @@ namespace GShark.Geometry
         /// <param name="curveA">The first curve.</param>
         /// <param name="curveB">The second curve.</param>
         /// <returns>A ruled surface.</returns>
-        public static NurbsSurface CreateRuledSurface(NurbsBase curveA, NurbsBase curveB)
+        public static NurbsSurface Ruled(NurbsBase curveA, NurbsBase curveB)
         {
             IList<NurbsBase> curves = new[] { curveA, curveB };
             curves = CurveHelpers.NormalizedDegree(curves);
@@ -243,19 +243,19 @@ namespace GShark.Geometry
         /// <param name="axis">Revolution axis.</param>
         /// <param name="rotationAngle">Angle in radiance.</param>
         /// <returns>The revolution surface.</returns>
-        public static NurbsSurface CreateRevolvedSurface(NurbsBase curveProfile, Ray axis, double rotationAngle)
+        public static NurbsSurface Revolved(NurbsBase curveProfile, Ray axis, double rotationAngle)
         {
             // if angle is less than 90.
             int arcCount = 1;
             KnotVector knotsU = Vector.Zero1d(6).ToKnot();
 
-            if (rotationAngle <= Math.PI && rotationAngle > Math.PI / 2)
+            if (rotationAngle <= Math.PI && rotationAngle > (Math.PI / 2))
             {
                 arcCount = 2;
                 knotsU[3] = knotsU[4] = 0.5;
             }
 
-            if (rotationAngle <= 3 * Math.PI / 2 && rotationAngle > Math.PI)
+            if (rotationAngle <= (3 * Math.PI / 2) && rotationAngle > Math.PI)
             {
                 arcCount = 3;
                 knotsU = Vector.Zero1d(6 + 2 * (arcCount - 1)).ToKnot();
@@ -263,7 +263,7 @@ namespace GShark.Geometry
                 knotsU[5] = knotsU[6] = (double)2 / 3;
             }
 
-            if (rotationAngle <= 4 * Math.PI && rotationAngle > 3 * Math.PI / 2)
+            if (rotationAngle <= (4 * Math.PI) && rotationAngle > (3 * Math.PI / 2))
             {
                 arcCount = 4;
                 knotsU = Vector.Zero1d(6 + 2 * (arcCount - 1)).ToKnot();

@@ -6,7 +6,6 @@ using GShark.Test.XUnit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -32,8 +31,8 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(5.0, 5.0, 1.5);
 
             // Act
-            NurbsSurface surfaceCcw = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
-            NurbsSurface surfaceCw = NurbsSurface.CreateFromCorners(p1, p4, p3, p2);
+            NurbsSurface surfaceCcw = NurbsSurface.FromCorners(p1, p2, p3, p4);
+            NurbsSurface surfaceCw = NurbsSurface.FromCorners(p1, p4, p3, p2);
             Point3 evalPtCcw = new Point3(surfaceCcw.PointAt(0.5, 0.5));
             Point3 evalPtCw = new Point3(surfaceCw.PointAt(0.5, 0.5));
 
@@ -89,7 +88,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsBaseCollection.OpenNurbs());
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.OpenNurbs());
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -107,7 +106,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsBaseCollection.OpenNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.OpenNurbs(), LoftType.Loose);
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -125,7 +124,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -137,7 +136,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Lofted_Surface_Throws_An_Exception_If_The_Curves_Are_Null()
         {
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(null);
+            Func<NurbsSurface> func = () => NurbsSurface.Lofted(null);
 
             // Assert
             func.Should().Throw<Exception>()
@@ -152,7 +151,7 @@ namespace GShark.Test.XUnit.Geometry
             crvs.Add(null);
 
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
+            Func<NurbsSurface> func = () => NurbsSurface.Lofted(crvs);
 
             // Assert
             func.Should().Throw<Exception>()
@@ -166,7 +165,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsBase[] crvs = { NurbsBaseCollection.OpenNurbs()[0] };
 
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
+            Func<NurbsSurface> func = () => NurbsSurface.Lofted(crvs);
 
             // Assert
             func.Should().Throw<Exception>()
@@ -181,7 +180,7 @@ namespace GShark.Test.XUnit.Geometry
             crvs[1] = crvs[1].Close();
 
             // Act
-            Func<NurbsSurface> func = () => NurbsSurface.CreateLoftedSurface(crvs);
+            Func<NurbsSurface> func = () => NurbsSurface.Lofted(crvs);
 
             // Assert
             func.Should().Throw<Exception>()
@@ -222,7 +221,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_True_If_Surface_Is_Close()
         {
             // Act
-            NurbsSurface surface = NurbsSurface.CreateLoftedSurface(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
 
             // Assert
             surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
@@ -258,7 +257,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve curveB = new NurbsCurve(ptsB, 2);
 
             // Act
-            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(curveA, curveB);
+            NurbsSurface ruledSurface = NurbsSurface.Ruled(curveA, curveB);
             Point3 pointAt = ruledSurface.PointAt(u, v);
 
             // Assert
@@ -295,7 +294,7 @@ namespace GShark.Test.XUnit.Geometry
             NurbsCurve curveB = new NurbsCurve(ptsB, 2);
 
             // Act
-            NurbsSurface ruledSurface = NurbsSurface.CreateRuledSurface(poly, curveB);
+            NurbsSurface ruledSurface = NurbsSurface.Ruled(poly, curveB);
             Point3 pointAt = ruledSurface.PointAt(u, v);
 
             // Assert
@@ -377,17 +376,17 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsSurface revolvedSurface0 = NurbsSurface.CreateRevolvedSurface(profile, axis, Math.PI * 0.25);
-            NurbsSurface revolvedSurface1 = NurbsSurface.CreateRevolvedSurface(profile, axis, 2 * Math.PI);
+            NurbsSurface revolvedSurface0 = NurbsSurface.Revolved(profile, axis, Math.PI * 0.25);
+            NurbsSurface revolvedSurface1 = NurbsSurface.Revolved(profile, axis, 2 * Math.PI);
 
             // Assert
             revolvedSurface0.ControlPointLocations
-                .Select((pts, i) => pts.SequenceEqual(expectedPts0[i]))
+                .Zip(expectedPts0, (pt0, pt1) => pt0.SequenceEqual(pt1))
                 .All(res => res)
                 .Should().BeTrue();
 
-            var t = revolvedSurface1.ControlPointLocations
-                .Select((pts, i) => pts.SequenceEqual(expectedPts1[i]))
+            revolvedSurface1.ControlPointLocations
+                .Zip(expectedPts1, (pt0, pt1) => pt0.SequenceEqual(pt1))
                 .All(res => res)
                 .Should().BeTrue();
         }
@@ -422,11 +421,11 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsSurface revolvedSurface = NurbsSurface.CreateRevolvedSurface(profile, axis, Math.PI * 0.25);
+            NurbsSurface revolvedSurface = NurbsSurface.Revolved(profile, axis, Math.PI * 0.25);
 
             // Assert
             revolvedSurface.ControlPointLocations
-                .Select((pts, i) => pts.SequenceEqual(expectedPts[i]))
+                .Zip(expectedPts, (pt0, pt1) => pt0.SequenceEqual(pt1))
                 .All(res => res)
                 .Should().BeTrue();
         }
