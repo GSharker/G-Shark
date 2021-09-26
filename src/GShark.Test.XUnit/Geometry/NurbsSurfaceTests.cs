@@ -88,7 +88,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.OpenNurbs());
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsCurveCollection.OpenCurves());
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -106,7 +106,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.OpenNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsCurveCollection.OpenCurves(), LoftType.Loose);
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -124,7 +124,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
             Point3 evalPt = surface.PointAt(u, v);
 
             // Assert
@@ -221,7 +221,7 @@ namespace GShark.Test.XUnit.Geometry
         public void Returns_True_If_Surface_Is_Close()
         {
             // Act
-            NurbsSurface surface = NurbsSurface.Lofted(NurbsBaseCollection.ClosedNurbs(), LoftType.Loose);
+            NurbsSurface surface = NurbsSurface.Lofted(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
 
             // Assert
             surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
