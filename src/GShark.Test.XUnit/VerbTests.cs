@@ -1,5 +1,6 @@
 ﻿using verb.core;
 using verb.eval;
+using verb.geom;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -466,6 +467,32 @@ namespace GShark.Test.XUnit
             for (int i = 0; i < elevatePoly.controlPoints.length; i++)
             {
                 _testOutput.WriteLine($"{elevatePoly.controlPoints[i]}");
+            }
+        }
+
+        [Fact]
+        public void RevolvedSurface()
+        {
+            var axis = new Array<double>(new double[] { 0, 0, 1 });
+            var pt = new Array<double>(new double[] { 0, 0, 1 });
+            var xaxis = new Array<double>(new double[] { 1, 0, 0 });
+            var center = new Array<double>(new double[] { 0, 0, 0 });
+
+            var arc = new Arc(center, axis, xaxis, 1, 0.0, Math.PI);
+
+            Array<object> pts = new Array<object>();
+
+            pts.push(new Array<double>(new double[] { 1, 0, 0, 1 }));
+            pts.push(new Array<double>(new double[] { 0, 0, 1, 1 }));
+            Array<double> knots = new Array<double>(new double[] { 0.0, 0.0, 1.0, 1.0 });
+            var profile = new verb.core.NurbsCurveData(1, knots, pts);
+
+            var comps = verb.eval.Make.revolvedSurface(arc._data, center, axis, 0.25 * Math.PI);
+
+            for (int i = 0; i < comps.controlPoints.length; i++)
+            {
+                var h = verb.eval.Eval.dehomogenize1d((Array<object>) comps.controlPoints.__a[i]);
+                _testOutput.WriteLine($"{h}");
             }
         }
     }

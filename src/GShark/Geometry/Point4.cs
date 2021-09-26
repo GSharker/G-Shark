@@ -447,7 +447,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">Control points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>A set of values, represented by a set pi with length (dim).</returns>
-        public static List<double> GetWeights(List<Point4> homogenizedPoints)
+        public static List<double> GetWeights(IEnumerable<Point4> homogenizedPoints)
         {
             return homogenizedPoints.Select(pt => pt.W).ToList();
         }
@@ -457,7 +457,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">Two-dimensional set of control points represented by an array (wi*pi, wi) with length (dim+1)</param>
         /// <returns>Two-dimensional set of values, each represented by an array pi with length (dim)</returns>
-        public static List<List<double>> GetWeights2d(List<List<Point4>> homogenizedPoints)
+        public static List<List<double>> GetWeights2d(IEnumerable<IEnumerable<Point4>> homogenizedPoints)
         {
             return homogenizedPoints.Select(pts => GetWeights(pts).ToList()).ToList();
         }
@@ -484,7 +484,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">A collection of points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of dehomogenized points.</returns>
-        public static List<Point3> PointDehomogenizer1d(List<Point4> homogenizedPoints)
+        public static List<Point3> PointDehomogenizer1d(IEnumerable<Point4> homogenizedPoints)
         {
             return homogenizedPoints.Select(PointDehomogenizer).ToList();
         }
@@ -494,7 +494,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
         /// <returns>Two-dimensional set of dehomogenized points.</returns>
-        public static List<List<Point3>> PointDehomogenizer2d(List<List<Point4>> homogenizedPoints)
+        public static List<List<Point3>> PointDehomogenizer2d(IEnumerable<IEnumerable<Point4>> homogenizedPoints)
         {
             return homogenizedPoints.Select(PointDehomogenizer1d).ToList();
         }
@@ -504,7 +504,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">Sets of points represented by an array (wi*pi, wi) with length (dim+1).</param>
         /// <returns>Set of rational points.</returns>
-        public static List<Point3> RationalPoints(List<Point4> homogenizedPoints)
+        public static List<Point3> RationalPoints(IEnumerable<Point4> homogenizedPoints)
         {
 
             return homogenizedPoints.Select(pt => new Point3(pt.X, pt.Y, pt.Z)).ToList();
@@ -515,7 +515,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="homogenizedPoints">Two-dimensional set of points represented by an array (wi*pi, wi) with length (dim+1)</param>
         /// <returns>Two-dimensional set of rational points.</returns>
-        public static List<List<Point3>> Rational2d(List<List<Point4>> homogenizedPoints)
+        public static List<List<Point3>> Rational2d(IEnumerable<IEnumerable<Point4>> homogenizedPoints)
         {
             return homogenizedPoints.Select(hpts => RationalPoints(hpts)).ToList();
         }

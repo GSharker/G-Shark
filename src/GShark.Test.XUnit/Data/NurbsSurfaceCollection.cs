@@ -13,7 +13,7 @@ namespace GShark.Test.XUnit.Data
             Point3 p3 = new Point3(10.0, 10.0, 2.0);
             Point3 p4 = new Point3(0.0, 10.0, 4.0);
 
-            NurbsSurface surface = NurbsSurface.CreateFromCorners(p1, p2, p3, p4);
+            NurbsSurface surface = NurbsSurface.FromCorners(p1, p2, p3, p4);
             #endregion
 
             return surface;
@@ -35,7 +35,7 @@ namespace GShark.Test.XUnit.Data
                 new List<double>{1, 1},
             };
 
-            return NurbsSurface.CreateFromPoints(2, 1, pts, weight);
+            return NurbsSurface.FromPoints(2, 1, pts, weight);
         }
 
         public static NurbsSurface Loft()
@@ -87,7 +87,7 @@ namespace GShark.Test.XUnit.Data
             NurbsCurve crv2 = new NurbsCurve(pts3, 3);
             List<NurbsBase> crvs = new List<NurbsBase> { ln, crv0, poly, crv1, crv2 };
 
-            return NurbsSurface.CreateLoftedSurface(crvs);
+            return NurbsSurface.Lofted(crvs);
         }
     }
 }

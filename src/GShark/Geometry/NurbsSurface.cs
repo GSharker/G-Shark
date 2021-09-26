@@ -1,5 +1,6 @@
 ﻿using GShark.Core;
 using GShark.Enumerations;
+using GShark.ExtendedMethods;
 using GShark.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,13 +32,13 @@ namespace GShark.Geometry
             if (degreeV < 1) throw new ArgumentException("DegreeV must be greater than 1!");
             if (knotsU == null) throw new ArgumentNullException("KnotU cannot be null!");
             if (knotsV == null) throw new ArgumentNullException("KnotV cannot be null!");
-            if (knotsU.Count != controlPts.Count + degreeU + 1)
+            if (knotsU.Count != controlPts.Count() + degreeU + 1)
                 throw new ArgumentException("Points count + degreeU + 1 must equal knotsU count!");
-            if (knotsV.Count != controlPts[0].Count + degreeV + 1)
+            if (knotsV.Count != controlPts.First().Count() + degreeV + 1)
                 throw new ArgumentException("Points count + degreeV + 1 must equal knotsV count!");
-            if (!knotsU.IsValid(degreeU, controlPts.Count))
+            if (!knotsU.IsValid(degreeU, controlPts.Count()))
                 throw new ArgumentException("Invalid knotsU!");
-            if (!knotsV.IsValid(degreeV, controlPts[0].Count))
+            if (!knotsV.IsValid(degreeV, controlPts.First().Count()))
                 throw new ArgumentException("Invalid knotsV!");
 
             DegreeU = degreeU;
@@ -116,7 +117,7 @@ namespace GShark.Geometry
         /// <param name="p2">The second point.</param>
         /// <param name="p3">The third point.</param>
         /// <param name="p4">The fourth point.</param>
-        public static NurbsSurface CreateFromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
+        public static NurbsSurface FromCorners(Point3 p1, Point3 p2, Point3 p3, Point3 p4)
         {
             List<List<Point4>> pts = new List<List<Point4>>
             {
@@ -139,7 +140,7 @@ namespace GShark.Geometry
         /// <param name="points">Points locations.</param>
         /// <param name="weight">A 2D collection of weights.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateFromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
+        public static NurbsSurface FromPoints(int degreeU, int degreeV, List<List<Point3>> points, List<List<double>> weight = null)
         {
             KnotVector knotU = new KnotVector(degreeU, points.Count);
             KnotVector knotV = new KnotVector(degreeV, points[0].Count);
@@ -153,7 +154,7 @@ namespace GShark.Geometry
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface CreateLoftedSurface(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface Lofted(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -224,7 +225,7 @@ namespace GShark.Geometry
         /// <param name="curveA">The first curve.</param>
         /// <param name="curveB">The second curve.</param>
         /// <returns>A ruled surface.</returns>
-        public static NurbsSurface CreateRuledSurface(NurbsBase curveA, NurbsBase curveB)
+        public static NurbsSurface Ruled(NurbsBase curveA, NurbsBase curveB)
         {
             IList<NurbsBase> curves = new[] { curveA, curveB };
             curves = CurveHelpers.NormalizedDegree(curves);
@@ -232,6 +233,131 @@ namespace GShark.Geometry
 
             return new NurbsSurface(1, curves[0].Degree, new KnotVector(1, 2), curves[0].Knots,
                 new List<List<Point4>> { curves[0].ControlPoints, curves[1].ControlPoints });
+        }
+
+        /// <summary>
+        /// Creates a surface of revolution through an arbitrary angle, and axis.
+        /// <em>Corresponds the algorithm A8.1 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="curveProfile">Profile curve.</param>
+        /// <param name="axis">Revolution axis.</param>
+        /// <param name="rotationAngle">Angle in radiance.</param>
+        /// <returns>The revolution surface.</returns>
+        public static NurbsSurface Revolved(NurbsBase curveProfile, Ray axis, double rotationAngle)
+        {
+            // if angle is less than 90.
+            int arcCount = 1;
+            KnotVector knotsU = Vector.Zero1d(6).ToKnot();
+
+            if (rotationAngle <= Math.PI && rotationAngle > (Math.PI / 2))
+            {
+                arcCount = 2;
+                knotsU[3] = knotsU[4] = 0.5;
+            }
+
+            if (rotationAngle <= (3 * Math.PI / 2) && rotationAngle > Math.PI)
+            {
+                arcCount = 3;
+                knotsU = Vector.Zero1d(6 + 2 * (arcCount - 1)).ToKnot();
+                knotsU[3] = knotsU[4] = (double)1 / 3;
+                knotsU[5] = knotsU[6] = (double)2 / 3;
+            }
+
+            if (rotationAngle <= (4 * Math.PI) && rotationAngle > (3 * Math.PI / 2))
+            {
+                arcCount = 4;
+                knotsU = Vector.Zero1d(6 + 2 * (arcCount - 1)).ToKnot();
+                knotsU[3] = knotsU[4] = (double)1 / 4;
+                knotsU[5] = knotsU[6] = (double)1 / 2;
+                knotsU[7] = knotsU[8] = (double)3 / 4;
+            }
+
+            // load start and end knots.
+            int t = 3 + 2 * (arcCount - 1);
+            for (int i = 0; i < 3; i++, t++)
+            {
+                knotsU[i] = 0.0;
+                knotsU[t] = 1.0;
+            }
+
+            // some initialization.
+            double divideAngle = rotationAngle / arcCount;
+            int n = 2 * arcCount;
+            double wm = divideAngle / 2; // is the base angle.
+
+            // initialize the sines and cosines only once.
+            double angle = 0.0;
+            double[] sines = new double[arcCount + 1];
+            double[] cosines = new double[arcCount + 1];
+            for (int i = 1; i <= arcCount; i++)
+            {
+                angle += divideAngle;
+                sines[i] = Math.Sin(angle);
+                cosines[i] = Math.Cos(angle);
+            }
+
+            // loop and compute each u row of control points and weights.
+            List<List<Point4>> controlPts = new List<List<Point4>>();
+            for (int r = 0; r < 2 * arcCount + 1; r++)
+            {
+                List<Point4> temp = CollectionHelpers.RepeatData(Point4.Zero, curveProfile.ControlPoints.Count);
+                controlPts.Add(temp);
+            }
+
+            for (int j = 0; j < curveProfile.ControlPointLocations.Count; j++)
+            {
+                Point3 ptO = axis.ClosestPoint(curveProfile.ControlPointLocations[j]);
+                Vector3 vectorX = curveProfile.ControlPointLocations[j] - ptO;
+                double radius = vectorX.Length; // the radius at that length.
+                Vector3 vectorY = Vector3.CrossProduct(axis.Direction, vectorX);
+
+                if (radius > GSharkMath.Epsilon)
+                {
+                    vectorX *= (1 / radius);
+                    vectorY *= (1 / radius);
+                }
+
+                // initialize the first control points and weights.
+                Point3 pt0 = curveProfile.ControlPointLocations[j];
+                controlPts[0][j] = new Point4(pt0, curveProfile.Weights[j]);
+
+                Vector3 tangent0 = vectorY;
+                int index = 0;
+
+                for (int i = 1; i <= arcCount; i++)
+                {
+                    // rotated generatrix point.
+                    Point3 pt2 = (Math.Abs(radius) < GSharkMath.Epsilon)
+                        ? ptO
+                        : ptO + (vectorX * (cosines[i] * radius) + vectorY * (sines[i] * radius));
+
+                    controlPts[index + 2][j] = new Point4(pt2, curveProfile.Weights[j]);
+
+                    // construct the vector tangent to the rotation.
+                    Vector3 rotationTangent = vectorX * (-1 * sines[i]) + vectorY * cosines[i];
+
+                    // construct the next control point.
+                    if (Math.Abs(radius) < GSharkMath.Epsilon)
+                    {
+                        controlPts[index + 1][j] = ptO;
+                    }
+                    else
+                    {
+                        Line ln0 = new Line(pt0, tangent0, tangent0.Length);
+                        Line ln1 = new Line(pt2, rotationTangent, rotationTangent.Length);
+                        Intersection.Intersect.LineLine(ln0, ln1, out Point3 intersectionPt, out _, out _, out _);
+                        controlPts[index + 1][j] = new Point4(intersectionPt, wm * curveProfile.Weights[j]);
+                    }
+
+                    index += 2;
+                    if (i >= arcCount) continue;
+                    pt0 = pt2;
+                    tangent0 = rotationTangent;
+                }
+
+            }
+            
+            return new NurbsSurface(2, curveProfile.Degree, knotsU, curveProfile.Knots, controlPts.Select(pts => pts.ToList()).ToList());
         }
 
         /// <summary>
