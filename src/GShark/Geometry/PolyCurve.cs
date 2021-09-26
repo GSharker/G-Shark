@@ -18,7 +18,6 @@ namespace GShark.Geometry
     {
         private readonly List<NurbsBase> _segments = new List<NurbsBase>();
 
-
         /// <summary>
         /// Initializes a new polyCurve with a list of curves
         /// </summary>
@@ -29,8 +28,8 @@ namespace GShark.Geometry
             {
                 HealthChecks(cv);
                 _segments.Add(cv);
-                ToNurbsForm();
             }
+            ToNurbsForm();
         }
 
         /// <summary>
@@ -114,7 +113,6 @@ namespace GShark.Geometry
         public NurbsBase SegmentAtLength(double length)
         {
             NurbsBase segment = null;
-            //if (_segments.Count() == 0) return null;
 
             if (length > this.Length) return _segments.Last();
 
