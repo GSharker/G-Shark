@@ -116,7 +116,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Divide_By_Number_Of_Segments_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
             double[] tValuesExpected = {
                     0,
                     0.12294074023135007,
@@ -147,7 +147,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Divide_By_Length_Returns_Points_And_Parameters_Along_Curve()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsPlanarExample();
+            NurbsBase curve = NurbsCurveCollection.PlanarCurveDegreeThree();
             double[] tValuesExpected = {
                 0,
                 0.12294074023135007,
@@ -302,7 +302,7 @@ namespace GShark.Test.XUnit.Sampling
         public void Return_Adaptive_Sample_Subdivision_Of_A_Nurbs()
         {
             // Arrange
-            NurbsBase curve = NurbsBaseCollection.NurbsBaseQuadratic3DBezier();
+            NurbsBase curve = NurbsCurveCollection.QuadraticBezier3D();
 
             // Act
             (List<double> tValues, List<Point3> pts) result0 = Curve.AdaptiveSample(curve, 0.1);
@@ -328,7 +328,7 @@ namespace GShark.Test.XUnit.Sampling
         public void AdaptiveSample_Returns_The_ControlPoints_If_Curve_Has_Grade_One()
         {
             // Arrange
-            List<Point3> locationPts = NurbsBaseCollection.NurbsPlanarExample().ControlPointLocations;
+            List<Point3> locationPts = NurbsCurveCollection.PlanarCurveDegreeThree().ControlPointLocations;
             NurbsCurve curve = new NurbsCurve(locationPts, 1);
 
             // Act
@@ -383,7 +383,7 @@ namespace GShark.Test.XUnit.Sampling
         public void AdaptiveSample_Use_MaxTolerance_If_Tolerance_Is_Set_Less_Or_Equal_To_Zero()
         {
             // Act
-            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(NurbsBaseCollection.NurbsPlanarExample());
+            (List<double> tValues, List<Point3> pts) = Curve.AdaptiveSample(NurbsCurveCollection.PlanarCurveDegreeThree());
 
             // Assert
             tValues.Should().NotBeEmpty();
