@@ -1,7 +1,5 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
-using GShark.Interfaces;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,20 +20,15 @@ namespace GShark.Geometry
         /// Initializes a new polyCurve with a list of curves
         /// </summary>
         /// <param name="curves">a list of curves</param>
-        public PolyCurve(List<NurbsBase> curves)
+        public PolyCurve(IList<NurbsBase> curves)
         {
-            //run healthchecks to make sure the element is connected
-            for (int i = 0; i < curves.Count(); i++)
+            _segments.Add(curves[0]);
+            for (int i = 1; i < curves.Count; i++)
             {
-                if (i == 0) 
-                    HealthChecks(curves[0]);
-                else
-                {
-                    if (curves[i - 1].EndPoint.DistanceTo(curves[i].StartPoint) > GSharkMath.Epsilon)
-                        throw new InvalidOperationException("The two curves can not be connected.");
-                }
+                HealthChecks(curves[i - 1], curves[i]);
+                _segments.Add(curves[i]);
             }
-            Append(curves);
+            ToNurbsForm();
         }
 
         /// <summary>
@@ -45,7 +38,7 @@ namespace GShark.Geometry
         /// <param name="line">The line to append.</param>
         public void Append(Line line)
         {
-            HealthChecks(line);
+            HealthChecks(this, line);
             _segments.Add(line);
             ToNurbsForm();
         }
@@ -57,7 +50,7 @@ namespace GShark.Geometry
         /// <param name="arc">The arc to append.</param>
         public void Append(Arc arc)
         {
-            HealthChecks(arc);
+            HealthChecks(this, arc);
             _segments.Add(arc);
             ToNurbsForm();
         }
@@ -73,7 +66,7 @@ namespace GShark.Geometry
             {
                 throw new InvalidOperationException("The curve is closed.");
             }
-            HealthChecks(curve);
+            HealthChecks(this, curve);
             _segments.Add(curve);
             ToNurbsForm();
         }
@@ -89,7 +82,7 @@ namespace GShark.Geometry
             {
                 throw new InvalidOperationException("The polycurve is closed.");
             }
-            HealthChecks(polyCurve);
+            HealthChecks(this, polyCurve);
             _segments.Add(polyCurve);
             ToNurbsForm();
         }
@@ -99,7 +92,7 @@ namespace GShark.Geometry
         /// No health checks are made, you are responsible of the collection of curve you are passing.
         /// </summary>
         /// <param name="curves"></param>
-        internal void Append(List<NurbsBase> curves)
+        internal void Append(IEnumerable<NurbsBase> curves)
         {
             _segments.AddRange(curves);
             ToNurbsForm();
@@ -119,10 +112,8 @@ namespace GShark.Geometry
         public NurbsBase SegmentAtLength(double length)
         {
             NurbsBase segment = null;
-
-            if (length > this.Length) return _segments.Last();
-
-            if (_segments.Count() == 1) return _segments.First();
+            if (length > Length) return _segments.Last();
+            if (_segments.Count == 1) return _segments.First();
 
             double temp = 0;
             foreach (NurbsBase curve in _segments)
@@ -184,18 +175,18 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks to define if the curve can be appended to the polycurve.
+        /// Checks to define if the curve can be appended.
         /// </summary>
-        private void HealthChecks(NurbsBase curve)
+        private void HealthChecks(NurbsBase curve, NurbsBase curveToAppend)
         {
             if (_segments.Count <= 0) return;
 
-            if (IsClosed)
+            if (curve.IsClosed)
             {
-                throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curve.GetType()}.");
+                throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curveToAppend.GetType()}.");
             }
 
-            if (EndPoint.DistanceTo(curve.StartPoint) > GSharkMath.Epsilon)
+            if (curve.EndPoint.DistanceTo(curveToAppend.StartPoint) > GSharkMath.Epsilon)
             {
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
