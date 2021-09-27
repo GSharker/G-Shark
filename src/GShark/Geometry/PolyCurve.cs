@@ -24,12 +24,18 @@ namespace GShark.Geometry
         /// <param name="curves">a list of curves</param>
         public PolyCurve(List<NurbsBase> curves)
         {
-            foreach (NurbsBase cv in curves)
+            //run healthchecks to make sure the element is connected
+            for (int i = 0; i < curves.Count(); i++)
             {
-                HealthChecks(cv);
-                _segments.Add(cv);
-                ToNurbsForm();
+                if (i == 0) 
+                    HealthChecks(curves[0]);
+                else
+                {
+                    if (curves[i - 1].EndPoint.DistanceTo(curves[i].StartPoint) > GSharkMath.Epsilon)
+                        throw new InvalidOperationException("The two curves can not be connected.");
+                }
             }
+            Append(curves);
         }
 
         /// <summary>
