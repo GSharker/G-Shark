@@ -521,8 +521,7 @@ namespace GShark.Geometry
                 }
             }
 
-            PolyCurve polyCurve = new PolyCurve();
-            polyCurve.Append(sortedCurves);
+            PolyCurve polyCurve = new PolyCurve(sortedCurves);
 
             return polyCurve;
         }

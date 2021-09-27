@@ -1,7 +1,5 @@
 ﻿using GShark.Core;
 using GShark.ExtendedMethods;
-using GShark.Interfaces;
-using GShark.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +17,19 @@ namespace GShark.Geometry
         private readonly List<NurbsBase> _segments = new List<NurbsBase>();
 
         /// <summary>
-        /// Initializes a new empty polyCurve.
+        /// Initializes a new polyCurve with a list of curves
         /// </summary>
-        public PolyCurve()
-        { }
+        /// <param name="curves">a list of curves</param>
+        public PolyCurve(IList<NurbsBase> curves)
+        {
+            _segments.Add(curves[0]);
+            for (int i = 1; i < curves.Count; i++)
+            {
+                HealthChecks(curves[i - 1], curves[i]);
+                _segments.Add(curves[i]);
+            }
+            ToNurbsForm();
+        }
 
         /// <summary>
         /// Appends and matches the start of the arc to the end of polycurve.
@@ -31,7 +38,7 @@ namespace GShark.Geometry
         /// <param name="line">The line to append.</param>
         public void Append(Line line)
         {
-            HealthChecks(line);
+            HealthChecks(this, line);
             _segments.Add(line);
             ToNurbsForm();
         }
@@ -43,7 +50,7 @@ namespace GShark.Geometry
         /// <param name="arc">The arc to append.</param>
         public void Append(Arc arc)
         {
-            HealthChecks(arc);
+            HealthChecks(this, arc);
             _segments.Add(arc);
             ToNurbsForm();
         }
@@ -59,7 +66,7 @@ namespace GShark.Geometry
             {
                 throw new InvalidOperationException("The curve is closed.");
             }
-            HealthChecks(curve);
+            HealthChecks(this, curve);
             _segments.Add(curve);
             ToNurbsForm();
         }
@@ -75,7 +82,7 @@ namespace GShark.Geometry
             {
                 throw new InvalidOperationException("The polycurve is closed.");
             }
-            HealthChecks(polyCurve);
+            HealthChecks(this, polyCurve);
             _segments.Add(polyCurve);
             ToNurbsForm();
         }
@@ -85,7 +92,7 @@ namespace GShark.Geometry
         /// No health checks are made, you are responsible of the collection of curve you are passing.
         /// </summary>
         /// <param name="curves"></param>
-        internal void Append(List<NurbsBase> curves)
+        internal void Append(IEnumerable<NurbsBase> curves)
         {
             _segments.AddRange(curves);
             ToNurbsForm();
@@ -95,6 +102,33 @@ namespace GShark.Geometry
         /// The segments of the polyCurve.
         /// </summary>
         public List<NurbsBase> Segments => _segments;
+
+        /// <summary>
+        /// Find Curve Segment At a given Length.
+        /// When there is no curve segments in the PolyCurve, return null;
+        /// If the provided length is greater than the PolyCurve Length, then it return the last segment in PolyCurve;
+        /// </summary>
+        /// <param name="length">Segment Length</param>
+        public NurbsBase SegmentAtLength(double length)
+        {
+            NurbsBase segment = null;
+            if (length > Length) return _segments.Last();
+            if (_segments.Count == 1) return _segments.First();
+
+            double temp = 0;
+            foreach (NurbsBase curve in _segments)
+            {
+                double cumulativeLength = curve.Length + temp;
+                if (length >= temp && length < cumulativeLength)
+                {
+                    segment = curve;
+                    break;
+                }
+                temp = cumulativeLength;
+            }
+
+            return segment;
+        }
 
         /// <summary>
         /// Defines the NURBS form of the polyline.
@@ -141,18 +175,18 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks to define if the curve can be appended to the polycurve.
+        /// Checks to define if the curve can be appended.
         /// </summary>
-        private void HealthChecks(NurbsBase curve)
+        private void HealthChecks(NurbsBase curve, NurbsBase curveToAppend)
         {
             if (_segments.Count <= 0) return;
 
-            if (IsClosed)
+            if (curve.IsClosed)
             {
-                throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curve.GetType()}.");
+                throw new InvalidOperationException($"The polyCurve is closed can not be possible to connect the {curveToAppend.GetType()}.");
             }
 
-            if (EndPoint.DistanceTo(curve.StartPoint) > GSharkMath.Epsilon)
+            if (curve.EndPoint.DistanceTo(curveToAppend.StartPoint) > GSharkMath.Epsilon)
             {
                 throw new InvalidOperationException("The two curves can not be connected.");
             }
