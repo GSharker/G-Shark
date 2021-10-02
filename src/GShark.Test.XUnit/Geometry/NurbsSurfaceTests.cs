@@ -429,5 +429,41 @@ namespace GShark.Test.XUnit.Geometry
                 .All(res => res)
                 .Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Extruded_Surface()
+        {
+            // Arrange
+            List<Point3> ptsA = new List<Point3>
+            {
+                new Point3(0, 0, 0),
+                new Point3(0, 0, 5),
+                new Point3(5, 0, 5),
+                new Point3(5, 0, 0),
+                new Point3(10, 0, 0)
+            };
+            List<Point3> ptsB = new List<Point3>
+            {
+                new Point3(0, 10, 0),
+                new Point3(0, 10, 5),
+                new Point3(5, 10, 5),
+                new Point3(5, 10, 0),
+                new Point3(10, 10, 0)
+            };
+            NurbsCurve curve = new NurbsCurve(ptsA, 3);
+            Vector3 direction = Vector3.YAxis * 10;
+            List<List<Point3>> expectedPts = new List<List<Point3>> {ptsA, ptsB};
+
+            // Act
+            NurbsSurface extrudedSurface = NurbsSurface.Extruded(direction, curve);
+
+            // Assert
+            extrudedSurface.ControlPointLocations
+                .Zip(expectedPts, (pt0, pt1) => pt0.SequenceEqual(pt1))
+                .All(res => res)
+                .Should().BeTrue();
+            extrudedSurface.DegreeU.Should().Be(1);
+            extrudedSurface.DegreeV.Should().Be(curve.Degree);
+        }
     }
 }

@@ -219,6 +219,36 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Constructs a surface extruding a curve profile long a direction.
+        /// </summary>
+        /// <param name="direction">The extrusion direction.</param>
+        /// <param name="profile">The profile curve to extrude.</param>
+        /// <returns>The extruded surface.</returns>
+        public static NurbsSurface Extruded(Vector3 direction, NurbsBase profile)
+        {
+            Transform xForm = Core.Transform.Translation(direction);
+            List<Point4> translatedControlPts =
+                profile.ControlPoints.Select(controlPoint => controlPoint.Transform(xForm)).ToList();
+
+            return new NurbsSurface(1, profile.Degree, new KnotVector {0, 0, 1, 1}, profile.Knots,
+                new List<List<Point4>> {profile.ControlPoints, translatedControlPts});
+        }
+        
+        /// <summary>
+        /// Constructs a sweep surface with one rail curve.
+        /// </summary>
+        /// <param name="rail">The rail curve.</param>
+        /// <param name="profile">The section curve.</param>
+        /// <returns>The sweep surface.</returns>
+        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile)
+        {
+            int samplesCount = rail.ControlPoints.Count * 2;
+            double span = (rail.Knots.Last() - rail.Knots[0]) / (samplesCount - 1);
+
+            return null;
+        }
+
+        /// <summary>
         /// Constructs a ruled surface between two curves.
         /// <em>Follows the algorithm at page 337 of The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
