@@ -230,10 +230,10 @@ namespace GShark.Geometry
             List<Point4> translatedControlPts =
                 profile.ControlPoints.Select(controlPoint => controlPoint.Transform(xForm)).ToList();
 
-            return new NurbsSurface(1, profile.Degree, new KnotVector {0, 0, 1, 1}, profile.Knots,
-                new List<List<Point4>> {profile.ControlPoints, translatedControlPts});
+            return new NurbsSurface(1, profile.Degree, new KnotVector { 0, 0, 1, 1 }, profile.Knots,
+                new List<List<Point4>> { profile.ControlPoints, translatedControlPts });
         }
-        
+
         /// <summary>
         /// Constructs a sweep surface with one rail curve.
         /// </summary>
@@ -242,10 +242,18 @@ namespace GShark.Geometry
         /// <returns>The sweep surface.</returns>
         public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile)
         {
-            int samplesCount = rail.ControlPoints.Count * 2;
-            double span = (rail.Knots.Last() - rail.Knots[0]) / (samplesCount - 1);
+            var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
+            List<Plane> frames = rail.PerpendicularFrames(tValues);
 
-            return null;
+            List<NurbsBase> curves = new List<NurbsBase> {profile};
+
+            foreach (Plane frame in frames.Skip(1))
+            {
+                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frame);
+                curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
+            }
+
+            return Lofted(curves);
         }
 
         /// <summary>
@@ -386,7 +394,7 @@ namespace GShark.Geometry
                 }
 
             }
-            
+
             return new NurbsSurface(2, curveProfile.Degree, knotsU, curveProfile.Knots, controlPts.Select(pts => pts.ToList()).ToList());
         }
 

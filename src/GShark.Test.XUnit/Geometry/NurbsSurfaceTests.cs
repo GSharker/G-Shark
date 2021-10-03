@@ -465,5 +465,33 @@ namespace GShark.Test.XUnit.Geometry
             extrudedSurface.DegreeU.Should().Be(1);
             extrudedSurface.DegreeV.Should().Be(curve.Degree);
         }
+
+        [Fact]
+        public void It_Returns_A_Sweep_Surface()
+        {
+            // Arrange
+            List<Point3> ptsA = new List<Point3>
+            {
+                new Point3(5, 0, 0),
+                new Point3(5, 5, 0),
+                new Point3(0, 5, 0),
+                new Point3(0, 5, 5),
+                new Point3(5, 5, 5)
+            };
+            List<Point3> ptsB = new List<Point3>
+            {
+                new Point3(4, 0, 1),
+                new Point3(5, 0, 0),
+                new Point3(6, 0, 1)
+            };
+            NurbsCurve rail = new NurbsCurve(ptsA, 3);
+            NurbsCurve profile = new NurbsCurve(ptsB, 2);
+
+            // Act
+            NurbsSurface sweepSurface = NurbsSurface.FromSweep(rail, profile);
+
+            // Assert
+            (sweepSurface.ControlPointLocations.Last()[1] == ptsA.Last()).Should().BeTrue();
+        }
     }
 }
