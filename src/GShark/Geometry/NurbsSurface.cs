@@ -236,6 +236,7 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Constructs a sweep surface with one rail curve.
+        /// <em>Follows the algorithm A10.2 at page 477 of The NURBS Book by Piegl and Tiller.</em>
         /// </summary>
         /// <param name="rail">The rail curve.</param>
         /// <param name="profile">The section curve.</param>
@@ -244,7 +245,6 @@ namespace GShark.Geometry
         {
             var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
             List<Plane> frames = rail.PerpendicularFrames(tValues);
-
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
             foreach (Plane frame in frames.Skip(1))
