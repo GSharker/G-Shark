@@ -61,6 +61,12 @@ jobs:
       
       - name: 🧱 Build project
         run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=${{ steps.bump-with-alpha.outputs.result }}
+        
+      - name: 📦 Create the package
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.bump-with-alpha.outputs.result }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+        
+      - name: 🚀 Publish the package
+        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg --skip-duplicate -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }}
 
       - name: 📘 Create Release
         id: create_release
