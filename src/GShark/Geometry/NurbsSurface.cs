@@ -1,11 +1,11 @@
-﻿using GShark.Core;
-using GShark.Enumerations;
-using GShark.ExtendedMethods;
-using GShark.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Core;
+using GShark.Enumerations;
+using GShark.ExtendedMethods;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
@@ -154,7 +154,7 @@ namespace GShark.Geometry
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface Lofted(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface FromLoft(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -224,7 +224,7 @@ namespace GShark.Geometry
         /// <param name="direction">The extrusion direction.</param>
         /// <param name="profile">The profile curve to extrude.</param>
         /// <returns>The extruded surface.</returns>
-        public static NurbsSurface Extruded(Vector3 direction, NurbsBase profile)
+        public static NurbsSurface FromExtrusion(Vector3 direction, NurbsBase profile)
         {
             Transform xForm = Core.Transform.Translation(direction);
             List<Point4> translatedControlPts =
@@ -247,13 +247,13 @@ namespace GShark.Geometry
             List<Plane> frames = rail.PerpendicularFrames(tValues);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
-            foreach (Plane frame in frames.Skip(1))
+            for (int i = 1; i <= frames.Count; i++)
             {
-                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frame);
+                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
             }
 
-            return Lofted(curves);
+            return FromLoft(curves);
         }
 
         /// <summary>

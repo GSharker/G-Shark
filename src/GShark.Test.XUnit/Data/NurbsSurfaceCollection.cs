@@ -87,7 +87,7 @@ namespace GShark.Test.XUnit.Data
             NurbsCurve crv2 = new NurbsCurve(pts3, 3);
             List<NurbsBase> crvs = new List<NurbsBase> { ln, crv0, poly, crv1, crv2 };
 
-            return NurbsSurface.Lofted(crvs);
+            return NurbsSurface.FromLoft(crvs);
         }
     }
 }
