@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Operation;
 
 namespace GShark.Sampling
 {

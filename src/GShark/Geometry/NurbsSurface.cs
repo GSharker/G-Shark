@@ -1,11 +1,11 @@
-﻿using GShark.Core;
-using GShark.Enumerations;
-using GShark.ExtendedMethods;
-using GShark.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Core;
+using GShark.Enumerations;
+using GShark.ExtendedMethods;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
@@ -154,7 +154,7 @@ namespace GShark.Geometry
         /// <param name="curves">Set of a minimum of two curves to create the surface.</param>
         /// <param name="loftType">Enum to choose the type of loft generation.</param>
         /// <returns>A NURBS surface.</returns>
-        public static NurbsSurface Lofted(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
+        public static NurbsSurface FromLoft(IList<NurbsBase> curves, LoftType loftType = LoftType.Normal)
         {
             if (curves == null)
                 throw new ArgumentException("An invalid number of curves to perform the loft.");
@@ -216,6 +216,44 @@ namespace GShark.Geometry
                     break;
             }
             return new NurbsSurface(degreeU, degreeV, knotVectorU, knotVectorV, surfaceControlPoints);
+        }
+
+        /// <summary>
+        /// Constructs a surface extruding a curve profile long a direction.
+        /// </summary>
+        /// <param name="direction">The extrusion direction.</param>
+        /// <param name="profile">The profile curve to extrude.</param>
+        /// <returns>The extruded surface.</returns>
+        public static NurbsSurface FromExtrusion(Vector3 direction, NurbsBase profile)
+        {
+            Transform xForm = Core.Transform.Translation(direction);
+            List<Point4> translatedControlPts =
+                profile.ControlPoints.Select(controlPoint => controlPoint.Transform(xForm)).ToList();
+
+            return new NurbsSurface(1, profile.Degree, new KnotVector { 0, 0, 1, 1 }, profile.Knots,
+                new List<List<Point4>> { profile.ControlPoints, translatedControlPts });
+        }
+
+        /// <summary>
+        /// Constructs a sweep surface with one rail curve.
+        /// <em>Follows the algorithm A10.2 at page 477 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="rail">The rail curve.</param>
+        /// <param name="profile">The section curve.</param>
+        /// <returns>The sweep surface.</returns>
+        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile)
+        {
+            var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
+            List<Plane> frames = rail.PerpendicularFrames(tValues);
+            List<NurbsBase> curves = new List<NurbsBase> {profile};
+
+            for (int i = 1; i <= frames.Count; i++)
+            {
+                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
+                curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
+            }
+
+            return FromLoft(curves);
         }
 
         /// <summary>
@@ -356,7 +394,7 @@ namespace GShark.Geometry
                 }
 
             }
-            
+
             return new NurbsSurface(2, curveProfile.Degree, knotsU, curveProfile.Knots, controlPts.Select(pts => pts.ToList()).ToList());
         }
 
