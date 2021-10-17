@@ -123,7 +123,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8)).ToNurbs();
+            NurbsBase arc = new Arc(Plane.PlaneYZ, 20, new Interval(0.0, 1.8));
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(5);
@@ -162,7 +162,7 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            NurbsCurve arc = _exampleArc3D.ToNurbs();
+            NurbsBase arc = _exampleArc3D;
 
             // Assert
             arc.ControlPointLocations.Count.Should().Be(7);

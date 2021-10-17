@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace GShark.Test.XUnit.Geometry
     public class PolylineTests
     {
         public readonly Point3[] ExamplePts;
-        private readonly Polyline _polyline;
+        private readonly PolyLine _polyLine;
         public PolylineTests()
         {
             #region example
@@ -25,7 +24,7 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(45, 12.5, 0)
             };
 
-            _polyline = new Polyline(ExamplePts);
+            _polyLine = new PolyLine(ExamplePts);
             #endregion
         }
 
@@ -36,12 +35,12 @@ namespace GShark.Test.XUnit.Geometry
             int numberOfExpectedSegments = 4;
 
             // Act
-            Polyline polyline = _polyline;
+            PolyLine polyLine = _polyLine;
 
             // Arrange
-            polyline.SegmentsCount.Should().Be(numberOfExpectedSegments);
-            polyline.Count.Should().Be(ExamplePts.Length);
-            polyline[0].Should().BeEquivalentTo(ExamplePts[0]);
+            polyLine.SegmentsCount.Should().Be(numberOfExpectedSegments);
+            polyLine.ControlPointLocations.Count.Should().Be(ExamplePts.Length);
+            polyLine.ControlPointLocations[0].Should().BeEquivalentTo(ExamplePts[0]);
         }
 
         [Fact]
@@ -51,10 +50,10 @@ namespace GShark.Test.XUnit.Geometry
             Point3[] pts = new Point3[] { new Point3(5, 0, 0) };
 
             // Act
-            Func<Polyline> func = () => new Polyline(pts);
+            Func<PolyLine> func = () => new PolyLine(pts);
 
             // Assert
-            func.Should().Throw<Exception>().WithMessage("Insufficient points for a polyline.");
+            func.Should().Throw<Exception>().WithMessage("Insufficient points for a polyLine.");
         }
 
         [Fact]
@@ -76,20 +75,37 @@ namespace GShark.Test.XUnit.Geometry
             };
 
             // Act
-            Polyline polyline = new Polyline(pts);
+            PolyLine polyLine = new PolyLine(pts);
 
             // Assert
-            polyline.Should().BeEquivalentTo(ptsExpected);
+            polyLine.ControlPointLocations.Should().BeEquivalentTo(ptsExpected);
+        }
+
+        [Fact]
+        public void It_Returns_True_If_Polylines_Are_Equal()
+        {
+            // Arrange
+            Point3[] pts = {new(5, 5, 0),
+                new(5, 10, 0),
+                new(15, 12, 0),
+                new(20, -20, 0)
+            };
+            PolyLine polyLine0 = new PolyLine(pts);
+            PolyLine polyLine1 = new PolyLine(pts);
+
+            // Assert
+            polyLine0.Equals(polyLine1).Should().BeTrue();
+            polyLine0.Equals(polyLine1.Reverse()).Should().BeFalse();
         }
 
         [Fact]
         public void It_Returns_A_Closed_Polyline()
         {
             // Arrange
-            Polyline closedPolyline = _polyline.Close();
+            PolyLine closedPolyLine = _polyLine.Close();
 
             // Assert
-            closedPolyline[0].DistanceTo(closedPolyline[closedPolyline.Count - 1]).Should().BeLessThan(GSharkMath.Epsilon);
+            closedPolyLine.ControlPointLocations[0].DistanceTo(closedPolyLine.ControlPointLocations.Last()).Should().BeLessThan(GSharkMath.Epsilon);
         }
 
         [Fact]
@@ -99,7 +115,7 @@ namespace GShark.Test.XUnit.Geometry
             double expectedLength = 55.595342;
 
             // Act
-            double length = _polyline.Length;
+            double length = _polyLine.Length;
 
             // Assert
             length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
@@ -113,7 +129,7 @@ namespace GShark.Test.XUnit.Geometry
             double expectedSegmentLength = 11.18034;
 
             // Act
-            var segments = _polyline.Segments;
+            var segments = _polyLine.Segments;
 
             // Assert
             segments.Count.Should().Be(expectedNumberOfSegments);
@@ -123,8 +139,8 @@ namespace GShark.Test.XUnit.Geometry
 
         [Theory]
         [InlineData(0.0, new double[] { 5, 0, 0 })]
-        [InlineData(0.25, new double[] { 15, 15, 0 })]
-        [InlineData(0.66, new double[] { 26.4, 8.2, 0 })]
+        [InlineData(0.25, new double[] { 7.5, 3.75, 0 })]
+        [InlineData(2.5, new double[] { 25, 7.5, 0 })]
         [InlineData(4.0, new double[] { 45, 12.5, 0 })]
         public void It_Returns_A_Point_At_The_Given_Parameter(double t, double[] pt)
         {
@@ -132,7 +148,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            Point3 ptResult = _polyline.PointAt(t);
+            Point3 ptResult = _polyLine.PointAt(t);
 
             // Assert
             ptResult.EpsilonEquals(expectedPt, GSharkMath.MaxTolerance).Should().BeTrue();
@@ -148,41 +164,51 @@ namespace GShark.Test.XUnit.Geometry
             Point3 closestPt = new Point3(pt[0], pt[1], pt[2]);
 
             // Act
-            double param = _polyline.ClosestParameter(closestPt);
+            double param = _polyLine.ClosestParameter(closestPt);
 
             // Assert
             param.Should().BeApproximately(expectedParam, GSharkMath.MaxTolerance);
         }
 
         [Theory]
-        [InlineData(0.0, new double[] { 0.5547, 0.83205, 0 })]
-        [InlineData(0.25, new double[] { 0.447214, -0.894427, 0 })]
-        [InlineData(0.66, new double[] { 0.894427, 0.447214, 0 })]
-        [InlineData(4.0, new double[] { 0.986394, 0.164399, 0 })]
-        public void It_Returns_A_Tangent_Vector_At_The_Given_Parameter(double t, double[] tangent)
+        [InlineData(0.693375, 12.5)]
+        [InlineData(0.931896, 16.8)]
+        [InlineData(2.330214, 32.9)]
+        [InlineData(3.415046, 46.7)]
+        public void It_Returns_The_Length_At_The_Given_Parameter(double t, double expectedLength)
         {
-            // Arrange
-            Vector3 expectedTangent = new Vector3(tangent[0], tangent[1], tangent[2]);
-
             // Act
-            Vector3 tanResult = _polyline.TangentAt(t);
+            double length = _polyLine.LengthAt(t);
 
             // Assert
-            tanResult.EpsilonEquals(expectedTangent, GSharkMath.MaxTolerance).Should().BeTrue();
+            length.Should().BeApproximately(expectedLength, GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
+        public void It_Returns_The_Point_At_The_Given_Length()
+        {
+            // Arrange
+            Point3 expectedPt = new Point3(19.369239, 6.261522, 0);
+
+            // Act
+            Point3 pt = _polyLine.PointAtNormalizedLength(0.5);
+
+            // Assert
+            (pt == expectedPt).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(0.0, 0)]
-        [InlineData(0.25, 1)]
-        [InlineData(0.66, 2)]
-        [InlineData(1, 3)]
-        public void It_Returns_A_Segment_At_The_Given_Index(double t, int expectedIndex)
+        [InlineData(12.5, 0.693375)]
+        [InlineData(16.8, 0.931896)]
+        [InlineData(32.9, 2.330214)]
+        [InlineData(46.7, 3.415046)]
+        public void It_Returns_The_Parameter_At_The_Given_Length(double length, double parameterExpected)
         {
             // Act
-            Line segment = _polyline.SegmentAt(t);
+            double parameter = _polyLine.ParameterAtLength(length);
 
             // Assert
-            segment.Should().Be(_polyline.Segments[expectedIndex]);
+            parameter.Should().BeApproximately(parameterExpected, GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -195,11 +221,26 @@ namespace GShark.Test.XUnit.Geometry
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
 
             // Act
-            Polyline transformedPoly = _polyline.Transform(combinedTransformations);
+            PolyLine transformedPoly = _polyLine.Transform(combinedTransformations);
 
             // Assert
-            double[] lengths = _polyline.Select((pt, i) => pt.DistanceTo(transformedPoly[i])).ToArray();
+            double[] lengths = _polyLine.ControlPointLocations.Select((pt, i) => pt.DistanceTo(transformedPoly.ControlPointLocations[i])).ToArray();
             lengths.Select((val, i) => val.Should().BeApproximately(distanceExpected[i], GSharkMath.MaxTolerance));
+        }
+
+        [Fact]
+        public void Returns_The_Offset_Of_A_Open_Polyline()
+        {
+            // Arrange
+            PolyLine pl = new PolyLine(new PolylineTests().ExamplePts);
+            double offset = 5;
+
+            // Act
+            PolyLine offsetResult = pl.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult.ControlPointLocations[0].DistanceTo(pl.ControlPointLocations[0]) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+            (offsetResult.ControlPointLocations.Last().DistanceTo(pl.ControlPointLocations.Last()) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
         }
 
         [Fact]
@@ -210,7 +251,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 expectedPt = new Point3(18.2, 8.6, 0.0);
 
             // Act
-            Point3 closestPt = _polyline.ClosestPoint(testPt);
+            Point3 closestPt = _polyLine.ClosestPoint(testPt);
 
             // Assert
             closestPt.EpsilonEquals(expectedPt, GSharkMath.Epsilon).Should().BeTrue();
@@ -224,7 +265,7 @@ namespace GShark.Test.XUnit.Geometry
             Point3 maxExpected = new Point3(45.0, 15.0, 0.0);
 
             // Act
-            BoundingBox bBox = _polyline.GetBoundingBox();
+            BoundingBox bBox = _polyLine.GetBoundingBox();
 
             // Assert
             bBox.Min.EpsilonEquals(minExpected, GSharkMath.Epsilon).Should().BeTrue();
@@ -239,15 +280,15 @@ namespace GShark.Test.XUnit.Geometry
             reversedPts.Reverse();
 
             // Act
-            Polyline reversedPolyline = _polyline.Reverse();
+            PolyLine reversedPolyLine = _polyLine.Reverse();
 
             // Assert
-            reversedPolyline.Should().NotBeSameAs(_polyline);
-            reversedPolyline.Should().BeEquivalentTo(reversedPts);
+            (reversedPolyLine.ControlPointLocations[0] == reversedPts[0]).Should().BeTrue();
+            (reversedPolyLine.ControlPointLocations.Last() == reversedPts.Last()).Should().BeTrue();
         }
 
         [Fact]
-        public void It_Returns_A_Polyline_Transformed_In_NurbsCurve()
+        public void It_Returns_True_If_The_NurbsBase_Form_Of_A_Polyline_Is_Correct()
         {
             // Arrange
             Point3[] pts = new[]
@@ -258,21 +299,18 @@ namespace GShark.Test.XUnit.Geometry
                 new Point3(18.154088, 30.745098, 7.561387),
                 new Point3(18.154088, 12.309505, 7.561387)
             };
+            PolyLine poly = new PolyLine(pts);
 
             // Act
-            var polyNurbs = new Polyline(pts).ToNurbs();
-            KnotVector knots = polyNurbs.Knots;
+            NurbsBase polyNurbs = poly;
 
             // Assert
             polyNurbs.Degree.Should().Be(1);
-            for (int i = 1; i < polyNurbs.Knots.Count - 1; i++)
-            {
-                pts[i - 1].EpsilonEquals(polyNurbs.PointAt(knots[i]), GSharkMath.MaxTolerance).Should().BeTrue();
-            }
+            polyNurbs.ControlPointLocations.Select((pt, i) => (pt == pts[i]).Should().BeTrue());
         }
 
         [Theory]
-        [InlineData(0,0)]
+        [InlineData(0, 0)]
         [InlineData(0.5, 0)]
         [InlineData(1, 0)]
         [InlineData(7, 1)]
@@ -284,7 +322,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Segment_At_A_Given_Length(double length, int expectedIndex)
         {
             //Arrange
-            var polyLine = new Polyline(new List<Point3>
+            var polyLine = new PolyLine(new List<Point3>
             {
                 new (0, 0, 0),
                 new (5, 0, 0),
@@ -292,36 +330,12 @@ namespace GShark.Test.XUnit.Geometry
                 new (0, 10, 0),
                 new (0, 0, 0)
             });
-            
+
             //Act
             var segment = polyLine.SegmentAtLength(length);
 
             //Assert
             polyLine.Segments.IndexOf(segment).Should().Be(expectedIndex);
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_At_A_Given_Length()
-        {
-            //Arrange
-            var polyLine = new Polyline(new List<Point3>
-            {
-                new (0, 0, 0),
-                new (5, 0, 0),
-                new (5, 10, 0),
-                new (0, 10, 0),
-                new (0, 0, 0)
-            });
-            
-            var testLength = 6.66;
-            var tan = polyLine[2] - polyLine[1];
-            var expectedTangent = tan.Unitize();
-            
-            //Act
-            var tangent = polyLine.TangentAtLength(testLength);
-
-            //Assert
-            tangent.Should().Be(expectedTangent);
         }
     }
 }

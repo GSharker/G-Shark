@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
+using GShark.Geometry;
 
 namespace GShark.Core
 {
@@ -155,9 +157,18 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets the domain of the knots, as the max value - min value.
+        /// Gets the domain of the knot vector.
         /// </summary>
-        public Interval Domain => new Interval(this[0], this[Count - 1]);
+        /// <param name="degree">The degree of the curve.</param>
+        /// <returns>The domain.</returns>
+        public Interval GetDomain(int degree)
+        {
+            if (IsPeriodic(degree))
+            {
+                    return new Interval(this[degree], this[Count - degree - 1]);
+            }
+            return new Interval(this[0], this[Count - 1]);
+        }
 
         /// <summary>
         /// Finds the span of the knot vector from curve degree and a parameter u on the curve.
@@ -264,9 +275,9 @@ namespace GShark.Core
                 numOfSegments = degree + numberOfControlPts - 1;
             }
 
-            this.AddRange(Sets.RepeatData(0.0, numOfRepeat));
-            this.AddRange(Sets.LinearSpace(new Interval(0.0, 1.0), numOfSegments + 2));
-            this.AddRange(Sets.RepeatData(1.0, numOfRepeat));
+            this.AddRange(CollectionHelpers.RepeatData(0.0, numOfRepeat));
+            this.AddRange(Interval.Divide(new Interval(0.0, 1.0), numOfSegments + 2));
+            this.AddRange(CollectionHelpers.RepeatData(1.0, numOfRepeat));
         }
 
         /// <summary>
@@ -312,9 +323,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Normalizes the input knot vector to a range from 0 to 1.
+        /// Normalizes the input knot vector to a range from 0.0 to 1.0.
         /// </summary>
-        /// <param name="knots">Knots vector to be normalized.</param>
         /// <returns>Normalized knots vector.</returns>
         public KnotVector Normalize()
         {
@@ -344,6 +354,32 @@ namespace GShark.Core
             }
 
             return reversedKnots;
+        }
+
+        /// <summary>
+        /// Performs a knot refinement on a curve, inserting knots and updating the control point locations.<br/>
+        /// <em>Implementation of Algorithm A5.4 of The NURBS Book by Piegl and Tiller.</em>
+        /// </summary>
+        /// <param name="curve">The curve object.</param>
+        /// <param name="knotsToInsert">The set of knots.</param>
+        /// <returns>A curve with refined knots.</returns>
+        public static NurbsBase Refine(NurbsBase curve, IList<double> knotsToInsert)
+        {
+            return Modify.Curve.KnotRefine(curve, knotsToInsert);
+        }
+
+        /// <summary>
+        /// Performs a knot refinement on a surface by inserting knots at various parameters and updating the control point locations.<br/>
+        /// <em>Implementation of Algorithm A5.5 of The NURBS Book by Piegl and Tiller.</em>
+        /// ToDo: refactor this algo following the book.
+        /// </summary>
+        /// <param name="surface">The surface object to insert the knots.</param>
+        /// <param name="knotsToInsert">The set of knots to insert.</param>
+        /// <param name="direction">Whether to insert in the U or V direction of the surface.</param>
+        /// <returns>A surface with the knots inserted.</returns>
+        public static NurbsSurface Refine(NurbsSurface surface, IList<double> knotsToInsert, SurfaceDirection direction)
+        {
+            return Modify.Surface.SurfaceKnotRefine(surface, knotsToInsert, direction);
         }
 
         /// <summary>

@@ -8,8 +8,13 @@ namespace GShark.Geometry
     /// Defines a Vector in Euclidean space with coordinates X, Y, and Z.
     /// Referenced from https://github.com/mcneel/rhinocommon/blob/master/dotnet/opennurbs/opennurbs_point.cs
     /// </summary>
-    public struct Point3 : IEquatable<Point3>, IComparable<Point3>, IComparable
+    public class Point3 : IEquatable<Point3>, IComparable<Point3>, IComparable
     {
+        /// <summary>
+        /// Initializes a new point.
+        /// </summary>
+        public Point3() { }
+
         /// <summary>
         /// Initializes a new point by defining the X, Y and Z coordinates.
         /// </summary>
@@ -373,7 +378,7 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Point3 and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is Point3 && this == (Point3)obj);
+            return obj is Point3 point3 && this == point3;
         }
 
         /// <summary>
@@ -381,13 +386,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="other"></param>
         /// <param name="epsilon"></param>
-        /// <returns></returns>
-        //ToDo Using EpsilonEquals everywhere. Perhaps should be moved into actual Equals method of classes.
+        /// <returns>True if the two points have the same coordinates as this; otherwise false.</returns>
         public bool EpsilonEquals(Point3 other, double epsilon)
         {
-            return Math.Abs(X - other.X) <= GSharkMath.MaxTolerance &&
-                   Math.Abs(Y - other.Y) <= GSharkMath.MaxTolerance &&
-                   Math.Abs(Z - other.Z) <= GSharkMath.MaxTolerance;
+            return Math.Abs(X - other.X) <= epsilon &&
+                   Math.Abs(Y - other.Y) <= epsilon &&
+                   Math.Abs(Z - other.Z) <= epsilon;
         }
 
         /// <summary>

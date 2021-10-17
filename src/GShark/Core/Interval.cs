@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GShark.Core
 {
@@ -74,6 +75,37 @@ namespace GShark.Core
             return !GSharkMath.IsValidDouble(normalizedParameter)
                 ? GSharkMath.UnsetValue
                 : (1.0 - normalizedParameter) * T0 + normalizedParameter * T1;
+        }
+
+        /// <summary>
+        /// Computes a collection of evenly spaced numbers over a specified domain.
+        /// </summary>
+        /// <param name="domain">Numeric domain.</param>
+        /// <param name="step">Number of steps.</param>
+        /// <returns>A collection of equally spaced numbers.</returns>
+        public static IList<double> Divide(Interval domain, int step)
+        {
+            if (Math.Abs(domain.T0 - domain.T1) <= GSharkMath.Epsilon)
+            {
+                return new List<double>() { domain.T0 };
+            }
+
+            List<double> linearSpace = new List<double>();
+
+            if (step <= 1)
+            {
+                linearSpace.Add(domain.T0);
+                return linearSpace;
+            }
+
+            int div = step - 1;
+            double delta = domain.T1 - domain.T0;
+            for (int i = 0; i < step; i++)
+            {
+                linearSpace.Add(domain.T0 + (i * delta / div));
+            }
+
+            return linearSpace;
         }
     }
 }

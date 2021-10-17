@@ -2,6 +2,7 @@
 using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
+using GShark.Operation;
 using Xunit;
 
 namespace GShark.Test.XUnit.Core

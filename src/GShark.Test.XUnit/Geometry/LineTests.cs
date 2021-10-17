@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
-using GShark.Geometry.Interfaces;
 using System;
 using Xunit;
 using Xunit.Abstractions;
@@ -175,32 +174,6 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Parameter()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAt(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
-        }
-
-        [Fact]
-        public void It_Returns_The_Tangent_Vector_At_Specified_Length()
-        {
-            //Arrange
-            var expectedDir = _exampleLine.Direction;
-
-            //Act
-            var tangent = _exampleLine.TangentAtLength(0.33);
-
-            //Assert
-            tangent.Equals(expectedDir).Should().BeTrue();
-        }
-
-        [Fact]
         public void It_Returns_The_Length_At_Specified_Parameter()
         {
             //Arrange
@@ -254,7 +227,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Flipped_Line()
         {
             // Act
-            Line flippedLine = _exampleLine.Flip();
+            Line flippedLine = _exampleLine.Reverse();
 
             // Assert
             flippedLine.StartPoint.Equals(_exampleLine.EndPoint).Should().BeTrue();
@@ -273,11 +246,25 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Returns_The_Offset_Of_A_Line()
+        {
+            // Arrange
+            Line ln = new Line(new Point3(5, 0, 0), new Point3(0, 5, 0));
+            double offset = 12;
+
+            // Act
+            Line offsetResult = ln.Offset(offset, Plane.PlaneXY);
+
+            // Assert
+            (offsetResult.StartPoint.DistanceTo(ln.StartPoint) - offset).Should().BeLessThan(GSharkMath.MaxTolerance);
+        }
+
+        [Fact]
         public void It_Checks_If_Two_Lines_Are_Equals()
         {
             // Act
-            Line lineFlip = _exampleLine.Flip();
-            Line lineFlippedBack = lineFlip.Flip();
+            Line lineFlip = _exampleLine.Reverse();
+            Line lineFlippedBack = lineFlip.Reverse();
 
             // Assert
             lineFlip.Equals(lineFlippedBack).Should().BeFalse();
@@ -299,18 +286,15 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_A_NurbsCurve_Form_Of_A_Line()
+        public void It_Returns_True_If_The_NurbsBase_Form_Of_A_Line_Is_Correct()
         {
-            // Arrange
-            var line = _exampleLine;
-
             //Act
-            var nurbsLine = line.ToNurbs();
+            NurbsBase nurbsLine = _exampleLine;
 
             // Assert
             nurbsLine.ControlPointLocations.Count.Should().Be(2);
-            nurbsLine.ControlPointLocations[0].Equals(line.StartPoint).Should().BeTrue();
-            nurbsLine.ControlPointLocations[1].Equals(line.EndPoint).Should().BeTrue();
+            nurbsLine.ControlPointLocations[0].Equals(_exampleLine.StartPoint).Should().BeTrue();
+            nurbsLine.ControlPointLocations[1].Equals(_exampleLine.EndPoint).Should().BeTrue();
             nurbsLine.Degree.Should().Be(1);
         }
     }
