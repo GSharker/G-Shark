@@ -8,7 +8,7 @@ namespace GShark.Core
     /// <summary>
     /// Represents the values in a 4 x 4 transformation matrix.
     /// </summary>
-    public class Transform : List<IList<double>>
+    public class Transform : List<List<double>>
     {
         internal readonly double M00;
         internal readonly double M01;
@@ -347,23 +347,31 @@ namespace GShark.Core
             var origin = new Point3(0, 0, 0);
 
             // Translating point pt0 to (0,0,0)
-            Transform translation0 = Translation(origin - pt0);
+            var translationPlnAToOrigin = new Matrix();
+            translationPlnAToOrigin.AddRange(Translation(origin - pt0));
             // Translating point (0,0,0) to pt1
-            Transform translation1 = Translation(pt1 - origin);
-            // Change x0,y0,z0 to world X,Y,Z
-            Transform map0 = Identity();
-            map0[0][0] = x0[0]; map0[0][1] = x0[1]; map0[0][2] = x0[2];
-            map0[1][0] = y0[0]; map0[1][1] = y0[1]; map0[1][2] = y0[2];
-            map0[2][0] = z0[0]; map0[2][1] = z0[1]; map0[2][2] = z0[2];
-            // Change world X,Y,Z to x1,y2,z3 
-            Transform map1 = Identity();
-            map1[0][0] = x1[0]; map1[0][1] = y1[0]; map1[0][2] = z1[0];
-            map1[1][0] = x1[1]; map1[1][1] = y1[1]; map1[1][2] = z1[1];
-            map1[2][0] = x1[2]; map1[2][1] = y1[2]; map1[2][2] = z1[2];
+            var translationOriginToPlnB = new Matrix();
+            translationOriginToPlnB.AddRange(Translation(pt1 - origin));
+            
+            //plane a as 4x4 transform matrix with axes as column vectors
+            Matrix mapA = Matrix.Identity(4);
+            mapA[0][0] = x0[0]; mapA[0][1] = y0[0]; mapA[0][2] = z0[0];
+            mapA[1][0] = x0[1]; mapA[1][1] = y0[1]; mapA[1][2] = z0[1];
+            mapA[2][0] = x0[2]; mapA[2][1] = y0[2]; mapA[2][2] = z0[2];
 
-            // Mapping x0 to x1, y0 to y1, z0 to z1
-            Transform map = map0 * map1;
-            return translation1 * map * translation0;
+            //plane b as 4x4 transform matrix with axes as column vectors
+            Matrix mapB = Matrix.Identity(4);
+            mapB[0][0] = x1[0]; mapB[0][1] = y1[0]; mapB[0][2] = z1[0];
+            mapB[1][0] = x1[1]; mapB[1][1] = y1[1]; mapB[1][2] = z1[1];
+            mapB[2][0] = x1[2]; mapB[2][1] = y1[2]; mapB[2][2] = z1[2];
+
+            //Transpose plane a matrix. Square matrix transpose same as inverse but cheaper.
+            var mapATransposed = mapA.Transpose();
+            Matrix result = translationOriginToPlnB * mapB * mapATransposed * translationPlnAToOrigin;
+            var xForm = new Transform();
+            xForm.Clear();
+            xForm.AddRange(result);
+            return xForm;
         }
 
         /// <summary>
