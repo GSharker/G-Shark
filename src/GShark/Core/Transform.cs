@@ -347,11 +347,11 @@ namespace GShark.Core
             var origin = new Point3(0, 0, 0);
 
             // Translating point pt0 to (0,0,0)
-            var translationA = new Matrix();
-            translationA.AddRange(Translation(origin - pt0));
+            var translationPlnAToOrigin = new Matrix();
+            translationPlnAToOrigin.AddRange(Translation(origin - pt0));
             // Translating point (0,0,0) to pt1
-            var translation1 = new Matrix();
-            translation1.AddRange(Translation(pt1 - origin));
+            var translationOriginToPlnB = new Matrix();
+            translationOriginToPlnB.AddRange(Translation(pt1 - origin));
             
             //plane a as 4x4 transform matrix with axes as column vectors
             Matrix mapA = Matrix.Identity(4);
@@ -367,7 +367,7 @@ namespace GShark.Core
 
             //Transpose plane a matrix. Square matrix transpose same as inverse but cheaper.
             var mapATransposed = mapA.Transpose();
-            Matrix result = translation1 * mapB * mapATransposed * translationA;
+            Matrix result = translationOriginToPlnB * mapB * mapATransposed * translationPlnAToOrigin;
             var xForm = new Transform();
             xForm.Clear();
             xForm.AddRange(result);
