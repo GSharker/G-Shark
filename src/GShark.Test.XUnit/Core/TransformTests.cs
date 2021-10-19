@@ -2,6 +2,7 @@
 using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -149,24 +150,38 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
+        public void It_Returns_A_PlaneToPlane_Transformation_Matrix()
         {
             // Arrange
-            var origin = new Point3(5, 0, 0);
-            var dir = new Vector3(-10, -15, 0);
-            Plane plane = new Plane(origin, dir);
+            Plane pA = new Plane();
+            Plane pB = new Plane();
 
+            pA.Origin = new Point3(7.4026739, 4.5163439, 0);
+            pA.XAxis = new Vector3(0.7124, 0.701773, 0);
+            pA.YAxis = new Vector3(-0.226587, 0.230018, 0.946441);
+
+            pB.Origin = new Point3(17.897769, 22.522106, 0);
+            pB.XAxis = new Vector3(-0.416727, -0.909032, 0);
+            pB.YAxis = new Vector3(-0.909032, 0.416727, 0);
+
+            var expectedXForm = Matrix.Identity(4);
+            expectedXForm[0][0] = -0.090902; expectedXForm[0][1] = -0.501542; expectedXForm[0][2] = -0.860345; expectedXForm[0][3] = 20.835818;
+            expectedXForm[1][0] = -0.742019; expectedXForm[1][1] = -0.54208; expectedXForm[1][2] = 0.394407; expectedXForm[1][3] = 30.463251;
+            expectedXForm[2][0] = -0.664187; expectedXForm[2][1] = 0.674245; expectedXForm[2][2] = -0.322878; expectedXForm[2][3] = 1.871639;
+            
             // Act
-            Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, plane);
+            Transform transform = Transform.PlaneToPlane(pA, pB);
 
             // Assert
-            transform[0][0].Should().BeApproximately(-0.832050, GSharkMath.MaxTolerance);
-            transform[0][2].Should().BeApproximately(-0.554700, GSharkMath.MaxTolerance);
-            transform[0][3].Should().BeApproximately(5.0, GSharkMath.MaxTolerance);
-            transform[1][0].Should().BeApproximately(0.554700, GSharkMath.MaxTolerance);
-            transform[1][2].Should().BeApproximately(-0.832050, GSharkMath.MaxTolerance);
-            transform[2][1].Should().BeApproximately(-1.0, GSharkMath.MaxTolerance);
-            transform[3][3].Should().BeApproximately(1.0, GSharkMath.MaxTolerance);
+            _testOutput.WriteLine(transform.ToString());
+            for (var i = 0; i < transform.Count; i++)
+            {
+                var row = transform[i];
+                for (int j = 0; j < row.Count; j++)
+                {
+                    transform[i][j].Should().BeApproximately(expectedXForm[i][j], GSharkMath.MaxTolerance);
+                }
+            }
         }
     }
 }
