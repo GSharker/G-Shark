@@ -218,6 +218,48 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void Returns_A_Reversed_Surface_In_The_U_Direction()
+        {
+            // Arrange
+            List<List<Point3>> expectedPts = new List<List<Point3>>
+            {
+                new List<Point3>{ new Point3(10.0, 0.0, 0.0), new Point3(10.0, 10.0, 2.0)},
+                new List<Point3>{ new Point3(5.0, 0.0, 0.0), new Point3(5.0,10.0,5.0)},
+                new List<Point3>{ new Point3(0.0, 0.0, 0.0), new Point3(0.0, 10.0, 4.0)}
+            };
+
+            // Act
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints().Reverse(SurfaceDirection.U);
+
+            // Assert
+            surface.ControlPointLocations
+                .Zip(expectedPts, (ptsA, ptsB) => ptsA.SequenceEqual(ptsB))
+                .All(res => res)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Reversed_Surface_In_The_V_Direction()
+        {
+            // Arrange
+            List<List<Point3>> expectedPts = new List<List<Point3>>
+            {
+                new List<Point3>{ new Point3(0.0, 10.0, 4.0), new Point3(0.0, 0.0, 0.0)},
+                new List<Point3>{ new Point3(5.0, 10.0, 5.0), new Point3(5.0,0.0,0.0)},
+                new List<Point3>{ new Point3(10.0, 10.0, 2.0), new Point3(10.0, 0.0, 0.0)}
+            };
+
+            // Act
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints().Reverse(SurfaceDirection.V);
+
+            // Assert
+            surface.ControlPointLocations
+                .Zip(expectedPts, (ptsA, ptsB) => ptsA.SequenceEqual(ptsB))
+                .All(res => res)
+                .Should().BeTrue();
+        }
+
+        [Fact]
         public void Returns_True_If_Surface_Is_Close()
         {
             // Act
