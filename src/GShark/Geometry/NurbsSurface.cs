@@ -487,6 +487,27 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Reverses the parameterization of a surface in the specified direction. The domain is unaffected.
+        /// </summary>
+        /// <param name="surfaceDirection">The U or V direction whether the surface will be reversed.</param>
+        /// <returns>A surface reversed in the specified direction.</returns>
+        public NurbsSurface Reverse(SurfaceDirection surfaceDirection)
+        {
+            var copyControlPoint = new List<List<Point4>>(ControlPoints);
+            if (surfaceDirection == SurfaceDirection.V)
+            {
+                foreach (List<Point4> row in copyControlPoint)
+                {
+                    row.Reverse();
+                }
+                return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotVector.Reverse(KnotsV), copyControlPoint);
+            }
+
+            copyControlPoint.Reverse();
+            return new NurbsSurface(DegreeU, DegreeV, KnotVector.Reverse(KnotsU), KnotsV, copyControlPoint);
+        }
+
+        /// <summary>
         /// Compares if two NURBS surfaces are the same.<br/>
         /// Two NURBS curves are equal when the have same degrees, same control points order and dimension, and same knots.
         /// </summary>
