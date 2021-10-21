@@ -5,8 +5,6 @@
     /// </summary>
     public enum SplitDirection
     {
-        Unknown = 0,
-
         /// <summary>
         /// The U direction of a surface.
         /// </summary>
