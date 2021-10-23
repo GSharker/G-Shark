@@ -109,6 +109,22 @@ namespace GShark.Geometry
         }
 
         /// <summary>
+        /// Extracts the boundary curves of the surface.
+        /// </summary>
+        /// <returns>The boundary edges.</returns>
+        public NurbsBase[] BoundaryEdges()
+        {
+            NurbsBase[] curves = new NurbsBase[]
+            {
+                IsoCurve(0.0, SurfaceDirection.U),
+                IsoCurve(1.0, SurfaceDirection.V),
+                IsoCurve(1.0, SurfaceDirection.U),
+                IsoCurve(0.0, SurfaceDirection.V)
+            };
+            return curves;
+        }
+
+        /// <summary>
         /// Constructs a NURBS surface from four corners.<br/>
         /// If the corners are ordered ccw the normal of the surface will point up otherwise, if corners ordered cw the normal will point down.<br/>
         /// The surface is defined of degree 1.
