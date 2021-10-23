@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using GShark.Core;
 using GShark.Enumerations;
 using GShark.ExtendedMethods;
@@ -97,8 +98,9 @@ namespace GShark.Geometry
         /// </summary>
         public List<List<Point4>> ControlPoints { get; }
 
+
         /// <summary>
-        /// Checks if a NURBS surface is closed.<br/>
+        /// Checks if the surface is closed.<br/>
         /// A surface is closed if the first points and the lasts in a direction are coincident.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
@@ -106,6 +108,24 @@ namespace GShark.Geometry
         {
             var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(ControlPointLocations) : ControlPointLocations;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
+        }
+
+        /// <summary>
+        /// Gets the BoundingBox of the surface.
+        /// </summary>
+        /// <returns>The BoundingBox of the surface.</returns>
+        public BoundingBox GetBoundingBox()
+        {
+            NurbsBase[] curves = BoundaryEdges();
+            List<Point3> pts = new List<Point3>();
+            foreach (NurbsBase curve in curves)
+            {
+                var extremaValues = curve.Extrema();
+                pts.AddRange(extremaValues.Select(val => curve.PointAt(val)));
+                pts.Add(curve.StartPoint);
+            }
+
+            return new BoundingBox(pts);
         }
 
         /// <summary>
@@ -263,7 +283,7 @@ namespace GShark.Geometry
             List<Plane> frames = rail.PerpendicularFrames(tValues);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
-            for (int i = 1; i <= frames.Count; i++)
+            for (int i = 1; i < frames.Count; i++)
             {
                 Transform xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));

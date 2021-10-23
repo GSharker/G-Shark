@@ -260,7 +260,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void Returns_True_If_Surface_Is_Close()
+        public void Returns_True_If_Surface_Is_Closed()
         {
             // Act
             NurbsSurface surface = NurbsSurface.FromLoft(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
@@ -534,6 +534,21 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             (sweepSurface.ControlPointLocations.Last()[1] == ptsA.Last()).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Gets_The_BoundingBox_Of_A_Surface()
+        {
+            // Arrange
+            Point3 expectedMinPt = new Point3(0, 0, 0);
+            Point3 expectedMaxPt = new Point3(10, 10, 4.464816);
+
+            // Act
+            BoundingBox bBox = NurbsSurfaceCollection.SurfaceFromPoints().GetBoundingBox();
+
+            // Assert
+            (bBox.Min == expectedMinPt).Should().BeTrue();
+            (bBox.Max == expectedMaxPt).Should().BeTrue();
         }
     }
 }
