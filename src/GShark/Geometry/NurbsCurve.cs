@@ -48,7 +48,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new NURBS curve transformed.</returns>
-        public NurbsCurve Transform(Transform transformation)
+        public NurbsCurve Transform(TransformMatrix transformation)
         {
             List<Point4> pts = ControlPoints.Select(pt => pt.Transform(transformation)).ToList();
             return new NurbsCurve(Degree, Knots, pts);

@@ -458,11 +458,11 @@ namespace GShark.Geometry
         /// <summary>
         /// Applies a transformation to the plane where the circle is on.
         /// </summary>
-        /// <param name="transformation">Transformation matrix to apply.</param>
+        /// <param name="t">Transformation matrix to apply.</param>
         /// <returns>A transformed arc.</returns>
-        public Circle Transform(Transform transformation)
+        public Circle Transform(TransformMatrix t)
         {
-            Plane plane = Plane.Transform(transformation);
+            Plane plane = Plane.Transform(t);
             return new Circle(plane, Radius);
         }
 

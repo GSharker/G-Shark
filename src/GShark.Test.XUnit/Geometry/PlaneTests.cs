@@ -117,21 +117,23 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Transformed_Plane()
         {
+            //ToDo Testing transformation here, not combination of transforms. Start with a given, already combined xForm and compare results to Rhino.
             // Arrange
             var pt1 = new Point3(20, 20, 0);
             var pt2 = new Point3(5, 5, 0);
             var pt3 = new Point3(-5, 10, 0);
             Plane plane = new Plane(pt1, pt2, pt3);
-            Transform translation = Transform.Translation(new Point3(10, 15, 0));
-            Transform rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
+            var translation = Transform.Translation(new Point3(10, 15, 0));
+            var rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
             var expectedOrigin = new Point3(17.320508, 42.320508, 0);
             var expectedZAxis = new Vector3(0, 0, -1);
 
             // Act
-            Transform combinedTransformations = translation.Combine(rotation);
+            var combinedTransformations = Transform.Combine(translation, rotation); //TODO Combine(translation, rotation) should return R * T.
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
             // Assert
+            //TODO Test in transform.
             transformedPlane.Origin.EpsilonEquals(expectedOrigin, GSharkMath.MaxTolerance).Should().BeTrue();
             transformedPlane.ZAxis.EpsilonEquals(expectedZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
         }

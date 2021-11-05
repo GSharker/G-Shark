@@ -226,7 +226,7 @@ namespace GShark.Geometry
         /// <returns>The extruded surface.</returns>
         public static NurbsSurface FromExtrusion(Vector3 direction, NurbsBase profile)
         {
-            Transform xForm = Core.Transform.Translation(direction);
+            var xForm = Core.Transform.Translation(direction);
             List<Point4> translatedControlPts =
                 profile.ControlPoints.Select(controlPoint => controlPoint.Transform(xForm)).ToList();
 
@@ -249,7 +249,7 @@ namespace GShark.Geometry
 
             for (int i = 1; i <= frames.Count; i++)
             {
-                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
+                var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
             }
 
@@ -479,7 +479,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new NURBS surface transformed.</returns>
-        public NurbsSurface Transform(Transform transformation)
+        public NurbsSurface Transform(TransformMatrix transformation)
         {
             List<List<Point4>> transformedControlPts = ControlPoints;
             transformedControlPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));

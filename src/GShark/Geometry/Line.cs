@@ -252,12 +252,12 @@ namespace GShark.Geometry
         /// <summary>
         /// Transforms the line using the transformation matrix.
         /// </summary>
-        /// <param name="transform">Transformation matrix to apply.</param>
+        /// <param name="t">Transformation matrix to apply.</param>
         /// <returns>A line transformed.</returns>
-        public Line Transform(Transform transform)
+        public Line Transform(TransformMatrix t)
         {
-            Point3 pt1 = StartPoint.Transform(transform);
-            Point3 pt2 = EndPoint.Transform(transform);
+            Point3 pt1 = StartPoint.Transform(t);
+            Point3 pt2 = EndPoint.Transform(t);
             return new Line(pt1, pt2);
         }
 

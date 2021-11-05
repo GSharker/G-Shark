@@ -357,7 +357,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polyline transformed.</returns>
-        public PolyLine Transform(Transform transform)
+        public PolyLine Transform(TransformMatrix transform)
         {
             List<Point3> transformedPts = ControlPointLocations.Select(pt => pt.Transform(transform)).ToList();
 
@@ -420,7 +420,7 @@ namespace GShark.Geometry
                 }
 
                 Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.ZAxis).Amplify(distance);
-                Transform xForm = Core.Transform.Translation(vecOffset);
+                var xForm = Core.Transform.Translation(vecOffset);
                 offsetSegments[k] = segments[k].Transform(xForm);
 
                 if (i == 0 && IsClosed)

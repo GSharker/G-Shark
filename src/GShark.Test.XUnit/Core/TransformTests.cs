@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
@@ -17,140 +18,19 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_An_Instance_Of_Transform()
+        public void It_Returns_The_Rotation_Matrix_To_Rotate_An_Object_About_An_Axis_And_Center_Point()
         {
-            // Act
-            Transform transform = new Transform();
-
-            // Assert
-            transform.Should().NotBeNull();
-            transform.Count.Should().Be(4);
-            transform[0].Count.Should().Be(4);
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public void It_Creates_A_Transform_By_Copying_Another_Transform()
+        public void It_Returns_The_Scaling_Matrix_To_Scale_An_Object_Non_Uniformly_From_A_Center_Point()
         {
-            // Arrange
-            Transform transform = new Transform { [0] = { [0] = 2 }, [1] = { [0] = 2 } };
-
-            // Act
-            Transform copyTransform = Transform.Copy(transform);
-
-            // Assert
-            copyTransform.Should().BeEquivalentTo(transform);
-            transform[0][2] = 3;
-            copyTransform.Should().NotBeEquivalentTo(transform);
+            throw new NotImplementedException();
         }
 
         [Fact]
-        public void It_Returns_A_Identity_Transform_Matrix()
-        {
-            // Act
-            Transform transform = Transform.Identity();
-
-            // Assert
-            transform.Count.Should().Be(4);
-            transform[0].Count.Should().Be(4);
-            transform[0][0].Should().Be(1);
-            transform[1][1].Should().Be(1);
-            transform[2][2].Should().Be(1);
-            transform[3][3].Should().Be(1);
-        }
-
-        [Fact]
-        public void It_Returns_A_Translated_Transformed_Matrix()
-        {
-            // Arrange
-            var translation = new Vector3(10, 10, 0);
-
-            // Act
-            Transform transform = Transform.Translation(translation);
-
-            // Assert
-            transform[0][3].Should().Be(10);
-            transform[1][3].Should().Be(10);
-            transform[3][3].Should().Be(1);
-        }
-
-        [Fact]
-        public void It_Returns_A_Rotated_Transformed_Matrix()
-        {
-            // Arrange
-            var center = new Point3(5, 5, 0);
-            double angleInRadians = GSharkMath.ToRadians(30);
-
-            // Act
-            Transform transform = Transform.Rotation(angleInRadians, center);
-
-            // Getting the angles.
-            Dictionary<string, double> angles = Transform.GetYawPitchRoll(transform);
-            // Getting the direction.
-            var axis = Transform.GetRotationAxis(transform);
-
-            // Assert
-            GSharkMath.ToDegrees(angles["Yaw"]).Should().BeApproximately(30, GSharkMath.Epsilon);
-            axis.Should().BeEquivalentTo(Vector3.ZAxis);
-        }
-
-        [Fact]
-        public void It_Returns_A_Scaled_Transformation_Matrix()
-        {
-            // Act
-            Transform scale1 = Transform.Scale(new Point3(0, 0, 0), 0.5);
-            Transform scale2 = Transform.Scale(new Point3(10, 10, 0), 0.5);
-
-            // Assert
-            scale1[0][0].Should().Be(0.5); scale2[0][0].Should().Be(0.5);
-            scale1[1][1].Should().Be(0.5); scale2[1][1].Should().Be(0.5);
-            scale1[2][2].Should().Be(0.5); scale2[2][2].Should().Be(0.5);
-            scale1[3][3].Should().Be(1.0); scale2[3][3].Should().Be(1.0);
-
-            scale2[0][3].Should().Be(5.0);
-            scale2[1][3].Should().Be(5.0);
-        }
-
-        [Fact]
-        public void It_Returns_A_Mirrored_Transformation_Matrix()
-        {
-            // Arrange
-            var pt = new Point3(10, 10, 0);
-            Plane plane = new Plane(pt, Vector3.XAxis);
-
-            // Act
-            Transform transform = Transform.Reflection(plane);
-
-            // Assert
-            transform[0][0].Should().Be(-1.0);
-            transform[1][1].Should().Be(1.0);
-            transform[2][2].Should().Be(1.0);
-            transform[3][3].Should().Be(1.0);
-            transform[0][3].Should().Be(20);
-        }
-
-        [Fact]
-        public void It_Returns_A_Transformation_Projection_By_A_Plane()
-        {
-            // Arrange
-            var origin = new Point3(5, 0, 0);
-            var dir = new Point3(-10, -15, 0);
-            Plane plane = new Plane(origin, dir);
-
-            // Act
-            Transform transform = Transform.PlanarProjection(plane);
-
-            // Assert
-            transform[0][0].Should().BeApproximately(0.692308, GSharkMath.MaxTolerance);
-            transform[0][1].Should().BeApproximately(-0.461538, GSharkMath.MaxTolerance);
-            transform[0][3].Should().BeApproximately(1.538462, GSharkMath.MaxTolerance);
-            transform[1][0].Should().BeApproximately(-0.461538, GSharkMath.MaxTolerance);
-            transform[1][1].Should().BeApproximately(0.307692, GSharkMath.MaxTolerance);
-            transform[1][3].Should().BeApproximately(2.307692, GSharkMath.MaxTolerance);
-            transform[3][3].Should().BeApproximately(1.0, GSharkMath.MaxTolerance);
-        }
-
-        [Fact]
-        public void It_Returns_A_PlaneToPlane_Transformation_Matrix()
+        public void It_Returns_A_PlaneToPlane_TransformMatrix()
         {
             // Arrange
             Plane pA = new Plane();
@@ -164,24 +44,30 @@ namespace GShark.Test.XUnit.Core
             pB.XAxis = new Vector3(-0.416727, -0.909032, 0);
             pB.YAxis = new Vector3(-0.909032, 0.416727, 0);
 
-            var expectedXForm = Matrix.Identity(4);
-            expectedXForm[0][0] = -0.090902; expectedXForm[0][1] = -0.501542; expectedXForm[0][2] = -0.860345; expectedXForm[0][3] = 20.835818;
-            expectedXForm[1][0] = -0.742019; expectedXForm[1][1] = -0.54208; expectedXForm[1][2] = 0.394407; expectedXForm[1][3] = 30.463251;
-            expectedXForm[2][0] = -0.664187; expectedXForm[2][1] = 0.674245; expectedXForm[2][2] = -0.322878; expectedXForm[2][3] = 1.871639;
-            
+            var expectedXForm = new TransformMatrix();
+
+            expectedXForm.M00 = -0.09090148101600004;
+            expectedXForm.M10 = -0.501541479547;
+            expectedXForm.M20 = -0.8603451551119999;
+            expectedXForm.M30 = 20.835816822737556;
+
+            expectedXForm.M01 = -0.742019317549;
+            expectedXForm.M11 = -0.54207940265;
+            expectedXForm.M21 = 0.394407518607;
+            expectedXForm.M31 = 30.463250038789766;
+
+            expectedXForm.M02 = -0.6641868664529847;
+            expectedXForm.M12 = 0.674244696876492;
+            expectedXForm.M22 = -0.3228775234749122;
+            expectedXForm.M32 = 1.871637857168802;
+
             // Act
-            Transform transform = Transform.PlaneToPlane(pA, pB);
+            var transform = Transform.PlaneToPlane(pA, pB);
 
             // Assert
             _testOutput.WriteLine(transform.ToString());
-            for (var i = 0; i < transform.Count; i++)
-            {
-                var row = transform[i];
-                for (int j = 0; j < row.Count; j++)
-                {
-                    transform[i][j].Should().BeApproximately(expectedXForm[i][j], GSharkMath.MaxTolerance);
-                }
-            }
+            _testOutput.WriteLine(expectedXForm.ToString());
+            transform.Equals(expectedXForm).Should().BeTrue();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TransformMatrix = GShark.Core.TransformMatrix;
 
 namespace GShark.Geometry
 {
@@ -43,13 +44,13 @@ namespace GShark.Geometry
             get
             {
                 bool isOnPlaneXy = true;
-                Transform transformBack = new Transform();
+                var transformBack = new TransformMatrix();
                 List<Point3> copiedPts = new List<Point3>(ControlPointLocations);
                 if (Math.Abs(ControlPointLocations[0][2]) > GSharkMath.MaxTolerance)
                 {
                     isOnPlaneXy = false;
                     Plane polygonPlane = new Plane(ControlPointLocations[0], ControlPointLocations[1], ControlPointLocations[2]);
-                    Transform toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+                    var toOrigin = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
                     transformBack = Core.Transform.PlaneToPlane(Plane.PlaneXY, polygonPlane);
                     copiedPts = Transform(toOrigin).ControlPointLocations;
                 }
@@ -169,7 +170,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polygon transformed.</returns>
-        public new Polygon Transform(Transform transform)
+        public new Polygon Transform(TransformMatrix transform)
         {
             List<Point3> transformedPts = ControlPointLocations.Select(pt => pt.Transform(transform)).ToList();
 
