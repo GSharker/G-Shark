@@ -369,6 +369,17 @@ namespace GShark.Core
             return a;
         }
 
+        /// <summary>
+        /// Combines this transform matrix with another. Order matters.<br/>
+        /// E.g. If you call translation.Combine(rotation), the combined transformation will represent a translation, followed by a rotation. <br/>
+        /// This is the same as using the * operator where M = rotation * translation.
+        /// </summary>
+        /// <returns>TransformMatrix representing the combined transformations.</returns>
+        public TransformMatrix Combine(TransformMatrix other)
+        {
+            return other * this;
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

@@ -122,9 +122,11 @@ namespace GShark.Core
                 M22 = factorZ
             };
 
-            var translationVector = new Vector3(centerPoint.X * factorX, centerPoint.Y * factorY, centerPoint.Z * factorZ);
-            var translation = TransformMatrix.Translation(translationVector);
-            var result =  translation * scaleMatrix;
+            var origin = new Point3(0, 0, 0);
+            var translationToOrigin = TransformMatrix.Translation(origin - centerPoint);
+            // Translating point (0,0,0) to pt1
+            var translationToCentrePoint = TransformMatrix.Translation(centerPoint - origin);
+            var result =  translationToCentrePoint * scaleMatrix * translationToOrigin;
 
             return result;
         }
@@ -207,18 +209,7 @@ namespace GShark.Core
             return result;
         }
 
-        /// <summary>
-        /// Combines two transformations.<br/>
-        /// This is the same as the * operator.
-        /// </summary>
-        /// <param name="t">Transformation to combine.</param>
-        /// <returns>Transformation combined.</returns>
-        public static TransformMatrix Combine(TransformMatrix a, TransformMatrix b)
-        {
-            return b * a;
-        }
-
-        /// <summary>
+       /// <summary>
         /// Finds the rotation axis used in the transformation.<br/>
         /// https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
         /// </summary>

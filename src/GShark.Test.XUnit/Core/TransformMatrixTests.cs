@@ -20,13 +20,13 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Multiplies_Matrices()
+        public void It_Combines_Transformation_Matrices()
         {
             //Arrange
             var t1 = TransformMatrix.Translation(new Vector3(5, 5, 2));
             var t2 = TransformMatrix.Rotation(Vector3.ZAxis, GSharkMath.ToRadians(30));
             var t3 = TransformMatrix.Scale(2, 2, 2);
-            var expectedMatrix1 = new TransformMatrix() //t1*t2*t3 checked in Rhino.
+            var expectedMatrix1 = new TransformMatrix() //Compound(t1, t2, t3) checked gh.
             {
                 M00 = 1.7320508075688774,
                 M01 = 0.9999999999999999,
@@ -38,7 +38,7 @@ namespace GShark.Test.XUnit.Core
                 M32 = 4
             };
 
-            var expectedMatrix2 = new TransformMatrix() //t2*t1*t3 checked in Rhino.
+            var expectedMatrix2 = new TransformMatrix() //Compound(t2,t1,t3) checked in gh.
             {
                 M00 = 1.7320508075688774,
                 M01 = 0.9999999999999999,
@@ -52,8 +52,8 @@ namespace GShark.Test.XUnit.Core
 
             //Act
             //order matters, matrices non commutative.
-            var result1 = t3 * t2 * t1;
-            var result2 = t3 * t1 * t2;
+            var result1 = t1.Combine(t2).Combine(t3);
+            var result2 = t2.Combine(t1).Combine(t3);
 
             //Assert
 #if DEBUG

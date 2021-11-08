@@ -129,7 +129,7 @@ namespace GShark.Test.XUnit.Geometry
             var expectedZAxis = new Vector3(0, 0, -1);
 
             // Act
-            var combinedTransformations = Transform.Combine(translation, rotation); //TODO Combine(translation, rotation) should return R * T.
+            var combinedTransformations = rotation.Combine(translation); //TODO Combine(translation, rotation) should return R * T.
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
             // Assert

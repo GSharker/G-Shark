@@ -247,7 +247,7 @@ namespace GShark.Geometry
             List<Plane> frames = rail.PerpendicularFrames(tValues);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
-            for (int i = 1; i <= frames.Count; i++)
+            for (int i = 1; i < frames.Count; i++)
             {
                 var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));

@@ -20,13 +20,64 @@ namespace GShark.Test.XUnit.Core
         [Fact]
         public void It_Returns_The_Rotation_Matrix_To_Rotate_An_Object_About_An_Axis_And_Center_Point()
         {
-            throw new NotImplementedException();
+            //Arrange
+            var axis = Vector3.ZAxis;
+            var degrees = GSharkMath.ToRadians(30);
+            var centerPoint = new Point3(5, 5, 2);
+
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 0.8660254037844387,
+                M10 = -0.49999999999999994,
+                M30 = 3.169872981077806,
+                M01 = 0.49999999999999994,
+                M11 = 0.8660254037844387,
+                M31 = -1.8301270189221928,
+            };
+
+            //Act
+            var rotationMatrix = Transform.Rotation(axis, degrees, centerPoint);
+
+            //Assert
+#if DEBUG
+            _testOutput.WriteLine(rotationMatrix.ToString());
+#endif
+            rotationMatrix.Equals(expectedMatrix).Should().BeTrue();
         }
 
         [Fact]
         public void It_Returns_The_Scaling_Matrix_To_Scale_An_Object_Non_Uniformly_From_A_Center_Point()
         {
-            throw new NotImplementedException();
+            //Arrange
+            var centerPoint = new Point3(5, 5, 2);
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 0.5,
+                M10 = 0,
+                M20 = 0,
+                M30 = 2.5,
+                M01 = 0,
+                M11 = 0.2,
+                M21 = 0,
+                M31 = 4,
+                M02 = 0,
+                M12 = 0,
+                M22 = 0.7,
+                M32 = 0.6000000000000001,
+                M03 = 0,
+                M13 = 0,
+                M23 = 0,
+                M33 = 1
+            };
+
+            //Act
+            var scalingMatrix = Transform.Scale(centerPoint, .5, .2, .7);
+
+            //Assert
+#if DEBUG
+            _testOutput.WriteLine(scalingMatrix.ToString());
+#endif
+            scalingMatrix.Equals(expectedMatrix).Should().BeTrue();
         }
 
         [Fact]

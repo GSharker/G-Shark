@@ -509,7 +509,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Creates_A_NurbsSurface_From_Swep()
+        public void It_Creates_A_NurbsSurface_From_Sweep()
         {
             // Arrange
             List<Point3> ptsA = new List<Point3>
