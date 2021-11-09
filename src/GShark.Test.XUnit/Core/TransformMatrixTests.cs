@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -65,7 +66,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_An_Instance_Of_TransformMatrix()
+        public void It_Returns_The_Identity_TransformMatrix()
         {
             // Act
             var transformMatrix = new TransformMatrix();
@@ -132,7 +133,7 @@ namespace GShark.Test.XUnit.Core
             double angleInRadians = GSharkMath.ToRadians(30);
 
             // Act
-            var transform = Transform.Rotation(angleInRadians, center);
+            var transform = Transform.Rotation(angleInRadians, center, RotationAxis.Z);
 
             // Assert
 #if DEBUG

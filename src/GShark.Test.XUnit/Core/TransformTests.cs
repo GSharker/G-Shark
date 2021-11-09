@@ -4,6 +4,7 @@ using GShark.Core;
 using GShark.Geometry;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,36 +18,10 @@ namespace GShark.Test.XUnit.Core
             _testOutput = testOutput;
         }
 
-        [Fact]
-        public void It_Returns_The_Rotation_Matrix_To_Rotate_An_Object_About_An_Axis_And_Center_Point()
-        {
-            //Arrange
-            var axis = Vector3.ZAxis;
-            var degrees = GSharkMath.ToRadians(30);
-            var centerPoint = new Point3(5, 5, 2);
 
-            var expectedMatrix = new TransformMatrix()
-            {
-                M00 = 0.8660254037844387,
-                M10 = -0.49999999999999994,
-                M30 = 3.169872981077806,
-                M01 = 0.49999999999999994,
-                M11 = 0.8660254037844387,
-                M31 = -1.8301270189221928,
-            };
-
-            //Act
-            var rotationMatrix = Transform.Rotation(axis, degrees, centerPoint);
-
-            //Assert
-#if DEBUG
-            _testOutput.WriteLine(rotationMatrix.ToString());
-#endif
-            rotationMatrix.Equals(expectedMatrix).Should().BeTrue();
-        }
 
         [Fact]
-        public void It_Returns_The_Scaling_Matrix_To_Scale_An_Object_Non_Uniformly_From_A_Center_Point()
+        public void It_Returns_A_Non_Uniform_Scaling_Matrix_From_A_Center_Point()
         {
             //Arrange
             var centerPoint = new Point3(5, 5, 2);
@@ -81,7 +56,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_PlaneToPlane_TransformMatrix()
+        public void It_Returns_A_Plane_To_Plane_Transformation_Matrix()
         {
             // Arrange
             Plane pA = new Plane();
@@ -120,5 +95,172 @@ namespace GShark.Test.XUnit.Core
             _testOutput.WriteLine(expectedXForm.ToString());
             transform.Equals(expectedXForm).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_A_Translation_Matrix_From_A_Vector()
+        {
+            //Arrange
+            var ptA = new Point3(0.3, 4, 1.2);
+            var ptB = new Point3(12, 7.5, 2);
+            var vec = new Vector3(ptB - ptA);
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 1,
+                M10 = 0,
+                M20 = 0,
+                M30 = 11.7,
+                M01 = 0,
+                M11 = 1,
+                M21 = 0,
+                M31 = 3.5,
+                M02 = 0,
+                M12 = 0,
+                M22 = 1,
+                M32 = 0.8,
+                M03 = 0,
+                M13 = 0,
+                M23 = 0,
+                M33 = 1
+            };
+
+            //Act
+            var translation = Transform.Translation(vec);
+
+            //Assert
+            translation.Equals(expectedMatrix).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Translation_Matrix_From_Two_Points()
+        {
+            //Arrange
+            var ptA = new Point3(0.3, 4, 1.2);
+            var ptB = new Point3(12, 7.5, 2);
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 1,
+                M10 = 0,
+                M20 = 0,
+                M30 = 11.7,
+                M01 = 0,
+                M11 = 1,
+                M21 = 0,
+                M31 = 3.5,
+                M02 = 0,
+                M12 = 0,
+                M22 = 1,
+                M32 = 0.8,
+                M03 = 0,
+                M13 = 0,
+                M23 = 0,
+                M33 = 1
+            };
+
+            //Act
+            var translation = Transform.Translation(ptA, ptB);
+
+            //Assert
+            translation.Equals(expectedMatrix).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Translation_Matrix_X_Y_Z_Values()
+        {
+            //Arrange
+            var x = 11.7;
+            var y = 3.5;
+            var z = 0.8;
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 1,
+                M10 = 0,
+                M20 = 0,
+                M30 = 11.7,
+                M01 = 0,
+                M11 = 1,
+                M21 = 0,
+                M31 = 3.5,
+                M02 = 0,
+                M12 = 0,
+                M22 = 1,
+                M32 = 0.8,
+                M03 = 0,
+                M13 = 0,
+                M23 = 0,
+                M33 = 1
+            };
+
+            //Act
+            var translation = Transform.Translation(x,y,z);
+
+            //Assert
+            translation.Equals(expectedMatrix).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Rotation_Matrix_From_An_Angle_And_A_Center_Point()
+        {
+            //Arrange
+            var degrees = GSharkMath.ToRadians(30);
+            var centerPoint = new Point3(5, 5, 2);
+
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 0.8660254037844387,
+                M10 = -0.49999999999999994,
+                M30 = 3.169872981077806,
+                M01 = 0.49999999999999994,
+                M11 = 0.8660254037844387,
+                M31 = -1.8301270189221928,
+            };
+
+            //Act
+            var rotationMatrix = Transform.Rotation(degrees, centerPoint);
+
+            //Assert
+#if DEBUG
+            _testOutput.WriteLine(rotationMatrix.ToString());
+#endif
+            rotationMatrix.Equals(expectedMatrix).Should().BeTrue();
+        }
+
+        [Fact]
+        public void It_Returns_A_Rotation_Matrix_From_An_Axis_And_A_Center_Point()
+        {
+            //Arrange
+            var axis = new Vector3(5, 15.6, 2);
+            var degrees = GSharkMath.ToRadians(30);
+            var centerPoint = new Point3(5, 5, 2);
+
+            var expectedMatrix = new TransformMatrix()
+            {
+                M00 = 0.878322969158903,
+                M10 = -0.0222254166980732,
+                M20 = 0.477550827347714,
+                M30 = -0.235589416999576,
+                M01 = 0.098962224634729,
+                M11 = 0.985734824165622,
+                M21 = -0.136137190078672,
+                M31 = -0.15121086384441,
+                M02 = -0.467712775048143,
+                M12 = 0.166831913253334,
+                M22 = 0.867993014244353,
+                M32 = 1.76841828048534,
+                M03 = 0,
+                M13 = 0,
+                M23 = 0,
+                M33 = 1
+            };
+
+            //Act
+            var rotationMatrix = Transform.Rotation(degrees, new Point3(), axis);
+
+            //Assert
+#if DEBUG
+            _testOutput.WriteLine(rotationMatrix.ToString());
+#endif
+            rotationMatrix.Equals(expectedMatrix).Should().BeTrue();
+        }
+
     }
 }

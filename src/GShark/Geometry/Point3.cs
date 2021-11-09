@@ -11,9 +11,14 @@ namespace GShark.Geometry
     public class Point3 : IEquatable<Point3>, IComparable<Point3>, IComparable
     {
         /// <summary>
-        /// Initializes a new point.
+        /// Initializes a new point with zero valued coordinates.
         /// </summary>
-        public Point3() { }
+        public Point3()
+        {
+            X = 0;
+            Y = 0;
+            Z = 0;
+        }
 
         /// <summary>
         /// Initializes a new point by defining the X, Y and Z coordinates.

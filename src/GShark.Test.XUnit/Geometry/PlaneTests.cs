@@ -3,6 +3,7 @@ using GShark.Core;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -124,7 +125,7 @@ namespace GShark.Test.XUnit.Geometry
             var pt3 = new Point3(-5, 10, 0);
             Plane plane = new Plane(pt1, pt2, pt3);
             var translation = Transform.Translation(new Point3(10, 15, 0));
-            var rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
+            var rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0), RotationAxis.Z);
             var expectedOrigin = new Point3(17.320508, 42.320508, 0);
             var expectedZAxis = new Vector3(0, 0, -1);
 

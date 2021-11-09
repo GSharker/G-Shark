@@ -17,10 +17,10 @@ namespace GShark.Core
     {
         /// <summary>
         /// Creates a TransformMatrix set to the identity matrix.
-        /// 1000<br>
-        /// 0100<br>
-        /// 0010<br>
-        /// 0001<br>
+        /// 1000<br/>
+        /// 0100<br/>
+        /// 0010<br/>
+        /// 0001<br/>
         /// </summary>
         public TransformMatrix()
         {
@@ -169,25 +169,25 @@ namespace GShark.Core
             var axisZ = axisUnitVector.Z;
             var sinTheta = Math.Sin(theta);
             var cosTheta = Math.Cos(theta);
-            var a = 1 - cosTheta;
-            var ax = a * axisX;
-            var ay = a * axisY;
-            var az = a * axisZ;
+            var k = 1 - cosTheta;
+            var kX = k * axisX;
+            var kY = k * axisY;
+            var kZ = k * axisZ;
 
             //column 0
-            result.M00 = ax * axisX + cosTheta;
-            result.M01 = ax * axisY + axisZ * sinTheta;
-            result.M02 = ax * axisZ - axisY * sinTheta;
+            result.M00 = kX * axisX + cosTheta;
+            result.M01 = kX * axisY + axisZ * sinTheta;
+            result.M02 = kX * axisZ - axisY * sinTheta;
             
             //column 1
-            result.M10 = ay * axisX - axis.Z * sinTheta;
-            result.M11 = ay * axisY + cosTheta;
-            result.M12 = ay * axisZ + axisX * sinTheta;
+            result.M10 = kY * axisX - axis.Z * sinTheta;
+            result.M11 = kY * axisY + cosTheta;
+            result.M12 = kY * axisZ + axisX * sinTheta;
 
             //column 2
-            result.M20 = az * axisX + axisY * sinTheta;
-            result.M21 = az * axisY - axisX * sinTheta;
-            result.M22 = az * axisZ + cosTheta;
+            result.M20 = kZ * axisX + axisY * sinTheta;
+            result.M21 = kZ * axisY - axisX * sinTheta;
+            result.M22 = kZ * axisZ + cosTheta;
 
             return result;
         }

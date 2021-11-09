@@ -3,6 +3,7 @@ using GShark.Core;
 using GShark.Geometry;
 using GShark.Intersection;
 using System.Collections.Generic;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -407,7 +408,7 @@ namespace GShark.Test.XUnit.Intersection
             };
             NurbsCurve crv = new NurbsCurve(crvCtrPts, degree);
 
-            var xForm = Transform.Rotation(0.15, new Point3(0.0, 0.0, 0.0));
+            var xForm = Transform.Rotation(0.15, new Point3(0.0, 0.0, 0.0), RotationAxis.Z);
             Plane pln = Plane.PlaneYZ;
             var testPln = pln.SetOrigin(new Point3(6, 0.0, 0.0));
             var testPlnXformed = testPln.Transform(xForm);

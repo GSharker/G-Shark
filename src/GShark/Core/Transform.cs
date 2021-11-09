@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GShark.Enumerations;
 
 namespace GShark.Core
 {
@@ -11,16 +12,15 @@ namespace GShark.Core
     /// </summary>
     public static class Transform
     {
-
         /// <summary>
         /// Constructs a transformation matrix representing a translation from pointA to pointB.
         /// </summary>
-        /// <param name="pointA">First point.</param>
-        /// <param name="pointB">Second point.</param>
+        /// <param name="from">First point.</param>
+        /// <param name="to">Second point.</param>
         /// <returns></returns>
-        public static TransformMatrix Translation(Point3 pointA, Point3 pointB)
+        public static TransformMatrix Translation(Point3 from, Point3 to)
         {
-            return Translation(pointB - pointA);
+            return Translation(to - from);
         }
 
         /// <summary>
@@ -56,30 +56,45 @@ namespace GShark.Core
         /// Constructs a new rotation transformation with specified radians angle, rotation center and rotation axis pointing up.
         /// </summary>
         /// <param name="theta">Angle in radians of the rotation.</param>
-        /// <param name="center">Center point of rotation. Rotation axis is vertical.</param>
+        /// <param name="center">Center point of rotation.</param>
+        /// <param name="rotationAxis">One of the standard rotation axes. X, Y, or Z.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public static TransformMatrix Rotation(double theta, Point3 center)
+        public static TransformMatrix Rotation(double theta, Point3 center, RotationAxis rotationAxis = RotationAxis.Z)
         {
-            return Rotation(Vector3.ZAxis, theta, center);
+            switch (rotationAxis)
+            {
+                case (RotationAxis.Z):
+                    return Rotation(theta, center, Vector3.ZAxis);
+                case (RotationAxis.Y):
+                    return Rotation(theta, center, Vector3.YAxis);
+                case (RotationAxis.X):
+                    return Rotation(theta, center, Vector3.XAxis);
+                default:
+                    throw new ArgumentException("Rotation axis must be X, Y, or Z.");
+            }
         }
 
         /// <summary>
         /// Constructs a new rotation transformation with Sin and Cos radians angle, rotation center and rotation axis.
         /// </summary>
-        /// <param name="axis">Axis direction.</param>
         /// <param name="theta"></param>
         /// <param name="centerPoint">Rotation center.</param>
-
+        /// <param name="axis">Axis direction.</param>
         /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
-        public static TransformMatrix Rotation(Vector3 axis, double theta, Point3 centerPoint)
+        public static TransformMatrix Rotation(double theta, Point3 centerPoint, Vector3 axis)
         {
             //T(x,y)∗R∗T(−x,−y)(P)
             var origin = new Point3(0, 0, 0);
-            var ptOriginVec = origin - centerPoint;
-            var translatePointToOrigin = TransformMatrix.Translation(ptOriginVec);
-            var translateOriginToPoint = TransformMatrix.Translation(ptOriginVec.Reverse());
             var rotationMatrix = TransformMatrix.Rotation(axis, theta);
-            var result = translateOriginToPoint * rotationMatrix * translatePointToOrigin;
+
+            if (centerPoint == origin)
+            {
+                return rotationMatrix;
+            }
+
+            var translatePointToOrigin = Translation(centerPoint, origin);
+            var translateOriginToPoint = Translation(origin, centerPoint);
+            var result = translatePointToOrigin.Combine(rotationMatrix).Combine(translateOriginToPoint);
 
             return result;
         }
