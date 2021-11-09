@@ -198,7 +198,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Rotation_Matrix_From_An_Angle_And_A_Center_Point()
+        public void It_Returns_A_Rotation_Matrix_From_Angle_And_Center_Point()
         {
             //Arrange
             var degrees = GSharkMath.ToRadians(30);
@@ -225,7 +225,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Rotation_Matrix_From_An_Axis_And_A_Center_Point()
+        public void It_Returns_A_Rotation_Matrix_From_Angle_Axis_And_Center_Point()
         {
             //Arrange
             var axis = new Vector3(5, 15.6, 2);
@@ -234,18 +234,18 @@ namespace GShark.Test.XUnit.Core
 
             var expectedMatrix = new TransformMatrix()
             {
-                M00 = 0.878322969158903,
+                M00 = 0.8783229691589027,
                 M10 = -0.0222254166980732,
                 M20 = 0.477550827347714,
-                M30 = -0.235589416999576,
-                M01 = 0.098962224634729,
-                M11 = 0.985734824165622,
-                M21 = -0.136137190078672,
-                M31 = -0.15121086384441,
-                M02 = -0.467712775048143,
-                M12 = 0.166831913253334,
-                M22 = 0.867993014244353,
-                M32 = 1.76841828048534,
+                M30 = -0.23558941699957536,
+                M01 = 0.09896222463472895,
+                M11 = 0.9857348241656216,
+                M21 = -0.1361371900786715,
+                M31 = -0.15121086384441007,
+                M02 = -0.46771277504814274,
+                M12 = 0.16683191325333382,
+                M22 = 0.8679930142443529,
+                M32 = 1.7684182804853388,
                 M03 = 0,
                 M13 = 0,
                 M23 = 0,
@@ -253,7 +253,7 @@ namespace GShark.Test.XUnit.Core
             };
 
             //Act
-            var rotationMatrix = Transform.Rotation(degrees, new Point3(), axis);
+            var rotationMatrix = Transform.Rotation(degrees, centerPoint, axis);
 
             //Assert
 #if DEBUG

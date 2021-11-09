@@ -163,31 +163,28 @@ namespace GShark.Core
         public static TransformMatrix Rotation(Vector3 axis, double theta)
         {
             var result = new TransformMatrix();
-            var axisUnitVector = axis.IsUnitVector ? axis : axis.Unitize();
-            var axisX = axisUnitVector.X;
-            var axisY = axisUnitVector.Y;
-            var axisZ = axisUnitVector.Z;
-            var sinTheta = Math.Sin(theta);
-            var cosTheta = Math.Cos(theta);
-            var k = 1 - cosTheta;
-            var kX = k * axisX;
-            var kY = k * axisY;
-            var kZ = k * axisZ;
+            axis = axis.Unitize();
+            var uX = axis.X;
+            var uY = axis.Y;
+            var uZ = axis.Z;
+            var s = Math.Sin(theta);
+            var c = Math.Cos(theta);
+            var k = 1 - c;
 
             //column 0
-            result.M00 = kX * axisX + cosTheta;
-            result.M01 = kX * axisY + axisZ * sinTheta;
-            result.M02 = kX * axisZ - axisY * sinTheta;
+            result.M00 = c + uX * uX * k;
+            result.M01 = uY * uX * k + uZ * s;
+            result.M02 = uZ * uX * k - uY * s;
             
             //column 1
-            result.M10 = kY * axisX - axis.Z * sinTheta;
-            result.M11 = kY * axisY + cosTheta;
-            result.M12 = kY * axisZ + axisX * sinTheta;
+            result.M10 = uX * uY * k - uZ * s;
+            result.M11 = c + uY * uY * k;
+            result.M12 = uZ * uY * k + uX * s;
 
             //column 2
-            result.M20 = kZ * axisX + axisY * sinTheta;
-            result.M21 = kZ * axisY - axisX * sinTheta;
-            result.M22 = kZ * axisZ + cosTheta;
+            result.M20 = uX * uZ  * k  + uY * s;
+            result.M21 = uY * uZ * k - uX * s;
+            result.M22 = c + uZ * uZ * k;
 
             return result;
         }
