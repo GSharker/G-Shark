@@ -11,16 +11,20 @@ using GShark.Geometry;
 namespace GShark.Core
 {
     /// <summary>
-    /// A column ordered 4x4 transformation matrix.
+    /// A column ordered 4x4 transformation matrix. <br/>
+    /// M00 M10 M20 M30 <br/>
+    /// M01 M11 M21 M31 <br/>
+    /// M02 M12 M22 M32 <br/>
+    /// M03 M13 M23 M33 <br/>
     /// </summary>
     public class TransformMatrix : IEquatable<TransformMatrix>
     {
         /// <summary>
-        /// Creates a TransformMatrix set to the identity matrix.
-        /// 1000<br/>
-        /// 0100<br/>
-        /// 0010<br/>
-        /// 0001<br/>
+        /// Creates a TransformMatrix set to the identity matrix. <br/>
+        /// 1 0 0 0 <br/>
+        /// 0 1 0 0 <br/>
+        /// 0 0 1 0 <br/>
+        /// 0 0 0 1 <br/>
         /// </summary>
         public TransformMatrix()
         {
@@ -160,7 +164,7 @@ namespace GShark.Core
         /// <param name="axis">Axis of rotation.</param>
         /// <param name="theta">Angle in radians.</param>
         /// <returns></returns>
-        public static TransformMatrix Rotation(Vector3 axis, double theta)
+        internal static TransformMatrix Rotation(Vector3 axis, double theta)
         {
             var result = new TransformMatrix();
             axis = axis.Unitize();
@@ -194,7 +198,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="vector">Translation vector.</param>
         /// <returns></returns>
-        public static TransformMatrix Translation(Vector3 vector)
+        internal static TransformMatrix Translation(Vector3 vector)
         {
             var result = new TransformMatrix
             {
@@ -211,7 +215,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="plane">The plane used to reflect.</param>
         /// <returns>The mirror transformation matrix.</returns>
-        public static TransformMatrix Reflection(Plane plane)
+        internal static TransformMatrix Reflection(Plane plane)
         {
             Point3 pt = plane.Origin;
             Vector3 normal = plane.ZAxis;
@@ -245,7 +249,7 @@ namespace GShark.Core
         /// <param name="yFactor">Scale factor in the y direction.</param>
         /// <param name="zFactor">Scale factor in the z direction.</param>
         /// <returns></returns>
-        public static TransformMatrix Scale(double xFactor, double yFactor, double zFactor)
+        internal static TransformMatrix Scale(double xFactor, double yFactor, double zFactor)
         {
             var result = new TransformMatrix
             {
@@ -263,7 +267,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="plane">Plane to project to.</param>
         /// <returns>A transformation matrix which projects geometry onto a specified plane.</returns>
-        public static TransformMatrix Projection(Plane plane)
+        internal static TransformMatrix Projection(Plane plane)
         {
             var n = plane.ZAxis.Unitize();
             var origin = plane.Origin;
@@ -289,6 +293,42 @@ namespace GShark.Core
             transform.M32 = translation.Z;
 
             return transform;
+        }
+
+        /// <summary>
+        /// Transposes matrix by swapping columns and rows.
+        /// </summary>
+        /// <returns></returns>
+        public TransformMatrix Transpose()
+        {
+            var a = new TransformMatrix
+            {
+                M00 = M00,
+                M01 = M10,
+                M02 = M20,
+                M10 = M01,
+                M11 = M11,
+                M12 = M21,
+                M20 = M02,
+                M21 = M12,
+                M22 = M22,
+                M30 = M03,
+                M31 = M13,
+                M32 = M23,
+                M33 = M33
+            };
+            return a;
+        }
+
+        /// <summary>
+        /// Combines this transform matrix with another. Order matters.<br/>
+        /// E.g. If you call translation.Combine(rotation), the combined transformation will represent a translation, followed by a rotation. <br/>
+        /// This is the same as using the * operator where M = rotation * translation.
+        /// </summary>
+        /// <returns>TransformMatrix representing the combined transformations.</returns>
+        public TransformMatrix Combine(TransformMatrix other)
+        {
+            return other * this;
         }
 
         /// <summary>
@@ -343,38 +383,6 @@ namespace GShark.Core
             };
 
             return result;
-        }
-
-        public TransformMatrix Transpose()
-        {
-            var a = new TransformMatrix
-            {
-                M00 = M00,
-                M01 = M10,
-                M02 = M20,
-                M10 = M01,
-                M11 = M11,
-                M12 = M21,
-                M20 = M02,
-                M21 = M12,
-                M22 = M22,
-                M30 = M03,
-                M31 = M13,
-                M32 = M23,
-                M33 = M33
-            };
-            return a;
-        }
-
-        /// <summary>
-        /// Combines this transform matrix with another. Order matters.<br/>
-        /// E.g. If you call translation.Combine(rotation), the combined transformation will represent a translation, followed by a rotation. <br/>
-        /// This is the same as using the * operator where M = rotation * translation.
-        /// </summary>
-        /// <returns>TransformMatrix representing the combined transformations.</returns>
-        public TransformMatrix Combine(TransformMatrix other)
-        {
-            return other * this;
         }
 
         public override string ToString()

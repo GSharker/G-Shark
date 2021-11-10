@@ -89,7 +89,7 @@ namespace GShark.Test.XUnit.Core
             var copyMatrix = new TransformMatrix(translationMatrix);
 
             // Assert
-            copyMatrix.Equals(translationMatrix);
+            copyMatrix.Equals(translationMatrix).Should().BeTrue();
         }
 
         [Fact]

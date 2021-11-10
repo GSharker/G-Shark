@@ -20,6 +20,12 @@
     <Version>$(Version)</Version>
   </PropertyGroup>
 
+<ItemGroup>
+	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		<_Parameter1>GShark.Test.XUnit</_Parameter1>
+	</AssemblyAttribute>
+</ItemGroup>
+	
   <ItemGroup>
     <None Include="../../media/gshark-logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
