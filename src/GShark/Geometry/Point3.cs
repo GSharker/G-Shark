@@ -11,9 +11,14 @@ namespace GShark.Geometry
     public class Point3 : IEquatable<Point3>, IComparable<Point3>, IComparable
     {
         /// <summary>
-        /// Initializes a new point.
+        /// Initializes a new point with zero valued coordinates.
         /// </summary>
-        public Point3() { }
+        public Point3()
+        {
+            X = 0;
+            Y = 0;
+            Z = 0;
+        }
 
         /// <summary>
         /// Initializes a new point by defining the X, Y and Z coordinates.
@@ -540,16 +545,9 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The transformation matrix.</param>
         /// <returns>The transformed point as a new instance.</returns>
-        public Point3 Transform(Transform t)
+        public Point3 Transform(TransformMatrix t)
         {
-            double n = t[3][0] * X + t[3][1] * Y + t[3][2] * Z + t[3][3];
-            if (n != 0.0)
-                n = 1.0 / n;
-            double x = n * (t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3]);
-            double y = n * (t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3]);
-            double z = n * (t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3]);
-
-            return new Point3(x, y, z);
+            return this * t;
         }
 
         /// <summary>

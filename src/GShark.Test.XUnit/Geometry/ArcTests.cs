@@ -99,14 +99,14 @@ namespace GShark.Test.XUnit.Geometry
             Arc arc = _exampleArc3D;
             Point3 expectedStartPt = new Point3(16.47719, 0, 0);
             Point3 expectedEndPt = new Point3(-6.160353, -15.282272, 0);
-            Transform transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
+            var transform = Transform.PlaneToPlane(arc.Plane, Plane.PlaneXY);
 
             // Act
             Arc arcTransformed = arc.Transform(transform);
 
             // Assert
-            arcTransformed.StartPoint.EpsilonEquals(expectedStartPt, 1e-6).Should().BeTrue();
-            arcTransformed.EndPoint.EpsilonEquals(expectedEndPt, 1e-6).Should().BeTrue();
+            arcTransformed.StartPoint.EpsilonEquals(expectedStartPt, GSharkMath.MaxTolerance).Should().BeTrue();
+            arcTransformed.EndPoint.EpsilonEquals(expectedEndPt, GSharkMath.MaxTolerance).Should().BeTrue();
         }
 
         [Fact]

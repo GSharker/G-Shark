@@ -4,6 +4,6 @@ namespace GShark.Interfaces
 {
     public interface ITransformable<T>
     {
-        public T Transform(Transform transformation);
+        public T Transform(TransformMatrix t);
     }
 }

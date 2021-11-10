@@ -303,14 +303,14 @@ namespace GShark.Geometry
         /// <summary>
         /// Transforms the plane by a transformation matrix.
         /// </summary>
-        /// <param name="transformation">The transformation matrix to apply to the plane.</param>
+        /// <param name="t">The transformation matrix to apply to the plane.</param>
         /// <returns>The transformed plane.</returns>
-        public Plane Transform(Transform transformation)
+        public Plane Transform(TransformMatrix t)
         {
-            Point3 transformedOrigin = Origin.Transform(transformation);
+            Point3 transformedOrigin = Origin.Transform(t);
 
-            var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
-            var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
+            var xDir = (Origin + XAxis).Transform(t) - transformedOrigin;
+            var yDir = (Origin + YAxis).Transform(t) - transformedOrigin;
 
             return new Plane(transformedOrigin, xDir, yDir);
         }

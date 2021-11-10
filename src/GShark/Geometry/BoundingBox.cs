@@ -32,7 +32,7 @@ namespace GShark.Geometry
             List<Point3> copyPt = new List<Point3>(pts);
             if (orientation != null)
             {
-                Transform transform = Transform.PlaneToPlane(Plane.PlaneXY, orientation);
+                var transform = Transform.PlaneToPlane(Plane.PlaneXY, orientation);
                 copyPt = pts.Select(pt => pt.Transform(transform)).ToList();
             }
 
