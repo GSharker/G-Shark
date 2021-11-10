@@ -58,7 +58,7 @@ namespace GShark.Core
         /// <param name="theta">Angle in radians of the rotation.</param>
         /// <param name="center">Center point of rotation.</param>
         /// <param name="rotationAxis">One of the standard rotation axes. X, Y, or Z.</param>
-        /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
+        /// <returns>The rotation matrix.</returns>
         public static TransformMatrix Rotation(double theta, Point3 center, RotationAxis rotationAxis = RotationAxis.Z)
         {
             switch (rotationAxis)
@@ -80,7 +80,7 @@ namespace GShark.Core
         /// <param name="theta"></param>
         /// <param name="centerPoint">Rotation center.</param>
         /// <param name="axis">Axis direction.</param>
-        /// <returns>A transformation matrix which rotates geometry around an anchor.</returns>
+        /// <returns>The rotation matrix.</returns>
         public static TransformMatrix Rotation(double theta, Point3 centerPoint, Vector3 axis)
         {
             //T(x,y)∗R∗T(−x,−y)(P)
@@ -103,31 +103,31 @@ namespace GShark.Core
         /// Creates a uniform scale transformation matrix with the origin as the fixed point.
         /// </summary>
         /// <param name="factor"></param>
-        /// <returns></returns>
+        /// <returns>The scale matrix.</returns>
         public static TransformMatrix Scale(double factor)
         {
             return Scale(new Point3(0, 0, 0), factor);
         }
 
         /// <summary>
-        /// Creates a uniform scale transformation matrix with a given center point.
+        /// Creates a uniform scale transformation matrix that scales from a given center point.
         /// </summary>
         /// <param name="centerPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="scaleFactor">Scale factor.</param>
-        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        /// <returns>The scale matrix.</returns>
         public static TransformMatrix Scale(Point3 centerPoint, double scaleFactor)
         {
             return Scale(centerPoint, scaleFactor, scaleFactor, scaleFactor);
         }
 
         /// <summary>
-        /// Creates non uniform scale transformation matrix with the origin as the fixed point.
+        /// Creates non-uniform scale transformation matrix that scales from a given center point.
         /// </summary>
         /// <param name="centerPoint">The anchor point from the scale transformation is computed.</param>
         /// <param name="factorX">Scale factor x direction.</param>
         /// <param name="factorY">Scale factor y direction.</param>
         /// <param name="factorZ">Scale factor z direction.</param>
-        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        /// <returns>The scale matrix.</returns>
         public static TransformMatrix Scale(Point3 centerPoint, double factorX, double factorY, double factorZ)
         {
             var scaleMatrix = new TransformMatrix
@@ -147,12 +147,12 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Creates non uniform scale transformation matrix with the anchor point in the origin.
+        /// Creates non-uniform scale transformation matrix that scales from the world origin.
         /// </summary>
         /// <param name="factorX">Scale factor x direction.</param>
         /// <param name="factorY">Scale factor y direction.</param>
         /// <param name="factorZ">Scale factor z direction.</param>
-        /// <returns>Scale transformation matrix where the diagonal is (factorX, factorY, factorZ, 1)</returns>
+        /// <returns>The scale matrix.</returns>
         public static TransformMatrix Scale(double factorX, double factorY, double factorZ)
         {
             var result = new TransformMatrix
@@ -165,11 +165,11 @@ namespace GShark.Core
         }
 
        /// <summary>
-        /// Creates a transformation that orients a planeA to a planeB.
+        /// Creates a plane to plane transformation matrix.
         /// </summary>
         /// <param name="a">The plane to orient from.</param>
         /// <param name="b">The plane to orient to.</param>
-        /// <returns>The translation transformation.</returns>
+        /// <returns>The transformation matrix.</returns>
         public static TransformMatrix PlaneToPlane(Plane a, Plane b)
         {
             var pt0 = a.Origin;
@@ -222,86 +222,6 @@ namespace GShark.Core
             var result = translationOriginToPlnB *mapB * mapATransposed * translationPlnAToOrigin;
 
             return result;
-        }
-
-       /// <summary>
-        /// Finds the rotation axis used in the transformation.<br/>
-        /// https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
-        /// </summary>
-        /// <param name="transform">Transformation to check.</param>
-        /// <returns>The rotation axis used for the transformation.</returns>
-        public static Vector3 GetRotationAxis(TransformMatrix transform)
-        {
-            throw new NotImplementedException();
-            //ToDo Implement with TransformationMatrix indexing
-            //Vector3 axis = Vector3.Unset;
-
-            //if (Math.Abs(transform[0][1] + transform[1][0]) < GSharkMath.MinTolerance ||
-            //    Math.Abs(transform[0][2] + transform[2][0]) < GSharkMath.MinTolerance ||
-            //    Math.Abs(transform[1][2] + transform[2][1]) < GSharkMath.MinTolerance)
-            //{
-            //    double xx = (transform[0][0] + 1) / 2;
-            //    double yy = (transform[1][1] + 1) / 2;
-            //    double zz = (transform[2][2] + 1) / 2;
-            //    double xy = (transform[0][1] + transform[1][0]) / 4;
-            //    double xz = (transform[0][2] + transform[2][0]) / 4;
-            //    double yz = (transform[1][2] + transform[2][1]) / 4;
-
-            //    if ((xx > yy) && (xx > zz))
-            //    { // m[0][0] is the largest diagonal term
-            //        if (xx < GSharkMath.MinTolerance)
-            //        {
-            //            axis[0] = 0;
-            //            axis[1] = 0.7071;
-            //            axis[2] = 0.7071;
-            //        }
-            //        else
-            //        {
-            //            axis[0] = Math.Sqrt(xx);
-            //            axis[1] = xy / axis[0];
-            //            axis[2] = xz / axis[0];
-            //        }
-            //    }
-            //    else if (yy > zz)
-            //    { // m[1][1] is the largest diagonal term
-            //        if (yy < GSharkMath.MinTolerance)
-            //        {
-            //            axis[0] = 0.7071;
-            //            axis[1] = 0;
-            //            axis[2] = 0.7071;
-            //        }
-            //        else
-            //        {
-            //            axis[1] = Math.Sqrt(yy);
-            //            axis[0] = xy / axis[1];
-            //            axis[2] = yz / axis[1];
-            //        }
-            //    }
-            //    else
-            //    { // m[2][2] is the largest diagonal term so base result on this
-            //        if (zz < GSharkMath.MinTolerance)
-            //        {
-            //            axis[0] = 0.7071;
-            //            axis[1] = 0.7071;
-            //            axis[2] = 0;
-            //        }
-            //        else
-            //        {
-            //            axis[2] = Math.Sqrt(zz);
-            //            axis[0] = xz / axis[2];
-            //            axis[1] = yz / axis[2];
-            //        }
-            //    }
-            //    return axis; // return 180 deg rotation
-            //}
-
-            //double v = Math.Sqrt(Math.Pow(transform[2][1] - transform[1][2], 2) + Math.Pow(transform[0][2] - transform[2][0], 2) + Math.Pow(transform[1][0] - transform[0][1], 2));
-
-            //axis[0] = (transform[2][1] - transform[1][2]) / v;
-            //axis[1] = (transform[0][2] - transform[2][0]) / v;
-            //axis[2] = (transform[1][0] - transform[0][1]) / v;
-
-            //return axis;
         }
     }
 }
