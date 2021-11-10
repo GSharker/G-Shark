@@ -151,19 +151,11 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Set last column values to 0.0, 0.0, 0.0, 1.0.
-        /// </summary>
-        internal void ZeroTranslation()
-        {
-            M30 = M31 = M32 = 0.0;
-        }
-
-        /// <summary>
         /// Creates a transformation matrix that represents a rotation in radians about an axis.
         /// </summary>
         /// <param name="axis">Axis of rotation.</param>
         /// <param name="theta">Angle in radians.</param>
-        /// <returns></returns>
+        /// <returns>The rotation matrix.</returns>
         internal static TransformMatrix Rotation(Vector3 axis, double theta)
         {
             var result = new TransformMatrix();
@@ -197,7 +189,7 @@ namespace GShark.Core
         /// Creates a transformation matrix that represents a translation along a vector.
         /// </summary>
         /// <param name="vector">Translation vector.</param>
-        /// <returns></returns>
+        /// <returns>The translation matrix.</returns>
         internal static TransformMatrix Translation(Vector3 vector)
         {
             var result = new TransformMatrix
@@ -214,7 +206,7 @@ namespace GShark.Core
         /// Creates a transformation matrix to reflect about a plane.
         /// </summary>
         /// <param name="plane">The plane used to reflect.</param>
-        /// <returns>The mirror transformation matrix.</returns>
+        /// <returns>The reflection matrix.</returns>
         internal static TransformMatrix Reflection(Plane plane)
         {
             Point3 pt = plane.Origin;
@@ -243,12 +235,12 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Creates a transformation matrix that represents a non-uniform scaling about an origin point.
+        /// Creates a transformation matrix that represents a scaling transformation.
         /// </summary>
         /// <param name="xFactor">Scale factor in the x direction.</param>
         /// <param name="yFactor">Scale factor in the y direction.</param>
         /// <param name="zFactor">Scale factor in the z direction.</param>
-        /// <returns></returns>
+        /// <returns>The scale matrix.</returns>
         internal static TransformMatrix Scale(double xFactor, double yFactor, double zFactor)
         {
             var result = new TransformMatrix
@@ -262,11 +254,10 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets the transformation that project to a plane.<br/>
-        /// The transformation maps a point to the point closest to the plane.
+        /// Creates a transformation matrix that represents an orthographic projection onto a plane.<br/>
         /// </summary>
         /// <param name="plane">Plane to project to.</param>
-        /// <returns>A transformation matrix which projects geometry onto a specified plane.</returns>
+        /// <returns>The projection matrix.</returns>
         internal static TransformMatrix Projection(Plane plane)
         {
             var n = plane.ZAxis.Unitize();
@@ -298,7 +289,7 @@ namespace GShark.Core
         /// <summary>
         /// Transposes matrix by swapping columns and rows.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The transposed matrix.</returns>
         public TransformMatrix Transpose()
         {
             var a = new TransformMatrix
@@ -325,18 +316,18 @@ namespace GShark.Core
         /// E.g. If you call translation.Combine(rotation), the combined transformation will represent a translation, followed by a rotation. <br/>
         /// This is the same as using the * operator where M = rotation * translation.
         /// </summary>
-        /// <returns>TransformMatrix representing the combined transformations.</returns>
+        /// <returns>Combined transformation matrix.</returns>
         public TransformMatrix Combine(TransformMatrix other)
         {
             return other * this;
         }
 
         /// <summary>
-        /// Transform the specified vector.
+        /// Transforms the specified point by the matrix.
         /// </summary>
-        /// <param name="p">The vector to transform.</param>
+        /// <param name="p">The point to transform.</param>
         /// <param name="m">The transformation matrix.</param>
-        /// <returns></returns>
+        /// <returns>The transformed point.</returns>
         public static Point3 operator *(Point3 p, TransformMatrix m)
         {
             return new Point3(
@@ -351,7 +342,7 @@ namespace GShark.Core
         /// </summary>
         /// <param name="a">Matrix A.</param>
         /// <param name="b">Matrix B.</param>
-        /// <returns>The result matrix AB.</returns>
+        /// <returns>The resulting matrix AB.</returns>
         public static TransformMatrix operator *(TransformMatrix a, TransformMatrix b)
         {
             var result = new TransformMatrix()

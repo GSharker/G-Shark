@@ -69,13 +69,24 @@ namespace GShark.Test.XUnit.Core
         public void It_Returns_The_Identity_TransformMatrix()
         {
             // Act
+            var identityMatrix = new TransformMatrix(
+                new List<double>
+                {
+                    1,0,0,
+                    0,1,0,
+                    0,0,1,
+                    0,0,0
+                });
+
+            //Act
             var transformMatrix = new TransformMatrix();
 
             // Assert
-            var matrix = transformMatrix.Matrix;
-            matrix.Should().NotBeNull();
-            matrix.Count.Should().Be(4);
-            matrix[0].Count.Should().Be(4);
+#if DEBUG
+            _testOutput.WriteLine(transformMatrix.ToString());
+            _testOutput.WriteLine(identityMatrix.ToString());
+#endif
+            transformMatrix.Equals(identityMatrix).Should().BeTrue();
         }
 
         [Fact]
