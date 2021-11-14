@@ -218,7 +218,7 @@ namespace GShark.Evaluate
         /// <returns>The extrema.</returns>
         internal static Extrema ComputeExtrema(NurbsBase curve)
         {
-            var derivPts = DerivativeCoordinates(curve.ControlPointLocations);
+            var derivPts = DerivativeCoordinates(curve.ControlPoints);
             Extrema extrema = new Extrema();
 
             int dim = derivPts[0][0].Size;
@@ -262,11 +262,12 @@ namespace GShark.Evaluate
         /// </summary>
         /// <param name="pts">The collection of coordinate points.</param>
         /// <returns>The derivative coordinates.</returns>
-        internal static List<List<Point3>> DerivativeCoordinates(List<Point3> pts)
+        internal static List<List<Point3>> DerivativeCoordinates(List<Point4> pts)
         {
             List<List<Point3>> derivPts = new List<List<Point3>>();
 
-            List<Point3> p = new List<Point3>(pts);
+            List<double> w = Point4.GetWeights(pts);
+            List<Point3> p = new List<Point3>(Point4.PointDehomogenizer1d(pts));
             int d = p.Count;
             int c = d - 1;
 
@@ -275,7 +276,9 @@ namespace GShark.Evaluate
                 List<Point3> list = new List<Point3>();
                 for (int j = 0; j < c; j++)
                 {
-                    Vector3 dpt = (p[j + 1] - p[j]) * c;
+                    var wt = (w[j + 1] - w[j]);
+                    wt = wt > 0.0 ? wt : 1;
+                    Vector3 dpt = (p[j + 1] - p[j]) * c * wt;
 
                     list.Add(dpt);
                 }
@@ -318,18 +321,12 @@ namespace GShark.Evaluate
             }
 
             // linear roots
-            if (derivatives.Count == 2)
+            if (derivatives.Count != 2) return Array.Empty<double>();
             {
                 var a = derivatives[0];
                 var b = derivatives[1];
-                if (a != b)
-                {
-                    return new[] { a / (a - b) };
-                }
-                return Array.Empty<double>();
+                return Math.Abs(a - b) > GSharkMath.Epsilon ? new[] { a / (a - b) } : Array.Empty<double>();
             }
-
-            return Array.Empty<double>();
         }
 
         /// <summary>

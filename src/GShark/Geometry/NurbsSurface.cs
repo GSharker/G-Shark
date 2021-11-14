@@ -111,24 +111,6 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Gets the BoundingBox of the surface.
-        /// </summary>
-        /// <returns>The BoundingBox of the surface.</returns>
-        public BoundingBox GetBoundingBox()
-        {
-            NurbsBase[] curves = BoundaryEdges();
-            List<Point3> pts = new List<Point3>();
-            foreach (NurbsBase curve in curves)
-            {
-                var extremaValues = curve.Extrema();
-                pts.AddRange(extremaValues.Select(val => curve.PointAt(val)));
-                pts.Add(curve.StartPoint);
-            }
-
-            return new BoundingBox(pts);
-        }
-
-        /// <summary>
         /// Extracts the boundary curves of the surface.
         /// </summary>
         /// <returns>The boundary edges.</returns>
@@ -136,10 +118,10 @@ namespace GShark.Geometry
         {
             NurbsBase[] curves = new NurbsBase[]
             {
-                IsoCurve(0.0, SurfaceDirection.U),
-                IsoCurve(1.0, SurfaceDirection.V),
+                IsoCurve(0.0, SurfaceDirection.V),
                 IsoCurve(1.0, SurfaceDirection.U),
-                IsoCurve(0.0, SurfaceDirection.V)
+                IsoCurve(1.0, SurfaceDirection.V),
+                IsoCurve(0.0, SurfaceDirection.U)
             };
             return curves;
         }
