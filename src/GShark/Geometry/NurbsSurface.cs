@@ -108,6 +108,17 @@ namespace GShark.Geometry
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
         }
 
+
+        /// <summary>
+        /// Checks is surface is planar within specified tolerance.
+        /// </summary>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        public bool IsPlanar(double tolerance = GSharkMath.Epsilon)
+        {
+            return Trigonometry.ArePointsCoplanar(ControlPointLocations.SelectMany(pt => pt).ToList(), tolerance);
+        }
+
         /// <summary>
         /// Constructs a NURBS surface from four corners.<br/>
         /// If the corners are ordered ccw the normal of the surface will point up otherwise, if corners ordered cw the normal will point down.<br/>

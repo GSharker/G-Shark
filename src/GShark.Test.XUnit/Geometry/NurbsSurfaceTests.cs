@@ -269,6 +269,33 @@ namespace GShark.Test.XUnit.Geometry
             surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
         }
 
+        [Fact]
+        public void Returns_True_If_Surface_Is_Planar()
+        {
+            //Arrange
+            var planarSurface = NurbsSurface.FromCorners(
+                new Point3(0, 0, 0),
+                new Point3(10, 0, 0),
+                new Point3(10,5,0),
+                new Point3(0,5,0)
+            );
+            
+            var nonPlanarSurface = NurbsSurface.FromCorners(
+                new Point3(0, 0, 0),
+                new Point3(10, 0, 5),
+                new Point3(10, 5, 0),
+                new Point3(0, 5, 5)
+            );
+
+            //Act
+            var isPlanarSurfacePlanar = planarSurface.IsPlanar();
+            var isNonPlanarSurfacePlanar = nonPlanarSurface.IsPlanar();
+
+            //Assert
+            isPlanarSurfacePlanar.Should().BeTrue();
+            isNonPlanarSurfacePlanar.Should().BeFalse();
+        }
+
         [Theory]
         [InlineData(0.1, 0.1, new double[] { 0.2655, 1, 2.442 })]
         [InlineData(0.5, 0.5, new double[] { 4.0625, 5, 4.0625 })]
