@@ -69,7 +69,8 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Creates_A_Plane_By_Two_Directions_And_Point()
         {
-            // Arrange
+            // Arrange (Creating a plane with one direction along world X and the other direction along the
+            // the vector (1, 1)
             Vector3 direction1 = Vector3.XAxis * 5;
             Vector3 direction2 = Vector3.XAxis + Vector3.YAxis;
             Point3 origin = new Point3();
