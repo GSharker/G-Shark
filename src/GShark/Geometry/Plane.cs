@@ -59,9 +59,18 @@ namespace GShark.Geometry
         /// <param name="yDirection">Y direction.</param>
         public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection)
         {
+            if (Math.Abs(Vector3.VectorAngle(xDirection, yDirection)) < GSharkMath.AngleTolerance)
+                throw new Exception("Plane cannot be created. The direction vectors are parallel");
             Origin = origin;
-            XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
-            YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
+            // Unitizing the directions
+            Vector3 unitDir1 = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
+            Vector3 unitDir2 = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
+            // Xaxis
+            XAxis = unitDir1;
+            // Zaxis
+            Vector3 unitZ = Vector3.CrossProduct(unitDir1, unitDir2);
+            // Yaxis (Since in a right handed coordinate system, Yvec = Zvec X Xvec
+            YAxis = (Vector3.CrossProduct(unitZ, XAxis)).Unitize();
         }
 
         /// <summary>

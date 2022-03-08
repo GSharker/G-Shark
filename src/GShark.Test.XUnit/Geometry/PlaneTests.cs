@@ -66,7 +66,24 @@ namespace GShark.Test.XUnit.Geometry
             func.Should().Throw<Exception>()
                 .WithMessage("Plane cannot be created, the tree points must not be collinear");
         }
+        [Fact]
+        public void It_Creates_A_Plane_By_Two_Directions_And_Point()
+        {
+            // Arrange (Creating a plane with one direction along world X and the other direction along the
+            // the vector (1, 1)
+            Vector3 direction1 = Vector3.XAxis * 5;
+            Vector3 direction2 = Vector3.XAxis + Vector3.YAxis;
+            Point3 origin = new Point3();
 
+            // Act
+            Plane plane = new Plane(origin, direction1, direction2);
+
+            // Assert
+            plane.Origin.Equals(origin).Should().BeTrue();
+            plane.XAxis.EpsilonEquals(Vector3.XAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.YAxis.EpsilonEquals(Vector3.YAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.ZAxis.EpsilonEquals(Vector3.ZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+        }
         [Fact]
         public void It_Creates_A_Plane_By_Three_Points()
         {
