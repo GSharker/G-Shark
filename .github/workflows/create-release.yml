@@ -10,7 +10,6 @@ env:
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
 on:
-  workflow_dispatch:
   pull_request:
     types: [closed]
     branches:
