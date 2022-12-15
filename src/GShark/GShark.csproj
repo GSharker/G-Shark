@@ -8,8 +8,9 @@
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
     <LangVersion>8.0</LangVersion>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>	
     <PackageId>GShark</PackageId>
     <PackageTitle>GShark</PackageTitle>
     <PackageIcon>gshark-logo.png</PackageIcon>
