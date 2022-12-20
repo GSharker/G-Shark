@@ -223,5 +223,15 @@ namespace GShark.Core
 
             return result;
         }
+
+        /// <summary>
+        /// Create a reflextion transformation
+        /// </summary>
+        /// <param name="a">The plane used to reflect.</param>
+        /// <returns>The transformation matrix.</returns>
+        public static TransformMatrix Reflection(Plane a)
+        {
+            return Reflection(a);
+        }
     }
 }
