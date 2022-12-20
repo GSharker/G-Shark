@@ -263,7 +263,7 @@ namespace GShark.Test.XUnit.Core
         }
 
         [Fact]
-        public void It_Returns_A_Point_Reflected_On_The_XY_Plane()
+        public void It_Returns_A_Point_Reflected_On_The_YZ_Plane()
         {
             var p = new Point3(5, 0, 0);
 
