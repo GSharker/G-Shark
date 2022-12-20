@@ -268,7 +268,7 @@ namespace GShark.Test.XUnit.Core
             var p = new Point3(5, 0, 0);
 
             //Act
-            var reflectionMatrix = Transform.Reflection(Plane.PlaneXY);
+            var reflectionMatrix = Transform.Reflection(Plane.PlaneYZ);
             var pReflected = p.Transform(reflectionMatrix);
 
             //Assert

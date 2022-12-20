@@ -231,7 +231,7 @@ namespace GShark.Core
         /// <returns>The transformation matrix.</returns>
         public static TransformMatrix Reflection(Plane a)
         {
-            return Reflection(a);
+            return TransformMatrix.Reflection(a);
         }
     }
 }
