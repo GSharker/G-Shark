@@ -11,6 +11,7 @@ namespace GShark.Geometry
     /// </summary>
     public class Polygon : PolyLine
     {
+        private Plane _plane;
         public Polygon(IList<Point3> vertices) : base(vertices)
         {
             if (vertices.Count < 3)
@@ -24,6 +25,8 @@ namespace GShark.Geometry
             {
                 throw new Exception("The points must be co-planar.");
             }
+
+            _plane = fitPlane;
 
             if (IsClosed) return;
             ControlPointLocations.Add(vertices[0]);
@@ -113,6 +116,11 @@ namespace GShark.Geometry
                 return Math.Abs(area);
             }
         }
+
+        /// <summary>
+        /// Gets the plane of the Polygon.
+        /// </summary>
+        public Plane Plane => _plane;
 
         /// <summary>
         /// Creates a rectangle on a plane.<br/>

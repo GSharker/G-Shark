@@ -590,14 +590,68 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Determinate if the provided point lies on the plane.
+        /// Test whether a point lies on a plane.
         /// </summary>
-        /// <param name="plane">The plane on which to find if the point lies on.</param>
-        /// <param name="tolerance">If the tolerance is not set, as per default is use 1e-6</param>
-        /// <returns>Whether the point is on the plane.</returns>
+        /// <param name="plane">The plane to test against.</param>
+        /// <param name="tolerance">Default is use 1e-6</param>
+        /// <returns>Returns true if point is on plane.</returns>
         public bool IsOnPlane(Plane plane, double tolerance = GSharkMath.MaxTolerance)
         {
             return Math.Abs(Vector3.DotProduct(this - plane.Origin, plane.ZAxis)) < tolerance;
+        }
+
+        /// <summary>
+        /// Tests whether a point is inside, outside, or coincident with a polygon.
+        /// <para>See https://stackoverflow.com/a/16391873</para>
+        /// </summary>
+        /// <param name="point">The point to test.</param>
+        /// <param name="polygon">The polygon to test against.</param>
+        /// <returns>Returns 0 if the point is outside the polygon or 1 if it is inside.</returns>        
+        public int InPolygon(Polygon polygon)
+        {
+            //check if point lies on polygon plane, else return
+            var polygonPlane = polygon.Plane;
+
+            if (!this.IsOnPlane(polygonPlane)) return 0;
+
+            //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
+            var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+            var polygonOriented = polygon.Transform(xForm);
+            var pointOriented = this.Transform(xForm);
+
+            double minX = polygonOriented.ControlPointLocations[0].X;
+            double maxX = polygonOriented.ControlPointLocations[0].X;
+            double minY = polygonOriented.ControlPointLocations[0].Y;
+            double maxY = polygonOriented.ControlPointLocations[0].Y;
+
+            //test bounding axis aligned bounding box condition
+            for (int i = 1; i < polygonOriented.ControlPointLocations.Count; i++)
+            {
+                Point3 q = polygonOriented.ControlPointLocations[i];
+                minX = Math.Min(q.X, minX);
+                maxX = Math.Max(q.X, maxX);
+                minY = Math.Min(q.Y, minY);
+                maxY = Math.Max(q.Y, maxY);
+            }
+            
+            //if point outside bbox, return 0
+            if (pointOriented.X < minX || pointOriented.X > maxX || pointOriented.Y < minY || pointOriented.Y > maxY)
+            {
+                return 0;
+            }
+
+            // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+            bool inside = false;
+            for (int i = 0, j = polygonOriented.ControlPointLocations.Count - 1; i < polygonOriented.ControlPointLocations.Count; j = i++)
+            {
+                if ((polygonOriented.ControlPointLocations[i].Y > pointOriented.Y) != (polygonOriented.ControlPointLocations[j].Y > pointOriented.Y) &&
+                     pointOriented.X < (polygonOriented.ControlPointLocations[j].X - polygonOriented.ControlPointLocations[i].X) * (pointOriented.Y - polygonOriented.ControlPointLocations[i].Y) / (polygonOriented.ControlPointLocations[j].Y - polygonOriented.ControlPointLocations[i].Y) + polygonOriented.ControlPointLocations[i].X)
+                {
+                    inside = !inside;
+                }
+            }
+
+            return 1;
         }
     }
 }
