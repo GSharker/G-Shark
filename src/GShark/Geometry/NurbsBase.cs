@@ -9,13 +9,14 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using GShark.Optimization;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
     /// <summary>
     /// This class represents a base class that is common to most curve types.
     /// </summary>
-    public abstract class NurbsBase : IEquatable<NurbsBase>
+    public abstract class NurbsBase : IEquatable<NurbsBase>, ITransformable<NurbsBase>
     {
         protected NurbsBase()
         {
@@ -852,6 +853,12 @@ namespace GShark.Geometry
             }
 
             return sBldr.ToString().GetHashCode();
+        }
+
+        public NurbsBase Transform(TransformMatrix t)
+        {
+            Type type = GetType();
+            return type.GetMethod(nameof(Transform)).Invoke(this, new object[] { t }) as NurbsBase;
         }
     }
 }

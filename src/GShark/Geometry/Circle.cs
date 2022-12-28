@@ -14,7 +14,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
     /// </example>
-    public class Circle : NurbsBase, IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : NurbsBase, ICurve<Circle>
     {
         internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
         internal double _length;

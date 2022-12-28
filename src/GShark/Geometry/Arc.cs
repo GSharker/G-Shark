@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/ArcTests.cs?name=example)]
     /// </example>
-    public class Arc : Circle, IEquatable<Arc>, ITransformable<Arc>
+    public class Arc : Circle, ICurve<Arc>
     {
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.

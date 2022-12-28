@@ -11,7 +11,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/LineTests.cs?name=example)]
     /// </example>
-    public class Line : NurbsBase, IEquatable<Line>, ITransformable<Line>
+    public class Line : NurbsBase, ICurve<Line>
     {
         /// <summary>
         /// Initializes a line by start point and end point.

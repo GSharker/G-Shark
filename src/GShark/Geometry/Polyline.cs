@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class PolyLine : NurbsBase, IEquatable<PolyLine>, ITransformable<PolyLine>
+    public class PolyLine : NurbsBase, ICurve<PolyLine>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
