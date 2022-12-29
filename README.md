@@ -1,4 +1,4 @@
-![Target Framework](https://img.shields.io/badge/Target%20Framework-.NetStandard2.0-blue.svg)
+![](https://img.shields.io/badge/Framwork-.NetStandard2.0-blue?logo=.NET)
 ![Nuget](https://img.shields.io/nuget/v/GShark)
 [![Build and Test](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml/badge.svg?branch=develop&event=pull_request)](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml)
 [![Build docs](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml)
