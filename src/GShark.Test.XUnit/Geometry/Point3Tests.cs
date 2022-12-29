@@ -100,11 +100,14 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Returns_Whether_A_Point_Is_Inside_A_Polygon()
+        public void It_Returns_Whether_A_Point_Is_Inside_Outside_Or_Coincident_With_A_Polygon()
         {
             //Arrange
             var testPointOutside = new Point3(-156.409788517205, -69.8134382323643, 0);
             var testPointInside = new Point3(26.5133684383793, 24.5045165536549, 31.5968021722952);
+            var testPointCoincident = new Line(
+                    new Point3(-27.1829592472304, -12.3049979552339, 59.1652925745504),
+                    new Point3(-40.9982936339814, 20.739935073677, 34.4162859330554)).MidPoint;
 
             var testPolygon = new GShark.Geometry.Polygon(new Point3[] {
                     new Point3(-27.1829592472304,-12.3049979552339,59.1652925745504),
@@ -117,10 +120,12 @@ namespace GShark.Test.XUnit.Geometry
             //Act
             var pointOutside = testPointOutside.InPolygon(testPolygon);
             var pointInside = testPointInside.InPolygon(testPolygon);
+            var pointCoincident = testPointCoincident.InPolygon(testPolygon);
 
             //Assert
-            pointOutside.Should().Be(0);
+            pointOutside.Should().Be(-1);
             pointInside.Should().Be(1);
+            pointCoincident.Should().Be(0);
         }
     }
 }

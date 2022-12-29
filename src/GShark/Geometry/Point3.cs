@@ -197,9 +197,9 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3 a, Point3 b)
         {
-             return (Math.Abs(a.X - b.X) < GSharkMath.MaxTolerance
-                     && Math.Abs(a.Y - b.Y) < GSharkMath.MaxTolerance
-                     && Math.Abs(a.Z - b.Z) < GSharkMath.MaxTolerance);
+            return (Math.Abs(a.X - b.X) < GSharkMath.MaxTolerance
+                    && Math.Abs(a.Y - b.Y) < GSharkMath.MaxTolerance
+                    && Math.Abs(a.Z - b.Z) < GSharkMath.MaxTolerance);
         }
 
         /// <summary>
@@ -460,17 +460,17 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Interpolate between two points returning a new point at the given interpolation parameter.
+        /// Interpolate isBetween two points returning a new point at the given interpolation parameter.
         /// </summary>
         /// <param name="pA">First point.</param>
         /// <param name="pB">Second point.</param>
         /// <param name="t">Interpolation parameter. 
         /// If t=0 then this point is set to pA. 
         /// If t=1 then this point is set to pB. 
-        /// Values of t in between 0.0 and 1.0 result in points between pA and pB.</param>
+        /// Values of t in isBetween 0.0 and 1.0 result in points isBetween pA and pB.</param>
         public static Point3 Interpolate(Point3 pA, Point3 pB, double t)
         {
-            if (t < 0 || t > 1) throw new ArgumentException($"{nameof(t)} must be between 0 and 1.");
+            if (t < 0 || t > 1) throw new ArgumentException($"{nameof(t)} must be isBetween 0 and 1.");
             switch (t)
             {
                 case 0:
@@ -487,11 +487,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Get a point between two points.
+        /// Get a point isBetween two points.
         /// </summary>
         /// <param name="p1">First point.</param>
         /// <param name="p2">Second point.</param>
-        /// <returns>Point between first and second point.</returns>
+        /// <returns>Point isBetween first and second point.</returns>
         public static Point3 PointBetween(Point3 p1, Point3 p2)
         {
             return Interpolate(p1, p2, 0.5);
@@ -507,10 +507,10 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Computes the distance between two points.
+        /// Computes the distance isBetween two points.
         /// </summary>
         /// <param name="other">Other point for distance measurement.</param>
-        /// <returns>The length of the line between this and the other point; or 0 if any of the points is not valid.</returns>
+        /// <returns>The length of the line isBetween this and the other point; or 0 if any of the points is not valid.</returns>
         public double DistanceTo(Point3 other)
         {
             double d;
@@ -554,7 +554,7 @@ namespace GShark.Geometry
         /// Removes duplicates in the supplied set of points.
         /// </summary>
         /// <param name="points">A list, an array or any enumerable of <see cref="Point3"/>.</param>
-        /// <param name="tolerance">The minimum distance between points.
+        /// <param name="tolerance">The minimum distance isBetween points.
         /// <para>Points that fall within this tolerance will be discarded.</para>
         /// .</param>
         /// <returns>An array of points without duplicates; or null on error.</returns>
@@ -602,56 +602,69 @@ namespace GShark.Geometry
 
         /// <summary>
         /// Tests whether a point is inside, outside, or coincident with a polygon.
-        /// <para>See https://stackoverflow.com/a/16391873</para>
+        /// <para>See https://stackoverflow.com/a/63436180</para>
         /// </summary>
-        /// <param name="point">The point to test.</param>
         /// <param name="polygon">The polygon to test against.</param>
-        /// <returns>Returns 0 if the point is outside the polygon or 1 if it is inside.</returns>        
+        /// <returns>Returns -1 if point is outside the polygon, 0 if it is coincident with a polygon edge, or 1 if it is inside the polygon.</returns>        
         public int InPolygon(Polygon polygon)
         {
             //check if point lies on polygon plane, else return
             var polygonPlane = polygon.Plane;
 
-            if (!this.IsOnPlane(polygonPlane)) return 0;
+            if (!this.IsOnPlane(polygonPlane)) return -1;
 
             //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
             var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
             var polygonOriented = polygon.Transform(xForm);
             var pointOriented = this.Transform(xForm);
-
-            double minX = polygonOriented.ControlPointLocations[0].X;
-            double maxX = polygonOriented.ControlPointLocations[0].X;
-            double minY = polygonOriented.ControlPointLocations[0].Y;
-            double maxY = polygonOriented.ControlPointLocations[0].Y;
-
-            //test bounding axis aligned bounding box condition
-            for (int i = 1; i < polygonOriented.ControlPointLocations.Count; i++)
-            {
-                Point3 q = polygonOriented.ControlPointLocations[i];
-                minX = Math.Min(q.X, minX);
-                maxX = Math.Max(q.X, maxX);
-                minY = Math.Min(q.Y, minY);
-                maxY = Math.Max(q.Y, maxY);
-            }
             
-            //if point outside bbox, return 0
-            if (pointOriented.X < minX || pointOriented.X > maxX || pointOriented.Y < minY || pointOriented.Y > maxY)
-            {
-                return 0;
-            }
-
-            // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+            //tests whether a value is isBetween two other values
+            Func<double, double, double, bool> isValueBetween = (p, a, b) => 
+                ((p - a) >= double.Epsilon) &&
+                ((p - b) <= double.Epsilon) ||
+                ((p - a) <= double.Epsilon) &&
+                ((p - b) >= double.Epsilon);
+            
             bool inside = false;
-            for (int i = 0, j = polygonOriented.ControlPointLocations.Count - 1; i < polygonOriented.ControlPointLocations.Count; j = i++)
+
+            for (int i = polygonOriented.ControlPointLocations.Count - 1, j = 0; j < polygonOriented.ControlPointLocations.Count; i = j, j++)
             {
-                if ((polygonOriented.ControlPointLocations[i].Y > pointOriented.Y) != (polygonOriented.ControlPointLocations[j].Y > pointOriented.Y) &&
-                     pointOriented.X < (polygonOriented.ControlPointLocations[j].X - polygonOriented.ControlPointLocations[i].X) * (pointOriented.Y - polygonOriented.ControlPointLocations[i].Y) / (polygonOriented.ControlPointLocations[j].Y - polygonOriented.ControlPointLocations[i].Y) + polygonOriented.ControlPointLocations[i].X)
+                Point3 A = polygonOriented.ControlPointLocations[i];
+                Point3 B = polygonOriented.ControlPointLocations[j];
+                
+                // corner cases
+                if (
+                    (Math.Abs(pointOriented.X - A.X) <= double.Epsilon) && 
+                    (Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon) || 
+                    (Math.Abs(pointOriented.X - B.X) <= double.Epsilon) &&
+                    (Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon)) return 0;
+                
+                if (
+                    Math.Abs(A.Y - B.Y) <= double.Epsilon && 
+                    Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon && 
+                    isValueBetween(pointOriented.X, A.X, B.X)) return 0;
+
+                if (isValueBetween(pointOriented.Y, A.Y, B.Y))
                 {
-                    inside = !inside;
+                    // if P inside the vertical range
+                    // filter out "ray pass vertex" problem by treating the line a little lower
+                    if (
+                        Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon &&
+                        (B.Y - A.Y) >= double.Epsilon || 
+                        Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon &&
+                        (A.Y - B.Y) <= double.Epsilon) continue;
+                    
+                    // calc cross product `PA X PB`, P lays on left side of AB if c > 0 
+                    double c = (A.X - pointOriented.X) * (B.Y - pointOriented.Y) - (B.X - pointOriented.X) * (A.Y - pointOriented.Y);
+                    
+                    if (c > 0 && c < GSharkMath.MinTolerance ) return 0;
+
+                    if ((A.Y < B.Y) == (c > 0))
+                        inside = !inside;
                 }
             }
-
-            return 1;
+            return inside ? 1 : -1;
         }
     }
 }
+
