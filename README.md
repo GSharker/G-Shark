@@ -2,6 +2,7 @@
 ![Nuget](https://img.shields.io/nuget/v/GShark)
 [![Build and Test](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml/badge.svg?branch=develop&event=pull_request)](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml)
 [![Build docs](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml)
+[![](https://dcbadge.vercel.app/api/server/RPz2XZEtbc?style=flat)](https://discord.gg/RPz2XZEtbc)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
