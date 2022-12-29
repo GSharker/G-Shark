@@ -15,7 +15,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsSurfaceCollection.cs?name=example)]
     /// </example>
-    public class NurbsSurface : ICurve<NurbsSurface>
+    public class NurbsSurface : IGeometry<NurbsSurface>
     {
         /// <summary>
         /// Internal constructor used to validate the NURBS surface.

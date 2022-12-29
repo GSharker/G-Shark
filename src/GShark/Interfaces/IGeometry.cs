@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GShark.Interfaces
 {
-    public interface ICurve<T> : IEquatable<T>, ITransformable<T>
+    public interface IGeometry<T> : IEquatable<T>, ITransformable<T>
     {
     }
 }
