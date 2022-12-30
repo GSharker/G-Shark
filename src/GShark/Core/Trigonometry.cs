@@ -1,6 +1,7 @@
 ﻿using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GShark.Core
@@ -147,5 +148,7 @@ namespace GShark.Core
             double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
             return (tValue: tValueResult, pt: pointResult);
         }
+
+       
     }
 }
