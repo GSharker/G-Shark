@@ -1,7 +1,9 @@
-![Target Framework](https://img.shields.io/badge/Target%20Framework-.NetStandard2.0-blue.svg)
-![Nuget](https://img.shields.io/nuget/v/GShark)
+![](https://img.shields.io/badge/Framwork-.NetStandard2.0-blue?logo=.NET)
+![Nuget](https://img.shields.io/nuget/v/GShark?logo=NuGet&color=004880)
 [![Build and Test](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml/badge.svg?branch=develop&event=pull_request)](https://github.com/GSharker/G-Shark/actions/workflows/build-and-test-on-pr.yml)
 [![Build docs](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://github.com/GSharker/G-Shark/actions/workflows/build-docs.yml)
+
+[![](https://dcbadge.vercel.app/api/server/RPz2XZEtbc?style=flat)](https://discord.gg/RPz2XZEtbc)
 ![](./media/gshark-banner.jpg "Geometry Shark")
 
 # The project
@@ -19,10 +21,3 @@ There's a tonne of work to be done and we appreciate all the help we can get! If
 
 ## Documentation
 [G-Shark Doc](https://gsharker.github.io/G-Shark/)
-
-## Our Codebase
-We've included the generated diagram by adding it to the README:
-
-![Visualization of this repo](media/diagram.svg)
-
-You can check out the whole GitHub Action at [diagram.yml](/.github/workflows/generate_diagram.yml). Notice that we're excluding the `ignore` and `.github` folders, using the `excluded_paths` config.
