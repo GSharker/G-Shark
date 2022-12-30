@@ -13,75 +13,48 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - develop
+      - master
 
 jobs:
   build:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    permissions:
+      contents: write
+      pull-requests: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
-
-    steps:
+    steps:          
       - name: 🛎 Checkout repo
         uses: actions/checkout@v3
         with: 
           fetch-depth: 0
+          
+      - name: 👶 Draft release
+        uses: release-drafter/release-drafter@v5
+        id: release
 
       - name: 🚧 Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 3.1.x
-
-      - name: ⚙️ Get previous tag.
-        id: version
-        run: |
-          lastTag=`git tag -l --sort=-creatordate --format='%(refname:short)' | head -n 1`
-          echo "tag=$lastTag" >> $GITHUB_OUTPUT
-
-      - name: ⚙️ Bump if alpha.
-        id: bump-with-alpha
-        uses: actions/github-script@v6
-        with:
-          result-encoding: string
-          script: |
-                const incoming = "${{steps.version.outputs.tag}}"
-                console.log("Incoming Tag: " + incoming)
-                if(incoming.includes('alpha')) {
-                  const oldNum = incoming.match(/alpha[.]*(\d+)/)[1]
-                  const newNum = parseInt(oldNum)+1
-                  const newTag = incoming.replace(/alpha.*\d+/, `alpha.${newNum}`)
-                  console.log("New Tag: " + newTag)
-                  return newTag
-                }
-                else {
-                  const newTag =incoming +'-alpha.0'
-                  console.log("New Tag: " + newTag)
-                  return newTag
-                }
+          dotnet-version: 6.0.x
+      
+      - name: 📖 Read release
+        run: echo ${{ steps.release.outputs.tag_name }}
       
       - name: 🔧 Restore nuget with dotnet
         run: dotnet restore ${{ env.PROJECT_PATH }}
       
       - name: 🧱 Build project
-        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=${{ steps.bump-with-alpha.outputs.result }}
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release -p:Version=${{ steps.release.outputs.tag_name }}
         
       - name: 📦 Create the package
-        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.bump-with-alpha.outputs.result }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.release.outputs.tag_name }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
         
       - name: 🚀 Publish the package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg --skip-duplicate -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }}
-
-      - name: 📘 Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: 📰 Publish release
+        uses: eregon/publish-release@v1
         with:
-          tag_name: ${{ steps.bump-with-alpha.outputs.result }}
-          release_name: ${{ steps.bump-with-alpha.outputs.result }}
-          body: |
-            ### PR Title
-            ${{ github.event.pull_request.title }}
-            
-            ${{ github.event.pull_request.body }}
-          draft: false
-          prerelease: false
+          release_id: ${{ steps.release.outputs.id }}
