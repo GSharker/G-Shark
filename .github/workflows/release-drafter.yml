@@ -11,13 +11,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: release-drafter/release-drafter@v5
-        id: release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: read release
-        run: echo ${{ release.outputs.tag_name }}
-    
+      - name: 👶 Draft release
+        uses: release-drafter/release-drafter@v5
