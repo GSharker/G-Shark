@@ -262,5 +262,21 @@ namespace GShark.Test.XUnit.Core
             rotationMatrix.Equals(expectedMatrix).Should().BeTrue();
         }
 
+        [Fact]
+        public void It_Returns_A_Point_Reflected_On_The_YZ_Plane()
+        {
+            var p = new Point3(5, 0, 0);
+
+            //Act
+            var reflectionMatrix = Transform.Reflection(Plane.PlaneYZ);
+            var pReflected = p.Transform(reflectionMatrix);
+
+            //Assert
+#if DEBUG
+            _testOutput.WriteLine(pReflected.ToString());
+#endif
+            pReflected.Should().BeEquivalentTo(new Point3(-5, 0, 0));
+        }
+
     }
 }
