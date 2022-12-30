@@ -260,7 +260,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void Returns_True_If_Surface_Is_Close()
+        public void Returns_True_If_Surface_Is_Closed()
         {
             // Act
             NurbsSurface surface = NurbsSurface.FromLoft(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);

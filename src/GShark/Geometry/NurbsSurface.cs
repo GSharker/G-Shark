@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using GShark.Core;
 using GShark.Enumerations;
 using GShark.ExtendedMethods;
@@ -97,8 +98,9 @@ namespace GShark.Geometry
         /// </summary>
         public List<List<Point4>> ControlPoints { get; }
 
+
         /// <summary>
-        /// Checks if a NURBS surface is closed.<br/>
+        /// Checks if the surface is closed.<br/>
         /// A surface is closed if the first points and the lasts in a direction are coincident.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
@@ -117,6 +119,22 @@ namespace GShark.Geometry
         public bool IsPlanar(double tolerance = GSharkMath.Epsilon)
         {
             return Trigonometry.ArePointsCoplanar(ControlPointLocations.SelectMany(pt => pt).ToList(), tolerance);
+        }
+
+        /// <summary>
+        /// Extracts the boundary curves of the surface.
+        /// </summary>
+        /// <returns>The boundary edges.</returns>
+        public NurbsBase[] BoundaryEdges()
+        {
+            NurbsBase[] curves = new NurbsBase[]
+            {
+                IsoCurve(0.0, SurfaceDirection.V),
+                IsoCurve(1.0, SurfaceDirection.U),
+                IsoCurve(1.0, SurfaceDirection.V),
+                IsoCurve(0.0, SurfaceDirection.U)
+            };
+            return curves;
         }
 
         /// <summary>
