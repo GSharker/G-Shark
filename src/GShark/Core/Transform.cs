@@ -225,7 +225,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Create a reflextion transformation
+        /// Creates a reflection transformation matrix given a Plane defining the plane of reflection.
         /// </summary>
         /// <param name="a">The plane used to reflect.</param>
         /// <returns>The transformation matrix.</returns>
