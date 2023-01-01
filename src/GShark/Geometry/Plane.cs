@@ -10,7 +10,7 @@ namespace GShark.Geometry
     /// <summary>
     /// A plane is simply an origin point and normal.
     /// </summary>
-    public class Plane : IEquatable<Plane>, ITransformable<Plane>
+    public class Plane : IGeometry<Plane>
     {
         public Plane()
         {

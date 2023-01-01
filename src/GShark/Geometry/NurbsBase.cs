@@ -9,13 +9,14 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using GShark.Optimization;
+using GShark.Interfaces;
 
 namespace GShark.Geometry
 {
     /// <summary>
     /// This class represents a base class that is common to most curve types.
     /// </summary>
-    public abstract class NurbsBase : IEquatable<NurbsBase>
+    public abstract class NurbsBase : IGeometry<NurbsBase>
     {
         protected NurbsBase()
         {
@@ -175,7 +176,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.PointAt"/>
+        /// <inheritdoc cref="IGeometry.PointAt"/>
         /// </summary>
         public virtual Point3 PointAt(double t)
         {
@@ -192,7 +193,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.PointAtLength"/>
+        /// <inheritdoc cref="IGeometry.PointAtLength"/>
         /// </summary>
         public virtual Point3 PointAtLength(double length)
         {
@@ -385,7 +386,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.ClosestPoint"/>
+        /// <inheritdoc cref="IGeometry.ClosestPoint"/>
         /// </summary>
         public virtual Point3 ClosestPoint(Point3 point)
         {
@@ -395,7 +396,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.ClosestParameter"/>
+        /// <inheritdoc cref="IGeometry.ClosestParameter"/>
         /// </summary>
         public virtual double ClosestParameter(Point3 pt)
         {
@@ -423,7 +424,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.LengthAt"/>
+        /// <inheritdoc cref="IGeometry.LengthAt"/>
         /// </summary>
         public virtual double LengthAt(double t)
         {
@@ -852,6 +853,18 @@ namespace GShark.Geometry
             }
 
             return sBldr.ToString().GetHashCode();
+        }
+        /// <summary>
+        /// Applies a transformation on the geometry object and returns the transformed geometry.
+        /// </summary>
+        /// <param name="t">The transformation matrix that represents the transformation.</param>
+        /// <returns>The transformed geometry</returns>
+        public NurbsBase Transform(TransformMatrix t)
+        {
+            // Figuring out the type of geometry using reflection so that the Transform function of that geometry 
+            // type is invoked.
+            Type type = GetType();
+            return type.GetMethod(nameof(Transform)).Invoke(this, new object[] { t }) as NurbsBase;
         }
     }
 }

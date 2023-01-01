@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class PolyLine : NurbsBase, IEquatable<PolyLine>, ITransformable<PolyLine>
+    public class PolyLine : NurbsBase, IGeometry<PolyLine>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
@@ -162,7 +162,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.PointAtLength"/>
+        /// <inheritdoc cref="IGeometry.PointAtLength"/>
         /// </summary>
         public override Point3 PointAtLength(double length)
         {
