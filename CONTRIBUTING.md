@@ -13,7 +13,7 @@ We use GitHub issues to track:
 	* Proposing new features
 
 if you are submitting a bug or suggesting an enhancement provide more information as possible.
-### Bugs: 
+### 🐛 Bugs: 
 * **Use a clear and descriptive title** for the issue to identify the problem.
 * **Describe the exact steps which reproduce the problem** in as many details as possible.
 	When listing steps, **don't just say what you did, but explain how you did it**.
@@ -29,18 +29,16 @@ If the issues is approved, you will be assigned to the issue.
 Once you get assegned to an issue you can start coding!
 
 ### All Code Changes Happen Through Pull Requests.
-1. **Fork the repo** and create your branch from `develop`, we use `develop` for continuous development, so it will be always the most updated, `master` is only for releases.
-2. **Create a topic branch** using the tags `feature`, `bug`, `refactor` based on the type if issue.
+1. **Fork the repo** and create your branch from `master`, we develop following [trunk-based development](https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development)
+2. **Crete your branch**, the space where you will develop the new integrations.
 	* This should usally branch of from master.
 	* Please avoid working directly on the `master` branch.
-	* To quickly create a topic branch based on master, run `git checkout -b refactor/<name-of-the-topic>` example `refactor/nurbs-curve`.
-3. From the topic branch **crete your branches**, this helps to keep track of sub-tasks that defines the issues.
 	* To quickly create a topic branch based on master, run `git checkout -b dev/<initial name and surname>/<name-of-the-task>` example `dev/mibi/review-point-at`.
-4. If you've added code that should be tested, **add tests**.
-5. If you've changed APIs, **update the documentation**.
-6. **Ensure the test suite passes**.
-7. Make sure your code lints.
-8. Issue that pull request!
+3. If you've added code that should be tested, **add tests**.
+4. If you've changed APIs, **update the documentation**.
+5. **Ensure the test suite passes**.
+6. Make sure your code lints.
+7. Issue that pull request!
 	* In the pull request, **outline what you did and link it to the specific issue** that you are resolving. This is a tremendous help for us in evaluation and acceptance.
 	* Once the pull request is in, **please do not delete the branch or close the pull request** (unless something is wrong with it).
 

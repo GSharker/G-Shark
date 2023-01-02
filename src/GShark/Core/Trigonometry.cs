@@ -1,6 +1,7 @@
 ﻿using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GShark.Core
@@ -11,14 +12,15 @@ namespace GShark.Core
     public class Trigonometry
     {
         /// <summary>
-        /// Determines if the provide points are on the same plane.
+        /// Determines if the provide points are on the same plane within specified tolerance.
         /// </summary>
-        /// <param name="points">Provided points.</param>
-        /// <returns>Whether the point are coplanar.</returns>
-        public static bool ArePointsCoplanar(IList<Point3> points)
+        /// <param name="points">Points to check.</param>
+        /// <param name="tolerance">Tolerance.</param>
+        /// <returns>True if all points are coplanar.</returns>
+        public static bool ArePointsCoplanar(IList<Point3> points, double tolerance = GSharkMath.Epsilon)
         {
             // https://en.wikipedia.org/wiki/Triple_product
-            if (points.Count < 3)
+            if (points.Count <= 3)
             {
                 return true;
             }
@@ -146,5 +148,7 @@ namespace GShark.Core
             double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
             return (tValue: tValueResult, pt: pointResult);
         }
+
+       
     }
 }

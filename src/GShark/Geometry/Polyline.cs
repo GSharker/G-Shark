@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/PolylineTests.cs?name=example)]
     /// </example>
-    public class PolyLine : NurbsBase, IEquatable<PolyLine>, ITransformable<PolyLine>
+    public class PolyLine : NurbsBase, IGeometry<PolyLine>
     {
         /// <summary>
         /// Initializes a new polyline from a collection of points.
@@ -162,7 +162,7 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// <inheritdoc cref="ICurve.PointAtLength"/>
+        /// <inheritdoc cref="IGeometry.PointAtLength"/>
         /// </summary>
         public override Point3 PointAtLength(double length)
         {
@@ -357,7 +357,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transform">Transformation matrix to apply.</param>
         /// <returns>A polyline transformed.</returns>
-        public PolyLine Transform(Transform transform)
+        public PolyLine Transform(TransformMatrix transform)
         {
             List<Point3> transformedPts = ControlPointLocations.Select(pt => pt.Transform(transform)).ToList();
 
@@ -420,7 +420,7 @@ namespace GShark.Geometry
                 }
 
                 Vector3 vecOffset = Vector3.CrossProduct(segments[k].Direction, pln.ZAxis).Amplify(distance);
-                Transform xForm = Core.Transform.Translation(vecOffset);
+                var xForm = Core.Transform.Translation(vecOffset);
                 offsetSegments[k] = segments[k].Transform(xForm);
 
                 if (i == 0 && IsClosed)

@@ -4,6 +4,7 @@ using GShark.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GShark.Enumerations;
 using Xunit;
 
 namespace GShark.Test.XUnit.Geometry
@@ -215,9 +216,9 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_A_Transformed_Polyline()
         {
             // Arrange
-            Transform translation = Transform.Translation(new Vector3(10, 15, 0));
-            Transform rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
-            Transform combinedTransformations = translation.Combine(rotation);
+            var translation = Transform.Translation(new Vector3(10, 15, 0));
+            var rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0), RotationAxis.Z);
+            var combinedTransformations = translation.Combine(rotation);
             double[] distanceExpected = new[] { 19.831825, 20.496248, 24.803072, 28.67703, 35.897724 };
 
             // Act

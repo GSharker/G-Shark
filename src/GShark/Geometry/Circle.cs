@@ -14,7 +14,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/CircleTests.cs?name=example)]
     /// </example>
-    public class Circle : NurbsBase, IEquatable<Circle>, ITransformable<Circle>
+    public class Circle : NurbsBase, IGeometry<Circle>
     {
         internal Interval _domain = new Interval(0.0, 2.0 * Math.PI);
         internal double _length;
@@ -458,11 +458,11 @@ namespace GShark.Geometry
         /// <summary>
         /// Applies a transformation to the plane where the circle is on.
         /// </summary>
-        /// <param name="transformation">Transformation matrix to apply.</param>
+        /// <param name="t">Transformation matrix to apply.</param>
         /// <returns>A transformed arc.</returns>
-        public Circle Transform(Transform transformation)
+        public Circle Transform(TransformMatrix t)
         {
-            Plane plane = Plane.Transform(transformation);
+            Plane plane = Plane.Transform(t);
             return new Circle(plane, Radius);
         }
 

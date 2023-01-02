@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using GShark.Core;
 using GShark.Enumerations;
 using GShark.ExtendedMethods;
@@ -15,7 +16,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Data/NurbsSurfaceCollection.cs?name=example)]
     /// </example>
-    public class NurbsSurface : IEquatable<NurbsSurface>, ITransformable<NurbsSurface>
+    public class NurbsSurface : IGeometry<NurbsSurface>
     {
         /// <summary>
         /// Internal constructor used to validate the NURBS surface.
@@ -97,8 +98,9 @@ namespace GShark.Geometry
         /// </summary>
         public List<List<Point4>> ControlPoints { get; }
 
+
         /// <summary>
-        /// Checks if a NURBS surface is closed.<br/>
+        /// Checks if the surface is closed.<br/>
         /// A surface is closed if the first points and the lasts in a direction are coincident.
         /// </summary>
         /// <returns>True if the curve is closed.</returns>
@@ -106,6 +108,33 @@ namespace GShark.Geometry
         {
             var pts2d = (direction == SurfaceDirection.U) ? CollectionHelpers.Transpose2DArray(ControlPointLocations) : ControlPointLocations;
             return pts2d.All(pts => pts[0].DistanceTo(pts.Last()) < GSharkMath.Epsilon);
+        }
+
+
+        /// <summary>
+        /// Checks is surface is planar within specified tolerance.
+        /// </summary>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        public bool IsPlanar(double tolerance = GSharkMath.Epsilon)
+        {
+            return Trigonometry.ArePointsCoplanar(ControlPointLocations.SelectMany(pt => pt).ToList(), tolerance);
+        }
+
+        /// <summary>
+        /// Extracts the boundary curves of the surface.
+        /// </summary>
+        /// <returns>The boundary edges.</returns>
+        public NurbsBase[] BoundaryEdges()
+        {
+            NurbsBase[] curves = new NurbsBase[]
+            {
+                IsoCurve(0.0, SurfaceDirection.V),
+                IsoCurve(1.0, SurfaceDirection.U),
+                IsoCurve(1.0, SurfaceDirection.V),
+                IsoCurve(0.0, SurfaceDirection.U)
+            };
+            return curves;
         }
 
         /// <summary>
@@ -226,7 +255,7 @@ namespace GShark.Geometry
         /// <returns>The extruded surface.</returns>
         public static NurbsSurface FromExtrusion(Vector3 direction, NurbsBase profile)
         {
-            Transform xForm = Core.Transform.Translation(direction);
+            var xForm = Core.Transform.Translation(direction);
             List<Point4> translatedControlPts =
                 profile.ControlPoints.Select(controlPoint => controlPoint.Transform(xForm)).ToList();
 
@@ -247,9 +276,9 @@ namespace GShark.Geometry
             List<Plane> frames = rail.PerpendicularFrames(tValues);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
-            for (int i = 1; i <= frames.Count; i++)
+            for (int i = 1; i < frames.Count; i++)
             {
-                Transform xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
+                var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
             }
 
@@ -479,11 +508,32 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="transformation">The transformation matrix.</param>
         /// <returns>A new NURBS surface transformed.</returns>
-        public NurbsSurface Transform(Transform transformation)
+        public NurbsSurface Transform(TransformMatrix transformation)
         {
             List<List<Point4>> transformedControlPts = ControlPoints;
             transformedControlPts.ForEach(pts => pts.ForEach(pt => pt.Transform(transformation)));
             return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotsV, transformedControlPts);
+        }
+
+        /// <summary>
+        /// Reverses the parameterization of a surface in the specified direction. The domain is unaffected.
+        /// </summary>
+        /// <param name="surfaceDirection">The U or V direction whether the surface will be reversed.</param>
+        /// <returns>A surface reversed in the specified direction.</returns>
+        public NurbsSurface Reverse(SurfaceDirection surfaceDirection)
+        {
+            var copyControlPoint = new List<List<Point4>>(ControlPoints);
+            if (surfaceDirection == SurfaceDirection.V)
+            {
+                foreach (List<Point4> row in copyControlPoint)
+                {
+                    row.Reverse();
+                }
+                return new NurbsSurface(DegreeU, DegreeV, KnotsU, KnotVector.Reverse(KnotsV), copyControlPoint);
+            }
+
+            copyControlPoint.Reverse();
+            return new NurbsSurface(DegreeU, DegreeV, KnotVector.Reverse(KnotsU), KnotsV, copyControlPoint);
         }
 
         /// <summary>

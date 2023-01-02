@@ -275,7 +275,7 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Translates_A_Line()
         {
             // Arrange
-            Transform transform = Transform.Translation(new Vector3(10, 10, 0));
+            var transform = Transform.Translation(new Vector3(10, 10, 0));
 
             // Act
             Line transformedLine = _exampleLine.Transform(transform);

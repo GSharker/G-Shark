@@ -127,12 +127,12 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="t">The transformation matrix.</param>
         /// <returns>The transformed control point as a new instance.</returns>
-        public Point4 Transform(Transform t)
+        public Point4 Transform(TransformMatrix t)
         {
-            double num1 = t[0][0] * X + t[0][1] * Y + t[0][2] * Z + t[0][3] * W;
-            double num2 = t[1][0] * X + t[1][1] * Y + t[1][2] * Z + t[1][3] * W;
-            double num3 = t[2][0] * X + t[2][1] * Y + t[2][2] * Z + t[2][3] * W;
-            double num4 = t[3][0] * X + t[3][1] * Y + t[3][2] * Z + t[3][3] * W;
+            double num1 = t.M00 * X + t.M10 * Y + t.M20 * Z + t.M30 * W;
+            double num2 = t.M01 * X + t.M11 * Y + t.M21 * Z + t.M31 * W;
+            double num3 = t.M02 * X + t.M12 * Y + t.M22 * Z + t.M32 * W;
+            double num4 = t.M03 * X + t.M13 * Y + t.M23 * Z + t.M33 * W;
 
             return new Point4(num1, num2, num3, num4);
         }

@@ -218,13 +218,82 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void Returns_True_If_Surface_Is_Close()
+        public void Returns_A_Reversed_Surface_In_The_U_Direction()
+        {
+            // Arrange
+            List<List<Point3>> expectedPts = new List<List<Point3>>
+            {
+                new List<Point3>{ new Point3(10.0, 0.0, 0.0), new Point3(10.0, 10.0, 2.0)},
+                new List<Point3>{ new Point3(5.0, 0.0, 0.0), new Point3(5.0,10.0,5.0)},
+                new List<Point3>{ new Point3(0.0, 0.0, 0.0), new Point3(0.0, 10.0, 4.0)}
+            };
+
+            // Act
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints().Reverse(SurfaceDirection.U);
+
+            // Assert
+            surface.ControlPointLocations
+                .Zip(expectedPts, (ptsA, ptsB) => ptsA.SequenceEqual(ptsB))
+                .All(res => res)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_A_Reversed_Surface_In_The_V_Direction()
+        {
+            // Arrange
+            List<List<Point3>> expectedPts = new List<List<Point3>>
+            {
+                new List<Point3>{ new Point3(0.0, 10.0, 4.0), new Point3(0.0, 0.0, 0.0)},
+                new List<Point3>{ new Point3(5.0, 10.0, 5.0), new Point3(5.0,0.0,0.0)},
+                new List<Point3>{ new Point3(10.0, 10.0, 2.0), new Point3(10.0, 0.0, 0.0)}
+            };
+
+            // Act
+            NurbsSurface surface = NurbsSurfaceCollection.SurfaceFromPoints().Reverse(SurfaceDirection.V);
+
+            // Assert
+            surface.ControlPointLocations
+                .Zip(expectedPts, (ptsA, ptsB) => ptsA.SequenceEqual(ptsB))
+                .All(res => res)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_True_If_Surface_Is_Closed()
         {
             // Act
             NurbsSurface surface = NurbsSurface.FromLoft(NurbsCurveCollection.ClosedCurves(), LoftType.Loose);
 
             // Assert
             surface.IsClosed(SurfaceDirection.V).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Returns_True_If_Surface_Is_Planar()
+        {
+            //Arrange
+            var planarSurface = NurbsSurface.FromCorners(
+                new Point3(0, 0, 0),
+                new Point3(10, 0, 0),
+                new Point3(10,5,0),
+                new Point3(0,5,0)
+            );
+            
+            var nonPlanarSurface = NurbsSurface.FromCorners(
+                new Point3(0, 0, 0),
+                new Point3(10, 0, 5),
+                new Point3(10, 5, 0),
+                new Point3(0, 5, 5)
+            );
+
+            //Act
+            var isPlanarSurfacePlanar = planarSurface.IsPlanar();
+            var isNonPlanarSurfacePlanar = nonPlanarSurface.IsPlanar();
+
+            //Assert
+            isPlanarSurfacePlanar.Should().BeTrue();
+            isNonPlanarSurfacePlanar.Should().BeFalse();
         }
 
         [Theory]
@@ -467,7 +536,7 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
-        public void It_Creates_A_NurbsSurface_From_Swep()
+        public void It_Creates_A_NurbsSurface_From_Sweep()
         {
             // Arrange
             List<Point3> ptsA = new List<Point3>

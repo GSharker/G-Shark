@@ -13,7 +13,7 @@ namespace GShark.Geometry
     /// <example>
     /// [!code-csharp[Example](../../src/GShark.Test.XUnit/Geometry/ArcTests.cs?name=example)]
     /// </example>
-    public class Arc : Circle, IEquatable<Arc>, ITransformable<Arc>
+    public class Arc : Circle, IGeometry<Arc>
     {
         /// <summary>
         /// Initializes an arc from a plane, a radius and an angle domain expressed as an interval in radians.
@@ -152,11 +152,11 @@ namespace GShark.Geometry
         /// <summary>
         /// Applies a transformation to the plane where the arc is on.
         /// </summary>
-        /// <param name="transformation">Transformation matrix to apply.</param>
+        /// <param name="t">Transformation matrix to apply.</param>
         /// <returns>A transformed arc.</returns>
-        public new Arc Transform(Transform transformation)
+        public new Arc Transform(TransformMatrix t)
         {
-            Plane plane = Plane.Transform(transformation);
+            Plane plane = Plane.Transform(t);
             Interval angleDomain = new Interval(_domain.T0, _domain.T1);
 
             return new Arc(plane, Radius, angleDomain);

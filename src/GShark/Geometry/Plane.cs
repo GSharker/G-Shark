@@ -10,7 +10,7 @@ namespace GShark.Geometry
     /// <summary>
     /// A plane is simply an origin point and normal.
     /// </summary>
-    public class Plane : IEquatable<Plane>, ITransformable<Plane>
+    public class Plane : IGeometry<Plane>
     {
         public Plane()
         {
@@ -59,9 +59,18 @@ namespace GShark.Geometry
         /// <param name="yDirection">Y direction.</param>
         public Plane(Point3 origin, Vector3 xDirection, Vector3 yDirection)
         {
+            if (Math.Abs(Vector3.VectorAngle(xDirection, yDirection)) < GSharkMath.AngleTolerance)
+                throw new Exception("Plane cannot be created. The direction vectors are parallel");
             Origin = origin;
-            XAxis = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
-            YAxis = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
+            // Unitizing the directions
+            Vector3 unitDir1 = xDirection.IsUnitVector ? xDirection : xDirection.Unitize();
+            Vector3 unitDir2 = yDirection.IsUnitVector ? yDirection : yDirection.Unitize();
+            // Xaxis
+            XAxis = unitDir1;
+            // Zaxis
+            Vector3 unitZ = Vector3.CrossProduct(unitDir1, unitDir2);
+            // Yaxis (Since in a right handed coordinate system, Yvec = Zvec X Xvec
+            YAxis = (Vector3.CrossProduct(unitZ, XAxis)).Unitize();
         }
 
         /// <summary>
@@ -138,7 +147,7 @@ namespace GShark.Geometry
         /// Finds the closest point on a plane.
         /// https://www.parametriczoo.com/index.php/2020/02/29/signed-distance-of-a-point-from-a-plane/
         /// </summary>
-        /// <param name="pt">The point to get close to plane.</param>
+        /// <param name="pt">The point to test.</param>
         /// <param name="distance">The signed distance of point from the plane. If the point is above the plane (positive side) the result is positive, if the point is below the result is negative.</param>
         /// <returns>The point on the plane that is closest to the sample point.</returns>
         public Point3 ClosestPoint(Vector3 pt, out double distance)
@@ -303,14 +312,14 @@ namespace GShark.Geometry
         /// <summary>
         /// Transforms the plane by a transformation matrix.
         /// </summary>
-        /// <param name="transformation">The transformation matrix to apply to the plane.</param>
+        /// <param name="t">The transformation matrix to apply to the plane.</param>
         /// <returns>The transformed plane.</returns>
-        public Plane Transform(Transform transformation)
+        public Plane Transform(TransformMatrix t)
         {
-            Point3 transformedOrigin = Origin.Transform(transformation);
+            Point3 transformedOrigin = Origin.Transform(t);
 
-            var xDir = (Origin + XAxis).Transform(transformation) - transformedOrigin;
-            var yDir = (Origin + YAxis).Transform(transformation) - transformedOrigin;
+            var xDir = (Origin + XAxis).Transform(t) - transformedOrigin;
+            var yDir = (Origin + YAxis).Transform(t) - transformedOrigin;
 
             return new Plane(transformedOrigin, xDir, yDir);
         }

@@ -5,8 +5,6 @@
     /// </summary>
     public enum EvaluateSurfaceDirection
     {
-        Unknown = 0,
-
         /// <summary>
         /// The U direction of a surface.
         /// </summary>

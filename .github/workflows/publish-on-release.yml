@@ -23,14 +23,14 @@ jobs:
 
     steps:
       - name: 🛎 Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with: 
           fetch-depth: 0
 
       - name: 🚧 Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 3.1.x
+          dotnet-version: 6.0.x
       
       - name: 🔧 Restore nuget with dotnet
         run: dotnet restore ${{ env.PROJECT_PATH }}

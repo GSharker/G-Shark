@@ -8,18 +8,28 @@
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
     <LangVersion>8.0</LangVersion>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>	
     <PackageId>GShark</PackageId>
     <PackageTitle>GShark</PackageTitle>
     <PackageIcon>gshark-logo.png</PackageIcon>
     <PackageProjectUrl>https://gsharker.github.io/G-Shark</PackageProjectUrl>
-    <PackageDescription>G-Shark is the nickname for Geometry Shark a light geometry library.</PackageDescription>
-    <Summary>G-Shark library provides operation for generating and manipulating basic geometry like, curves, surfaces, meshes.</Summary>
-    <PackageTags>computational geometry, geometry kernel, geometry, kernel, csharp, nurbs, curves, bezier, polygons, intersections, mesh, solid, linear algebra, vectors</PackageTags>
+    <Summary>G-Shark provides classes and methods to create and manipulate geometry including curves, surfaces, solids, and meshes.</Summary>
+    <PackageDescription>G-Shark is a highly functional general pruprose geometry library designed for computational designers and software developers 
+    working in Architecture, Engineering, and Construction (AEC). It is implemented in C# to provide developers in the AEC industry with a single source
+    of functionality for developing geometric logic and geometry-centric applications in a familiar language, and enabling interoperability
+    with most CAD software used across AEC professions.</PackageDescription>
+    <PackageTags>computational geometry, architecture, engineering, construction, geometry kernel, geometry, kernel, csharp, nurbs, curves, bezier, polygons, intersections, mesh, solid, linear algebra, vectors</PackageTags>
     <Version>$(Version)</Version>
   </PropertyGroup>
 
+<ItemGroup>
+	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		<_Parameter1>GShark.Test.XUnit</_Parameter1>
+	</AssemblyAttribute>
+</ItemGroup>
+	
   <ItemGroup>
     <None Include="../../media/gshark-logo.png" Pack="true" PackagePath="" />
   </ItemGroup>

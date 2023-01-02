@@ -3,6 +3,7 @@ using GShark.Core;
 using GShark.Geometry;
 using System;
 using System.Collections.Generic;
+using GShark.Enumerations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -65,7 +66,24 @@ namespace GShark.Test.XUnit.Geometry
             func.Should().Throw<Exception>()
                 .WithMessage("Plane cannot be created, the tree points must not be collinear");
         }
+        [Fact]
+        public void It_Creates_A_Plane_By_Two_Directions_And_Point()
+        {
+            // Arrange (Creating a plane with one direction along world X and the other direction along the
+            // the vector (1, 1)
+            Vector3 direction1 = Vector3.XAxis * 5;
+            Vector3 direction2 = Vector3.XAxis + Vector3.YAxis;
+            Point3 origin = new Point3();
 
+            // Act
+            Plane plane = new Plane(origin, direction1, direction2);
+
+            // Assert
+            plane.Origin.Equals(origin).Should().BeTrue();
+            plane.XAxis.EpsilonEquals(Vector3.XAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.YAxis.EpsilonEquals(Vector3.YAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+            plane.ZAxis.EpsilonEquals(Vector3.ZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
+        }
         [Fact]
         public void It_Creates_A_Plane_By_Three_Points()
         {
@@ -117,21 +135,23 @@ namespace GShark.Test.XUnit.Geometry
         [Fact]
         public void It_Returns_A_Transformed_Plane()
         {
+            //ToDo Testing transformation here, not combination of transforms. Start with a given, already combined xForm and compare results to Rhino.
             // Arrange
             var pt1 = new Point3(20, 20, 0);
             var pt2 = new Point3(5, 5, 0);
             var pt3 = new Point3(-5, 10, 0);
             Plane plane = new Plane(pt1, pt2, pt3);
-            Transform translation = Transform.Translation(new Point3(10, 15, 0));
-            Transform rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0));
+            var translation = Transform.Translation(new Point3(10, 15, 0));
+            var rotation = Transform.Rotation(GSharkMath.ToRadians(30), new Point3(0, 0, 0), RotationAxis.Z);
             var expectedOrigin = new Point3(17.320508, 42.320508, 0);
             var expectedZAxis = new Vector3(0, 0, -1);
 
             // Act
-            Transform combinedTransformations = translation.Combine(rotation);
+            var combinedTransformations = rotation.Combine(translation); //TODO Combine(translation, rotation) should return R * T.
             Plane transformedPlane = plane.Transform(combinedTransformations);
 
             // Assert
+            //TODO Test in transform.
             transformedPlane.Origin.EpsilonEquals(expectedOrigin, GSharkMath.MaxTolerance).Should().BeTrue();
             transformedPlane.ZAxis.EpsilonEquals(expectedZAxis, GSharkMath.MaxTolerance).Should().BeTrue();
         }
