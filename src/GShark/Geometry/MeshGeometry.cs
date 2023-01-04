@@ -68,17 +68,17 @@ namespace GShark.Geometry
                 {
                     var u = Vector(firstEdge);
                     var v = -Vector(firstEdge.Prev);
-                    return 0.5 * u.Cross(v).Length;
+                    return 0.5 * Vector3.CrossProduct(u,v).Length;
                 }
                 case 4: // Quad face
                 {
                     var u1 = Vector(firstEdge);
                     var v1 = -Vector(firstEdge.Prev);
-                    var a1 = 0.5 * u1.Cross(v1).Length;
+                    var a1 = 0.5 * Vector3.CrossProduct(u1,v1).Length;
                     var opposite = firstEdge.Next.Next;
                     var u2 = Vector(opposite);
                     var v2 = -Vector(opposite.Prev);
-                    var a2 = 0.5 * u2.Cross(v2).Length;
+                    var a2 = 0.5 * Vector3.CrossProduct(u2,v2).Length;
                     return a1 + a2;
                 }
                 default: // NGon face
@@ -106,7 +106,7 @@ namespace GShark.Geometry
             // TODO: This must be checked as it will not apply in quad/ngon cases
             var u = Vector(face.HalfEdge);
             var v = -Vector(face.HalfEdge.Prev);
-            return u.Cross(v).Unit();
+            return Vector3.CrossProduct(u,v).Unitize();
         }
 
 
@@ -147,10 +147,10 @@ namespace GShark.Geometry
 
             var ac = c - a;
             var ab = b - a;
-            var w = ab.Cross(ac);
+            var w = Vector3.CrossProduct(ab,ac);
 
-            var u = w.Cross(ab) * ac.SquareLength;
-            var v = ac.Cross(w) * ab.SquareLength;
+            var u = Vector3.CrossProduct(w,ab) * ac.SquareLength;
+            var v = Vector3.CrossProduct(ac, w) * ab.SquareLength;
 
             var x = ( Point3 ) (u + v) / (2 * w.SquareLength);
 
@@ -165,9 +165,9 @@ namespace GShark.Geometry
         /// <param name="face">Face.</param>
         public static Vector3[] OrthonormalBases(MeshFace face)
         {
-            var e1 = Vector(face.HalfEdge).Unit();
+            var e1 = Vector(face.HalfEdge).Unitize();
             var normal = FaceNormal(face);
-            var e2 = normal.Cross(e1);
+            var e2 = Vector3.CrossProduct(normal, e1);
 
             return new[] {e1, e2};
         }
@@ -180,10 +180,10 @@ namespace GShark.Geometry
         /// <param name="corner">Corner.</param>
         public static double Angle(MeshCorner corner)
         {
-            var u = Vector(corner.HalfEdge).Unit();
-            var v = -Vector(corner.HalfEdge.Next).Unit();
+            var u = Vector(corner.HalfEdge).Unitize();
+            var v = -Vector(corner.HalfEdge.Next).Unitize();
 
-            return Math.Acos(Math.Max(-1, Math.Min(1.0, u.Dot(v))));
+            return Math.Acos(Math.Max(-1, Math.Min(1.0, Vector3.DotProduct(u,v))));
         }
 
 
@@ -200,7 +200,7 @@ namespace GShark.Geometry
             var u = Vector(hE.Prev);
             var v = -Vector(hE.Next);
 
-            return u.Dot(v) / u.Cross(v).Length;
+            return Vector3.DotProduct(u,v) / Vector3.CrossProduct(u,v).Length;
         }
 
 
@@ -216,10 +216,10 @@ namespace GShark.Geometry
 
             var n1 = FaceNormal(hE.Face);
             var n2 = FaceNormal(hE.Twin.Face);
-            var w = Vector(hE).Unit();
+            var w = Vector(hE).Unitize();
 
-            var cosTheta = n1.Dot(n2);
-            var sinTheta = n1.Cross(n2).Dot(w);
+            var cosTheta = Vector3.DotProduct(n1,n2);
+            var sinTheta = Vector3.DotProduct(Vector3.CrossProduct(n1,n2), w);
 
             return Math.Atan2(sinTheta, cosTheta);
         }
@@ -263,7 +263,7 @@ namespace GShark.Geometry
             foreach (var f in vertex.AdjacentFaces())
                 n += FaceNormal(f);
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 
@@ -283,7 +283,7 @@ namespace GShark.Geometry
                 n += normal * area;
             }
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 
@@ -303,7 +303,7 @@ namespace GShark.Geometry
                 n += normal * angle;
             }
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 
@@ -321,7 +321,7 @@ namespace GShark.Geometry
                 n -= Vector(hE) * weight;
             }
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 
@@ -339,7 +339,7 @@ namespace GShark.Geometry
                 n -= Vector(hE) * weight;
             }
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 
@@ -356,10 +356,10 @@ namespace GShark.Geometry
                 var u = Vector(c.HalfEdge.Prev);
                 var v = -Vector(c.HalfEdge.Next);
 
-                n += u.Cross(v) / (u.SquareLength * v.SquareLength);
+                n += Vector3.CrossProduct(u,v) / (u.SquareLength * v.SquareLength);
             }
 
-            return n.Unit();
+            return n.Unitize();
         }
 
 

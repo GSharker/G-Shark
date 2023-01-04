@@ -602,36 +602,7 @@ namespace GShark.Geometry
             return this * (1 / Length);
         }
 
-        /// <summary>
-        ///     Returns a normalized copy of this vector.
-        /// </summary>
-        /// <returns>A copy of this vector unitized.</returns>
-        public Vector3 Unit()
-        {
-            var length = this.Length;
-            var x = this.X / length;
-            var y = this.Y / length;
-            var z = this.Z / length;
-            return new Vector3(x, y, z);
-        }
 
-
-        /// <summary>
-        ///     Computes the dot product of this vector and v.
-        /// </summary>
-        /// <param name="v">Vector.</param>
-        /// <returns>Dot product.</returns>
-        public double Dot(Vector3 v) => DotProduct(this, v);
-
-
-        /// <summary>
-        ///     Returns the cross product of this vector and v.
-        /// </summary>
-        /// <param name="v">Vector.</param>
-        /// <returns>Cross product vector.</returns>
-        public Vector3 Cross(Vector3 v) => CrossProduct(this, v);
-
-        
         /// <summary>
         /// Rotates this vector around a given axis.<br/>
         /// The rotation is computed using Rodrigues Rotation formula.<br/>
