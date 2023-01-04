@@ -18,4 +18,4 @@ There's a tonne of work to be done and we appreciate all the help we can get! If
 
 [Cesare Caoduro](https://www.linkedin.com/in/cesarecaoduro/)<br/>
 [Mirco Bianchini](https://www.linkedin.com/in/mirco-bianchini-352b2128/)<br/>
-[Guido Maciocchi](https://www.linkedin.com/in/guido-maciocci-709a9412)
+[Guido Maciocci](https://www.linkedin.com/in/guido-maciocci-709a9412)
