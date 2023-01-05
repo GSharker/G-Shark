@@ -68,5 +68,22 @@ namespace GShark.Test.XUnit.Core
             closestPt.tValue.Should().BeApproximately(tValExpected, GSharkMath.MaxTolerance);
             closestPt.pt.EpsilonEquals(expectedPt, GSharkMath.Epsilon).Should().BeTrue();
         }
+
+        [Fact]
+        public void It_Returns_The_Area_Of_A_Triangle_From_A_Polyline()
+        {
+            // Arrange
+            Point3 pt1 = new Point3(-4.27, 5.90, 5.76);
+            Point3 pt2 = new Point3(-10, -7.69, 0.0);
+            Point3 pt3 = new Point3(9.93, -2.65, -5.57);
+            PolyLine polyLine = new PolyLine(new[] {pt1, pt2, pt3});
+            double expectedArea = 150.865499;
+
+            // Act
+            double area = Trigonometry.AreaOfTriangle(polyLine);
+
+            // Assert
+            area.Should().Be(expectedArea);
+        }
     }
 }
