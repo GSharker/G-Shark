@@ -149,6 +149,34 @@ namespace GShark.Core
             return (tValue: tValueResult, pt: pointResult);
         }
 
-       
+        /// <summary>
+        /// Calculates the area of a triangle.
+        /// The calculation use the Heron's formula.
+        /// https://en.wikipedia.org/wiki/Heron%27s_formula
+        /// </summary>
+        /// <param name="pt1">First point of the triangle.</param>
+        /// <param name="pt2">Second point of the triangle.</param>
+        /// <param name="pt3">Third point of the triangle.</param>
+        /// <returns>The area of the triangle.</returns>
+        public static double AreaOfTriangle(Point3 pt1, Point3 pt2, Point3 pt3)
+        {
+            double distA = pt1.DistanceTo(pt2);
+            double distB = pt2.DistanceTo(pt3);
+            double distC = pt3.DistanceTo(pt1);
+
+            double semiperimeter = (distA + distB + distC) / 2;
+            return Math.Sqrt(semiperimeter * (semiperimeter - distA) * (semiperimeter - distB) * (semiperimeter - distC));
+        }
+
+        /// <summary>
+        /// Calculates the area of a triangle defined as a polyline.
+        /// </summary>
+        /// <param name="polyLine">The polyline.</param>
+        /// <returns>The area of the triangle.</returns>
+        public static double AreaOfTriangle(PolyLine polyLine)
+        {
+            var  pts = polyLine.ControlPointLocations;
+            return AreaOfTriangle(pts[0], pts[1], pts[2]);
+        }
     }
 }
