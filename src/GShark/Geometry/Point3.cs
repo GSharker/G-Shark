@@ -527,6 +527,20 @@ namespace GShark.Geometry
             }
             return d;
         }
+        
+        /// <summary>
+        /// Project a point onto a plane.
+        /// </summary>
+        /// <param name="point">point</param>
+        /// <param name="plane">plane to project onto</param>
+        /// <returns name="the point projected to plane"></returns>
+        public static Point3 ProjectTo(Point3 point, Plane plane)
+        {
+            Vector3 v = plane.Origin - point;
+            Vector3 normal = plane.ZAxis;
+            double d = Vector3.DotProduct(v, normal);
+            return point + d * normal;
+        }
 
         /// <summary>
         /// Calculates the distance of a point to a line.
@@ -665,6 +679,7 @@ namespace GShark.Geometry
             }
             return inside ? 1 : -1;
         }
+        
     }
 }
 
