@@ -37,7 +37,7 @@ namespace GShark.Geometry
         ///     Gets the normal vector of the face.
         /// </summary>
         /// <returns>Returns the perpendicular vector to the face.</returns>
-        public Vector3 Normal => MeshGeometry.FaceNormal(this);
+        public Vector3? Normal => MeshGeometry.FaceNormal(this);
 
 
         /// <summary>

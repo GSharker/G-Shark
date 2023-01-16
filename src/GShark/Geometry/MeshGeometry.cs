@@ -103,10 +103,34 @@ namespace GShark.Geometry
         /// <param name="face">Face.</param>
         public static Vector3 FaceNormal(MeshFace face)
         {
-            // TODO: This must be checked as it will not apply in quad/ngon cases
-            var u = Vector(face.HalfEdge);
-            var v = -Vector(face.HalfEdge.Prev);
-            return Vector3.CrossProduct(u,v).Unitize();
+            if (face.IsBoundaryLoop())
+                return Vector3.Unset;
+            
+            var adjacentFaces = face.AdjacentVertices();
+            var firstEdge = face.HalfEdge;
+            switch (adjacentFaces.Count)
+            {
+                case 3: // Triangle face
+                {
+                    var u = Vector(firstEdge);
+                    var v = -Vector(firstEdge.Prev);
+                    return Vector3.CrossProduct(u,v).Unitize();
+                }
+                case 4: // Quad face
+                {
+                    var u1 = Vector(firstEdge);
+                    var v1 = -Vector(firstEdge.Prev);
+                    var a1 = 0.5 * Vector3.CrossProduct(u1,v1).Unitize();
+                    var opposite = firstEdge.Next.Next;
+                    var u2 = Vector(opposite);
+                    var v2 = -Vector(opposite.Prev);
+                    var a2 = 0.5 * Vector3.CrossProduct(u2,v2).Unitize();
+                    return (a1 + a2).Unitize();
+                }
+                default: // NGon face
+                    //TODO: Calculate the area of an arbitrary polygon.
+                    throw new NotImplementedException("NGon face normal calculation is not supported yet");
+            }
         }
 
 
