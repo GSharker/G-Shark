@@ -529,7 +529,7 @@ namespace GShark.Geometry
         }
         
         /// <summary>
-        /// Project a point onto a plane.
+        /// Projects a point onto a plane.
         /// </summary>
         /// <param name="point">point</param>
         /// <param name="plane">plane to project onto</param>
