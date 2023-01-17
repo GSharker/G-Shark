@@ -69,7 +69,7 @@ namespace GShark.Test.XUnit.Geometry
             var expectedPt = new Point3(10, 10, -5);
 
             // Act
-            var result = Point3.ProjectTo(point,plane);
+            var result = point.ProjectToPlan(plane);
 
             // Assert
             result.Should().BeEquivalentTo(expectedPt);
