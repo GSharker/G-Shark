@@ -1,6 +1,7 @@
 ﻿using GShark.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GShark.Geometry
 {
@@ -495,6 +496,28 @@ namespace GShark.Geometry
         public static Point3 PointBetween(Point3 p1, Point3 p2)
         {
             return Interpolate(p1, p2, 0.5);
+        }
+        
+        /// <summary>
+        /// Returns the centroid of an arbitrary collection of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>The centroid of the points</returns>
+        public static Point3 Centroid(IEnumerable<Point3> points)
+        {
+            return Centroid(points.ToArray());
+        }
+        /// <summary>
+        /// Returns the centroid of an arbitrary collection of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>The centroid of the points</returns>
+        public static Point3 Centroid(params Point3[] points)
+        {
+            return new Point3(
+                points.Average(point => point.X),
+                points.Average(point => point.Y),
+                points.Average(point => point.Z));
         }
 
         /// <summary>
