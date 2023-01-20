@@ -58,6 +58,25 @@ namespace GShark.Test.XUnit.Geometry
             pt.IsOnPlane(plane, 0.001).Should().BeTrue();
         }
 
+        [Theory]
+        [InlineData(1,2,3)]
+        [InlineData(-4,5,-6)]
+        [InlineData(+7,-8,9)]
+        public void TestConvertAsVector(double x,double y,double z)
+        {
+            Point3 point3 = new Point3(x, y, z);
+            Vector3 vector3 = point3.AsVector3();
+            vector3.X.Should().Be(x);
+            vector3.Y.Should().Be(y);
+            vector3.Z.Should().Be(z);
+            Vector vector = point3.AsVector();
+            vector[0].Should().Be(x);
+            vector[1].Should().Be(y);
+            vector[2].Should().Be(z);
+            vector.Count
+                 .Should()
+                .Be(3);       }
+
         [Fact]
         public void It_Returns_The_Linear_Interpolation_Between_Two_Points()
         {
