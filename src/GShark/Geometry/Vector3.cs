@@ -706,6 +706,23 @@ namespace GShark.Geometry
             return result;
         }
 
+        
+        /// <summary>
+        /// The triple product of this vector and the two specified vectors.
+        /// </summary>
+        /// <param name="middle">The second vector.</param>
+        /// <param name="right">The third vector.</param>
+        /// <returns>The real number equal to the triple product.</returns>
+        ///<remarks>
+        /// The scalar triple product is defined as the dot product of one of the vectors
+        /// with the cross product of the other two. Geometrically, this product is the (signed)
+        /// volume of the parallelepiped formed by the three vectors given.
+        /// </remarks>
+        public double TripleProduct(Vector3 middle, Vector3 right)
+        {
+           return DotProduct(this, CrossProduct(middle, right));
+        }
+
         ///<summary>
         /// Determines whether this vector is perpendicular to another vector, within a provided angle tolerance. 
         ///</summary>

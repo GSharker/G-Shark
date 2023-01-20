@@ -68,6 +68,22 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void TestReturnResultOfTripleProduct()
+        {
+            Vector3 v1 = new Vector3(1, 2, 3);
+            Vector3 v2 = new Vector3(4, 5, 6);
+            Vector3 v3 = new Vector3(7, 8, 9);
+            double result = v1.TripleProduct(v2, v3);
+            result.Should().Be(0);
+            Vector3 u1 = new Vector3(2, 3, -4);
+            Vector3 u2 = new Vector3(5, 1, 6);
+            Vector3 u3 = new Vector3(-7, 8, 9);
+            double result2 = u1.TripleProduct(u2, u3);
+            result2.Should().Be(-527);
+            
+        }
+
+        [Fact]
         public void It_Returns_The_Squared_Length_Of_A_Vector()
         {
             // Arrange
