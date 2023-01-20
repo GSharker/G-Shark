@@ -527,18 +527,6 @@ namespace GShark.Geometry
             }
             return d;
         }
-        /// <summary>
-        /// Projects a point onto a plane.
-        /// </summary>
-        /// <param name="plane">plane to project onto</param>
-        /// <returns name="the point projected to plane"></returns>
-        public Point3 ProjectToPlan(Plane plane)
-        {
-            Vector3 v = plane.Origin - this;
-            Vector3 normal = plane.ZAxis;
-            double d = Vector3.DotProduct(v, normal);
-            return this + d * normal;
-        }
         
         /// <summary>
         /// Get the Vector with the same X, Y, and Z component
