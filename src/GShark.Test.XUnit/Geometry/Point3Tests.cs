@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Security.Cryptography.X509Certificates;
+using FluentAssertions;
 using GShark.Geometry;
 using haxe.ds;
 using Xunit;
@@ -56,6 +57,22 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             pt.IsOnPlane(plane, 0.001).Should().BeTrue();
+        }
+
+        [Fact]
+        public void TestPointIsOnLine()
+        {
+            Point3 p1 = new Point3(0, 5, 0);
+            Line line1 = new Line(new Point3(0,0,0), new Point3(0,10,0));
+            bool isOnLine1 = p1.IsOnLine(line1);
+            Assert.True(isOnLine1);
+            Point3 p2 = new Point3(0, 20, 0);
+            bool isOnLine = p2.IsOnLine(line1);
+            Assert.False(isOnLine);
+            Point3 p3 = new Point3(0, 0, 0);
+            bool isOnLine2 = p3.IsOnLine(line1);
+            Assert.True(isOnLine2);
+            
         }
 
         [Fact]
