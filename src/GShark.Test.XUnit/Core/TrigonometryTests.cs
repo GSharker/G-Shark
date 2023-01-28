@@ -75,11 +75,10 @@ public class TrigonometryTests
         Point3 pt1 = new Point3(-4.27, 5.90, 5.76);
         Point3 pt2 = new Point3(-10, -7.69, 0.0);
         Point3 pt3 = new Point3(9.93, -2.65, -5.57);
-        PolyLine polyLine = new PolyLine(new[] {pt1, pt2, pt3});
         double expectedArea = 150.865499;
 
         // Act
-        double area = Trigonometry.AreaOfTriangle(polyLine);
+        double area = Trigonometry.AreaOfTriangle(pt1, pt2, pt3);
 
         // Assert
         area.Should().BeApproximately(expectedArea, GSharkMath.MaxTolerance);

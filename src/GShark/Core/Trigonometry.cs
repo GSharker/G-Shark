@@ -10,7 +10,7 @@ namespace GShark.Core
     public class Trigonometry
     {
         /// <summary>
-        ///     Determines if the provide points are on the same plane within specified tolerance.
+        ///     Determines if the given points lie on the same plane within the specified tolerance.
         /// </summary>
         /// <param name="points">Points to check.</param>
         /// <param name="tolerance">Tolerance.</param>
@@ -81,7 +81,7 @@ namespace GShark.Core
         }
 
         /// <summary>
-        ///     Gets the orientation between tree points in the plane.<br />
+        ///     Gets the orientation between three points in the plane.<br />
         ///     https://math.stackexchange.com/questions/2386810/orientation-of-three-points-in-3d-space
         /// </summary>
         /// <param name="pt1">First point.</param>
@@ -133,8 +133,6 @@ namespace GShark.Core
 
         /// <summary>
         ///     Calculates the area of a triangle.
-        ///     The calculation use the Heron's formula.
-        ///     https://en.wikipedia.org/wiki/Heron%27s_formula
         /// </summary>
         /// <param name="pt1">First point of the triangle.</param>
         /// <param name="pt2">Second point of the triangle.</param>
@@ -142,24 +140,9 @@ namespace GShark.Core
         /// <returns>The area of the triangle.</returns>
         public static double AreaOfTriangle(Point3 pt1, Point3 pt2, Point3 pt3)
         {
-            double distA = pt1.DistanceTo(pt2);
-            double distB = pt2.DistanceTo(pt3);
-            double distC = pt3.DistanceTo(pt1);
-
-            double semiperimeter = (distA + distB + distC) / 2;
-            return Math.Sqrt(
-                semiperimeter * (semiperimeter - distA) * (semiperimeter - distB) * (semiperimeter - distC));
-        }
-
-        /// <summary>
-        ///     Calculates the area of a triangle defined as a polyline.
-        /// </summary>
-        /// <param name="polyLine">The polyline.</param>
-        /// <returns>The area of the triangle.</returns>
-        public static double AreaOfTriangle(PolyLine polyLine)
-        {
-            var pts = polyLine.ControlPointLocations;
-            return AreaOfTriangle(pts[0], pts[1], pts[2]);
+            Vector3 v1 = pt1 - pt2;
+            Vector3 v2 = pt1 - pt3;
+            return 0.5 * Vector3.CrossProduct(v1, v2).Length;
         }
     }
 }
