@@ -80,7 +80,8 @@ namespace GShark.Test.XUnit.Geometry
             vector[2].Should().Be(z);
             vector.Count
                  .Should()
-                .Be(3);       }
+                .Be(3);       
+        }
 
         [Fact]
         public void It_Returns_The_Linear_Interpolation_Between_Two_Points()
