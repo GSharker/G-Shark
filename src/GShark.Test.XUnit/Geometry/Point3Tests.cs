@@ -62,14 +62,19 @@ namespace GShark.Test.XUnit.Geometry
         [InlineData(1,2,3)]
         [InlineData(-4,5,-6)]
         [InlineData(+7,-8,9)]
-        public void TestConvertAsVector(double x,double y,double z)
+        public void It_Convert_Point_As_Vector(double x,double y,double z)
         {
+            //Arrange
             Point3 point3 = new Point3(x, y, z);
+            // Act
             Vector3 vector3 = point3.AsVector3();
+            // Assert
             vector3.X.Should().Be(x);
             vector3.Y.Should().Be(y);
             vector3.Z.Should().Be(z);
+            // Act
             Vector vector = point3.AsVector();
+            // Assert
             vector[0].Should().Be(x);
             vector[1].Should().Be(y);
             vector[2].Should().Be(z);
