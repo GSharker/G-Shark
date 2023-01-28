@@ -529,15 +529,16 @@ namespace GShark.Geometry
         }
         
         /// <summary>
-        /// Get the Vector with the same X, Y, and Z component
+        /// Gets the vector with the same X, Y, and Z component.
         /// </summary>
         /// <returns></returns>
         public Vector3 AsVector3()
         {
             return new Vector3(X, Y, Z);
         }
+        
         /// <summary>
-        /// Get the Vector with the same X, Y, and Z component
+        /// Gets the vector with the same X, Y, and Z component.
         /// </summary>
         /// <returns></returns>
         public Vector AsVector()
