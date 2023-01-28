@@ -499,27 +499,18 @@ namespace GShark.Geometry
         }
         
         /// <summary>
-        /// Returns the centroid of an arbitrary collection of points
+        /// Calculate the centroid of an arbitrary collection of points
         /// </summary>
-        /// <param name="points">a list of points</param>
+        /// <param name="points">A collection of points.</param>
         /// <returns>The centroid of the points</returns>
         public static Point3 Centroid(IEnumerable<Point3> points)
         {
-            return Centroid(points.ToArray());
-        }
-        /// <summary>
-        /// Returns the centroid of an arbitrary collection of points
-        /// </summary>
-        /// <param name="points">a list of points</param>
-        /// <returns>The centroid of the points</returns>
-        public static Point3 Centroid(params Point3[] points)
-        {
+            IEnumerable<Point3> enumerable = points as Point3[] ?? points.ToArray();
             return new Point3(
-                points.Average(point => point.X),
-                points.Average(point => point.Y),
-                points.Average(point => point.Z));
+                enumerable.Average(point => point.X),
+                enumerable.Average(point => point.Y),
+                enumerable.Average(point => point.Z));
         }
-
         /// <summary>
         /// Constructs the string representation for the current point.
         /// </summary>
