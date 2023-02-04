@@ -1,18 +1,16 @@
-﻿using GShark.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+using GShark.Geometry;
 
 namespace GShark.Core
 {
     /// <summary>
-    /// Provides basic trigonometry methods.
+    ///     Provides basic trigonometry methods.
     /// </summary>
     public class Trigonometry
     {
         /// <summary>
-        /// Determines if the provide points are on the same plane within specified tolerance.
+        ///     Determines if the given points lie on the same plane within the specified tolerance.
         /// </summary>
         /// <param name="points">Points to check.</param>
         /// <param name="tolerance">Tolerance.</param>
@@ -20,10 +18,7 @@ namespace GShark.Core
         public static bool ArePointsCoplanar(IList<Point3> points, double tolerance = GSharkMath.Epsilon)
         {
             // https://en.wikipedia.org/wiki/Triple_product
-            if (points.Count <= 3)
-            {
-                return true;
-            }
+            if (points.Count <= 3) return true;
 
             var vec1 = points[1] - points[0];
             var vec2 = points[2] - points[0];
@@ -32,19 +27,16 @@ namespace GShark.Core
             {
                 var vec3 = points[i] - points[0];
                 double tripleProduct = Vector3.DotProduct(Vector3.CrossProduct(vec3, vec2), vec1);
-                if (Math.Abs(tripleProduct) > GSharkMath.Epsilon)
-                {
-                    return false;
-                }
+                if (Math.Abs(tripleProduct) > GSharkMath.Epsilon) return false;
             }
 
             return true;
         }
 
         /// <summary>
-        /// Determines if three points form a straight line (are collinear) within a given tolerance.<br/>
-        /// Find the area of the triangle without using square root and multiply it for 0.5.<br/>
-        /// http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
+        ///     Determines if three points form a straight line (are collinear) within a given tolerance.<br />
+        ///     Find the area of the triangle without using square root and multiply it for 0.5.<br />
+        ///     http://www.stumblingrobot.com/2016/05/01/use-cross-product-compute-area-triangles-given-vertices/
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
@@ -62,7 +54,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Calculates the point at the equal distance from the three points, it can be also described as the center of a circle.
+        ///     Calculates the point at the equal distance from the three points, it can be also described as the center of a
+        ///     circle.
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
@@ -88,8 +81,8 @@ namespace GShark.Core
         }
 
         /// <summary>
-        /// Gets the orientation between tree points in the plane.<br/>
-        /// https://math.stackexchange.com/questions/2386810/orientation-of-three-points-in-3d-space
+        ///     Gets the orientation between three points in the plane.<br />
+        ///     https://math.stackexchange.com/questions/2386810/orientation-of-three-points-in-3d-space
         /// </summary>
         /// <param name="pt1">First point.</param>
         /// <param name="pt2">Second point.</param>
@@ -101,18 +94,15 @@ namespace GShark.Core
             Vector3 n = Vector3.CrossProduct(pt2 - pt1, pt3 - pt1);
             double result = Vector3.DotProduct(pl.ZAxis, n.Unitize());
 
-            if (Math.Abs(result) < GSharkMath.Epsilon)
-            {
-                return 0;
-            }
+            if (Math.Abs(result) < GSharkMath.Epsilon) return 0;
 
-            return (result < 0) ? 1 : 2;
+            return result < 0 ? 1 : 2;
         }
 
         /// <summary>
-        /// Finds the closest point on a segment.<br/>
-        /// It is not a segment like a line or ray but the part that compose the segment.<br/>
-        /// The segment is deconstruct in two points and two t values.
+        ///     Finds the closest point on a segment.<br />
+        ///     It is not a segment like a line or ray but the part that compose the segment.<br />
+        ///     The segment is deconstruct in two points and two t values.
         /// </summary>
         /// <param name="point">Point to project.</param>
         /// <param name="segmentPt0">First point of the segment.</param>
@@ -120,35 +110,39 @@ namespace GShark.Core
         /// <param name="valueT0">First t value of the segment.</param>
         /// <param name="valueT1">Second t value of the segment.</param>
         /// <returns>Tuple with the closest point its corresponding tValue on the curve.</returns>
-        public static (double tValue, Point3 pt) ClosestPointToSegment(Point3 point, Point3 segmentPt0, Point3 segmentPt1, double valueT0, double valueT1)
+        public static (double tValue, Point3 pt) ClosestPointToSegment(Point3 point, Point3 segmentPt0,
+            Point3 segmentPt1, double valueT0, double valueT1)
         {
             Vector3 direction = segmentPt1 - segmentPt0;
             double length = direction.Length;
 
-            if (length < GSharkMath.Epsilon)
-            {
-                return (tValue: valueT0, pt: segmentPt0);
-            }
+            if (length < GSharkMath.Epsilon) return (tValue: valueT0, pt: segmentPt0);
 
             Vector3 vecUnitized = direction.Unitize();
             Vector3 ptToSegPt0 = point - segmentPt0;
             double dotResult = Vector3.DotProduct(ptToSegPt0, vecUnitized);
 
-            if (dotResult < 0.0)
-            {
-                return (tValue: valueT0, pt: segmentPt0);
-            }
+            if (dotResult < 0.0) return (tValue: valueT0, pt: segmentPt0);
 
-            if (dotResult > length)
-            {
-                return (tValue: valueT1, pt: segmentPt1);
-            }
+            if (dotResult > length) return (tValue: valueT1, pt: segmentPt1);
 
-            Point3 pointResult = segmentPt0 + (vecUnitized * dotResult);
+            Point3 pointResult = segmentPt0 + vecUnitized * dotResult;
             double tValueResult = valueT0 + (valueT1 - valueT0) * dotResult / length;
             return (tValue: tValueResult, pt: pointResult);
         }
 
-       
+        /// <summary>
+        ///     Calculates the area of a triangle.
+        /// </summary>
+        /// <param name="pt1">First point of the triangle.</param>
+        /// <param name="pt2">Second point of the triangle.</param>
+        /// <param name="pt3">Third point of the triangle.</param>
+        /// <returns>The area of the triangle.</returns>
+        public static double AreaOfTriangle(Point3 pt1, Point3 pt2, Point3 pt3)
+        {
+            Vector3 v1 = pt1 - pt2;
+            Vector3 v2 = pt1 - pt3;
+            return 0.5 * Vector3.CrossProduct(v1, v2).Length;
+        }
     }
 }
