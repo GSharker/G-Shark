@@ -21,8 +21,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:          
       - name: 🛎 Checkout repo
@@ -31,8 +29,10 @@ jobs:
           fetch-depth: 0
           
       - name: 👶 Draft release
-        uses: release-drafter/release-drafter@v5
         id: release
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚧 Setup .NET Core
         uses: actions/setup-dotnet@v3
