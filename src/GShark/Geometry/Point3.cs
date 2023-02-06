@@ -531,8 +531,8 @@ namespace GShark.Geometry
         /// <summary>
         /// Projects a point onto a plane.
         /// </summary>
-        /// <param name="plane">plane to project onto</param>
-        /// <returns name="the point projected to plane"></returns>
+        /// <param name="plane">Plane  to project onto</param>
+        /// <returns name="point3">The point projected to plane</returns>
         public Point3 ProjectToPlan(Plane plane)
         {
             Vector3 v = plane.Origin - this;
