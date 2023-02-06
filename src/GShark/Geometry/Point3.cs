@@ -613,6 +613,17 @@ namespace GShark.Geometry
         {
             return Math.Abs(Vector3.DotProduct(this - plane.Origin, plane.ZAxis)) < tolerance;
         }
+        
+        /// <summary>
+        /// Test whether a point lies on a line.
+        /// </summary>
+        /// <param name="line">The line to test against.</param>
+        /// <param name="tolerance">Default is use 1e-6</param>
+        /// <returns>Returns true if point is on plane.</returns>
+        public bool IsOnLine(Line line, double tolerance = GSharkMath.MaxTolerance)
+        {
+            return line.ClosestPoint(this).DistanceTo(this) < tolerance;
+        }
 
         /// <summary>
         /// Tests whether a point is inside, outside, or coincident with a polygon.
