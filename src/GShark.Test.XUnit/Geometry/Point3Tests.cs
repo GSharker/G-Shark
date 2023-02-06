@@ -58,6 +58,24 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             pt.IsOnPlane(plane, 0.001).Should().BeTrue();
         }
+        
+        [Fact]
+        public void If_Check_Project_A_Point_On_A_Plane()
+        {
+            // Arrange
+            Point3 point = new Point3(10, 20, -5);
+            Point3 planeOrigin = new Point3(0, 10, 0);
+            Vector3 direction = new Vector3(0, 1, 0);
+            Plane plane = new Plane(planeOrigin, direction);
+            var expectedPt = new Point3(10, 10, -5);
+
+            // Act
+            var result = point.ProjectToPlan(plane);
+
+            // Assert
+            result.Should().BeEquivalentTo(expectedPt);
+            result.Equals(expectedPt).Should().Be(true);
+        }
 
         [Fact]
         public void It_Check_Point_Is_On_Line()
@@ -91,6 +109,7 @@ namespace GShark.Test.XUnit.Geometry
             var result = Point3.Interpolate(p1, p2, amount);
 
             // Assert
+            
             result.Equals(expectedPoint).Should().Be(true);
         }
 
