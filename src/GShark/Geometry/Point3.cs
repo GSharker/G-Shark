@@ -531,7 +531,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the vector with the same X, Y, and Z component.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="vector3">vector converted from X,Y and Z component</returns>
         public Vector3 AsVector3()
         {
             return new Vector3(X, Y, Z);
@@ -540,7 +540,7 @@ namespace GShark.Geometry
         /// <summary>
         /// Gets the vector with the same X, Y, and Z component.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="vector">vector converted from X,Y and Z component</returns>
         public Vector AsVector()
         {
             return new Vector( new []{X, Y,Z});
