@@ -1,7 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using GShark.Geometry;
-using haxe.ds;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -125,6 +124,22 @@ namespace GShark.Test.XUnit.Geometry
 
             // Assert
             divisionResult.Equals(expectedPoint).Should().Be(true);
+        }
+        
+        [Fact]
+        public void It_Returns_Centroid_Of_Collection_Points()
+        {
+            // Arrange
+            Point3 p1 = new Point3(1, 2, 3);
+            Point3 p2 = new Point3(4, 5, 6);
+            Point3 p3 = new Point3(7, 8, 9);
+            Point3 p4 = new Point3(10, 11, 12);
+            List<Point3> point3s = new List<Point3> { p1, p2, p3, p4 };
+            //Act
+            Point3 centroid = Point3.Centroid(point3s);
+            Point3 expectedCentroid = new Point3(5.5, 6.5, 7.5);
+            // Assert
+            centroid.Equals(expectedCentroid).Should().Be(true);
         }
 
         [Fact]
