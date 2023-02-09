@@ -236,6 +236,24 @@ namespace GShark.Test.XUnit.Geometry
             // Assert
             (vec1 == vec2).Should().BeTrue();
         }
+        
+        
+        [Theory]
+        [InlineData(new double[] { 1, 2, 3 }, new double[] { 4, 5, 6 }, new double[] { 7, 8, 9 }, 0)]
+        [InlineData(new double[] { 2, 3, -4 }, new double[] { 5, 1, 6 }, new double[] { -7, 8, 9 }, -527)]
+        public void It_Returns_Result_Of_Triple_Product(double[] v1, double[] v2, double[] v3, double expected)
+        {
+            // Arrange
+            Vector3 testVector1 = new Vector3(v1[0], v1[1], v1[2]);
+            Vector3 testVector2 = new Vector3(v2[0], v2[1], v2[2]);
+            Vector3 testVector3 = new Vector3(v3[0], v3[1], v3[2]);
+
+            // Act
+            double result = testVector1.TripleProduct(testVector2, testVector3);
+            
+            // Assert
+            result.Should().Be(expected);
+        }
 
         [Fact]
         public void It_Checks_If_Vectors_Are_Perpendicular()
