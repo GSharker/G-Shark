@@ -632,7 +632,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="line">The line to test against.</param>
         /// <param name="tolerance">Default is use 1e-6</param>
-        /// <returns>Returns true if point is on plane.</returns>
+        /// <returns>Returns true if point is on line.</returns>
         public bool IsOnLine(Line line, double tolerance = GSharkMath.MaxTolerance)
         {
             return line.ClosestPoint(this).DistanceTo(this) < tolerance;
