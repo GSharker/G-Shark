@@ -299,6 +299,47 @@ namespace GShark.Test.XUnit.Sampling
         }
 
         [Fact]
+        public void It_Calculates_Rotation_Minimized_Frames_Along_Curve2()
+        {            
+            //Arrange
+            List<Point3> railPts = new List<Point3>()
+            {
+                new Point3(-0.9214326, -1.0785674, -7.991379E-08),
+                new Point3(-0.4986757, -0.79609025, -7.991379E-08),
+                new Point3(0, -0.6968975, -7.991379E-08),
+                new Point3(0.4986757, -0.79609036, -7.991379E-08),
+                new Point3(0.9214326, -1.0785673, -7.991379E-08)
+            };
+            List<Point3> profilePts = new List<Point3>()
+            {
+                new Point3(-0.29289323, -1.7071068, 0),
+                new Point3(-0.50000006, -1.5, 0.7071067),
+                new Point3(-1, -1, 0.99999994),
+                new Point3(-1.5, -0.50000006, 0.7071067),
+                new Point3(-1.7071067, -0.2928933, -8.742278E-08),
+                new Point3(-1.4999999, -0.50000006, -0.7071068),
+                new Point3(-1, -1, -0.99999994),
+                new Point3(-0.5000001, -1.4999998, -0.7071068),
+                new Point3(-0.29289323, -1.7071068, -3.0199158E-07)
+            };
+
+            var rail = new NurbsCurve(railPts, 1);
+            var profile = new NurbsCurve(profilePts, 1);
+
+            var sweepNurb = NurbsSurface.FromSweep(rail, profile);
+
+            var tValues = new [] { 0d, .25d, .5d, .75d, 1d }.ToList();       
+            List<Plane> frames = rail.PerpendicularFrames(tValues);
+
+            foreach (var frame in frames)
+            {                
+                frame.XAxis.Length.Should().BeApproximately(1, GSharkMath.MinTolerance);
+                frame.YAxis.Length.Should().BeApproximately(1, GSharkMath.MinTolerance);
+                frame.ZAxis.Length.Should().BeApproximately(1, GSharkMath.MinTolerance);                
+            }
+        }
+
+        [Fact]
         public void Return_Adaptive_Sample_Subdivision_Of_A_Nurbs()
         {
             // Arrange
