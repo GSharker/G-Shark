@@ -659,7 +659,7 @@ namespace GShark.Geometry
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };
+                var frameNext = new Plane(pointsOnCurve[i + 1], rNext, sNext);                
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
