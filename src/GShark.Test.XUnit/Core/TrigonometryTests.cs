@@ -46,6 +46,61 @@ public class TrigonometryTests
         Trigonometry.ArePointsCollinear(pt1, pt2, pt3).Should().BeFalse();
     }
 
+    [Fact]
+    public void Returns_A_List_Of_Points_Without_Collinear()
+    {
+        // Arrange
+        Point3[] pts =
+        {
+            new Point3(0.0, 0.0, 0.0),
+            new Point3(1.343973, 0.318025, 1.148505),
+            new Point3(2.392638, 0.56617, 2.044653),
+            new Point3(3.423607, 0.810129, 2.683595)
+        };
+
+        Point3[] expectedPts =
+        {
+            new Point3(0.0, 0.0, 0.0),
+            new Point3(2.392638, 0.56617, 2.044653),
+            new Point3(3.423607, 0.810129, 2.683595)
+        };
+
+
+        // Act
+        var result = Trigonometry.RemoveCollinear(pts);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedPts);
+    }
+
+    [Fact]
+    public void It_Returns_True_If_Points_Are_Clockwise()
+    {
+        // Arrange
+        Point3 pt1 = new Point3(10.0, 0.0, 0.0);
+        Point3 pt2 = new Point3(5.0, 0.0, 0.0);
+        Point3 pt3 = new Point3(5.0, 5.0, 0.0);
+        Point3 pt4 = new Point3(7.0, 7.0, 0.0);
+        List<Point3> points = new List<Point3> { pt1, pt2, pt3, pt4 };
+
+        // Arrange
+        Trigonometry.ArePointsClockwise(points).Should().BeTrue();
+    }
+
+    [Fact]
+    public void It_Returns_True_If_Points_Are_Clockwise_On_A_Plane()
+    {
+        // Arrange
+        Point3 pt1 = new Point3(10.0, 0.0, -5.0);
+        Point3 pt2 = new Point3(5.0, 0.0, 3.0);
+        Point3 pt3 = new Point3(5.0, 5.0, 10.0);
+        Point3 pt4 = new Point3(7.0, 7.0, -2.0);
+        List<Point3> points = new List<Point3> { pt1, pt2, pt3, pt4 };
+
+        // Arrange
+        Trigonometry.ArePointsClockwise(points, Plane.PlaneXY).Should().BeTrue();
+    }
+
     [Theory]
     [InlineData(new double[] {5, 7, 0}, new double[] {6, 6, 0}, 0.2)]
     [InlineData(new double[] {7, 6, 0}, new[] {6.5, 6.5, 0}, 0.3)]

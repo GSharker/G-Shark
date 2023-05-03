@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GShark.Geometry;
 
 namespace GShark.Core
@@ -54,6 +55,34 @@ namespace GShark.Core
         }
 
         /// <summary>
+        ///     Remove the collinear points into a ordered collection of points.
+        /// </summary>
+        /// <param name="pts">Collection of point to clean up.</param>
+        /// <param name="tol">Tolerance from the straight line between collinear points. Set by default at 1e-3.</param>
+        /// <returns>Cleaned collection of points.</returns>
+        public static IEnumerable<Point3> RemoveCollinear(IEnumerable<Point3> pts, double tol = 1e-3)
+        {
+            Point3[] ptsCollection = pts.ToArray();
+
+            List<Point3> result = new List<Point3> { ptsCollection[0] };
+
+            for (int i = 0; i < ptsCollection.Length - 2; i++)
+            {
+                if (ArePointsCollinear(ptsCollection[i], ptsCollection[i + 1], ptsCollection[i + 2], tol))
+                    continue;
+                result.Add(ptsCollection[i + 1]);
+            }
+
+            if (ptsCollection.Last() != ptsCollection.First())
+                if (ArePointsCollinear(result[result.Count - 1], ptsCollection[ptsCollection.Length - 1], result[0],
+                        tol))
+                    return result;
+
+            result.Add(ptsCollection.Last());
+            return result;
+        }
+
+        /// <summary>
         ///     Calculates the point at the equal distance from the three points, it can be also described as the center of a
         ///     circle.
         /// </summary>
@@ -97,6 +126,41 @@ namespace GShark.Core
             if (Math.Abs(result) < GSharkMath.Epsilon) return 0;
 
             return result < 0 ? 1 : 2;
+        }
+
+        /// <summary>
+        ///     Determines if the points direction is clockwise in its plane.
+        ///     It'll even work with a self-intersecting polygon like a figure-eight, telling you whether it's mostly clockwise.
+        ///     https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order.
+        /// </summary>
+        /// <param name="points">Collection of points.</param>
+        /// <returns>True if clockwise.</returns>
+        public static bool ArePointsClockwise(IList<Point3> points)
+        {
+            double sum = 0;
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                sum += (points[i + 1].X - points[i].X) * (points[i + 1].Y + points[i].Y);
+            }
+
+            if (sum == 0)
+            {
+                throw new ArgumentException("The points are on a straight line or are creating a closed loop.");
+            }
+
+            return sum > 0;
+        }
+
+        /// <summary>
+        ///     Determines if the points direction is clockwise on a passed plane.
+        /// </summary>
+        /// <param name="points">Collection of points that make up the polygon.</param>
+        /// <param name="pl">The</param>
+        /// <returns>True if clockwise.</returns>
+        public static bool ArePointsClockwise(IList<Point3> points, Plane pl)
+        {
+            var projectedPts = points.Select(pt => pl.ClosestPoint(pt, out _)).ToList();
+            return ArePointsClockwise(projectedPts);
         }
 
         /// <summary>
