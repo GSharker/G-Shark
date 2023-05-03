@@ -602,6 +602,7 @@ namespace GShark.Geometry
             return this * (1 / Length);
         }
 
+
         /// <summary>
         /// Rotates this vector around a given axis.<br/>
         /// The rotation is computed using Rodrigues Rotation formula.<br/>
