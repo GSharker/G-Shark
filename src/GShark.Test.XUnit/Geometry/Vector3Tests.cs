@@ -33,17 +33,32 @@ namespace GShark.Test.XUnit.Geometry
         public void It_Returns_The_Radian_Angle_Between_Two_Vectors_On_A_Plane()
         {
             // Arrange
-            Vector3 v1 = new Vector3(1, 0, 0);
-            Vector3 v2 = new Vector3(3, 0, 4);
-            var expectedAngle = System.Math.Atan2(4, 3);
+            Vector3 v1 = new Vector3(54.534634, 70.106922, 28.165069);
+            Vector3 v2 = new Vector3(-65.601466, 59.878665, -45.937199);
+
+            const double expectedAngleWithPlaneXY = 1.492079;
+            const double expectedAngleReflectionWithPlaneXY = 4.791106;
+
+            const double expectedAngleWithPlaneYZ = 5.246775;
+            const double expectedAngleReflectionWithPlaneYZ = 1.03641;
+
+            const double expectedAngleWithPlaneZX = 3.007432;
+            const double expectedAngleReflectionWithPlaneZX = 3.275754;
 
             // Act
-            double reflexAngle;
-            double angle = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneZX, out reflexAngle);
+            double anglePlaneXY = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneXY, out var reflexAngleWithPlaneXY);
+            double anglePlaneYZ = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneYZ, out var reflexAngleWithPlaneYZ);
+            double anglePlaneZX = Vector3.VectorAngleOnPlane(v1, v2, Plane.PlaneZX, out var reflexAngleWithPlaneZX);
 
             // Assert
-            angle.Should().BeApproximately(expectedAngle, GSharkMath.Epsilon);
-            reflexAngle.Should().BeApproximately(2 * Math.PI - expectedAngle, GSharkMath.Epsilon);
+            anglePlaneXY.Should().BeApproximately(expectedAngleWithPlaneXY, GSharkMath.MinTolerance);
+            reflexAngleWithPlaneXY.Should().BeApproximately(expectedAngleReflectionWithPlaneXY, GSharkMath.MinTolerance);
+
+            anglePlaneYZ.Should().BeApproximately(expectedAngleWithPlaneYZ, GSharkMath.MinTolerance);
+            reflexAngleWithPlaneYZ.Should().BeApproximately(expectedAngleReflectionWithPlaneYZ, GSharkMath.MinTolerance);
+
+            anglePlaneZX.Should().BeApproximately(expectedAngleWithPlaneZX, GSharkMath.MinTolerance);
+            reflexAngleWithPlaneZX.Should().BeApproximately(expectedAngleReflectionWithPlaneZX, GSharkMath.MinTolerance);
         }
 
         [Fact]
