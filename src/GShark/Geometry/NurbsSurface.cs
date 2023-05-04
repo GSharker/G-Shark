@@ -269,11 +269,15 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="rail">The rail curve.</param>
         /// <param name="profile">The section curve.</param>
+        /// <param name="startTangent">If not null override start tangent vector.</param>
+        /// <param name="endTangent">If not null override end tangent vector.</param>
         /// <returns>The sweep surface.</returns>
-        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile)
+        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile,
+            Vector3? startTangent = null,
+            Vector3? endTangent = null)
         {
             var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
-            List<Plane> frames = rail.PerpendicularFrames(tValues);
+            List<Plane> frames = rail.PerpendicularFrames(tValues, startTangent, endTangent);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
             for (int i = 1; i < frames.Count; i++)
