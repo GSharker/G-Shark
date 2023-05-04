@@ -282,14 +282,15 @@ namespace GShark.Geometry
                 return Math.PI;
             }
 
-            if (angle > Math.PI)
+            Vector3 other = Vector3.CrossProduct(a, b);
+            if (plane.ZAxis.IsParallelTo(other) == 1)
             {
-                reflexAngle = angle;
-                return 2 * Math.PI - angle;
+                reflexAngle = 2 * Math.PI - angle;
+                return angle;
             }
 
-            reflexAngle = 2 * Math.PI - angle;
-            return angle;
+            reflexAngle = angle;
+            return 2 * Math.PI - angle;
         }
 
         /// <summary>
