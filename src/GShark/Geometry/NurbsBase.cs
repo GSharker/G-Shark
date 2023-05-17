@@ -615,9 +615,13 @@ namespace GShark.Geometry
         /// Double reflection method taken from Wang, W., J¨uttler, B., Zheng, D., and Liu, Y. 2008. "Computation of rotation minimizing frame."<br/>
         /// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/Computation-of-rotation-minimizing-frames.pdf
         /// </summary>
-        ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
+        /// <param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
+        /// <param name="startTangent">If not null override start tangent vector.</param>
+        /// <param name="endTangent">If not null override end tangent vector.</param>
         /// <returns>A collection of planes.</returns>
-        public List<Plane> PerpendicularFrames(List<double> uValues)
+        public List<Plane> PerpendicularFrames(List<double> uValues,
+            Vector3? startTangent = null,
+            Vector3? endTangent = null)
         {
             var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values
             var pointsOnCurveTan = uValues.Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1]).ToList(); //get tangents at t values
@@ -625,7 +629,7 @@ namespace GShark.Geometry
 
             //Create initial frame at first parameter
             var origin = PointAt(firstParameter);
-            var crvTan = Evaluate.Curve.RationalDerivatives(this, firstParameter, 1)[1];
+            var crvTan = startTangent is not null ? startTangent.Value : Evaluate.Curve.RationalDerivatives(this, firstParameter, 1)[1];
             var crvNormal = Vector3.PerpendicularTo(crvTan);
             var yAxis = Vector3.CrossProduct(crvTan, crvNormal);
             var xAxis = Vector3.CrossProduct(yAxis, crvTan);
@@ -659,7 +663,11 @@ namespace GShark.Geometry
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };
+                if (i == pointsOnCurve.Count - 2 && endTangent is not null)
+                {
+                    rNext = Vector3.CrossProduct(sNext, endTangent.Value);
+                }
+                var frameNext = new Plane(pointsOnCurve[i + 1], rNext, sNext);                
                 perpFrames[i + 1] = frameNext; //output frame
             }
 

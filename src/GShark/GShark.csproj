@@ -7,7 +7,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <AssemblyName>GShark</AssemblyName>
     <RootNamespace>GShark</RootNamespace>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Sharker/G-Shark</RepositoryUrl>	
