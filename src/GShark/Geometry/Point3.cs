@@ -198,9 +198,9 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3 a, Point3 b)
         {
-            if (a == null && b == null)
-                return true;
-            if (a == null || b == null)
+            if (a is null && b is null)
+                return false;
+            if (a is null || b is null)
                 return false;
             if (ReferenceEquals(a, b))
                 return true;
