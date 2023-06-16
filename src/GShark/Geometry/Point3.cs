@@ -198,6 +198,12 @@ namespace GShark.Geometry
         /// <returns>true if the coordinates of the two points are exactly equal; otherwise false.</returns>
         public static bool operator ==(Point3 a, Point3 b)
         {
+            if (a is null && b is null)
+                return false;
+            if (a is null || b is null)
+                return false;
+            if (ReferenceEquals(a, b))
+                return true;
             return (Math.Abs(a.X - b.X) < GSharkMath.MaxTolerance
                     && Math.Abs(a.Y - b.Y) < GSharkMath.MaxTolerance
                     && Math.Abs(a.Z - b.Z) < GSharkMath.MaxTolerance);
@@ -384,6 +390,14 @@ namespace GShark.Geometry
         /// <returns>true if obj is a Point3 and has the same coordinates as this; otherwise false.</returns>
         public override bool Equals(object obj)
         {
+            if (obj == null)
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            if (this.GetType() != obj.GetType())
+                return false;
             return obj is Point3 point3 && this == point3;
         }
 

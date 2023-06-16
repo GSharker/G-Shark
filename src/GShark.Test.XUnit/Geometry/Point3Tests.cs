@@ -154,6 +154,38 @@ namespace GShark.Test.XUnit.Geometry
         }
 
         [Fact]
+        public void It_Returns_True_If_Two_Points_Are_Equal_Null_Case1()
+        {
+            // Arrange
+            Point3 p1 = new Point3(5.982099, 5.950299, 0);
+            Point3 p2 = null;
+
+            // Assert
+            (p1 == p2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void It_Returns_True_If_Two_Points_Are_Equal_Null_Case2()
+        {
+            // Arrange
+            Point3 p1 = null;
+            Point3 p2 = new Point3(5.982099, 5.950299, 0);
+
+            // Assert
+            (p1 == p2).Should().BeFalse();
+        }
+        [Fact]
+        public void It_Returns_True_If_Two_Points_Are_Equal_Null_Case3()
+        {
+            // Arrange
+            Point3 p1 = null;
+            Point3 p2 = null;
+
+            // Assert
+            (p1 == p2).Should().BeFalse();
+        }
+
+        [Fact]
         public void It_Returns_Whether_A_Point_Is_Inside_Outside_Or_Coincident_With_A_Polygon()
         {
             //Arrange
