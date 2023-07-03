@@ -547,6 +547,10 @@ namespace GShark.Geometry
             return data;
         }
 
+        public static string MeshClosestPointTest ()
+        {
+            return "Hello world from Mesh Closest Point";
+        }
 
         /// <summary>
         ///     Type of mesh (Triangular, Quad, Ngon or Error).
