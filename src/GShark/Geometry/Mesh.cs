@@ -547,9 +547,143 @@ namespace GShark.Geometry
             return data;
         }
 
-        public static string MeshClosestPointTest ()
+
+        //Function that finds point in a cloud of points to a target point
+        public static Point3 CloudClosestPoint(Point3 target, List<Point3> cloud)
         {
-            return "Hello world from Mesh Closest Point";
+            var DistancesToTarget_List = new List<double>();
+            foreach (Point3 point in cloud)
+            {
+                double DistanceToTarget = point.DistanceTo(target);
+                DistancesToTarget_List.Add(DistanceToTarget);
+            }
+            double MinDistToTarget = DistancesToTarget_List.Min();
+            Point3 ClosestPoint = cloud[DistancesToTarget_List.IndexOf(MinDistToTarget)];
+            return ClosestPoint;
+        }
+
+        //Function that checks if point is in or out a triangle (boolean result, In - True , Out - False)
+        private bool PointInTriangle(Point3 projection, List<Point3> trianglePoints)
+        {
+            //edges vectors of the triangle
+            Vector3 v0 = new Vector3(trianglePoints[1] - trianglePoints[0]);
+            Vector3 v1 = new Vector3(trianglePoints[2] - trianglePoints[1]);
+            Vector3 v2 = new Vector3(trianglePoints[0] - trianglePoints[2]);
+
+            List<Vector3> edges_vectors = new List<Vector3>() { v0, v1, v2 };
+
+            //normal to the triangle
+            Vector3 n = Vector3.CrossProduct(v0, v1);
+
+            //Creates a list to store the dot products of the vectors
+            //Negative dot product means that the point is ouside of the triangle edges
+            List<double> tests = new List<double>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                Vector3 w = new Vector3(projection - trianglePoints[i]);
+                Vector3 t = Vector3.CrossProduct(edges_vectors[i], w);
+                double test = n * t;
+                tests.Add(test);
+            }
+
+            if ((tests[0] > 0) && (tests[1] > 0) && (tests[2] > 0))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Function that finds the closer point to a triangle (given the 3 vertices as points)
+        private Point3 ClosestPointToTriangle(List<Point3> trianglePoints, Point3 point)
+        {
+            //Creates Plane from 3 points
+            Plane FacePlane = new Plane(trianglePoints[0], trianglePoints[1], trianglePoints[2]);
+
+            //Find projection of point of the plane
+            Vector3 pointV = new Vector3(point);
+            double cpdistance;
+            Point3 PlaneClosestPoint = FacePlane.ClosestPoint(point, out cpdistance);
+
+            //We create a initial base point "ClosestPoint" that will be overwritten
+            Point3 ClosestPoint = new Point3(0, 0, 0);
+
+            //Checks if the projection of the point on the FacePlane is inside the triangle
+            bool InOrOut = PointInTriangle(PlaneClosestPoint, trianglePoints);
+            if (InOrOut == true)
+            {
+                //Checks if the projection of the point on the FacePlane is inside the triangle
+                ClosestPoint = PlaneClosestPoint;
+            }
+
+            else //If not, we need to perform a few more calculations.
+                 //We create a line(a Rhino line, a mathematical segment)
+                 //for each of the edges and then find the closest point on each of the edges,
+                 //and then take the closest one out of these 3
+            {
+                //Create a list to store the closest point to each of the edges
+                List<Point3> EdgesClosestPoints = new List<Point3>();
+                Line segment_AB = new Line(trianglePoints[0], trianglePoints[1]);
+                Line segment_BC = new Line(trianglePoints[1], trianglePoints[2]);
+                Line segment_CA = new Line(trianglePoints[2], trianglePoints[0]);
+                List<Line> Segments_list = new List<Line>() { segment_AB, segment_BC, segment_CA };
+
+                //Create a segment for each vertex
+                foreach (Line segment in Segments_list)
+                {
+                    Point3 SegmentClosestPoint = segment.ClosestPoint(point);
+                    EdgesClosestPoints.Add(SegmentClosestPoint);
+                }
+                Point3 edgeClosestPoint = CloudClosestPoint(point, EdgesClosestPoints);
+                ClosestPoint = edgeClosestPoint;
+            }
+
+            return ClosestPoint;
+        }
+
+        public Point3 MeshClosestPointTest(Point3 point)
+        {
+            //Gets vertices and converts them from type "MeshVertex" to "Point3"
+            List<MeshVertex> meshVertices = Vertices;
+            List<Point3> verticesPoints = meshVertices.ConvertAll(v => (Point3)v);
+
+            //Finds closer vertex to the target point
+            Point3 CloserPointVertex = CloudClosestPoint(point, verticesPoints);
+            //Finds the equivalent point as a type "MeshVertex" using the index of the Point3 in its equivalent list
+            MeshVertex CloserVertex = meshVertices[verticesPoints.IndexOf(CloserPointVertex)];
+
+            //Finds adjiacent faces to the closer vertex
+            System.Collections.Generic.IEnumerable<MeshFace> AdjacentFaces = CloserVertex.AdjacentFaces();
+
+            List<Point3> CloserPointToFace_List = new List<Point3>();
+
+            foreach (MeshFace face in AdjacentFaces)
+            {
+                //Retrives the Vertices associated with each face
+                List<MeshVertex> GSVertices = face.AdjacentVertices();
+                //Converts from MeshVertex to Point3
+                List<Point3> QuadPoints = GSVertices.ConvertAll(v => (Point3)v);
+
+                var trianglePoints1 = new List<Point3>() { QuadPoints[0], QuadPoints[1], QuadPoints[2] };
+                var trianglePoints2 = new List<Point3>() { QuadPoints[1], QuadPoints[2], QuadPoints[3] };
+                var trianglePoints3 = new List<Point3>() { QuadPoints[0], QuadPoints[1], QuadPoints[3] };
+                var trianglePoints4 = new List<Point3>() { QuadPoints[0], QuadPoints[2], QuadPoints[3] };
+
+                Point3 ClosestPoint1 = ClosestPointToTriangle(trianglePoints1, point);
+                Point3 ClosestPoint2 = ClosestPointToTriangle(trianglePoints2, point);
+                Point3 ClosestPoint3 = ClosestPointToTriangle(trianglePoints3, point);
+                Point3 ClosestPoint4 = ClosestPointToTriangle(trianglePoints4, point);
+
+                List<Point3> TrianglesCP = new List<Point3>() { ClosestPoint1, ClosestPoint2, ClosestPoint3, ClosestPoint4 };
+                Point3 ClosestPoint = CloudClosestPoint(point, TrianglesCP);
+
+                CloserPointToFace_List.Add(ClosestPoint);
+            }
+            Point3 MeshClosestPoint = CloudClosestPoint(point, CloserPointToFace_List);
+            return MeshClosestPoint;
         }
 
         /// <summary>
