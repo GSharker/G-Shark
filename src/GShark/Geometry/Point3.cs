@@ -717,7 +717,26 @@ namespace GShark.Geometry
             }
             return inside ? 1 : -1;
         }
-        
+
+
+
+        //Function that finds point in a cloud of points to a target point
+        public Point3 CloudClosestPoint(List<Point3> cloud)
+        {
+            double Min_list = double.MaxValue;
+            Point3 ClosestPoint = new Point3();
+            foreach (Point3 point in cloud)
+            {
+                double DistanceToTarget = point.DistanceTo(this);
+                if (DistanceToTarget < Min_list)
+                {
+                    Min_list = DistanceToTarget;
+                    ClosestPoint = point;
+                }
+            }
+            return ClosestPoint;
+        }
+
     }
 }
 
