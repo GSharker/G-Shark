@@ -651,72 +651,108 @@ namespace GShark.Geometry
         {
             return line.ClosestPoint(this).DistanceTo(this) < tolerance;
         }
+        public int InPolygon(Polygon polygon)
+        {
+            Plane polygonPlane = polygon.Plane;
 
+            // Check if point lies on the polygon plane
+            if (!this.IsOnPlane(polygonPlane))
+                return -1;
+
+            //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
+            var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+            var polygonOriented = polygon.Transform(xForm);
+            var pointOriented = this.Transform(xForm);
+
+            int wn = 0;
+            for(int i = 0; i < polygonOriented.ControlPointLocations.Count - 1; i++)
+            {
+                Line edge = new Line(polygonOriented.ControlPointLocations[0], polygonOriented.ControlPointLocations[1]);
+                double Py = pointOriented.Y;
+                double x1 = polygonOriented.ControlPointLocations[i].X;
+                double y1 = polygonOriented.ControlPointLocations[i].Y;
+                double x2 = polygonOriented.ControlPointLocations[i + 1].X;
+                double y2 = polygonOriented.ControlPointLocations[i + 1].Y;
+
+                if(y2 - y1 == 0)
+                {
+                    if (Py == y2)
+                        wn++;
+                    continue;
+                }
+
+                double intX = (Py * (x2 - x1) + x1 * y2 - x2 * y1) / (y2 - y1);
+                Point3 intersectionPoint = new Point3(intX, Py, 0);
+                if(intersectionPoint.Equals)
+                if (intersectionPoint.IsOnLine(edge))
+                    wn++;
+            }
+        }
         /// <summary>
         /// Tests whether a point is inside, outside, or coincident with a polygon.
         /// <para>See https://stackoverflow.com/a/63436180</para>
         /// </summary>
         /// <param name="polygon">The polygon to test against.</param>
         /// <returns>Returns -1 if point is outside the polygon, 0 if it is coincident with a polygon edge, or 1 if it is inside the polygon.</returns>        
-        public int InPolygon(Polygon polygon)
-        {
-            //check if point lies on polygon plane, else return
-            var polygonPlane = polygon.Plane;
-
-            if (!this.IsOnPlane(polygonPlane)) return -1;
-
-            //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
-            var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
-            var polygonOriented = polygon.Transform(xForm);
-            var pointOriented = this.Transform(xForm);
-            
-            //tests whether a value is isBetween two other values
-            Func<double, double, double, bool> isValueBetween = (p, a, b) => 
-                ((p - a) >= double.Epsilon) &&
-                ((p - b) <= double.Epsilon) ||
-                ((p - a) <= double.Epsilon) &&
-                ((p - b) >= double.Epsilon);
-            
-            bool inside = false;
-
-            for (int i = polygonOriented.ControlPointLocations.Count - 1, j = 0; j < polygonOriented.ControlPointLocations.Count; i = j, j++)
-            {
-                Point3 A = polygonOriented.ControlPointLocations[i];
-                Point3 B = polygonOriented.ControlPointLocations[j];
-                
-                // corner cases
-                if (
-                    (Math.Abs(pointOriented.X - A.X) <= double.Epsilon) && 
-                    (Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon) || 
-                    (Math.Abs(pointOriented.X - B.X) <= double.Epsilon) &&
-                    (Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon)) return 0;
-                
-                if (
-                    Math.Abs(A.Y - B.Y) <= double.Epsilon && 
-                    Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon && 
-                    isValueBetween(pointOriented.X, A.X, B.X)) return 0;
-
-                if (isValueBetween(pointOriented.Y, A.Y, B.Y))
-                {
-                    // if P inside the vertical range
-                    // filter out "ray pass vertex" problem by treating the line a little lower
-                    if (
-                        Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon &&
-                        (B.Y - A.Y) >= double.Epsilon || 
-                        Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon &&
-                        (A.Y - B.Y) <= double.Epsilon) continue;
-                    
-                    // calc cross product `PA X PB`, P lays on left side of AB if c > 0 
-                    double c = (A.X - pointOriented.X) * (B.Y - pointOriented.Y) - (B.X - pointOriented.X) * (A.Y - pointOriented.Y);
-                    
-                    if (c > 0 && c < GSharkMath.MinTolerance ) return 0;
-
-                    if ((A.Y < B.Y) == (c > 0))
-                        inside = !inside;
-                }
-            }
-            return inside ? 1 : -1;
-        }
+        //public int InPolygon(Polygon polygon)
+        //{
+        //    //check if point lies on polygon plane, else return
+        //    var polygonPlane = polygon.Plane;
+        //
+        //    if (!this.IsOnPlane(polygonPlane)) return -1;
+        //
+        //    //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
+        //    var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+        //    var polygonOriented = polygon.Transform(xForm);
+        //    var pointOriented = this.Transform(xForm);
+        //    
+        //    //tests whether a value is isBetween two other values
+        //    Func<double, double, double, bool> isValueBetween = (p, a, b) => 
+        //        ((p - a) >= double.Epsilon) &&
+        //        ((p - b) <= double.Epsilon) ||
+        //        ((p - a) <= double.Epsilon) &&
+        //        ((p - b) >= double.Epsilon);
+        //    
+        //    bool inside = false;
+        //
+        //    for (int i = polygonOriented.ControlPointLocations.Count - 1, j = 0; j < polygonOriented.ControlPointLocations.Count; i = j, j++)
+        //    {
+        //        Point3 A = polygonOriented.ControlPointLocations[i];
+        //        Point3 B = polygonOriented.ControlPointLocations[j];
+        //        
+        //        // corner cases
+        //        if (
+        //            (Math.Abs(pointOriented.X - A.X) <= double.Epsilon) && 
+        //            (Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon) || 
+        //            (Math.Abs(pointOriented.X - B.X) <= double.Epsilon) &&
+        //            (Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon)) return 0;
+        //        
+        //        if (
+        //            Math.Abs(A.Y - B.Y) <= double.Epsilon && 
+        //            Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon && 
+        //            isValueBetween(pointOriented.X, A.X, B.X)) return 0;
+        //
+        //        if (isValueBetween(pointOriented.Y, A.Y, B.Y))
+        //        {
+        //            // if P inside the vertical range
+        //            // filter out "ray pass vertex" problem by treating the line a little lower
+        //            if (
+        //                Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon &&
+        //                (B.Y - A.Y) >= double.Epsilon || 
+        //                Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon &&
+        //                (A.Y - B.Y) <= double.Epsilon) continue;
+        //            
+        //            // calc cross product `PA X PB`, P lays on left side of AB if c > 0 
+        //            double c = (A.X - pointOriented.X) * (B.Y - pointOriented.Y) - (B.X - pointOriented.X) * (A.Y - pointOriented.Y);
+        //            
+        //            if (c > 0 && c < GSharkMath.MinTolerance ) return 0;
+        //
+        //            if ((A.Y < B.Y) == (c > 0))
+        //                inside = !inside;
+        //        }
+        //    }
+        //    return inside ? 1 : -1;
+        //}
         
     }
 }

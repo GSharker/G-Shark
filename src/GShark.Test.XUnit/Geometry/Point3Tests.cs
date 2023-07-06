@@ -213,5 +213,24 @@ namespace GShark.Test.XUnit.Geometry
             pointInside.Should().Be(1);
             pointCoincident.Should().Be(0);
         }
+
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Inside_Polygon()
+        {
+            // Arrange
+            var testPolygon2 = new GShark.Geometry.Polygon(new Point3[] {
+                new Point3(10.00,0,0.00),
+                new Point3(-5.00,8.660,0.00),
+                new Point3(-5.00,-8.660,0.00),
+
+            });
+            var p3 = new Point3(5, 0, 0);
+            
+            // Act
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside2.Should().Be(1);
+        }
     }
 }
