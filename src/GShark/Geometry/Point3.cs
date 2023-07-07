@@ -649,10 +649,21 @@ namespace GShark.Geometry
         /// <returns>Returns true if point is on line.</returns>
         public bool IsOnLine(Line line, double tolerance = GSharkMath.MaxTolerance)
         {
-            return line.ClosestPoint(this).DistanceTo(this) < tolerance;
+            double x = DistanceTo(line.StartPoint);
+            double y = DistanceTo(line.EndPoint);
+            double l = line.Length;
+            return x + y <= tolerance + l;
+            //return line.ClosestPoint(this).DistanceTo(this) < tolerance;
         }
         public int InPolygon(Polygon polygon)
         {
+            //tests whether a value is isBetween two other values
+            Func<double, double, double, bool> isValueBetween = (p, a, b) => 
+                ((p - a) > 0) &&
+                ((p - b) < 0) ||
+                ((p - a) < 0) &&
+                ((p - b) > 0);
+
             Plane polygonPlane = polygon.Plane;
 
             // Check if point lies on the polygon plane
@@ -665,16 +676,22 @@ namespace GShark.Geometry
             var pointOriented = this.Transform(xForm);
 
             int wn = 0;
-            for(int i = 0; i < polygonOriented.ControlPointLocations.Count - 1; i++)
+            int n = polygonOriented.ControlPointLocations.Count;
+            for (int i = 0; i < n - 1; i++)
             {
-                Line edge = new Line(polygonOriented.ControlPointLocations[0], polygonOriented.ControlPointLocations[1]);
+                Line edge = new Line(polygonOriented.ControlPointLocations[i], polygonOriented.ControlPointLocations[i + 1]);
+                if (pointOriented.IsOnLine(edge))
+                    return 0;
                 double Py = pointOriented.Y;
                 double x1 = polygonOriented.ControlPointLocations[i].X;
                 double y1 = polygonOriented.ControlPointLocations[i].Y;
                 double x2 = polygonOriented.ControlPointLocations[i + 1].X;
                 double y2 = polygonOriented.ControlPointLocations[i + 1].Y;
 
-                if(y2 - y1 == 0)
+                Point3 start = new Point3(x1, y1, 0);
+                Point3 end = new Point3(x2, y2, 0);
+
+                if (y2 - y1 == 0)
                 {
                     if (Py == y2)
                         wn++;
@@ -683,10 +700,24 @@ namespace GShark.Geometry
 
                 double intX = (Py * (x2 - x1) + x1 * y2 - x2 * y1) / (y2 - y1);
                 Point3 intersectionPoint = new Point3(intX, Py, 0);
-                if(intersectionPoint.Equals)
-                if (intersectionPoint.IsOnLine(edge))
+                if (intersectionPoint.Equals(end))
+                {
+                    // There are two possibilities, either the ray has entered the polygon (or exited if inside) or the
+                    // ray just touches the polygon at the vertex by not entering the polygon (or exiting). The first
+                    // is the case when the before vertex if above and the after vertex is below (or vice versa).
+                    
+                    Point3 before = start; // Nothing but the start vertex of this edge.
+                    Point3 after = polygonOriented.ControlPointLocations[(i + 2) % n]; // The end vertex of the next edge.
+                    if (isValueBetween(Py, before.Y, after.Y))
+                    {
+                        wn++;
+                    }
+                    continue;
+                }
+                if (intersectionPoint.IsOnLine(edge) && intersectionPoint.X > pointOriented.X)
                     wn++;
             }
+            return wn % 2 == 0 ? -1 : 1;
         }
         /// <summary>
         /// Tests whether a point is inside, outside, or coincident with a polygon.
@@ -756,4 +787,3 @@ namespace GShark.Geometry
         
     }
 }
-
