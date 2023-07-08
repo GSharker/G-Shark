@@ -649,11 +649,7 @@ namespace GShark.Geometry
         /// <returns>Returns true if point is on line.</returns>
         public bool IsOnLine(Line line, double tolerance = GSharkMath.MaxTolerance)
         {
-            double x = DistanceTo(line.StartPoint);
-            double y = DistanceTo(line.EndPoint);
-            double l = line.Length;
-            return x + y <= tolerance + l;
-            //return line.ClosestPoint(this).DistanceTo(this) < tolerance;
+            return line.ClosestPoint(this).DistanceTo(this) < tolerance;
         }
 
         /// <summary>
