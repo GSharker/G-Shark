@@ -655,135 +655,89 @@ namespace GShark.Geometry
             return x + y <= tolerance + l;
             //return line.ClosestPoint(this).DistanceTo(this) < tolerance;
         }
-        public int InPolygon(Polygon polygon)
-        {
-            //tests whether a value is isBetween two other values
-            Func<double, double, double, bool> isValueBetween = (p, a, b) => 
-                ((p - a) > 0) &&
-                ((p - b) < 0) ||
-                ((p - a) < 0) &&
-                ((p - b) > 0);
 
-            Plane polygonPlane = polygon.Plane;
-
-            // Check if point lies on the polygon plane
-            if (!this.IsOnPlane(polygonPlane))
-                return -1;
-
-            //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
-            var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
-            var polygonOriented = polygon.Transform(xForm);
-            var pointOriented = this.Transform(xForm);
-
-            int wn = 0;
-            int n = polygonOriented.ControlPointLocations.Count;
-            for (int i = 0; i < n - 1; i++)
-            {
-                Line edge = new Line(polygonOriented.ControlPointLocations[i], polygonOriented.ControlPointLocations[i + 1]);
-                if (pointOriented.IsOnLine(edge))
-                    return 0;
-                double Py = pointOriented.Y;
-                double x1 = polygonOriented.ControlPointLocations[i].X;
-                double y1 = polygonOriented.ControlPointLocations[i].Y;
-                double x2 = polygonOriented.ControlPointLocations[i + 1].X;
-                double y2 = polygonOriented.ControlPointLocations[i + 1].Y;
-
-                Point3 start = new Point3(x1, y1, 0);
-                Point3 end = new Point3(x2, y2, 0);
-
-                if (y2 - y1 == 0)
-                {
-                    if (Py == y2)
-                        wn++;
-                    continue;
-                }
-
-                double intX = (Py * (x2 - x1) + x1 * y2 - x2 * y1) / (y2 - y1);
-                Point3 intersectionPoint = new Point3(intX, Py, 0);
-                if (intersectionPoint.Equals(end))
-                {
-                    // There are two possibilities, either the ray has entered the polygon (or exited if inside) or the
-                    // ray just touches the polygon at the vertex by not entering the polygon (or exiting). The first
-                    // is the case when the before vertex if above and the after vertex is below (or vice versa).
-                    
-                    Point3 before = start; // Nothing but the start vertex of this edge.
-                    Point3 after = polygonOriented.ControlPointLocations[(i + 2) % n]; // The end vertex of the next edge.
-                    if (isValueBetween(Py, before.Y, after.Y))
-                    {
-                        wn++;
-                    }
-                    continue;
-                }
-                if (intersectionPoint.IsOnLine(edge) && intersectionPoint.X > pointOriented.X)
-                    wn++;
-            }
-            return wn % 2 == 0 ? -1 : 1;
-        }
         /// <summary>
         /// Tests whether a point is inside, outside, or coincident with a polygon.
         /// <para>See https://stackoverflow.com/a/63436180</para>
         /// </summary>
         /// <param name="polygon">The polygon to test against.</param>
-        /// <returns>Returns -1 if point is outside the polygon, 0 if it is coincident with a polygon edge, or 1 if it is inside the polygon.</returns>        
-        //public int InPolygon(Polygon polygon)
-        //{
-        //    //check if point lies on polygon plane, else return
-        //    var polygonPlane = polygon.Plane;
-        //
-        //    if (!this.IsOnPlane(polygonPlane)) return -1;
-        //
-        //    //translate polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
-        //    var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
-        //    var polygonOriented = polygon.Transform(xForm);
-        //    var pointOriented = this.Transform(xForm);
-        //    
-        //    //tests whether a value is isBetween two other values
-        //    Func<double, double, double, bool> isValueBetween = (p, a, b) => 
-        //        ((p - a) >= double.Epsilon) &&
-        //        ((p - b) <= double.Epsilon) ||
-        //        ((p - a) <= double.Epsilon) &&
-        //        ((p - b) >= double.Epsilon);
-        //    
-        //    bool inside = false;
-        //
-        //    for (int i = polygonOriented.ControlPointLocations.Count - 1, j = 0; j < polygonOriented.ControlPointLocations.Count; i = j, j++)
-        //    {
-        //        Point3 A = polygonOriented.ControlPointLocations[i];
-        //        Point3 B = polygonOriented.ControlPointLocations[j];
-        //        
-        //        // corner cases
-        //        if (
-        //            (Math.Abs(pointOriented.X - A.X) <= double.Epsilon) && 
-        //            (Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon) || 
-        //            (Math.Abs(pointOriented.X - B.X) <= double.Epsilon) &&
-        //            (Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon)) return 0;
-        //        
-        //        if (
-        //            Math.Abs(A.Y - B.Y) <= double.Epsilon && 
-        //            Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon && 
-        //            isValueBetween(pointOriented.X, A.X, B.X)) return 0;
-        //
-        //        if (isValueBetween(pointOriented.Y, A.Y, B.Y))
-        //        {
-        //            // if P inside the vertical range
-        //            // filter out "ray pass vertex" problem by treating the line a little lower
-        //            if (
-        //                Math.Abs(pointOriented.Y - A.Y) <= double.Epsilon &&
-        //                (B.Y - A.Y) >= double.Epsilon || 
-        //                Math.Abs(pointOriented.Y - B.Y) <= double.Epsilon &&
-        //                (A.Y - B.Y) <= double.Epsilon) continue;
-        //            
-        //            // calc cross product `PA X PB`, P lays on left side of AB if c > 0 
-        //            double c = (A.X - pointOriented.X) * (B.Y - pointOriented.Y) - (B.X - pointOriented.X) * (A.Y - pointOriented.Y);
-        //            
-        //            if (c > 0 && c < GSharkMath.MinTolerance ) return 0;
-        //
-        //            if ((A.Y < B.Y) == (c > 0))
-        //                inside = !inside;
-        //        }
-        //    }
-        //    return inside ? 1 : -1;
-        //}
+        /// <returns>Returns -1 if point is outside the polygon, 0 if it is coincident with a polygon edge, or 1 if it is inside the polygon.</returns>
+        public int InPolygon(Polygon polygon)
+        {
+            // Tests whether a value is isBetween two other values.
+            Func<double, double, double, bool> isValueBetween = (p, a, b) => 
+                (p > a) &&
+                (p < b) ||
+                (p < a) &&
+                (p > b);
+        
+            Plane polygonPlane = polygon.Plane;
+        
+            // Check if point lies on the polygon plane.
+            if (!this.IsOnPlane(polygonPlane))
+                return -1;
+        
+            // Transform polygon and point to XY plane for 2d calculations to account for rotated polygons and 3d points
+            var xForm = Core.Transform.PlaneToPlane(polygonPlane, Plane.PlaneXY);
+            var polygonOriented = polygon.Transform(xForm);
+            var pointOriented = this.Transform(xForm);
+            
+            // The winding number
+            int wn = 0;
+
+            // Looping through all the edges.
+            int n = polygonOriented.ControlPointLocations.Count;
+            for (int i = 0; i < n - 1; i++)
+            {
+                Line edge = new Line(polygonOriented.ControlPointLocations[i], polygonOriented.ControlPointLocations[i + 1]);
+
+                // If point on edge, we return.
+                if (pointOriented.IsOnLine(edge))
+                    return 0;
+
+                double Py = pointOriented.Y;
+                double x1 = polygonOriented.ControlPointLocations[i].X;
+                double y1 = polygonOriented.ControlPointLocations[i].Y;
+                double x2 = polygonOriented.ControlPointLocations[i + 1].X;
+                double y2 = polygonOriented.ControlPointLocations[i + 1].Y;
+        
+                Point3 start = new Point3(x1, y1, 0);
+                Point3 end = new Point3(x2, y2, 0);
+                
+                // Corner case when an edge is horizontal, we just treat it like a edge that is a bit lower
+                // than the point (hence doesn't intersect).
+                if (y2 - y1 == 0)
+                {
+                    continue;
+                }
+                
+                // Calculating the intersection of the ray casted with the edge
+                double intX = (Py * (x2 - x1) + x1 * y2 - x2 * y1) / (y2 - y1);
+                Point3 intersectionPoint = new Point3(intX, Py, 0);
+
+                // Incase the ray intersects one of the vertices, we see if the previous vertex and the next vertex
+                // are on the same side or the opposite side of the horizontal ray. If on same side we just carry on
+                // else we increament the winding number. Since the end vertex of the edge will be the start vertex
+                // of the next edge, we don't have to do this explicitly for both start and end vertex.
+                if (intersectionPoint.Equals(end))
+                {
+                    Point3 previous = start; // Nothing but the start vertex of this edge.
+                    Point3 next = polygonOriented.ControlPointLocations[(i + 2) % n]; // The end vertex of the next edge.
+                    if (isValueBetween(Py, previous.Y, next.Y))
+                        wn++;
+                    continue;
+                }
+
+                // The general case when the ray intersects the edge. Since the intersection point calculated before
+                // considered that the line was NOT a half-line, we need to add additional check to see if the inter-
+                // section point is to the right of this point.
+                if (intersectionPoint.IsOnLine(edge) && intersectionPoint.X > pointOriented.X)
+                    wn++;
+            }
+
+            // Applying the even-odd rule.
+            return wn % 2 == 0 ? -1 : 1;
+        }
         
     }
 }
