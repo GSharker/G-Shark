@@ -720,21 +720,21 @@ namespace GShark.Geometry
 
 
 
-        //Function that finds point in a cloud of points to a target point
-        public Point3 CloudClosestPoint(List<Point3> cloud)
+        // Function that finds point in a cloud of points to a target point
+        public Point3 CloudClosestPoint(IEnumerable<Point3> cloud)
         {
-            double Min_list = double.MaxValue;
-            Point3 ClosestPoint = new Point3();
+            double minDistance = double.MaxValue;
+            Point3 closestPoint = new Point3();
             foreach (Point3 point in cloud)
             {
-                double DistanceToTarget = point.DistanceTo(this);
-                if (DistanceToTarget < Min_list)
+                double distanceToTarget = point.DistanceTo(this);
+                if (distanceToTarget < minDistance)
                 {
-                    Min_list = DistanceToTarget;
-                    ClosestPoint = point;
+                    minDistance = distanceToTarget;
+                    closestPoint = point;
                 }
             }
-            return ClosestPoint;
+            return closestPoint;
         }
 
     }
