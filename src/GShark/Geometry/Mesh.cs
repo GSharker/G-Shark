@@ -638,7 +638,7 @@ namespace GShark.Geometry
                     Point3 ClosestPoint0 = ClosestPointToTriangle(trianglePoints, point);
                     CloserPointToFace_List.Add(ClosestPoint0);
                 }
-                if (GSVertices.Count == 4)
+                else if (GSVertices.Count == 4)
                 {
                     var trianglePoints1 = new Point3[] { FacePoints[0], FacePoints[1], FacePoints[2] };
                     var trianglePoints2 = new Point3[] { FacePoints[1], FacePoints[2], FacePoints[3] };
@@ -657,16 +657,7 @@ namespace GShark.Geometry
                 }
                 else 
                 {
-                    List<Point3> TrianglesCP = new List<Point3>();
-                    //Point3 ClosestPoint = point.CloudClosestPoint(FacePoints);
-                    for (int i = 0; i < (GSVertices.Count-2); i++)
-                    {
-                        var trianglePoints = new Point3[] { FacePoints[0], FacePoints[i + 1], FacePoints[i + 2] };
-                        Point3 ClosestPointToNgon = ClosestPointToTriangle(trianglePoints, point);
-                        TrianglesCP.Add(ClosestPointToNgon);
-                    }
-                    Point3 ClosestPoint = point.CloudClosestPoint(TrianglesCP);
-                    CloserPointToFace_List.Add(ClosestPoint);
+                    throw new Exception("Ngon detected");
                 }
             }
             Point3 MeshClosestPoint = point.CloudClosestPoint(CloserPointToFace_List);
