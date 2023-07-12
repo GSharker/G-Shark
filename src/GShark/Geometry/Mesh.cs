@@ -619,11 +619,13 @@ namespace GShark.Geometry
             MeshVertex CloserVertex = meshVertices[verticesPoints.IndexOf(CloserPointVertex)];
 
             // Finds adjiacent faces to the closer vertex
-            System.Collections.Generic.IEnumerable<MeshFace> AdjacentFaces = CloserVertex.AdjacentFaces();
+            //System.Collections.Generic.IEnumerable<MeshFace> AdjacentFaces = CloserVertex.AdjacentFaces();
+            //All faces check 
+            System.Collections.Generic.IEnumerable<MeshFace> AllFaces = this.Faces;
 
             var CloserPointToFace_List = new List<Point3>();
 
-            foreach (MeshFace face in AdjacentFaces)
+            foreach (MeshFace face in AllFaces)
             {
                 // Retrives the Vertices associated with each face
                 List<MeshVertex> GSVertices = face.AdjacentVertices();
