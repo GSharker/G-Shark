@@ -658,6 +658,8 @@ namespace GShark.Geometry
                 else 
                 {
                     throw new Exception("Ngon detected");
+                    // using Rhino as the checking tool the code path will never end up here because Rhino considers Ngons are a collection of triangles and quads 
+                    //trying to keep the definition of Ngon will crash the "Rhino mesh > G Shark mesh method" in the RhinoCommand code
                 }
             }
             Point3 MeshClosestPoint = point.CloudClosestPoint(CloserPointToFace_List);
