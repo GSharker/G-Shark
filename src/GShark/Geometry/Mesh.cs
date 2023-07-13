@@ -607,6 +607,7 @@ namespace GShark.Geometry
             return point.CloudClosestPoint(edgesClosestPoints);
         }
 
+
         public Point3 ClosestPoint(Point3 point)
         {
             // Gets vertices and converts them from type "MeshVertex" to "Point3"
@@ -657,7 +658,8 @@ namespace GShark.Geometry
                 }
                 else 
                 {
-                    throw new Exception("Ngon detected");
+                    //throw new Exception("Ngon detected");
+                    
                 }
             }
             Point3 MeshClosestPoint = point.CloudClosestPoint(CloserPointToFace_List);
