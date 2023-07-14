@@ -607,7 +607,7 @@ namespace GShark.Geometry
             return point.CloudClosestPoint(edgesClosestPoints);
         }
 
-        // Function to find mid point from cloud 
+        /* Function to find mid point from cloud 
         private Point3 midPoint(List<Point3> points)
         {
             Point3 pointTotSum = Point3.Origin;
@@ -617,7 +617,7 @@ namespace GShark.Geometry
             }
             Point3 mid = pointTotSum / points.Count();
             return mid;
-        }
+        }*/
 
         public Point3 ClosestPoint(Point3 point)
         {
@@ -672,7 +672,7 @@ namespace GShark.Geometry
                     //throw new Exception("Ngon detected");
                     //Stellate method (from Ngon to triangles) 
                     List<Point3> GSVerticesPoints = GSVertices.ConvertAll(v => (Point3)v);
-                    Point3 ngonCentre = midPoint(GSVerticesPoints);
+                    Point3 ngonCentre = Point3.AveragePoint(GSVerticesPoints);
 
                     var TrianglesCP = new List<Point3>();
 

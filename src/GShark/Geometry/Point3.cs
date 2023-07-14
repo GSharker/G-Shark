@@ -718,17 +718,18 @@ namespace GShark.Geometry
             return inside ? 1 : -1;
         }
 
-        /* Function to find mid point from cloud 
-        private Point3 midPoint(List<Point3> points)
+
+        // Function to find mid point from cloud 
+        public static Point3 AveragePoint(List<Point3> points)
         {
             Point3 pointTotSum = Point3.Origin;
-            for (int i = 0; i < points.Count() - 1; i++)
+            for (int i = 0; i < points.Count(); i++)
             {
                 pointTotSum += points[i];
             }
             Point3 mid = pointTotSum / points.Count();
             return mid;
-        }*/
+        }
 
         // Function that finds point in a cloud of points to a target point
         public Point3 CloudClosestPoint(IEnumerable<Point3> cloud)
