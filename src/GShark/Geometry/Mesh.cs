@@ -611,7 +611,7 @@ namespace GShark.Geometry
         private Point3 midPoint(List<Point3> points)
         {
             Point3 pointTotSum = Point3.Origin;
-            for (int i = 0; i < points.Count() - 1; i++)
+            for (int i = 0; i < points.Count(); i++)
             {
                 pointTotSum += points[i];
             }
@@ -669,7 +669,7 @@ namespace GShark.Geometry
                 }
                 else 
                 {
-                    throw new Exception("Ngon detected");
+                    //throw new Exception("Ngon detected");
                     //Stellate method (from Ngon to triangles) 
                     List<Point3> GSVerticesPoints = GSVertices.ConvertAll(v => (Point3)v);
                     Point3 ngonCentre = midPoint(GSVerticesPoints);
