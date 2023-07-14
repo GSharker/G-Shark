@@ -607,31 +607,10 @@ namespace GShark.Geometry
             return point.CloudClosestPoint(edgesClosestPoints);
         }
 
-        /* Function to find mid point from cloud 
-        private Point3 midPoint(List<Point3> points)
-        {
-            Point3 pointTotSum = Point3.Origin;
-            for (int i = 0; i < points.Count(); i++)
-            {
-                pointTotSum += points[i];
-            }
-            Point3 mid = pointTotSum / points.Count();
-            return mid;
-        }*/
-
         public Point3 ClosestPoint(Point3 point)
         {
-            // Gets vertices and converts them from type "MeshVertex" to "Point3"
             List<MeshVertex> meshVertices = Vertices;
-            //List<Point3> verticesPoints = meshVertices.ConvertAll(v => (Point3)v);
 
-            // Finds closer vertex to the target point
-            //Point3 CloserPointVertex = point.CloudClosestPoint(meshVertices);
-            // Finds the equivalent point as a type "MeshVertex" using the index of the Point3 in its equivalent list
-            //MeshVertex CloserVertex = meshVertices[meshVertices.IndexOf(CloserPointVertex)];
-
-            // Finds adjiacent faces to the closer vertex
-            //System.Collections.Generic.IEnumerable<MeshFace> AdjacentFaces = CloserVertex.AdjacentFaces();
             //All faces check 
             System.Collections.Generic.IEnumerable<MeshFace> AllFaces = this.Faces;
 
@@ -670,7 +649,7 @@ namespace GShark.Geometry
                 else 
                 {
                     //throw new Exception("Ngon detected");
-                    //Stellate method (from Ngon to triangles) 
+                    // Stellate method (from Ngon to triangles) 
                     List<Point3> GSVerticesPoints = GSVertices.ConvertAll(v => (Point3)v);
                     Point3 ngonCentre = Point3.AveragePoint(GSVerticesPoints);
 
@@ -678,15 +657,7 @@ namespace GShark.Geometry
 
                     for (int i = 0; i < GSVertices.Count; i++)
                     {
-                        Point3[] trianglePoints;
-                        if (i== GSVertices.Count - 1)
-                        {
-                            trianglePoints = new Point3[] { ngonCentre, GSVertices[i], GSVertices[0] };
-                        }
-                        else
-                        {
-                            trianglePoints = new Point3[] { ngonCentre, GSVertices[i], GSVertices[i + 1] };
-                        }
+                        Point3[] trianglePoints = new Point3[] { ngonCentre, GSVertices[i], GSVertices[(i + 1)% GSVertices.Count] };
                         Point3 ClosestPointToNgon = ClosestPointToTriangle(trianglePoints, point);
                         TrianglesCP.Add(ClosestPointToNgon);
                     }
