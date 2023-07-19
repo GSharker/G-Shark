@@ -604,14 +604,14 @@ namespace GShark.Geometry
                 Point3 segmentClosestPoint = segment.ClosestPoint(point);
                 edgesClosestPoints.Add(segmentClosestPoint);
             }
-            return point.CloudClosestPoint(edgesClosestPoints);
+            return Point3.CloudClosestPoint(edgesClosestPoints, point);
         }
 
         public Point3 ClosestPoint(Point3 point)
         {
             List<MeshVertex> meshVertices = Vertices;
 
-            //All faces check 
+            // All faces check 
             System.Collections.Generic.IEnumerable<MeshFace> AllFaces = this.Faces;
 
             var CloserPointToFace_List = new List<Point3>();
@@ -619,53 +619,51 @@ namespace GShark.Geometry
             foreach (MeshFace face in AllFaces)
             {
                 // Retrives the Vertices associated with each face
-                List<MeshVertex> GSVertices = face.AdjacentVertices();
+                List<MeshVertex> faceVertices = face.AdjacentVertices();
                 // Converts from MeshVertex to Point3
-                List<Point3> FacePoints = GSVertices.ConvertAll(v => (Point3)v);
+                //List<Point3> faceVertices  = faceVertices .ConvertAll(v => (Point3)v);
 
-                if (GSVertices.Count == 3)
+                if (faceVertices .Count == 3)
                 {
-                    var trianglePoints = new Point3[] { FacePoints[0], FacePoints[1], FacePoints[2] };
+                    var trianglePoints = new Point3[] { faceVertices [0], faceVertices [1], faceVertices [2] };
                     Point3 ClosestPoint0 = ClosestPointToTriangle(trianglePoints, point);
                     CloserPointToFace_List.Add(ClosestPoint0);
                 }
-                else if (GSVertices.Count == 4)
+
+                // Quad with only one diagonal 
+                /*else if (faceVertices .Count == 4)
                 {
-                    var trianglePoints1 = new Point3[] { FacePoints[0], FacePoints[1], FacePoints[2] };
-                    var trianglePoints2 = new Point3[] { FacePoints[1], FacePoints[2], FacePoints[3] };
-                    var trianglePoints3 = new Point3[] { FacePoints[0], FacePoints[1], FacePoints[3] };
-                    var trianglePoints4 = new Point3[] { FacePoints[0], FacePoints[2], FacePoints[3] };
+                    var trianglePoints1 = new Point3[] { faceVertices [0], faceVertices [1], faceVertices [2] };
+                    var trianglePoints4 = new Point3[] { faceVertices [0], faceVertices [2], faceVertices [3] };
 
                     var ClosestPoint1 = ClosestPointToTriangle(trianglePoints1, point);
-                    var ClosestPoint2 = ClosestPointToTriangle(trianglePoints2, point);
-                    var ClosestPoint3 = ClosestPointToTriangle(trianglePoints3, point);
                     var ClosestPoint4 = ClosestPointToTriangle(trianglePoints4, point);
 
-                    var TrianglesCP = new Point3[4] { ClosestPoint1, ClosestPoint2, ClosestPoint3, ClosestPoint4 };
-                    Point3 ClosestPoint = point.CloudClosestPoint(TrianglesCP);
+                    var TrianglesCP = new Point3[2] {ClosestPoint1, ClosestPoint4};
+                    Point3 ClosestPoint = Point3.CloudClosestPoint(TrianglesCP, point); 
 
                     CloserPointToFace_List.Add(ClosestPoint);
-                }
+                }*/
+
                 else 
                 {
-                    //throw new Exception("Ngon detected");
-                    // Stellate method (from Ngon to triangles) 
-                    List<Point3> GSVerticesPoints = GSVertices.ConvertAll(v => (Point3)v);
-                    Point3 ngonCentre = Point3.AveragePoint(GSVerticesPoints);
+                    // Ngon triangulation using the vertices centroid and consecutive vertices to create the triangles 
+                    List<Point3> Points = faceVertices.ConvertAll(v => (Point3)v);
+                    Point3 ngonCentre = Point3.AveragePoint(faceVertices);
 
                     var TrianglesCP = new List<Point3>();
 
-                    for (int i = 0; i < GSVertices.Count; i++)
+                    for (int i = 0; i < faceVertices .Count; i++)
                     {
-                        Point3[] trianglePoints = new Point3[] { ngonCentre, GSVertices[i], GSVertices[(i + 1)% GSVertices.Count] };
+                        Point3[] trianglePoints = new Point3[] { ngonCentre, faceVertices [i], faceVertices [(i + 1)% faceVertices .Count] };
                         Point3 ClosestPointToNgon = ClosestPointToTriangle(trianglePoints, point);
                         TrianglesCP.Add(ClosestPointToNgon);
                     }
-                    Point3 ClosestPoint = point.CloudClosestPoint(TrianglesCP);
+                    Point3 ClosestPoint = Point3.CloudClosestPoint(TrianglesCP, point);
                     CloserPointToFace_List.Add(ClosestPoint);
                 }
             }
-            Point3 MeshClosestPoint = point.CloudClosestPoint(CloserPointToFace_List);
+            Point3 MeshClosestPoint = Point3.CloudClosestPoint(CloserPointToFace_List, point);
             return MeshClosestPoint;
         }
 
