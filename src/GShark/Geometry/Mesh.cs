@@ -547,12 +547,18 @@ namespace GShark.Geometry
             return data;
         }
 
-
-        
-
-        // Checks if point is in or out a triangle (boolean result, In - True , Out - False)
+        /// <summary>
+        /// Checks if point is in or out a triangle
+        /// </summary>
+        /// <param name="projection">Point to check.</param>
+        /// <param name="trianglePoints">Triangle vertices.</param>
+        /// <returns> boolean result (In - True , Out - False) </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when trianglePoints is not 3 points.</exception>
         private bool IsPointInTriangle(Point3 projection, Point3[] trianglePoints)
         {
+            if (trianglePoints.Length != 3)
+                throw new ArgumentOutOfRangeException($"{nameof(trianglePoints)} must be 3.");
+
             //edges vectors of the triangle
             Vector3 v0 = new Vector3(trianglePoints[1] - trianglePoints[0]);
             Vector3 v1 = new Vector3(trianglePoints[2] - trianglePoints[1]);
@@ -577,8 +583,15 @@ namespace GShark.Geometry
 
             return ((dotProducts[0] > 0) && (dotProducts[1] > 0) && (dotProducts[2] > 0));
             }
-         
-        // Function that finds the closest point to a triangle (given the 3 vertices as points)
+
+
+        /// <summary>
+        /// Finds the closest point to a triangle
+        /// </summary>
+        /// <param name="trianglePoints">Triangle vertices.</param>
+        /// <param name="point">Test point.</param>
+        /// <returns>Closest point to the triangle.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when trianglePoints is not 3 points.</exception>
         private Point3 ClosestPointToTriangle(Point3[] trianglePoints, Point3 point)
         {
             if (trianglePoints.Length != 3)
@@ -591,13 +604,13 @@ namespace GShark.Geometry
             // if the projection of the point is inside the triangle, we return the closest point
             if (IsPointInTriangle(closestPoint, trianglePoints))
                 return closestPoint;
-
+             
             // If not, we create a line for each triangle edges
             // and then find the closest point on each edge
-            Line segment_AB = new Line(trianglePoints[0], trianglePoints[1]);
-            Line segment_BC = new Line(trianglePoints[1], trianglePoints[2]);
-            Line segment_CA = new Line(trianglePoints[2], trianglePoints[0]);
-            List<Line> segments = new List<Line>() { segment_AB, segment_BC, segment_CA };
+            Line segmentAB = new Line(trianglePoints[0], trianglePoints[1]);
+            Line segmentBC = new Line(trianglePoints[1], trianglePoints[2]);
+            Line segmentCA = new Line(trianglePoints[2], trianglePoints[0]);
+            List<Line> segments = new List<Line>() { segmentAB, segmentBC, segmentCA };
             List<Point3> edgesClosestPoints = new List<Point3>();
             foreach (Line segment in segments)
             {
@@ -607,64 +620,48 @@ namespace GShark.Geometry
             return Point3.CloudClosestPoint(edgesClosestPoints, point);
         }
 
+        /// <summary>
+        /// Finds the closest point to a mesh.
+        /// </summary>
+        /// <param name="point">Test point.</param>
+        /// <returns>Mesh Closest Point.</returns>
+        /// <exception>Method does not work with concave Ngons.</exception>
         public Point3 ClosestPoint(Point3 point)
         {
             List<MeshVertex> meshVertices = Vertices;
-
             // All faces check 
-            System.Collections.Generic.IEnumerable<MeshFace> AllFaces = this.Faces;
+            IEnumerable<MeshFace> allFaces = this.Faces;
+            var closerPointToFaceList = new List<Point3>();
 
-            var CloserPointToFace_List = new List<Point3>();
-
-            foreach (MeshFace face in AllFaces)
+            foreach (MeshFace face in allFaces)
             {
                 // Retrives the Vertices associated with each face
                 List<MeshVertex> faceVertices = face.AdjacentVertices();
-                // Converts from MeshVertex to Point3
-                //List<Point3> faceVertices  = faceVertices .ConvertAll(v => (Point3)v);
-
-                if (faceVertices .Count == 3)
+                
+                if (faceVertices.Count == 3)
                 {
-                    var trianglePoints = new Point3[] { faceVertices [0], faceVertices [1], faceVertices [2] };
-                    Point3 ClosestPoint0 = ClosestPointToTriangle(trianglePoints, point);
-                    CloserPointToFace_List.Add(ClosestPoint0);
+                    var trianglePoints = new Point3[] { faceVertices[0], faceVertices[1], faceVertices[2] };
+                    Point3 closestPoint0 = ClosestPointToTriangle(trianglePoints, point);
+                    closerPointToFaceList.Add(closestPoint0);
                 }
-
-                // Quad with only one diagonal 
-                /*else if (faceVertices .Count == 4)
-                {
-                    var trianglePoints1 = new Point3[] { faceVertices [0], faceVertices [1], faceVertices [2] };
-                    var trianglePoints4 = new Point3[] { faceVertices [0], faceVertices [2], faceVertices [3] };
-
-                    var ClosestPoint1 = ClosestPointToTriangle(trianglePoints1, point);
-                    var ClosestPoint4 = ClosestPointToTriangle(trianglePoints4, point);
-
-                    var TrianglesCP = new Point3[2] {ClosestPoint1, ClosestPoint4};
-                    Point3 ClosestPoint = Point3.CloudClosestPoint(TrianglesCP, point); 
-
-                    CloserPointToFace_List.Add(ClosestPoint);
-                }*/
-
                 else 
                 {
-                    // Ngon triangulation using the vertices centroid and consecutive vertices to create the triangles 
-                    List<Point3> Points = faceVertices.ConvertAll(v => (Point3)v);
+                    // Ngon triangulation using the vertices' centroid and consecutive vertices to create the triangles 
                     Point3 ngonCentre = Point3.AveragePoint(faceVertices);
-
                     var TrianglesCP = new List<Point3>();
 
                     for (int i = 0; i < faceVertices .Count; i++)
                     {
-                        Point3[] trianglePoints = new Point3[] { ngonCentre, faceVertices [i], faceVertices [(i + 1)% faceVertices .Count] };
+                        Point3[] trianglePoints = new Point3[] { ngonCentre, faceVertices[i], faceVertices[(i + 1)% faceVertices.Count] };
                         Point3 ClosestPointToNgon = ClosestPointToTriangle(trianglePoints, point);
                         TrianglesCP.Add(ClosestPointToNgon);
                     }
                     Point3 ClosestPoint = Point3.CloudClosestPoint(TrianglesCP, point);
-                    CloserPointToFace_List.Add(ClosestPoint);
+                    closerPointToFaceList.Add(ClosestPoint);
                 }
             }
-            Point3 MeshClosestPoint = Point3.CloudClosestPoint(CloserPointToFace_List, point);
-            return MeshClosestPoint;
+            Point3 meshClosestPoint = Point3.CloudClosestPoint(closerPointToFaceList, point);
+            return new Point3(meshClosestPoint);
         }
 
         /// <summary>

@@ -718,27 +718,35 @@ namespace GShark.Geometry
             return inside ? 1 : -1;
         }
 
-
-        // Function to find mid point from cloud 
+        /// <summary>
+        /// Finds mid point from a cloud of points.  
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns>The average point.</returns>
         public static Point3 AveragePoint (IEnumerable<Point3> points)
         {
             Point3 pointTotSum = Point3.Origin;
-            for (int i = 0; i < points.Count(); i++)
+            foreach (Point3 point in points)
             {
-                pointTotSum += points [i];
+                pointTotSum += point;
             }
             Point3 mid = pointTotSum / points.Count();
             return mid;
         }
 
-        // Function that finds point in a cloud of points to a target point
-        public static Point3  CloudClosestPoint  (IEnumerable<Point3> cloud, Point3 targetPoint)
+        /// <summary>
+        /// Finds closest point to a test point from a cloud of points.
+        /// </summary>
+        /// <param name="cloud">Collection of points from which the closest is chosen.</param>
+        /// <param name="testPoint"></param>
+        /// <returns>Closest from from the cloud of points.</returns>
+        public static Point3 CloudClosestPoint (IEnumerable<Point3> cloud, Point3 testPoint)
         {
             double minDistance = double.MaxValue;
             Point3 closestPoint = new Point3();
             foreach (Point3 point in cloud)
             {
-                double distanceToTarget = point.DistanceTo(targetPoint);
+                double distanceToTarget = point.DistanceTo(testPoint);
                 if (distanceToTarget < minDistance)
                 {
                     minDistance = distanceToTarget;
