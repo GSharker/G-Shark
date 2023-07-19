@@ -740,6 +740,7 @@ namespace GShark.Geometry
         /// <param name="cloud">Collection of points from which the closest is chosen.</param>
         /// <param name="testPoint"></param>
         /// <returns>Closest from from the cloud of points.</returns>
+        /// <remark>Returns the same object within the cloud without copying it.</remark>
         public static Point3 CloudClosestPoint (IEnumerable<Point3> cloud, Point3 testPoint)
         {
             double minDistance = double.MaxValue;
