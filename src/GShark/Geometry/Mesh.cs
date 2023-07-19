@@ -548,11 +548,11 @@ namespace GShark.Geometry
         }
 
         /// <summary>
-        /// Checks if point is in or out a triangle
+        /// Checks if point is in or out a triangle.
         /// </summary>
         /// <param name="projection">Point to check.</param>
         /// <param name="trianglePoints">Triangle vertices.</param>
-        /// <returns> boolean result (In - True , Out - False) </returns>
+        /// <returns>Boolean result (In - True , Out - False).</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when trianglePoints is not 3 points.</exception>
         private bool IsPointInTriangle(Point3 projection, Point3[] trianglePoints)
         {
@@ -586,7 +586,7 @@ namespace GShark.Geometry
 
 
         /// <summary>
-        /// Finds the closest point to a triangle
+        /// Finds the closest point to a triangle.
         /// </summary>
         /// <param name="trianglePoints">Triangle vertices.</param>
         /// <param name="point">Test point.</param>
@@ -625,7 +625,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Test point.</param>
         /// <returns>Mesh Closest Point.</returns>
-        /// <exception>Method does not work with concave Ngons.</exception>
+        /// <exception>Method does not work with concave Ngon faces.</exception>
         public Point3 ClosestPoint(Point3 point)
         {
             List<MeshVertex> meshVertices = Vertices;
@@ -635,7 +635,7 @@ namespace GShark.Geometry
 
             foreach (MeshFace face in allFaces)
             {
-                // Retrives the Vertices associated with each face
+                // Retrives the vertices associated with each face
                 List<MeshVertex> faceVertices = face.AdjacentVertices();
                 
                 if (faceVertices.Count == 3)
