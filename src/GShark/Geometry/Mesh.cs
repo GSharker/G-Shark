@@ -625,7 +625,7 @@ namespace GShark.Geometry
         /// </summary>
         /// <param name="point">Test point.</param>
         /// <returns>Mesh Closest Point.</returns>
-        /// <exception>Method does not work with concave Ngon faces.</exception>
+        /// <remark>Method might not work with concave Ngon faces.</remark>
         public Point3 ClosestPoint(Point3 point)
         {
             List<MeshVertex> meshVertices = Vertices;
