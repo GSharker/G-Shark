@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using GShark.Geometry;
 using Xunit;
@@ -197,10 +198,10 @@ namespace GShark.Test.XUnit.Geometry
 
             var testPolygon = new GShark.Geometry.Polygon(new Point3[] {
                     new Point3(-27.1829592472304,-12.3049979552339,59.1652925745504),
-                    new Point3(-40.9982936339814,20.739935073677,34.4162859330554),
-                    new Point3(19.082346606075,37.5838503530052,21.8010335204645),
-                    new Point3(49.9258838416119,19.3255605082373,35.4755819371661),
-                    new Point3(34.18282837764,-33.7777754487285,75.2473319096853)
+                    new Point3(-40.9982936339814,20.739935073677  ,34.4162859330554),
+                    new Point3(19.082346606075  ,37.5838503530052 ,21.8010335204645),
+                    new Point3(49.9258838416119 ,19.3255605082373 ,35.4755819371661),
+                    new Point3(34.18282837764   ,-33.7777754487285,75.2473319096853)
             });
 
             //Act
@@ -212,6 +213,238 @@ namespace GShark.Test.XUnit.Geometry
             pointOutside.Should().Be(-1);
             pointInside.Should().Be(1);
             pointCoincident.Should().Be(0);
+        }
+
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Inside_Triangle()
+        {
+            // Arrange
+            var testPolygon2 = new GShark.Geometry.Polygon(new Point3[] {
+                new Point3(10.00,0,0.00),
+                new Point3(-5.00,8.660,0.00),
+                new Point3(-5.00,-8.660,0.00),
+
+            });
+            var p3 = new Point3(5, 0, 0);
+            
+            // Act
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside2.Should().Be(1);
+        }
+
+        /// <summary>
+        ///  x is the point of interest
+        ///  
+        ///  (0,2)___(1,2)
+        ///      |   | 
+        ///      |   |____(2,1)    x(3,1)
+        ///      |  (1,1) |
+        ///      |________|
+        ///  (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Outside_Polygon_Right_Side()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(3, 1, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(-1);
+            pointIsInside2.Should().Be(-1);
+        }
+
+        /// <summary>
+        ///  x is the point of interest
+        ///  
+        ///  (0,2)___(1,2)
+        ///      |   | 
+        ///      |   |____x(2,1)
+        ///      |  (1,1) |
+        ///      |________|
+        ///  (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_On_Polygon_Right_Side()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(2, 1, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(0);
+            pointIsInside2.Should().Be(0);
+        }
+
+        /// <summary>
+        ///  x is the point of interest (0.5, 1)
+        ///  
+        ///  (0,2)___(1,2)
+        ///      |   | 
+        ///      | x |____(2,1)
+        ///      |   (1,1)|
+        ///      |________|
+        ///  (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Inside_Polygon()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(0.5, 1, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(1);
+            pointIsInside2.Should().Be(1);
+        }
+        /// <summary>
+        ///  x is the point of interest (-1, 1)
+        ///  
+        ///     (0,2)___(1,2)
+        ///         |   | 
+        /// x(-1,1) |   |____(2,1)
+        ///         |   (1,1)|
+        ///         |________|
+        ///     (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Outside_Polygon_Left_Side()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(-1, 1, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(-1);
+            pointIsInside2.Should().Be(-1);
+        }
+        /// <summary>
+        ///  x is the point of interest (0.5, 1.5)
+        ///  
+        ///     (0,2)___(1,2)
+        ///         | x | 
+        ///         |   |____(2,1)
+        ///         |   (1,1)|
+        ///         |________|
+        ///     (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Inside_Polygon_Top()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(0.5, 1.5, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(1);
+            pointIsInside2.Should().Be(1);
+        }
+        /// <summary>
+        ///  x is the point of interest (-1, 1)
+        ///  
+        ///   x(-1, 1)  (0,2)___(1,2)
+        ///                 |   | 
+        ///                 |   |____(2,1)
+        ///                 |   (1,1)|
+        ///                 |________|
+        ///             (0,0)        (2,0)
+        ///  
+        /// </summary>
+        [Fact]
+        public void It_Returns_Whether_A_Point_Is_Outside_Polygon_Top()
+        {
+            // Arrange
+            Point3[] pts = new Point3[] {
+                new Point3(0,0,0),
+                new Point3(2,0,0),
+                new Point3(2,1,0),
+                new Point3(1,1,0),
+                new Point3(1,2,0),
+                new Point3(0,2,0),
+            };
+            var testPolygon1 = new GShark.Geometry.Polygon(pts); // CCW
+            var testPolygon2 = new GShark.Geometry.Polygon(pts.Reverse().ToList()); // CW
+            var p3 = new Point3(-1, 1, 0);
+
+            // Act
+            var pointIsInside1 = p3.InPolygon(testPolygon1);
+            var pointIsInside2 = p3.InPolygon(testPolygon2);
+
+            // Assert
+            pointIsInside1.Should().Be(-1);
+            pointIsInside2.Should().Be(-1);
         }
     }
 }
