@@ -12,6 +12,14 @@ namespace GShark.Geometry
     public class BoundingBox
     {
         /// <summary>
+        /// Constructs a new bounding box with a default transform and extents of (-100, -100, -100) to (100, 100, 100).
+        /// </summary>
+        public BoundingBox()
+        {
+            Min = new Point3(-100, -100, -100);
+            Max = new Point3(100, 100, 100);
+        }
+        /// <summary>
         /// Constructs a new bounding box from two corner points.
         /// </summary>
         /// <param name="min">Point containing all the minimum coordinates.</param>
