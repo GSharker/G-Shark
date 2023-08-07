@@ -734,6 +734,45 @@ namespace GShark.Geometry
             // Applying the even-odd rule.
             return wn % 2 == 0 ? -1 : 1;
         }
-        
+
+        /// <summary>
+        /// Finds average point from a cloud of points.  
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns>The average point.</returns>
+        public static Point3 AveragePoint (IEnumerable<Point3> points)
+        {
+            Point3 pointTotSum = Point3.Origin;
+            foreach (Point3 point in points)
+            {
+                pointTotSum += point;
+            }
+            Point3 average = pointTotSum / points.Count();
+            return average;
+        }
+
+        /// <summary>
+        /// Finds closest point to a test point from a cloud of points.
+        /// </summary>
+        /// <param name="cloud">Cloud of points from which the closest is chosen.</param>
+        /// <param name="testPoint"></param>
+        /// <returns>Closest point.</returns>
+        /// <remark>Returns the same object within the cloud without copying it.</remark>
+        public static Point3 CloudClosestPoint (IEnumerable<Point3> cloud, Point3 testPoint)
+        {
+            double minDistance = double.MaxValue;
+            Point3 closestPoint = new Point3();
+            foreach (Point3 point in cloud)
+            {
+                double distanceToTarget = point.DistanceTo(testPoint);
+                if (distanceToTarget < minDistance)
+                {
+                    minDistance = distanceToTarget;
+                    closestPoint = point;
+                }
+            }
+            return closestPoint;
+        }
+
     }
 }
