@@ -1,0 +1,847 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/G-Shark/G-Shark/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.CollectionHelpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.CollectionHelpers.html",
+          "hash": "ZPeafUyjXaoIvmXRbaiQjGo5XB2rub0LMY+L0XtMEwg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.GSharkMath.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.GSharkMath.html",
+          "hash": "Am93aCvkKMTytqsEm9ASErdJLS0xLuS+enfeesf1vy4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.Interval.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.Interval.html",
+          "hash": "5P2XcJjW5k7IMb+/OTL4oWcTBgstvewYGlmlcP203yM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.KnotVector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.KnotVector.html",
+          "hash": "KdTQqsOMaFABkrf4iUPHesLrksmPNHJOBjvUcUxVjKA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.Matrix.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.Matrix.html",
+          "hash": "Uaxp6z+TvdDNS1UADFdJoMMbTyHaSlpfXV6ajK/QNRU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.Transform.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.Transform.html",
+          "hash": "rV5TYmZH9UaWuQ2K01g0VGIGvnJ5V8GgHcso26h5Aww="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.TransformMatrix.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.TransformMatrix.html",
+          "hash": "MB5aonsGWrE5IqGBP99/J5YV+y1WKnbQ/CsGyJKvxmo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.Trigonometry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.Trigonometry.html",
+          "hash": "+YrxtGSkYb0y5ZMyhrsnXiSuRV9/ZFLSipAS6KktEtY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Core.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Core.html",
+          "hash": "h8vwvkutEm7T3X6bC6uVCYp3TCFhsxmwvW0hMwTPVgo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.EvaluateSurfaceDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.EvaluateSurfaceDirection.html",
+          "hash": "EP151EwYf3YY7WQnXFpZQNYUU2+RCHwi85VzOmPOcxY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.LoftType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.LoftType.html",
+          "hash": "X/Cw9bpQ4zS6w8d3a2epGWJ2H7IZ2W7UdlEC/rj4PKY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.RotationAxis.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.RotationAxis.html",
+          "hash": "T9Atr+jTK/X+xiel0Vn1//XIVOOHb9wk7/sRsLpPWqU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.SplitDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.SplitDirection.html",
+          "hash": "0Q5zdyP8VqxVeeq0GX4pySqbiDCc9LqfdZbP4fqzYAE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.SurfaceDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.SurfaceDirection.html",
+          "hash": "D20/760XApoRfIJNAU2tO6kTw6RIzAEhlN47llpm5uM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Enumerations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Enumerations.html",
+          "hash": "RNk31i9Ja+VBBncDqCkCcN1C6vFWDBFpbmo/jzMuJns="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.ExtendedMethods.ExtendedEnumerable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.ExtendedMethods.ExtendedEnumerable.html",
+          "hash": "7CLnaZGnFLRNcbGX1ZNgceS+MaRM6DTesFF4WweNEJk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.ExtendedMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.ExtendedMethods.html",
+          "hash": "OPKjNnjSKpgsJvmmr+M29tjqzsGHi4tlmmcew1JZ4rc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Fitting.Curve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Fitting.Curve.html",
+          "hash": "kX7ZTq3ft40yXIWxR9GErcTLWBvA45ErXvL7ZsLAXao="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Fitting.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Fitting.html",
+          "hash": "zpADavkwD+13LSlZW4A0y7DlXwXRZFnvvDcKnwMJ72k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Arc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Arc.html",
+          "hash": "sZFTP6tAqxyCPGUT3e0FgtW54K/joS5ElCCMypNsNBU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.BoundingBox.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.BoundingBox.html",
+          "hash": "TYIQLNeNQq0IqTzRR/x0W5ulVl7/fzksjyMqeZkXdFA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Circle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Circle.html",
+          "hash": "yFYYd/bKUtVHdK8RSlJ5i8Rm7Ji42bsrTNVrHXTVXew="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.ConvexHull.Face.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.ConvexHull.Face.html",
+          "hash": "/quTli/w7cqtr/0U26YKjbDFbIcTNivjWszEbHbtKxM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.ConvexHull.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.ConvexHull.html",
+          "hash": "zfDcgLtbIvFryOhyDar3UKUUm0X4GceUnmb8AH5hdAI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Line.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Line.html",
+          "hash": "B3SXozS9Z45qoXYdm9L8WmI4GRmYL5MKY3DwXIRyPRE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Mesh.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Mesh.html",
+          "hash": "rI9+RELokHGKKYoHi7yq7kJgiKUIuGFLm5VvuWYJTlc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshCorner.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshCorner.html",
+          "hash": "aaEIBUiQs6+U9tRzaNoRPFrJFJy37ERB02uius18nLQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshEdge.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshEdge.html",
+          "hash": "KJYsrTcOD/hWp8KqCrr6zM8G/nIOXDmXuT48LsdQDDE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshFace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshFace.html",
+          "hash": "//qUzbGF3ImTLcgkwS/6RoDCBUxYs+h0865AfNQjDXs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshGeometry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshGeometry.html",
+          "hash": "wnIM1kgcJGQy1/7TOC5YCbfD5JW663zJxTli9iGu4Kc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshHalfEdge.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshHalfEdge.html",
+          "hash": "2TO0VT1Q4mI+oLtKPwsPZ/hAWsgg+SutP1u5k5A5VYE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshTopology.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshTopology.html",
+          "hash": "egQ+o6pb80Gr1/dZ0ce0hOQYYPzpJWJ7fIprlIChrGc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.MeshVertex.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.MeshVertex.html",
+          "hash": "8ps/jRypOscTTJWIHZw6zXkiZ/vN9+XsgD39nL821is="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.NurbsBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.NurbsBase.html",
+          "hash": "KLV7yR3Iv3ijtnjF60qZRQjKti8BqGLKfCHqGZ+BTX0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "codesnippet-not-found"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.NurbsCurve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.NurbsCurve.html",
+          "hash": "gPA5q7PJbIEW9fpklklTq3GoGFMsFpgAocDOqsHUl+w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.NurbsSurface.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.NurbsSurface.html",
+          "hash": "Cigx3WMAC/TmRyY0KdQgPvir8Seu+2iA+6HJD6jwKvA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Plane.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Plane.html",
+          "hash": "l7CyT4olHTSB1ddPFTFvibd/ErST6N8l1XMq204UzPc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Point3.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Point3.html",
+          "hash": "X+IGgyMm7nDiOe1rNT2/ewTkkjIXYclG2fMZJobkhYc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Point4.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Point4.html",
+          "hash": "lBgKauXY+1xxMbVBdfLdIpAJ31Zpgx4uP/4C9P0FaTU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.PolyCurve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.PolyCurve.html",
+          "hash": "Ao0uZh+alht4fUx/lyxDGD4no34CXY5pd56IoV5rE+M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.PolyLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.PolyLine.html",
+          "hash": "OyO8XBZz+GtuAcXtMOwEpzVfKf6f6BdxHrdPGmEDh1U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Polygon.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Polygon.html",
+          "hash": "63RM3uAAHjcQE/4+oNF7vVcggxPw/A3QxjP1DNZxCnA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Ray.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Ray.html",
+          "hash": "B8k/6GOru6V6KBA1/1CGfdSgC2m7zs0+oXErSzMZI9w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Vector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Vector.html",
+          "hash": "LK6w3Z3N/v0R9G7l6y/f2CCTrVDSVRqA63yRBiWLxCg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.Vector3.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.Vector3.html",
+          "hash": "gjmeTYkG254MMXML0AHPyI/7XsYzGaFV4la9qfISxl0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Geometry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Geometry.html",
+          "hash": "jWfEo2NSTTH/sUBOwHdW/tDYLFfgt6bcUrADLvDIWLw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Interfaces.IGeometry-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Interfaces.IGeometry-1.html",
+          "hash": "hE21/tnVa4yELZZQGESO3gv9DuW1CaB2VpRFjZSwYQw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Interfaces.ISerializable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Interfaces.ISerializable-1.html",
+          "hash": "Gwi79mOsvnXZ9cOezyR0RlGeYDDf5K+P//h4H7A/rs0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Interfaces.ITransformable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Interfaces.ITransformable-1.html",
+          "hash": "Zh4WHOuIYF+uKvoDs7rOurC9m14xayMlrvM6NuHttZE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Interfaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Interfaces.html",
+          "hash": "6cwtDcIZH023tKJ0CBbjn4JlFiIMI52qvOCzuBKR74I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Intersection.CurvePlaneIntersectionResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Intersection.CurvePlaneIntersectionResult.html",
+          "hash": "dydJnN7zwOcGXEdUN5MF4yx6PrMasmIVO8ncVcooz30="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Intersection.CurvesIntersectionResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Intersection.CurvesIntersectionResult.html",
+          "hash": "iD96rc/+UXhrMtD453VzRyskvF6VUNpJVXR1ZT8/Fek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Intersection.Intersect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Intersection.Intersect.html",
+          "hash": "EuTyfu+GbrbAMa74tk6nk1iNIrW2Gv7M+8J1u/3vyYw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Intersection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Intersection.html",
+          "hash": "/fBG76WuJhzw9ytUDrkLIQtgzPpByM26fQvOae5UrhQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Modify.Curve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Modify.Curve.html",
+          "hash": "LyvAnnMvxWufwFsAXKfbOZzcD0zBGijHv8okq5yyhWA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Modify.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Modify.html",
+          "hash": "CR+xNg6332V6GR8k5vnJC2uRrqxhaF0Iy2VO4hrD+0k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Sampling.Curve.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Sampling.Curve.html",
+          "hash": "IO1Emy09lQML7Gx9Q4RiyBAw0ZxYsyAL00u1tFbGOxc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Sampling.Surface.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Sampling.Surface.html",
+          "hash": "0aFUu6Qv6V860/QqnDYQTnH+QlPKPUEBOqejAw/+dRo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GShark.Sampling.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GShark.Sampling.html",
+          "hash": "c3Bl88thY8ci0Luo0lItARwmTdmED5cwaDQNtB9Boww="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "zmJkrrrMJbwOWZ5pTPXqpXHC12ZdyAgsCxgvzMxhJXc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "NO7pDRUyaXSu9ag8Me2J9kFJ26NidAqpw8NHHgzzkeQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/G-Shark-logo.svg",
+      "output": {
+        "resource": {
+          "relative_path": "images/G-Shark-logo.svg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/TwitterLogo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/TwitterLogo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "+VS1A4NnxVZlQapz1/zy2mSaTIh2P1QGpM9rwfGj93Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "RUXK0ckeYH5vUDRm0pUQOco63ZlwBVqSAv7YJC0B6cg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 2,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 59,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
