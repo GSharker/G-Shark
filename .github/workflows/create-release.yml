@@ -10,17 +10,20 @@ env:
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - master
+  pull_request:
+    types: [closed]
+  pull_request_target:
+    types: [closed]
 
 jobs:
   build:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:          
       - name: 🛎 Checkout repo
